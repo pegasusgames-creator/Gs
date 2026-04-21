@@ -3,12 +3,13 @@ keystore.properties
 *.jks
 *.keystore
 
-# Android build outputs
+# Android build outputs — never commit
 **/build/
 **/.gradle/
 **/*.apk
 **/*.aab
 **/local.properties
+**/.cxx/
 
 # IDE
 .idea/

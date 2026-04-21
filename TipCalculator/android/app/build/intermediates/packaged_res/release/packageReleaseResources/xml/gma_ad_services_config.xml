@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ad-services-config>
-    <attribution-reporting allowAllToActivate="true" />
-    <custom-audiences allowAllToActivate="true" />
-    <topics allowAllToActivate="true" />
-    <protected-signals allowAllToActivate="true" />
-    <ad-selection-service allowAllToActivate="true" />
-</ad-services-config>
