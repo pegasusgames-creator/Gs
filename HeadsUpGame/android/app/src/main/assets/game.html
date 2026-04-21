@@ -234,7 +234,6 @@ function handleTilt(e) {
   else if (diff < -25) { tiltCooldown = true; markSkip(); setTimeout(() => { tiltCooldown = false; lastBeta = null; }, 1200); }
 }
 
-window.onAdMobLoaded = function() {};
 window.onPurchaseComplete = function(sku) {
   if (sku && sku.includes('no_ads')) {
     document.getElementById('banner-ad').style.display = 'none';

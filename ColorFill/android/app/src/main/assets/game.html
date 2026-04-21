@@ -164,8 +164,6 @@ function removeAds() {
   else { state.removeAds = true; document.getElementById('msg').textContent = 'Ads removed!'; }
 }
 window.onPurchaseComplete = function() { state.removeAds = true; };
-window.onAdMobLoaded = function() {};
-
 loadLevel(1);
 buildLevelSelect();
 </script>

@@ -920,10 +920,6 @@ function _showMsg(msg){
   setTimeout(()=>el.remove(),2500);
 }
 
-window.onAdMobLoaded=function(){
-  if(save.removeAds && window.Android) window.Android.hideBannerAd();
-};
-
 window.onAdReward=function(rewardType){
   if(!VALID_REWARD_TYPES.has(rewardType)){console.warn('Invalid reward type');return;}
   switch(rewardType){

@@ -173,7 +173,6 @@ window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=tru
 function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%10===0&&window.Android)Android.showInterstitial();}
 
 function init(){if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';loadUnits();}
-window.onAdMobLoaded=function(){};
 init();
 </script>
 </body>

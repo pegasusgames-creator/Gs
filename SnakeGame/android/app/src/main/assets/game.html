@@ -220,7 +220,6 @@ ctx.fillStyle='#0d1f0d';ctx.fillRect(0,0,canvas.width,canvas.height);
 
 if(!state.removeAds&&!window.Android)document.getElementById('admob-banner').style.display='flex';
 window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';}};
-window.onAdMobLoaded=function(){};
 </script>
 </body>
 </html>

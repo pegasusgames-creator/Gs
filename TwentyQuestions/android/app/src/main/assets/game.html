@@ -201,6 +201,7 @@ function useQuickQ(q) {
 }
 
 function startGame() {
+  _showInterstitial();
   currentThing = THINGS[Math.floor(Math.random() * THINGS.length)];
   questionsUsed = 0;
   history = [];
@@ -300,7 +301,6 @@ function showScreen(id) {
   document.getElementById(id).classList.remove('hidden');
 }
 
-window.onAdMobLoaded = function() {};
 window.onPurchaseComplete = function(sku) {
   if (sku && sku.includes('no_ads')) {
     document.getElementById('banner-ad').style.display = 'none';

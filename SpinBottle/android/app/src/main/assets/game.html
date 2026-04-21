@@ -225,6 +225,7 @@ function renderPlayers() {
 function removePlayer(i) { players.splice(i, 1); renderPlayers(); }
 
 function startGame() {
+  _showInterstitial();
   if (players.length < 2) { alert('Add at least 2 players!'); return; }
   const labels = {spin:'Spin Only', truth:'Truth or Dare', dare:'Dares Only'};
   document.getElementById('modeLabel').textContent = labels[gameMode];
@@ -309,7 +310,6 @@ function showScreen(id) {
   document.getElementById(id).classList.remove('hidden');
 }
 
-window.onAdMobLoaded = function() {};
 window.onPurchaseComplete = function(sku) {
   if (sku && sku.includes('no_ads')) {
     document.getElementById('banner-ad').style.display = 'none';

@@ -259,6 +259,37 @@ function endGame(){
 function restartGame(){ startGame(gameState.timeSec); }
 function goMenu(){ clearInterval(timerInterval); showScreen('menuScreen'); }
 function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+
+// ── AppLovin MAX / IAP bridge ──────────────────────────────────────────
+var _adsRemoved = false;
+var _interstitialCount = 0;
+
+function _showInterstitial() {
+  if (_adsRemoved) return;
+  _interstitialCount++;
+  if (_interstitialCount % 3 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
+  }
+}
+
+window.onPurchaseComplete = function(sku) {
+  if (sku === 'remove_ads') {
+    _adsRemoved = true;
+    var btn = document.getElementById('btn-remove-ads');
+    if (btn) btn.style.display = 'none';
+    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+  }
+};
+
+// Restore remove-ads state on load
+if (window.Android) {
+  try { if (Android.isPurchased && Android.isPurchased('remove_ads')) {
+    _adsRemoved = true;
+    var btn = document.getElementById('btn-remove-ads');
+    if (btn) btn.style.display = 'none';
+  }} catch(e) {}
+}
+
 </script>
 </body>
 </html>

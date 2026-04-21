@@ -36,10 +36,10 @@ input[type=text] { flex: 1; background: #0f3460; border: 2px solid var(--accent)
 .wrong { color: #ef5350; }
 .timer-bar { height: 8px; background: #333; border-radius: 4px; overflow: hidden; }
 .timer-fill { height: 100%; background: var(--accent); transition: width 0.1s linear; border-radius: 4px; }
-.banner { background: #111; border: 1px dashed #444; color: #555; text-align: center; padding: 10px; font-size: 0.75rem; margin-top: auto; flex-shrink: 0; }
 </style>
 </head>
 <body>
+<button id="btn-remove-ads" onclick="if(window.Android)Android.purchase('remove_ads')" style="position:fixed;top:8px;right:8px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:0.65rem;font-weight:700;padding:5px 10px;border-radius:20px;cursor:pointer;z-index:9999;letter-spacing:0.5px">Remove Ads</button>
 <header><h1>ANAGRAM FINDER</h1></header>
 <div class="tabs">
   <div class="tab active" data-tab="finder" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="switchTab('finder')">Finder</div>
@@ -87,7 +87,7 @@ input[type=text] { flex: 1; background: #0f3460; border: 2px solid var(--accent)
   <button class="btn" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="startTimer()">Start Game</button>
 </div>
 
-<div class="banner" id="banner-ad">Advertisement</div>
+
 
 <script>
 const WORDS = "able,about,above,acid,aged,aims,arch,area,army,arts,aunt,auto,baby,back,bake,bald,band,bank,bare,barn,bars,base,bath,bead,beam,bean,bear,beat,beer,belt,bent,bike,bill,bins,bird,bite,black,blow,blue,body,bold,bolt,bone,book,boom,boot,bore,boss,both,bout,bran,brow,buck,bulk,bull,bunk,buzz,cage,cake,calm,camp,cane,cape,card,care,cart,case,cave,cent,chef,chin,chip,chop,clam,clap,clay,clip,club,coal,coat,code,coil,coin,cola,coma,comb,cone,cope,cord,core,cork,corn,cows,crab,crew,crop,crow,cube,curl,cute,damp,dare,dart,dash,dead,deal,dean,debt,deck,deed,deny,desk,dial,dice,dime,dips,dirt,disk,dive,dogs,doll,dome,dots,dove,drag,draw,drop,drum,duck,dull,dump,dusk,dust,duty,earn,ease,east,edge,emit,envy,epic,face,fail,fall,fang,fare,fast,fate,fawn,fear,feat,feel,feet,fell,fern,fill,find,fire,fish,fist,flag,flaw,flea,flee,flew,flex,flip,foam,fold,fond,font,ford,fork,form,fort,foul,four,frog,fuel,fume,fuse,gale,gash,gate,gear,germ,gist,glee,glob,glue,goal,goes,gold,gore,gown,grab,gram,grew,grin,grip,grit,grow,gust,guts,hack,hail,half,hall,hand,hard,harm,hash,haze,head,hear,heap,heat,heel,helm,hemp,herb,herd,high,hike,hill,hire,hive,hoax,hold,hole,home,hope,hops,horn,hose,host,hour,howl,huff,hull,hump,huge,hung,hunk,hurl,hymn,idle,idea,into,iron,jail,jerk,jest,jolt,jump,just,keen,kill,kilt,kind,knew,know,knob,knot,lace,lame,lamp,land,lane,lark,lash,last,late,lava,lawn,laze,leaf,lean,left,legs,lend,lens,less,levy,lick,life,light,like,limp,line,lint,lion,lips,list,live,load,long,look,lore,lost,loud,lull,lump,lure,lurk,lust,made,main,make,mane,mark,mars,mass,mask,mast,mean,meet,melt,mesh,mild,milk,mill,mind,mine,miss,mist,moat,mock,mold,mole,molt,monk,moon,more,moss,moth,move,much,muck,mull,murk,muse,musk,mute,myth,nail,name,nape,nark,neck,need,nest,news,nick,nine,node,norm,noun,nude,numb,oaks,oath,obey,omen,once,open,oven,owed,pace,pack,pact,pain,palm,pang,past,path,pave,peak,peal,peat,peck,peel,peep,peer,pest,pets,pier,pike,pile,pill,pine,pink,pint,pipe,pity,plan,play,plea,plop,plow,ploy,plug,plum,plot,plus,poem,poet,pole,poll,pond,pore,port,pose,post,pout,prep,prey,prim,prod,prop,prow,puck,puff,pump,pure,push,pull,pyre,race,rage,rain,ramp,rank,rant,rash,rasp,rate,rave,rays,raze,read,real,reed,reef,reel,rely,rest,rice,rick,ride,rife,rift,rime,rind,ring,rink,riot,ripe,rise,rite,road,roam,roar,robe,rock,rode,rods,role,roll,roof,room,root,rope,rose,rout,rove,ruby,rude,ruin,rule,ruse,rust,safe,sage,said,salt,same,sane,sank,save,scam,scar,seam,seep,self,sell,send,sewn,shed,shin,ship,show,side,sigh,sign,silk,sill,silo,silt,sing,sink,sire,size,skin,slab,slap,slat,slay,sled,slim,slip,slit,slop,slot,slug,slum,slur,slow,smug,snap,snob,snot,snub,soak,soar,sobs,sock,soda,soft,soil,sole,soma,some,song,soon,sore,sort,soul,south,sown,span,spar,spec,spew,spin,spit,spot,star,step,stew,stir,stop,stub,stud,stun,suck,suit,sulk,sump,surf,swap,swat,sway,swim,tack,tail,take,talk,tall,tame,tang,tarp,task,taut,teal,teem,teen,tell,tend,tent,test,that,them,then,thin,time,tiny,toad,toil,tomb,tone,tool,tops,tore,tort,toss,tour,town,trap,tray,trek,trim,trio,trip,trod,trot,troy,tuba,tuft,tulip,turf,turn,twig,twin,type,ugly,undo,unit,upon,vain,vale,vane,veer,veil,vend,verb,vest,veto,vial,vice,vine,vise,void,vole,volt,vote,waif,wait,wake,walk,wane,ward,ware,warm,warn,wary,wasp,wash,wave,weal,wear,weld,welt,well,went,west,wick,wide,will,wilt,wind,wine,wing,wish,wisp,wood,word,work,worn,wrap,wren,writ,yard,year,yore,your,zeal,zinc,zero,zone,zoom,about,above,action,allow,among,animal,answer,begin,being,below,black,break,bring,build,carry,cause,change,check,child,class,clean,clear,climb,close,color,count,cover,cross,daily,drink,drive,earth,early,empty,every,extra,false,field,final,first,floor,force,found,frame,fresh,front,given,glass,grace,grain,grand,grant,graph,grave,great,green,greet,group,guard,guide,guilt,haunt,heart,heavy,hence,hinge,horse,human,hurry,image,inner,input,issue,judge,knife,knock,large,later,laugh,layer,learn,legal,level,light,linen,liver,local,loose,lover,lower,lucky,lunch,magic,major,maker,manor,march,might,minor,money,month,moral,mouse,mouth,music,night,noble,noise,north,north,novel,nurse,ocean,offer,often,order,other,outer,owner,paint,panel,paper,party,peace,pedal,phase,piece,pilot,pitch,pixel,place,plain,plane,plant,plate,plaza,plead,pluck,point,power,press,price,pride,print,prior,prize,proof,prove,prowl,queen,quest,quick,quiet,quite,quote,raise,range,reach,ready,realm,right,rival,river,round,royal,ruler,rural,saint,scale,scene,scope,score,scout,sense,serve,setup,seven,shade,shake,shame,shape,share,sharp,shift,shirt,shore,short,shout,sight,since,sixth,skill,sleep,slice,slide,slope,smart,smell,smile,smoke,solve,south,space,spare,spark,speak,speed,spend,spill,spine,spite,split,spoke,spray,stack,stage,stake,stand,stark,start,state,stave,stays,steal,steel,steep,steer,stern,stick,stiff,still,stock,stone,store,storm,story,strap,straw,strip,stuck,style,sugar,suite,sunny,super,surge,swear,sweep,sweet,swift,sword,table,taste,teach,tempt,tense,their,theme,thick,thing,think,third,those,three,threw,throw,thumb,tiger,tired,title,today,token,total,touch,tough,towel,toxic,trace,track,trade,trail,train,trait,trash,treat,trend,trial,trick,troop,trout,truck,truly,trust,truth,tumor,twine,twist,ultra,unify,union,until,upper,upset,usage,usual,until,valid,value,valve,video,vigor,visit,vital,vocal,voice,waste,watch,water,weave,weigh,where,which,while,white,whole,whose,witch,woman,women,world,worry,worse,worth,would,write,wrong,young,yours,youth,above,acted,added,admit,adopt,adult,after,agent,agree,ahead,aimed,alarm,album,alert,alien,align,alive,alley,allot,alone,along,aloof,alter,among,angel,anger,angle,angry,annex,apart,apple,apply,arena,argue,arose,array,aside,asset,atlas,attic,audio,augur,avoid,award,aware,awful,badly,bagel,baker,basic,basin,basis,batch,beach,began,bench,birth,blank,blast,blaze,bleed,blend,bless,blink,block,blood,bloom,blown,blues,blunt,board,bonus,boost,bound,boxer,brace,braid,brand,brave,bread,broke,brown,brush,buddy,build,built,butch,buyer,camel,candy,cargo,carry,catch,cedar,chair,chalk,champ,chaos,charm,cheap,check,cheer,chess,chest,chief,child,china,choir,chord,civic,civil,claim,clash,class,clean,clear,clerk,click,cliff,climb,clock,clone,close,cloud,clown,coach,coast,cobra,cocoa,comet,comma,coral,could,count,court,cover,crack,craft,crane,crash,crazy,cream,creek,creep,crest,crime,crisp,cross,crowd,cruel,crush,crust,culpa,curve,daily,dance,death,debut,decor,delay,depot,depth,diode,dirty,dizzy,donor,dough,dowel,dozen,draft,drama,drape,drawn,dread,dream,dress,dried,drill,drink,drive,drove,drown,drugs,dryer,dunes,eagle,eight,elect,elite,email,empty,ended,enemy,enjoy,enter,entry,equal,erupt,event,every,exact,exert,exile,exist,expel,extra,fable,faith,falls,falls,false,fancy,fatal,feast,fence,fever,fifth,fifty,fifty,fight,filed,first,fixed,flame,flare,flash,flask,fleet,flesh,float,flood,flour,fluid,flute,focal,folks,fraud,freed,fresh,front,froze,fruit,fully,funds,funky,giant,given,gives,gland,glare,gloss,glove,going,grace,grade,grail,grasp,graze,grief,grind,groan,gross,grout,grove,growl,gruel,gruff,grump,guile,gulch,gusty,gypsy".split(',');
@@ -246,7 +246,37 @@ document.querySelectorAll('input').forEach(el => {
 });
 
 window.onPurchaseComplete = function(sku) { console.log('Purchase:', sku); };
-window.onAdMobLoaded = function() { document.getElementById('banner-ad').style.display = 'none'; };
+
+// ── AppLovin MAX / IAP bridge ──────────────────────────────────────────
+var _adsRemoved = false;
+var _interstitialCount = 0;
+
+function _showInterstitial() {
+  if (_adsRemoved) return;
+  _interstitialCount++;
+  if (_interstitialCount % 3 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
+  }
+}
+
+window.onPurchaseComplete = function(sku) {
+  if (sku === 'remove_ads') {
+    _adsRemoved = true;
+    var btn = document.getElementById('btn-remove-ads');
+    if (btn) btn.style.display = 'none';
+    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+  }
+};
+
+// Restore remove-ads state on load
+if (window.Android) {
+  try { if (Android.isPurchased && Android.isPurchased('remove_ads')) {
+    _adsRemoved = true;
+    var btn = document.getElementById('btn-remove-ads');
+    if (btn) btn.style.display = 'none';
+  }} catch(e) {}
+}
+
 </script>
 </body>
 </html>

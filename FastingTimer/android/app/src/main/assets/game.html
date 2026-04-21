@@ -91,7 +91,6 @@ var state={useCount:0,removeAds:false};
 document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
 window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
 function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
-window.onAdMobLoaded=function(){};
 if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
 
 var planH=16;

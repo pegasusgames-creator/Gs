@@ -2060,10 +2060,6 @@ window.onPurchaseComplete = function(productId) {
   onPurchaseSuccess(productId);
 };
 
-window.onAdMobLoaded = function() {
-  initAdMob();
-};
-
 window.onAdNotReady = function() {
   if (window._pendingAdCallback) {
     window._pendingAdCallback = null;

@@ -91,7 +91,6 @@ function showScreen(id){document.querySelectorAll('.screen').forEach(function(s)
 var state={useCount:0,removeAds:false,score:0,qi:0,questions:[],timer:null,timeLeft:0,answered:false};
 window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;if(window.Android)Android.hideBannerAd();}};
 function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%5===0&&window.Android)Android.showInterstitial();}
-window.onAdMobLoaded=function(){};
 if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
 
 var ALL_QUESTIONS=[

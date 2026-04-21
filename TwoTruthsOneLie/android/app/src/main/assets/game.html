@@ -295,7 +295,6 @@ function showScreen(id) {
   document.getElementById(id).classList.remove('hidden');
 }
 
-window.onAdMobLoaded = function() {};
 window.onPurchaseComplete = function(sku) {
   if (sku && sku.includes('no_ads')) {
     document.getElementById('banner-ad').style.display = 'none';

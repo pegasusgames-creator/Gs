@@ -65,6 +65,7 @@ function randomSecret() {
 }
 
 function newGame() {
+  _showInterstitial();
   state.secret = randomSecret();
   state.guesses = [];
   state.currentGuess = [null,null,null,null];
@@ -215,8 +216,6 @@ function removeAds() {
   else { state.removeAds=true; document.getElementById('msg').textContent='Ads removed!'; }
 }
 window.onPurchaseComplete = function() { state.removeAds=true; };
-window.onAdMobLoaded = function() {};
-
 newGame();
 </script>
 </body>

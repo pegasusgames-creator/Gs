@@ -165,6 +165,7 @@ document.getElementById('removeAdsBtn').addEventListener('click', () => {
 });
 
 function startGame() {
+  _showInterstitial();
   teamMode = document.getElementById('teamModeCheck').checked;
   roundTime = parseInt(document.getElementById('roundTime').value) || 60;
   scores = [0, 0];
@@ -301,7 +302,6 @@ function handleTilt(e) {
   else if (diff < -28) { tiltCooldown = true; skipWord(); setTimeout(() => { tiltCooldown = false; lastBeta = null; }, 1200); }
 }
 
-window.onAdMobLoaded = function() {};
 window.onPurchaseComplete = function(sku) {
   if (sku && sku.includes('no_ads')) {
     document.getElementById('banner-ad').style.display = 'none';

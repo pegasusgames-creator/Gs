@@ -90,7 +90,6 @@ header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--ac
 var state={useCount:0,removeAds:false};
 document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
 window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
-window.onAdMobLoaded=function(){};
 if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
 
 var QUOTES=['Every cigarette not smoked is a victory. You are stronger than your cravings.','The first step was the hardest. Everything after is proof of your strength.','Your lungs are healing. Your heart is thankful. Keep going.','One day at a time. One breath at a time. You\'ve got this.','The money you save is the freedom you earn. Stay the course.','Cravings last 3-5 minutes. You are bigger than a craving.'];

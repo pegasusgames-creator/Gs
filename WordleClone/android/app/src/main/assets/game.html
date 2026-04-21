@@ -38,10 +38,10 @@ header h1 { font-size: 1.6rem; letter-spacing: 4px; font-weight: 700; }
 .share-btn { background: var(--green); color: #fff; border: none; border-radius: 10px; padding: 12px 28px; font-size: 1rem; font-weight: 700; cursor: pointer; margin: 8px; }
 .share-btn.btn-pressed { opacity: 0.7; transform: scale(0.95); }
 .new-btn { background: #565758; color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-size: 0.9rem; font-weight: 700; cursor: pointer; margin: 4px; }
-.banner { background: #111; border: 1px dashed #444; color: #555; text-align: center; padding: 10px; font-size: 0.75rem; width: 100%; margin-top: auto; flex-shrink: 0; }
 </style>
 </head>
 <body>
+<button id="btn-remove-ads" onclick="if(window.Android)Android.purchase('remove_ads')" style="position:fixed;top:8px;right:8px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:0.65rem;font-weight:700;padding:5px 10px;border-radius:20px;cursor:pointer;z-index:9999;letter-spacing:0.5px">Remove Ads</button>
 <header><h1>WORDLE</h1></header>
 <div class="board" id="board"></div>
 <div class="msg" id="msg"></div>
@@ -56,7 +56,7 @@ header h1 { font-size: 1.6rem; letter-spacing: 4px; font-weight: 700; }
   <button class="share-btn" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="shareResult()">Share Result</button>
   <button class="new-btn" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="newGame()">New Game</button>
 </div>
-<div class="banner" id="banner-ad">Advertisement</div>
+
 
 <script>
 const WORDS = "about,above,abuse,actor,acute,admit,adopt,agent,agree,ahead,alarm,album,alert,alien,align,alive,alley,allot,allow,alone,along,altar,angel,anger,angle,angry,annex,apart,apple,apply,arena,argue,array,aside,asset,attic,audio,avoid,award,aware,awful,badly,baker,basic,basin,basis,batch,beach,began,bench,birth,black,blade,blame,bland,blank,blast,blaze,bleed,blend,bless,blink,block,blood,bloom,blown,blues,blunt,board,bonus,boost,bound,brain,brand,brave,bread,break,breed,brick,brief,bring,brisk,broke,brook,brown,brush,buddy,build,built,buyer,cable,camel,candy,cargo,carry,catch,cedar,chair,chalk,champ,chaos,charm,cheap,check,cheer,chess,chest,chief,child,china,choir,chord,civic,civil,claim,clash,class,clean,clear,clerk,click,cliff,climb,clock,clone,close,cloud,clown,coach,coast,cobra,cocoa,comet,comma,coral,could,count,court,cover,crack,craft,crane,crash,crazy,cream,creek,creep,crest,crime,crisp,cross,crowd,cruel,crush,crust,curve,daily,dance,death,debut,decor,delay,depot,depth,dirty,dizzy,donor,dough,draft,drama,drawn,dread,dream,dress,dried,drill,drink,drive,drove,drown,drums,eagle,eight,elect,elite,email,empty,ended,enemy,enjoy,enter,entry,equal,erupt,event,every,exact,exert,exile,exist,expel,extra,fable,faith,falls,fancy,fatal,feast,fence,fever,fifth,fifty,fight,filed,first,fixed,flame,flare,flash,flask,fleet,flesh,float,flood,flour,fluid,flute,folks,fraud,freed,fresh,front,froze,fruit,fully,funds,funky,ghost,giant,given,gives,gland,glare,gloss,glove,going,grace,grade,grail,grasp,graze,grief,grind,groan,gross,grove,growl,gruel,gruff,grump,guile,gulch,gusty,gypsy,habit,happy,harsh,hasty,havoc,hedge,hence,hinge,honey,honor,horse,hotel,human,humid,humor,hurry,ideal,image,imply,index,infer,inner,input,inter,intro,issue,ivory,jazzy,jewel,joint,joker,judge,juicy,jumbo,jumpy,junta,karma,kayak,knack,kneel,knife,knock,knoll,known,label,lapel,large,laser,latch,later,laugh,layer,learn,legal,level,light,liver,local,lodge,logic,loose,lover,lower,lucky,lunch,lusty,magic,major,maker,manor,march,mercy,merit,metal,might,minor,miser,money,month,moral,mouse,mouth,muddy,music,naive,naval,nervy,night,noble,noise,north,novel,nurse,nymph,ocean,offer,often,olive,omega,onset,opera,order,other,outer,oxide,ozone,paint,panel,panic,paper,party,peace,pedal,penny,phase,photo,piano,piece,pilot,pitch,pixel,pizza,place,plain,plane,plant,plate,plaza,plead,pluck,plugs,plumb,plume,plunk,polar,posed,power,press,price,pride,prime,print,prior,prize,probe,proof,prose,prove,prowl,pupil,queen,quest,queue,quick,quiet,quite,quota,quote,radar,raise,rally,range,rapid,ratio,reach,ready,realm,rebel,recap,refer,reign,relax,repay,repel,reply,rider,rifle,right,risky,rival,river,rocky,rouge,rough,royal,rugby,ruler,rural,saint,salad,sauce,scale,scene,scope,score,scout,screw,sense,serve,setup,seven,shade,shake,shame,shape,share,sharp,shift,shirt,shore,short,shout,sight,since,sixth,skill,skull,slave,sleep,slice,slide,slime,slope,smart,smell,smile,smoke,snake,solar,solid,solve,sorry,south,space,spare,spark,speak,spear,speed,spend,spill,spine,spite,split,spoke,spray,spree,squad,stack,stage,stake,stand,stark,start,state,stave,stays,steal,steel,steep,steer,stern,stick,stiff,still,stock,stone,store,storm,story,strap,straw,strip,stuck,study,style,sugar,suite,sunny,super,surge,swear,sweep,sweet,swift,sword,swore,syrup,table,taste,taunt,teach,tempt,tense,tenth,theme,thick,thing,think,third,those,three,threw,throw,thumb,tiger,tired,title,today,token,total,touch,tough,towel,toxic,trace,track,trade,trail,train,trait,trash,treat,trend,trial,trick,troop,trout,truck,truly,trust,truth,tumor,twine,twist,ultra,unify,union,until,upper,upset,usage,usual,valid,value,valve,video,vigor,visor,visit,vital,vivid,vocal,voice,voter,waste,watch,water,weave,weigh,weird,where,which,while,white,whole,whose,witch,woman,women,world,worry,worse,worth,would,write,wrong,yacht,young,yours,youth,zebra,zilch,zonal".split(',');
@@ -254,6 +254,7 @@ function shareResult() {
 }
 
 function newGame() {
+  _showInterstitial();
   const newSeed = seed + Math.floor(Math.random() * 100);
   const nrng = seededRand(newSeed);
   answer = WORDS[Math.floor(nrng() * WORDS.length)].toUpperCase();
@@ -270,7 +271,37 @@ buildBoard();
 buildKeyboard();
 updateStats();
 window.onPurchaseComplete = function(sku) { console.log('Purchase:', sku); };
-window.onAdMobLoaded = function() { document.getElementById('banner-ad').style.display = 'none'; };
+
+// ── AppLovin MAX / IAP bridge ──────────────────────────────────────────
+var _adsRemoved = false;
+var _interstitialCount = 0;
+
+function _showInterstitial() {
+  if (_adsRemoved) return;
+  _interstitialCount++;
+  if (_interstitialCount % 3 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
+  }
+}
+
+window.onPurchaseComplete = function(sku) {
+  if (sku === 'remove_ads') {
+    _adsRemoved = true;
+    var btn = document.getElementById('btn-remove-ads');
+    if (btn) btn.style.display = 'none';
+    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+  }
+};
+
+// Restore remove-ads state on load
+if (window.Android) {
+  try { if (Android.isPurchased && Android.isPurchased('remove_ads')) {
+    _adsRemoved = true;
+    var btn = document.getElementById('btn-remove-ads');
+    if (btn) btn.style.display = 'none';
+  }} catch(e) {}
+}
+
 </script>
 </body>
 </html>

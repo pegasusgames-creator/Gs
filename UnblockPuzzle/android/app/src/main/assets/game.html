@@ -1697,10 +1697,6 @@ function playSound(type){
 // =====================================================================
 // ADMOB & PURCHASE CALLBACKS
 // =====================================================================
-window.onAdMobLoaded = function(){
-  if(state.removeAds && window.Android) Android.hideBannerAd();
-};
-
 function _showMsg(msg){
   const el=document.createElement('div');
   el.textContent=msg;
