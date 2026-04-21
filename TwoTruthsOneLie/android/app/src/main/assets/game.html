@@ -302,6 +302,24 @@ window.onPurchaseComplete = function(sku) {
   }
 };
 if (window.Android) document.getElementById('banner-ad').style.display = 'none';
+
+// Interstitial ad helper
+var _interstitialCount = 0;
+var _adsRemoved = false;
+function _showInterstitial() {
+  if (_adsRemoved) return;
+  _interstitialCount++;
+  if (_interstitialCount % 3 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
+  }
+}
+
+// Show interstitial every 5 taps
+var _tapCount = 0;
+document.addEventListener('click', function() {
+  _tapCount++;
+  if (_tapCount % 5 === 0) _showInterstitial();
+});
 </script>
 </body>
 </html>

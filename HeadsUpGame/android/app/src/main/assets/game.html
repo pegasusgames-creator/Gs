@@ -178,6 +178,7 @@ function updateTimerUI() {
 }
 
 function nextCard() {
+  _showInterstitial();
   if (!deck.length) { deck = [...(CARDS[activeCat] || [])]; shuffle(deck); }
   document.getElementById('gameWord').textContent = deck.pop().toUpperCase();
 }
@@ -241,6 +242,17 @@ window.onPurchaseComplete = function(sku) {
   }
 };
 if (window.Android) document.getElementById('banner-ad').style.display = 'none';
+
+// Interstitial ad helper
+var _interstitialCount = 0;
+var _adsRemoved = false;
+function _showInterstitial() {
+  if (_adsRemoved) return;
+  _interstitialCount++;
+  if (_interstitialCount % 3 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
+  }
+}
 </script>
 </body>
 </html>

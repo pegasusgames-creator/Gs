@@ -47,6 +47,7 @@
 
 <script>
 function calculate(){
+  _showInterstitial();
   const dobVal=document.getElementById('dob').value;
   if(!dobVal)return;
   const dob=new Date(dobVal);
@@ -87,6 +88,17 @@ function calculate(){
 document.getElementById('asof').value=new Date().toISOString().split('T')[0];
 
 window.onPurchaseComplete=function(id){if(id==='remove_ads'){document.getElementById('remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+
+// Interstitial ad helper
+var _interstitialCount = 0;
+var _adsRemoved = false;
+function _showInterstitial() {
+  if (_adsRemoved) return;
+  _interstitialCount++;
+  if (_interstitialCount % 3 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
+  }
+}
 </script>
 </body>
 </html>
