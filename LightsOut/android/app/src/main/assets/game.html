@@ -159,10 +159,10 @@ function buildLevelSelect() {
 }
 
 function removeAds() {
-  if (window.Android) Android.purchaseRemoveAds();
+  if (window.Android) Android.purchase('remove_ads');
   else { state.removeAds=true; document.getElementById('msg').textContent='Ads removed!'; }
 }
-window.onPurchaseComplete=function(){state.removeAds=true;};
+window.onPurchaseComplete = function(sku) {state.removeAds=true;};
 loadLevel(1);
 buildLevelSelect();
 </script>
