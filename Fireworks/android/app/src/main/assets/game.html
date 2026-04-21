@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Fireworks</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#0a0a0f;--accent:#FF5722;--text:#eaeaea;--muted:#666;--radius:12px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;}
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;flex-shrink:0;}
+header h1{font-size:1.2rem;font-weight:700;}
+header h1 span{color:var(--accent);}
+#canvas{display:block;flex:1;width:100%;touch-action:manipulation;}
+#controls{display:flex;gap:8px;padding:8px 12px;flex-shrink:0;}
+.btn{flex:1;background:#1a1a2a;border:1px solid #333;color:var(--text);padding:11px;border-radius:var(--radius);font-size:0.85rem;cursor:pointer;touch-action:manipulation;}
+.btn.active{background:var(--accent);color:#000;border-color:var(--accent);}
+.btn.btn-pressed{transform:scale(0.93);}
+#banner{height:50px;background:#111;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.75rem;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Fire<span>works</span></h1><span style="color:var(--muted);font-size:0.8rem;">Tap anywhere!</span></header>
+  <canvas id="canvas"></canvas>
+  <div id="controls">
+    <button class="btn" id="btn-auto">Auto Mode</button>
+    <button class="btn" id="btn-ambient">Ambient</button>
+  </div>
+  <div id="banner">Ad Banner</div>
+</div>
+<script>
+const canvas=document.getElementById('canvas');
+const ctx2=canvas.getContext('2d');
+let particles=[],rockets=[],autoMode=false,ambientMode=false,autoTimer=null;
+
+function resize(){
+  canvas.width=canvas.offsetWidth;
+  canvas.height=canvas.offsetHeight;
+}
+resize();
+window.addEventListener('resize',resize);
+
+const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+function playSparkle(){
+  try{
+    if(audioCtx.state==='suspended')audioCtx.resume();
+    const num=8+Math.floor(Math.random()*6);
+    for(let i=0;i<num;i++){
+      setTimeout(()=>{
+        const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+        o.connect(g);g.connect(audioCtx.destination);
+        o.frequency.value=1200+Math.random()*1400;
+        g.gain.setValueAtTime(0.05,audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.18);
+        o.start();o.stop(audioCtx.currentTime+0.18);
+      },i*30);
+    }
+  }catch(e){}
+}
+
+class Rocket{
+  constructor(x,y){
+    this.x=x;this.startX=x;
+    this.y=canvas.height;this.targetY=y;
+    this.vy=-12-Math.random()*4;
+    this.color=`hsl(${Math.random()*360},100%,70%)`;
+    this.trail=[];this.done=false;
+  }
+  update(){
+    this.trail.push({x:this.x,y:this.y,a:1});
+    this.y+=this.vy;
+    this.vy*=0.98;
+    if(this.y<=this.targetY)this.explode();
+    this.trail.forEach(t=>t.a-=0.06);
+    this.trail=this.trail.filter(t=>t.a>0);
+  }
+  explode(){
+    this.done=true;
+    playSparkle();
+    const num=60+Math.floor(Math.random()*40);
+    for(let i=0;i<num;i++){
+      const angle=Math.random()*Math.PI*2;
+      const speed=2+Math.random()*6;
+      particles.push({
+        x:this.x,y:this.y,
+        vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,
+        color:this.color,a:1,size:2+Math.random()*2,
+        gravity:0.12
+      });
+    }
+  }
+  draw(){
+    this.trail.forEach(t=>{
+      ctx2.globalAlpha=t.a*0.6;
+      ctx2.fillStyle=this.color;
+      ctx2.beginPath();ctx2.arc(t.x,t.y,2,0,Math.PI*2);ctx2.fill();
+    });
+    ctx2.globalAlpha=1;
+    ctx2.fillStyle=this.color;
+    ctx2.beginPath();ctx2.arc(this.x,this.y,3,0,Math.PI*2);ctx2.fill();
+  }
+}
+
+function launch(x,y){
+  rockets.push(new Rocket(x,y||canvas.height*0.2+Math.random()*canvas.height*0.4));
+}
+
+function animate(){
+  requestAnimationFrame(animate);
+  ctx2.fillStyle='rgba(10,10,15,0.18)';
+  ctx2.fillRect(0,0,canvas.width,canvas.height);
+  rockets.forEach(r=>{if(!r.done){r.update();r.draw();}});
+  rockets=rockets.filter(r=>!r.done||r.trail.length>0);
+  particles.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;p.vy+=p.gravity;
+    p.vx*=0.97;p.vy*=0.97;p.a-=0.015;
+    ctx2.globalAlpha=Math.max(0,p.a);
+    ctx2.fillStyle=p.color;
+    ctx2.beginPath();ctx2.arc(p.x,p.y,p.size,0,Math.PI*2);ctx2.fill();
+  });
+  ctx2.globalAlpha=1;
+  particles=particles.filter(p=>p.a>0);
+  if(autoMode&&Math.random()<0.04)launch(Math.random()*canvas.width);
+  if(ambientMode&&Math.random()<0.015)launch(Math.random()*canvas.width);
+}
+animate();
+
+canvas.addEventListener('click',e=>{
+  const r=canvas.getBoundingClientRect();
+  launch(e.clientX-r.left,e.clientY-r.top);
+});
+canvas.addEventListener('touchstart',e=>{
+  e.preventDefault();
+  const r=canvas.getBoundingClientRect();
+  for(let t of e.touches)launch(t.clientX-r.left,t.clientY-r.top);
+},{passive:false});
+
+document.getElementById('btn-auto').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  autoMode=!autoMode;this.classList.toggle('active',autoMode);
+  if(ambientMode){ambientMode=false;document.getElementById('btn-ambient').classList.remove('active');}
+});
+document.getElementById('btn-ambient').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  ambientMode=!ambientMode;this.classList.toggle('active',ambientMode);
+  if(autoMode){autoMode=false;document.getElementById('btn-auto').classList.remove('active');}
+});
+
+window.onPurchaseComplete=function(sku){};
+window.onAdMobLoaded=function(){document.getElementById('banner').style.display='none';};
+</script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Travel Phrasebook</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --accent:#1565C0; --accent2:#42A5F5; --bg:#E3F2FD; --card:#fff; --text:#333; --muted:#777; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--accent); flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:800; color:#fff; }
+#btn-remove-ads { background:rgba(255,255,255,0.25); border:none; color:#fff; font-size:0.72rem; font-weight:700; padding:5px 10px; border-radius:20px; cursor:pointer; }
+
+/* Controls */
+#controls { background:#fff; padding:10px 12px; flex-shrink:0; border-bottom:2px solid #BBDEFB; display:flex; flex-direction:column; gap:8px; }
+.ctrl-row { display:flex; gap:8px; align-items:center; }
+#searchInput { flex:1; padding:10px 14px; border:2px solid #BBDEFB; border-radius:24px; font-size:0.9rem; color:var(--text); outline:none; }
+#searchInput:focus { border-color:var(--accent); }
+
+/* Lang and cat scroll */
+.scroll-chips { display:flex; gap:8px; overflow-x:auto; padding-bottom:2px; }
+.chip { padding:7px 14px; font-size:0.78rem; font-weight:700; border:2px solid #BBDEFB; border-radius:20px; background:#fff; cursor:pointer; white-space:nowrap; transition:all 0.15s; color:var(--muted); flex-shrink:0; }
+.chip.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+/* Phrase list */
+#phraseList { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:10px; }
+.phrase-card { background:#fff; border-radius:var(--radius); padding:14px 16px; margin-bottom:8px; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; transition:all 0.15s; border:2px solid transparent; }
+.phrase-card:active { transform:scale(0.99); }
+.phrase-card.expanded { border-color:var(--accent); }
+.ph-english { font-size:0.95rem; font-weight:700; color:var(--text); }
+.ph-translation { font-size:1rem; font-weight:800; color:var(--accent); margin-top:4px; }
+.ph-pronunc { font-size:0.82rem; color:var(--muted); margin-top:3px; display:none; font-style:italic; }
+.phrase-card.expanded .ph-pronunc { display:block; }
+.ph-cat-badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:0.68rem; font-weight:700; background:#E3F2FD; color:#1565C0; margin-top:4px; }
+.no-results { text-align:center; padding:40px; color:var(--muted); font-size:1rem; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>🌍 Phrasebook</h1>
+    <button id="btn-remove-ads" onclick="purchase('remove_ads')">⭐ Remove Ads</button>
+  </header>
+
+  <div id="controls">
+    <div class="ctrl-row">
+      <input type="search" id="searchInput" placeholder="🔍 Search phrases..." oninput="renderList()">
+    </div>
+    <div class="scroll-chips" id="langChips"></div>
+    <div class="scroll-chips" id="catChips"></div>
+  </div>
+
+  <div id="phraseList"></div>
+</div>
+<script>
+function purchase(sku){if(window.Android&&Android.purchase)Android.purchase(sku);}
+
+const LANGS = ['All','Spanish','French','German','Italian','Portuguese','Japanese','Chinese','Arabic','Russian','Korean'];
+const CATS  = ['All','Greetings','Food','Directions','Emergency','Shopping','Hotel'];
+
+// 40 phrases × up to 10 languages (abbreviated for brevity but covers all categories)
+const PHRASES = [
+  // Greetings
+  {e:'Hello',cat:'Greetings',t:{Spanish:'Hola',French:'Bonjour',German:'Hallo',Italian:'Ciao',Portuguese:'Olá',Japanese:'こんにちは (Konnichiwa)',Chinese:'你好 (Nǐ hǎo)',Arabic:'مرحبا (Marhaba)',Russian:'Привет (Privet)',Korean:'안녕하세요 (Annyeonghaseyo)'}},
+  {e:'Good morning',cat:'Greetings',t:{Spanish:'Buenos días',French:'Bonjour',German:'Guten Morgen',Italian:'Buongiorno',Portuguese:'Bom dia',Japanese:'おはようございます (Ohayou gozaimasu)',Chinese:'早上好 (Zǎoshang hǎo)',Arabic:'صباح الخير (Sabah al-khayr)',Russian:'Доброе утро (Dobroe utro)',Korean:'좋은 아침이에요 (Joheun achimieyo)'}},
+  {e:'Good night',cat:'Greetings',t:{Spanish:'Buenas noches',French:'Bonne nuit',German:'Gute Nacht',Italian:'Buonanotte',Portuguese:'Boa noite',Japanese:'おやすみなさい (Oyasumi nasai)',Chinese:'晚安 (Wǎn ān)',Arabic:'تصبح على خير (Tusbih ala khayr)',Russian:'Спокойной ночи (Spokoynoy nochi)',Korean:'잘 자요 (Jal jayo)'}},
+  {e:'Goodbye',cat:'Greetings',t:{Spanish:'Adiós',French:'Au revoir',German:'Auf Wiedersehen',Italian:'Arrivederci',Portuguese:'Tchau',Japanese:'さようなら (Sayonara)',Chinese:'再见 (Zàijiàn)',Arabic:'مع السلامة (Ma\'a salama)',Russian:'До свидания (Do svidaniya)',Korean:'안녕히 가세요 (Annyeonghi gaseyo)'}},
+  {e:'Thank you',cat:'Greetings',t:{Spanish:'Gracias',French:'Merci',German:'Danke',Italian:'Grazie',Portuguese:'Obrigado/a',Japanese:'ありがとうございます (Arigatou gozaimasu)',Chinese:'谢谢 (Xièxiè)',Arabic:'شكراً (Shukran)',Russian:'Спасибо (Spasibo)',Korean:'감사합니다 (Gamsahamnida)'}},
+  {e:'Please',cat:'Greetings',t:{Spanish:'Por favor',French:'S\'il vous plaît',German:'Bitte',Italian:'Per favore',Portuguese:'Por favor',Japanese:'お願いします (Onegaishimasu)',Chinese:'请 (Qǐng)',Arabic:'من فضلك (Min fadlik)',Russian:'Пожалуйста (Pozhaluysta)',Korean:'부탁합니다 (Butakhamnida)'}},
+  {e:'Sorry / Excuse me',cat:'Greetings',t:{Spanish:'Lo siento / Perdón',French:'Pardon / Excusez-moi',German:'Entschuldigung',Italian:'Scusa / Mi scusi',Portuguese:'Desculpe',Japanese:'すみません (Sumimasen)',Chinese:'对不起 (Duìbuqǐ)',Arabic:'آسف (Asif)',Russian:'Извините (Izvinite)',Korean:'죄송합니다 (Joesonghamnida)'}},
+  {e:'Yes / No',cat:'Greetings',t:{Spanish:'Sí / No',French:'Oui / Non',German:'Ja / Nein',Italian:'Sì / No',Portuguese:'Sim / Não',Japanese:'はい / いいえ (Hai / Iie)',Chinese:'是 / 不是 (Shì / Bùshì)',Arabic:'نعم / لا (Na\'am / La)',Russian:'Да / Нет (Da / Net)',Korean:'네 / 아니요 (Ne / Aniyo)'}},
+  {e:'How are you?',cat:'Greetings',t:{Spanish:'¿Cómo estás?',French:'Comment allez-vous?',German:'Wie geht es Ihnen?',Italian:'Come stai?',Portuguese:'Como vai você?',Japanese:'お元気ですか？(Ogenki desu ka?)',Chinese:'你好吗？(Nǐ hǎo ma?)',Arabic:'كيف حالك؟ (Kayfa halak?)',Russian:'Как дела? (Kak dela?)',Korean:'잘 지내세요? (Jal jinaeseyo?)'}},
+  {e:'My name is...',cat:'Greetings',t:{Spanish:'Me llamo...',French:'Je m\'appelle...',German:'Ich heiße...',Italian:'Mi chiamo...',Portuguese:'Meu nome é...',Japanese:'私の名前は... (Watashi no namae wa...)',Chinese:'我叫... (Wǒ jiào...)',Arabic:'اسمي... (Ismi...)',Russian:'Меня зовут... (Menya zovut...)',Korean:'제 이름은... (Je ireumeun...)'}},
+  // Food
+  {e:'The bill, please',cat:'Food',t:{Spanish:'La cuenta, por favor',French:'L\'addition, s\'il vous plaît',German:'Die Rechnung, bitte',Italian:'Il conto, per favore',Portuguese:'A conta, por favor',Japanese:'お会計をお願いします (Okaikei wo onegaishimasu)',Chinese:'买单 (Mǎidān)',Arabic:'الحساب من فضلك (Al-hisab min fadlik)',Russian:'Счёт, пожалуйста (Schyot, pozhaluysta)',Korean:'계산서 주세요 (Gyesanseo juseyo)'}},
+  {e:'I am vegetarian',cat:'Food',t:{Spanish:'Soy vegetariano/a',French:'Je suis végétarien/ne',German:'Ich bin Vegetarier/in',Italian:'Sono vegetariano/a',Portuguese:'Sou vegetariano/a',Japanese:'私はベジタリアンです (Watashi wa bejitarian desu)',Chinese:'我吃素 (Wǒ chī sù)',Arabic:'أنا نباتي (Ana nabati)',Russian:'Я вегетарианец (Ya vegetarianets)',Korean:'저는 채식주의자입니다 (Jeoneun chaesikjuuijaemnida)'}},
+  {e:'I am allergic to...',cat:'Food',t:{Spanish:'Soy alérgico/a a...',French:'Je suis allergique à...',German:'Ich bin allergisch gegen...',Italian:'Sono allergico/a a...',Portuguese:'Sou alérgico/a a...',Japanese:'...アレルギーがあります (...arerugii ga arimasu)',Chinese:'我对...过敏 (Wǒ duì... guòmǐn)',Arabic:'لدي حساسية من... (Ladayya hassasiya min...)',Russian:'У меня аллергия на... (U menya allergiya na...)',Korean:'저는 ...알레르기가 있어요 (Jeoneun ...allereugi ga isseoyo)'}},
+  {e:'Do you have a menu in English?',cat:'Food',t:{Spanish:'¿Tiene un menú en inglés?',French:'Avez-vous un menu en anglais?',German:'Haben Sie eine Speisekarte auf Englisch?',Italian:'Ha un menu in inglese?',Portuguese:'Tem cardápio em inglês?',Japanese:'英語のメニューはありますか？(Eigo no menyu wa arimasu ka?)',Chinese:'有英文菜单吗？(Yǒu yīngwén càidān ma?)',Arabic:'هل لديكم قائمة بالإنجليزية؟',Russian:'У вас есть меню на английском? (U vas yest menyu na angliyskom?)',Korean:'영어 메뉴판 있나요? (Yeongeo menupan innayo?)'}},
+  {e:'Water, please',cat:'Food',t:{Spanish:'Agua, por favor',French:'De l\'eau, s\'il vous plaît',German:'Wasser, bitte',Italian:'Acqua, per favore',Portuguese:'Água, por favor',Japanese:'お水をください (Omizu wo kudasai)',Chinese:'请给我水 (Qǐng gěi wǒ shuǐ)',Arabic:'ماء من فضلك (Ma\' min fadlik)',Russian:'Воду, пожалуйста (Vodu, pozhaluysta)',Korean:'물 주세요 (Mul juseyo)'}},
+  {e:'It was delicious!',cat:'Food',t:{Spanish:'¡Estuvo delicioso!',French:'C\'était délicieux!',German:'Es war köstlich!',Italian:'Era delizioso!',Portuguese:'Estava delicioso!',Japanese:'美味しかったです！(Oishikatta desu!)',Chinese:'太好吃了！(Tài hǎo chī le!)',Arabic:'كان لذيذاً! (Kana ladheedhan!)',Russian:'Было вкусно! (Bylo vkusno!)',Korean:'정말 맛있었어요! (Jeongmal masitseosseoyo!)'}},
+  {e:'A table for two',cat:'Food',t:{Spanish:'Una mesa para dos',French:'Une table pour deux',German:'Einen Tisch für zwei',Italian:'Un tavolo per due',Portuguese:'Uma mesa para dois',Japanese:'二人用のテーブル (Futari you no teburu)',Chinese:'两位 (Liǎng wèi)',Arabic:'طاولة لشخصين (Taawila li shakhsayn)',Russian:'Столик на двоих (Stolik na dvoikh)',Korean:'2인용 테이블 (Iinnyong teibeul)'}},
+  // Directions
+  {e:'Where is...?',cat:'Directions',t:{Spanish:'¿Dónde está...?',French:'Où est...?',German:'Wo ist...?',Italian:'Dov\'è...?',Portuguese:'Onde fica...?',Japanese:'...はどこですか？ (...wa doko desu ka?)',Chinese:'...在哪里？(...zài nǎlǐ?)',Arabic:'أين...؟ (Ayn...?)',Russian:'Где...? (Gde...?)',Korean:'...이/가 어디 있나요? (...i/ga eodi innayo?)'}},
+  {e:'Left / Right',cat:'Directions',t:{Spanish:'Izquierda / Derecha',French:'Gauche / Droite',German:'Links / Rechts',Italian:'Sinistra / Destra',Portuguese:'Esquerda / Direita',Japanese:'左 / 右 (Hidari / Migi)',Chinese:'左 / 右 (Zuǒ / Yòu)',Arabic:'يسار / يمين (Yasar / Yameen)',Russian:'Налево / Направо (Nalevo / Napravo)',Korean:'왼쪽 / 오른쪽 (Oenjjok / Oreunjjok)'}},
+  {e:'Straight ahead',cat:'Directions',t:{Spanish:'Todo recto',French:'Tout droit',German:'Geradeaus',Italian:'Sempre dritto',Portuguese:'Em frente',Japanese:'まっすぐ (Massugu)',Chinese:'直走 (Zhí zǒu)',Arabic:'على طول (Ala tul)',Russian:'Прямо (Pryamo)',Korean:'직진 (Jikjin)'}},
+  {e:'How far is it?',cat:'Directions',t:{Spanish:'¿A qué distancia está?',French:'C\'est à quelle distance?',German:'Wie weit ist es?',Italian:'Quanto è lontano?',Portuguese:'Fica a que distância?',Japanese:'どのくらいかかりますか？',Chinese:'多远？(Duō yuǎn?)',Arabic:'كم المسافة؟ (Kam al-masafa?)',Russian:'Как далеко? (Kak daleko?)',Korean:'얼마나 멀어요? (Eolmana meoreoyo?)'}},
+  {e:'I am lost',cat:'Directions',t:{Spanish:'Estoy perdido/a',French:'Je suis perdu/e',German:'Ich habe mich verirrt',Italian:'Mi sono perso/a',Portuguese:'Estou perdido/a',Japanese:'迷子になりました (Maigo ni narimashita)',Chinese:'我迷路了 (Wǒ mílù le)',Arabic:'أنا ضائع (Ana dayi\')',Russian:'Я заблудился (Ya zabludilsya)',Korean:'길을 잃었어요 (Gireul irheosseoyo)'}},
+  // Emergency
+  {e:'Help!',cat:'Emergency',t:{Spanish:'¡Ayuda!',French:'Au secours!',German:'Hilfe!',Italian:'Aiuto!',Portuguese:'Socorro!',Japanese:'助けてください！(Tasukete kudasai!)',Chinese:'救命！(Jiùmìng!)',Arabic:'النجدة! (An-najda!)',Russian:'Помогите! (Pomogite!)',Korean:'도와주세요! (Dowajuseyo!)'}},
+  {e:'Call the police!',cat:'Emergency',t:{Spanish:'¡Llame a la policía!',French:'Appelez la police!',German:'Rufen Sie die Polizei!',Italian:'Chiami la polizia!',Portuguese:'Chame a polícia!',Japanese:'警察を呼んでください！(Keisatsu wo yonde kudasai!)',Chinese:'叫警察！(Jiào jǐngchá!)',Arabic:'اتصل بالشرطة! (Ittasil bilshurta!)',Russian:'Вызовите полицию! (Vyzovite politsiyu!)',Korean:'경찰을 불러주세요! (Gyeongchareul bulleojuseyo!)'}},
+  {e:'I need a doctor',cat:'Emergency',t:{Spanish:'Necesito un médico',French:'J\'ai besoin d\'un médecin',German:'Ich brauche einen Arzt',Italian:'Ho bisogno di un medico',Portuguese:'Preciso de um médico',Japanese:'医者が必要です (Isha ga hitsuyou desu)',Chinese:'我需要医生 (Wǒ xūyào yīshēng)',Arabic:'أحتاج طبيباً (Ahtaj tabeeba)',Russian:'Мне нужен врач (Mne nuzhen vrach)',Korean:'의사가 필요해요 (Uisaga piryohaeyo)'}},
+  {e:'Where is the hospital?',cat:'Emergency',t:{Spanish:'¿Dónde está el hospital?',French:'Où est l\'hôpital?',German:'Wo ist das Krankenhaus?',Italian:'Dov\'è l\'ospedale?',Portuguese:'Onde fica o hospital?',Japanese:'病院はどこですか？(Byouin wa doko desu ka?)',Chinese:'医院在哪里？(Yīyuàn zài nǎlǐ?)',Arabic:'أين المستشفى؟ (Ayna al-mustashfa?)',Russian:'Где больница? (Gde bolnitsa?)',Korean:'병원이 어디 있나요? (Byeongwoni eodi innayo?)'}},
+  // Shopping
+  {e:'How much does this cost?',cat:'Shopping',t:{Spanish:'¿Cuánto cuesta esto?',French:'Combien ça coûte?',German:'Wie viel kostet das?',Italian:'Quanto costa?',Portuguese:'Quanto custa?',Japanese:'これはいくらですか？(Kore wa ikura desu ka?)',Chinese:'这多少钱？(Zhè duōshǎo qián?)',Arabic:'كم ثمن هذا؟ (Kam thaman hadha?)',Russian:'Сколько это стоит? (Skolko eto stoit?)',Korean:'이거 얼마예요? (Igeo eolmayeyo?)'}},
+  {e:'Too expensive',cat:'Shopping',t:{Spanish:'Muy caro',French:'Trop cher',German:'Zu teuer',Italian:'Troppo caro',Portuguese:'Muito caro',Japanese:'高すぎます (Takasugimasu)',Chinese:'太贵了 (Tài guì le)',Arabic:'غالي جداً (Ghali jiddan)',Russian:'Слишком дорого (Slishkom dorogo)',Korean:'너무 비싸요 (Neomu bissayo)'}},
+  {e:'Do you accept credit cards?',cat:'Shopping',t:{Spanish:'¿Aceptan tarjetas de crédito?',French:'Acceptez-vous les cartes de crédit?',German:'Akzeptieren Sie Kreditkarten?',Italian:'Accettate carte di credito?',Portuguese:'Aceitam cartão de crédito?',Japanese:'クレジットカードは使えますか？',Chinese:'可以刷卡吗？(Kěyǐ shuā kǎ ma?)',Arabic:'هل تقبلون بطاقات الائتمان؟',Russian:'Вы принимаете кредитные карты?',Korean:'신용카드 되나요? (Sinyongkadeu doenayo?)'}},
+  {e:'I\'m just looking',cat:'Shopping',t:{Spanish:'Solo estoy mirando',French:'Je regarde seulement',German:'Ich schaue nur',Italian:'Sto solo guardando',Portuguese:'Só estou olhando',Japanese:'見ているだけです (Mite iru dake desu)',Chinese:'我只是看看 (Wǒ zhǐshì kànkàn)',Arabic:'أنا فقط أتفرج (Ana faqat atfarraj)',Russian:'Я просто смотрю (Ya prosto smotryu)',Korean:'그냥 구경하고 있어요 (Geunyang gugyeonghago isseoyo)'}},
+  // Hotel
+  {e:'I have a reservation',cat:'Hotel',t:{Spanish:'Tengo una reserva',French:'J\'ai une réservation',German:'Ich habe eine Reservierung',Italian:'Ho una prenotazione',Portuguese:'Tenho uma reserva',Japanese:'予約があります (Yoyaku ga arimasu)',Chinese:'我有预订 (Wǒ yǒu yùdìng)',Arabic:'لدي حجز (Ladayya hajz)',Russian:'У меня есть бронь (U menya yest bron)',Korean:'예약이 있어요 (Yeyagi isseoyo)'}},
+  {e:'What time is check-out?',cat:'Hotel',t:{Spanish:'¿A qué hora es el check-out?',French:'À quelle heure est le départ?',German:'Wann ist Check-out?',Italian:'A che ora è il check-out?',Portuguese:'A que horas é o check-out?',Japanese:'チェックアウトは何時ですか？',Chinese:'退房时间是几点？',Arabic:'ما وقت المغادرة؟',Russian:'В какое время выселение?',Korean:'체크아웃은 몇 시예요?'}},
+  {e:'Where is the Wi-Fi password?',cat:'Hotel',t:{Spanish:'¿Cuál es la contraseña del Wi-Fi?',French:'Quel est le mot de passe Wi-Fi?',German:'Was ist das WLAN-Passwort?',Italian:'Qual è la password del Wi-Fi?',Portuguese:'Qual é a senha do Wi-Fi?',Japanese:'Wi-Fiのパスワードは何ですか？',Chinese:'WiFi密码是多少？',Arabic:'ما كلمة مرور الواي فاي؟',Russian:'Какой пароль от Wi-Fi?',Korean:'와이파이 비밀번호가 뭐예요?'}},
+  {e:'The room is too noisy',cat:'Hotel',t:{Spanish:'La habitación es muy ruidosa',French:'La chambre est trop bruyante',German:'Das Zimmer ist zu laut',Italian:'La camera è troppo rumorosa',Portuguese:'O quarto está muito barulhento',Japanese:'部屋がうるさすぎます',Chinese:'房间太吵了',Arabic:'الغرفة صاخبة جداً',Russian:'В комнате слишком шумно',Korean:'방이 너무 시끄러워요'}},
+  {e:'Can I have an extra towel?',cat:'Hotel',t:{Spanish:'¿Me puede dar una toalla extra?',French:'Puis-je avoir une serviette supplémentaire?',German:'Kann ich ein extra Handtuch bekommen?',Italian:'Posso avere un asciugamano in più?',Portuguese:'Posso ter uma toalha extra?',Japanese:'タオルをもう一枚いただけますか？',Chinese:'可以再给我一条毛巾吗？',Arabic:'هل يمكنني الحصول على منشفة إضافية؟',Russian:'Можно ещё одно полотенце?',Korean:'수건 하나 더 주실 수 있나요?'}},
+];
+
+let selectedLang='All', selectedCat='All', expandedIdx=-1;
+
+function buildChips(){
+  const lc=document.getElementById('langChips');
+  LANGS.forEach(l=>{ const c=document.createElement('button'); c.className='chip'+(l==='All'?' active':''); c.textContent=l==='All'?'🌍 All':l; c.onclick=()=>{selectedLang=l;document.querySelectorAll('#langChips .chip').forEach(x=>x.classList.toggle('active',x.textContent.replace('🌍 ','')===l||x.textContent===l&&l==='All'));renderList();}; lc.appendChild(c); });
+  const cc=document.getElementById('catChips');
+  CATS.forEach(cat=>{ const c=document.createElement('button'); c.className='chip'+(cat==='All'?' active':''); c.textContent=cat==='All'?'📋 All':cat; c.onclick=()=>{selectedCat=cat;document.querySelectorAll('#catChips .chip').forEach(x=>x.classList.toggle('active',x.textContent.replace('📋 ','')===cat||(cat==='All'&&x.textContent==='📋 All')));renderList();}; cc.appendChild(c); });
+}
+
+function renderList(){
+  const q=document.getElementById('searchInput').value.toLowerCase().trim();
+  const list=document.getElementById('phraseList');
+  const langsToShow = selectedLang==='All'?LANGS.slice(1):[selectedLang];
+  let filtered = PHRASES.filter(p=>(selectedCat==='All'||p.cat===selectedCat));
+  if(q) filtered=filtered.filter(p=>p.e.toLowerCase().includes(q)||langsToShow.some(l=>p.t[l]&&p.t[l].toLowerCase().includes(q)));
+
+  if(!filtered.length){ list.innerHTML='<div class="no-results">No phrases found 😊</div>'; return; }
+  expandedIdx=-1;
+  list.innerHTML='';
+  filtered.forEach((phrase,i)=>{
+    langsToShow.forEach(lang=>{
+      const trans=phrase.t[lang];
+      if(!trans)return;
+      const card=document.createElement('div');
+      card.className='phrase-card';
+      const flag={'Spanish':'🇪🇸','French':'🇫🇷','German':'🇩🇪','Italian':'🇮🇹','Portuguese':'🇧🇷','Japanese':'🇯🇵','Chinese':'🇨🇳','Arabic':'🇸🇦','Russian':'🇷🇺','Korean':'🇰🇷'}[lang]||'🌐';
+      const uid=lang+'-'+i;
+      card.id='card-'+uid;
+      card.innerHTML=`<div class="ph-english">${phrase.e}</div><div class="ph-translation">${flag} ${trans}</div><div class="ph-pronunc">Category: ${phrase.cat} · Tap to expand</div><span class="ph-cat-badge">${lang}</span>`;
+      card.onclick=()=>{ const was=card.classList.contains('expanded'); document.querySelectorAll('.phrase-card').forEach(c=>c.classList.remove('expanded')); if(!was)card.classList.add('expanded'); };
+      list.appendChild(card);
+    });
+  });
+}
+
+buildChips();
+renderList();
+</script>
+</body>
+</html>

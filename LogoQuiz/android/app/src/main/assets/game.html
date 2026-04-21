@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Logo Quiz</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#546E7A; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+.screen { display:none; flex-direction:column; height:100%; }
+.screen.active { display:flex; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+button { cursor:pointer; border:none; border-radius:var(--radius); font-family:inherit; font-weight:600; transition:transform 0.1s,opacity 0.1s; }
+button:active, button.btn-pressed { transform:scale(0.96); opacity:0.85; }
+.btn-primary { background:var(--accent); color:#fff; padding:14px 28px; font-size:1.1rem; width:100%; }
+.btn-secondary { background:var(--card); color:var(--text); padding:12px 20px; font-size:0.95rem; width:100%; }
+#menuScreen { align-items:center; justify-content:center; gap:20px; padding:30px; }
+.menu-emoji { font-size:5rem; }
+.menu-title { font-size:2.2rem; font-weight:800; color:var(--accent); }
+.menu-sub { color:var(--muted); font-size:0.95rem; text-align:center; }
+.menu-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+#gameScreen { padding:0; }
+.game-header { background:var(--surface); padding:12px 16px; display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.game-top { display:flex; justify-content:space-between; align-items:center; }
+.progress-text { font-size:0.85rem; color:var(--muted); }
+.score-text { font-size:0.95rem; font-weight:700; color:var(--accent); }
+.timer-bar-wrap { height:6px; background:var(--card); border-radius:3px; overflow:hidden; }
+.timer-bar { height:100%; background:var(--accent); border-radius:3px; transition:width 0.1s linear; }
+.question-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; gap:10px; overflow:hidden; }
+.category-badge { background:var(--card); color:var(--accent); padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; }
+.logo-box { background:var(--surface); border:2px solid var(--accent); border-radius:16px; padding:16px 20px; width:100%; max-width:360px; text-align:center; }
+.logo-icon { font-size:2.5rem; margin-bottom:8px; }
+.logo-desc { font-size:0.95rem; color:var(--muted); line-height:1.5; font-style:italic; }
+.answers { width:100%; max-width:480px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ans-btn { background:var(--card); color:var(--text); padding:14px 8px; font-size:0.9rem; border-radius:var(--radius); border:2px solid transparent; min-height:58px; line-height:1.3; }
+.ans-btn.correct { background:#1b5e20; border-color:#66BB6A; color:#fff; }
+.ans-btn.wrong { background:#b71c1c; border-color:#EF5350; color:#fff; }
+.ans-btn:disabled { cursor:default; }
+.feedback-bar { height:38px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0; background:var(--surface); padding:0 12px; text-align:center; }
+.feedback-bar.correct { color:#66BB6A; }
+.feedback-bar.wrong { color:#EF5350; }
+#resultScreen { align-items:center; justify-content:center; gap:18px; padding:30px; }
+.result-emoji { font-size:4rem; }
+.result-title { font-size:1.8rem; font-weight:800; }
+.result-score { font-size:3.5rem; font-weight:900; color:var(--accent); }
+.result-sub { color:var(--muted); font-size:1rem; }
+.result-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="screen active" id="menuScreen">
+    <div class="menu-emoji">🏷️</div>
+    <div class="menu-title">Logo Quiz</div>
+    <div class="menu-sub">Guess the brand from the logo description!</div>
+    <div class="menu-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Now</button>
+    </div>
+  </div>
+  <div class="screen" id="gameScreen">
+    <div class="game-header">
+      <div class="game-top">
+        <span class="progress-text" id="progressText">1 / 50</span>
+        <span class="score-text" id="scoreText">Score: 0</span>
+      </div>
+      <div class="timer-bar-wrap"><div class="timer-bar" id="timerBar"></div></div>
+    </div>
+    <div class="question-area">
+      <div class="category-badge" id="categoryBadge">Tech</div>
+      <div class="logo-box">
+        <div class="logo-icon" id="qEmoji"></div>
+        <div class="logo-desc" id="qText"></div>
+      </div>
+      <div class="answers" id="answersDiv"></div>
+    </div>
+    <div class="feedback-bar" id="feedbackBar"></div>
+  </div>
+  <div class="screen" id="resultScreen">
+    <div class="result-emoji" id="resultEmoji">🏆</div>
+    <div class="result-title">Quiz Complete!</div>
+    <div class="result-score" id="resultScore">0%</div>
+    <div class="result-sub" id="resultSub"></div>
+    <div class="result-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Again</button>
+      <button class="btn-secondary" onclick="showScreen('menuScreen')">Menu</button>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+var state={useCount:0,removeAds:false,score:0,qi:0,questions:[],timer:null,timeLeft:0,answered:false};
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%5===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var ALL_QUESTIONS=[
+  {e:'💻',cat:'Tech',q:"A bitten apple silhouette in silver/black. Makes iPhones and MacBooks.",a:["Apple","Google","Microsoft","Samsung"],c:0},
+  {e:'🔍',cat:'Tech',q:"Multi-coloured letters (blue, red, yellow, green) spelling a word meaning large number.",a:["Google","Yahoo","Bing","Ask"],c:0},
+  {e:'💙',cat:'Social',q:"Lowercase 'f' in white on a blue square background.",a:["Facebook","Twitter","LinkedIn","Tumblr"],c:0},
+  {e:'📷',cat:'Social',q:"A colourful gradient square/camera icon — a photo and video sharing app.",a:["Instagram","Snapchat","TikTok","Pinterest"],c:0},
+  {e:'🐦',cat:'Social',q:"A small blue bird silhouette. Known for short posts called tweets.",a:["Twitter/X","Instagram","Discord","Telegram"],c:0},
+  {e:'🎵',cat:'Entertainment',q:"Three black stripes on white. German sportswear brand famous for trainers.",a:["Adidas","Nike","Puma","Reebok"],c:0},
+  {e:'✔️',cat:'Sports',q:"A simple swoosh/tick shape. 'Just Do It.'",a:["Nike","Adidas","Under Armour","New Balance"],c:0},
+  {e:'🚗',cat:'Auto',q:"Four interlocking rings, silver on silver. German luxury car brand.",a:["Audi","BMW","Mercedes","Volkswagen"],c:0},
+  {e:'🚗',cat:'Auto',q:"Three-pointed star inside a circle. German luxury car. 'The best or nothing.'",a:["Mercedes-Benz","BMW","Audi","Porsche"],c:0},
+  {e:'🍔',cat:'Food',q:"Golden arches forming an 'M' shape. World's largest fast food chain.",a:["McDonald's","Burger King","Wendy's","KFC"],c:0},
+  {e:'☕',cat:'Food',q:"A crowned mermaid (siren) in green and white. Famous coffee chain.",a:["Starbucks","Costa Coffee","Tim Hortons","Dunkin'"],c:0},
+  {e:'🎬',cat:'Entertainment',q:"Bold red letters 'N' — streaming service with original shows and movies.",a:["Netflix","Hulu","HBO","Disney+"],c:0},
+  {e:'📦',cat:'Tech',q:"A curved arrow smile underneath text. World's largest online marketplace.",a:["Amazon","eBay","Alibaba","Walmart"],c:0},
+  {e:'🔵',cat:'Tech',q:"Lowercase 'in' in white on a blue square. Professional networking platform.",a:["LinkedIn","Twitter","Facebook","Indeed"],c:0},
+  {e:'🟡',cat:'Food',q:"Bold red background with a yellow crown. 'Have it your way.'",a:["Burger King","McDonald's","Wendy's","Five Guys"],c:0},
+  {e:'💼',cat:'Tech',q:"Windows pane logo — four coloured squares. Makes Windows and Xbox.",a:["Microsoft","Google","Apple","Oracle"],c:0},
+  {e:'🎮',cat:'Entertainment',q:"A stylised 'G' controller shape. Japanese gaming company. Made Mario.",a:["Nintendo","Sony","Sega","Atari"],c:0},
+  {e:'🛒',cat:'Retail',q:"A smiley face made from a shopping trolley. Swedish furniture giant.",a:["IKEA","H&M","Zara","Primark"],c:0},
+  {e:'🚀',cat:'Tech',q:"A blue bird/plane swoosh. American electric car & space company CEO tweets a lot.",a:["SpaceX","Boeing","NASA","Blue Origin"],c:0},
+  {e:'⚡',cat:'Auto',q:"Stylised 'T' in red. Electric vehicle company named after Tesla.",a:["Tesla","Rivian","Lucid","NIO"],c:0},
+  {e:'🎮',cat:'Entertainment',q:"A blue/white circle with triangle, circle, cross, square symbols. Japanese gaming brand.",a:["PlayStation","Xbox","Nintendo","Sega"],c:0},
+  {e:'🟢',cat:'Music',q:"Green circle with a black sound wave / headphone design. Music streaming app.",a:["Spotify","Apple Music","Deezer","Tidal"],c:0},
+  {e:'🐦',cat:'Tech',q:"A ghost with a Pac-Man mouth on yellow background. Disappearing photos app.",a:["Snapchat","Instagram","BeReal","TikTok"],c:0},
+  {e:'🎵',cat:'Entertainment',q:"A musical note or 'TT' in a black background. Short video app popular with teens.",a:["TikTok","Vine","Instagram Reels","YouTube Shorts"],c:0},
+  {e:'🔴',cat:'Entertainment',q:"A red play button triangle on white/black. World's largest video platform.",a:["YouTube","Vimeo","Twitch","Dailymotion"],c:0},
+  {e:'🍕',cat:'Food',q:"A red and white checkered logo. Known for pizza delivery.",a:["Pizza Hut","Domino's","Papa John's","Little Caesars"],c:0},
+  {e:'🍗',cat:'Food',q:"A smiling white-haired man with glasses and black tie. Famous fried chicken chain.",a:["KFC","Popeyes","Chick-fil-A","Raising Cane's"],c:0},
+  {e:'💳',cat:'Finance',q:"Blue and silver stripes with a dove/bird. Financial services and credit cards.",a:["Visa","Mastercard","American Express","Discover"],c:0},
+  {e:'🔴🟡',cat:'Finance',q:"Two interlocking circles — red and yellow/orange. 'Priceless.' Payment network.",a:["Mastercard","Visa","PayPal","Stripe"],c:0},
+  {e:'💰',cat:'Finance',q:"Blue 'P' with yellow 'P' overlapping, on blue. Online payment platform.",a:["PayPal","Stripe","Square","Venmo"],c:0},
+  {e:'🔵',cat:'Auto',q:"A round logo with blue-and-white quadrants inside a black ring. Bavarian car brand.",a:["BMW","Volkswagen","Audi","Opel"],c:0},
+  {e:'🏁',cat:'Auto',q:"A prancing horse on yellow. Italian sports car brand with Ferrari red.",a:["Ferrari","Lamborghini","Porsche","Maserati"],c:0},
+  {e:'🐂',cat:'Auto',q:"A charging bull on yellow background. Italian supercar brand.",a:["Lamborghini","Ferrari","Bugatti","Maserati"],c:0},
+  {e:'☁️',cat:'Tech',q:"Simple white cloud on blue background. Enterprise software and CRM company.",a:["Salesforce","Oracle","SAP","Workday"],c:0},
+  {e:'🎯',cat:'Retail',q:"A red target (bullseye) symbol. American big-box retailer.",a:["Target","Kmart","Walmart","Costco"],c:0},
+  {e:'💛',cat:'Food',q:"Black script font on a red background. 'Taste the feeling.' Dark fizzy drink.",a:["Coca-Cola","Pepsi","Dr Pepper","RC Cola"],c:0},
+  {e:'🔵',cat:'Food',q:"Red, white, and blue globe design. Cola brand that rhymes with 'Pepsi'.",a:["Pepsi","Coca-Cola","7UP","Sprite"],c:0},
+  {e:'🏃',cat:'Sports',q:"A leaping cat — sleek feline in motion. German sportswear brand.",a:["Puma","Reebok","Asics","New Balance"],c:0},
+  {e:'🔷',cat:'Tech',q:"A blue 'F' that doesn't stand for Facebook — it's a chip company. 'Intel Inside'.",a:["Intel","AMD","Qualcomm","Nvidia"],c:0},
+  {e:'🟩',cat:'Tech',q:"Green Android robot mascot. Mobile OS owned by Google.",a:["Android","iOS","Windows Phone","HarmonyOS"],c:0},
+  {e:'🎪',cat:'Entertainment',q:"Three 'X' letters. Adult streaming platform... well-known brand starting with a famous Roman numeral.",a:["XXX / Pornhub","Netflix","Twitch","OnlyFans"],c:0},
+  {e:'🚚',cat:'Delivery',q:"Purple and orange logo. International package delivery 'absolutely positively'.",a:["FedEx","UPS","DHL","USPS"],c:0},
+  {e:'🟤',cat:'Delivery',q:"Brown shield with UPS initials. 'What can Brown do for you?'",a:["UPS","FedEx","Amazon","DHL"],c:0},
+  {e:'🔑',cat:'Travel',q:"A stylised red 'A' frame / house outline. Home rental platform.",a:["Airbnb","Vrbo","Booking.com","Expedia"],c:0},
+  {e:'🚕',cat:'Travel',q:"Black logo, now with red underline. Ride-hailing pioneer company.",a:["Uber","Lyft","Grab","Bolt"],c:0},
+  {e:'🍏',cat:'Food',q:"A green logo with a mermaid-like creature. Specialises in 'premium smoothies'.",a:["Innocent","Naked","Bolthouse","Odwalla"],c:0},
+  {e:'⚡',cat:'Energy',q:"A red bull with wings. Energy drink brand from Austria.",a:["Red Bull","Monster","Rockstar","Bang"],c:0},
+  {e:'🟢',cat:'Food',q:"Green letters on white. Famous for sub sandwiches. 'Eat Fresh.'",a:["Subway","Quiznos","Jersey Mike's","Jimmy John's"],c:0},
+  {e:'📱',cat:'Tech',q:"A colourful logo (primary colours) of a robot hand. South Korean tech giant.",a:["Samsung","LG","Xiaomi","Huawei"],c:0},
+  {e:'🔵',cat:'Tech',q:"Blue circle with stylised 'e' or globe. Default browser on older Windows.",a:["Internet Explorer","Chrome","Firefox","Safari"],c:0},
+];
+
+function shuffle(arr){for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
+function startGame(){state.score=0;state.qi=0;state.useCount=0;state.questions=shuffle(ALL_QUESTIONS.slice()).slice(0,50);showScreen('gameScreen');loadQuestion();}
+function loadQuestion(){
+  if(state.qi>=state.questions.length){endGame();return;}
+  var q=state.questions[state.qi];
+  document.getElementById('progressText').textContent=(state.qi+1)+' / '+state.questions.length;
+  document.getElementById('scoreText').textContent='Score: '+state.score;
+  document.getElementById('qEmoji').textContent=q.e;
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('categoryBadge').textContent=q.cat;
+  document.getElementById('feedbackBar').textContent='';
+  document.getElementById('feedbackBar').className='feedback-bar';
+  state.answered=false;
+  var correctLabel=q.a[q.c];
+  var indices=[0,1,2,3];shuffle(indices);
+  var div=document.getElementById('answersDiv');div.innerHTML='';
+  indices.forEach(function(idx){var btn=document.createElement('button');btn.className='ans-btn';btn.textContent=q.a[idx];btn.onclick=function(){answer(btn,q.a[idx]===correctLabel,correctLabel);};div.appendChild(btn);});
+  startTimer();
+}
+var TIMER_DURATION=18;
+function startTimer(){clearInterval(state.timer);state.timeLeft=TIMER_DURATION;updateTimerBar();state.timer=setInterval(function(){state.timeLeft-=0.1;updateTimerBar();if(state.timeLeft<=0){clearInterval(state.timer);timeUp();}},100);}
+function updateTimerBar(){document.getElementById('timerBar').style.width=Math.max(0,state.timeLeft/TIMER_DURATION*100)+'%';}
+function timeUp(){if(state.answered)return;state.answered=true;var q=state.questions[state.qi];var correctLabel=q.a[q.c];document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});showFeedback(false,"Time up! Correct: "+correctLabel);setTimeout(nextQ,1600);}
+function answer(btn,isCorrect,correctLabel){if(state.answered)return;state.answered=true;clearInterval(state.timer);document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});if(isCorrect){state.score++;btn.classList.add('correct');showFeedback(true,'Correct! 🎉');}else{btn.classList.add('wrong');showFeedback(false,'Wrong! Correct: '+correctLabel);}setTimeout(nextQ,1600);}
+function showFeedback(ok,msg){var bar=document.getElementById('feedbackBar');bar.textContent=msg;bar.className='feedback-bar '+(ok?'correct':'wrong');}
+function nextQ(){state.qi++;if(state.qi%5===0)maybeInterstitial();loadQuestion();}
+function endGame(){clearInterval(state.timer);var pct=Math.round(state.score/state.questions.length*100);document.getElementById('resultScore').textContent=pct+'%';document.getElementById('resultSub').textContent=state.score+' out of '+state.questions.length+' correct';var emojis=['😢','😕','🙂','😊','🏆'];document.getElementById('resultEmoji').textContent=emojis[Math.min(4,Math.floor(pct/20))];showScreen('resultScreen');}
+</script>
+</body>
+</html>

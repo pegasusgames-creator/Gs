@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>IceBreaker</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: #0a1929; color: #fff; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  :root { --accent: #00BCD4; }
+  header { background: #0d2137; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); flex-shrink:0; }
+  header h1 { font-size: 1.3rem; color: var(--accent); }
+  .btn-remove-ads { background: var(--accent); color: #000; border: none; border-radius: 20px; padding: 8px 16px; font-size: 0.8rem; font-weight: bold; min-height: 44px; cursor: pointer; }
+  .btn-pressed { opacity: 0.7; transform: scale(0.96); }
+  .cat-tabs { display: flex; gap: 8px; padding: 10px 16px; overflow-x: auto; scrollbar-width:none; flex-shrink:0; background:#0d2137; }
+  .cat-tabs::-webkit-scrollbar { display:none; }
+  .cat-tab { background: #1a3a52; border: 1px solid #2a4a62; color: #aaa; border-radius: 20px; padding: 8px 16px; white-space: nowrap; cursor: pointer; font-size: 0.85rem; min-height: 44px; flex-shrink:0; }
+  .cat-tab.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: bold; }
+  .screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 20px; }
+  .screen.hidden { display: none; }
+  .question-card { background: linear-gradient(135deg, #0d2137, #1a3a52); border: 2px solid var(--accent); border-radius: 20px; padding: 32px 24px; text-align: center; width: 100%; max-width: 420px; min-height: 200px; display: flex; align-items: center; justify-content: center; position: relative; }
+  .question-text { font-size: 1.4rem; line-height: 1.5; font-weight: 600; color: #fff; }
+  .cat-badge { position: absolute; top: 14px; right: 14px; background: var(--accent); color: #000; font-size: 0.7rem; font-weight: bold; border-radius: 10px; padding: 3px 8px; text-transform: uppercase; }
+  .question-num { color: rgba(0,188,212,0.6); font-size: 0.8rem; margin-bottom: 16px; }
+  .main-actions { display: flex; gap: 12px; margin-top: 20px; width: 100%; max-width: 420px; }
+  .action-btn { flex: 1; background: #1a3a52; border: 1px solid #2a4a62; color: #fff; border-radius: 14px; padding: 16px; font-size: 0.95rem; cursor: pointer; min-height: 56px; }
+  .random-btn { background: var(--accent); color: #000; border: none; font-weight: bold; }
+  .fav-btn-active { color: #ff4081; border-color: #ff4081; }
+  .share-btn { color: var(--accent); }
+  .nav-area { display: flex; gap: 12px; margin-top: 12px; width: 100%; max-width: 420px; }
+  .nav-arrow { flex: 1; background: #1a3a52; border: 1px solid #2a4a62; color: #aaa; border-radius: 12px; padding: 14px; font-size: 1.2rem; cursor: pointer; min-height: 50px; }
+  .favorites-screen { flex: 1; width: 100%; padding: 16px; overflow-y:auto; }
+  .fav-item { background: #0d2137; border: 1px solid #1a3a52; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; font-size: 0.9rem; line-height: 1.4; }
+  .fav-item-cat { font-size: 0.7rem; color: var(--accent); margin-top: 4px; }
+  .fav-remove { color: #ff4081; font-size: 1.1rem; cursor: pointer; padding: 4px; min-width: 28px; text-align: center; }
+  .empty-msg { color: #555; text-align: center; padding: 40px 20px; font-size: 1rem; }
+  .bottom-nav { display: flex; background: #0d2137; border-top: 1px solid #1a3a52; flex-shrink:0; }
+  .nav-btn { flex: 1; background: none; border: none; color: #666; padding: 10px; font-size: 0.75rem; cursor: pointer; min-height: 56px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .nav-btn.active { color: var(--accent); }
+  .nav-icon { font-size: 1.3rem; }
+  #banner-ad { background: #0d2137; text-align: center; padding: 8px; color: #444; font-size: 0.75rem; border-top: 1px solid #1a3a52; flex-shrink:0; }
+  .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; padding: 10px 20px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; opacity: 0; transition: opacity 0.3s; pointer-events:none; z-index:99; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🧊 IceBreaker</h1>
+  <button class="btn-remove-ads" id="removeAdsBtn">Remove Ads</button>
+</header>
+<div class="cat-tabs" id="catTabs">
+  <button class="cat-tab active" data-cat="All">All</button>
+  <button class="cat-tab" data-cat="Fun">Fun</button>
+  <button class="cat-tab" data-cat="Deep">Deep</button>
+  <button class="cat-tab" data-cat="Work">Work</button>
+  <button class="cat-tab" data-cat="Hypothetical">Hypothetical</button>
+  <button class="cat-tab" data-cat="Creative">Creative</button>
+</div>
+
+<div class="screen" id="mainScreen">
+  <div class="question-num" id="questionNum">Question 1 of 100</div>
+  <div class="question-card">
+    <span class="cat-badge" id="catBadge">Fun</span>
+    <div class="question-text" id="questionText">What's the most embarrassing song you know all the words to?</div>
+  </div>
+  <div class="nav-area">
+    <button class="nav-arrow" id="prevBtn">←</button>
+    <button class="nav-arrow" id="nextBtn">→</button>
+  </div>
+  <div class="main-actions">
+    <button class="action-btn random-btn" id="randomBtn">🎲 Random</button>
+    <button class="action-btn" id="favBtn">♡ Save</button>
+    <button class="action-btn share-btn" id="shareBtn">📋 Copy</button>
+  </div>
+</div>
+
+<div class="screen hidden" id="favsScreen">
+  <div class="favorites-screen" id="favsList">
+    <div class="empty-msg">No saved questions yet.<br>Tap ♡ Save to add favorites.</div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn active" id="navMain"><span class="nav-icon">🃏</span>Questions</button>
+  <button class="nav-btn" id="navFavs"><span class="nav-icon">♥</span>Favorites</button>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="banner-ad">Advertisement</div>
+
+<script>
+const QUESTIONS = {
+  Fun: [
+    "What's the most embarrassing song you know all the words to?",
+    "If you could only eat one food for the rest of your life, what would it be?",
+    "What's the weirdest dream you've ever had?",
+    "Would you rather fight 100 duck-sized horses or 1 horse-sized duck?",
+    "What's your most useless talent?",
+    "If you were a kitchen appliance, which one would you be and why?",
+    "What's the worst haircut you've ever had?",
+    "If your life had a theme song, what would it be?",
+    "What's the funniest autocorrect fail you've had?",
+    "Would you rather never be able to sit down or never be able to lie down?",
+    "What's the strangest thing you've ever eaten on a dare?",
+    "If you could replace any celebrity in a movie, who and what movie?",
+    "What was your nickname as a kid?",
+    "If animals could talk, which would be the rudest?",
+    "What's the most ridiculous thing you've done to impress someone?",
+    "Would you rather have spaghetti for hair or sweat maple syrup?",
+    "What's your go-to karaoke song?",
+    "If you were a superhero, what would your completely useless power be?",
+    "What's your most irrational fear?",
+    "Have you ever pretended not to see a notification to avoid responding?"
+  ],
+  Deep: [
+    "What's something you believe that most people disagree with?",
+    "What would you want to be remembered for after you're gone?",
+    "If you could have a 30-minute conversation with anyone, dead or alive, who would it be?",
+    "What's the best piece of advice you've ever received?",
+    "What's something you've changed your mind about in the last 5 years?",
+    "What does success mean to you personally?",
+    "If you could relive one day of your life, which would it be and why?",
+    "What's something you wish you had learned earlier in life?",
+    "What's the most meaningful compliment you've ever received?",
+    "If money were no object, how would you spend your time?",
+    "What's something you've always wanted to do but haven't yet?",
+    "What quality do you admire most in other people?",
+    "What's a small thing that consistently brings you happiness?",
+    "When did you last step outside your comfort zone?",
+    "What's something you think the world needs more of?",
+    "What would you do differently if you knew nobody would judge you?",
+    "What's one thing you want to accomplish before you die?",
+    "Who has had the biggest positive impact on your life?",
+    "What's something you're grateful for that you rarely think about?",
+    "At what age did you feel most like yourself, and why?"
+  ],
+  Work: [
+    "What's the best work lesson you've learned from a terrible job?",
+    "If you could swap jobs with anyone in the company for a day, who would it be?",
+    "What's the first thing you do when you sit down to start work?",
+    "What's your productivity superpower?",
+    "If you had to describe your work style as a movie genre, what would it be?",
+    "What app or tool could you not live without at work?",
+    "What's something work-related you've learned recently that surprised you?",
+    "What's your favorite way to celebrate a team win?",
+    "If the team could instantly master any skill, what would be most valuable?",
+    "What's one meeting you think could be an email?",
+    "What's the most creative solution you've come up with at work?",
+    "How do you recharge after a stressful work week?",
+    "What's one thing you wish someone had told you when you first started here?",
+    "If you could change one thing about how the team works, what would it be?",
+    "What's a project you're most proud of from the past year?",
+    "What does your ideal work environment look like?",
+    "How do you handle it when you disagree with a decision at work?",
+    "What's a skill you'd like to develop in the next 12 months?",
+    "What's one work myth you used to believe but don't anymore?",
+    "If you could add a new company tradition, what would it be?"
+  ],
+  Hypothetical: [
+    "If you woke up tomorrow as the opposite gender, what's the first thing you'd do?",
+    "If you could teleport anywhere right now, where would you go?",
+    "If you had to live in a different decade, which would you choose?",
+    "If you could eliminate one invention from history, what would it be?",
+    "If you were the last person on Earth, what would you do?",
+    "If you had to live off-grid for a year, where would you go and how would you survive?",
+    "If you could add one hour to every day, how would you use it?",
+    "If you discovered a new island, what would you name it and how would you develop it?",
+    "If you could make one law that everyone had to follow, what would it be?",
+    "If aliens landed tomorrow and asked you to be Earth's spokesperson, what would you say?",
+    "If you could know exactly when and how you'll die, would you want to?",
+    "If you could be any historical figure for a week, who would you choose?",
+    "If you could time travel but only to witness events (not change them), where would you go?",
+    "If you could merge two animals to create a new species, what would you combine?",
+    "If you had a magic button that solved one world problem, what would you push it for?",
+    "If you could speak every language fluently, what would you do first?",
+    "If you had to teach a subject you don't know, how would you approach it?",
+    "If all jobs paid equally, what would you do for work?",
+    "If you could live as any type of animal for a month, what would you choose?",
+    "If you could make one previously impossible technology real, what would it be?"
+  ],
+  Creative: [
+    "If your life was a movie, what genre would it be and who would play you?",
+    "If you had to write a book about your life, what would the title be?",
+    "Describe your personality using only emojis.",
+    "If you could design your dream house, what one unusual feature would it have?",
+    "If you were a color, which one would you be?",
+    "Invent a new holiday — what would it celebrate and how?",
+    "If you could redesign something everyone uses, what would you improve?",
+    "What would the soundtrack of your average Tuesday be?",
+    "If you were a character in a fairy tale, would you be the hero, villain, or sidekick?",
+    "Design a theme park based on your interests — what would the rides be?",
+    "If you could combine any two cuisines to create a fusion restaurant, what would it be?",
+    "If you were a museum exhibit, what would you be and what would the description say?",
+    "Create a new sport that combines two existing sports.",
+    "If you had your own TV show, what would it be about?",
+    "If you could paint a mural on the side of a building, what would you paint?",
+    "Invent a new word and define it.",
+    "If you were a weather phenomenon, which would you be?",
+    "Design your dream car — what unusual feature does it have?",
+    "If you could add a new subject to school curriculums worldwide, what would it be?",
+    "If you were a font, which would you be and why?"
+  ]
+};
+
+const ALL_QUESTIONS = Object.entries(QUESTIONS).flatMap(([cat, qs]) => qs.map(q => ({q, cat})));
+
+let activeCat = 'All';
+let currentList = [...ALL_QUESTIONS];
+let currentIndex = 0;
+let favorites = JSON.parse(localStorage.getItem('ibFavs') || '[]');
+
+function addTouchFeedback(el) {
+  el.addEventListener('touchstart', () => el.classList.add('btn-pressed'), {passive:true});
+  el.addEventListener('touchend', () => el.classList.remove('btn-pressed'), {passive:true});
+  el.addEventListener('touchcancel', () => el.classList.remove('btn-pressed'), {passive:true});
+}
+document.querySelectorAll('button').forEach(addTouchFeedback);
+
+document.querySelectorAll('.cat-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    activeCat = tab.dataset.cat;
+    if (activeCat === 'All') currentList = [...ALL_QUESTIONS];
+    else currentList = ALL_QUESTIONS.filter(item => item.cat === activeCat);
+    shuffle(currentList);
+    currentIndex = 0;
+    showQuestion();
+  });
+});
+
+document.getElementById('randomBtn').addEventListener('click', () => {
+  currentIndex = Math.floor(Math.random() * currentList.length);
+  showQuestion();
+});
+document.getElementById('prevBtn').addEventListener('click', () => {
+  currentIndex = (currentIndex - 1 + currentList.length) % currentList.length;
+  showQuestion();
+});
+document.getElementById('nextBtn').addEventListener('click', () => {
+  currentIndex = (currentIndex + 1) % currentList.length;
+  showQuestion();
+});
+document.getElementById('favBtn').addEventListener('click', toggleFav);
+document.getElementById('shareBtn').addEventListener('click', copyQuestion);
+document.getElementById('navMain').addEventListener('click', () => { showScreen('mainScreen'); setNav('navMain'); });
+document.getElementById('navFavs').addEventListener('click', () => { showScreen('favsScreen'); setNav('navFavs'); renderFavs(); });
+document.getElementById('removeAdsBtn').addEventListener('click', () => { if (window.Android) Android.purchaseNoAds(); });
+
+function showQuestion() {
+  if (!currentList.length) return;
+  const item = currentList[currentIndex];
+  document.getElementById('questionText').textContent = item.q;
+  document.getElementById('catBadge').textContent = item.cat;
+  document.getElementById('questionNum').textContent = `Question ${currentIndex + 1} of ${currentList.length}`;
+  const isFav = favorites.some(f => f.q === item.q);
+  document.getElementById('favBtn').textContent = isFav ? '♥ Saved' : '♡ Save';
+  document.getElementById('favBtn').classList.toggle('fav-btn-active', isFav);
+}
+
+function toggleFav() {
+  const item = currentList[currentIndex];
+  const idx = favorites.findIndex(f => f.q === item.q);
+  if (idx >= 0) {
+    favorites.splice(idx, 1);
+    showToast('Removed from favorites');
+  } else {
+    favorites.push(item);
+    showToast('Saved to favorites!');
+  }
+  localStorage.setItem('ibFavs', JSON.stringify(favorites));
+  showQuestion();
+}
+
+function copyQuestion() {
+  const text = currentList[currentIndex]?.q || '';
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => showToast('Copied!')).catch(() => showToast('Copy failed'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied!');
+  }
+}
+
+function renderFavs() {
+  const el = document.getElementById('favsList');
+  if (!favorites.length) {
+    el.innerHTML = '<div class="empty-msg">No saved questions yet.<br>Tap ♡ Save to add favorites.</div>';
+    return;
+  }
+  el.innerHTML = favorites.map((f, i) => `
+    <div class="fav-item">
+      <div style="flex:1">
+        <div>${f.q}</div>
+        <div class="fav-item-cat">${f.cat}</div>
+      </div>
+      <div class="fav-remove" onclick="removeFav(${i})">✕</div>
+    </div>
+  `).join('');
+}
+
+function removeFav(i) {
+  favorites.splice(i, 1);
+  localStorage.setItem('ibFavs', JSON.stringify(favorites));
+  renderFavs();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+function setNav(id) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function shuffle(arr) {
+  for (let i = arr.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+}
+
+shuffle(currentList);
+showQuestion();
+
+window.onAdMobLoaded = function() {};
+window.onPurchaseComplete = function(sku) {
+  if (sku && sku.includes('no_ads')) {
+    document.getElementById('banner-ad').style.display = 'none';
+    document.getElementById('removeAdsBtn').style.display = 'none';
+  }
+};
+if (window.Android) document.getElementById('banner-ad').style.display = 'none';
+</script>
+</body>
+</html>

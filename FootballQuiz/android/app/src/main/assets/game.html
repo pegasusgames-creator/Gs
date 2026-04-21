@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Football Quiz</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#66BB6A; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+.screen { display:none; flex-direction:column; height:100%; }
+.screen.active { display:flex; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+button { cursor:pointer; border:none; border-radius:var(--radius); font-family:inherit; font-weight:600; transition:transform 0.1s,opacity 0.1s; }
+button:active, button.btn-pressed { transform:scale(0.96); opacity:0.85; }
+.btn-primary { background:var(--accent); color:#fff; padding:14px 28px; font-size:1.1rem; width:100%; }
+.btn-secondary { background:var(--card); color:var(--text); padding:12px 20px; font-size:0.95rem; width:100%; }
+#menuScreen { align-items:center; justify-content:center; gap:20px; padding:30px; }
+.menu-emoji { font-size:5rem; }
+.menu-title { font-size:2.2rem; font-weight:800; color:var(--accent); }
+.menu-sub { color:var(--muted); font-size:0.95rem; text-align:center; }
+.menu-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+#gameScreen { padding:0; }
+.game-header { background:var(--surface); padding:12px 16px; display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.game-top { display:flex; justify-content:space-between; align-items:center; }
+.progress-text { font-size:0.85rem; color:var(--muted); }
+.score-text { font-size:0.95rem; font-weight:700; color:var(--accent); }
+.timer-bar-wrap { height:6px; background:var(--card); border-radius:3px; overflow:hidden; }
+.timer-bar { height:100%; background:var(--accent); border-radius:3px; transition:width 0.1s linear; }
+.question-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; gap:12px; overflow:hidden; }
+.question-emoji { font-size:3.5rem; line-height:1; }
+.question-text { font-size:1.05rem; font-weight:600; text-align:center; line-height:1.4; }
+.answers { width:100%; max-width:480px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ans-btn { background:var(--card); color:var(--text); padding:14px 8px; font-size:0.9rem; border-radius:var(--radius); border:2px solid transparent; min-height:58px; line-height:1.3; }
+.ans-btn.correct { background:#1b5e20; border-color:#66BB6A; color:#fff; }
+.ans-btn.wrong { background:#b71c1c; border-color:#EF5350; color:#fff; }
+.ans-btn:disabled { cursor:default; }
+.feedback-bar { height:38px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0; background:var(--surface); padding:0 12px; text-align:center; }
+.feedback-bar.correct { color:#66BB6A; }
+.feedback-bar.wrong { color:#EF5350; }
+#resultScreen { align-items:center; justify-content:center; gap:18px; padding:30px; }
+.result-emoji { font-size:4rem; }
+.result-title { font-size:1.8rem; font-weight:800; }
+.result-score { font-size:3.5rem; font-weight:900; color:var(--accent); }
+.result-sub { color:var(--muted); font-size:1rem; }
+.result-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="screen active" id="menuScreen">
+    <div class="menu-emoji">⚽</div>
+    <div class="menu-title">Football Quiz</div>
+    <div class="menu-sub">50 questions on the beautiful game</div>
+    <div class="menu-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Now</button>
+    </div>
+  </div>
+  <div class="screen" id="gameScreen">
+    <div class="game-header">
+      <div class="game-top">
+        <span class="progress-text" id="progressText">1 / 50</span>
+        <span class="score-text" id="scoreText">Score: 0</span>
+      </div>
+      <div class="timer-bar-wrap"><div class="timer-bar" id="timerBar"></div></div>
+    </div>
+    <div class="question-area">
+      <div class="question-emoji" id="qEmoji"></div>
+      <div class="question-text" id="qText"></div>
+      <div class="answers" id="answersDiv"></div>
+    </div>
+    <div class="feedback-bar" id="feedbackBar"></div>
+  </div>
+  <div class="screen" id="resultScreen">
+    <div class="result-emoji" id="resultEmoji">🏆</div>
+    <div class="result-title">Quiz Complete!</div>
+    <div class="result-score" id="resultScore">0%</div>
+    <div class="result-sub" id="resultSub"></div>
+    <div class="result-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Again</button>
+      <button class="btn-secondary" onclick="showScreen('menuScreen')">Menu</button>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+var state={useCount:0,removeAds:false,score:0,qi:0,questions:[],timer:null,timeLeft:0,answered:false};
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%5===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var ALL_QUESTIONS=[
+  {e:'🏆',q:"Which country has won the most FIFA World Cups?",a:["Brazil (5)","Germany (4)","Italy (4)","France (2)"],c:0},
+  {e:'⚽',q:"How many players are on a standard football team on the pitch?",a:["11","10","12","9"],c:0},
+  {e:'🥅',q:"How long is a standard football match?",a:["90 minutes","80 minutes","100 minutes","120 minutes"],c:0},
+  {e:'🌍',q:"Where was the first FIFA World Cup held (1930)?",a:["Uruguay","Brazil","Argentina","Mexico"],c:0},
+  {e:'🏆',q:"Who scored in the 1966 World Cup final for England's 4-2 win?",a:["Geoff Hurst (hat-trick)","Bobby Charlton","Martin Peters","Gordon Banks"],c:0},
+  {e:'⭐',q:"Who is known as 'The Best Player of the 20th Century' by FIFA?",a:["Pelé","Diego Maradona","Johan Cruyff","Ronaldo"],c:0},
+  {e:'🐐',q:"Lionel Messi is from which country?",a:["Argentina","Brazil","Spain","Uruguay"],c:0},
+  {e:'🐐',q:"Cristiano Ronaldo is from which country?",a:["Portugal","Spain","Brazil","Italy"],c:0},
+  {e:'🏟️',q:"What is the largest football stadium in the world by capacity?",a:["Rungrado 1st of May Stadium (N. Korea)","Camp Nou","Wembley","Maracanã"],c:0},
+  {e:'🏆',q:"Which club has won the most UEFA Champions League titles?",a:["Real Madrid","AC Milan","Liverpool","Bayern Munich"],c:0},
+  {e:'🥇',q:"Which country has won the most UEFA European Championships?",a:["Germany & Spain (tied at 3)","France","Italy","Portugal"],c:0},
+  {e:'⚽',q:"What is a 'hat-trick' in football?",a:["3 goals by one player in a match","3 saves by the goalkeeper","Scoring in 3 consecutive games","3 assists in a match"],c:0},
+  {e:'🖐️',q:"What rule is the 'offside rule' in football designed to prevent?",a:["Goal-hanging near the opponent's goal","Dangerous play","Time-wasting","Diving"],c:0},
+  {e:'💛',q:"How many yellow cards result in a red card?",a:["2","3","1","4"],c:0},
+  {e:'🎯',q:"From how many yards is a penalty kick taken?",a:["12 yards (11m)","10 yards","15 yards","18 yards"],c:0},
+  {e:'🏆',q:"Which team won the inaugural Premier League season (1992–93)?",a:["Manchester United","Arsenal","Blackburn Rovers","Leeds United"],c:0},
+  {e:'⚽',q:"The 'Golden Boot' is awarded to the top scorer in which tournament?",a:["Both World Cup and Premier League","Only the World Cup","Only the Premier League","Champions League only"],c:0},
+  {e:'🌍',q:"The 2022 FIFA World Cup was held in which country?",a:["Qatar","Saudi Arabia","UAE","Bahrain"],c:0},
+  {e:'🏆',q:"Argentina won the 2022 World Cup. Who scored the decisive penalty in the final?",a:["Gonzalo Montiel","Lionel Messi","Lautaro Martínez","Julián Álvarez"],c:0},
+  {e:'🇧🇷',q:"Brazil's Ronaldo (R9) scored how many goals at the 2002 World Cup?",a:["8","6","7","5"],c:0},
+  {e:'⚽',q:"Which English club is nicknamed 'The Reds'?",a:["Liverpool","Manchester United","Arsenal","Nottingham Forest"],c:0},
+  {e:'⚽',q:"Which Spanish club plays at the Santiago Bernabéu?",a:["Real Madrid","Atletico Madrid","Sevilla","Valencia"],c:0},
+  {e:'⚽',q:"Which Italian club is nicknamed 'The Old Lady' (La Vecchia Signora)?",a:["Juventus","AC Milan","Inter Milan","Roma"],c:0},
+  {e:'⚽',q:"What is the name of the German top football league?",a:["Bundesliga","Serie A","La Liga","Ligue 1"],c:0},
+  {e:'⚽',q:"How many substitutes can a team make in a standard FIFA match?",a:["5","3","4","6"],c:0},
+  {e:'🏆',q:"Which team has won the English First Division/Premier League the most times?",a:["Manchester United (20)","Liverpool (19)","Arsenal (13)","Chelsea (6)"],c:0},
+  {e:'🌍',q:"The 1994 World Cup was held in which country?",a:["USA","Mexico","Italy","Germany"],c:0},
+  {e:'⚽',q:"A corner kick is awarded when the ball goes out of play after touching?",a:["A defender last","An attacker last","The goalkeeper","Any player"],c:0},
+  {e:'🎯',q:"What is a 'brace' in football terminology?",a:["2 goals by one player","A sliding tackle","A defensive formation","Goal from a free kick"],c:0},
+  {e:'🏆',q:"Who holds the record for most goals in a single World Cup tournament?",a:["Just Fontaine (13 in 1958)","Ronaldo (8 in 2002)","Pele (6 in 1958)","Miroslav Klose (5)"],c:0},
+  {e:'⭐',q:"Zlatan Ibrahimović played for how many different top European clubs?",a:["More than 10 clubs","5 clubs","7 clubs","3 clubs"],c:0},
+  {e:'⚽',q:"Which club plays home games at Anfield?",a:["Liverpool","Everton","Arsenal","Manchester City"],c:0},
+  {e:'⚽',q:"Which club plays at the Allianz Arena?",a:["Bayern Munich","Borussia Dortmund","Bayer Leverkusen","Schalke"],c:0},
+  {e:'🏆',q:"The Copa América is the continental championship of which region?",a:["South America","North America","Africa","Asia"],c:0},
+  {e:'🌍',q:"Which African country first reached a World Cup semi-final in 2002?",a:["Senegal","Cameroon","Nigeria","South Africa"],c:0},
+  {e:'⚽',q:"What colour are the traditional home shirts of Brazil's national team?",a:["Yellow","Green","Blue","White"],c:0},
+  {e:'⚽',q:"Which nation's team is nicknamed 'The Three Lions'?",a:["England","Scotland","Wales","Ireland"],c:0},
+  {e:'🔴',q:"Which country does Gareth Bale represent?",a:["Wales","Scotland","England","Ireland"],c:0},
+  {e:'⚽',q:"What does 'VAR' stand for in football?",a:["Video Assistant Referee","Video Action Replay","Visual Assist Review","Verified Action Ruling"],c:0},
+  {e:'🏆',q:"The 'Ballon d'Or' is awarded to whom?",a:["Best player in the world annually","Best goalkeeper","Best young player","Best manager"],c:0},
+  {e:'⚽',q:"How wide is a standard football goal (in meters)?",a:["7.32m","6m","8m","7m"],c:0},
+  {e:'🌍',q:"Which team won the first-ever FIFA World Cup in 1930?",a:["Uruguay","Argentina","USA","Brazil"],c:0},
+  {e:'⚽',q:"What is the maximum number of players in a match squad allowed on the bench in international matches?",a:["12","7","10","9"],c:0},
+  {e:'🏆',q:"Which player has won the most Ballon d'Or awards?",a:["Lionel Messi (8)","Cristiano Ronaldo (5)","Ronaldo R9 (2)","Zinedine Zidane (1)"],c:0},
+  {e:'⚽',q:"What is the name of the main domestic cup competition in England?",a:["FA Cup","League Cup","Community Shield","Trophy"],c:0},
+  {e:'⭐',q:"Pelé won how many World Cups?",a:["3 (1958, 1962, 1970)","2","1","4"],c:0},
+  {e:'⚽',q:"A throw-in is awarded when the ball crosses which line?",a:["Touchline (sideline)","Goal line","Halfway line","Penalty box line"],c:0},
+  {e:'🏆',q:"Which club won the first-ever Champions League (then European Cup) in 1956?",a:["Real Madrid","Barcelona","Juventus","Benfica"],c:0},
+  {e:'⚽',q:"Mohamed Salah plays international football for which country?",a:["Egypt","Algeria","Morocco","Tunisia"],c:0},
+  {e:'🌍',q:"The 2026 World Cup will be hosted jointly by?",a:["USA, Canada & Mexico","USA & Canada","Brazil & Argentina","Spain & Portugal"],c:0},
+];
+
+function shuffle(arr){for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
+function startGame(){state.score=0;state.qi=0;state.useCount=0;state.questions=shuffle(ALL_QUESTIONS.slice()).slice(0,50);showScreen('gameScreen');loadQuestion();}
+function loadQuestion(){
+  if(state.qi>=state.questions.length){endGame();return;}
+  var q=state.questions[state.qi];
+  document.getElementById('progressText').textContent=(state.qi+1)+' / '+state.questions.length;
+  document.getElementById('scoreText').textContent='Score: '+state.score;
+  document.getElementById('qEmoji').textContent=q.e;
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('feedbackBar').textContent='';
+  document.getElementById('feedbackBar').className='feedback-bar';
+  state.answered=false;
+  var correctLabel=q.a[q.c];
+  var indices=[0,1,2,3];shuffle(indices);
+  var div=document.getElementById('answersDiv');div.innerHTML='';
+  indices.forEach(function(idx){var btn=document.createElement('button');btn.className='ans-btn';btn.textContent=q.a[idx];btn.onclick=function(){answer(btn,q.a[idx]===correctLabel,correctLabel);};div.appendChild(btn);});
+  startTimer();
+}
+var TIMER_DURATION=15;
+function startTimer(){clearInterval(state.timer);state.timeLeft=TIMER_DURATION;updateTimerBar();state.timer=setInterval(function(){state.timeLeft-=0.1;updateTimerBar();if(state.timeLeft<=0){clearInterval(state.timer);timeUp();}},100);}
+function updateTimerBar(){document.getElementById('timerBar').style.width=Math.max(0,state.timeLeft/TIMER_DURATION*100)+'%';}
+function timeUp(){if(state.answered)return;state.answered=true;var q=state.questions[state.qi];var correctLabel=q.a[q.c];document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});showFeedback(false,"Time up! Correct: "+correctLabel);setTimeout(nextQ,1600);}
+function answer(btn,isCorrect,correctLabel){if(state.answered)return;state.answered=true;clearInterval(state.timer);document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});if(isCorrect){state.score++;btn.classList.add('correct');showFeedback(true,'Correct! 🎉');}else{btn.classList.add('wrong');showFeedback(false,'Wrong! Correct: '+correctLabel);}setTimeout(nextQ,1600);}
+function showFeedback(ok,msg){var bar=document.getElementById('feedbackBar');bar.textContent=msg;bar.className='feedback-bar '+(ok?'correct':'wrong');}
+function nextQ(){state.qi++;if(state.qi%5===0)maybeInterstitial();loadQuestion();}
+function endGame(){clearInterval(state.timer);var pct=Math.round(state.score/state.questions.length*100);document.getElementById('resultScore').textContent=pct+'%';document.getElementById('resultSub').textContent=state.score+' out of '+state.questions.length+' correct';var emojis=['😢','😕','🙂','😊','🏆'];document.getElementById('resultEmoji').textContent=emojis[Math.min(4,Math.floor(pct/20))];showScreen('resultScreen');}
+</script>
+</body>
+</html>

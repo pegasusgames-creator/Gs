@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PixelArt</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#0f0d1a;--surface:#1a1630;--accent:#7C4DFF;--text:#eaeaea;--muted:#5544aa;--radius:10px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;padding:6px 6px 0;}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-shrink:0;}
+header h1{font-size:1.1rem;font-weight:700;}header h1 span{color:var(--accent);}
+#toolbar{display:flex;gap:3px;flex-shrink:0;margin-bottom:4px;flex-wrap:wrap;align-items:center;}
+.tool-btn{background:var(--surface);border:1px solid #332266;color:var(--text);padding:5px 9px;border-radius:8px;font-size:0.72rem;cursor:pointer;touch-action:manipulation;}
+.tool-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.tool-btn.btn-pressed{transform:scale(0.9);}
+#zoom-label{font-size:0.72rem;color:var(--muted);}
+#canvas-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+#grid{display:inline-grid;gap:0;border:1px solid #332266;touch-action:none;}
+.px{cursor:pointer;}
+#palette-wrap{flex-shrink:0;padding:4px 0;}
+.palette-row{display:flex;gap:3px;flex-wrap:wrap;justify-content:center;}
+.color-btn{width:24px;height:24px;border-radius:4px;border:2px solid transparent;cursor:pointer;touch-action:manipulation;}
+.color-btn.active{border-color:#fff;}
+#btns{display:flex;gap:4px;flex-shrink:0;padding:4px 0 6px;}
+.btn{flex:1;background:var(--surface);border:1px solid #332266;color:var(--text);padding:7px;border-radius:8px;font-size:0.7rem;cursor:pointer;touch-action:manipulation;}
+.btn.btn-pressed{transform:scale(0.92);}
+.btn.primary{background:var(--accent);color:#fff;}
+#banner{height:50px;background:#111;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.75rem;flex-shrink:0;}
+#gallery{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:10;padding:16px;overflow-y:auto;}
+.gallery-item{background:var(--surface);border-radius:8px;padding:8px;margin-bottom:10px;cursor:pointer;border:1px solid #332266;}
+.gallery-item canvas{display:block;image-rendering:pixelated;width:64px;height:64px;margin-bottom:4px;}
+.gallery-item .info{font-size:0.75rem;color:var(--muted);}
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Pixel<span>Art</span></h1><span id="zoom-label">1×</span></header>
+  <div id="toolbar">
+    <button class="tool-btn active" id="tool-draw">Draw</button>
+    <button class="tool-btn" id="tool-erase">Erase</button>
+    <button class="tool-btn" id="tool-fill">Fill</button>
+    <button class="tool-btn" id="btn-zoom">Zoom 2×</button>
+    <button class="tool-btn" id="btn-undo">↩</button>
+    <button class="tool-btn" id="btn-redo">↪</button>
+  </div>
+  <div id="canvas-wrap"><div id="grid"></div></div>
+  <div id="palette-wrap"><div class="palette-row" id="palette"></div></div>
+  <div id="btns">
+    <button class="btn" id="btn-clear">Clear</button>
+    <button class="btn" id="btn-save">Save</button>
+    <button class="btn primary" id="btn-gallery">Gallery</button>
+    <button class="btn" id="btn-template">Template</button>
+  </div>
+  <div id="banner">Ad Banner</div>
+</div>
+<div id="gallery">
+  <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+    <span style="font-size:1rem;font-weight:700;">Saved Art</span>
+    <button onclick="document.getElementById('gallery').style.display='none'" style="background:var(--accent);border:none;color:#fff;padding:6px 14px;border-radius:8px;font-weight:700;cursor:pointer;">Close</button>
+  </div>
+  <div id="gallery-list"></div>
+</div>
+<script>
+const SIZE=16;
+const COLORS=['#7C4DFF','#E53935','#FF9800','#FFEB3B','#43A047','#00ACC1','#1E88E5','#F48FB1','#FFFFFF','#9E9E9E','#424242','#000000','#795548','#FF5722','#00BFA5','#F50057'];
+const TEMPLATES=[
+  // Heart
+  [0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,
+   0,1,1,1,1,0,0,1,1,1,1,0,0,0,0,0,
+   1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,
+   1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,
+   1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,
+   0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
+   0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,
+   0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,
+   0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,
+   0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,
+   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+];
+
+let tool='draw',currentColor=COLORS[0],zoom=1;
+let pixels=Array(SIZE*SIZE).fill('');
+let undoStack=[],redoStack=[];
+let isDrawing=false;
+const gridEl=document.getElementById('grid');
+
+function buildGrid(){
+  gridEl.style.gridTemplateColumns=`repeat(${SIZE},${zoom===1?'20px':'36px'})`;
+  gridEl.innerHTML='';
+  for(let i=0;i<SIZE*SIZE;i++){
+    const px=document.createElement('div');
+    px.className='px';
+    px.style.width=px.style.height=(zoom===1?'20px':'36px');
+    px.style.background=pixels[i]||'#1a1630';
+    px.dataset.i=i;
+    px.addEventListener('mousedown',()=>{isDrawing=true;paint(i);});
+    px.addEventListener('mouseover',()=>{if(isDrawing)paint(i);});
+    gridEl.appendChild(px);
+  }
+}
+
+gridEl.addEventListener('touchstart',e=>{
+  isDrawing=true;
+  paintTouch(e.touches[0]);
+},{passive:true});
+gridEl.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  paintTouch(e.touches[0]);
+},{passive:false});
+gridEl.addEventListener('touchend',()=>isDrawing=false);
+document.addEventListener('mouseup',()=>isDrawing=false);
+
+function paintTouch(t){
+  const el=document.elementFromPoint(t.clientX,t.clientY);
+  if(el&&el.classList.contains('px'))paint(parseInt(el.dataset.i));
+}
+
+function paint(i){
+  if(tool==='fill'){floodFill(i,pixels[i],currentColor);buildGrid();return;}
+  saveUndo();
+  if(tool==='erase')pixels[i]='';
+  else pixels[i]=currentColor;
+  const el=gridEl.children[i];
+  if(el)el.style.background=pixels[i]||'#1a1630';
+}
+
+function floodFill(start,target,fill){
+  if(target===fill)return;
+  saveUndo();
+  const stack=[start];
+  while(stack.length){
+    const idx=stack.pop();
+    if(idx<0||idx>=SIZE*SIZE)continue;
+    if(pixels[idx]!==target)continue;
+    pixels[idx]=fill;
+    const row=Math.floor(idx/SIZE),col=idx%SIZE;
+    if(col>0)stack.push(idx-1);
+    if(col<SIZE-1)stack.push(idx+1);
+    if(row>0)stack.push(idx-SIZE);
+    if(row<SIZE-1)stack.push(idx+SIZE);
+  }
+}
+
+function saveUndo(){undoStack.push([...pixels]);if(undoStack.length>30)undoStack.shift();redoStack=[];}
+
+// Palette
+const pal=document.getElementById('palette');
+COLORS.forEach((c,i)=>{
+  const b=document.createElement('div');
+  b.className='color-btn'+(i===0?' active':'');
+  b.style.background=c;
+  b.addEventListener('click',()=>{
+    currentColor=c;tool='draw';
+    document.querySelectorAll('.color-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    setTool('draw');
+  });
+  pal.appendChild(b);
+});
+
+function setTool(t){
+  tool=t;
+  document.querySelectorAll('.tool-btn[id^=tool]').forEach(x=>x.classList.remove('active'));
+  const el=document.getElementById('tool-'+t);
+  if(el)el.classList.add('active');
+}
+document.getElementById('tool-draw').addEventListener('click',()=>setTool('draw'));
+document.getElementById('tool-erase').addEventListener('click',()=>setTool('erase'));
+document.getElementById('tool-fill').addEventListener('click',()=>setTool('fill'));
+
+document.getElementById('btn-zoom').addEventListener('click',function(){
+  zoom=zoom===1?2:1;
+  this.textContent='Zoom '+(zoom===1?'2':'1')+'×';
+  document.getElementById('zoom-label').textContent=zoom+'×';
+  buildGrid();
+});
+
+document.getElementById('btn-undo').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  if(!undoStack.length)return;
+  redoStack.push([...pixels]);pixels=undoStack.pop();buildGrid();
+});
+document.getElementById('btn-redo').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  if(!redoStack.length)return;
+  undoStack.push([...pixels]);pixels=redoStack.pop();buildGrid();
+});
+document.getElementById('btn-clear').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  saveUndo();pixels=Array(SIZE*SIZE).fill('');buildGrid();
+});
+
+document.getElementById('btn-save').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  const saves=JSON.parse(localStorage.getItem('pixelart_saves')||'[]');
+  saves.unshift({pixels:[...pixels],date:new Date().toLocaleDateString()});
+  if(saves.length>5)saves.pop();
+  localStorage.setItem('pixelart_saves',JSON.stringify(saves));
+  this.textContent='Saved!';setTimeout(()=>this.textContent='Save',1000);
+});
+
+document.getElementById('btn-template').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  saveUndo();
+  const t=TEMPLATES[0];
+  pixels=pixels.map((p,i)=>t[i]?currentColor:'');
+  buildGrid();
+});
+
+document.getElementById('btn-gallery').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  const saves=JSON.parse(localStorage.getItem('pixelart_saves')||'[]');
+  const list=document.getElementById('gallery-list');
+  list.innerHTML='';
+  if(!saves.length){list.innerHTML='<p style="color:#666;text-align:center;padding:20px;">No saved art yet.</p>';
+  }else{
+    saves.forEach((s,idx)=>{
+      const item=document.createElement('div');item.className='gallery-item';
+      const c=document.createElement('canvas');c.width=SIZE;c.height=SIZE;
+      const cx=c.getContext('2d');
+      s.pixels.forEach((col,i)=>{if(col){cx.fillStyle=col;cx.fillRect(i%SIZE,Math.floor(i/SIZE),1,1);}});
+      const info=document.createElement('div');info.className='info';info.textContent='Saved: '+s.date;
+      const loadBtn=document.createElement('button');
+      loadBtn.style.cssText='background:var(--accent);border:none;color:#fff;padding:4px 10px;border-radius:6px;font-size:0.72rem;cursor:pointer;margin-top:4px;';
+      loadBtn.textContent='Load';
+      loadBtn.addEventListener('click',()=>{
+        pixels=[...s.pixels];buildGrid();
+        document.getElementById('gallery').style.display='none';
+      });
+      item.appendChild(c);item.appendChild(info);item.appendChild(loadBtn);
+      list.appendChild(item);
+    });
+  }
+  document.getElementById('gallery').style.display='block';
+});
+
+window.onPurchaseComplete=function(sku){};
+window.onAdMobLoaded=function(){document.getElementById('banner').style.display='none';};
+
+buildGrid();
+</script>
+</body>
+</html>

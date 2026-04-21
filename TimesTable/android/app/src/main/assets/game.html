@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Times Tables</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --accent:#3F51B5; --accent2:#7986CB; --bg:#E8EAF6; --card:#fff; --text:#333; --muted:#777; --radius:16px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--accent); flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:800; color:#fff; }
+#btn-remove-ads { background:rgba(255,255,255,0.25); border:none; color:#fff; font-size:0.72rem; font-weight:700; padding:5px 10px; border-radius:20px; cursor:pointer; }
+
+#tabs { display:flex; background:#fff; flex-shrink:0; border-bottom:3px solid var(--bg); }
+.tab { flex:1; padding:10px 4px; text-align:center; font-size:0.78rem; font-weight:700; color:var(--muted); border:none; background:none; cursor:pointer; border-bottom:3px solid transparent; }
+.tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+.screen { display:none; flex-direction:column; flex:1; overflow:hidden; }
+.screen.active { display:flex; }
+
+/* ---- SELECT TABLE SCREEN ---- */
+#selectScreen { background:var(--bg); overflow-y:auto; padding:12px; gap:10px; align-items:center; }
+.select-title { font-size:1rem; font-weight:700; color:var(--accent); margin-bottom:4px; }
+#tableGrid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; width:100%; max-width:400px; }
+.table-sel-btn { padding:20px 8px; font-size:1.2rem; font-weight:900; border:none; border-radius:14px; cursor:pointer; transition:transform 0.15s; position:relative; }
+.table-sel-btn:active { transform:scale(0.93); }
+.table-sel-btn .mastered-badge { position:absolute; top:4px; right:4px; font-size:0.65rem; background:#FFD700; color:#333; border-radius:8px; padding:1px 5px; font-weight:700; }
+
+/* ---- PRACTICE SCREEN ---- */
+#practiceScreen { background:var(--bg); padding:14px; gap:12px; align-items:center; overflow-y:auto; }
+.prac-header { display:flex; justify-content:space-between; width:100%; max-width:400px; align-items:center; }
+.prac-title { font-size:1rem; font-weight:700; color:var(--accent); }
+.back-link { font-size:0.85rem; color:var(--accent); font-weight:700; border:none; background:none; cursor:pointer; padding:4px 8px; border-radius:8px; background:#E8EAF6; }
+#pracTable { width:100%; max-width:400px; }
+.prac-row { display:flex; align-items:center; justify-content:space-between; background:#fff; border-radius:12px; padding:14px 16px; margin-bottom:8px; box-shadow:0 2px 8px rgba(0,0,0,0.06); font-size:1rem; font-weight:700; }
+.prac-eq { color:var(--text); }
+.prac-ans { color:var(--accent); font-size:1.1rem; font-weight:900; }
+
+/* ---- QUIZ SCREEN ---- */
+#quizScreen { background:var(--bg); padding:14px; gap:12px; align-items:center; }
+.quiz-hdr { display:flex; justify-content:space-between; width:100%; max-width:400px; font-size:0.9rem; font-weight:700; color:var(--muted); align-items:center; }
+.back-link2 { font-size:0.85rem; color:var(--accent); font-weight:700; border:none; background:none; cursor:pointer; padding:4px 8px; border-radius:8px; background:#E8EAF6; }
+.quiz-card { background:#fff; border-radius:var(--radius); box-shadow:0 4px 20px rgba(0,0,0,0.08); padding:24px; text-align:center; width:100%; max-width:400px; }
+.quiz-q-text { font-size:clamp(26px,9vw,38px); font-weight:900; color:var(--text); }
+.quiz-q-text .qmark { color:var(--accent); }
+.ans-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; max-width:400px; }
+.ans-btn { padding:20px; font-size:1.3rem; font-weight:900; border:3px solid transparent; border-radius:var(--radius); cursor:pointer; transition:all 0.15s; }
+.ans-btn:active { transform:scale(0.95); }
+.ans-a { background:#E8EAF6; color:#3F51B5; }
+.ans-b { background:#E8F5E9; color:#2E7D32; }
+.ans-c { background:#FFF3E0; color:#E65100; }
+.ans-d { background:#FCE4EC; color:#C2185B; }
+.ans-btn.correct { background:#4CAF50; color:#fff; }
+.ans-btn.wrong   { background:#f44336; color:#fff; }
+
+/* ---- GRID SCREEN ---- */
+#gridScreen { background:var(--bg); overflow:auto; padding:10px; }
+.grid-table { border-collapse:collapse; min-width:520px; font-size:0.75rem; }
+.grid-table td,.grid-table th { padding:7px 8px; text-align:center; border:1px solid #c5cae9; min-width:36px; }
+.grid-table th { background:var(--accent); color:#fff; font-weight:800; }
+.grid-table td { background:#fff; color:var(--text); font-weight:600; transition:background 0.2s; cursor:pointer; }
+.grid-table td:hover { background:#e8eaf6; }
+.grid-table .diag { background:#c5cae9; font-weight:800; }
+
+/* Achievements */
+#achieveBar { padding:8px 12px; background:#fff; border-top:2px solid var(--bg); flex-shrink:0; display:flex; gap:4px; flex-wrap:wrap; align-items:center; }
+#achieveBar span { font-size:0.7rem; color:var(--muted); font-weight:600; margin-right:4px; }
+.badge-item { width:28px; height:28px; border-radius:50%; background:#e0e0e0; display:flex; align-items:center; justify-content:center; font-size:0.65rem; font-weight:800; color:#fff; cursor:pointer; title-attr:''; transition:all 0.2s; }
+.badge-item.earned { background:linear-gradient(135deg,#FFD700,#FF9800); color:#333; box-shadow:0 2px 8px rgba(255,152,0,0.4); }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>✖️ Times Tables</h1>
+    <button id="btn-remove-ads" onclick="purchase('remove_ads')">⭐ Remove Ads</button>
+  </header>
+
+  <div id="tabs">
+    <button class="tab active" onclick="switchTab('select')">📋 Practice</button>
+    <button class="tab" onclick="switchTab('quiz')">🎯 Quiz</button>
+    <button class="tab" onclick="switchTab('grid')">📊 Grid</button>
+  </div>
+
+  <!-- SELECT TABLE -->
+  <div class="screen active" id="selectScreen">
+    <p class="select-title">Choose a table to practice:</p>
+    <div id="tableGrid"></div>
+    <div style="font-size:0.8rem;color:var(--muted);text-align:center;">⭐ = Mastered (5+ correct in quiz)</div>
+    <div id="achieveBar"><span>Badges:</span></div>
+  </div>
+
+  <!-- PRACTICE SCREEN -->
+  <div class="screen" id="practiceScreen">
+    <div class="prac-header">
+      <span class="prac-title" id="pracTitle">× 3 Table</span>
+      <button class="back-link" onclick="switchTab('select')">← Back</button>
+    </div>
+    <button onclick="startQuizForTable(currentTable)" style="width:100%;max-width:400px;padding:16px;font-size:1rem;font-weight:800;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 4px 16px rgba(63,81,181,0.35);">🎯 Quiz This Table</button>
+    <div id="pracTable"></div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div class="screen" id="quizScreen">
+    <div class="quiz-hdr">
+      <button class="back-link2" onclick="switchTab('select')">← Back</button>
+      <span>Score: <span id="qScore">0</span> | Q<span id="qNum">1</span>/10</span>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-q-text" id="quizQ">3 × 4 = <span class="qmark">?</span></div>
+    </div>
+    <div class="ans-grid" id="ansGrid"></div>
+  </div>
+
+  <!-- GRID SCREEN -->
+  <div class="screen" id="gridScreen">
+    <div id="gridWrap"></div>
+  </div>
+</div>
+<script>
+function purchase(sku){if(window.Android&&Android.purchase)Android.purchase(sku);}
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+function playTone(f,d,t='sine'){const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(0.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+d);o.start();o.stop(audioCtx.currentTime+d);}
+
+const COLORS=['#FF4081','#FF5722','#FF9800','#FFC107','#4CAF50','#00BCD4','#2196F3','#3F51B5','#9C27B0','#E91E63','#795548','#607D8B'];
+const mastered = JSON.parse(localStorage.getItem('tt_mastered')||'{}');
+let currentTable=3, quizState={table:1,q:0,score:0,answered:false};
+
+function buildTableGrid(){
+  const grid=document.getElementById('tableGrid');
+  grid.innerHTML='';
+  for(let n=1;n<=12;n++){
+    const btn=document.createElement('button');
+    btn.className='table-sel-btn';
+    btn.style.background=COLORS[(n-1)%COLORS.length]+'33';
+    btn.style.color=COLORS[(n-1)%COLORS.length];
+    btn.innerHTML=`×${n}${mastered[n]?'<span class="mastered-badge">⭐</span>':''}`;
+    btn.onclick=()=>openTable(n);
+    grid.appendChild(btn);
+  }
+  // Badges
+  const bar=document.getElementById('achieveBar');
+  bar.innerHTML='<span>Badges:</span>';
+  for(let n=1;n<=12;n++){
+    const b=document.createElement('div');
+    b.className='badge-item'+(mastered[n]?' earned':'');
+    b.textContent='×'+n; b.title='Table ×'+n+(mastered[n]?' (Mastered!)':'');
+    bar.appendChild(b);
+  }
+}
+
+function openTable(n){
+  currentTable=n;
+  document.getElementById('pracTitle').textContent='× '+n+' Table';
+  const tbl=document.getElementById('pracTable');
+  tbl.innerHTML='';
+  for(let i=1;i<=12;i++){
+    const row=document.createElement('div');
+    row.className='prac-row';
+    row.innerHTML=`<span class="prac-eq">${i} × ${n}</span><span class="prac-ans">= ${i*n}</span>`;
+    tbl.appendChild(row);
+  }
+  showScreen('practiceScreen');
+}
+
+function startQuizForTable(n){
+  quizState={table:n,q:0,score:0,answered:false};
+  document.getElementById('qScore').textContent=0;
+  switchTab('quiz');
+  nextQuizQ();
+}
+
+function nextQuizQ(){
+  if(quizState.q>=10){ endQuiz(); return; }
+  quizState.q++;
+  quizState.answered=false;
+  document.getElementById('qNum').textContent=quizState.q;
+  const a=Math.floor(Math.random()*12)+1;
+  const b=quizState.table;
+  const ans=a*b;
+  quizState.ans=ans;
+  document.getElementById('quizQ').innerHTML=`${a} × ${b} = <span class="qmark">?</span>`;
+  // 4 options
+  const wrongs=new Set();
+  while(wrongs.size<3){ const w=ans+(Math.random()<0.5?1:-1)*(Math.floor(Math.random()*5)+1); if(w>0&&w!==ans) wrongs.add(w); }
+  const opts=[...wrongs,ans].sort(()=>Math.random()-0.5);
+  const classes=['ans-a','ans-b','ans-c','ans-d'];
+  const grid=document.getElementById('ansGrid');
+  grid.innerHTML='';
+  opts.forEach((opt,i)=>{
+    const b=document.createElement('button');
+    b.className='ans-btn '+classes[i]; b.textContent=opt;
+    b.onclick=()=>answerQ(b,opt===ans);
+    grid.appendChild(b);
+  });
+}
+
+function answerQ(btn,correct){
+  if(quizState.answered)return; quizState.answered=true;
+  if(correct){ btn.classList.add('correct'); quizState.score++; document.getElementById('qScore').textContent=quizState.score; playTone(880,0.1);setTimeout(()=>playTone(1100,0.15),120); }
+  else { btn.classList.add('wrong'); playTone(200,0.3,'sawtooth'); document.querySelectorAll('.ans-btn').forEach(b=>{if(+b.textContent===quizState.ans)b.classList.add('correct');}); }
+  setTimeout(nextQuizQ,1200);
+}
+
+function endQuiz(){
+  if(quizState.score>=7){ mastered[quizState.table]=true; localStorage.setItem('tt_mastered',JSON.stringify(mastered)); }
+  document.getElementById('quizQ').innerHTML=`Done! ${quizState.score}/10 ${quizState.score>=9?'🌟 Mastered!':quizState.score>=7?'😄 Great!':'💪 Keep going!'}`;
+  document.getElementById('ansGrid').innerHTML=`<button style="grid-column:span 2;padding:18px;font-size:1rem;font-weight:800;border:none;border-radius:14px;background:var(--accent);color:#fff;cursor:pointer;" onclick="startQuizForTable(${quizState.table})">Try Again</button><button style="padding:18px;font-size:1rem;font-weight:800;border:none;border-radius:14px;background:#E8EAF6;color:var(--accent);cursor:pointer;" onclick="switchTab('select')">Back</button>`;
+  if(quizState.score>=7){ [523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f,0.2),i*120)); buildTableGrid(); }
+}
+
+function buildGrid(){
+  const wrap=document.getElementById('gridWrap');
+  let html='<table class="grid-table"><tr><th>×</th>';
+  for(let c=1;c<=12;c++) html+=`<th>${c}</th>`;
+  html+='</tr>';
+  for(let r=1;r<=12;r++){
+    html+=`<tr><th>${r}</th>`;
+    for(let c=1;c<=12;c++) html+=`<td class="${r===c?'diag':''}">${r*c}</td>`;
+    html+='</tr>';
+  }
+  html+='</table>';
+  wrap.innerHTML=html;
+}
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['select','quiz','grid'][i]===t));
+  showScreen(t==='select'?'selectScreen':t==='quiz'?'quizScreen':'gridScreen');
+  if(t==='grid') buildGrid();
+  if(t==='select') buildTableGrid();
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+buildTableGrid();
+</script>
+</body>
+</html>

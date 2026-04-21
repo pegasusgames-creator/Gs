@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Food Quiz</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#FF7043; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+.screen { display:none; flex-direction:column; height:100%; }
+.screen.active { display:flex; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+button { cursor:pointer; border:none; border-radius:var(--radius); font-family:inherit; font-weight:600; transition:transform 0.1s,opacity 0.1s; }
+button:active, button.btn-pressed { transform:scale(0.96); opacity:0.85; }
+.btn-primary { background:var(--accent); color:#fff; padding:14px 28px; font-size:1.1rem; width:100%; }
+.btn-secondary { background:var(--card); color:var(--text); padding:12px 20px; font-size:0.95rem; width:100%; }
+#menuScreen { align-items:center; justify-content:center; gap:20px; padding:30px; }
+.menu-emoji { font-size:5rem; }
+.menu-title { font-size:2.2rem; font-weight:800; color:var(--accent); }
+.menu-sub { color:var(--muted); font-size:0.95rem; text-align:center; }
+.menu-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+#gameScreen { padding:0; }
+.game-header { background:var(--surface); padding:12px 16px; display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.game-top { display:flex; justify-content:space-between; align-items:center; }
+.progress-text { font-size:0.85rem; color:var(--muted); }
+.score-text { font-size:0.95rem; font-weight:700; color:var(--accent); }
+.timer-bar-wrap { height:6px; background:var(--card); border-radius:3px; overflow:hidden; }
+.timer-bar { height:100%; background:var(--accent); border-radius:3px; transition:width 0.1s linear; }
+.question-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; gap:12px; overflow:hidden; }
+.question-emoji { font-size:3.5rem; line-height:1; }
+.question-text { font-size:1.05rem; font-weight:600; text-align:center; line-height:1.4; }
+.answers { width:100%; max-width:480px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ans-btn { background:var(--card); color:var(--text); padding:14px 8px; font-size:0.9rem; border-radius:var(--radius); border:2px solid transparent; min-height:58px; line-height:1.3; }
+.ans-btn.correct { background:#1b5e20; border-color:#66BB6A; color:#fff; }
+.ans-btn.wrong { background:#b71c1c; border-color:#EF5350; color:#fff; }
+.ans-btn:disabled { cursor:default; }
+.feedback-bar { height:38px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0; background:var(--surface); padding:0 12px; text-align:center; }
+.feedback-bar.correct { color:#66BB6A; }
+.feedback-bar.wrong { color:#EF5350; }
+#resultScreen { align-items:center; justify-content:center; gap:18px; padding:30px; }
+.result-emoji { font-size:4rem; }
+.result-title { font-size:1.8rem; font-weight:800; }
+.result-score { font-size:3.5rem; font-weight:900; color:var(--accent); }
+.result-sub { color:var(--muted); font-size:1rem; }
+.result-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="screen active" id="menuScreen">
+    <div class="menu-emoji">🍽️</div>
+    <div class="menu-title">Food Quiz</div>
+    <div class="menu-sub">50 questions on cuisine, cooking & food origins</div>
+    <div class="menu-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Now</button>
+    </div>
+  </div>
+  <div class="screen" id="gameScreen">
+    <div class="game-header">
+      <div class="game-top">
+        <span class="progress-text" id="progressText">1 / 50</span>
+        <span class="score-text" id="scoreText">Score: 0</span>
+      </div>
+      <div class="timer-bar-wrap"><div class="timer-bar" id="timerBar"></div></div>
+    </div>
+    <div class="question-area">
+      <div class="question-emoji" id="qEmoji"></div>
+      <div class="question-text" id="qText"></div>
+      <div class="answers" id="answersDiv"></div>
+    </div>
+    <div class="feedback-bar" id="feedbackBar"></div>
+  </div>
+  <div class="screen" id="resultScreen">
+    <div class="result-emoji" id="resultEmoji">🏆</div>
+    <div class="result-title">Quiz Complete!</div>
+    <div class="result-score" id="resultScore">0%</div>
+    <div class="result-sub" id="resultSub"></div>
+    <div class="result-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Again</button>
+      <button class="btn-secondary" onclick="showScreen('menuScreen')">Menu</button>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+var state={useCount:0,removeAds:false,score:0,qi:0,questions:[],timer:null,timeLeft:0,answered:false};
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%5===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var ALL_QUESTIONS=[
+  {e:'🍕',q:"Pizza originated in which country?",a:["Italy","Greece","USA","Spain"],c:0},
+  {e:'🍣',q:"Sushi is a dish that originated in which country?",a:["Japan","China","South Korea","Vietnam"],c:0},
+  {e:'🍜',q:"Which country is famous for inventing ramen?",a:["Japan","China","Korea","Thailand"],c:0},
+  {e:'🌮',q:"Tacos are a traditional dish from which country?",a:["Mexico","Spain","USA","Brazil"],c:0},
+  {e:'🥐',q:"Croissants are famously associated with which country?",a:["France","Austria","Germany","Belgium"],c:0},
+  {e:'🍛',q:"Biryani is a famous rice dish from which cuisine?",a:["Indian/South Asian","Persian","Arabian","Thai"],c:0},
+  {e:'🥘',q:"Paella is a traditional dish from which country?",a:["Spain","Italy","Mexico","Portugal"],c:0},
+  {e:'🍜',q:"What are the main noodles used in traditional Pad Thai?",a:["Rice noodles","Egg noodles","Ramen noodles","Soba noodles"],c:0},
+  {e:'🫕',q:"Hummus is made from which main ingredient?",a:["Chickpeas","Lentils","Broad beans","Split peas"],c:0},
+  {e:'🥩',q:"What cut of beef is used to make a classic Wiener Schnitzel?",a:["Veal","Pork","Chicken","Beef loin"],c:0},
+  {e:'🧀',q:"Which country produces the most varieties of cheese?",a:["France","Switzerland","Netherlands","UK"],c:0},
+  {e:'🍫',q:"Chocolate originates from which continent?",a:["South America","Africa","Asia","Europe"],c:0},
+  {e:'☕',q:"Espresso coffee originated in which country?",a:["Italy","France","Turkey","Brazil"],c:0},
+  {e:'🫖',q:"Which country is the world's largest producer of tea?",a:["China","India","Sri Lanka","Kenya"],c:0},
+  {e:'🍷',q:"Which country produces the most wine in the world?",a:["Italy","France","Spain","USA"],c:0},
+  {e:'🍺',q:"Which country invented lager beer?",a:["Germany/Czech Republic","Belgium","UK","Ireland"],c:0},
+  {e:'🧅',q:"The cooking technique of 'sautéing' comes from which language?",a:["French","Italian","Spanish","English"],c:0},
+  {e:'🍳',q:"What does 'al dente' mean in pasta cooking?",a:["Firm to the bite","Very soft","Half cooked","With sauce"],c:0},
+  {e:'🥗',q:"The Caesar salad was invented in which country?",a:["Mexico","USA","Italy","France"],c:0},
+  {e:'🍱',q:"What is a bento?",a:["Japanese lunch box","Korean dumpling","Thai rice dish","Chinese noodle dish"],c:0},
+  {e:'🫙',q:"What ingredient makes sourdough bread different from regular bread?",a:["Wild yeast/fermented starter","Baking soda","Milk","Vinegar"],c:0},
+  {e:'🍪',q:"Macarons (the colourful sandwich cookies) are associated with which country?",a:["France","Italy","Belgium","Switzerland"],c:0},
+  {e:'🧇',q:"Waffles were originally invented in which country?",a:["Belgium","France","Netherlands","Germany"],c:0},
+  {e:'🥞',q:"The thin French pancake is called a?",a:["Crêpe","Galette","Blini","Pfannkuchen"],c:0},
+  {e:'🍦',q:"Gelato is the Italian version of which dessert?",a:["Ice cream","Sorbet","Parfait","Mousse"],c:0},
+  {e:'🫒',q:"Extra virgin olive oil is defined by its low acid content. What is the maximum acidity level?",a:["0.8%","2%","1.5%","3%"],c:0},
+  {e:'🌶️',q:"What gives chilli peppers their heat?",a:["Capsaicin","Piperine","Allicin","Curcumin"],c:0},
+  {e:'🍣',q:"Which fish is traditionally used in classic sushi nigiri?",a:["Bluefin tuna","Salmon","Eel","Mackerel"],c:0},
+  {e:'🫕',q:"Pho is a noodle soup dish from which country?",a:["Vietnam","Thailand","Cambodia","Laos"],c:0},
+  {e:'🍔',q:"The Big Mac was introduced by McDonald's in which decade?",a:["1960s","1970s","1950s","1980s"],c:0},
+  {e:'🥑',q:"Avocados are technically classified as which type of food?",a:["Berry (fruit)","Vegetable","Nut","Legume"],c:0},
+  {e:'🍄',q:"Which mushroom is known as the 'king of mushrooms'?",a:["Porcini","Truffle","Shiitake","Portobello"],c:0},
+  {e:'🧄',q:"Garlic belongs to which family of plants?",a:["Allium (onion family)","Nightshade","Brassica","Umbellifera"],c:0},
+  {e:'🦪',q:"In which month is it traditionally said oysters should not be eaten?",a:["Any month without an 'R'","Only in winter","Only in summer","During full moon"],c:0},
+  {e:'🍝',q:"Carbonara pasta sauce is made with which ingredient (besides pasta)?",a:["Eggs, cheese, guanciale","Cream, bacon, parmesan","Tomato, basil, meat","Butter, garlic, herbs"],c:0},
+  {e:'🫙',q:"What does 'umami' taste like?",a:["Savoury/meaty","Sweet and salty","Bitter and sour","Spicy and hot"],c:0},
+  {e:'🍠',q:"Sweet potatoes are native to which continent?",a:["South America","Africa","Asia","North America"],c:0},
+  {e:'🌽',q:"Polenta is made from which grain?",a:["Maize (corn)","Wheat","Barley","Rye"],c:0},
+  {e:'🥩',q:"What is the Maillard reaction in cooking?",a:["Browning of food through heat","Making food tender","Adding flavour via marination","Caramelising sugars"],c:0},
+  {e:'🫐',q:"Açaí berries originate from which region?",a:["Amazon rainforest","Sub-Saharan Africa","Southeast Asia","Mediterranean"],c:0},
+  {e:'🍱',q:"Kimchi is a traditional fermented dish from which country?",a:["South Korea","Japan","China","Thailand"],c:0},
+  {e:'🥐',q:"Pain au chocolat is a pastry filled with?",a:["Chocolate","Almonds","Jam","Custard"],c:0},
+  {e:'🫕',q:"Goulash is a traditional stew from which country?",a:["Hungary","Romania","Poland","Czech Republic"],c:0},
+  {e:'🍟',q:"French fries are believed to have been invented in which country?",a:["Belgium","France","USA","UK"],c:0},
+  {e:'🥚',q:"Hollandaise sauce is an emulsion of butter, egg yolk, and what?",a:["Lemon juice or vinegar","White wine","Cream","Mustard"],c:0},
+  {e:'🍜',q:"Miso soup is made from fermented what?",a:["Soybeans","Rice","Barley","Wheat"],c:0},
+  {e:'🫙',q:"Which spice comes from dried flower stigmas of Crocus sativus?",a:["Saffron","Turmeric","Paprika","Cinnamon"],c:0},
+  {e:'🥩',q:"What is 'wagyu' beef famous for?",a:["Intense marbling and fat content","Being grass-fed","Low fat content","Coming from wild cattle"],c:0},
+  {e:'🍰',q:"Tiramisu is a dessert from which country?",a:["Italy","France","Austria","Spain"],c:0},
+  {e:'🫖',q:"Matcha is a powdered form of which type of tea?",a:["Green tea","White tea","Oolong","Black tea"],c:0},
+];
+
+function shuffle(arr){for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
+function startGame(){state.score=0;state.qi=0;state.useCount=0;state.questions=shuffle(ALL_QUESTIONS.slice()).slice(0,50);showScreen('gameScreen');loadQuestion();}
+function loadQuestion(){
+  if(state.qi>=state.questions.length){endGame();return;}
+  var q=state.questions[state.qi];
+  document.getElementById('progressText').textContent=(state.qi+1)+' / '+state.questions.length;
+  document.getElementById('scoreText').textContent='Score: '+state.score;
+  document.getElementById('qEmoji').textContent=q.e;
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('feedbackBar').textContent='';
+  document.getElementById('feedbackBar').className='feedback-bar';
+  state.answered=false;
+  var correctLabel=q.a[q.c];
+  var indices=[0,1,2,3];shuffle(indices);
+  var div=document.getElementById('answersDiv');div.innerHTML='';
+  indices.forEach(function(idx){var btn=document.createElement('button');btn.className='ans-btn';btn.textContent=q.a[idx];btn.onclick=function(){answer(btn,q.a[idx]===correctLabel,correctLabel);};div.appendChild(btn);});
+  startTimer();
+}
+var TIMER_DURATION=15;
+function startTimer(){clearInterval(state.timer);state.timeLeft=TIMER_DURATION;updateTimerBar();state.timer=setInterval(function(){state.timeLeft-=0.1;updateTimerBar();if(state.timeLeft<=0){clearInterval(state.timer);timeUp();}},100);}
+function updateTimerBar(){document.getElementById('timerBar').style.width=Math.max(0,state.timeLeft/TIMER_DURATION*100)+'%';}
+function timeUp(){if(state.answered)return;state.answered=true;var q=state.questions[state.qi];var correctLabel=q.a[q.c];document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});showFeedback(false,"Time up! Correct: "+correctLabel);setTimeout(nextQ,1600);}
+function answer(btn,isCorrect,correctLabel){if(state.answered)return;state.answered=true;clearInterval(state.timer);document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});if(isCorrect){state.score++;btn.classList.add('correct');showFeedback(true,'Correct! 🎉');}else{btn.classList.add('wrong');showFeedback(false,'Wrong! Correct: '+correctLabel);}setTimeout(nextQ,1600);}
+function showFeedback(ok,msg){var bar=document.getElementById('feedbackBar');bar.textContent=msg;bar.className='feedback-bar '+(ok?'correct':'wrong');}
+function nextQ(){state.qi++;if(state.qi%5===0)maybeInterstitial();loadQuestion();}
+function endGame(){clearInterval(state.timer);var pct=Math.round(state.score/state.questions.length*100);document.getElementById('resultScore').textContent=pct+'%';document.getElementById('resultSub').textContent=state.score+' out of '+state.questions.length+' correct';var emojis=['😢','😕','🙂','😊','🏆'];document.getElementById('resultEmoji').textContent=emojis[Math.min(4,Math.floor(pct/20))];showScreen('resultScreen');}
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Posture Reminder</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#0d1e1e; --surface:#122828; --card:#0f3030; --accent:#80CBC4; --text:#eaeaea; --muted:#88aaaa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
+#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+.interval-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.ibtn { flex:1; min-width:60px; background:var(--card); border:2px solid transparent; border-radius:10px; color:var(--muted); font-size:0.9rem; font-weight:700; padding:10px 6px; cursor:pointer; text-align:center; }
+.ibtn.active { border-color:var(--accent); color:var(--accent); }
+.btn-p { background:var(--accent); border:none; color:#0d1e1e; font-size:1rem; font-weight:700; padding:12px; border-radius:10px; cursor:pointer; width:100%; }
+.btn-sec { background:var(--card); border:none; color:var(--text); font-size:1rem; font-weight:600; padding:12px; border-radius:10px; cursor:pointer; width:100%; margin-top:8px; }
+#reminder-box { background:rgba(128,203,196,0.08); border:2px solid var(--accent); border-radius:var(--radius); padding:20px; text-align:center; margin-bottom:12px; display:none; }
+#reminder-title { font-size:1.2rem; font-weight:700; color:var(--accent); margin-bottom:8px; }
+#reminder-tip { font-size:0.9rem; color:var(--text); line-height:1.6; }
+.btn-done { background:var(--accent); border:none; color:#0d1e1e; font-size:1rem; font-weight:700; padding:12px 28px; border-radius:10px; cursor:pointer; margin-top:14px; }
+.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.stat-box { background:var(--card); border-radius:10px; padding:10px; text-align:center; }
+.stat-lbl { font-size:0.65rem; color:var(--muted); margin-bottom:2px; }
+.stat-val { font-size:1.2rem; font-weight:700; color:var(--accent); }
+.tip-item { background:var(--card); border-radius:10px; padding:12px; margin-bottom:8px; }
+.tip-num { font-size:0.65rem; color:var(--accent); font-weight:700; margin-bottom:4px; }
+.tip-text { font-size:0.85rem; line-height:1.5; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Posture <span>Reminder</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
+  <div id="scroll">
+    <div class="card">
+      <div class="card-title">Reminder Interval</div>
+      <div class="interval-row" id="interval-row">
+        <button class="ibtn" data-m="15">15m</button>
+        <button class="ibtn active" data-m="20">20m</button>
+        <button class="ibtn" data-m="30">30m</button>
+        <button class="ibtn" data-m="45">45m</button>
+        <button class="ibtn" data-m="60">60m</button>
+      </div>
+      <button class="btn-p" id="btn-toggle">Start Reminders</button>
+      <button class="btn-sec" id="btn-reset" style="display:none">Stop & Reset</button>
+    </div>
+    <div id="reminder-box">
+      <div id="reminder-title">Time to check your posture!</div>
+      <div id="reminder-tip"></div>
+      <button class="btn-done" id="btn-done">Done! (+1)</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Today's Stats</div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-lbl">Completed</div><div class="stat-val" id="st-done">0</div></div>
+        <div class="stat-box"><div class="stat-lbl">Next In</div><div class="stat-val" id="st-next">--</div></div>
+        <div class="stat-box"><div class="stat-lbl">Total All Time</div><div class="stat-val" id="st-total">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Posture Exercises</div>
+      <div id="tips-list"></div>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var state={useCount:0,removeAds:false};
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var TIPS=[
+  {t:'Chin Tuck',d:'Sit tall, pull your chin back gently (making a double chin). Hold 5 seconds. Repeat 5 times. Relieves neck strain from forward head posture.'},
+  {t:'Shoulder Blade Squeeze',d:'Sit upright, squeeze shoulder blades together and hold for 5 seconds. Repeat 10 times. Counters rounded shoulders from desk work.'},
+  {t:'Chest Opener Stretch',d:'Clasp hands behind your back, straighten arms and lift slightly while opening your chest. Hold 10-20 seconds. Reverses forward hunching.'},
+  {t:'Standing Back Extension',d:'Stand and place hands on lower back. Gently arch backward, looking upward. Hold 5 seconds. Reverses prolonged sitting compression.'},
+  {t:'Neck Side Stretch',d:'Drop your right ear toward your right shoulder. Hold 15 seconds. Switch sides. Releases tension from phone/screen use.'},
+  {t:'Hip Flexor Stretch',d:'Kneel on one knee, push hips forward gently. Hold 20 seconds per side. Counteracts tight hip flexors from sitting too long.'}
+];
+
+var intervalMin=20, running=false, nextSec=0, tipIdx=0;
+var countToday=parseInt(localStorage.getItem('pr_today')||'0');
+var totalCount=parseInt(localStorage.getItem('pr_total')||'0');
+var todayKey=new Date().toDateString();
+if(localStorage.getItem('pr_date')!==todayKey){countToday=0;localStorage.setItem('pr_date',todayKey);localStorage.setItem('pr_today','0');}
+var ticker=null;
+
+document.getElementById('interval-row').querySelectorAll('.ibtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    if(running)return;
+    intervalMin=parseInt(b.dataset.m);
+    document.querySelectorAll('.ibtn').forEach(function(x){x.classList.toggle('active',x===b);});
+  });
+});
+
+function fmtSec(s){var m=Math.floor(s/60),sec=s%60;return m+':'+(sec<10?'0':'')+sec;}
+
+function showReminder(){
+  var tip=TIPS[tipIdx%TIPS.length];
+  document.getElementById('reminder-title').textContent='Posture Check! ('+tip.t+')';
+  document.getElementById('reminder-tip').textContent=tip.d;
+  document.getElementById('reminder-box').style.display='';
+  document.getElementById('st-next').textContent='Now!';
+}
+
+function tick(){
+  nextSec--;
+  if(nextSec<=0){showReminder();return;}
+  document.getElementById('st-next').textContent=fmtSec(nextSec);
+}
+
+function startReminders(){
+  running=true;
+  nextSec=intervalMin*60;
+  document.getElementById('btn-toggle').textContent='Running...';
+  document.getElementById('btn-toggle').disabled=true;
+  document.getElementById('btn-reset').style.display='';
+  ticker=setInterval(tick,1000);
+  document.getElementById('st-next').textContent=fmtSec(nextSec);
+}
+
+function stopReminders(){
+  running=false;
+  clearInterval(ticker);
+  document.getElementById('btn-toggle').textContent='Start Reminders';
+  document.getElementById('btn-toggle').disabled=false;
+  document.getElementById('btn-reset').style.display='none';
+  document.getElementById('reminder-box').style.display='none';
+  document.getElementById('st-next').textContent='--';
+}
+
+document.getElementById('btn-toggle').addEventListener('click',startReminders);
+document.getElementById('btn-reset').addEventListener('click',stopReminders);
+document.getElementById('btn-done').addEventListener('click',function(){
+  countToday++;totalCount++;tipIdx++;
+  localStorage.setItem('pr_today',countToday);
+  localStorage.setItem('pr_total',totalCount);
+  document.getElementById('reminder-box').style.display='none';
+  document.getElementById('st-done').textContent=countToday;
+  document.getElementById('st-total').textContent=totalCount;
+  nextSec=intervalMin*60;
+  maybeInterstitial();
+});
+
+document.getElementById('st-done').textContent=countToday;
+document.getElementById('st-total').textContent=totalCount;
+
+var tl=document.getElementById('tips-list');
+tl.innerHTML=TIPS.map(function(t,i){
+  return '<div class="tip-item"><div class="tip-num">TIP '+(i+1)+'</div><div style="font-weight:700;margin-bottom:4px;">'+t.t+'</div><div class="tip-text">'+t.d+'</div></div>';
+}).join('');
+</script>
+</body>
+</html>

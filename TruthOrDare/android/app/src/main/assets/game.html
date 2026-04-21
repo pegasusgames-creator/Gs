@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Truth or Dare</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+  body{background:#1a0d14;color:#ffd0f0;font-family:'Arial',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh;overflow:hidden}
+  h1{font-size:1.5rem;margin:14px 0 4px;color:#ff60c0;letter-spacing:2px}
+  #mode-btns{display:flex;gap:14px;margin:10px 0 14px}
+  .mode-btn{border:none;border-radius:50px;padding:13px 30px;font-size:1.05rem;font-weight:bold;cursor:pointer;transition:transform 0.1s,box-shadow 0.1s}
+  #truth-btn{background:linear-gradient(135deg,#a020a0,#ff60c0);color:#fff;box-shadow:0 4px 16px #ff60c044}
+  #dare-btn{background:linear-gradient(135deg,#a02020,#ff6040);color:#fff;box-shadow:0 4px 16px #ff604044}
+  .mode-btn:active{transform:scale(0.93)}
+  .mode-btn.selected{animation:pulse-sel 0.3s ease-out}
+  @keyframes pulse-sel{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+  #level-row{display:flex;gap:8px;margin-bottom:12px}
+  .lvl-btn{background:#ffffff10;border:1px solid #ff60c033;color:#ff60c077;border-radius:16px;padding:6px 14px;font-size:0.78rem;cursor:pointer}
+  .lvl-btn.active{background:#ff60c033;border-color:#ff60c0;color:#ff60c0}
+  #card-area{position:relative;width:300px;height:170px;margin:0 0 14px;perspective:600px}
+  #card{position:absolute;inset:0;background:linear-gradient(135deg,#2d0d20,#3d1530);border:1px solid #ff60c033;border-radius:22px;display:flex;align-items:center;justify-content:center;padding:18px;transition:transform 0.3s;cursor:pointer}
+  #card.flip{animation:flip-in 0.3s ease-out}
+  @keyframes flip-in{0%{transform:rotateX(90deg);opacity:0}100%{transform:rotateX(0);opacity:1}}
+  #card-type{position:absolute;top:10px;left:16px;font-size:0.72rem;letter-spacing:2px;font-weight:bold}
+  #card-text{font-size:1.0rem;line-height:1.5;text-align:center;color:#ffd0f0}
+  #card-icon{position:absolute;bottom:10px;right:14px;font-size:1.2rem}
+  #placeholder{font-size:1.5rem;color:#ff60c033;text-align:center;line-height:1.5}
+  .action-row{display:flex;gap:12px;margin-bottom:10px}
+  .action-btn{border:none;border-radius:50px;padding:11px 26px;font-size:0.9rem;font-weight:bold;cursor:pointer;transition:transform 0.1s}
+  #next-btn{background:linear-gradient(135deg,#a020a0,#ff60c0);color:#fff}
+  #skip-btn{background:#ffffff12;color:#ffd0f0;border:1px solid #ff60c033}
+  .action-btn:active{transform:scale(0.94)}
+  #count-info{font-size:0.8rem;color:#ff60c044;min-height:1.2rem}
+  #players-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:310px;margin-bottom:8px}
+  .player-chip{background:#ff60c022;border:1px solid #ff60c044;color:#ffd0f0;border-radius:16px;padding:4px 10px;font-size:0.78rem;cursor:pointer;position:relative}
+  .player-chip.active{background:#ff60c066;border-color:#ff60c0;color:#fff}
+  #add-player{background:#ffffff10;border:1px solid #ff60c033;color:#ff60c077;border-radius:16px;padding:4px 10px;font-size:0.78rem;cursor:pointer}
+  #remove-ads{position:fixed;top:8px;right:8px;background:#ffffff10;border:1px solid #ff60c033;color:#ff60c055;font-size:0.65rem;padding:4px 8px;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<button id="remove-ads" onclick="Android.purchase('remove_ads')">Remove Ads</button>
+<h1>🎭 Truth or Dare</h1>
+<div id="players-row">
+  <div class="player-chip active" onclick="selectPlayer(this)">Player 1</div>
+  <div class="player-chip" onclick="selectPlayer(this)">Player 2</div>
+  <div id="add-player" onclick="addPlayer()">+ Add</div>
+</div>
+<div id="mode-btns">
+  <button class="mode-btn" id="truth-btn" onclick="pickCard('truth')">🤍 TRUTH</button>
+  <button class="mode-btn" id="dare-btn" onclick="pickCard('dare')">🔥 DARE</button>
+</div>
+<div id="level-row">
+  <button class="lvl-btn active" onclick="setLevel('mild',this)">😊 Mild</button>
+  <button class="lvl-btn" onclick="setLevel('spicy',this)">🌶️ Spicy</button>
+  <button class="lvl-btn" onclick="setLevel('wild',this)">🔥 Wild</button>
+</div>
+<div id="card-area">
+  <div id="card">
+    <div id="card-type" style="color:#ff60c0"></div>
+    <div id="card-text"><div id="placeholder">Tap TRUTH or DARE<br>to get started! 🎭</div></div>
+    <div id="card-icon"></div>
+  </div>
+</div>
+<div class="action-row">
+  <button class="action-btn" id="next-btn" onclick="nextCard()" style="display:none">NEXT ›</button>
+  <button class="action-btn" id="skip-btn" onclick="skipCard()" style="display:none">SKIP</button>
+</div>
+<div id="count-info"></div>
+
+<script>
+const CARDS={
+  truth:{
+    mild:["What's your most embarrassing moment?","What's the worst gift you've ever received?","Have you ever lied to get out of plans?","What's a secret talent nobody knows about?","What was your most awkward first date?","Who do you have a crush on right now?","What's the most childish thing you still do?","Have you ever blamed someone else for something you did?","What's the weirdest dream you've ever had?","What's your biggest irrational fear?"],
+    spicy:["What's the biggest lie you've told recently?","Have you ever cheated on a test?","Who in this room would you most want to date?","What's something you've done that you'd never admit to your parents?","Have you ever walked into the wrong bathroom?","What's your most embarrassing Google search?","Have you ever stood someone up?","What's the most money you've spent on something unnecessary?","Have you ever pretended to be sick to avoid something?","What's your biggest guilty pleasure?"],
+    wild:["What's the most scandalous thing you've done at work?","Have you ever ghosted someone after a date?","What's the most awkward thing that's happened on a date?","Have you ever read someone's diary or texts without permission?","What's the biggest secret you've kept from your family?","Have you ever talked about a friend behind their back?","What's something embarrassing on your phone right now?","Have you ever lied about your age?","What's the most trouble you've gotten into?","Have you ever faked being sick to skip something important?"]
+  },
+  dare:{
+    mild:["Do your best impression of someone in this room","Speak in an accent for the next 3 rounds","Let someone post a photo on your social media","Call a family member and tell them you love them","Do 20 jumping jacks right now","Let someone style your hair","Sing the first verse of any song you know","Tell everyone your most recent embarrassing moment","Do a 30-second dance","Let someone text from your phone for 1 minute"],
+    spicy:["Let someone draw on your face","Do your best runway walk around the room","Call someone and speak only in questions for 1 minute","Swap one item of clothing with someone else for the next round","Let the group choose a dare for you","Do 10 push-ups or a 45-second plank","Let someone scroll through your photos for 30 seconds","Speak in a different language (or gibberish) for 2 rounds","Text your most recent contact saying 'I think it's time we talked'","Let everyone look at your screen time statistics"],
+    wild:["Let someone post a status on your social media","Do a dramatic monologue from your favorite movie","Eat a spoonful of something unusual from the kitchen","Let someone draw a temporary tattoo on you","Call the last person who texted you and sing them a song","Let everyone look through your browser history for 60 seconds","Do your most embarrassing childhood dance","Let someone choose your profile picture for the week","Perform a stand-up comedy routine for 1 minute","Let the group pick a new nickname for you — you must use it all night"]
+  }
+};
+let level='mild',currentType=null,usedTruths=[],usedDares=[],useCount=0,playerCount=2,activePlayer=0;
+
+function setLevel(l,btn){level=l;document.querySelectorAll('.lvl-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function pickCard(type){currentType=type;const pool=CARDS[type][level];const unused=pool.filter((_,i)=>!(type==='truth'?usedTruths:usedDares).includes(i));if(unused.length===0){if(type==='truth')usedTruths=[];else usedDares=[];}const available=pool.filter((_,i)=>!(type==='truth'?usedTruths:usedDares).includes(i));const idx=Math.floor(Math.random()*available.length);const globalIdx=pool.indexOf(available[idx]);if(type==='truth')usedTruths.push(globalIdx);else usedDares.push(globalIdx);
+showCard(type,available[idx]);document.getElementById('next-btn').style.display='';document.getElementById('skip-btn').style.display='';if(++useCount%4===0&&window.Android)Android.showInterstitial();}
+function showCard(type,text){const card=document.getElementById('card');card.classList.remove('flip');void card.offsetWidth;card.classList.add('flip');document.getElementById('placeholder').style.display='none';document.getElementById('card-type').textContent=type.toUpperCase();document.getElementById('card-type').style.color=type==='truth'?'#ff60c0':'#ff6040';document.getElementById('card-text').textContent=text;document.getElementById('card-icon').textContent=type==='truth'?'🤍':'🔥';if(navigator.vibrate)navigator.vibrate(60);}
+function nextCard(){if(currentType)pickCard(currentType);}
+function skipCard(){if(currentType)pickCard(currentType);}
+function selectPlayer(chip){document.querySelectorAll('.player-chip').forEach(c=>c.classList.remove('active'));chip.classList.add('active');}
+function addPlayer(){if(playerCount>=8)return;playerCount++;const row=document.getElementById('players-row');const chip=document.createElement('div');chip.className='player-chip';chip.textContent='Player '+playerCount;chip.onclick=()=>selectPlayer(chip);row.insertBefore(chip,document.getElementById('add-player'));}
+
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){document.getElementById('remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+</script>
+</body>
+</html>

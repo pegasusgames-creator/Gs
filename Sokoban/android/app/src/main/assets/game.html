@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Sokoban</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#1a1200;--surface:#2a1e00;--accent:#FF8F00;--text:#eaeaea;--muted:#886633;--radius:10px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;padding:6px 6px 0;}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-shrink:0;}
+header h1{font-size:1.1rem;font-weight:700;}header h1 span{color:var(--accent);}
+#info{display:flex;gap:14px;font-size:0.82rem;color:var(--muted);flex-shrink:0;margin-bottom:4px;}
+#info span{color:var(--text);}
+#game-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+#game-canvas{image-rendering:pixelated;}
+#controls{display:flex;flex-direction:column;gap:4px;flex-shrink:0;padding:6px 0;}
+.ctrl-row{display:flex;justify-content:center;gap:8px;}
+.ctrl-btn{width:52px;height:52px;background:var(--surface);border:1px solid #443300;border-radius:var(--radius);font-size:1.4rem;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;justify-content:center;color:var(--text);}
+.ctrl-btn.btn-pressed{transform:scale(0.88);background:var(--accent);}
+.btn-row{display:flex;gap:6px;}
+.btn{flex:1;background:var(--surface);border:1px solid #443300;color:var(--text);padding:8px;border-radius:var(--radius);font-size:0.78rem;cursor:pointer;touch-action:manipulation;text-align:center;}
+.btn.btn-pressed{transform:scale(0.93);}
+.btn.primary{background:var(--accent);color:#000;}
+#banner{height:50px;background:#111;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.75rem;flex-shrink:0;}
+#level-select{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:10;padding:16px;overflow-y:auto;}
+.lvl-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px;}
+.lvl-btn{background:var(--surface);border:1px solid #443;color:var(--text);padding:10px;border-radius:8px;font-size:0.8rem;cursor:pointer;text-align:center;touch-action:manipulation;}
+.lvl-btn.done{background:#1a3300;border-color:#4CAF50;color:#4CAF50;}
+.lvl-btn.current{background:var(--accent);color:#000;}
+#win-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:20;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+#win-overlay h2{font-size:1.8rem;color:var(--accent);}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Soko<span>ban</span></h1>
+    <button class="btn" id="btn-levels" style="flex:none;padding:6px 12px;">Levels</button>
+  </header>
+  <div id="info">
+    Level <span id="lv">1</span>/50 &nbsp; Moves: <span id="moves">0</span>
+  </div>
+  <div id="game-wrap"><canvas id="game-canvas"></canvas></div>
+  <div id="controls">
+    <div class="ctrl-row"><div class="ctrl-btn" id="btn-up">▲</div></div>
+    <div class="ctrl-row">
+      <div class="ctrl-btn" id="btn-left">◀</div>
+      <div class="ctrl-btn" id="btn-down">▼</div>
+      <div class="ctrl-btn" id="btn-right">▶</div>
+    </div>
+    <div class="btn-row" style="margin-top:6px;">
+      <button class="btn" id="btn-undo">Undo</button>
+      <button class="btn primary" id="btn-restart">Restart</button>
+      <button class="btn" id="btn-next">Next</button>
+    </div>
+  </div>
+  <div id="banner">Ad Banner</div>
+</div>
+<div id="level-select">
+  <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+    <span style="font-weight:700;font-size:1rem;">Select Level</span>
+    <button onclick="document.getElementById('level-select').style.display='none'" style="background:var(--accent);border:none;color:#000;padding:6px 14px;border-radius:8px;cursor:pointer;font-weight:700;">Close</button>
+  </div>
+  <div class="lvl-grid" id="lvl-grid"></div>
+</div>
+<div id="win-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:20;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <h2 id="win-title">Level Complete! 🎉</h2>
+  <p id="win-moves" style="color:var(--muted);font-size:1rem;"></p>
+  <button id="btn-win-next" style="background:var(--accent);border:none;color:#000;padding:14px 32px;border-radius:var(--radius);font-size:1rem;font-weight:700;cursor:pointer;">Next Level</button>
+</div>
+<script>
+// 50 classic Sokoban levels (Original collection)
+const LEVELS=[
+`#####
+#   #
+#$  #
+  $ #
+## $##
+ # . #
+ #.  #
+ #.  #
+ #####`,
+`############
+#  # .#    #
+# $  $    .#
+#  $#. # $ #
+# . #. #   #
+#  ###  ## ##
+#     $    #
+## ## ##  ##
+ #  .  $  #
+ # ## ##  #
+ #        #
+ ##########`,
+`######
+#    #
+# #$ #
+# $  #
+# .$.#
+#  . #
+######`,
+`  ####
+  #  ##
+### $  #
+# . $# #
+# #. $ #
+#  . # #
+########`,
+`#####
+#.  #
+#   #
+#$$ #
+## ##
+ # #
+ ###`,
+`######
+#    #
+# ## #
+# $. #
+## # #
+ # .##
+ #$ #
+ #  #
+ ####`,
+`  #####
+###   ##
+# $ $  #
+# . .  #
+#  #  ##
+### # #
+  #   #
+  #####`,
+`########
+#      #
+#  $$  #
+#  ..  #
+#  ##  #
+# $  $ #
+# .  . #
+########`,
+`  ####
+### .#
+# $  #
+#  $.#
+# $. #
+##.  #
+ # ###
+ #  #
+ ####`,
+`######
+#   .#
+# $$ #
+# .$ #
+# .  #
+#    #
+######`,
+`  ####
+###  #
+# $$ #
+# .. #
+# $$ #
+# .. #
+###  #
+  ####`,
+`#######
+#     #
+# $$$ #
+# ... #
+#     #
+#######`,
+`#########
+#   #   #
+# $ . $ #
+#   .   #
+# $ . $ #
+#   #   #
+#########`,
+`  ####
+  #  #
+###$ #
+# $. #
+# .$ #
+# $. #
+##.  #
+ #  ##
+ ####`,
+`######
+#    #
+# $$ #
+## . #
+ #.$ #
+ # . #
+ ####`,
+`####
+#  ###
+# $$ #
+#.   #
+# .$ #
+#  . #
+######`,
+`########
+#  .   #
+#  $$  #
+#  ..  #
+# $  $ #
+#.    .#
+########`,
+`  ######
+###    #
+# $  $ #
+# . .. #
+# $  $ #
+###    #
+  ######`,
+`#######
+#.    #
+#. $$ #
+#.    #
+##### #
+  #$  #
+  #   #
+  #####`,
+`########
+#  .   #
+# $$$  #
+# ...  #
+# $$$  #
+#      #
+########`,
+`  #####
+  #   #
+  # $ #
+### .##
+# $  #
+# . ##
+## $ #
+ # . #
+ #   #
+ #####`,
+`######
+#  . #
+# $. #
+# .$ #
+# .  #
+# $  #
+######`,
+`#####
+#   ##
+# $  #
+##$. #
+ #.$ #
+ # . #
+ #####`,
+`########
+#  ..  #
+# $$$$ #
+# .... #
+# $$$$ #
+#      #
+########`,
+`  ####
+###  #
+# $$ #
+# .. #
+####  #
+   $  #
+   .  #
+  #####`,
+`  #####
+### . #
+# $ . #
+#  $. #
+## $. #
+ #    #
+ ######`,
+`######
+#    #
+# $$ #
+##.. #
+ #$$ #
+ #.. #
+ ####`,
+`########
+#  .   #
+# $.$  #
+# ...  #
+# $.$  #
+#  .   #
+########`,
+`#######
+#  .  #
+# $$$ #
+# ... #
+# $$$ #
+#  .  #
+#######`,
+`  ####
+###  #
+# $  #
+# .  #
+# $  #
+# .  #
+# $  #
+# .  #
+###  #
+  ####`,
+`########
+#      #
+# $$$$ #
+# .... #
+# $$$$ #
+# .... #
+#      #
+########`,
+`  ######
+###    #
+# $  $ #
+# .. .. #
+# $  $  #
+###      #
+  ########`,
+`######
+#    #
+#$$  #
+#..  #
+# $$ #
+# .. #
+######`,
+` #####
+##   #
+# $$ #
+# .  #
+# $  #
+# .  #
+##.  #
+ ##$##
+  # #
+  ###`,
+`########
+#      #
+# $$$  #
+# ...  #
+# $$$  #
+# ...  #
+#      #
+########`,
+`  ####
+  #  #
+### $ #
+# . $ #
+# $ . #
+# . $ #
+## $. #
+ #    #
+ ######`,
+`######
+#    #
+# $. #
+# $. #
+# $. #
+# $. #
+######`,
+`########
+#  .   #
+# $$.  #
+# ..$  #
+# $$   #
+#  ..  #
+########`,
+`#######
+#     #
+# $$$ #
+## . ##
+ #   #
+ #.$.#
+ # . #
+ #####`,
+`#####
+#   ##
+# $$ #
+## . #
+ #$. #
+ # . #
+ ## ##
+  # #
+  ###`,
+`########
+#  .   #
+# $$$  #
+# ...  #
+#  $   #
+##   ##
+ #####`,
+`  ####
+###  #
+# $  #
+#. $ #
+##.$ #
+ #.  #
+ ## ##
+  #  #
+  ####`,
+` ######
+ #    #
+##$$  #
+# ..  #
+# $$  #
+# ..  #
+#     #
+#######`,
+`#########
+#   .   #
+# $$$$$ #
+# .   . #
+# $$$$$ #
+#   .   #
+#########`,
+`######
+#    #
+# $. #
+##$. #
+ #$. #
+ ##. #
+  ## #
+   ###`,
+`########
+#  .   #
+# $.$. #
+# $.$. #
+# .$.$ #
+#  .   #
+########`,
+` #####
+##   #
+# $$ #
+#..  #
+# $$ #
+#..  #
+##   #
+ #####`,
+`########
+#      #
+# $$$$ #
+# .... #
+########`,
+`######
+#    #
+# $$ #
+# .  #
+## . #
+ #$  #
+ # . #
+ # $ #
+ #.  #
+ #####`,
+`  ####
+###  #
+# $  #
+# .  #
+# $  #
+# .  #
+# $  #
+# .  #
+## $ #
+ #.  #
+ #####`
+];
+
+const TILE=36;
+let level=0,map=[],player={x:0,y:0},moves=0;
+let history=[],completed=new Set();
+
+const canvas=document.getElementById('game-canvas');
+const ctx=canvas.getContext('2d');
+
+const COLORS={
+  '#':'#5D3A00',
+  ' ':'#3a2800',
+  '@':'#90CAF9',
+  '$':'#A1887F',
+  '.':'#FF8F00',
+  '*':'#4CAF50',
+  '+':'#64B5F6',
+};
+
+function parseLevel(str){
+  const lines=str.trim().split('\n');
+  let pw=0,ph=lines.length;
+  lines.forEach(l=>{if(l.length>pw)pw=l.length;});
+  const m=[];
+  let px=0,py=0;
+  for(let y=0;y<ph;y++){
+    m.push([]);
+    for(let x=0;x<pw;x++){
+      const ch=(lines[y]||'')[x]||' ';
+      m[y].push(ch);
+      if(ch==='@'||ch==='+'){px=x;py=y;}
+    }
+  }
+  return{map:m,px,py,w:pw,h:ph};
+}
+
+function loadLevel(idx){
+  level=idx;
+  const data=parseLevel(LEVELS[idx]);
+  map=data.map.map(row=>[...row]);
+  player={x:data.px,y:data.py};
+  moves=0;history=[];
+  document.getElementById('lv').textContent=idx+1;
+  document.getElementById('moves').textContent=0;
+  render();
+}
+
+function cellAt(x,y){return(map[y]&&map[y][x])||' ';}
+function isWall(x,y){return cellAt(x,y)==='#';}
+function isBox(x,y){const c=cellAt(x,y);return c==='$'||c==='*';}
+function isGoal(x,y){const c=cellAt(x,y);return c==='.'||c==='*'||c==='+';}
+
+function setCell(x,y,ch){if(map[y])map[y][x]=ch;}
+
+function move(dx,dy){
+  const nx=player.x+dx,ny=player.y+dy;
+  if(isWall(nx,ny))return;
+  const snapshot=map.map(r=>[...r]);
+  const snpPos={...player};
+  if(isBox(nx,ny)){
+    const bx=nx+dx,by=ny+dy;
+    if(isWall(bx,by)||isBox(bx,by))return;
+    // Move box
+    const boxWasOnGoal=isGoal(nx,ny);
+    const boxGoesOnGoal=isGoal(bx,by);
+    setCell(nx,ny,boxWasOnGoal?'.':' ');
+    setCell(bx,by,boxGoesOnGoal?'*':'$');
+  }
+  // Move player
+  const wasOnGoal=isGoal(player.x,player.y)||cellAt(player.x,player.y)==='+';
+  const goesOnGoal=isGoal(nx,ny)||cellAt(nx,ny)==='+';
+  // fix: check floor under player
+  const underPlayer=(cellAt(player.x,player.y)==='+'||cellAt(player.x,player.y)==='@')&&isGoal(player.x,player.y)?'.':' ';
+  setCell(player.x,player.y,underPlayer);
+  // check if cell was goal
+  const targetWasGoal=cellAt(nx,ny)==='.'||cellAt(nx,ny)==='+'||cellAt(nx,ny)==='*';
+  setCell(nx,ny,targetWasGoal?'+':'@');
+  player={x:nx,y:ny};
+  moves++;
+  history.push({map:snapshot,player:snpPos});
+  document.getElementById('moves').textContent=moves;
+  render();
+  checkWin();
+}
+
+function checkWin(){
+  for(let y=0;y<map.length;y++){
+    for(let x=0;x<map[y].length;x++){
+      if(map[y][x]==='$')return;// box not on goal
+    }
+  }
+  completed.add(level);
+  localStorage.setItem('sokoban_done',JSON.stringify([...completed]));
+  setTimeout(()=>{
+    document.getElementById('win-moves').textContent='Solved in '+moves+' moves!';
+    document.getElementById('win-overlay').style.display='flex';
+  },300);
+}
+
+function undo(){
+  if(!history.length)return;
+  const s=history.pop();
+  map=s.map;player=s.player;moves=Math.max(0,moves-1);
+  document.getElementById('moves').textContent=moves;
+  render();
+}
+
+function render(){
+  const rows=map.length,cols=map[0].length;
+  const maxW=window.innerWidth-12;
+  const maxH=window.innerHeight-260;
+  const ts=Math.min(TILE,Math.floor(maxW/cols),Math.floor(maxH/rows));
+  canvas.width=cols*ts;canvas.height=rows*ts;
+
+  for(let y=0;y<rows;y++){
+    for(let x=0;x<cols;x++){
+      const ch=map[y][x];
+      // Floor
+      ctx.fillStyle=ch===' '||ch==='.'||ch==='@'||ch==='+'?'#2a1e00':'#1a1200';
+      ctx.fillRect(x*ts,y*ts,ts,ts);
+      if(ch==='#'){
+        ctx.fillStyle='#5D3A00';
+        ctx.fillRect(x*ts+1,y*ts+1,ts-2,ts-2);
+        ctx.fillStyle='#7A5000';
+        ctx.fillRect(x*ts+1,y*ts+1,ts-2,4);
+        ctx.fillRect(x*ts+1,y*ts+1,4,ts-2);
+      }else if(ch==='.'||ch==='+'){
+        ctx.fillStyle='#FF8F0066';
+        ctx.beginPath();ctx.arc(x*ts+ts/2,y*ts+ts/2,ts*0.3,0,Math.PI*2);ctx.fill();
+        ctx.strokeStyle='#FF8F00';ctx.lineWidth=2;ctx.stroke();
+      }
+      if(ch==='$'||ch==='*'){
+        const pad=ts*0.1;
+        ctx.fillStyle=ch==='*'?'#6DBF67':'#A1887F';
+        ctx.beginPath();ctx.roundRect?ctx.roundRect(x*ts+pad,y*ts+pad,ts-pad*2,ts-pad*2,4):ctx.rect(x*ts+pad,y*ts+pad,ts-pad*2,ts-pad*2);
+        ctx.fill();
+        ctx.strokeStyle=ch==='*'?'#388E3C':'#795548';ctx.lineWidth=2;ctx.stroke();
+      }
+      if(ch==='@'||ch==='+'){
+        ctx.fillStyle='#90CAF9';
+        ctx.beginPath();ctx.arc(x*ts+ts/2,y*ts+ts*0.42,ts*0.22,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#42A5F5';
+        ctx.beginPath();ctx.arc(x*ts+ts/2,y*ts+ts*0.7,ts*0.28,0,Math.PI,false);ctx.fill();
+      }
+    }
+  }
+}
+
+// Touch swipe
+let touchStartX=null,touchStartY=null;
+document.getElementById('game-wrap').addEventListener('touchstart',e=>{
+  touchStartX=e.touches[0].clientX;touchStartY=e.touches[0].clientY;
+},{passive:true});
+document.getElementById('game-wrap').addEventListener('touchend',e=>{
+  if(touchStartX===null)return;
+  const dx=e.changedTouches[0].clientX-touchStartX;
+  const dy=e.changedTouches[0].clientY-touchStartY;
+  const adx=Math.abs(dx),ady=Math.abs(dy);
+  if(adx<15&&ady<15)return;
+  if(adx>ady){move(dx>0?1:-1,0);}else{move(0,dy>0?1:-1);}
+  touchStartX=null;touchStartY=null;
+},{passive:true});
+
+['up','down','left','right'].forEach(dir=>{
+  const el=document.getElementById('btn-'+dir);
+  el.addEventListener('touchstart',e=>{e.preventDefault();el.classList.add('btn-pressed');},{passive:false});
+  el.addEventListener('touchend',e=>{e.preventDefault();el.classList.remove('btn-pressed');
+    if(dir==='up')move(0,-1);else if(dir==='down')move(0,1);
+    else if(dir==='left')move(-1,0);else move(1,0);
+  },{passive:false});
+  el.addEventListener('click',()=>{
+    if(dir==='up')move(0,-1);else if(dir==='down')move(0,1);
+    else if(dir==='left')move(-1,0);else move(1,0);
+  });
+});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowUp')move(0,-1);
+  else if(e.key==='ArrowDown')move(0,1);
+  else if(e.key==='ArrowLeft')move(-1,0);
+  else if(e.key==='ArrowRight')move(1,0);
+  else if(e.key==='u')undo();
+});
+
+document.getElementById('btn-undo').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);undo();});
+document.getElementById('btn-restart').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);loadLevel(level);});
+document.getElementById('btn-next').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  document.getElementById('win-overlay').style.display='none';
+  if(level<49)loadLevel(level+1);
+});
+document.getElementById('btn-win-next').addEventListener('click',function(){
+  document.getElementById('win-overlay').style.display='none';
+  if(level<49)loadLevel(level+1);
+});
+
+// Level select
+document.getElementById('btn-levels').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  const grid=document.getElementById('lvl-grid');grid.innerHTML='';
+  for(let i=0;i<50;i++){
+    const b=document.createElement('div');b.className='lvl-btn';
+    if(completed.has(i))b.classList.add('done');
+    if(i===level)b.classList.add('current');
+    b.textContent=i+1;
+    b.addEventListener('click',()=>{loadLevel(i);document.getElementById('level-select').style.display='none';});
+    grid.appendChild(b);
+  }
+  document.getElementById('level-select').style.display='block';
+});
+
+// Load saved progress
+const savedDone=localStorage.getItem('sokoban_done');
+if(savedDone)JSON.parse(savedDone).forEach(i=>completed.add(i));
+
+loadLevel(0);
+window.onPurchaseComplete=function(sku){};
+window.onAdMobLoaded=function(){document.getElementById('banner').style.display='none';};
+</script>
+</body>
+</html>

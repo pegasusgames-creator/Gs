@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>This or That</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: #1a1200; color: #fff; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  :root { --accent: #FF9800; }
+  header { background: #221800; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); flex-shrink:0; }
+  header h1 { font-size: 1.3rem; color: var(--accent); }
+  .btn-remove-ads { background: var(--accent); color: #000; border: none; border-radius: 20px; padding: 8px 16px; font-size: 0.8rem; font-weight: bold; min-height: 44px; cursor: pointer; }
+  .btn-pressed { opacity: 0.7; transform: scale(0.96); }
+  .cat-tabs { display: flex; gap: 8px; padding: 10px 16px; overflow-x: auto; scrollbar-width:none; background:#1e1600; flex-shrink:0; }
+  .cat-tabs::-webkit-scrollbar { display:none; }
+  .cat-tab { background: #2a2000; border: 1px solid #444; color: #aaa; border-radius: 20px; padding: 8px 16px; white-space: nowrap; cursor: pointer; font-size: 0.85rem; min-height: 44px; flex-shrink:0; }
+  .cat-tab.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: bold; }
+  .screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 16px; }
+  .screen.hidden { display: none; }
+  .question-counter { color: #888; font-size: 0.85rem; margin-bottom: 12px; }
+  .vs-label { color: var(--accent); font-size: 1.2rem; font-weight: 900; text-align: center; margin: 16px 0; }
+  .choices { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; }
+  .choice-btn { background: #2a2000; border: 2px solid #444; color: #fff; border-radius: 16px; padding: 22px 20px; font-size: 1.2rem; font-weight: bold; cursor: pointer; min-height: 70px; text-align: center; transition: all 0.2s; }
+  .choice-btn:active { transform: scale(0.96); }
+  .choice-btn.selected { border-color: var(--accent); background: #3a2800; }
+  .choice-btn.winner { border-color: #4CAF50; background: #1a3020; }
+  .choice-btn.loser { border-color: #333; opacity: 0.6; }
+  .result-bar-wrap { margin-top: 10px; width: 100%; max-width: 400px; }
+  .result-bar { display: flex; height: 32px; border-radius: 8px; overflow: hidden; margin-bottom: 6px; }
+  .bar-a { background: var(--accent); display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 0.8rem; font-weight: bold; color: #000; min-width: 30px; transition: flex 0.6s ease; }
+  .bar-b { background: #5C6BC0; display: flex; align-items: center; padding-left: 8px; font-size: 0.8rem; font-weight: bold; color: #fff; min-width: 30px; transition: flex 0.6s ease; }
+  .result-labels { display: flex; justify-content: space-between; font-size: 0.8rem; color: #aaa; }
+  .cat-badge { background: var(--accent); color: #000; border-radius: 12px; padding: 3px 10px; font-size: 0.7rem; font-weight: bold; margin-bottom: 10px; }
+  .next-btn { background: var(--accent); color: #000; border: none; border-radius: 16px; padding: 16px 40px; font-size: 1.1rem; font-weight: bold; cursor: pointer; min-height: 54px; margin-top: 16px; width: 100%; max-width: 400px; }
+  .score-display { font-size: 0.9rem; color: #888; margin-bottom: 8px; }
+  #banner-ad { background: #221800; text-align: center; padding: 8px; color: #666; font-size: 0.75rem; border-top: 1px solid #333; flex-shrink:0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>This or That?</h1>
+  <button class="btn-remove-ads" id="removeAdsBtn">Remove Ads</button>
+</header>
+<div class="cat-tabs">
+  <button class="cat-tab active" data-cat="All">All</button>
+  <button class="cat-tab" data-cat="Food">Food</button>
+  <button class="cat-tab" data-cat="Travel">Travel</button>
+  <button class="cat-tab" data-cat="Lifestyle">Lifestyle</button>
+  <button class="cat-tab" data-cat="Fun">Fun</button>
+</div>
+
+<div class="screen" id="gameScreen">
+  <div class="question-counter" id="questionCounter">Question 1</div>
+  <span class="cat-badge" id="catBadge">Food</span>
+  <div class="choices" id="choices">
+    <button class="choice-btn" id="btnA" onclick="pick(0)">Coffee</button>
+    <div class="vs-label">OR</div>
+    <button class="choice-btn" id="btnB" onclick="pick(1)">Tea</button>
+  </div>
+  <div class="result-bar-wrap" id="resultBarWrap" style="display:none">
+    <div class="result-bar">
+      <div class="bar-a" id="barA" style="flex:50">50%</div>
+      <div class="bar-b" id="barB" style="flex:50">50%</div>
+    </div>
+    <div class="result-labels" id="resultLabels"></div>
+  </div>
+  <button class="next-btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next →</button>
+</div>
+
+<div id="banner-ad">Advertisement</div>
+
+<script>
+const DILEMMAS = {
+  Food: [
+    ["Coffee", "Tea"], ["Pizza", "Burger"], ["Sushi", "Tacos"], ["Ice Cream", "Cake"],
+    ["Sweet", "Savory"], ["Chocolate", "Vanilla"], ["Breakfast", "Dinner"], ["Cooking at Home", "Eating Out"],
+    ["Pasta", "Rice"], ["Chips", "Crackers"], ["Fruit", "Veggies"], ["Hot Food", "Cold Food"],
+    ["Smoothie", "Milkshake"], ["Pancakes", "Waffles"], ["Fries", "Onion Rings"], ["Beer", "Wine"],
+    ["Spicy Food", "Mild Food"], ["Meat Lovers", "Vegetarian"], ["Fresh Bread", "Toast"], ["Soup", "Salad"]
+  ],
+  Travel: [
+    ["Beach", "Mountains"], ["City Break", "Nature Trip"], ["Solo Travel", "Group Tour"],
+    ["Backpacking", "Luxury Hotel"], ["Summer Holiday", "Winter Escape"], ["Road Trip", "Fly Everywhere"],
+    ["Europe", "Asia"], ["Explore New Places", "Revisit Favorites"], ["Camping", "Glamping"],
+    ["Tourist Spots", "Hidden Gems"], ["Short Trips Often", "Long Trip Rarely"], ["Guided Tour", "Self-Guided"],
+    ["Train Travel", "Flying"], ["Sea Cruise", "River Cruise"], ["Tropical Island", "Remote Cabin"],
+    ["All-Inclusive", "Self-Catering"], ["Safari", "City Museum"], ["Desert", "Rainforest"],
+    ["Skiing", "Surfing Vacation"], ["Budget Travel", "Splurge Travel"]
+  ],
+  Lifestyle: [
+    ["Early Bird", "Night Owl"], ["City Life", "Country Life"], ["Introvert", "Extrovert"],
+    ["Work from Home", "Office Work"], ["Morning Workout", "Evening Workout"], ["Books", "Movies"],
+    ["Cats", "Dogs"], ["Minimalism", "Maximalism"], ["Routine", "Spontaneity"],
+    ["Quiet Evenings In", "Nights Out"], ["Plan Everything", "Wing It"], ["Save Money", "Spend Money"],
+    ["Fashion Forward", "Comfort First"], ["Slow Mornings", "Rushed Mornings"], ["Big City", "Small Town"],
+    ["Apartment", "House"], ["Public Transport", "Drive Everywhere"], ["Binge Watching", "One Episode a Day"],
+    ["Handwrite", "Type Everything"], ["Gym", "Home Workouts"]
+  ],
+  Fun: [
+    ["Superpower: Fly", "Superpower: Invisible"], ["Live in Space", "Live Underwater"],
+    ["Talk to Animals", "Talk to Dead People"], ["Always Win", "Always Be Happy"],
+    ["Know the Future", "Change the Past"], ["Be Famous", "Be Rich"],
+    ["Have 10 True Friends", "Have 1000 Acquaintances"], ["Never Lie", "Never Be Lied To"],
+    ["Pause Time", "Rewind Time"], ["No Sleep Needed", "Never Need to Eat"],
+    ["Live Forever", "Age Backwards"], ["Be a Movie Hero", "Be a Villain"],
+    ["Magic Powers", "Technology Powers"], ["Sing Perfectly", "Dance Perfectly"],
+    ["Live in a Movie", "Live in a Game"], ["Fluent in All Languages", "Expert in Everything"],
+    ["Weather Control", "Mind Reading"], ["Be 10 Again", "Be 80 Wisely"],
+    ["Have a Dragon", "Have a Time Machine"], ["Meet Your Hero", "Become Your Hero"]
+  ]
+};
+
+const ALL = Object.entries(DILEMMAS).flatMap(([cat, pairs]) => pairs.map(p => ({a:p[0], b:p[1], cat})));
+
+let activeCat = 'All';
+let deck = [];
+let currentIdx = 0;
+let answered = false;
+let questionCount = 0;
+
+function addTouchFeedback(el) {
+  el.addEventListener('touchstart', () => el.classList.add('btn-pressed'), {passive:true});
+  el.addEventListener('touchend', () => el.classList.remove('btn-pressed'), {passive:true});
+  el.addEventListener('touchcancel', () => el.classList.remove('btn-pressed'), {passive:true});
+}
+document.querySelectorAll('button').forEach(addTouchFeedback);
+
+document.querySelectorAll('.cat-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    activeCat = tab.dataset.cat;
+    buildDeck();
+    nextQuestion();
+  });
+});
+
+document.getElementById('removeAdsBtn').addEventListener('click', () => { if (window.Android) Android.purchaseNoAds(); });
+
+function buildDeck() {
+  if (activeCat === 'All') deck = [...ALL];
+  else deck = ALL.filter(d => d.cat === activeCat);
+  shuffle(deck);
+  currentIdx = 0;
+}
+
+function showQuestion() {
+  if (!deck.length) return;
+  const q = deck[currentIdx % deck.length];
+  answered = false;
+  questionCount++;
+  document.getElementById('questionCounter').textContent = `Question ${questionCount}`;
+  document.getElementById('catBadge').textContent = q.cat;
+  document.getElementById('btnA').textContent = q.a;
+  document.getElementById('btnB').textContent = q.b;
+  document.getElementById('btnA').className = 'choice-btn';
+  document.getElementById('btnB').className = 'choice-btn';
+  document.getElementById('resultBarWrap').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('resultLabels').textContent = '';
+}
+
+function pick(choice) {
+  if (answered) return;
+  answered = true;
+  const q = deck[currentIdx % deck.length];
+  // Simulate skewed percentage
+  const base = 30 + Math.floor(Math.random() * 40);
+  let pctA, pctB;
+  if (choice === 0) { pctA = Math.max(base, 100-base); pctB = 100 - pctA; }
+  else { pctB = Math.max(base, 100-base); pctA = 100 - pctB; }
+  document.getElementById('btnA').className = 'choice-btn ' + (choice === 0 ? 'winner' : 'loser');
+  document.getElementById('btnB').className = 'choice-btn ' + (choice === 1 ? 'winner' : 'loser');
+  document.getElementById('barA').style.flex = pctA;
+  document.getElementById('barA').textContent = pctA + '%';
+  document.getElementById('barB').style.flex = pctB;
+  document.getElementById('barB').textContent = pctB + '%';
+  document.getElementById('resultLabels').innerHTML = `<span>${q.a}</span><span>${q.b}</span>`;
+  document.getElementById('resultBarWrap').style.display = 'block';
+  document.getElementById('nextBtn').style.display = 'block';
+  if (window.Android && questionCount % 10 === 0) Android.showInterstitial();
+}
+
+function nextQuestion() {
+  currentIdx++;
+  if (currentIdx >= deck.length) { shuffle(deck); currentIdx = 0; }
+  showQuestion();
+}
+
+function shuffle(arr) {
+  for (let i = arr.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+}
+
+buildDeck();
+showQuestion();
+
+window.onAdMobLoaded = function() {};
+window.onPurchaseComplete = function(sku) {
+  if (sku && sku.includes('no_ads')) {
+    document.getElementById('banner-ad').style.display = 'none';
+    document.getElementById('removeAdsBtn').style.display = 'none';
+  }
+};
+if (window.Android) document.getElementById('banner-ad').style.display = 'none';
+</script>
+</body>
+</html>

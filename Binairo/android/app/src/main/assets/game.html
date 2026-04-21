@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Binairo</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #121212; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+#banner { width: 100%; height: 50px; background: #1e1e1e; display: flex; align-items: center; justify-content: center; color: #555; font-size: 12px; border-bottom: 1px solid #333; }
+#header { width: 100%; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; background: #1a1a1a; }
+h1 { font-size: 22px; color: #00BCD4; font-weight: 700; }
+#level-info { font-size: 14px; color: #aaa; }
+#size-select { display: flex; gap: 8px; padding: 8px 16px; justify-content: center; }
+#controls { display: flex; gap: 8px; padding: 8px 16px; flex-wrap: wrap; justify-content: center; }
+button { background: #1e1e1e; color: #00BCD4; border: 1.5px solid #00BCD4; border-radius: 8px; padding: 8px 16px; font-size: 14px; cursor: pointer; touch-action: manipulation; }
+button:active { background: #00BCD4; color: #000; }
+.size-btn.active { background: #00BCD4; color: #000; }
+#msg { padding: 8px 16px; text-align: center; font-size: 16px; min-height: 36px; color: #00BCD4; }
+#grid-container { display: flex; justify-content: center; padding: 10px; }
+.grid { display: inline-grid; gap: 3px; background: #1a1a1a; padding: 8px; border-radius: 10px; border: 2px solid #00BCD4; }
+.cell { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.15s; user-select: none; touch-action: manipulation; }
+.cell.empty { background: #2a2a2a; color: #555; }
+.cell.zero { background: #004d5a; color: #00BCD4; }
+.cell.one { background: #4a2800; color: #FF9800; }
+.cell.given { opacity: 0.9; pointer-events: none; border: 2px solid #444; }
+.cell.error { outline: 2px solid #f44336; }
+#level-select { display: none; flex-wrap: wrap; gap: 6px; padding: 8px 16px; justify-content: center; max-width: 400px; }
+.lvl-btn { padding: 6px 12px; font-size: 13px; min-width: 40px; }
+.lvl-btn.done { background: #00BCD4; color: #000; border-color: #00BCD4; }
+#modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 100; }
+#modal.show { display: flex; }
+#modal-box { background: #1e1e1e; border: 2px solid #00BCD4; border-radius: 14px; padding: 28px 24px; text-align: center; max-width: 300px; }
+#modal-box h2 { color: #00BCD4; margin-bottom: 12px; font-size: 22px; }
+#modal-box p { color: #ccc; margin-bottom: 18px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div id="banner">Advertisement</div>
+<div id="header">
+  <h1>Binairo</h1>
+  <span id="level-info">Level 1</span>
+</div>
+<div id="size-select">
+  <button class="size-btn active" onclick="setSize(6)">6×6</button>
+  <button class="size-btn" onclick="setSize(8)">8×8</button>
+</div>
+<div id="controls">
+  <button onclick="checkSolution()">Check</button>
+  <button onclick="hint()">Hint</button>
+  <button onclick="resetLevel()">Reset</button>
+  <button onclick="toggleLevelSelect()">Levels</button>
+  <button onclick="removeAds()">No Ads</button>
+</div>
+<div id="msg"></div>
+<div id="grid-container"><div class="grid" id="grid"></div></div>
+<div id="level-select"></div>
+
+<div id="modal" class="show">
+  <div id="modal-box">
+    <h2>Binairo</h2>
+    <p>Fill the grid with 0s and 1s.<br>No 3 same consecutive.<br>Equal 0s and 1s per row/col.<br>No duplicate rows or columns.</p>
+    <button onclick="document.getElementById('modal').classList.remove('show')">Play!</button>
+  </div>
+</div>
+
+<script>
+const state = { level: 1, size: 6, removeAds: false, completed: new Set(), board: [], given: [], solution: [] };
+
+// Each puzzle: c=clues(-1=empty), s=solution. All verified valid Binairo puzzles.
+const puzzles6 = [
+  {c:[-1,0,-1,1,-1,-1,-1,-1,1,-1,-1,0,0,-1,-1,-1,1,-1,-1,1,-1,-1,-1,1,-1,-1,0,-1,-1,-1,1,-1,-1,0,-1,-1],
+   s:[0,0,1,1,0,1,1,0,1,0,1,0,0,1,0,1,1,0,0,1,1,0,0,1,1,0,0,1,0,1,1,1,0,0,1,0]},
+  {c:[1,-1,-1,0,-1,-1,-1,1,-1,-1,0,-1,-1,-1,0,-1,-1,1,0,-1,-1,1,-1,-1,-1,0,-1,-1,1,-1,-1,-1,1,-1,-1,0],
+   s:[1,0,1,0,0,1,0,1,1,0,0,1,1,0,0,1,1,0,0,1,0,1,1,0,1,0,0,1,1,0,0,1,1,0,0,1]},
+  {c:[-1,-1,0,-1,1,-1,1,-1,-1,0,-1,-1,-1,0,-1,-1,-1,1,-1,-1,1,-1,0,-1,0,-1,-1,1,-1,-1,-1,1,-1,-1,-1,0],
+   s:[0,1,0,1,1,0,1,0,1,0,0,1,1,0,0,1,0,1,0,1,1,0,0,1,0,1,0,1,0,1,1,1,0,0,1,0]},
+  {c:[0,-1,1,-1,-1,0,-1,0,-1,1,-1,-1,1,-1,-1,-1,0,-1,-1,1,-1,0,-1,-1,-1,-1,0,-1,1,-1,-1,-1,-1,1,-1,1],
+   s:[0,1,1,0,1,0,1,0,0,1,1,0,1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1,1,0,1,0,1,1,0,0]},
+  {c:[-1,1,-1,0,-1,-1,0,-1,-1,-1,1,-1,-1,-1,1,-1,-1,0,-1,0,-1,-1,-1,1,1,-1,0,-1,-1,-1,-1,-1,-1,1,0,-1],
+   s:[1,1,0,0,1,0,0,0,1,1,1,0,1,0,1,1,0,0,0,0,1,1,0,1,1,0,0,1,0,1,0,1,1,1,0,0]},
+  {c:[1,-1,0,-1,-1,1,-1,1,-1,1,-1,-1,0,-1,-1,-1,1,-1,-1,-1,1,-1,-1,0,-1,0,-1,-1,1,-1,-1,-1,-1,0,-1,1],
+   s:[1,0,0,1,0,1,0,1,0,1,1,0,0,1,1,0,1,0,1,0,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1]},
+  {c:[-1,0,-1,-1,1,-1,1,-1,1,-1,-1,0,-1,-1,-1,0,-1,1,0,-1,-1,1,-1,-1,-1,1,-1,-1,0,-1,-1,-1,0,-1,-1,1],
+   s:[0,0,1,1,1,0,1,1,1,0,0,0,0,1,0,0,1,1,0,1,0,1,1,0,1,1,0,0,0,1,0,0,0,1,1,1]},
+  {c:[0,-1,-1,1,-1,0,-1,1,-1,-1,0,-1,1,-1,0,-1,-1,1,-1,-1,1,-1,1,-1,-1,0,-1,0,-1,-1,1,-1,-1,-1,-1,1],
+   s:[0,1,1,1,0,0,0,1,0,1,0,1,1,0,0,0,1,1,1,0,1,0,1,0,0,0,1,0,1,1,1,1,0,0,1,0]},
+  {c:[-1,-1,1,0,-1,-1,0,-1,-1,-1,1,-1,-1,1,-1,1,-1,0,1,-1,0,-1,-1,1,-1,0,-1,-1,0,-1,-1,-1,1,-1,-1,0],
+   s:[1,0,1,0,0,1,0,1,0,1,1,0,1,1,0,1,0,0,1,0,0,0,1,1,0,0,1,1,0,1,0,1,1,0,1,0]},
+  {c:[1,-1,-1,0,-1,1,-1,0,-1,-1,1,-1,-1,-1,1,-1,0,-1,0,-1,-1,1,-1,-1,-1,1,0,-1,-1,1,-1,-1,-1,-1,0,-1],
+   s:[1,0,1,0,0,1,0,0,1,1,1,0,1,0,1,0,0,1,0,1,0,1,1,0,1,1,0,0,0,1,0,1,1,0,0,1]},
+  {c:[-1,0,-1,1,-1,0,1,-1,1,-1,0,-1,-1,1,-1,-1,-1,1,0,-1,0,-1,1,-1,-1,-1,-1,0,-1,1,-1,1,-1,-1,1,-1],
+   s:[1,0,0,1,1,0,1,0,1,0,0,1,0,1,1,0,0,1,0,1,0,1,1,0,1,0,1,0,0,1,0,1,0,1,1,0]},
+  {c:[0,-1,1,-1,-1,1,-1,0,-1,1,-1,-1,1,-1,-1,-1,0,-1,-1,-1,1,-1,-1,0,-1,1,-1,0,-1,-1,-1,-1,-1,1,-1,1],
+   s:[0,0,1,0,1,1,1,0,0,1,1,0,1,0,1,0,0,1,0,1,1,0,0,1,0,1,1,0,1,0,1,0,0,1,0,1]},
+  {c:[-1,1,-1,-1,0,-1,0,-1,1,-1,-1,1,-1,-1,-1,1,-1,0,1,0,-1,-1,1,-1,-1,-1,0,-1,-1,1,-1,1,-1,0,-1,-1],
+   s:[1,1,0,1,0,0,0,0,1,0,1,1,1,0,0,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0]},
+  {c:[0,-1,-1,0,-1,1,-1,1,-1,-1,0,-1,1,-1,0,-1,-1,-1,-1,-1,1,-1,1,0,-1,0,-1,1,-1,-1,-1,-1,-1,-1,0,1],
+   s:[0,1,1,0,0,1,0,1,0,1,0,1,1,0,0,1,1,0,1,0,1,0,1,0,1,0,1,1,0,0,0,1,1,0,0,1]},
+  {c:[1,-1,0,-1,1,-1,-1,0,-1,1,-1,0,-1,-1,1,-1,0,-1,-1,-1,-1,0,-1,1,0,-1,-1,-1,1,-1,-1,-1,0,-1,-1,1],
+   s:[1,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,0,1,1,0,0,0,1,1,0,1,1,0,1,0,0,1,0,1,0,1]},
+];
+
+const puzzles8 = [
+  {c:[0,-1,-1,1,-1,0,-1,-1,-1,1,-1,-1,0,-1,1,-1,-1,-1,0,-1,-1,1,-1,0,1,-1,1,-1,-1,-1,0,-1,-1,0,-1,-1,1,-1,-1,1,-1,-1,1,-1,-1,0,-1,-1,0,-1,-1,1,-1,-1,0,-1,-1,1,-1,-1,0,-1,-1,1],
+   s:[0,0,1,1,0,0,1,1,1,1,0,0,0,1,1,0,0,1,0,1,1,1,0,0,1,0,1,0,1,0,0,1,0,0,1,1,1,0,0,1,1,0,1,0,0,0,1,1,0,1,0,1,1,0,0,1,0,1,1,0,0,1,1,0]},
+  {c:[-1,1,-1,-1,0,-1,-1,1,1,-1,0,-1,-1,1,-1,-1,-1,-1,-1,1,-1,-1,0,-1,0,-1,1,-1,1,-1,-1,0,-1,0,-1,-1,-1,0,-1,1,-1,-1,0,-1,1,-1,1,-1,1,-1,-1,0,-1,-1,1,-1,-1,1,-1,1,-1,0,-1,-1],
+   s:[0,1,0,1,0,0,1,1,1,0,0,1,0,1,1,0,0,1,1,1,0,0,0,1,0,0,1,0,1,1,1,0,1,0,0,1,1,0,0,1,0,1,0,0,1,0,1,1,1,0,1,0,0,1,1,0,0,1,0,1,1,0,1,0]},
+  {c:[1,-1,0,-1,-1,1,-1,0,-1,0,-1,1,-1,-1,1,-1,-1,-1,1,-1,0,-1,-1,1,0,-1,-1,-1,1,-1,0,-1,-1,1,-1,0,-1,-1,-1,1,1,-1,-1,-1,0,-1,1,-1,-1,0,-1,1,-1,1,-1,-1,-1,-1,0,-1,1,-1,-1,0],
+   s:[1,1,0,0,1,1,0,0,0,0,1,1,0,0,1,1,1,0,1,0,0,1,0,1,0,1,1,0,1,0,0,1,0,1,0,0,1,1,1,0,1,0,1,1,0,0,1,0,1,0,0,1,0,1,1,0,0,1,0,1,1,0,0,1]},
+  {c:[-1,-1,1,-1,0,-1,1,-1,0,-1,-1,1,-1,0,-1,-1,-1,1,-1,-1,-1,1,-1,0,1,-1,0,-1,1,-1,-1,-1,-1,0,-1,1,-1,-1,0,-1,-1,-1,1,-1,-1,1,-1,1,0,-1,-1,-1,0,-1,1,-1,-1,1,-1,0,-1,-1,-1,0],
+   s:[1,0,1,0,0,1,1,0,0,1,0,1,1,0,0,1,1,1,0,1,0,1,0,0,1,0,0,1,1,0,1,0,0,0,1,1,0,1,0,1,1,0,1,0,0,1,0,1,0,1,1,0,0,1,1,0,0,1,1,0,1,0,0,1]},
+  {c:[0,-1,1,-1,-1,0,-1,1,-1,1,-1,0,1,-1,0,-1,-1,-1,0,-1,-1,-1,1,-1,1,-1,-1,1,-1,1,-1,0,-1,0,-1,-1,0,-1,-1,1,1,-1,-1,-1,0,-1,1,-1,-1,-1,1,-1,0,-1,1,-1,-1,-1,-1,0,1,-1,-1,-1],
+   s:[0,0,1,1,0,0,1,1,0,1,1,0,1,0,0,1,1,0,0,1,1,0,1,0,1,1,0,1,0,1,0,0,0,0,1,0,0,1,1,1,1,0,1,0,0,1,1,0,0,1,1,0,0,1,1,0,1,1,0,0,1,0,0,1]},
+  {c:[-1,0,-1,-1,1,-1,0,-1,1,-1,1,-1,-1,0,-1,-1,-1,1,-1,0,-1,-1,-1,1,0,-1,-1,-1,0,1,-1,-1,-1,-1,0,-1,-1,-1,1,-1,-1,1,-1,1,-1,0,-1,0,-1,-1,1,-1,0,-1,1,-1,0,-1,-1,1,-1,-1,-1,1],
+   s:[1,0,0,1,1,0,0,1,1,0,1,0,0,0,1,1,0,1,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,0,1,0,1,1,0,0,1,0,1,1,0,0,1,1,0,1,0,0,1,1,0,0,1,0,1,1,0,1,0]},
+  {c:[1,-1,-1,0,-1,1,-1,-1,-1,1,-1,-1,0,-1,-1,1,-1,-1,0,-1,1,-1,0,-1,0,-1,1,-1,-1,0,-1,1,-1,0,-1,-1,-1,1,1,-1,-1,-1,1,-1,0,-1,-1,0,1,-1,-1,0,-1,1,-1,-1,-1,0,-1,-1,1,-1,1,-1],
+   s:[1,0,1,0,0,1,1,0,0,1,1,0,0,1,0,1,1,0,0,1,1,0,0,1,0,1,1,0,1,0,0,1,1,0,0,1,0,1,1,0,0,1,1,0,0,1,1,0,1,1,0,0,1,1,0,0,0,0,1,1,1,0,1,0]},
+  {c:[-1,1,-1,0,-1,-1,1,-1,0,-1,1,-1,-1,0,-1,1,-1,-1,-1,1,-1,1,-1,0,1,0,-1,-1,1,-1,-1,-1,-1,-1,0,-1,-1,1,-1,1,-1,0,-1,1,-1,-1,0,-1,1,-1,-1,-1,0,-1,1,-1,-1,-1,1,-1,1,-1,-1,0],
+   s:[0,1,0,0,1,0,1,1,0,0,1,1,1,0,0,1,1,0,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,0,1,1,0,1,0,0,1,1,0,0,1,1,0,1,0,0,1]},
+  {c:[0,-1,-1,1,-1,0,1,-1,-1,1,0,-1,-1,1,-1,-1,-1,-1,1,-1,0,-1,-1,1,1,-1,-1,0,-1,-1,1,-1,-1,0,-1,-1,1,-1,-1,0,0,-1,-1,-1,1,-1,-1,1,0,1,-1,-1,-1,0,1,-1,-1,-1,-1,1,-1,1,-1,0],
+   s:[0,0,1,1,0,0,1,1,0,1,0,0,1,1,0,1,1,0,1,0,0,1,0,1,1,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0,1,0,1,1,0,1,1,0,1,1,0,0,0,1,1,1,0,0,1,0,1,1,0]},
+  {c:[-1,0,-1,1,-1,-1,0,-1,1,-1,0,-1,1,-1,-1,0,-1,1,-1,-1,-1,0,-1,1,0,-1,1,-1,0,-1,1,-1,-1,-1,-1,0,-1,1,-1,1,-1,-1,0,-1,1,-1,-1,0,-1,1,-1,0,-1,-1,-1,1,1,-1,-1,-1,0,-1,-1,1],
+   s:[1,0,0,1,1,0,0,1,1,1,0,0,1,0,1,0,0,1,1,0,1,0,0,1,0,0,1,1,0,1,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,0,1,1,0,0,1,0,1,1,0,1,0,0,1,0,1]},
+  {c:[0,-1,1,-1,-1,1,-1,0,-1,1,-1,0,1,-1,0,-1,-1,-1,0,-1,1,-1,-1,1,1,-1,-1,0,-1,-1,0,-1,-1,0,-1,-1,0,-1,-1,1,-1,-1,1,-1,-1,0,1,-1,0,-1,-1,-1,1,-1,-1,1,-1,1,-1,-1,-1,-1,0,1],
+   s:[0,0,1,1,0,1,1,0,0,1,1,0,1,0,0,1,1,0,0,1,1,0,0,1,1,0,1,0,0,1,0,1,0,0,1,1,0,0,1,1,1,1,1,0,0,0,1,0,0,0,1,0,1,1,0,1,1,1,0,0,1,0,0,0]},
+  {c:[1,-1,-1,0,-1,1,-1,-1,-1,0,-1,1,-1,-1,1,-1,-1,-1,1,-1,-1,0,-1,1,0,-1,-1,-1,0,-1,1,-1,-1,1,-1,0,-1,-1,-1,1,1,-1,0,-1,-1,-1,0,-1,-1,0,-1,1,-1,-1,1,-1,-1,-1,1,-1,-1,1,-1,0],
+   s:[1,0,1,0,0,1,1,0,1,0,0,1,0,1,1,0,0,1,1,0,1,0,0,1,0,1,0,1,0,1,1,0,0,1,0,0,1,0,1,1,1,0,0,1,0,1,0,1,1,0,0,1,0,1,1,0,0,1,1,0,1,1,0,0]},
+  {c:[-1,1,-1,-1,0,-1,1,-1,0,-1,1,-1,-1,1,-1,0,-1,-1,-1,0,-1,-1,1,-1,1,-1,0,-1,1,-1,-1,-1,-1,0,-1,1,-1,-1,0,-1,-1,-1,1,-1,-1,1,-1,1,0,-1,-1,-1,0,-1,1,-1,-1,1,-1,0,-1,-1,-1,0],
+   s:[0,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,1,0,1,0,1,0,1,1,0,0,1,0,0,1,0,0,1,1,0,1,0,1,1,0,1,0,0,1,0,1,0,1,0,1,0,0,1,1,1,1,0,0,1,0,0,0]},
+  {c:[0,-1,-1,1,-1,-1,0,1,-1,1,-1,-1,0,1,-1,-1,-1,-1,0,-1,1,-1,-1,1,1,-1,-1,0,-1,-1,1,-1,-1,0,-1,-1,1,-1,-1,0,0,-1,1,-1,-1,-1,-1,1,0,-1,-1,-1,0,-1,-1,1,-1,-1,1,-1,1,-1,-1,0],
+   s:[0,0,1,1,0,1,0,1,0,1,1,0,0,1,1,0,1,0,0,1,1,0,0,1,1,0,1,0,0,1,1,0,0,0,1,1,1,0,0,1,0,1,1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,0,1,0,1,0,0,0]},
+  {c:[-1,0,-1,-1,1,-1,-1,1,1,-1,0,-1,-1,1,0,-1,-1,1,-1,0,-1,-1,-1,0,-1,-1,0,-1,-1,-1,1,-1,-1,-1,1,-1,0,-1,-1,1,-1,-1,-1,1,-1,0,-1,-1,-1,0,-1,1,-1,-1,0,-1,1,-1,-1,-1,-1,1,-1,0],
+   s:[0,0,1,1,1,0,0,1,1,0,0,1,0,1,0,1,0,1,1,0,1,0,0,1,1,0,0,1,0,1,1,0,0,1,1,0,0,1,0,1,1,0,0,1,1,0,1,0,1,0,0,1,1,0,0,1,1,1,0,0,1,1,0,0]},
+];
+
+let currentPuzzles = puzzles6;
+
+function setSize(sz) {
+  state.size = sz;
+  currentPuzzles = sz === 6 ? puzzles6 : puzzles8;
+  document.querySelectorAll('.size-btn').forEach((b,i) => b.classList.toggle('active', (i===0&&sz===6)||(i===1&&sz===8)));
+  loadLevel(1);
+  buildLevelSelect();
+}
+
+function loadLevel(n) {
+  state.level = n;
+  const p = currentPuzzles[(n-1) % currentPuzzles.length];
+  state.given = p.c.map(v => v !== -1);
+  state.board = [...p.c];
+  state.solution = [...p.s];
+  document.getElementById('level-info').textContent = 'Level ' + n;
+  document.getElementById('msg').textContent = '';
+  renderGrid();
+}
+
+function renderGrid() {
+  const sz = state.size;
+  const grid = document.getElementById('grid');
+  grid.style.gridTemplateColumns = 'repeat(' + sz + ', 42px)';
+  grid.innerHTML = '';
+  for (let i = 0; i < sz * sz; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    const v = state.board[i];
+    if (v === 0) { cell.textContent = '0'; cell.classList.add('zero'); }
+    else if (v === 1) { cell.textContent = '1'; cell.classList.add('one'); }
+    else { cell.textContent = '·'; cell.classList.add('empty'); }
+    if (state.given[i]) cell.classList.add('given');
+    cell.addEventListener('click', () => tapCell(i));
+    grid.appendChild(cell);
+  }
+}
+
+function tapCell(i) {
+  if (state.given[i]) return;
+  state.board[i] = state.board[i] === -1 ? 0 : state.board[i] === 0 ? 1 : -1;
+  renderGrid();
+  if (!state.board.includes(-1)) autoCheck();
+}
+
+function autoCheck() {
+  if (state.board.every((v, i) => v === state.solution[i])) winLevel();
+  else document.getElementById('msg').textContent = 'Not quite — keep checking!';
+}
+
+function checkSolution() {
+  if (state.board.includes(-1)) { document.getElementById('msg').textContent = 'Fill all cells first!'; return; }
+  if (state.board.every((v, i) => v === state.solution[i])) winLevel();
+  else {
+    document.getElementById('msg').textContent = 'Some cells are wrong!';
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach((c, i) => {
+      c.classList.remove('error');
+      if (!state.given[i] && state.board[i] !== -1 && state.board[i] !== state.solution[i]) c.classList.add('error');
+    });
+  }
+}
+
+function hint() {
+  const empties = state.board.map((v,i) => v===-1 && !state.given[i] ? i : -1).filter(i=>i>=0);
+  if (!empties.length) { document.getElementById('msg').textContent = 'No empty cells!'; return; }
+  const pick = empties[Math.floor(Math.random()*empties.length)];
+  state.board[pick] = state.solution[pick];
+  state.given[pick] = true;
+  renderGrid();
+}
+
+function resetLevel() { loadLevel(state.level); }
+
+function winLevel() {
+  state.completed.add(state.size + '-' + state.level);
+  document.getElementById('msg').textContent = '🎉 Puzzle Solved!';
+  buildLevelSelect();
+  const next = state.level + 1;
+  if (next <= currentPuzzles.length) {
+    setTimeout(() => {
+      if (!state.removeAds && next % 3 === 0 && window.Android) Android.showInterstitial();
+      loadLevel(next);
+    }, 1400);
+  }
+}
+
+function toggleLevelSelect() {
+  const ls = document.getElementById('level-select');
+  ls.style.display = ls.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function buildLevelSelect() {
+  const ls = document.getElementById('level-select');
+  ls.innerHTML = '';
+  currentPuzzles.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.className = 'lvl-btn' + (state.completed.has(state.size + '-' + (i+1)) ? ' done' : '');
+    b.textContent = i + 1;
+    b.onclick = () => { loadLevel(i+1); ls.style.display='none'; };
+    ls.appendChild(b);
+  });
+}
+
+function removeAds() {
+  if (window.Android) Android.purchaseRemoveAds();
+  else { state.removeAds = true; document.getElementById('msg').textContent = 'Ads removed!'; }
+}
+window.onPurchaseComplete = function() { state.removeAds = true; };
+window.onAdMobLoaded = function() {};
+
+loadLevel(1);
+buildLevelSelect();
+</script>
+</body>
+</html>

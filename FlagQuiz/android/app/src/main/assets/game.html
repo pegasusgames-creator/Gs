@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Flag Quiz</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#EF5350; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+.screen { display:none; flex-direction:column; height:100%; }
+.screen.active { display:flex; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+button { cursor:pointer; border:none; border-radius:var(--radius); font-family:inherit; font-weight:600; transition:transform 0.1s,opacity 0.1s; }
+button:active, button.btn-pressed { transform:scale(0.96); opacity:0.85; }
+.btn-primary { background:var(--accent); color:#fff; padding:14px 28px; font-size:1.1rem; width:100%; }
+.btn-secondary { background:var(--card); color:var(--text); padding:12px 20px; font-size:0.95rem; width:100%; }
+#menuScreen { align-items:center; justify-content:center; gap:20px; padding:30px; }
+.menu-flags { font-size:2.5rem; letter-spacing:4px; }
+.menu-title { font-size:2.2rem; font-weight:800; color:var(--accent); }
+.menu-sub { color:var(--muted); font-size:0.95rem; text-align:center; }
+.menu-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+#gameScreen { padding:0; }
+.game-header { background:var(--surface); padding:12px 16px; display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.game-top { display:flex; justify-content:space-between; align-items:center; }
+.progress-text { font-size:0.85rem; color:var(--muted); }
+.score-text { font-size:0.95rem; font-weight:700; color:var(--accent); }
+.timer-bar-wrap { height:6px; background:var(--card); border-radius:3px; overflow:hidden; }
+.timer-bar { height:100%; background:var(--accent); border-radius:3px; transition:width 0.1s linear; }
+.question-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; gap:16px; overflow:hidden; }
+.flag-display { font-size:6rem; line-height:1; }
+.question-text { font-size:1.1rem; font-weight:600; color:var(--muted); }
+.answers { width:100%; max-width:480px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ans-btn { background:var(--card); color:var(--text); padding:14px 8px; font-size:0.9rem; border-radius:var(--radius); border:2px solid transparent; min-height:58px; line-height:1.3; }
+.ans-btn.correct { background:#1b5e20; border-color:#66BB6A; color:#fff; }
+.ans-btn.wrong { background:#b71c1c; border-color:#EF5350; color:#fff; }
+.ans-btn:disabled { cursor:default; }
+.feedback-bar { height:38px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0; background:var(--surface); padding:0 12px; text-align:center; }
+.feedback-bar.correct { color:#66BB6A; }
+.feedback-bar.wrong { color:#EF5350; }
+#resultScreen { align-items:center; justify-content:center; gap:18px; padding:30px; }
+.result-emoji { font-size:4rem; }
+.result-title { font-size:1.8rem; font-weight:800; }
+.result-score { font-size:3.5rem; font-weight:900; color:var(--accent); }
+.result-sub { color:var(--muted); font-size:1rem; }
+.result-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="screen active" id="menuScreen">
+    <div class="menu-flags">🇺🇸🇬🇧🇫🇷🇯🇵</div>
+    <div class="menu-title">Flag Quiz</div>
+    <div class="menu-sub">Identify 50 flags from around the world!</div>
+    <div class="menu-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Now</button>
+    </div>
+  </div>
+  <div class="screen" id="gameScreen">
+    <div class="game-header">
+      <div class="game-top">
+        <span class="progress-text" id="progressText">1 / 50</span>
+        <span class="score-text" id="scoreText">Score: 0</span>
+      </div>
+      <div class="timer-bar-wrap"><div class="timer-bar" id="timerBar"></div></div>
+    </div>
+    <div class="question-area">
+      <div class="flag-display" id="qEmoji"></div>
+      <div class="question-text">Which country is this flag?</div>
+      <div class="answers" id="answersDiv"></div>
+    </div>
+    <div class="feedback-bar" id="feedbackBar"></div>
+  </div>
+  <div class="screen" id="resultScreen">
+    <div class="result-emoji" id="resultEmoji">🏆</div>
+    <div class="result-title">Quiz Complete!</div>
+    <div class="result-score" id="resultScore">0%</div>
+    <div class="result-sub" id="resultSub"></div>
+    <div class="result-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Again</button>
+      <button class="btn-secondary" onclick="showScreen('menuScreen')">Menu</button>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+var state={useCount:0,removeAds:false,score:0,qi:0,questions:[],timer:null,timeLeft:0,answered:false};
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%5===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+// flag emoji, correct country, 3 wrong options
+var ALL_FLAGS=[
+  {f:'🇺🇸',c:"United States",w:["Canada","Australia","New Zealand"]},
+  {f:'🇬🇧',c:"United Kingdom",w:["Ireland","Australia","New Zealand"]},
+  {f:'🇫🇷',c:"France",w:["Belgium","Italy","Spain"]},
+  {f:'🇩🇪',c:"Germany",w:["Austria","Belgium","Netherlands"]},
+  {f:'🇯🇵',c:"Japan",w:["South Korea","China","Taiwan"]},
+  {f:'🇧🇷',c:"Brazil",w:["Argentina","Mexico","Colombia"]},
+  {f:'🇨🇦',c:"Canada",w:["USA","Australia","New Zealand"]},
+  {f:'🇦🇺',c:"Australia",w:["New Zealand","UK","Ireland"]},
+  {f:'🇮🇳',c:"India",w:["Pakistan","Bangladesh","Iran"]},
+  {f:'🇷🇺',c:"Russia",w:["Serbia","Netherlands","France"]},
+  {f:'🇨🇳',c:"China",w:["Vietnam","North Korea","Japan"]},
+  {f:'🇰🇷',c:"South Korea",w:["Japan","China","North Korea"]},
+  {f:'🇲🇽',c:"Mexico",w:["Italy","Brazil","Colombia"]},
+  {f:'🇿🇦',c:"South Africa",w:["Nigeria","Kenya","Ethiopia"]},
+  {f:'🇦🇷',c:"Argentina",w:["Uruguay","Chile","Paraguay"]},
+  {f:'🇮🇹',c:"Italy",w:["France","Spain","Portugal"]},
+  {f:'🇪🇸',c:"Spain",w:["Portugal","Italy","France"]},
+  {f:'🇵🇹',c:"Portugal",w:["Spain","Brazil","Italy"]},
+  {f:'🇳🇱',c:"Netherlands",w:["Belgium","Luxembourg","Germany"]},
+  {f:'🇧🇪',c:"Belgium",w:["Netherlands","France","Germany"]},
+  {f:'🇸🇪',c:"Sweden",w:["Norway","Denmark","Finland"]},
+  {f:'🇳🇴',c:"Norway",w:["Sweden","Denmark","Iceland"]},
+  {f:'🇩🇰',c:"Denmark",w:["Norway","Sweden","Netherlands"]},
+  {f:'🇫🇮',c:"Finland",w:["Sweden","Norway","Estonia"]},
+  {f:'🇨🇭',c:"Switzerland",w:["Austria","Denmark","Norway"]},
+  {f:'🇦🇹',c:"Austria",w:["Switzerland","Germany","Belgium"]},
+  {f:'🇬🇷',c:"Greece",w:["Cyprus","Croatia","Serbia"]},
+  {f:'🇹🇷',c:"Turkey",w:["Pakistan","Tunisia","Algeria"]},
+  {f:'🇵🇱',c:"Poland",w:["Ukraine","Germany","Czech Republic"]},
+  {f:'🇺🇦',c:"Ukraine",w:["Poland","Russia","Sweden"]},
+  {f:'🇷🇴',c:"Romania",w:["Moldova","Bulgaria","Hungary"]},
+  {f:'🇭🇺',c:"Hungary",w:["Austria","Romania","Slovakia"]},
+  {f:'🇨🇿',c:"Czech Republic",w:["Slovakia","Poland","Austria"]},
+  {f:'🇸🇰',c:"Slovakia",w:["Czech Republic","Slovenia","Croatia"]},
+  {f:'🇭🇷',c:"Croatia",w:["Serbia","Slovenia","Bosnia"]},
+  {f:'🇸🇮',c:"Slovenia",w:["Croatia","Slovakia","Austria"]},
+  {f:'🇧🇬',c:"Bulgaria",w:["Romania","Serbia","Moldova"]},
+  {f:'🇷🇸',c:"Serbia",w:["Croatia","Bosnia","Bulgaria"]},
+  {f:'🇪🇬',c:"Egypt",w:["Iraq","Syria","Jordan"]},
+  {f:'🇸🇦',c:"Saudi Arabia",w:["Pakistan","Iran","UAE"]},
+  {f:'🇮🇷',c:"Iran",w:["Iraq","Afghanistan","Saudi Arabia"]},
+  {f:'🇮🇶',c:"Iraq",w:["Iran","Syria","Jordan"]},
+  {f:'🇮🇱',c:"Israel",w:["UAE","Jordan","Lebanon"]},
+  {f:'🇵🇰',c:"Pakistan",w:["Bangladesh","Malaysia","Indonesia"]},
+  {f:'🇧🇩',c:"Bangladesh",w:["India","Pakistan","Myanmar"]},
+  {f:'🇮🇩',c:"Indonesia",w:["Malaysia","Philippines","Vietnam"]},
+  {f:'🇵🇭',c:"Philippines",w:["Indonesia","Malaysia","Thailand"]},
+  {f:'🇻🇳',c:"Vietnam",w:["Laos","Cambodia","Myanmar"]},
+  {f:'🇹🇭',c:"Thailand",w:["Laos","Cambodia","Myanmar"]},
+  {f:'🇳🇬',c:"Nigeria",w:["Ghana","Cameroon","Ivory Coast"]},
+  {f:'🇰🇪',c:"Kenya",w:["Tanzania","Uganda","Ethiopia"]},
+  {f:'🇪🇹',c:"Ethiopia",w:["Eritrea","Somalia","Kenya"]},
+  {f:'🇲🇦',c:"Morocco",w:["Algeria","Tunisia","Libya"]},
+  {f:'🇳🇿',c:"New Zealand",w:["Australia","UK","Fiji"]},
+  {f:'🇨🇴',c:"Colombia",w:["Venezuela","Ecuador","Brazil"]},
+];
+
+// Build questions: shuffle wrong answers + correct into 4 options
+function buildQuestions(flags){
+  return flags.map(function(item){
+    var wrongs=item.w.slice();
+    shuffle(wrongs);
+    var options=[item.c,wrongs[0],wrongs[1],wrongs[2]];
+    shuffle(options);
+    var cidx=options.indexOf(item.c);
+    return {e:item.f,a:options,c:cidx};
+  });
+}
+
+function shuffle(arr){for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
+function startGame(){
+  state.score=0;state.qi=0;state.useCount=0;
+  var flagsCopy=ALL_FLAGS.slice();shuffle(flagsCopy);
+  state.questions=buildQuestions(flagsCopy.slice(0,50));
+  showScreen('gameScreen');loadQuestion();
+}
+function loadQuestion(){
+  if(state.qi>=state.questions.length){endGame();return;}
+  var q=state.questions[state.qi];
+  document.getElementById('progressText').textContent=(state.qi+1)+' / '+state.questions.length;
+  document.getElementById('scoreText').textContent='Score: '+state.score;
+  document.getElementById('qEmoji').textContent=q.e;
+  document.getElementById('feedbackBar').textContent='';
+  document.getElementById('feedbackBar').className='feedback-bar';
+  state.answered=false;
+  var correctLabel=q.a[q.c];
+  var div=document.getElementById('answersDiv');div.innerHTML='';
+  q.a.forEach(function(opt){var btn=document.createElement('button');btn.className='ans-btn';btn.textContent=opt;btn.onclick=function(){answer(btn,opt===correctLabel,correctLabel);};div.appendChild(btn);});
+  startTimer();
+}
+var TIMER_DURATION=12;
+function startTimer(){clearInterval(state.timer);state.timeLeft=TIMER_DURATION;updateTimerBar();state.timer=setInterval(function(){state.timeLeft-=0.1;updateTimerBar();if(state.timeLeft<=0){clearInterval(state.timer);timeUp();}},100);}
+function updateTimerBar(){document.getElementById('timerBar').style.width=Math.max(0,state.timeLeft/TIMER_DURATION*100)+'%';}
+function timeUp(){if(state.answered)return;state.answered=true;var q=state.questions[state.qi];var correctLabel=q.a[q.c];document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});showFeedback(false,"Time up! Correct: "+correctLabel);setTimeout(nextQ,1600);}
+function answer(btn,isCorrect,correctLabel){if(state.answered)return;state.answered=true;clearInterval(state.timer);document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});if(isCorrect){state.score++;btn.classList.add('correct');showFeedback(true,'Correct! 🎉');}else{btn.classList.add('wrong');showFeedback(false,'Wrong! It was '+correctLabel);}setTimeout(nextQ,1600);}
+function showFeedback(ok,msg){var bar=document.getElementById('feedbackBar');bar.textContent=msg;bar.className='feedback-bar '+(ok?'correct':'wrong');}
+function nextQ(){state.qi++;if(state.qi%5===0)maybeInterstitial();loadQuestion();}
+function endGame(){clearInterval(state.timer);var pct=Math.round(state.score/state.questions.length*100);document.getElementById('resultScore').textContent=pct+'%';document.getElementById('resultSub').textContent=state.score+' out of '+state.questions.length+' correct';var emojis=['😢','😕','🙂','😊','🏆'];document.getElementById('resultEmoji').textContent=emojis[Math.min(4,Math.floor(pct/20))];showScreen('resultScreen');}
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Color Fill</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #121212; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+#banner { width:100%; height:50px; background:#1e1e1e; display:flex; align-items:center; justify-content:center; color:#555; font-size:12px; border-bottom:1px solid #333; }
+#header { width:100%; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; background:#1a1a1a; }
+h1 { font-size:20px; color:#E91E63; font-weight:700; }
+#info { font-size:13px; color:#aaa; }
+#controls { display:flex; gap:8px; padding:8px 16px; flex-wrap:wrap; justify-content:center; }
+button { background:#1e1e1e; color:#E91E63; border:1.5px solid #E91E63; border-radius:8px; padding:8px 16px; font-size:14px; cursor:pointer; touch-action:manipulation; }
+button:active { background:#E91E63; color:#000; }
+#msg { padding:6px 16px; text-align:center; font-size:15px; min-height:32px; color:#E91E63; }
+#grid { display:inline-grid; gap:2px; padding:2px; background:#1a1a1a; border-radius:6px; border:2px solid #E91E63; margin:8px auto; }
+.cell { width:36px; height:36px; border-radius:3px; cursor:pointer; transition:opacity 0.1s; touch-action:manipulation; }
+#level-select { display:none; flex-wrap:wrap; gap:6px; padding:8px 16px; justify-content:center; max-width:360px; }
+.lvl-btn { padding:6px 12px; font-size:13px; min-width:38px; }
+.lvl-btn.done { background:#E91E63; color:#000; border-color:#E91E63; }
+</style>
+</head>
+<body>
+<div id="banner">Advertisement</div>
+<div id="header">
+  <h1>Color Fill</h1>
+  <span id="info">Level 1 | Moves: 0/20</span>
+</div>
+<div id="controls">
+  <button onclick="resetLevel()">Reset</button>
+  <button onclick="toggleLevelSelect()">Levels</button>
+  <button onclick="removeAds()">No Ads</button>
+</div>
+<div id="msg">Flood-fill from top-left to cover all squares!</div>
+<div id="grid"></div>
+<div id="level-select"></div>
+
+<script>
+// Colors palette
+const PALETTE = ['#E91E63','#1E88E5','#43A047','#FF9800','#9C27B0','#00BCD4'];
+const C = PALETTE.length;
+// 8x8 grid, each cell is color index 0-5
+// 40 levels - hardcoded starting grids and move limits
+
+function rnd(seed) {
+  let x = seed;
+  return () => { x = (x*1664525+1013904223)&0xffffffff; return (x>>>0)/0xffffffff; };
+}
+
+function genLevel(seed, maxMoves) {
+  const r = rnd(seed);
+  const grid = [];
+  for (let i = 0; i < 64; i++) grid.push(Math.floor(r() * C));
+  return { grid, maxMoves };
+}
+
+// 40 levels: varied seeds and move limits
+const levels = [
+  genLevel(1,22), genLevel(2,20), genLevel(3,22), genLevel(4,21), genLevel(5,23),
+  genLevel(6,20), genLevel(7,21), genLevel(8,22), genLevel(9,19), genLevel(10,22),
+  genLevel(11,23), genLevel(12,21), genLevel(13,20), genLevel(14,22), genLevel(15,21),
+  genLevel(16,20), genLevel(17,23), genLevel(18,22), genLevel(19,21), genLevel(20,20),
+  genLevel(21,19), genLevel(22,23), genLevel(23,22), genLevel(24,21), genLevel(25,20),
+  genLevel(26,22), genLevel(27,21), genLevel(28,20), genLevel(29,23), genLevel(30,22),
+  genLevel(31,21), genLevel(32,20), genLevel(33,22), genLevel(34,21), genLevel(35,23),
+  genLevel(36,20), genLevel(37,22), genLevel(38,21), genLevel(39,20), genLevel(40,22),
+];
+
+const state = { level: 1, moves: 0, removeAds: false, completed: new Set(), board: [] };
+
+function loadLevel(n) {
+  state.level = n;
+  state.moves = 0;
+  const lv = levels[(n-1) % levels.length];
+  state.board = [...lv.grid];
+  document.getElementById('msg').textContent = 'Flood-fill from top-left to cover all squares!';
+  updateInfo();
+  renderGrid();
+}
+
+function updateInfo() {
+  const lv = levels[(state.level-1) % levels.length];
+  document.getElementById('info').textContent = 'Level ' + state.level + ' | Moves: ' + state.moves + '/' + lv.maxMoves;
+}
+
+function renderGrid() {
+  const g = document.getElementById('grid');
+  g.style.gridTemplateColumns = 'repeat(8, 36px)';
+  g.innerHTML = '';
+  state.board.forEach((c, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.style.background = PALETTE[c];
+    cell.addEventListener('click', () => floodFill(c));
+    g.appendChild(cell);
+  });
+}
+
+function floodFill(newColor) {
+  const lv = levels[(state.level-1) % levels.length];
+  const currentColor = state.board[0];
+  if (newColor === currentColor) return;
+  if (state.moves >= lv.maxMoves) return;
+  // BFS flood fill from (0,0)
+  const visited = new Array(64).fill(false);
+  const queue = [0];
+  visited[0] = true;
+  while (queue.length) {
+    const idx = queue.shift();
+    if (state.board[idx] === currentColor) {
+      state.board[idx] = newColor;
+      const r = Math.floor(idx/8), c = idx%8;
+      if (r>0 && !visited[idx-8]) { visited[idx-8]=true; queue.push(idx-8); }
+      if (r<7 && !visited[idx+8]) { visited[idx+8]=true; queue.push(idx+8); }
+      if (c>0 && !visited[idx-1]) { visited[idx-1]=true; queue.push(idx-1); }
+      if (c<7 && !visited[idx+1]) { visited[idx+1]=true; queue.push(idx+1); }
+    }
+  }
+  state.moves++;
+  updateInfo();
+  renderGrid();
+  // Check win
+  if (state.board.every(v => v === newColor)) {
+    winLevel();
+  } else if (state.moves >= lv.maxMoves && !state.board.every(v => v === state.board[0])) {
+    document.getElementById('msg').textContent = 'Out of moves! Try again.';
+  }
+}
+
+function resetLevel() { loadLevel(state.level); }
+
+function winLevel() {
+  state.completed.add(state.level);
+  document.getElementById('msg').textContent = '🎉 Level Complete!';
+  buildLevelSelect();
+  setTimeout(() => {
+    const next = state.level + 1;
+    if (!state.removeAds && next % 3 === 0 && window.Android) Android.showInterstitial();
+    if (next <= levels.length) loadLevel(next);
+  }, 1400);
+}
+
+function toggleLevelSelect() {
+  const ls = document.getElementById('level-select');
+  ls.style.display = ls.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function buildLevelSelect() {
+  const ls = document.getElementById('level-select');
+  ls.innerHTML = '';
+  levels.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.className = 'lvl-btn' + (state.completed.has(i+1) ? ' done' : '');
+    b.textContent = i+1;
+    b.onclick = () => { loadLevel(i+1); ls.style.display='none'; };
+    ls.appendChild(b);
+  });
+}
+
+function removeAds() {
+  if (window.Android) Android.purchaseRemoveAds();
+  else { state.removeAds = true; document.getElementById('msg').textContent = 'Ads removed!'; }
+}
+window.onPurchaseComplete = function() { state.removeAds = true; };
+window.onAdMobLoaded = function() {};
+
+loadLevel(1);
+buildLevelSelect();
+</script>
+</body>
+</html>

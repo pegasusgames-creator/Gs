@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Packing List</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#EC407A; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:0; }
+header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px 10px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
+#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
+/* Bag selector */
+#bag-bar { display:flex; gap:6px; padding:0 14px 8px; overflow-x:auto; flex-shrink:0; scrollbar-width:none; }
+#bag-bar::-webkit-scrollbar { display:none; }
+.bag-chip { padding:6px 13px; border:none; border-radius:20px; font-size:0.75rem; cursor:pointer; background:var(--card); color:var(--text); white-space:nowrap; flex-shrink:0; }
+.bag-chip.active { background:var(--accent); color:#fff; font-weight:700; }
+/* Add form */
+#add-form { display:flex; gap:7px; padding:0 14px 8px; flex-shrink:0; flex-wrap:wrap; }
+#add-form input[type=text] { flex:2; min-width:100px; padding:9px 12px; border-radius:10px; border:none; background:var(--surface); color:var(--text); font-size:0.88rem; }
+#add-form input.weight { flex:1; min-width:60px; padding:9px 8px; border-radius:10px; border:none; background:var(--surface); color:var(--text); font-size:0.85rem; text-align:center; }
+#add-form select { flex:1; min-width:100px; padding:9px 8px; border-radius:10px; border:none; background:var(--surface); color:var(--text); font-size:0.82rem; -webkit-appearance:none; }
+#add-form button { padding:9px 14px; border:none; border-radius:10px; background:var(--accent); color:#fff; font-weight:700; font-size:1rem; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 14px 12px; }
+/* Bag summary */
+.bag-summary { background:var(--surface); border-radius:12px; padding:12px 14px; margin-bottom:10px; }
+.bs-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.bs-name { font-size:1rem; font-weight:700; color:var(--accent); }
+.bs-weight { font-size:0.82rem; color:var(--muted); }
+.bs-progress { height:4px; background:var(--card); border-radius:2px; }
+.bs-fill { height:100%; background:var(--accent); border-radius:2px; }
+/* Items */
+.pack-item { display:flex; align-items:center; gap:9px; padding:9px 12px; background:var(--card); border-radius:9px; margin-bottom:5px; }
+.pi-check { width:20px; height:20px; border-radius:6px; border:2px solid var(--muted); flex-shrink:0; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.15s; }
+.pi-check.packed { background:var(--accent); border-color:var(--accent); }
+.pi-check.packed::after { content:'✓'; color:#fff; font-size:0.78rem; font-weight:700; }
+.pi-name { flex:1; font-size:0.88rem; }
+.pack-item.packed .pi-name { text-decoration:line-through; color:var(--muted); }
+.pi-wt { font-size:0.72rem; color:var(--muted); margin-right:4px; }
+.pi-bag { font-size:0.65rem; color:var(--accent); background:rgba(236,64,122,0.12); padding:2px 6px; border-radius:8px; }
+.pi-del { background:none; border:none; color:#FF7043; cursor:pointer; font-size:0.88rem; padding:0 2px; }
+/* All items view */
+.bag-section { margin-bottom:12px; }
+.bag-header { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); padding:4px 2px; margin-bottom:4px; display:flex; justify-content:space-between; }
+.empty-msg { text-align:center; color:var(--muted); padding:20px 0; font-size:0.85rem; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Packing <span>List</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
+  <div id="bag-bar"></div>
+  <div id="add-form">
+    <input type="text" id="item-name" placeholder="Item name…" maxlength="40">
+    <input type="text" class="weight" id="item-wt" placeholder="kg">
+    <select id="item-bag"></select>
+    <button onclick="addItem()">+</button>
+  </div>
+  <div id="scroll"><div id="items-area"></div></div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+
+var BAGS = ['Carry-on','Checked Bag','Backpack','Purse/Tote','All Items'];
+var STORE='packinglist_data';
+var S = { useCount:0, removeAds:false, items:[], curBag:'All Items', nextId:1 };
+
+function load(){
+  try{var d=JSON.parse(localStorage.getItem(STORE)||'null');
+    if(d){S.items=d.items||[];S.nextId=d.nextId||1;S.curBag=d.curBag||'All Items';}
+  }catch(e){}
+}
+function save(){localStorage.setItem(STORE,JSON.stringify({items:S.items,nextId:S.nextId,curBag:S.curBag}));}
+
+// Populate bag select (exclude "All Items")
+var bagSel=document.getElementById('item-bag');
+BAGS.filter(function(b){return b!=='All Items';}).forEach(function(b){
+  var o=document.createElement('option');o.value=b;o.textContent=b;bagSel.appendChild(o);
+});
+
+function addItem(){
+  var name=document.getElementById('item-name').value.trim();
+  if(!name)return;
+  var wt=parseFloat(document.getElementById('item-wt').value)||0;
+  var bag=document.getElementById('item-bag').value;
+  S.items.push({id:S.nextId++,name:name,weight:wt,bag:bag,packed:false});
+  save();
+  document.getElementById('item-name').value='';
+  document.getElementById('item-wt').value='';
+  render();
+  maybeInterstitial();
+}
+
+function toggleItem(id){
+  var it=S.items.find(function(x){return x.id===id;});
+  if(it){it.packed=!it.packed;save();render();}
+}
+
+function deleteItem(id){
+  S.items=S.items.filter(function(x){return x.id!==id;});
+  save();render();
+}
+
+function switchBag(b){S.curBag=b;save();renderBagBar();render();}
+
+function renderBagBar(){
+  var el=document.getElementById('bag-bar');
+  el.innerHTML=BAGS.map(function(b){
+    return '<button class="bag-chip'+(b===S.curBag?' active':'')+'" onclick="switchBag(\''+b+'\')">'+b+'</button>';
+  }).join('');
+}
+
+function bagWeight(bag){
+  return S.items.filter(function(x){return x.bag===bag;}).reduce(function(s,x){return s+x.weight;},0);
+}
+
+function render(){
+  var area=document.getElementById('items-area');
+  var bgs=BAGS.filter(function(b){return b!=='All Items';});
+
+  if(S.curBag==='All Items'){
+    // Show all bags as sections with summaries
+    var totalWt=S.items.reduce(function(s,x){return s+x.weight;},0);
+    var html='';
+    // Summary cards
+    html+='<div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;">';
+    bgs.forEach(function(b){
+      var bItems=S.items.filter(function(x){return x.bag===b;});
+      var bWt=bItems.reduce(function(s,x){return s+x.weight;},0);
+      var bDone=bItems.filter(function(x){return x.packed;}).length;
+      html+='<div style="flex:1;min-width:120px;background:var(--surface);border-radius:10px;padding:10px 12px;">'+
+        '<div style="font-size:0.8rem;font-weight:700;color:var(--accent);">'+b+'</div>'+
+        '<div style="font-size:0.72rem;color:var(--muted);margin-top:2px;">'+bItems.length+' items · '+bWt.toFixed(1)+'kg</div>'+
+        '<div style="font-size:0.68rem;color:var(--muted);">'+bDone+'/'+bItems.length+' packed</div></div>';
+    });
+    html+='</div>';
+    // Items by bag
+    bgs.forEach(function(b){
+      var bItems=S.items.filter(function(x){return x.bag===b;});
+      if(!bItems.length)return;
+      var bWt=bItems.reduce(function(s,x){return s+x.weight;},0);
+      html+='<div class="bag-section"><div class="bag-header"><span>'+b+'</span><span>'+bWt.toFixed(1)+'kg</span></div>';
+      html+=bItems.map(function(item){return itemHtml(item);}).join('');
+      html+='</div>';
+    });
+    if(!S.items.length) html='<div class="empty-msg">No items. Add items above.</div>';
+    area.innerHTML=html;
+  } else {
+    // Show single bag
+    var bItems=S.items.filter(function(x){return x.bag===S.curBag;});
+    var bWt=bItems.reduce(function(s,x){return s+x.weight;},0);
+    var bPacked=bItems.filter(function(x){return x.packed;}).length;
+    var pct=bItems.length?Math.round(bPacked/bItems.length*100):0;
+    var html2='<div class="bag-summary"><div class="bs-header">'+
+      '<span class="bs-name">'+S.curBag+'</span>'+
+      '<span class="bs-weight">'+bWt.toFixed(2)+' kg total</span></div>'+
+      '<div style="font-size:0.75rem;color:var(--muted);margin-bottom:6px;">'+bPacked+'/'+bItems.length+' packed ('+pct+'%)</div>'+
+      '<div class="bs-progress"><div class="bs-fill" style="width:'+pct+'%"></div></div></div>';
+    if(!bItems.length) html2+='<div class="empty-msg">No items in '+S.curBag+'.</div>';
+    html2+=bItems.map(function(item){return itemHtml(item);}).join('');
+    area.innerHTML=html2;
+  }
+}
+
+function itemHtml(item){
+  return '<div class="pack-item'+(item.packed?' packed':'')+'">'+
+    '<div class="pi-check'+(item.packed?' packed':'')+'" onclick="toggleItem('+item.id+')"></div>'+
+    '<span class="pi-name">'+esc(item.name)+'</span>'+
+    (item.weight?'<span class="pi-wt">'+item.weight.toFixed(1)+'kg</span>':'')+
+    '<button class="pi-del" onclick="deleteItem('+item.id+')">&#10005;</button></div>';
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+load();renderBagBar();render();
+
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){S.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){S.useCount++;if(!S.removeAds&&S.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!S.removeAds)document.getElementById('admob-banner').style.display='flex';
+</script>
+</body>
+</html>

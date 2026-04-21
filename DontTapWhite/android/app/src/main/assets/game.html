@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Don't Tap White</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html,body { height:100%; background:#111; overflow:hidden; font-family:'Segoe UI',system-ui,sans-serif; color:#fff; }
+canvas { display:block; touch-action:none; }
+#overlay { position:absolute; inset:0; background:rgba(0,0,0,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:20; gap:14px; }
+#overlay h2 { font-size:1.8rem; font-weight:900; color:#eee; }
+#overlay .accent { color:#FFD600; }
+#overlay .sub { font-size:0.95rem; color:#aaa; text-align:center; max-width:280px; }
+#overlay .big { font-size:1.5rem; font-weight:800; }
+#btn-play { background:#fff; border:none; border-radius:30px; color:#111; font-size:1.2rem; font-weight:900; padding:14px 48px; cursor:pointer; }
+#admob-banner { position:absolute; bottom:0; left:0; right:0; height:50px; background:#111; display:none; align-items:center; justify-content:center; color:#555; font-size:0.7rem; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="overlay">
+  <h2>Don't Tap <span class="accent">White!</span></h2>
+  <div class="sub">Tap only the BLACK tiles.<br>Never tap white or miss a black tile.</div>
+  <div class="big" id="score-msg"></div>
+  <button id="btn-play">Play!</button>
+</div>
+<div id="admob-banner">Advertisement</div>
+<script>
+'use strict';
+var canvas=document.getElementById('c'), ctx=canvas.getContext('2d');
+var W,H;
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize(); window.addEventListener('resize',resize);
+
+var COLS=4, TILE_H=120, SCROLL_SPEED=3;
+var best=parseInt(localStorage.getItem('dtw_best')||'0');
+var state={running:false,removeAds:false,score:0,speed:SCROLL_SPEED,
+  rows:[],scrollY:0,frame:0};
+
+function makeRow(y){
+  var blackCol=Math.floor(Math.random()*COLS);
+  return {y:y,blackCol:blackCol,tapped:false,missed:false};
+}
+
+function initGame(){
+  state.rows=[];state.score=0;state.frame=0;state.speed=SCROLL_SPEED;
+  state.scrollY=0;
+  // Pre-fill screen
+  var numRows=Math.ceil(H/TILE_H)+3;
+  for(var i=0;i<numRows;i++){
+    state.rows.push(makeRow(-i*TILE_H));
+  }
+  state.running=true;
+  document.getElementById('overlay').style.display='none';
+}
+document.getElementById('btn-play').addEventListener('click',initGame);
+
+function getTileAt(x,y){
+  var col=Math.floor(x/(W/COLS));
+  for(var i=0;i<state.rows.length;i++){
+    var row=state.rows[i];
+    var ry=row.y+state.scrollY;
+    if(y>=ry&&y<ry+TILE_H)return{row:row,col:col};
+  }
+  return null;
+}
+
+canvas.addEventListener('touchstart',function(e){
+  e.preventDefault();
+  if(!state.running)return;
+  var t=e.changedTouches[0];
+  handleTap(t.clientX,t.clientY);
+},{passive:false});
+canvas.addEventListener('mousedown',function(e){if(state.running)handleTap(e.clientX,e.clientY);});
+
+function handleTap(x,y){
+  var hit=getTileAt(x,y);
+  if(!hit)return;
+  var row=hit.row, col=hit.col;
+  if(row.tapped)return;
+  if(col===row.blackCol){
+    row.tapped=true;
+    state.score++;
+    state.speed=SCROLL_SPEED+state.score*0.04;
+  } else {
+    // Tapped white
+    doGameOver();
+  }
+}
+
+function doGameOver(){
+  state.running=false;
+  if(state.score>best){best=state.score;localStorage.setItem('dtw_best',best);}
+  document.getElementById('score-msg').textContent='Score: '+state.score+' | Best: '+best;
+  document.getElementById('btn-play').textContent='Play Again';
+  document.getElementById('overlay').style.display='flex';
+  if(!state.removeAds&&window.Android)Android.showInterstitial();
+}
+
+function loop(){
+  requestAnimationFrame(loop);
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#111';ctx.fillRect(0,0,W,H);
+
+  if(!state.running){
+    // Draw static grid
+    drawGrid(0);
+    return;
+  }
+  state.frame++;
+  state.scrollY+=state.speed;
+
+  // Add new rows at top
+  var topRow=state.rows[0];
+  while(topRow.y+state.scrollY>0){
+    state.rows.unshift(makeRow(topRow.y-TILE_H));
+    topRow=state.rows[0];
+  }
+
+  // Check for missed black tiles (scrolled past bottom)
+  for(var i=state.rows.length-1;i>=0;i--){
+    var row=state.rows[i];
+    if(row.y+state.scrollY>H){
+      if(!row.tapped){doGameOver();return;}
+      state.rows.splice(i,1);
+    }
+  }
+
+  drawGrid(state.scrollY);
+
+  // HUD
+  ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(0,0,W,50);
+  ctx.fillStyle='#FFD600';ctx.font='bold 22px sans-serif';ctx.textAlign='center';
+  ctx.fillText(state.score,W/2,34);
+  ctx.fillStyle='#aaa';ctx.font='13px sans-serif';ctx.textAlign='left';
+  ctx.fillText('Best:'+best,10,34);
+}
+
+function drawGrid(scrollY){
+  var tw=W/COLS;
+  state.rows.forEach(function(row){
+    var ry=row.y+scrollY;
+    if(ry+TILE_H<0||ry>H)return;
+    for(var c=0;c<COLS;c++){
+      var isBlack=c===row.blackCol;
+      var color=isBlack?(row.tapped?'#444':'#111'):'#e8e8e8';
+      ctx.fillStyle=color;
+      ctx.fillRect(c*tw+1,ry+1,tw-2,TILE_H-2);
+      // Flash on tap
+      if(isBlack&&row.tapped){
+        ctx.fillStyle='rgba(255,214,0,0.25)';
+        ctx.fillRect(c*tw+1,ry+1,tw-2,TILE_H-2);
+      }
+    }
+    // Grid lines
+    ctx.strokeStyle='#333';ctx.lineWidth=2;
+    for(var c=0;c<=COLS;c++){ctx.beginPath();ctx.moveTo(c*tw,ry);ctx.lineTo(c*tw,ry+TILE_H);ctx.stroke();}
+    ctx.beginPath();ctx.moveTo(0,ry);ctx.lineTo(W,ry);ctx.stroke();
+  });
+}
+
+loop();
+if(!state.removeAds&&!window.Android)document.getElementById('admob-banner').style.display='flex';
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';}};
+window.onAdMobLoaded=function(){};
+</script>
+</body>
+</html>

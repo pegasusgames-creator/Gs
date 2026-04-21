@@ -1,0 +1,15 @@
+# Signing credentials — never commit these
+keystore.properties
+*.jks
+*.keystore
+
+# Build outputs
+build/
+app/build/
+.gradle/
+
+# Local config
+local.properties
+
+# Node
+node_modules/

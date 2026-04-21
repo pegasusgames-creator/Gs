@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Two Truths One Lie</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: #1a0e0a; color: #fff; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  :root { --accent: #FF5722; }
+  header { background: #2a1510; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); flex-shrink:0; }
+  header h1 { font-size: 1.2rem; color: var(--accent); }
+  .btn-remove-ads { background: var(--accent); color: #fff; border: none; border-radius: 20px; padding: 8px 16px; font-size: 0.8rem; font-weight: bold; min-height: 44px; cursor: pointer; }
+  .btn-pressed { opacity: 0.7; transform: scale(0.96); }
+  .screen { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px 16px; overflow-y:auto; }
+  .screen.hidden { display: none; }
+  h2 { font-size: 1.4rem; font-weight: bold; margin-bottom: 16px; text-align: center; }
+  .mode-toggle { display: flex; background: #2a1510; border-radius: 30px; padding: 4px; margin-bottom: 24px; width: 100%; max-width: 380px; }
+  .mode-btn { flex: 1; background: none; border: none; color: #aaa; border-radius: 26px; padding: 12px; font-size: 0.9rem; cursor: pointer; min-height: 44px; font-weight: bold; }
+  .mode-btn.active { background: var(--accent); color: #fff; }
+  /* CREATE MODE */
+  .create-section { width: 100%; max-width: 400px; }
+  .input-label { font-size: 0.8rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; margin-top: 14px; }
+  .truth-icon { color: #4CAF50; }
+  .lie-icon { color: #ef5350; }
+  .statement-input { width: 100%; background: #2a1510; border: 2px solid #3a2520; color: #fff; border-radius: 12px; padding: 14px 16px; font-size: 1rem; outline: none; resize: none; font-family: inherit; }
+  .statement-input.truth { border-color: rgba(76,175,80,0.5); }
+  .statement-input.lie { border-color: rgba(239,83,80,0.5); }
+  .big-btn { background: var(--accent); color: #fff; border: none; border-radius: 16px; padding: 18px 40px; font-size: 1.1rem; font-weight: bold; cursor: pointer; min-height: 54px; width: 100%; max-width: 400px; margin: 16px 0 8px; }
+  /* SHOW MODE */
+  .show-screen { width: 100%; max-width: 400px; }
+  .show-label { color: #888; font-size: 0.85rem; text-align: center; margin-bottom: 16px; }
+  .statement-card { background: #2a1510; border: 2px solid #3a2520; border-radius: 16px; padding: 22px 18px; margin-bottom: 12px; cursor: pointer; position: relative; }
+  .statement-number { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .statement-text { font-size: 1.1rem; font-weight: 600; color: #fff; line-height: 1.4; }
+  .statement-card.revealed-truth { border-color: #4CAF50; background: #1a2e1a; }
+  .statement-card.revealed-lie { border-color: #ef5350; background: #2e1a1a; }
+  .revealed-badge { position: absolute; top: 12px; right: 12px; border-radius: 10px; padding: 3px 10px; font-size: 0.75rem; font-weight: bold; }
+  .badge-truth { background: #4CAF50; color: #fff; }
+  .badge-lie { background: #ef5350; color: #fff; }
+  .hint-text { color: #888; font-size: 0.8rem; text-align: center; margin-bottom: 16px; }
+  .secondary-btn { background: #2a1510; color: #ccc; border: 1px solid #444; border-radius: 16px; padding: 14px 24px; font-size: 0.95rem; cursor: pointer; min-height: 50px; width: 100%; max-width: 400px; margin: 6px 0; }
+  /* RANDOM MODE */
+  .random-card { background: #2a1510; border: 2px solid var(--accent); border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 400px; margin-bottom: 16px; }
+  .random-card h3 { color: var(--accent); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+  .random-stmt { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #3a2520; }
+  .random-stmt:last-child { border-bottom: none; padding-bottom: 0; }
+  .stmt-num { background: var(--accent); color: #fff; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; flex-shrink:0; margin-top: 2px; }
+  .stmt-text { font-size: 0.95rem; line-height: 1.4; }
+  .answer-reveal { margin-top: 12px; padding: 10px 14px; border-radius: 10px; font-size: 0.85rem; display: none; }
+  .answer-reveal.show { display: block; background: #1a1510; border: 1px solid var(--accent); }
+  #banner-ad { background: #2a1510; text-align: center; padding: 8px; color: #666; font-size: 0.75rem; border-top: 1px solid #3a2520; flex-shrink:0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Two Truths & One Lie</h1>
+  <button class="btn-remove-ads" id="removeAdsBtn">Remove Ads</button>
+</header>
+
+<div class="screen" id="homeScreen">
+  <div style="font-size:2.5rem;text-align:center;margin:16px 0">✌️🤥</div>
+  <h2>Two Truths One Lie</h2>
+  <div class="mode-toggle">
+    <button class="mode-btn active" data-mode="create">Create</button>
+    <button class="mode-btn" data-mode="random">Examples</button>
+  </div>
+
+  <!-- CREATE MODE -->
+  <div class="create-section" id="createSection">
+    <div class="input-label"><span class="truth-icon">✓</span> Truth #1</div>
+    <textarea class="statement-input truth" id="truth1" rows="2" placeholder="A true statement about yourself..."></textarea>
+    <div class="input-label"><span class="truth-icon">✓</span> Truth #2</div>
+    <textarea class="statement-input truth" id="truth2" rows="2" placeholder="Another true statement..."></textarea>
+    <div class="input-label"><span class="lie-icon">✗</span> The Lie</div>
+    <textarea class="statement-input lie" id="lie1" rows="2" placeholder="A statement that is NOT true..."></textarea>
+    <button class="big-btn" id="shuffleShowBtn">Shuffle & Show</button>
+  </div>
+
+  <!-- RANDOM MODE -->
+  <div id="randomSection" style="display:none;width:100%;max-width:400px">
+    <p style="color:#aaa;text-align:center;font-size:0.9rem;margin-bottom:16px">Browse example sets for inspiration or use them in your next party!</p>
+    <div id="randomCardDisplay"></div>
+    <button class="big-btn" id="nextRandomBtn">Next Example</button>
+  </div>
+</div>
+
+<!-- SHOW SCREEN -->
+<div class="screen hidden" id="showScreen">
+  <div class="show-screen">
+    <h2>Which one is the lie?</h2>
+    <div class="hint-text">Tap a statement to reveal if it's a truth or lie</div>
+    <div id="showCards"></div>
+    <button class="big-btn" id="revealAllBtn">Reveal All</button>
+    <button class="secondary-btn" id="backToCreateBtn">← Back</button>
+  </div>
+</div>
+
+<div id="banner-ad">Advertisement</div>
+
+<script>
+const EXAMPLE_SETS = [
+  {
+    truths: ["I once accidentally called my teacher 'Mom' in front of the whole class.", "I can speak two languages fluently."],
+    lie: "I have never broken a bone in my body.",
+    reveal: "The lie is #3 — actually I broke my arm when I was 8!"
+  },
+  {
+    truths: ["I have been to more than 10 different countries.", "I learned to cook at a professional culinary school."],
+    lie: "I have met a current world leader in person.",
+    reveal: "The lie is #3 — I've never met any world leaders!"
+  },
+  {
+    truths: ["I once ate sushi for breakfast, lunch, and dinner on the same day.", "I have a scar on my knee from a bicycle accident."],
+    lie: "I have gone skydiving three times.",
+    reveal: "The lie is #3 — I've never skydived, I'm terrified of heights!"
+  },
+  {
+    truths: ["I used to be afraid of butterflies when I was little.", "I can solve a Rubik's cube in under 2 minutes."],
+    lie: "I once appeared as an extra in a Hollywood movie.",
+    reveal: "The lie is #3 — I've never been in a movie, though I wish I had!"
+  },
+  {
+    truths: ["I've read more than 100 books in a single year.", "I once lived without electricity for an entire month."],
+    lie: "I have a twin sibling I never knew about.",
+    reveal: "The lie is #3 — I'm an only child!"
+  },
+  {
+    truths: ["I have never eaten a McDonald's burger in my entire life.", "I won a regional spelling bee championship as a kid."],
+    lie: "I wrote a song that got over 1 million streams.",
+    reveal: "The lie is #3 — my music career never took off!"
+  },
+  {
+    truths: ["I have been struck by lightning (and survived).", "I can do a perfect cartwheel even now."],
+    lie: "I once swam with great white sharks in South Africa.",
+    reveal: "The lie is #3 — I've never been to South Africa!"
+  },
+  {
+    truths: ["I once stayed awake for 48 hours straight during a work deadline.", "I have a complete collection of every season of a TV show on DVD."],
+    lie: "I have been interviewed on national television.",
+    reveal: "The lie is #3 — I've never been on TV!"
+  },
+  {
+    truths: ["I cried watching a cartoon movie as an adult.", "I have memorized over 100 digits of pi."],
+    lie: "I once got lost in a foreign country for three days with no phone.",
+    reveal: "The lie is #3 — I've always had my phone with me when traveling!"
+  },
+  {
+    truths: ["I have eaten insects voluntarily as a food adventure.", "I once missed my own surprise party because I was napping."],
+    lie: "I was scouted by a professional sports team at age 16.",
+    reveal: "The lie is #3 — sports scouts definitely never came knocking for me!"
+  },
+  {
+    truths: ["I taught myself to play a musical instrument entirely from YouTube videos.", "I have a habit of talking to my houseplants."],
+    lie: "I competed in a national chess championship and came in third place.",
+    reveal: "The lie is #3 — I barely know the rules of chess!"
+  },
+  {
+    truths: ["I once fainted in a museum standing in front of a painting.", "I have worn the same pair of shoes every day for over a year."],
+    lie: "I have a pilot's license and fly small planes as a hobby.",
+    reveal: "The lie is #3 — I'm not a pilot, though it would be cool!"
+  },
+  {
+    truths: ["I have never owned a smartphone until I was 25 years old.", "I can name all the capital cities in South America."],
+    lie: "I once hiked to the base camp of Mount Everest.",
+    reveal: "The lie is #3 — I've never been to Nepal!"
+  },
+  {
+    truths: ["I once won a local hot-dog eating contest at a fair.", "My first job was cleaning swimming pools."],
+    lie: "I have a black belt in a martial art.",
+    reveal: "The lie is #3 — I've never trained in any martial art!"
+  },
+  {
+    truths: ["I can ride a unicycle (badly).", "I once accidentally sent a very personal text to my boss."],
+    lie: "I have been to space camp and trained in a zero-gravity simulator.",
+    reveal: "The lie is #3 — I wish I'd been to space camp!"
+  },
+  {
+    truths: ["I once made a viral video with over 5 million views.", "I have been in a Flash Mob."],
+    lie: "I am distantly related to a European royal family.",
+    reveal: "The lie is #3 — no royal blood in my family tree!"
+  },
+  {
+    truths: ["I lived abroad for more than 2 years.", "I've run a half-marathon."],
+    lie: "I once won $10,000 in a game show.",
+    reveal: "The lie is #3 — never been on a game show, sadly!"
+  },
+  {
+    truths: ["I have a food allergy that's quite unusual.", "I've been bitten by a dog twice in my life."],
+    lie: "I once performed stand-up comedy at an open mic night.",
+    reveal: "The lie is #3 — I'm too shy for stand-up!"
+  },
+  {
+    truths: ["I have moved homes more than 10 times in my life.", "I once accidentally started a small kitchen fire."],
+    lie: "I can bench press 200 pounds.",
+    reveal: "The lie is #3 — I'm not that strong!"
+  },
+  {
+    truths: ["I have an unusual collection that most people find strange.", "I can name every US president in order."],
+    lie: "I once appeared in a national newspaper front page photo.",
+    reveal: "The lie is #3 — never made the front page!"
+  }
+];
+
+let currentMode = 'create';
+let shuffledStatements = [];
+let lieIndex = -1;
+let currentExampleIdx = 0;
+let revealed = [];
+
+function addTouchFeedback(el) {
+  el.addEventListener('touchstart', () => el.classList.add('btn-pressed'), {passive:true});
+  el.addEventListener('touchend', () => el.classList.remove('btn-pressed'), {passive:true});
+  el.addEventListener('touchcancel', () => el.classList.remove('btn-pressed'), {passive:true});
+}
+document.querySelectorAll('button').forEach(addTouchFeedback);
+
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.dataset.mode;
+    document.getElementById('createSection').style.display = currentMode === 'create' ? 'block' : 'none';
+    document.getElementById('randomSection').style.display = currentMode === 'random' ? 'block' : 'none';
+    if (currentMode === 'random') showRandomExample();
+  });
+});
+
+document.getElementById('shuffleShowBtn').addEventListener('click', shuffleAndShow);
+document.getElementById('nextRandomBtn').addEventListener('click', () => { currentExampleIdx = (currentExampleIdx + 1) % EXAMPLE_SETS.length; showRandomExample(); });
+document.getElementById('revealAllBtn').addEventListener('click', revealAll);
+document.getElementById('backToCreateBtn').addEventListener('click', () => showScreen('homeScreen'));
+document.getElementById('removeAdsBtn').addEventListener('click', () => { if (window.Android) Android.purchaseNoAds(); });
+
+function shuffleAndShow() {
+  const t1 = document.getElementById('truth1').value.trim();
+  const t2 = document.getElementById('truth2').value.trim();
+  const l = document.getElementById('lie1').value.trim();
+  if (!t1 || !t2 || !l) { alert('Please fill in all three statements!'); return; }
+  const stmts = [{text:t1,isLie:false},{text:t2,isLie:false},{text:l,isLie:true}];
+  for (let i = stmts.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [stmts[i],stmts[j]]=[stmts[j],stmts[i]]; }
+  shuffledStatements = stmts;
+  lieIndex = stmts.findIndex(s => s.isLie);
+  revealed = [false, false, false];
+  renderShowCards();
+  showScreen('showScreen');
+}
+
+function renderShowCards() {
+  const el = document.getElementById('showCards');
+  el.innerHTML = shuffledStatements.map((s, i) => {
+    const cls = revealed[i] ? (s.isLie ? 'statement-card revealed-lie' : 'statement-card revealed-truth') : 'statement-card';
+    const badge = revealed[i] ? `<div class="revealed-badge ${s.isLie ? 'badge-lie' : 'badge-truth'}">${s.isLie ? '🤥 LIE' : '✓ TRUTH'}</div>` : '';
+    return `<div class="${cls}" onclick="toggleReveal(${i})">
+      <div class="statement-number">Statement ${i+1}</div>
+      <div class="statement-text">${s.text}</div>
+      ${badge}
+    </div>`;
+  }).join('');
+}
+
+function toggleReveal(i) {
+  revealed[i] = !revealed[i];
+  renderShowCards();
+}
+
+function revealAll() {
+  revealed = [true, true, true];
+  renderShowCards();
+}
+
+function showRandomExample() {
+  const example = EXAMPLE_SETS[currentExampleIdx % EXAMPLE_SETS.length];
+  const stmts = [{text:example.truths[0],isLie:false},{text:example.truths[1],isLie:false},{text:example.lie,isLie:true}];
+  for (let i = stmts.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [stmts[i],stmts[j]]=[stmts[j],stmts[i]]; }
+  const el = document.getElementById('randomCardDisplay');
+  el.innerHTML = `<div class="random-card">
+    <h3>Example Set ${currentExampleIdx % EXAMPLE_SETS.length + 1} of ${EXAMPLE_SETS.length}</h3>
+    ${stmts.map((s,i) => `<div class="random-stmt"><div class="stmt-num">${i+1}</div><div class="stmt-text">${s.text}</div></div>`).join('')}
+    <div class="answer-reveal" id="answerReveal${currentExampleIdx}">
+      ${example.reveal}
+    </div>
+    <button style="background:#2a1510;border:1px solid var(--accent);color:var(--accent);border-radius:10px;padding:8px 16px;font-size:0.8rem;cursor:pointer;min-height:44px;margin-top:12px;width:100%" onclick="toggleAnswer(this)">Reveal the Lie</button>
+  </div>`;
+}
+
+function toggleAnswer(btn) {
+  const reveal = btn.previousElementSibling;
+  reveal.classList.toggle('show');
+  btn.textContent = reveal.classList.contains('show') ? 'Hide Answer' : 'Reveal the Lie';
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+window.onAdMobLoaded = function() {};
+window.onPurchaseComplete = function(sku) {
+  if (sku && sku.includes('no_ads')) {
+    document.getElementById('banner-ad').style.display = 'none';
+    document.getElementById('removeAdsBtn').style.display = 'none';
+  }
+};
+if (window.Android) document.getElementById('banner-ad').style.display = 'none';
+</script>
+</body>
+</html>

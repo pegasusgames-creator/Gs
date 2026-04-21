@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>History Quiz</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#8D6E63; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+.screen { display:none; flex-direction:column; height:100%; }
+.screen.active { display:flex; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+button { cursor:pointer; border:none; border-radius:var(--radius); font-family:inherit; font-weight:600; transition:transform 0.1s,opacity 0.1s; }
+button:active, button.btn-pressed { transform:scale(0.96); opacity:0.85; }
+.btn-primary { background:var(--accent); color:#fff; padding:14px 28px; font-size:1.1rem; width:100%; }
+.btn-secondary { background:var(--card); color:var(--text); padding:12px 20px; font-size:0.95rem; width:100%; }
+#menuScreen { align-items:center; justify-content:center; gap:20px; padding:30px; }
+.menu-emoji { font-size:5rem; }
+.menu-title { font-size:2.2rem; font-weight:800; color:var(--accent); }
+.menu-sub { color:var(--muted); font-size:0.95rem; text-align:center; }
+.menu-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+#gameScreen { padding:0; }
+.game-header { background:var(--surface); padding:12px 16px; display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.game-top { display:flex; justify-content:space-between; align-items:center; }
+.progress-text { font-size:0.85rem; color:var(--muted); }
+.score-text { font-size:0.95rem; font-weight:700; color:var(--accent); }
+.timer-bar-wrap { height:6px; background:var(--card); border-radius:3px; overflow:hidden; }
+.timer-bar { height:100%; background:var(--accent); border-radius:3px; transition:width 0.1s linear; }
+.question-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; gap:12px; overflow:hidden; }
+.question-emoji { font-size:3.5rem; line-height:1; }
+.question-text { font-size:1.05rem; font-weight:600; text-align:center; line-height:1.4; }
+.answers { width:100%; max-width:480px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ans-btn { background:var(--card); color:var(--text); padding:14px 8px; font-size:0.9rem; border-radius:var(--radius); border:2px solid transparent; min-height:58px; line-height:1.3; }
+.ans-btn.correct { background:#1b5e20; border-color:#66BB6A; color:#fff; }
+.ans-btn.wrong { background:#b71c1c; border-color:#EF5350; color:#fff; }
+.ans-btn:disabled { cursor:default; }
+.feedback-bar { height:38px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0; background:var(--surface); padding:0 12px; text-align:center; }
+.feedback-bar.correct { color:#66BB6A; }
+.feedback-bar.wrong { color:#EF5350; }
+#resultScreen { align-items:center; justify-content:center; gap:18px; padding:30px; }
+.result-emoji { font-size:4rem; }
+.result-title { font-size:1.8rem; font-weight:800; }
+.result-score { font-size:3.5rem; font-weight:900; color:var(--accent); }
+.result-sub { color:var(--muted); font-size:1rem; }
+.result-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="screen active" id="menuScreen">
+    <div class="menu-emoji">📜</div>
+    <div class="menu-title">History Quiz</div>
+    <div class="menu-sub">50 questions spanning ancient to modern history</div>
+    <div class="menu-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Now</button>
+    </div>
+  </div>
+  <div class="screen" id="gameScreen">
+    <div class="game-header">
+      <div class="game-top">
+        <span class="progress-text" id="progressText">1 / 50</span>
+        <span class="score-text" id="scoreText">Score: 0</span>
+      </div>
+      <div class="timer-bar-wrap"><div class="timer-bar" id="timerBar"></div></div>
+    </div>
+    <div class="question-area">
+      <div class="question-emoji" id="qEmoji"></div>
+      <div class="question-text" id="qText"></div>
+      <div class="answers" id="answersDiv"></div>
+    </div>
+    <div class="feedback-bar" id="feedbackBar"></div>
+  </div>
+  <div class="screen" id="resultScreen">
+    <div class="result-emoji" id="resultEmoji">🏆</div>
+    <div class="result-title">Quiz Complete!</div>
+    <div class="result-score" id="resultScore">0%</div>
+    <div class="result-sub" id="resultSub"></div>
+    <div class="result-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Again</button>
+      <button class="btn-secondary" onclick="showScreen('menuScreen')">Menu</button>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+var state={useCount:0,removeAds:false,score:0,qi:0,questions:[],timer:null,timeLeft:0,answered:false};
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%5===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var ALL_QUESTIONS=[
+  {e:'🏛️',q:"In what year did World War II end?",a:["1945","1944","1946","1943"],c:0},
+  {e:'⚔️',q:"World War I began in which year?",a:["1914","1912","1916","1918"],c:0},
+  {e:'🗽',q:"The Statue of Liberty was a gift from which country to the USA?",a:["France","UK","Spain","Italy"],c:0},
+  {e:'🌍',q:"Christopher Columbus reached the Americas in which year?",a:["1492","1488","1500","1502"],c:0},
+  {e:'🏛️',q:"Who was the first President of the United States?",a:["George Washington","John Adams","Thomas Jefferson","Benjamin Franklin"],c:0},
+  {e:'🔬',q:"The invention of the printing press is credited to?",a:["Johannes Gutenberg","Leonardo da Vinci","Galileo Galilei","Nicolaus Copernicus"],c:0},
+  {e:'⚔️',q:"The Battle of Waterloo took place in which year?",a:["1815","1805","1820","1800"],c:0},
+  {e:'🏛️',q:"The fall of the Western Roman Empire is traditionally dated to?",a:["476 AD","410 AD","500 AD","395 AD"],c:0},
+  {e:'🧱',q:"The Berlin Wall fell in which year?",a:["1989","1991","1987","1985"],c:0},
+  {e:'🚀',q:"The first human walked on the Moon in which year?",a:["1969","1967","1971","1965"],c:0},
+  {e:'📜',q:"The Magna Carta was signed in which year?",a:["1215","1066","1300","1189"],c:0},
+  {e:'⚔️',q:"Who led the Mongol Empire to its greatest extent?",a:["Genghis Khan","Kublai Khan","Timur","Attila"],c:0},
+  {e:'🏛️',q:"Julius Caesar was assassinated on the Ides of March in which year?",a:["44 BC","54 BC","33 BC","23 BC"],c:0},
+  {e:'🌊',q:"The Titanic sank in which year?",a:["1912","1914","1910","1916"],c:0},
+  {e:'🏛️',q:"The ancient wonder 'The Great Pyramid of Giza' was built for which pharaoh?",a:["Khufu (Cheops)","Ramesses II","Tutankhamun","Cleopatra"],c:0},
+  {e:'🔥',q:"The Great Fire of London occurred in which year?",a:["1666","1660","1700","1642"],c:0},
+  {e:'✊',q:"The French Revolution began in which year?",a:["1789","1799","1775","1815"],c:0},
+  {e:'🌍',q:"The American Declaration of Independence was signed in?",a:["1776","1778","1774","1781"],c:0},
+  {e:'⚔️',q:"Who commanded the Allied forces at D-Day (June 6, 1944)?",a:["Dwight D. Eisenhower","Douglas MacArthur","George Patton","Bernard Montgomery"],c:0},
+  {e:'🏛️',q:"Who was the Egyptian queen famous for relationships with Julius Caesar and Mark Antony?",a:["Cleopatra VII","Nefertiti","Hatshepsut","Isis"],c:0},
+  {e:'🌍',q:"The Cold War was primarily between which two superpowers?",a:["USA & USSR","USA & China","UK & USSR","USA & Germany"],c:0},
+  {e:'🚀',q:"Who was the first human in space?",a:["Yuri Gagarin","Neil Armstrong","Alan Shepard","Buzz Aldrin"],c:0},
+  {e:'⚔️',q:"The Hundred Years' War was fought primarily between which two countries?",a:["England & France","England & Spain","France & Germany","England & Scotland"],c:0},
+  {e:'🏛️',q:"The Renaissance period began in which country?",a:["Italy","France","Germany","Spain"],c:0},
+  {e:'📜',q:"The Gutenberg Bible was printed in approximately which year?",a:["1455","1490","1500","1440"],c:0},
+  {e:'⚔️',q:"Who was the last Roman Emperor of the Western Empire?",a:["Romulus Augustulus","Diocletian","Constantine","Theodosius"],c:0},
+  {e:'🌍',q:"The Aztec empire was conquered by which Spanish conquistador?",a:["Hernán Cortés","Francisco Pizarro","Vasco de Gama","Ferdinand Magellan"],c:0},
+  {e:'🏛️',q:"Who built the Colosseum in Rome?",a:["Emperor Vespasian","Julius Caesar","Augustus","Nero"],c:0},
+  {e:'✊',q:"Nelson Mandela was imprisoned for how many years?",a:["27 years","18 years","33 years","21 years"],c:0},
+  {e:'⚔️',q:"The Battle of Hastings was fought in which year?",a:["1066","1086","1054","1099"],c:0},
+  {e:'🌍',q:"In what year did the Soviet Union collapse?",a:["1991","1989","1993","1985"],c:0},
+  {e:'✈️',q:"The Wright Brothers' first powered flight was in?",a:["1903","1900","1905","1898"],c:0},
+  {e:'🏛️',q:"Who was the first Emperor of China?",a:["Qin Shi Huang","Kublai Khan","Confucius","Han Wudi"],c:0},
+  {e:'⚔️',q:"The Crusades were a series of religious wars primarily fought over which city?",a:["Jerusalem","Constantinople","Rome","Antioch"],c:0},
+  {e:'🌍',q:"The Korean War ended with an armistice in which year?",a:["1953","1950","1955","1948"],c:0},
+  {e:'🏛️',q:"Who was the first female Prime Minister of the United Kingdom?",a:["Margaret Thatcher","Theresa May","Tony Blair","Winston Churchill"],c:0},
+  {e:'✊',q:"Martin Luther King Jr. gave his 'I Have a Dream' speech in which year?",a:["1963","1955","1968","1960"],c:0},
+  {e:'📜',q:"The Rosetta Stone helped decode which ancient writing system?",a:["Egyptian hieroglyphics","Cuneiform","Linear B","Mayan glyphs"],c:0},
+  {e:'⚔️',q:"In which war was the Battle of Gettysburg fought?",a:["American Civil War","War of 1812","Mexican-American War","Revolutionary War"],c:0},
+  {e:'🌍',q:"India gained independence from Britain in which year?",a:["1947","1945","1950","1942"],c:0},
+  {e:'🏛️',q:"The Parthenon in Athens was built as a temple to which goddess?",a:["Athena","Aphrodite","Artemis","Hera"],c:0},
+  {e:'⚔️',q:"Napoleon Bonaparte was exiled to which island after Waterloo?",a:["Saint Helena","Elba","Corsica","Sardinia"],c:0},
+  {e:'✊',q:"The women's suffrage movement in the UK achieved equal voting rights in which year?",a:["1928","1918","1920","1945"],c:0},
+  {e:'🌍',q:"The Vietnam War ended with the fall of Saigon in which year?",a:["1975","1973","1968","1980"],c:0},
+  {e:'🏛️',q:"The Silk Road was a trade route connecting which two regions?",a:["China & Mediterranean Europe","India & Africa","Arabia & Rome","China & India"],c:0},
+  {e:'⚔️',q:"Who was the British Prime Minister during most of World War II?",a:["Winston Churchill","Neville Chamberlain","Clement Attlee","Anthony Eden"],c:0},
+  {e:'🚀',q:"The Cuban Missile Crisis occurred in which year?",a:["1962","1960","1964","1961"],c:0},
+  {e:'📜',q:"The Code of Hammurabi was one of the earliest known legal codes from which civilization?",a:["Babylonian","Egyptian","Sumerian","Assyrian"],c:0},
+  {e:'🌍',q:"The Panama Canal was officially opened in which year?",a:["1914","1906","1920","1910"],c:0},
+  {e:'🏛️',q:"The Black Death (bubonic plague) devastated Europe in which century?",a:["14th century (1300s)","13th century (1200s)","15th century (1400s)","12th century (1100s)"],c:0},
+];
+
+function shuffle(arr){for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
+function startGame(){state.score=0;state.qi=0;state.useCount=0;state.questions=shuffle(ALL_QUESTIONS.slice()).slice(0,50);showScreen('gameScreen');loadQuestion();}
+function loadQuestion(){
+  if(state.qi>=state.questions.length){endGame();return;}
+  var q=state.questions[state.qi];
+  document.getElementById('progressText').textContent=(state.qi+1)+' / '+state.questions.length;
+  document.getElementById('scoreText').textContent='Score: '+state.score;
+  document.getElementById('qEmoji').textContent=q.e;
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('feedbackBar').textContent='';
+  document.getElementById('feedbackBar').className='feedback-bar';
+  state.answered=false;
+  var correctLabel=q.a[q.c];
+  var indices=[0,1,2,3];shuffle(indices);
+  var div=document.getElementById('answersDiv');div.innerHTML='';
+  indices.forEach(function(idx){var btn=document.createElement('button');btn.className='ans-btn';btn.textContent=q.a[idx];btn.onclick=function(){answer(btn,q.a[idx]===correctLabel,correctLabel);};div.appendChild(btn);});
+  startTimer();
+}
+var TIMER_DURATION=15;
+function startTimer(){clearInterval(state.timer);state.timeLeft=TIMER_DURATION;updateTimerBar();state.timer=setInterval(function(){state.timeLeft-=0.1;updateTimerBar();if(state.timeLeft<=0){clearInterval(state.timer);timeUp();}},100);}
+function updateTimerBar(){document.getElementById('timerBar').style.width=Math.max(0,state.timeLeft/TIMER_DURATION*100)+'%';}
+function timeUp(){if(state.answered)return;state.answered=true;var q=state.questions[state.qi];var correctLabel=q.a[q.c];document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});showFeedback(false,"Time up! Correct: "+correctLabel);setTimeout(nextQ,1600);}
+function answer(btn,isCorrect,correctLabel){if(state.answered)return;state.answered=true;clearInterval(state.timer);document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});if(isCorrect){state.score++;btn.classList.add('correct');showFeedback(true,'Correct! 🎉');}else{btn.classList.add('wrong');showFeedback(false,'Wrong! Correct: '+correctLabel);}setTimeout(nextQ,1600);}
+function showFeedback(ok,msg){var bar=document.getElementById('feedbackBar');bar.textContent=msg;bar.className='feedback-bar '+(ok?'correct':'wrong');}
+function nextQ(){state.qi++;if(state.qi%5===0)maybeInterstitial();loadQuestion();}
+function endGame(){clearInterval(state.timer);var pct=Math.round(state.score/state.questions.length*100);document.getElementById('resultScore').textContent=pct+'%';document.getElementById('resultSub').textContent=state.score+' out of '+state.questions.length+' correct';var emojis=['😢','😕','🙂','😊','🏆'];document.getElementById('resultEmoji').textContent=emojis[Math.min(4,Math.floor(pct/20))];showScreen('resultScreen');}
+</script>
+</body>
+</html>

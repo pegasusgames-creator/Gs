@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Boggle Game</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: #0d1b2a; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; user-select: none; }
+:root { --accent: #42A5F5; --light: #90CAF9; }
+header { background: #1565C0; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); }
+header h1 { font-size: 1.3rem; color: #fff; letter-spacing: 2px; }
+.info-row { display: flex; justify-content: space-between; padding: 10px 16px; background: #111d2e; }
+.info-box { text-align: center; }
+.info-label { font-size: 0.7rem; color: #aaa; text-transform: uppercase; }
+.info-val { font-size: 1.3rem; font-weight: 700; color: var(--light); }
+.grid-wrap { padding: 16px; display: flex; justify-content: center; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: 100%; max-width: 320px; }
+.cell { aspect-ratio: 1; background: #1e3a5f; border: 2px solid #2a4a7f; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; color: #fff; cursor: pointer; transition: all 0.1s; text-transform: uppercase; }
+.cell.selected { background: var(--accent); border-color: #fff; color: #fff; transform: scale(0.95); }
+.cell.path { background: #1565C0; border-color: var(--accent); }
+.current-word { text-align: center; font-size: 1.6rem; letter-spacing: 6px; color: #fff; min-height: 44px; padding: 6px; }
+.words-found { padding: 0 16px; flex: 1; overflow-y: auto; }
+.words-found h3 { font-size: 0.85rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.word-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.word-tag { background: #1e3a5f; border: 1px solid var(--accent); border-radius: 16px; padding: 4px 12px; font-size: 0.85rem; color: var(--light); }
+.word-tag.bonus { border-color: gold; color: gold; }
+.btn-row { display: flex; gap: 8px; padding: 12px 16px; }
+.btn { flex: 1; background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 13px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+.btn.btn-pressed { opacity: 0.6; transform: scale(0.96); }
+.btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--light); }
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 100; }
+.overlay.show { display: flex; }
+.modal { background: #1e3a5f; border: 2px solid var(--accent); border-radius: 16px; padding: 24px; max-width: 320px; width: 90%; text-align: center; }
+.modal h2 { color: var(--light); font-size: 1.4rem; margin-bottom: 12px; }
+.modal .score-big { font-size: 3rem; font-weight: 700; color: var(--accent); }
+.sol-words { max-height: 200px; overflow-y: auto; display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+.banner { background: #111; border: 1px dashed #444; color: #555; text-align: center; padding: 10px; font-size: 0.75rem; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>BOGGLE</h1>
+  <span id="timer-display" style="font-size:1.5rem;font-weight:700;color:var(--light)">3:00</span>
+</header>
+<div class="info-row">
+  <div class="info-box"><div class="info-label">Score</div><div class="info-val" id="score">0</div></div>
+  <div class="info-box"><div class="info-label">Words</div><div class="info-val" id="word-count">0</div></div>
+  <div class="info-box"><div class="info-label">Best</div><div class="info-val" id="best">0</div></div>
+</div>
+<div class="grid-wrap"><div class="grid" id="grid"></div></div>
+<div class="current-word" id="current-word"></div>
+<div class="words-found">
+  <h3>Found Words</h3>
+  <div class="word-list" id="word-list"></div>
+</div>
+<div class="btn-row">
+  <button class="btn btn-outline" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="clearSelection()">Clear</button>
+  <button class="btn" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="submitWord()">Submit</button>
+  <button class="btn btn-outline" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="startGame()">New</button>
+</div>
+
+<div class="overlay" id="end-overlay">
+  <div class="modal">
+    <h2>Time's Up!</h2>
+    <div class="score-big" id="final-score">0</div>
+    <p style="color:#aaa;margin:8px 0">points from <span id="final-words">0</span> words</p>
+    <div class="sol-words" id="solution-words"></div>
+    <button class="btn" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="closeOverlay();startGame()">Play Again</button>
+  </div>
+</div>
+
+<div class="banner" id="banner-ad">Advertisement</div>
+
+<script>
+const DICT = new Set("ace,act,add,age,ago,aid,aim,air,all,and,ant,ape,apt,arc,are,ark,arm,art,ash,ask,ate,awe,axe,aye,bad,bag,ban,bar,bat,bay,bed,beg,bet,bid,big,bit,bog,bow,box,boy,bud,bug,bun,bus,but,cab,can,cap,car,cat,cob,cod,cog,cop,cot,cow,cry,cub,cup,cut,dad,dam,day,den,dew,did,die,dig,dim,dip,dog,dot,dry,dub,dud,dug,dye,ear,eat,egg,ego,elf,elm,end,era,eve,ewe,eye,fad,fan,far,fat,fax,fed,few,fib,fig,fit,fix,fly,fog,for,fox,fry,fun,fur,gag,gap,gas,gel,gem,get,gig,gin,gnu,god,got,gun,gut,guy,gym,had,hag,ham,has,hat,hay,hen,her,hex,hid,him,hip,his,hit,hog,hop,hot,how,hub,hug,hum,hut,ice,icy,ill,imp,ink,inn,ion,ire,ivy,jab,jag,jam,jar,jaw,jet,job,jog,joy,jug,keg,key,kid,kin,kit,lab,lad,lag,lap,law,lax,lay,leg,let,lid,lip,lit,log,lot,low,lug,mad,man,map,mar,mat,maw,may,men,met,mew,mid,mob,mop,mud,mug,nab,nag,nap,net,new,nip,nit,nod,nor,not,now,nun,nut,oak,oar,odd,ode,off,oil,old,opt,orb,ore,owe,owl,own,pal,pan,par,pat,paw,pay,pea,peg,pen,pep,pet,pie,pig,pin,pit,pod,pop,pot,pro,pub,pun,pup,put,rag,ram,ran,raw,ray,red,ref,rep,rib,rid,rim,rip,rob,rot,row,rub,rug,rum,run,rut,sag,sap,sat,saw,say,sea,set,sew,shy,sin,sip,sir,sit,six,ski,sky,sly,sob,sod,son,sow,soy,spa,spy,sub,sue,sum,sun,tab,tag,tan,tap,tar,tax,tea,ten,the,thy,tie,tin,tip,top,toy,try,tug,two,urn,use,van,vat,via,vie,vim,vow,wad,war,was,web,wed,wig,win,wit,woe,won,woo,wry,yam,yap,yew,yet,yew,zoo,able,acid,aged,also,arch,area,army,arts,aunt,auto,baby,back,bake,bald,band,bank,bare,barn,bars,base,bath,bead,beam,bean,bear,beat,beer,belt,bent,bike,bill,bins,bird,bite,black,blow,blue,body,bold,bolt,bone,book,boom,boot,bore,boss,both,bout,bran,brow,buck,bulk,bull,bunk,buzz,cage,cake,calm,camp,cane,cape,card,care,cart,case,cave,cent,chef,chin,chip,chop,clam,clap,clay,clip,club,coal,coat,code,coil,coin,cola,coma,comb,cone,cope,cord,core,cork,corn,cows,crab,crew,crop,crow,cube,curl,cute,damp,dare,dart,dash,dead,deal,dean,debt,deck,deed,deny,desk,dial,dice,dime,dips,dirt,disk,dive,dogs,doll,dome,dots,dove,drag,draw,drop,drum,duck,dull,dump,dusk,dust,duty,earn,ease,east,edge,emit,envy,epic,face,fail,fall,fang,fare,fast,fate,fawn,fear,feat,feel,feet,fell,fern,fill,find,fire,fish,fist,flag,flaw,flea,flee,flew,flex,flip,foam,fold,fond,font,ford,fork,form,fort,foul,four,frog,fuel,fume,fuse,gale,gash,gate,gear,germ,gist,glee,glob,glue,goal,goes,gold,gore,gown,grab,gram,grew,grin,grip,grit,grow,gust,guts,hack,hail,half,hall,hand,hard,harm,hash,haze,head,hear,heap,heat,heel,helm,hemp,herb,herd,high,hike,hill,hire,hive,hoax,hold,hole,home,hope,hops,horn,hose,host,hour,howl,huff,hull,hump,huge,hung,hunk,hurl,hymn,idle,idea,into,iron,jail,jerk,jest,jolt,jump,just,keen,kill,kilt,kind,knew,know,lace,lame,lamp,land,lane,lark,lash,last,late,lava,lawn,laze,leaf,lean,left,legs,lend,lens,less,levy,lick,life,limp,line,lint,lion,lips,list,live,load,long,look,lore,lost,loud,lull,lump,lure,lurk,lust,made,main,make,mane,mark,mars,mass,mask,mast,mean,meet,melt,mesh,mild,milk,mill,mind,mine,miss,mist,moat,mock,mold,mole,monk,moon,more,moss,moth,move,much,muck,mull,murk,muse,musk,mute,myth,nail,name,nape,neck,need,nest,news,nick,nine,node,norm,noun,nude,numb,oaks,oath,obey,omen,once,open,oven,owed,pace,pack,pact,pain,palm,pang,past,path,pave,peak,peal,peat,peck,peel,peep,peer,pest,pets,pier,pike,pile,pill,pine,pink,pint,pipe,pity,plan,play,plea,plop,plow,ploy,plug,plum,plot,plus,poem,poet,pole,poll,pond,pore,port,pose,post,pout,prep,prey,prim,prod,prop,prow,puck,puff,pump,pure,push,pull,pyre,race,rage,rain,ramp,rank,rant,rash,rasp,rate,rave,rays,raze,read,real,reed,reef,reel,rely,rest,rice,rick,ride,rife,rift,rime,rind,ring,rink,riot,ripe,rise,rite,road,roam,roar,robe,rock,rode,rods,role,roll,roof,room,root,rope,rose,rout,rove,ruby,rude,ruin,rule,ruse,rust,safe,sage,said,salt,same,sane,sank,save,scam,scar,seam,seep,self,sell,send,sewn,shed,shin,ship,show,side,sigh,sign,silk,sill,silo,silt,sing,sink,sire,size,skin,slab,slap,slat,slay,sled,slim,slip,slit,slop,slot,slug,slum,slur,slow,smug,snap,snob,snot,snub,soak,soar,sobs,sock,soda,soft,soil,sole,soma,some,song,soon,sore,sort,soul,sown,span,spar,spec,spew,spin,spit,spot,star,step,stew,stir,stop,stub,stud,stun,suck,suit,sulk,sump,surf,swap,swat,sway,swim,tack,tail,take,talk,tall,tame,tang,tarp,task,taut,teal,teem,teen,tell,tend,tent,test,toad,toil,tomb,tone,tool,tops,tore,tort,toss,tour,town,trap,tray,trek,trim,trio,trip,trod,trot,troy,tuba,tuft,turf,turn,twig,twin,type,ugly,undo,unit,upon,vain,vale,vane,veer,veil,vend,verb,vest,veto,vial,vice,vine,vise,void,vole,volt,vote,waif,wait,wake,walk,wane,ward,ware,warm,warn,wary,wasp,wash,wave,weal,wear,weld,welt,well,went,west,wick,wide,will,wilt,wind,wine,wing,wish,wisp,wood,word,work,worn,wrap,wren,writ,yard,year,yore,your,zeal,zinc,zero,zone,zoom,about,again,ahead,aimed,alarm,alert,alive,allow,alone,along,angel,anger,angle,arose,aside,atlas,audio,avoid,award,aware,awful,beach,began,bench,birth,blank,blast,blaze,blend,bless,blink,block,blood,bloom,blown,blunt,board,bonus,boost,bound,brace,brand,brave,bread,broke,brown,brush,build,built,buyer,candy,cargo,catch,cedar,chair,chalk,chaos,charm,cheap,check,cheer,chess,chest,chief,china,choir,chord,civic,civil,claim,clash,clean,clear,clerk,click,cliff,climb,clock,close,cloud,coach,coast,comet,could,count,court,cover,craft,crane,crash,crazy,cream,creek,creep,crest,crime,crisp,cross,crowd,cruel,crush,crust,dance,death,debut,decor,delay,depth,dirty,dizzy,donor,dough,dozen,draft,drama,drawn,dread,dream,dress,dried,drill,drink,drive,drove,drown,eagle,eight,elect,elite,enemy,enjoy,enter,equal,erupt,event,every,exact,exile,exist,extra,fable,faith,falls,fancy,fatal,feast,fence,fever,fifth,fight,first,fixed,flame,flare,flash,flask,fleet,flesh,float,flood,flour,fluid,flute,folks,freed,fresh,front,froze,fruit,fully,funds,funky,giant,given,gland,glare,gloss,glove,grace,grade,grasp,graze,grief,grind,groan,gross,grove,growl,guile,gulch".split(','));
+
+const FREQ = 'AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTTTTUUUUVVWWXYYZ';
+let grid = [], selected = [], path = [], foundWords = new Set(), score = 0, timerSec = 180, timerInt = null, gameActive = false;
+let best = parseInt(localStorage.getItem('boggle_best') || '0');
+document.getElementById('best').textContent = best;
+
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function playBeep(freq, dur, type='sine') {
+  if (!audioCtx) { try { audioCtx = new AudioCtx(); } catch(e) { return; } }
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.type = type; osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  osc.start(); osc.stop(audioCtx.currentTime + dur);
+}
+
+function startGame() {
+  clearInterval(timerInt);
+  grid = [];
+  for (let i = 0; i < 16; i++) grid.push(FREQ[Math.floor(Math.random() * FREQ.length)]);
+  selected = []; path = []; foundWords = new Set(); score = 0; timerSec = 180; gameActive = true;
+  render();
+  updateInfo();
+  document.getElementById('word-list').innerHTML = '';
+  document.getElementById('current-word').textContent = '';
+  timerInt = setInterval(tick, 1000);
+  document.getElementById('end-overlay').classList.remove('show');
+}
+
+function tick() {
+  timerSec--;
+  const m = Math.floor(timerSec / 60), s = timerSec % 60;
+  document.getElementById('timer-display').textContent = m + ':' + String(s).padStart(2, '0');
+  if (timerSec <= 0) {
+    clearInterval(timerInt);
+    gameActive = false;
+    if (score > best) { best = score; localStorage.setItem('boggle_best', best); document.getElementById('best').textContent = best; }
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('final-words').textContent = foundWords.size;
+    // Find solutions
+    const solutions = findSolutions();
+    const solDiv = document.getElementById('solution-words');
+    solDiv.innerHTML = '';
+    solutions.slice(0, 40).forEach(w => {
+      const t = document.createElement('div');
+      t.className = 'word-tag' + (w.length >= 6 ? ' bonus' : '');
+      t.textContent = w.toUpperCase();
+      solDiv.appendChild(t);
+    });
+    document.getElementById('end-overlay').classList.add('show');
+  }
+}
+
+function render() {
+  const g = document.getElementById('grid');
+  g.innerHTML = '';
+  grid.forEach((letter, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'cell' + (selected.includes(i) ? ' selected' : (path.includes(i) ? ' path' : ''));
+    cell.textContent = letter;
+    cell.dataset.i = i;
+    cell.addEventListener('touchstart', e => { e.preventDefault(); selectCell(i); });
+    cell.addEventListener('click', () => selectCell(i));
+    g.appendChild(cell);
+  });
+}
+
+function isAdjacent(a, b) {
+  const ar = Math.floor(a / 4), ac = a % 4, br = Math.floor(b / 4), bc = b % 4;
+  return Math.abs(ar - br) <= 1 && Math.abs(ac - bc) <= 1 && a !== b;
+}
+
+function selectCell(i) {
+  if (!gameActive) return;
+  if (selected.length > 0 && !isAdjacent(selected[selected.length - 1], i)) return;
+  if (selected.includes(i)) return;
+  selected.push(i);
+  document.getElementById('current-word').textContent = selected.map(idx => grid[idx]).join('');
+  render();
+  playBeep(400 + selected.length * 80, 0.08);
+}
+
+function clearSelection() {
+  path = []; selected = [];
+  document.getElementById('current-word').textContent = '';
+  render();
+}
+
+function submitWord() {
+  if (!gameActive || selected.length < 3) return;
+  const word = selected.map(i => grid[i]).join('').toLowerCase();
+  const msg = document.getElementById('current-word');
+  if (foundWords.has(word)) {
+    msg.textContent = ''; msg.style.color = '#aaa';
+    playBeep(200, 0.15, 'sawtooth');
+    setTimeout(() => { msg.textContent = ''; msg.style.color = '#fff'; }, 500);
+  } else if (DICT.has(word)) {
+    foundWords.add(word);
+    const pts = word.length <= 3 ? 1 : word.length === 4 ? 2 : word.length === 5 ? 4 : word.length === 6 ? 8 : word.length * 3;
+    score += pts;
+    updateInfo();
+    playBeep(600, 0.15);
+    const tag = document.createElement('div');
+    tag.className = 'word-tag' + (word.length >= 6 ? ' bonus' : '');
+    tag.textContent = word.toUpperCase() + ' +' + pts;
+    document.getElementById('word-list').prepend(tag);
+  } else {
+    playBeep(200, 0.15, 'sawtooth');
+  }
+  path = [...selected]; selected = [];
+  document.getElementById('current-word').textContent = '';
+  render();
+}
+
+function updateInfo() {
+  document.getElementById('score').textContent = score;
+  document.getElementById('word-count').textContent = foundWords.size;
+}
+
+function findSolutions() {
+  const results = [];
+  function dfs(path, visited) {
+    const word = path.map(i => grid[i]).join('').toLowerCase();
+    if (word.length >= 3 && DICT.has(word)) results.push(word);
+    if (path.length >= 8) return;
+    const last = path[path.length - 1];
+    for (let i = 0; i < 16; i++) {
+      if (!visited[i] && isAdjacent(last, i)) {
+        visited[i] = true;
+        path.push(i);
+        dfs(path, visited);
+        path.pop();
+        visited[i] = false;
+      }
+    }
+  }
+  for (let i = 0; i < 16; i++) {
+    const v = new Array(16).fill(false); v[i] = true;
+    dfs([i], v);
+  }
+  return [...new Set(results)].sort((a, b) => b.length - a.length);
+}
+
+function closeOverlay() {
+  document.getElementById('end-overlay').classList.remove('show');
+}
+
+startGame();
+window.onPurchaseComplete = function(sku) { console.log('Purchase:', sku); };
+window.onAdMobLoaded = function() { document.getElementById('banner-ad').style.display = 'none'; };
+</script>
+</body>
+</html>

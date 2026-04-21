@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tap Color</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html,body { height:100%; background:#0f0a00; overflow:hidden; font-family:'Segoe UI',system-ui,sans-serif; color:#fff; }
+#app { display:flex; flex-direction:column; height:100%; }
+#hud { display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:rgba(0,0,0,0.5); flex-shrink:0; }
+.hv { font-size:1.3rem; font-weight:900; color:#FF9800; }
+.hl { font-size:0.6rem; text-transform:uppercase; letter-spacing:1px; color:#777; }
+#timer-bar-wrap { height:8px; background:#222; flex-shrink:0; }
+#timer-bar { height:8px; background:#FF9800; transition:width 0.1s linear; width:100%; }
+#prompt-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:20px; }
+#prompt-text { font-size:2.2rem; font-weight:900; letter-spacing:2px; text-align:center; }
+#question-type { font-size:0.85rem; color:#aaa; }
+#feedback { font-size:1.3rem; font-weight:800; min-height:32px; }
+#circles { display:grid; grid-template-columns:1fr 1fr; gap:16px; padding:16px; flex-shrink:0; }
+.circle-btn {
+  height:80px; border:none; border-radius:20px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1rem; font-weight:900; letter-spacing:1px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.4);
+  color:#fff; text-shadow:0 1px 3px rgba(0,0,0,0.6);
+}
+.circle-btn:active { transform:scale(0.94); }
+#overlay { position:absolute; inset:0; background:rgba(0,0,0,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:20; gap:14px; }
+#overlay h2 { font-size:2rem; font-weight:900; color:#FF9800; }
+#overlay .sub { color:#aaa; font-size:0.9rem; text-align:center; max-width:280px; }
+#overlay .big { font-size:1.2rem; font-weight:800; text-align:center; line-height:1.6; }
+.mode-row { display:flex; gap:10px; }
+.mode-btn { background:#1a1000; border:2px solid #FF9800; border-radius:20px; color:#fff; font-size:0.9rem; font-weight:700; padding:8px 18px; cursor:pointer; }
+.mode-btn.active { background:#3a2000; }
+#btn-play { background:#FF9800; border:none; border-radius:30px; color:#fff; font-size:1.2rem; font-weight:800; padding:14px 48px; cursor:pointer; }
+#admob-banner { height:50px; background:#111; display:none; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="hud">
+    <div><div class="hl">Score</div><div class="hv" id="score-disp">0</div></div>
+    <div style="text-align:center"><div class="hl">Time</div><div class="hv" id="time-disp">60</div></div>
+    <div style="text-align:right"><div class="hl">Best</div><div class="hv" id="best-disp">0</div></div>
+  </div>
+  <div id="timer-bar-wrap"><div id="timer-bar"></div></div>
+  <div id="prompt-area">
+    <div id="question-type">Tap the circle matching the color name</div>
+    <div id="prompt-text">RED</div>
+    <div id="feedback"></div>
+  </div>
+  <div id="circles">
+    <button class="circle-btn" id="c0"></button>
+    <button class="circle-btn" id="c1"></button>
+    <button class="circle-btn" id="c2"></button>
+    <button class="circle-btn" id="c3"></button>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<div id="overlay">
+  <h2>Tap Color</h2>
+  <div class="sub">A color name appears. Tap the matching colored circle!</div>
+  <div class="mode-row">
+    <button class="mode-btn active" id="mode-color">Tap Color</button>
+    <button class="mode-btn" id="mode-name">Tap Name</button>
+  </div>
+  <div class="big" id="final-msg"></div>
+  <button id="btn-play">Start!</button>
+</div>
+<script>
+'use strict';
+var COLORS=[
+  {name:'RED',hex:'#e74c3c'},
+  {name:'BLUE',hex:'#3498db'},
+  {name:'GREEN',hex:'#2ecc71'},
+  {name:'YELLOW',hex:'#f1c40f'},
+  {name:'PURPLE',hex:'#9b59b6'},
+  {name:'ORANGE',hex:'#e67e22'}
+];
+var DURATION=60;
+var best=parseInt(localStorage.getItem('tc_best')||'0');
+document.getElementById('best-disp').textContent=best;
+
+var state={running:false,removeAds:false,score:0,timeLeft:DURATION,timer:null,
+  mode:'color',correct:null,options:[]};
+
+function shuffle(arr){for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
+
+function nextQuestion(){
+  // Pick correct color
+  state.correct=COLORS[Math.floor(Math.random()*COLORS.length)];
+  // Pick 3 other distractors
+  var others=COLORS.filter(function(c){return c.name!==state.correct.name;});
+  shuffle(others);
+  state.options=shuffle([state.correct,others[0],others[1],others[2]]);
+
+  var prompt=document.getElementById('prompt-text');
+  var qtEl=document.getElementById('question-type');
+  if(state.mode==='color'){
+    prompt.textContent=state.correct.name;
+    prompt.style.color='#fff';
+    qtEl.textContent='Tap the CIRCLE that matches this color name';
+    state.options.forEach(function(c,i){
+      var btn=document.getElementById('c'+i);
+      btn.style.background=c.hex;
+      btn.textContent='';
+    });
+  } else {
+    // Show the color as a colored box, tap the name
+    prompt.textContent='■';
+    prompt.style.color=state.correct.hex;
+    prompt.style.fontSize='4rem';
+    qtEl.textContent='Tap the NAME of this color';
+    state.options.forEach(function(c,i){
+      var btn=document.getElementById('c'+i);
+      btn.style.background='#222';
+      btn.textContent=c.name;
+      btn.style.color=c.hex;
+    });
+  }
+}
+
+function handleAnswer(idx){
+  if(!state.running)return;
+  var chosen=state.options[idx];
+  var fb=document.getElementById('feedback');
+  if(chosen.name===state.correct.name){
+    state.score++;
+    fb.textContent='✓ Correct!';fb.style.color='#2ecc71';
+  } else {
+    state.score=Math.max(0,state.score-1);
+    fb.textContent='✗ Wrong! It was '+state.correct.name;fb.style.color='#e74c3c';
+  }
+  document.getElementById('score-disp').textContent=state.score;
+  nextQuestion();
+}
+
+for(var ii=0;ii<4;ii++){
+  (function(i){
+    var btn=document.getElementById('c'+i);
+    btn.addEventListener('touchstart',function(e){e.preventDefault();handleAnswer(i);},{passive:false});
+    btn.addEventListener('mousedown',function(){handleAnswer(i);});
+  })(ii);
+}
+
+function startGame(){
+  state.score=0;state.timeLeft=DURATION;
+  document.getElementById('score-disp').textContent='0';
+  document.getElementById('timer-bar').style.width='100%';
+  document.getElementById('feedback').textContent='';
+  document.getElementById('overlay').style.display='none';
+  state.running=true;
+  nextQuestion();
+  if(state.timer)clearInterval(state.timer);
+  state.timer=setInterval(function(){
+    state.timeLeft--;
+    document.getElementById('time-disp').textContent=state.timeLeft;
+    document.getElementById('timer-bar').style.width=(state.timeLeft/DURATION*100)+'%';
+    if(state.timeLeft<=0){clearInterval(state.timer);endGame();}
+  },1000);
+}
+document.getElementById('btn-play').addEventListener('click',startGame);
+
+document.getElementById('mode-color').addEventListener('click',function(){
+  state.mode='color';this.classList.add('active');document.getElementById('mode-name').classList.remove('active');
+});
+document.getElementById('mode-name').addEventListener('click',function(){
+  state.mode='name';this.classList.add('active');document.getElementById('mode-color').classList.remove('active');
+});
+
+function endGame(){
+  state.running=false;
+  if(state.score>best){best=state.score;localStorage.setItem('tc_best',best);document.getElementById('best-disp').textContent=best;}
+  document.getElementById('final-msg').textContent='Score: '+state.score+'\nBest: '+best;
+  document.getElementById('btn-play').textContent='Play Again';
+  document.getElementById('overlay').style.display='flex';
+  if(!state.removeAds&&window.Android)Android.showInterstitial();
+}
+
+if(!state.removeAds&&!window.Android)document.getElementById('admob-banner').style.display='flex';
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';}};
+window.onAdMobLoaded=function(){};
+</script>
+</body>
+</html>

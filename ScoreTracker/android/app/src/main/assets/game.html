@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Score Tracker</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#AB47BC; --accent2:#6A1B9A; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; }
+header h1 span { color:var(--accent); }
+#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+.step-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+.step-btn { min-height:36px; min-width:44px; background:var(--card); border:2px solid transparent; color:var(--text); font-size:0.85rem; font-weight:700; border-radius:8px; cursor:pointer; padding:0 10px; }
+.step-btn.active { border-color:var(--accent); color:var(--accent); }
+.step-btn.btn-pressed { opacity:0.7; }
+.custom-step-wrap { display:none; }
+.custom-step-wrap.show { display:flex; gap:8px; align-items:center; }
+input[type=number],input[type=text] { background:var(--card); border:none; color:var(--text); font-size:0.9rem; padding:8px 12px; border-radius:8px; outline:none; }
+input:focus { box-shadow:0 0 0 2px var(--accent); }
+.player-row { display:flex; align-items:center; gap:10px; background:var(--card); border-radius:12px; padding:10px; margin-bottom:8px; }
+.player-name-inp { flex:1; font-size:0.95rem; background:transparent; border:none; color:var(--text); min-width:0; }
+.player-name-inp:focus { outline:none; border-bottom:2px solid var(--accent); }
+.player-score-display { font-size:1.6rem; font-weight:700; color:var(--accent); min-width:60px; text-align:center; }
+.score-btns { display:flex; gap:6px; }
+.score-btn { min-width:44px; min-height:44px; border:none; border-radius:8px; font-size:1.2rem; font-weight:700; cursor:pointer; }
+.score-btn.plus { background:#1a3a1a; color:#4CAF50; }
+.score-btn.minus { background:#3a1a1a; color:#F44336; }
+.score-btn.btn-pressed { opacity:0.65; }
+.del-player-btn { min-width:32px; min-height:32px; background:transparent; border:none; color:#c44; font-size:1rem; cursor:pointer; }
+.del-player-btn.btn-pressed { opacity:0.6; }
+.add-player-row { display:flex; gap:8px; }
+#btn-add-player { flex:1; min-height:44px; background:var(--accent); border:none; color:#fff; font-size:0.9rem; font-weight:700; border-radius:8px; cursor:pointer; }
+#btn-add-player.btn-pressed { opacity:0.8; }
+#btn-reset-all { min-height:44px; background:var(--card); border:none; color:var(--muted); font-size:0.85rem; border-radius:8px; cursor:pointer; padding:0 14px; }
+#btn-reset-all.btn-pressed { opacity:0.7; }
+.history-item { display:flex; justify-content:space-between; font-size:0.82rem; padding:6px 0; border-bottom:1px solid #1a1a3a; }
+.history-item:last-child { border-bottom:none; }
+.hist-name { color:var(--muted); }
+.hist-change { font-weight:700; }
+.hist-pos { color:#4CAF50; }
+.hist-neg { color:#F44336; }
+.empty-hist { color:var(--muted); font-size:0.82rem; text-align:center; padding:10px; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Score <span>Tracker</span></h1>
+    <button id="btn-remove-ads">Remove Ads</button>
+  </header>
+  <div id="scroll">
+    <div class="card">
+      <div class="card-title">Score Step</div>
+      <div class="step-row" id="step-row">
+        <button class="step-btn active" data-step="1">1</button>
+        <button class="step-btn" data-step="5">5</button>
+        <button class="step-btn" data-step="10">10</button>
+        <button class="step-btn" data-step="custom">Custom</button>
+      </div>
+      <div class="custom-step-wrap" id="custom-step-wrap">
+        <input type="number" id="custom-step-val" placeholder="Step" min="1" step="1" style="width:80px;">
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Players</div>
+      <div id="players-list"></div>
+      <div class="add-player-row" style="margin-top:8px;">
+        <button id="btn-add-player">+ Add Player</button>
+        <button id="btn-reset-all">Reset All</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Recent Changes (last 20)</div>
+      <div id="history-list"><div class="empty-hist">No score changes yet.</div></div>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+
+var state = { useCount:0, removeAds:false, step:1 };
+var players = [];
+var history = [];
+var nextId = 0;
+
+function getStep(){
+  if(state.step==='custom'){
+    var v=parseInt(document.getElementById('custom-step-val').value)||1;
+    return Math.max(1,v);
+  }
+  return state.step;
+}
+
+function addPlayer(){
+  if(players.length>=6) return;
+  players.push({id:nextId++, name:'Player '+(players.length+1), score:0});
+  render();
+}
+
+function removePlayer(id){
+  players=players.filter(function(p){ return p.id!==id; });
+  render();
+}
+
+function changeScore(id, delta){
+  var p=players.find(function(p){ return p.id===id; });
+  if(!p) return;
+  p.score+=delta;
+  history.unshift({name:p.name, change:delta, score:p.score});
+  if(history.length>20) history.pop();
+  renderHistory();
+  renderPlayers();
+  maybeInterstitial();
+}
+
+function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function renderPlayers(){
+  var list=document.getElementById('players-list');
+  list.innerHTML='';
+  players.forEach(function(p){
+    var row=document.createElement('div');
+    row.className='player-row';
+    row.innerHTML='<input type="text" class="player-name-inp" value="'+escH(p.name)+'" data-id="'+p.id+'" maxlength="20">'+
+      '<button class="score-btn minus" data-id="'+p.id+'" data-dir="-1">−</button>'+
+      '<div class="player-score-display">'+p.score+'</div>'+
+      '<button class="score-btn plus" data-id="'+p.id+'" data-dir="1">+</button>'+
+      '<button class="del-player-btn" data-id="'+p.id+'">✕</button>';
+    list.appendChild(row);
+  });
+}
+
+function renderHistory(){
+  var list=document.getElementById('history-list');
+  if(history.length===0){ list.innerHTML='<div class="empty-hist">No score changes yet.</div>'; return; }
+  list.innerHTML='';
+  history.forEach(function(h){
+    var div=document.createElement('div');
+    div.className='history-item';
+    div.innerHTML='<span class="hist-name">'+escH(h.name)+'</span><span class="hist-change '+(h.change>=0?'hist-pos':'hist-neg')+'">'+(h.change>=0?'+':'')+h.change+' → '+h.score+'</span>';
+    list.appendChild(div);
+  });
+}
+
+function render(){ renderPlayers(); renderHistory(); }
+
+document.getElementById('players-list').addEventListener('click',function(e){
+  var btn=e.target.closest('.score-btn');
+  if(btn){ changeScore(parseInt(btn.dataset.id), parseInt(btn.dataset.dir)*getStep()); return; }
+  var del=e.target.closest('.del-player-btn');
+  if(del){ removePlayer(parseInt(del.dataset.id)); }
+});
+
+document.getElementById('players-list').addEventListener('change',function(e){
+  var inp=e.target.closest('.player-name-inp');
+  if(!inp) return;
+  var p=players.find(function(p){ return p.id===parseInt(inp.dataset.id); });
+  if(p) p.name=inp.value;
+});
+
+document.getElementById('step-row').addEventListener('click',function(e){
+  var btn=e.target.closest('.step-btn');
+  if(!btn) return;
+  document.querySelectorAll('.step-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  var s=btn.dataset.step;
+  if(s==='custom'){ state.step='custom'; document.getElementById('custom-step-wrap').classList.add('show'); }
+  else { state.step=parseInt(s); document.getElementById('custom-step-wrap').classList.remove('show'); }
+});
+
+document.getElementById('btn-add-player').addEventListener('click', addPlayer);
+document.getElementById('btn-reset-all').addEventListener('click',function(){
+  players.forEach(function(p){ p.score=0; });
+  history=[];
+  render();
+});
+
+// Start with 2 players
+addPlayer(); addPlayer();
+
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+function init(){if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';}
+init();
+</script>
+</body>
+</html>

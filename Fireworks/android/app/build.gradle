@@ -1,0 +1,80 @@
+// -------------------------------------------------------
+// app/build.gradle
+// -------------------------------------------------------
+plugins {
+    id 'com.android.application'
+}
+
+// Load signing credentials from keystore.properties (never commit that file)
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+android {
+    compileSdk 36
+
+    namespace "com.pegasusgames.fireworks"
+
+    defaultConfig {
+        applicationId "com.pegasusgames.fireworks"
+        minSdk 23
+        targetSdk 36
+        versionCode 11
+        versionName "1.7"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
+    }
+}
+
+dependencies {
+    // AppLovin MAX (replaces AdMob; AdMob still used as mediation adapter)
+    implementation 'com.applovin:applovin-sdk:13.+'
+    implementation 'com.applovin.mediation:google-adapter:23.+'
+
+    // Google Play Billing
+    implementation 'com.android.billingclient:billing:8.3.0'
+
+    // Firebase Analytics — requires google-services.json in this folder
+    // Setup: Firebase Console → Add Android app → download google-services.json → place in app/
+    implementation platform('com.google.firebase:firebase-bom:34.12.0')
+    implementation 'com.google.firebase:firebase-analytics'
+
+    // Core Android
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.12.0'
+}
+
+// Must be at bottom — apply after dependencies declared
+apply plugin: 'com.google.gms.google-services'

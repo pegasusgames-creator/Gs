@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>20 Questions</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: #0d0d1a; color: #fff; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  :root { --accent: #9C27B0; --accent-light: #CE93D8; }
+  header { background: #160d22; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); flex-shrink:0; }
+  header h1 { font-size: 1.3rem; color: var(--accent-light); }
+  .btn-remove-ads { background: var(--accent); color: #fff; border: none; border-radius: 20px; padding: 8px 16px; font-size: 0.8rem; font-weight: bold; min-height: 44px; cursor: pointer; }
+  .btn-pressed { opacity: 0.7; transform: scale(0.96); }
+  .screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 16px; overflow-y:auto; }
+  .screen.hidden { display: none; }
+  h2 { font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 16px; }
+  .big-btn { background: var(--accent); color: #fff; border: none; border-radius: 16px; padding: 18px 40px; font-size: 1.2rem; font-weight: bold; cursor: pointer; min-height: 56px; width: 100%; max-width: 380px; margin: 8px 0; }
+  .secondary-btn { background: #2a1a3a; color: #ccc; border: 1px solid #444; border-radius: 16px; padding: 14px 30px; font-size: 1rem; cursor: pointer; min-height: 50px; width: 100%; max-width: 380px; margin: 6px 0; }
+  /* GAME */
+  .questions-left { font-size: 1rem; color: var(--accent-light); margin-bottom: 4px; text-align: center; }
+  .questions-bar-wrap { width: 100%; max-width: 380px; background: #2a1a3a; border-radius: 8px; height: 10px; margin-bottom: 16px; overflow:hidden; }
+  .questions-bar { height: 100%; background: var(--accent); border-radius: 8px; transition: width 0.4s; }
+  .app-status { background: #1a0d2e; border: 2px solid var(--accent); border-radius: 16px; padding: 20px; text-align: center; width: 100%; max-width: 380px; margin-bottom: 16px; min-height: 100px; display: flex; align-items: center; justify-content: center; }
+  .answer-text { font-size: 1.1rem; font-weight: bold; color: #fff; line-height: 1.5; }
+  .answer-big { font-size: 1.4rem; color: var(--accent-light); }
+  .q-history { width: 100%; max-width: 380px; max-height: 200px; overflow-y:auto; margin-bottom: 16px; }
+  .q-item { display: flex; justify-content: space-between; padding: 8px 12px; background: #1a1028; border-radius: 8px; margin-bottom: 5px; font-size: 0.85rem; gap: 8px; }
+  .q-text { flex: 1; color: #ccc; }
+  .q-ans { font-weight: bold; color: var(--accent-light); flex-shrink:0; }
+  .q-ans.yes { color: #4CAF50; }
+  .q-ans.no { color: #ef5350; }
+  .q-ans.maybe { color: #FF9800; }
+  .question-input { width: 100%; max-width: 380px; background: #1a1028; border: 2px solid var(--accent); color: #fff; border-radius: 12px; padding: 14px 16px; font-size: 1rem; outline: none; margin-bottom: 10px; }
+  .question-input::placeholder { color: #666; }
+  .quick-questions { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; max-width: 380px; margin-bottom: 12px; }
+  .quick-q { background: #1a1028; border: 1px solid var(--accent); color: var(--accent-light); border-radius: 20px; padding: 6px 12px; font-size: 0.78rem; cursor: pointer; min-height: 36px; }
+  .ask-btn { background: var(--accent); color: #fff; border: none; border-radius: 12px; padding: 14px 28px; font-size: 1rem; font-weight: bold; cursor: pointer; min-height: 50px; width: 100%; max-width: 380px; }
+  .guess-input { width: 100%; max-width: 380px; background: #1a1028; border: 2px solid #FF9800; color: #fff; border-radius: 12px; padding: 14px 16px; font-size: 1rem; outline: none; margin-bottom: 10px; }
+  .guess-btn { background: #FF9800; color: #000; border: none; border-radius: 12px; padding: 14px 28px; font-size: 1rem; font-weight: bold; cursor: pointer; min-height: 50px; width: 100%; max-width: 380px; margin-bottom: 8px; }
+  #banner-ad { background: #160d22; text-align: center; padding: 8px; color: #555; font-size: 0.75rem; border-top: 1px solid #2a1a3a; flex-shrink:0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🔮 20 Questions</h1>
+  <button class="btn-remove-ads" id="removeAdsBtn">Remove Ads</button>
+</header>
+
+<div class="screen" id="homeScreen">
+  <div style="font-size:3rem;margin-bottom:16px">🔮</div>
+  <h2>Can you guess<br>what I'm thinking?</h2>
+  <p style="color:#aaa;text-align:center;margin-bottom:24px;font-size:0.95rem">I'm thinking of something.<br>Ask yes/no questions to figure it out!</p>
+  <button class="big-btn" id="startBtn">Start Game</button>
+</div>
+
+<div class="screen hidden" id="gameScreen">
+  <div class="questions-left" id="questionsLeft">20 questions remaining</div>
+  <div class="questions-bar-wrap"><div class="questions-bar" id="questionsBar" style="width:100%"></div></div>
+  <div class="app-status"><div class="answer-text" id="answerDisplay"><span class="answer-big">I'm thinking...</span><br>Ask me a question!</div></div>
+  <div class="q-history" id="qHistory"></div>
+  <input type="text" class="question-input" id="questionInput" placeholder="Type a yes/no question..." maxlength="100">
+  <div class="quick-questions" id="quickQuestions"></div>
+  <button class="ask-btn" id="askBtn">Ask Question</button>
+  <div style="display:flex;gap:8px;width:100%;max-width:380px;margin-top:10px">
+    <input type="text" class="guess-input" style="flex:1" id="guessInput" placeholder="I think it's...">
+    <button class="guess-btn" style="width:auto;padding:14px 16px" id="guessBtn">Guess!</button>
+  </div>
+</div>
+
+<div class="screen hidden" id="resultScreen">
+  <div style="font-size:3.5rem;margin-bottom:12px" id="resultEmoji">🎉</div>
+  <h2 id="resultTitle">You guessed it!</h2>
+  <div style="font-size:1.2rem;color:#aaa;text-align:center;margin:10px 0 20px" id="resultMessage"></div>
+  <div style="background:#1a1028;border-radius:14px;padding:20px;text-align:center;width:100%;max-width:380px;margin-bottom:20px">
+    <div style="color:#888;font-size:0.85rem">It was...</div>
+    <div style="font-size:1.8rem;font-weight:900;color:var(--accent-light);margin-top:6px" id="revealAnswer"></div>
+    <div style="color:#888;font-size:0.8rem;margin-top:4px" id="revealCategory"></div>
+  </div>
+  <button class="big-btn" id="playAgainBtn">Play Again</button>
+</div>
+
+<div id="banner-ad">Advertisement</div>
+
+<script>
+const THINGS = [
+  {name:"Elephant", cat:"Animal", hints:{animal:true, big:true, gray:true, alive:true, legs:4, trunk:true}},
+  {name:"Piano", cat:"Object", hints:{musical:true, big:true, electronic:false, indoors:true}},
+  {name:"Moon", cat:"Nature", hints:{space:true, round:true, alive:false, big:true}},
+  {name:"Banana", cat:"Food", hints:{fruit:true, yellow:true, edible:true, grows_on_tree:true}},
+  {name:"Bicycle", cat:"Object", hints:{vehicle:true, wheels:2, electric:false, outdoors:true}},
+  {name:"Butterfly", cat:"Animal", hints:{insect:true, wings:true, colorful:true, alive:true}},
+  {name:"Volcano", cat:"Nature", hints:{fire:true, mountain:true, natural:true, dangerous:true}},
+  {name:"Pizza", cat:"Food", hints:{food:true, round:true, cooked:true, popular:true}},
+  {name:"Guitar", cat:"Object", hints:{musical:true, strings:true, handheld:true}},
+  {name:"Shark", cat:"Animal", hints:{fish:true, dangerous:true, ocean:true, alive:true}},
+  {name:"Computer", cat:"Object", hints:{electronic:true, screen:true, technology:true, indoors:true}},
+  {name:"Apple", cat:"Food", hints:{fruit:true, red:true, edible:true, grows_on_tree:true}},
+  {name:"Giraffe", cat:"Animal", hints:{animal:true, tall:true, africa:true, alive:true}},
+  {name:"Submarine", cat:"Object", hints:{vehicle:true, underwater:true, military:true}},
+  {name:"Rainbow", cat:"Nature", hints:{colorful:true, sky:true, after_rain:true, natural:true}},
+  {name:"Dinosaur", cat:"Animal", hints:{extinct:true, animal:true, big:true, reptile:true}},
+  {name:"Pyramid", cat:"Object", hints:{ancient:true, stone:true, egypt:true, big:true}},
+  {name:"Snowflake", cat:"Nature", hints:{cold:true, frozen:true, unique:true, natural:true}},
+  {name:"Television", cat:"Object", hints:{electronic:true, screen:true, entertainment:true, indoors:true}},
+  {name:"Parrot", cat:"Animal", hints:{bird:true, colorful:true, talks:true, alive:true}},
+  {name:"Lighthouse", cat:"Object", hints:{tower:true, light:true, ocean:true, landmark:true}},
+  {name:"Astronaut", cat:"Person", hints:{space:true, human:true, costume:true, job:true}},
+  {name:"Cactus", cat:"Plant", hints:{plant:true, desert:true, spiky:true, alive:true}},
+  {name:"Diamond", cat:"Object", hints:{gem:true, expensive:true, shiny:true, hard:true}},
+  {name:"Tornado", cat:"Nature", hints:{wind:true, destructive:true, spinning:true, weather:true}},
+  {name:"Octopus", cat:"Animal", hints:{ocean:true, tentacles:true, intelligent:true, alive:true}},
+  {name:"Violin", cat:"Object", hints:{musical:true, strings:true, classical:true, small:true}},
+  {name:"Igloo", cat:"Object", hints:{cold:true, home:true, ice:true, arctic:true}},
+  {name:"Peacock", cat:"Animal", hints:{bird:true, colorful:true, beautiful:true, alive:true}},
+  {name:"Sandcastle", cat:"Object", hints:{sand:true, beach:true, temporary:true, art:true}},
+  {name:"Thunderstorm", cat:"Nature", hints:{weather:true, lightning:true, rain:true, loud:true}},
+  {name:"Telescope", cat:"Object", hints:{science:true, space:true, glass:true, tool:true}},
+  {name:"Flamingo", cat:"Animal", hints:{bird:true, pink:true, one_leg:true, alive:true}},
+  {name:"Compass", cat:"Object", hints:{navigation:true, tool:true, direction:true, small:true}},
+  {name:"Jellyfish", cat:"Animal", hints:{ocean:true, transparent:true, stings:true, alive:true}},
+  {name:"Clocktower", cat:"Object", hints:{big:true, time:true, tower:true, landmark:true}},
+  {name:"Penguin", cat:"Animal", hints:{bird:true, cold:true, cant_fly:true, alive:true}},
+  {name:"Sombrero", cat:"Object", hints:{hat:true, mexico:true, clothing:true, big_brim:true}},
+  {name:"Bonsai Tree", cat:"Plant", hints:{plant:true, small:true, japanese:true, alive:true}},
+  {name:"Canoe", cat:"Object", hints:{boat:true, small:true, paddle:true, water:true}},
+  {name:"Hourglass", cat:"Object", hints:{time:true, sand:true, glass:true, vintage:true}},
+  {name:"Porcupine", cat:"Animal", hints:{animal:true, spiky:true, nocturnal:true, alive:true}},
+  {name:"Gondola", cat:"Object", hints:{boat:true, italy:true, romantic:true, water:true}},
+  {name:"Maple Leaf", cat:"Nature", hints:{plant:true, leaf:true, canada:true, falls_off:true}},
+  {name:"Typewriter", cat:"Object", hints:{vintage:true, writing:true, mechanical:true, clicks:true}},
+  {name:"Comet", cat:"Nature", hints:{space:true, fast:true, tail:true, natural:true}},
+  {name:"Mandolin", cat:"Object", hints:{musical:true, strings:true, small:true, instrument:true}},
+  {name:"Sloth", cat:"Animal", hints:{animal:true, slow:true, tree:true, alive:true}},
+  {name:"Sphinx", cat:"Object", hints:{ancient:true, egypt:true, stone:true, landmark:true}},
+  {name:"Moose", cat:"Animal", hints:{animal:true, antlers:true, north_america:true, alive:true}}
+];
+
+const QUICK_QS = [
+  "Is it alive?", "Is it an animal?", "Is it a food?", "Is it an object?",
+  "Is it bigger than a car?", "Is it smaller than a shoe?", "Can you eat it?",
+  "Can it fly?", "Is it found in nature?", "Is it found indoors?", "Is it colorful?",
+  "Is it expensive?", "Is it made by humans?", "Is it used daily?", "Is it found in water?",
+  "Is it found in cold places?", "Does it make a sound?", "Can you hold it in one hand?",
+  "Is it a living creature?", "Is it ancient?"
+];
+
+const ANSWERS = {
+  "Is it alive?": o => o.hints.alive === true,
+  "Is it an animal?": o => o.hints.animal === true,
+  "Is it a food?": o => o.hints.food === true || o.hints.edible === true,
+  "Is it an object?": o => !o.hints.animal && !o.hints.natural && o.cat === 'Object',
+  "Is it bigger than a car?": o => o.hints.big === true && !o.hints.small,
+  "Is it smaller than a shoe?": o => o.hints.small === true,
+  "Can you eat it?": o => o.hints.edible === true || o.hints.food === true || o.cat === 'Food',
+  "Can it fly?": o => o.hints.wings === true,
+  "Is it found in nature?": o => o.cat === 'Nature' || o.hints.natural === true,
+  "Is it found indoors?": o => o.hints.indoors === true,
+  "Is it colorful?": o => o.hints.colorful === true,
+  "Is it expensive?": o => o.hints.expensive === true,
+  "Is it made by humans?": o => o.cat === 'Object' || o.hints.technology === true,
+  "Is it used daily?": o => ['Computer','Television','Bicycle'].includes(o.name),
+  "Is it found in water?": o => o.hints.ocean === true || o.hints.underwater === true || o.hints.water === true,
+  "Is it found in cold places?": o => o.hints.cold === true || o.hints.arctic === true,
+  "Does it make a sound?": o => o.hints.musical === true || ['Parrot','Elephant','Thunderstorm','Tornado'].includes(o.name),
+  "Can you hold it in one hand?": o => o.hints.small === true || o.hints.handheld === true,
+  "Is it a living creature?": o => o.hints.alive === true || o.cat === 'Animal' || o.cat === 'Plant',
+  "Is it ancient?": o => o.hints.ancient === true || o.hints.extinct === true
+};
+
+let currentThing = null;
+let questionsUsed = 0;
+let maxQ = 20;
+let history = [];
+
+function addTouchFeedback(el) {
+  el.addEventListener('touchstart', () => el.classList.add('btn-pressed'), {passive:true});
+  el.addEventListener('touchend', () => el.classList.remove('btn-pressed'), {passive:true});
+  el.addEventListener('touchcancel', () => el.classList.remove('btn-pressed'), {passive:true});
+}
+document.querySelectorAll('button').forEach(addTouchFeedback);
+
+document.getElementById('startBtn').addEventListener('click', startGame);
+document.getElementById('askBtn').addEventListener('click', askQuestion);
+document.getElementById('guessBtn').addEventListener('click', makeGuess);
+document.getElementById('playAgainBtn').addEventListener('click', startGame);
+document.getElementById('removeAdsBtn').addEventListener('click', () => { if (window.Android) Android.purchaseNoAds(); });
+document.getElementById('questionInput').addEventListener('keydown', e => { if (e.key === 'Enter') askQuestion(); });
+
+function buildQuickQuestions() {
+  const el = document.getElementById('quickQuestions');
+  el.innerHTML = QUICK_QS.slice(0, 12).map(q =>
+    `<button class="quick-q" onclick="useQuickQ('${q.replace(/'/g,"\\'")}')">? ${q}</button>`
+  ).join('');
+  el.querySelectorAll('.quick-q').forEach(addTouchFeedback);
+}
+
+function useQuickQ(q) {
+  document.getElementById('questionInput').value = q;
+  askQuestion();
+}
+
+function startGame() {
+  currentThing = THINGS[Math.floor(Math.random() * THINGS.length)];
+  questionsUsed = 0;
+  history = [];
+  document.getElementById('qHistory').innerHTML = '';
+  document.getElementById('questionInput').value = '';
+  document.getElementById('guessInput').value = '';
+  document.getElementById('answerDisplay').innerHTML = `<span class="answer-big">I'm thinking of something...</span><br>Ask me a yes/no question!`;
+  updateProgressBar();
+  buildQuickQuestions();
+  showScreen('gameScreen');
+}
+
+function askQuestion() {
+  const q = document.getElementById('questionInput').value.trim();
+  if (!q || questionsUsed >= maxQ) return;
+  questionsUsed++;
+  updateProgressBar();
+  document.getElementById('questionInput').value = '';
+  const answer = getAnswer(q);
+  addToHistory(q, answer);
+  showAnswer(answer);
+  if (questionsUsed >= maxQ) {
+    setTimeout(() => endGame(false), 1500);
+  }
+}
+
+function getAnswer(q) {
+  const qLower = q.toLowerCase();
+  for (const [key, fn] of Object.entries(ANSWERS)) {
+    if (qLower.includes(key.toLowerCase().replace('is it ', '').replace('can ', '').replace('does it ', ''))) {
+      try { return fn(currentThing) ? 'Yes!' : 'No.'; } catch(e) {}
+    }
+  }
+  // Fuzzy matching for keywords
+  if (qLower.includes('animal') || qLower.includes('creature')) return currentThing.hints.animal || currentThing.cat === 'Animal' ? 'Yes!' : 'No.';
+  if (qLower.includes('food') || qLower.includes('eat')) return currentThing.cat === 'Food' || currentThing.hints.edible ? 'Yes!' : 'No.';
+  if (qLower.includes('alive') || qLower.includes('living')) return currentThing.hints.alive ? 'Yes!' : 'No.';
+  if (qLower.includes('water') || qLower.includes('ocean') || qLower.includes('sea')) return (currentThing.hints.ocean || currentThing.hints.water) ? 'Yes!' : 'No.';
+  if (qLower.includes('fly') || qLower.includes('wing')) return currentThing.hints.wings ? 'Yes!' : 'No.';
+  if (qLower.includes('big') || qLower.includes('large')) return currentThing.hints.big ? 'Yes!' : 'No.';
+  if (qLower.includes('small') || qLower.includes('tiny') || qLower.includes('little')) return currentThing.hints.small ? 'Yes!' : 'No.';
+  if (qLower.includes('color') || qLower.includes('colorful') || qLower.includes('bright')) return currentThing.hints.colorful ? 'Yes!' : 'No.';
+  if (qLower.includes('music') || qLower.includes('sound') || qLower.includes('noise')) return currentThing.hints.musical ? 'Yes!' : 'No.';
+  if (qLower.includes('cold') || qLower.includes('snow') || qLower.includes('ice')) return (currentThing.hints.cold || currentThing.hints.frozen) ? 'Yes!' : 'No.';
+  if (qLower.includes('fire') || qLower.includes('hot') || qLower.includes('warm')) return currentThing.hints.fire ? 'Yes!' : 'No.';
+  if (qLower.includes('space') || qLower.includes('planet') || qLower.includes('star')) return currentThing.hints.space ? 'Yes!' : 'No.';
+  if (qLower.includes('human') || qLower.includes('person') || qLower.includes('people')) return currentThing.cat === 'Person' ? 'Yes!' : 'No.';
+  if (qLower.includes('plant') || qLower.includes('tree') || qLower.includes('flower')) return currentThing.cat === 'Plant' ? 'Yes!' : 'No.';
+  // Fall back to Maybe
+  return Math.random() < 0.5 ? 'Maybe...' : 'Not exactly...';
+}
+
+function showAnswer(answer) {
+  const colors = {'Yes!': '#4CAF50', 'No.': '#ef5350', 'Maybe...': '#FF9800', 'Not exactly...': '#FF9800'};
+  const color = colors[answer] || '#fff';
+  document.getElementById('answerDisplay').innerHTML = `<span style="font-size:1.8rem;color:${color};font-weight:900">${answer}</span>`;
+}
+
+function addToHistory(q, ans) {
+  history.unshift({q, ans});
+  const el = document.getElementById('qHistory');
+  const cls = ans === 'Yes!' ? 'yes' : ans === 'No.' ? 'no' : 'maybe';
+  el.innerHTML = `<div class="q-item"><span class="q-text">${q}</span><span class="q-ans ${cls}">${ans}</span></div>` + el.innerHTML;
+}
+
+function updateProgressBar() {
+  const remaining = maxQ - questionsUsed;
+  document.getElementById('questionsLeft').textContent = `${remaining} question${remaining !== 1 ? 's' : ''} remaining`;
+  document.getElementById('questionsBar').style.width = (remaining / maxQ * 100) + '%';
+  document.getElementById('questionsBar').style.background = remaining <= 5 ? '#ef5350' : remaining <= 10 ? '#FF9800' : 'var(--accent)';
+}
+
+function makeGuess() {
+  const guess = document.getElementById('guessInput').value.trim().toLowerCase();
+  if (!guess) return;
+  const correct = guess === currentThing.name.toLowerCase() || currentThing.name.toLowerCase().includes(guess) || guess.includes(currentThing.name.toLowerCase());
+  endGame(correct);
+}
+
+function endGame(won) {
+  showScreen('resultScreen');
+  if (won) {
+    document.getElementById('resultEmoji').textContent = '🎉';
+    document.getElementById('resultTitle').textContent = 'You Got It!';
+    document.getElementById('resultMessage').textContent = `Amazing! You figured it out in ${questionsUsed} question${questionsUsed !== 1 ? 's' : ''}!`;
+  } else {
+    document.getElementById('resultEmoji').textContent = '🔮';
+    document.getElementById('resultTitle').textContent = questionsUsed >= maxQ ? "Time's Up!" : "Not Quite!";
+    document.getElementById('resultMessage').textContent = questionsUsed >= maxQ ? "You used all 20 questions!" : "Better luck next time!";
+  }
+  document.getElementById('revealAnswer').textContent = currentThing.name;
+  document.getElementById('revealCategory').textContent = `Category: ${currentThing.cat}`;
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+window.onAdMobLoaded = function() {};
+window.onPurchaseComplete = function(sku) {
+  if (sku && sku.includes('no_ads')) {
+    document.getElementById('banner-ad').style.display = 'none';
+    document.getElementById('removeAdsBtn').style.display = 'none';
+  }
+};
+if (window.Android) document.getElementById('banner-ad').style.display = 'none';
+</script>
+</body>
+</html>

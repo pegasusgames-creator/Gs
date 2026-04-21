@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tip Calculator</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg:      #1a1a2e;
+    --surface: #16213e;
+    --card:    #0f3460;
+    --accent:  #e94560;
+    --accent2: #533483;
+    --text:    #eaeaea;
+    --muted:   #8888aa;
+    --radius:  14px;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    overflow: hidden;
+  }
+
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 16px 16px 0;
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    flex-shrink: 0;
+  }
+  header h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: 0.5px; }
+  header h1 span { color: var(--accent); }
+
+  #btn-remove-ads {
+    background: var(--accent2);
+    border: none;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+
+  /* Scroll area */
+  #scroll {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 12px;
+  }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  /* Bill input */
+  #bill-wrap {
+    display: flex;
+    align-items: center;
+    background: var(--card);
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+  #bill-symbol {
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-right: 8px;
+    font-weight: 700;
+  }
+  #bill-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 1.8rem;
+    font-weight: 700;
+    width: 100%;
+  }
+  #bill-input::placeholder { color: var(--muted); }
+
+  /* Tip buttons */
+  .tip-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .tip-btn {
+    background: var(--card);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 12px 0;
+    cursor: pointer;
+    transition: border-color 0.12s;
+  }
+  .tip-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .tip-btn.btn-pressed { transform: scale(0.93); }
+
+  /* Custom tip */
+  #custom-wrap {
+    margin-top: 8px;
+    display: none;
+    align-items: center;
+    background: var(--card);
+    border-radius: 10px;
+    padding: 8px 14px;
+  }
+  #custom-wrap.visible { display: flex; }
+  #custom-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--accent);
+    font-size: 1.3rem;
+    font-weight: 700;
+    width: 100%;
+  }
+  #custom-label { color: var(--muted); font-size: 1rem; }
+
+  /* Split */
+  .split-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .split-label { font-size: 1rem; }
+  .split-controls { display: flex; align-items: center; gap: 14px; }
+  .split-btn {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    font-size: 1.4rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .split-btn.btn-pressed { transform: scale(0.88); }
+  #split-count { font-size: 1.4rem; font-weight: 700; min-width: 28px; text-align: center; }
+
+  /* Results */
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .result-box {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+  .result-box.col-accent2 { background: var(--accent2); }
+  .result-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.8; margin-bottom: 4px; }
+  .result-value { font-size: 1.4rem; font-weight: 700; }
+
+  .result-full {
+    background: var(--accent);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .result-full .result-value { font-size: 2rem; }
+
+  /* Reset */
+  #btn-reset {
+    width: 100%;
+    background: transparent;
+    border: 2px solid var(--muted);
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 12px;
+    cursor: pointer;
+    margin-bottom: 12px;
+  }
+  #btn-reset.btn-pressed { transform: scale(0.97); opacity: 0.7; }
+
+  /* AdMob banner placeholder (browser only) */
+  #admob-banner {
+    display: none;
+    width: 100%;
+    height: 50px;
+    background: #000;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <header>
+    <h1>Tip <span>Calculator</span></h1>
+    <button id="btn-remove-ads">Remove Ads</button>
+  </header>
+
+  <div id="scroll">
+
+    <!-- Bill Amount -->
+    <div class="card">
+      <div class="card-title">Bill Amount</div>
+      <div id="bill-wrap">
+        <span id="bill-symbol">$</span>
+        <input id="bill-input" type="number" inputmode="decimal" placeholder="0.00" min="0" step="0.01">
+      </div>
+    </div>
+
+    <!-- Tip % -->
+    <div class="card">
+      <div class="card-title">Tip Percentage</div>
+      <div class="tip-grid">
+        <button class="tip-btn" data-tip="10">10%</button>
+        <button class="tip-btn active" data-tip="15">15%</button>
+        <button class="tip-btn" data-tip="18">18%</button>
+        <button class="tip-btn" data-tip="20">20%</button>
+        <button class="tip-btn" data-tip="25">25%</button>
+        <button class="tip-btn" data-tip="custom">Custom</button>
+      </div>
+      <div id="custom-wrap">
+        <input id="custom-input" type="number" inputmode="decimal" placeholder="0" min="0" max="100">
+        <span id="custom-label">%</span>
+      </div>
+    </div>
+
+    <!-- Split -->
+    <div class="card">
+      <div class="card-title">Split Between</div>
+      <div class="split-row">
+        <span class="split-label">People</span>
+        <div class="split-controls">
+          <button class="split-btn" id="btn-minus">−</button>
+          <span id="split-count">1</span>
+          <button class="split-btn" id="btn-plus">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="card">
+      <div class="card-title">Results</div>
+      <div class="results-grid">
+        <div class="result-box">
+          <div class="result-label">Tip Amount</div>
+          <div class="result-value" id="res-tip">$0.00</div>
+        </div>
+        <div class="result-box col-accent2">
+          <div class="result-label">Total Bill</div>
+          <div class="result-value" id="res-total">$0.00</div>
+        </div>
+      </div>
+      <div class="result-full">
+        <div class="result-label">Per Person</div>
+        <div class="result-value" id="res-per">$0.00</div>
+      </div>
+    </div>
+
+    <!-- Reset -->
+    <button id="btn-reset">Reset</button>
+
+  </div><!-- /scroll -->
+
+  <div id="admob-banner">Advertisement</div>
+</div>
+
+<script>
+'use strict';
+
+// Touch press feedback
+(function() {
+  var PRESS = 'btn-pressed';
+  document.addEventListener('touchstart', function(e) {
+    var el = e.target.closest('button, .tip-btn, .split-btn');
+    if (el) el.classList.add(PRESS);
+  }, {passive: true});
+  function clearPress() {
+    document.querySelectorAll('.' + PRESS).forEach(function(el) {
+      el.classList.remove(PRESS);
+    });
+  }
+  document.addEventListener('touchend', clearPress, {passive: true});
+  document.addEventListener('touchcancel', clearPress, {passive: true});
+})();
+
+// State
+var state = {
+  tipPct: 15,
+  split: 1,
+  useCount: 0,
+  removeAds: false
+};
+
+// DOM
+var billInput   = document.getElementById('bill-input');
+var tipBtns     = document.querySelectorAll('.tip-btn');
+var customWrap  = document.getElementById('custom-wrap');
+var customInput = document.getElementById('custom-input');
+var splitCount  = document.getElementById('split-count');
+var resTip      = document.getElementById('res-tip');
+var resTotal    = document.getElementById('res-total');
+var resPer      = document.getElementById('res-per');
+
+function fmt(n) { return '$' + n.toFixed(2); }
+
+function calc() {
+  var bill  = parseFloat(billInput.value) || 0;
+  var tip   = bill * state.tipPct / 100;
+  var total = bill + tip;
+  var per   = total / state.split;
+  resTip.textContent   = fmt(tip);
+  resTotal.textContent = fmt(total);
+  resPer.textContent   = fmt(per);
+}
+
+// Tip buttons
+tipBtns.forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    tipBtns.forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    if (btn.dataset.tip === 'custom') {
+      customWrap.classList.add('visible');
+      state.tipPct = parseFloat(customInput.value) || 0;
+      customInput.focus();
+    } else {
+      customWrap.classList.remove('visible');
+      state.tipPct = parseInt(btn.dataset.tip, 10);
+    }
+    calc();
+    maybeInterstitial();
+  });
+});
+
+customInput.addEventListener('input', function() {
+  state.tipPct = parseFloat(customInput.value) || 0;
+  calc();
+});
+
+billInput.addEventListener('input', calc);
+
+// Split
+document.getElementById('btn-minus').addEventListener('click', function() {
+  if (state.split > 1) { state.split--; splitCount.textContent = state.split; calc(); }
+});
+document.getElementById('btn-plus').addEventListener('click', function() {
+  if (state.split < 99) { state.split++; splitCount.textContent = state.split; calc(); }
+});
+
+// Reset
+document.getElementById('btn-reset').addEventListener('click', function() {
+  billInput.value = '';
+  state.split = 1;
+  splitCount.textContent = '1';
+  tipBtns.forEach(function(b) { b.classList.remove('active'); });
+  document.querySelector('[data-tip="15"]').classList.add('active');
+  state.tipPct = 15;
+  customWrap.classList.remove('visible');
+  customInput.value = '';
+  calc();
+});
+
+// Remove Ads
+document.getElementById('btn-remove-ads').addEventListener('click', function() {
+  if (window.Android) { Android.purchase('remove_ads'); }
+});
+
+window.onPurchaseComplete = function(productId) {
+  if (productId === 'remove_ads') {
+    state.removeAds = true;
+    document.getElementById('admob-banner').style.display = 'none';
+    document.getElementById('btn-remove-ads').style.display = 'none';
+  }
+};
+
+// Interstitial — every 8 tip-button taps
+function maybeInterstitial() {
+  state.useCount++;
+  if (!state.removeAds && state.useCount % 8 === 0 && window.Android) {
+    Android.showInterstitial();
+  }
+}
+
+// Init
+function init() {
+  // Show HTML banner only in browser (not in Android WebView)
+  if (!window.Android && !state.removeAds) {
+    document.getElementById('admob-banner').style.display = 'flex';
+  }
+  calc();
+}
+
+window.onAdMobLoaded = function() { /* banner handled natively by MainActivity */ };
+
+init();
+</script>
+</body>
+</html>

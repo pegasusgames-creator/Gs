@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Coffee Guide</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: #1a1a1a; color: #fff; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  :root { --accent: #8D6E63; --accent-light: #A1887F; }
+  header { background: #1e1512; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); flex-shrink:0; }
+  header h1 { font-size: 1.3rem; color: var(--accent-light); }
+  .btn-remove-ads { background: var(--accent); color: #fff; border: none; border-radius: 20px; padding: 8px 16px; font-size: 0.8rem; font-weight: bold; min-height: 44px; cursor: pointer; }
+  .btn-pressed { opacity: 0.7; transform: scale(0.96); }
+  .screen { flex: 1; overflow-y: auto; }
+  .screen.hidden { display: none; }
+  /* MAIN LIST */
+  .coffee-grid { padding: 12px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .coffee-card { background: #2a201a; border-radius: 14px; padding: 16px; cursor: pointer; border: 1px solid #3a2a20; }
+  .coffee-icon { font-size: 2rem; margin-bottom: 8px; }
+  .coffee-title { font-size: 1rem; font-weight: bold; color: #fff; }
+  .coffee-subtitle { font-size: 0.75rem; color: #aaa; margin-top: 3px; }
+  .strength-dots { display: flex; gap: 4px; margin-top: 8px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: #444; }
+  .dot.filled { background: var(--accent-light); }
+  /* DETAIL VIEW */
+  .detail-view { padding: 20px 16px; }
+  .back-btn { background: #2a201a; border: 1px solid var(--accent); color: var(--accent-light); border-radius: 10px; padding: 10px 18px; font-size: 0.9rem; cursor: pointer; min-height: 44px; margin-bottom: 20px; }
+  .detail-icon { font-size: 3rem; text-align: center; margin-bottom: 10px; }
+  .detail-name { font-size: 2rem; font-weight: 900; text-align: center; color: #fff; }
+  .detail-tagline { color: #aaa; text-align: center; margin-bottom: 20px; font-style: italic; }
+  .info-section { background: #2a201a; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .info-section h3 { color: var(--accent-light); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .info-text { font-size: 0.95rem; line-height: 1.6; color: #ddd; }
+  /* RATIO VISUAL */
+  .ratio-bar { display: flex; height: 24px; border-radius: 8px; overflow: hidden; margin-top: 8px; }
+  .ratio-espresso { background: #3e200a; }
+  .ratio-milk { background: var(--accent-light); opacity: 0.7; }
+  .ratio-foam { background: #c8a97e; }
+  .ratio-water { background: #5a9ab5; }
+  .ratio-label { font-size: 0.75rem; color: #aaa; margin-top: 6px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .ratio-label span { display: flex; align-items: center; gap: 4px; }
+  .ratio-label .swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink:0; }
+  /* CAFFEINE */
+  .caffeine-bar-wrap { background: #333; border-radius: 8px; height: 12px; overflow: hidden; margin-top: 8px; }
+  .caffeine-bar { background: var(--accent); height: 100%; border-radius: 8px; }
+  /* CALCULATOR */
+  .calc-section { padding: 16px; }
+  .calc-section h2 { font-size: 1.2rem; color: var(--accent-light); margin-bottom: 16px; }
+  .calc-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .calc-row label { flex: 1; font-size: 0.9rem; color: #ccc; }
+  .calc-input { background: #333; border: 1px solid var(--accent); color: #fff; border-radius: 8px; padding: 10px 12px; width: 100px; font-size: 1rem; text-align: center; outline:none; }
+  .calc-btn { background: var(--accent); color: #fff; border: none; border-radius: 12px; padding: 14px 24px; font-size: 1rem; font-weight: bold; cursor: pointer; min-height: 50px; width: 100%; margin-top: 8px; }
+  .calc-result { background: #2a201a; border-radius: 12px; padding: 16px; margin-top: 12px; text-align: center; font-size: 1.4rem; font-weight: bold; color: var(--accent-light); display: none; }
+  /* NAV */
+  .bottom-nav { display: flex; background: #1e1512; border-top: 1px solid #333; flex-shrink:0; }
+  .nav-btn { flex: 1; background: none; border: none; color: #888; padding: 12px; font-size: 0.75rem; cursor: pointer; min-height: 56px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .nav-btn.active { color: var(--accent-light); }
+  .nav-icon { font-size: 1.3rem; }
+  #banner-ad { background: #1e1512; text-align: center; padding: 8px; color: #666; font-size: 0.75rem; border-top: 1px solid #333; flex-shrink:0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>☕ Coffee Guide</h1>
+  <button class="btn-remove-ads" id="removeAdsBtn">Remove Ads</button>
+</header>
+
+<div class="screen" id="listScreen">
+  <div class="coffee-grid" id="coffeeGrid"></div>
+</div>
+
+<div class="screen hidden" id="detailScreen">
+  <div class="detail-view" id="detailContent"></div>
+</div>
+
+<div class="screen hidden" id="calcScreen">
+  <div class="calc-section">
+    <h2>☕ Strength Calculator</h2>
+    <p style="color:#aaa;font-size:0.85rem;margin-bottom:16px">Calculate the coffee-to-liquid ratio and strength of your brew.</p>
+    <div class="calc-row">
+      <label>Espresso (ml)</label>
+      <input type="number" class="calc-input" id="espressoMl" value="30" min="1">
+    </div>
+    <div class="calc-row">
+      <label>Water (ml)</label>
+      <input type="number" class="calc-input" id="waterMl" value="0" min="0">
+    </div>
+    <div class="calc-row">
+      <label>Milk (ml)</label>
+      <input type="number" class="calc-input" id="milkMl" value="150" min="0">
+    </div>
+    <button class="calc-btn" id="calcBtn">Calculate Strength</button>
+    <div class="calc-result" id="calcResult"></div>
+    <div id="calcDetail" style="display:none;background:#2a201a;border-radius:12px;padding:16px;margin-top:12px;font-size:0.9rem;color:#ccc;line-height:1.7"></div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn active" id="navList"><span class="nav-icon">☕</span>Coffees</button>
+  <button class="nav-btn" id="navCalc"><span class="nav-icon">🧮</span>Calculator</button>
+</div>
+
+<div id="banner-ad">Advertisement</div>
+
+<script>
+const COFFEES = [
+  { icon:"☕", name:"Espresso", tagline:"The foundation of all coffee drinks", description:"A concentrated shot of coffee brewed by forcing hot water through finely ground coffee under high pressure. Typically 25-35ml with a rich crema on top.", howMade:"7-9g of finely ground coffee, tamped firmly into a portafilter. Hot water (93°C) is pushed through at 9 bars of pressure for 25-30 seconds.", espresso:30, water:0, milk:0, foam:0, caffeine:70 },
+  { icon:"🌊", name:"Americano", tagline:"Espresso diluted with hot water", description:"An Americano is simply espresso topped with hot water, creating a coffee similar in strength to drip coffee but with the character of espresso.", howMade:"Pull 1-2 shots of espresso. Pour hot water into the cup first, then add the espresso on top to preserve crema.", espresso:30, water:150, milk:0, foam:0, caffeine:70 },
+  { icon:"🥛", name:"Latte", tagline:"Silky smooth espresso and steamed milk", description:"A latte is espresso combined with steamed milk and a small amount of milk foam on top. The most popular espresso drink worldwide.", howMade:"Pull a double shot of espresso. Steam milk to 65°C, creating velvety microfoam. Pour milk over espresso and add a thin layer of foam.", espresso:30, water:0, milk:200, foam:20, caffeine:70 },
+  { icon:"💨", name:"Cappuccino", tagline:"Equal parts espresso, milk, and foam", description:"A classic Italian drink with equal portions of espresso, steamed milk, and frothed milk foam. Drier and stronger than a latte.", howMade:"Pull a double espresso. Steam milk to create stiff microfoam. Pour equal amounts of steamed milk and foam over espresso.", espresso:30, water:0, milk:60, foam:60, caffeine:70 },
+  { icon:"⚪", name:"Flat White", tagline:"Stronger than a latte, smooth as silk", description:"Originating from Australia/New Zealand, a flat white is like a smaller latte with a higher coffee-to-milk ratio and very smooth microfoam.", howMade:"Pull a ristretto (shorter, sweeter espresso). Steam milk to 65°C with silky microfoam. Pour over espresso — less milk than a latte.", espresso:30, water:0, milk:100, foam:10, caffeine:70 },
+  { icon:"🍦", name:"Macchiato", tagline:"Espresso stained with milk", description:"Macchiato means 'stained' in Italian. A shot of espresso 'stained' with a small dollop of steamed milk or foam.", howMade:"Pull a single or double shot of espresso. Add just a small spoonful of steamed milk or frothed foam on top.", espresso:30, water:0, milk:15, foam:15, caffeine:70 },
+  { icon:"🧊", name:"Cold Brew", tagline:"Smooth, never bitter, cold steeped", description:"Cold brew is made by steeping coarsely ground coffee in cold water for 12-24 hours. The result is smooth, sweet, low-acid coffee.", howMade:"Coarsely grind coffee at 1:8 ratio with cold water. Steep in refrigerator for 12-24 hours. Filter through fine mesh or paper filter.", espresso:0, water:250, milk:0, foam:0, caffeine:100, isSpecial:true },
+  { icon:"❄️", name:"Iced Latte", tagline:"Cool and creamy summer staple", description:"An iced latte is espresso mixed with cold milk over ice. It's lighter than a hot latte but just as satisfying.", howMade:"Brew a double shot of espresso. Let cool slightly. Fill glass with ice, add milk, then pour espresso over. Stir.", espresso:30, water:0, milk:180, foam:0, caffeine:70 },
+  { icon:"🫧", name:"Frappuccino", tagline:"Blended frozen coffee delight", description:"A cold blended coffee drink made with espresso, milk, ice and sweetener. The original was invented at Starbucks in 1995.", howMade:"Blend espresso, milk, ice, and sweetener together until smooth. Top with whipped cream if desired.", espresso:30, water:0, milk:150, foam:0, caffeine:70, isSpecial:true },
+  { icon:"🍫", name:"Mocha", tagline:"Coffee meets chocolate", description:"A mocha (or caffè mocha) is a latte with chocolate syrup or powder added. Rich, sweet and indulgent.", howMade:"Pull a double espresso. Add 1-2 tbsp chocolate syrup. Steam milk and pour over. Top with whipped cream or cocoa dust.", espresso:30, water:0, milk:180, foam:15, caffeine:70 },
+  { icon:"🇮🇪", name:"Irish Coffee", tagline:"Warming coffee cocktail", description:"Irish Coffee is hot coffee, Irish whiskey, and sugar topped with thick cream. A classic after-dinner drink invented in 1943.", howMade:"Warm a glass. Add hot coffee, whiskey, and sugar. Stir to dissolve. Float lightly whipped cream over the back of a spoon.", espresso:0, water:200, milk:0, foam:0, caffeine:80, isSpecial:true },
+  { icon:"🍮", name:"Cortado", tagline:"Equal espresso and warm milk", description:"Cortado means 'cut' in Spanish. Equal parts espresso 'cut' with warm milk to reduce acidity. Less foam than a cappuccino.", howMade:"Pull a double shot of espresso. Steam a small amount of milk (equal volume). Pour milk directly into espresso without foam.", espresso:30, water:0, milk:30, foam:0, caffeine:70 },
+  { icon:"🌿", name:"Matcha Latte", tagline:"Japanese green tea espresso alternative", description:"While not coffee, matcha lattes are a popular coffee alternative. Ceremonial grade matcha whisked with steamed milk.", howMade:"Sift 1-2 tsp matcha powder. Add small amount of hot water and whisk to paste. Top with steamed milk.", espresso:0, water:30, milk:200, foam:20, caffeine:60, isSpecial:true },
+  { icon:"☁️", name:"Dalgona Coffee", tagline:"Whipped coffee sensation", description:"Viral frothy whipped coffee from Korea. Equal parts instant coffee, sugar, and hot water whipped until thick and creamy.", howMade:"Whip 2 tbsp each: instant coffee, sugar, hot water until stiff peaks form. Spoon over cold or hot milk.", espresso:0, water:30, milk:200, foam:0, caffeine:60, isSpecial:true },
+  { icon:"🌞", name:"Long Black", tagline:"Australian double espresso over water", description:"Popular in Australia and New Zealand. A long black is hot water topped with a double ristretto, preserving the crema.", howMade:"Pour hot water into cup first (200ml). Extract a double ristretto shot directly on top without disrupting it.", espresso:40, water:160, milk:0, foam:0, caffeine:90 },
+  { icon:"🍯", name:"Honey Latte", tagline:"Naturally sweetened warming cup", description:"A latte sweetened with honey instead of sugar. The honey adds a floral sweetness that pairs beautifully with espresso.", howMade:"Brew double espresso. Add 1-2 tsp raw honey and stir until dissolved. Add steamed milk and top with foam.", espresso:30, water:0, milk:180, foam:20, caffeine:70 },
+  { icon:"🌶️", name:"Spiced Coffee", tagline:"Warming aromatic spice blend", description:"Coffee brewed or topped with warming spices like cinnamon, cardamom, and nutmeg. Popular in Middle Eastern and Ethiopian traditions.", howMade:"Add ground cardamom, cinnamon to grounds before brewing. Or add a cinnamon stick to hot coffee. Top with nutmeg.", espresso:30, water:100, milk:0, foam:0, caffeine:70, isSpecial:true },
+  { icon:"💚", name:"Pistachio Latte", tagline:"Nutty, creamy modern favourite", description:"A modern coffee trend combining espresso with pistachio flavored milk or pistachio cream syrup. Rich and nutty.", howMade:"Pull double espresso. Mix pistachio paste/syrup with steamed milk. Pour over espresso. Garnish with crushed pistachios.", espresso:30, water:0, milk:180, foam:20, caffeine:70 },
+  { icon:"🧊", name:"Nitro Cold Brew", tagline:"Silky smooth nitrogen-infused", description:"Cold brew coffee infused with nitrogen gas, giving it a creamy, stout-like texture. Served from a tap like draft beer.", howMade:"Make regular cold brew. Charge with nitrogen under pressure. Serve from tap — the cascading pour creates the creamy head.", espresso:0, water:250, milk:0, foam:0, caffeine:120, isSpecial:true },
+  { icon:"🍊", name:"Orange Espresso", tagline:"Zesty Italian trend", description:"A trending Italian drink — fresh espresso poured over or alongside fresh orange juice. The citrus brightens the coffee's natural notes.", howMade:"Brew a double espresso. Squeeze fresh orange juice separately. Drink together or mix — best with natural fruit sweetness.", espresso:30, water:0, milk:0, foam:0, caffeine:70 }
+];
+
+let currentScreen = 'listScreen';
+
+function addTouchFeedback(el) {
+  el.addEventListener('touchstart', () => el.classList.add('btn-pressed'), {passive:true});
+  el.addEventListener('touchend', () => el.classList.remove('btn-pressed'), {passive:true});
+  el.addEventListener('touchcancel', () => el.classList.remove('btn-pressed'), {passive:true});
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  currentScreen = id;
+}
+
+document.getElementById('navList').addEventListener('click', () => {
+  showScreen('listScreen');
+  document.getElementById('navList').classList.add('active');
+  document.getElementById('navCalc').classList.remove('active');
+});
+document.getElementById('navCalc').addEventListener('click', () => {
+  showScreen('calcScreen');
+  document.getElementById('navCalc').classList.add('active');
+  document.getElementById('navList').classList.remove('active');
+});
+document.getElementById('removeAdsBtn').addEventListener('click', () => {
+  if (window.Android) Android.purchaseNoAds();
+});
+
+[document.getElementById('navList'), document.getElementById('navCalc'), document.getElementById('removeAdsBtn')].forEach(addTouchFeedback);
+
+function renderList() {
+  const grid = document.getElementById('coffeeGrid');
+  grid.innerHTML = COFFEES.map((c, i) => {
+    const lvl = Math.min(5, Math.round(c.caffeine / 25));
+    const dots = Array.from({length:5}, (_,k) => `<div class="dot${k < lvl ? ' filled' : ''}"></div>`).join('');
+    return `<div class="coffee-card" onclick="showDetail(${i})" style="border-color:${c.isSpecial?'var(--accent)':'#3a2a20'}">
+      <div class="coffee-icon">${c.icon}</div>
+      <div class="coffee-title">${c.name}</div>
+      <div class="coffee-subtitle">${c.tagline}</div>
+      <div class="strength-dots">${dots}</div>
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('.coffee-card').forEach(addTouchFeedback);
+}
+
+function showDetail(idx) {
+  const c = COFFEES[idx];
+  const total = c.espresso + c.water + c.milk + c.foam || 1;
+  const espPct = Math.round(c.espresso/total*100);
+  const watPct = Math.round(c.water/total*100);
+  const milkPct = Math.round(c.milk/total*100);
+  const foamPct = Math.round(c.foam/total*100);
+  const caffLvl = Math.min(100, Math.round(c.caffeine / 1.5));
+  const ratioBar = `<div class="ratio-bar">
+    ${espPct ? `<div class="ratio-espresso" style="flex:${espPct}"></div>` : ''}
+    ${watPct ? `<div class="ratio-water" style="flex:${watPct}"></div>` : ''}
+    ${milkPct ? `<div class="ratio-milk" style="flex:${milkPct}"></div>` : ''}
+    ${foamPct ? `<div class="ratio-foam" style="flex:${foamPct}"></div>` : ''}
+  </div>
+  <div class="ratio-label">
+    ${espPct ? `<span><span class="swatch" style="background:#3e200a"></span>Espresso ${espPct}%</span>` : ''}
+    ${watPct ? `<span><span class="swatch" style="background:#5a9ab5"></span>Water ${watPct}%</span>` : ''}
+    ${milkPct ? `<span><span class="swatch" style="background:var(--accent-light);opacity:0.7"></span>Milk ${milkPct}%</span>` : ''}
+    ${foamPct ? `<span><span class="swatch" style="background:#c8a97e"></span>Foam ${foamPct}%</span>` : ''}
+  </div>`;
+  document.getElementById('detailContent').innerHTML = `
+    <button class="back-btn" onclick="showScreen('listScreen')">← Back</button>
+    <div class="detail-icon">${c.icon}</div>
+    <div class="detail-name">${c.name}</div>
+    <div class="detail-tagline">${c.tagline}</div>
+    <div class="info-section"><h3>About</h3><p class="info-text">${c.description}</p></div>
+    <div class="info-section"><h3>How It's Made</h3><p class="info-text">${c.howMade}</p></div>
+    <div class="info-section"><h3>Composition</h3>${ratioBar}</div>
+    <div class="info-section"><h3>Caffeine (approx ${c.caffeine}mg)</h3>
+      <div class="caffeine-bar-wrap"><div class="caffeine-bar" style="width:${caffLvl}%"></div></div>
+      <div style="color:#aaa;font-size:0.8rem;margin-top:6px">${c.caffeine < 40 ? 'Low' : c.caffeine < 80 ? 'Moderate' : c.caffeine < 120 ? 'High' : 'Very High'} caffeine</div>
+    </div>
+  `;
+  document.getElementById('detailContent').querySelector('.back-btn').addEventListener('touchstart', function() { this.classList.add('btn-pressed'); }, {passive:true});
+  document.getElementById('detailContent').querySelector('.back-btn').addEventListener('touchend', function() { this.classList.remove('btn-pressed'); }, {passive:true});
+  showScreen('detailScreen');
+}
+
+document.getElementById('calcBtn').addEventListener('click', () => {
+  const esp = parseFloat(document.getElementById('espressoMl').value) || 0;
+  const water = parseFloat(document.getElementById('waterMl').value) || 0;
+  const milk = parseFloat(document.getElementById('milkMl').value) || 0;
+  const total = esp + water + milk;
+  if (total === 0) { document.getElementById('calcResult').style.display = 'block'; document.getElementById('calcResult').textContent = 'Enter some values first'; return; }
+  const ratio = esp / total;
+  let strength = '';
+  if (ratio > 0.5) strength = 'Very Strong ☕☕☕☕☕';
+  else if (ratio > 0.25) strength = 'Strong ☕☕☕☕';
+  else if (ratio > 0.12) strength = 'Medium ☕☕☕';
+  else if (ratio > 0.06) strength = 'Mild ☕☕';
+  else strength = 'Very Mild ☕';
+  document.getElementById('calcResult').style.display = 'block';
+  document.getElementById('calcResult').textContent = strength;
+  const detail = document.getElementById('calcDetail');
+  detail.style.display = 'block';
+  detail.innerHTML = `Total volume: <strong>${total}ml</strong><br>
+  Coffee ratio: <strong>${(ratio*100).toFixed(1)}%</strong><br>
+  Espresso: <strong>${esp}ml</strong> | Water: <strong>${water}ml</strong> | Milk: <strong>${milk}ml</strong><br>
+  Similar to: <strong>${ratio > 0.5 ? 'Espresso shot' : ratio > 0.25 ? 'Cortado / Macchiato' : ratio > 0.12 ? 'Cappuccino / Flat White' : ratio > 0.06 ? 'Latte / Americano' : 'Very diluted coffee'}</strong>`;
+});
+addTouchFeedback(document.getElementById('calcBtn'));
+
+renderList();
+
+window.onAdMobLoaded = function() {};
+window.onPurchaseComplete = function(sku) {
+  if (sku && sku.includes('no_ads')) {
+    document.getElementById('banner-ad').style.display = 'none';
+    document.getElementById('removeAdsBtn').style.display = 'none';
+  }
+};
+if (window.Android) document.getElementById('banner-ad').style.display = 'none';
+</script>
+</body>
+</html>

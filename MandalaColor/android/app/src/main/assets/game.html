@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MandalaColor</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#1a0a14;--surface:#2a0e1e;--accent:#FF80AB;--text:#eaeaea;--muted:#886;--radius:10px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;padding:8px 8px 0;}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-shrink:0;}
+header h1{font-size:1.2rem;font-weight:700;}header h1 span{color:var(--accent);}
+#mandala-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+#mandala-svg{touch-action:manipulation;}
+.section{cursor:pointer;transition:opacity 0.1s;stroke:#333;stroke-width:0.5;}
+.section:active,.section.btn-pressed{opacity:0.7;}
+#palette-row{display:flex;gap:4px;flex-wrap:wrap;flex-shrink:0;padding:6px 0;justify-content:center;}
+.color-dot{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;touch-action:manipulation;}
+.color-dot.active{border-color:#fff;transform:scale(1.15);}
+#btns{display:flex;gap:6px;flex-shrink:0;padding:0 0 8px;}
+.btn{flex:1;background:var(--surface);border:1px solid #442;color:var(--text);padding:9px;border-radius:var(--radius);font-size:0.75rem;cursor:pointer;touch-action:manipulation;}
+.btn.btn-pressed{transform:scale(0.93);}
+.btn.primary{background:var(--accent);color:#000;border-color:var(--accent);}
+#banner{height:50px;background:#111;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.75rem;flex-shrink:0;}
+#mandala-sel{display:flex;gap:6px;flex-shrink:0;padding:0 0 6px;}
+.msel{flex:1;background:var(--surface);border:1px solid #442;color:var(--text);padding:7px;border-radius:var(--radius);font-size:0.75rem;cursor:pointer;touch-action:manipulation;text-align:center;}
+.msel.active{background:var(--accent);color:#000;}
+.msel.btn-pressed{transform:scale(0.93);}
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Mandala<span>Color</span></h1></header>
+  <div id="mandala-sel">
+    <div class="msel active" data-m="0">Rose</div>
+    <div class="msel" data-m="1">Lotus</div>
+    <div class="msel" data-m="2">Sun</div>
+    <div class="msel" data-m="3">Star</div>
+  </div>
+  <div id="mandala-wrap"><svg id="mandala-svg" viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg"></svg></div>
+  <div id="palette-row"></div>
+  <div id="btns">
+    <button class="btn" id="btn-undo">Undo</button>
+    <button class="btn" id="btn-clear">Clear</button>
+    <button class="btn" id="btn-save">Save</button>
+    <button class="btn" id="btn-load">Load</button>
+  </div>
+  <div id="banner">Ad Banner</div>
+</div>
+<script>
+const COLORS=['#FF80AB','#FF5252','#FF9800','#FFEB3B','#69F0AE','#40C4FF','#7C4DFF','#EA80FC','#FFFFFF','#BDBDBD','#795548','#1a0a14'];
+const SYMMETRY=8;
+let currentColor=COLORS[0],currentMandala=0,history=[],sectionColors={};
+const svg=document.getElementById('mandala-svg');
+
+// Mandalas defined as petal groups
+const MANDALAS=[
+  // Rose: nested petals
+  {name:'rose',rings:[
+    {n:SYMMETRY,r:20,size:16,type:'ellipse'},
+    {n:SYMMETRY,r:45,size:22,type:'ellipse'},
+    {n:SYMMETRY*2,r:70,size:12,type:'ellipse'},
+    {n:1,r:0,size:10,type:'circle'},
+  ]},
+  // Lotus
+  {name:'lotus',rings:[
+    {n:SYMMETRY,r:18,size:18,type:'petal'},
+    {n:SYMMETRY,r:50,size:24,type:'petal'},
+    {n:SYMMETRY,r:80,size:18,type:'petal'},
+    {n:1,r:0,size:12,type:'circle'},
+  ]},
+  // Sun
+  {name:'sun',rings:[
+    {n:12,r:30,size:10,type:'ray'},
+    {n:8,r:55,size:15,type:'diamond'},
+    {n:16,r:78,size:8,type:'ray'},
+    {n:1,r:0,size:14,type:'circle'},
+  ]},
+  // Star
+  {name:'star',rings:[
+    {n:6,r:25,size:20,type:'diamond'},
+    {n:12,r:55,size:14,type:'diamond'},
+    {n:6,r:80,size:18,type:'diamond'},
+    {n:1,r:0,size:10,type:'circle'},
+  ]}
+];
+
+function buildMandala(m){
+  svg.innerHTML='';sectionColors={};history=[];
+  const def=MANDALAS[m];
+  def.rings.forEach((ring,ri)=>{
+    const n=ring.n;
+    for(let i=0;i<n;i++){
+      const angle=(Math.PI*2/n)*i;
+      const cx=Math.cos(angle)*ring.r,cy=Math.sin(angle)*ring.r;
+      const key=ri+'_'+i;
+      const el=createShape(ring.type,cx,cy,ring.size,angle,key);
+      el.dataset.key=key;el.dataset.ring=ri;el.dataset.idx=i;el.dataset.n=n;
+      el.setAttribute('fill','#1e0e18');
+      el.classList.add('section');
+      el.addEventListener('click',function(){colorSection(this);});
+      el.addEventListener('touchstart',function(e){
+        e.preventDefault();
+        this.classList.add('btn-pressed');
+        setTimeout(()=>this.classList.remove('btn-pressed'),120);
+        colorSection(this);
+      },{passive:false});
+      svg.appendChild(el);
+    }
+  });
+}
+
+function createShape(type,cx,cy,size,angle,key){
+  let el;
+  if(type==='circle'){
+    el=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    el.setAttribute('cx',cx);el.setAttribute('cy',cy);el.setAttribute('r',size);
+  }else if(type==='ellipse'||type==='petal'){
+    el=document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+    el.setAttribute('cx',cx);el.setAttribute('cy',cy);
+    el.setAttribute('rx',type==='petal'?size*0.4:size*0.5);
+    el.setAttribute('ry',type==='petal'?size:size*0.7);
+    el.setAttribute('transform',`rotate(${angle*180/Math.PI+90},${cx},${cy})`);
+  }else if(type==='diamond'){
+    el=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    const pts=[[cx,cy-size],[cx+size*0.4,cy],[cx,cy+size],[cx-size*0.4,cy]];
+    el.setAttribute('points',pts.map(p=>p.join(',')).join(' '));
+    el.setAttribute('transform',`rotate(${angle*180/Math.PI},${cx},${cy})`);
+  }else{// ray
+    el=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    const pts=[[cx,cy-size],[cx+size*0.25,cy+size*0.5],[cx-size*0.25,cy+size*0.5]];
+    el.setAttribute('points',pts.map(p=>p.join(',')).join(' '));
+    el.setAttribute('transform',`rotate(${angle*180/Math.PI},${cx},${cy})`);
+  }
+  return el;
+}
+
+function colorSection(el){
+  const ri=parseInt(el.dataset.ring),n=parseInt(el.dataset.n),idx=parseInt(el.dataset.idx);
+  const undoState=JSON.stringify(sectionColors);
+  // Mirror: color symmetric sections
+  const keys=[];
+  for(let k=0;k<n;k+=n/SYMMETRY){
+    const mirror=Math.round((idx+(k)*(n/SYMMETRY))%n);// simplified symmetry
+  }
+  // Color this + symmetric partner
+  const partners=[idx,(idx+n/2)%n];
+  partners.forEach(pidx=>{
+    const key=ri+'_'+pidx;
+    sectionColors[key]=currentColor;
+    const target=svg.querySelector(`[data-key="${key}"]`);
+    if(target)target.setAttribute('fill',currentColor);
+  });
+  // Also color the element directly
+  sectionColors[el.dataset.key]=currentColor;
+  el.setAttribute('fill',currentColor);
+  history.push(undoState);
+}
+
+// Palette
+const palRow=document.getElementById('palette-row');
+COLORS.forEach((c,i)=>{
+  const b=document.createElement('div');
+  b.className='color-dot'+(i===0?' active':'');
+  b.style.background=c;
+  b.addEventListener('click',()=>{
+    currentColor=c;
+    document.querySelectorAll('.color-dot').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+  });
+  palRow.appendChild(b);
+});
+
+// Mandala selector
+document.querySelectorAll('.msel').forEach(s=>{
+  s.addEventListener('click',function(){
+    document.querySelectorAll('.msel').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+    currentMandala=parseInt(this.dataset.m);
+    buildMandala(currentMandala);
+  });
+});
+
+document.getElementById('btn-undo').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  if(history.length===0)return;
+  sectionColors=JSON.parse(history.pop());
+  svg.querySelectorAll('.section').forEach(el=>{
+    el.setAttribute('fill',sectionColors[el.dataset.key]||'#1e0e18');
+  });
+});
+document.getElementById('btn-clear').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  buildMandala(currentMandala);
+});
+document.getElementById('btn-save').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  localStorage.setItem('mandala_save',JSON.stringify({m:currentMandala,colors:sectionColors}));
+  this.textContent='Saved!';setTimeout(()=>this.textContent='Save',1000);
+});
+document.getElementById('btn-load').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  const data=localStorage.getItem('mandala_save');if(!data)return;
+  const d=JSON.parse(data);
+  if(d.m!==currentMandala){
+    currentMandala=d.m;
+    document.querySelectorAll('.msel').forEach((s,i)=>s.classList.toggle('active',i===currentMandala));
+    buildMandala(currentMandala);
+  }
+  sectionColors=d.colors;
+  svg.querySelectorAll('.section').forEach(el=>{
+    el.setAttribute('fill',sectionColors[el.dataset.key]||'#1e0e18');
+  });
+});
+
+window.onPurchaseComplete=function(sku){};
+window.onAdMobLoaded=function(){document.getElementById('banner').style.display='none';};
+
+buildMandala(0);
+</script>
+</body>
+</html>

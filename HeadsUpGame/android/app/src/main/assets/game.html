@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Heads Up!</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: #111; color: #fff; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  :root { --accent: #FF4081; }
+  header { background: #1a1a1a; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); flex-shrink:0; }
+  header h1 { font-size: 1.3rem; color: var(--accent); }
+  .btn-remove-ads { background: var(--accent); color: #fff; border: none; border-radius: 20px; padding: 8px 16px; font-size: 0.8rem; font-weight: bold; min-height: 44px; cursor: pointer; }
+  .btn-pressed { opacity: 0.7; transform: scale(0.96); }
+  .screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow-y:auto; }
+  .screen.hidden { display: none; }
+  h2 { font-size: 1.6rem; font-weight: 900; margin-bottom: 20px; text-align: center; }
+  .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 400px; }
+  .cat-card { background: linear-gradient(135deg, #2a2a2a, #1a1a1a); border: 2px solid #333; border-radius: 16px; padding: 20px 12px; text-align: center; cursor: pointer; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+  .cat-card:active { transform: scale(0.95); }
+  .cat-card .cat-emoji { font-size: 1.8rem; }
+  .cat-card .cat-name { font-size: 0.9rem; font-weight: bold; }
+  .big-btn { background: var(--accent); color: #fff; border: none; border-radius: 16px; padding: 18px 40px; font-size: 1.2rem; font-weight: bold; cursor: pointer; min-height: 56px; margin: 10px 0; width: 100%; max-width: 360px; }
+  .secondary-btn { background: #2a2a2a; color: #ccc; border: 1px solid #444; border-radius: 16px; padding: 14px 30px; font-size: 1rem; cursor: pointer; min-height: 50px; width: 100%; max-width: 360px; margin: 6px 0; }
+  /* GAME SCREEN */
+  .game-bg { position: fixed; top:0;left:0;right:0;bottom:0; z-index:-1; transition: background 0.3s; }
+  .card-word { font-size: 3rem; font-weight: 900; text-align: center; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); padding: 20px; line-height: 1.1; }
+  .card-category { color: rgba(255,255,255,0.7); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+  .timer-ring { width: 90px; height: 90px; position: relative; margin: 10px 0; }
+  .timer-ring svg { transform: rotate(-90deg); }
+  .timer-ring .timer-bg { fill: none; stroke: rgba(255,255,255,0.2); stroke-width: 6; }
+  .timer-ring .timer-fill { fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 220; transition: stroke-dashoffset 1s linear; }
+  .timer-number { position: absolute; top:50%; left:50%; transform: translate(-50%,-50%); font-size: 1.5rem; font-weight: 900; }
+  .score-display { font-size: 1.2rem; color: rgba(255,255,255,0.9); margin-bottom: 10px; }
+  .hint-text { color: rgba(255,255,255,0.6); font-size: 0.85rem; text-align:center; margin-top:8px; }
+  .game-btns { display: flex; gap: 16px; margin-top: 16px; width: 100%; max-width: 360px; }
+  .correct-btn { flex: 1; background: rgba(76,175,80,0.8); backdrop-filter:blur(4px); color: #fff; border: none; border-radius: 14px; padding: 18px; font-size: 1rem; font-weight: bold; cursor: pointer; min-height: 60px; }
+  .skip-btn-game { flex: 1; background: rgba(255,193,7,0.8); backdrop-filter:blur(4px); color: #111; border: none; border-radius: 14px; padding: 18px; font-size: 1rem; font-weight: bold; cursor: pointer; min-height: 60px; }
+  .flash-overlay { position: fixed; top:0;left:0;right:0;bottom:0; pointer-events:none; opacity:0; transition: opacity 0.4s; z-index:50; }
+  /* RESULTS */
+  .results-score { font-size: 4rem; font-weight: 900; color: var(--accent); text-align: center; }
+  .results-label { font-size: 1rem; color: #aaa; text-align: center; margin-bottom: 20px; }
+  .results-list { width:100%; max-width:380px; max-height:280px; overflow-y:auto; }
+  .result-row { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:#1e1e1e; border-radius:10px; margin:5px 0; font-size:0.9rem; }
+  #banner-ad { background: #1a1a1a; text-align: center; padding: 8px; color: #666; font-size: 0.75rem; border-top: 1px solid #222; flex-shrink:0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Heads Up!</h1>
+  <button class="btn-remove-ads" id="removeAdsBtn">Remove Ads</button>
+</header>
+
+<div class="flash-overlay" id="flashOverlay"></div>
+
+<!-- HOME SCREEN -->
+<div class="screen" id="homeScreen">
+  <h2>Pick a Category</h2>
+  <div class="cat-grid" id="catGrid">
+    <div class="cat-card" data-cat="Animals" style="border-color:#4CAF50"><span class="cat-emoji">🐾</span><span class="cat-name">Animals</span></div>
+    <div class="cat-card" data-cat="Movies" style="border-color:#2196F3"><span class="cat-emoji">🎬</span><span class="cat-name">Movies</span></div>
+    <div class="cat-card" data-cat="Celebrities" style="border-color:#FF9800"><span class="cat-emoji">⭐</span><span class="cat-name">Celebrities</span></div>
+    <div class="cat-card" data-cat="Objects" style="border-color:#9C27B0"><span class="cat-emoji">📦</span><span class="cat-name">Objects</span></div>
+    <div class="cat-card" data-cat="Actions" style="border-color:#00BCD4"><span class="cat-emoji">🏃</span><span class="cat-name">Actions</span></div>
+    <div class="cat-card" data-cat="Places" style="border-color:#F44336"><span class="cat-emoji">🌍</span><span class="cat-name">Places</span></div>
+  </div>
+  <div style="height:16px"></div>
+  <div style="color:#888;font-size:0.85rem;text-align:center;margin-bottom:12px">Hold phone on forehead — tilt to answer!</div>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen hidden" id="gameScreen" style="background:linear-gradient(135deg, #FF4081, #c62828)">
+  <div class="score-display" id="scoreDisplay">Score: 0</div>
+  <div class="timer-ring" id="timerRing">
+    <svg viewBox="0 0 80 80" width="90" height="90">
+      <circle class="timer-bg" cx="40" cy="40" r="35"/>
+      <circle class="timer-fill" id="timerCircle" cx="40" cy="40" r="35"/>
+    </svg>
+    <div class="timer-number" id="timerNum">60</div>
+  </div>
+  <div class="card-category" id="gameCategory">ANIMALS</div>
+  <div class="card-word" id="gameWord">ELEPHANT</div>
+  <div class="hint-text">Tilt forward = Correct ✓ | Tilt back = Skip →</div>
+  <div class="game-btns">
+    <button class="correct-btn" id="correctBtn">✓ CORRECT</button>
+    <button class="skip-btn-game" id="skipBtnGame">→ SKIP</button>
+  </div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div class="screen hidden" id="resultsScreen">
+  <h2>Time's Up!</h2>
+  <div class="results-score" id="finalScore">5</div>
+  <div class="results-label">cards correct</div>
+  <div class="results-list" id="resultsList"></div>
+  <button class="big-btn" id="playAgainBtn" style="margin-top:20px">Play Again</button>
+  <button class="secondary-btn" id="homeBtn">Change Category</button>
+</div>
+
+<div id="banner-ad">Advertisement</div>
+
+<script>
+const CARDS = {
+  Animals: ["Elephant","Penguin","Giraffe","Kangaroo","Flamingo","Sloth","Gorilla","Cheetah","Octopus","Peacock","Crocodile","Chameleon","Platypus","Armadillo","Meerkat","Jellyfish","Porcupine","Toucan","Wombat","Narwhal","Seahorse","Flying Squirrel","Bison","Hyena","Komodo Dragon","Snow Leopard","Axolotl","Capybara","Red Panda","Quokka","Ocelot","Tapir","Mandrill","Okapi","Fennec Fox","Pangolin","Alpaca","Lemur","Manatee","Axolotl","Dingo","Kinkajou","Numbat","Echidna","Wallaby","Cassowary","Binturong","Fossa","Shoebill Stork","Tarsier","Wolverine","Caracal","Fishing Cat","Serval","Saiga","Olm","Mudskipper","Blobfish","Aye-aye","Naked Mole Rat","Sun Bear","Binturong","Patagonian Mara","Gerenuk","Frill-necked Lizard","Thorny Devil","Pygmy Seahorse","Mimic Octopus","Dumbo Octopus","Vampire Squid","Leafy Sea Dragon","Mantis Shrimp","Pistol Shrimp","Glass Frog","Satanic Leaf-tailed Gecko","Puffer Fish","Clownfish","Lion","Tiger","Bear","Wolf","Fox"],
+  Movies: ["Titanic","The Lion King","Jurassic Park","Star Wars","Frozen","Avatar","Forrest Gump","The Matrix","Toy Story","Shrek","Finding Nemo","The Avengers","Jaws","E.T.","Home Alone","Gladiator","The Dark Knight","Inception","Moana","Coco","Up","WALL-E","Grease","Back to the Future","Ghostbusters","The Wizard of Oz","Cinderella","Beauty and the Beast","Aladdin","The Little Mermaid","Kung Fu Panda","Minions","Spider-Man","Black Panther","Encanto","Interstellar","The Godfather","Pulp Fiction","Rocky","Casablanca","The Shawshank Redemption","Schindler's List","Forrest Gump","Silence of the Lambs","It's a Wonderful Life","Citizen Kane","2001: A Space Odyssey","Blade Runner","Die Hard","Indiana Jones","The Lord of the Rings","Harry Potter","Pirates of the Caribbean","Iron Man","Thor","Captain America","Guardians of the Galaxy","Deadpool","Wonder Woman","Aquaman","Joker","Parasite","Nomadland","Soul","Luca","Turning Red","Lightyear","Elemental","Wish","Wonka","Barbie","Oppenheimer","Dune","Top Gun","The Menu","Knives Out","Glass Onion"],
+  Celebrities: ["Taylor Swift","Elon Musk","Beyonce","Cristiano Ronaldo","Lionel Messi","Adele","Harry Styles","Billie Eilish","Ariana Grande","Drake","Ed Sheeran","Justin Bieber","Lady Gaga","Rihanna","Bruno Mars","The Weeknd","Post Malone","Cardi B","Dua Lipa","Olivia Rodrigo","Zendaya","Tom Cruise","Leonardo DiCaprio","Brad Pitt","Angelina Jolie","Meryl Streep","Denzel Washington","Will Smith","Ryan Reynolds","Jennifer Lawrence","Emma Watson","Scarlett Johansson","Chris Hemsworth","Dwayne Johnson","Kevin Hart","Chris Rock","Ellen DeGeneres","Oprah Winfrey","Kim Kardashian","Kylie Jenner","LeBron James","Serena Williams","Tiger Woods","Roger Federer","Rafael Nadal","Novak Djokovic","Simone Biles","Usain Bolt","Michael Phelps","Stephen Curry","Kobe Bryant","Michael Jordan","Muhammad Ali","Barack Obama","Queen Elizabeth","Prince Harry","Meghan Markle","Elon Musk","Jeff Bezos","Bill Gates","Mark Zuckerberg"],
+  Objects: ["Umbrella","Telescope","Accordion","Hammock","Trampoline","Backpack","Compass","Magnifying Glass","Typewriter","Binoculars","Gramophone","Abacus","Boomerang","Kaleidoscope","Yo-yo","Hourglass","Slinky","Skateboard","Canteen","Piggy Bank","Blender","Wheelbarrow","Corkscrew","Whisk","Trombone","Anvil","Stapler","Waffle Iron","Thermometer","Barometer","Stethoscope","Microscope","Periscope","Sextant","Astrolabe","Sundial","Slide Rule","Orrery","Loom","Spinning Wheel","Bellows","Tongs","Anvil","Vise","Soldering Iron","Level","Plumb Bob","Clamp","Jigsaw","Miter Saw","Router","Lathe","Bandsaw","Drill Press","Table Saw","Air Compressor","Jackhammer","Rivet Gun","Caulking Gun","Heat Gun","Blowtorch","Solvent","Putty Knife","Trowel","Roller","Brush"],
+  Actions: ["Swimming","Juggling","Knitting","Playing Guitar","Hula Hooping","Rock Climbing","Painting","Cooking","Doing Yoga","Ice Skating","Surfing","Playing Chess","Gardening","Reading","Dancing","Sleeping","Sneezing","Laughing","Crying","Meditating","Skipping","Rowing","Weight Lifting","Baking","Fishing","Hiking","Taking a Selfie","Texting","Yawning","Stretching","Doing Cartwheels","Eating Spaghetti","Walking the Dog","Brushing Teeth","Building a Sandcastle","Making a Snowman","Flying a Kite","Riding a Bike","Rollerblading","Skateboarding","Snowboarding","Skiing","Wakeboarding","Kayaking","Rock Climbing","Paragliding","Skydiving","Bungee Jumping","Ziplining","White Water Rafting","Scuba Diving","Snorkeling","Whale Watching","Bird Watching","Star Gazing","Fossil Hunting","Mushroom Picking","Berry Picking","Truffle Hunting","Metal Detecting","Geocaching","Orienteering"],
+  Places: ["Eiffel Tower","Great Wall of China","Machu Picchu","Taj Mahal","Colosseum","Niagara Falls","Grand Canyon","Amazon Rainforest","Sahara Desert","Antarctica","Mount Everest","Great Barrier Reef","Times Square","Hollywood","Las Vegas","Tokyo","Paris","London","New York","Dubai","Sydney","Rome","Barcelona","Prague","Budapest","Amsterdam","Vienna","Athens","Istanbul","Cairo","Marrakech","Cape Town","Nairobi","Mumbai","Beijing","Seoul","Singapore","Bali","Santorini","Venice","Florence","Madrid","Lisbon","Dublin","Edinburgh","Copenhagen","Stockholm","Helsinki","Oslo","Reykjavik","Zurich","Geneva","Monaco","Monte Carlo"]
+};
+
+const CAT_COLORS = {
+  Animals: 'linear-gradient(135deg, #1b5e20, #388e3c)',
+  Movies: 'linear-gradient(135deg, #0d47a1, #1976d2)',
+  Celebrities: 'linear-gradient(135deg, #e65100, #f57c00)',
+  Objects: 'linear-gradient(135deg, #4a148c, #7b1fa2)',
+  Actions: 'linear-gradient(135deg, #006064, #0097a7)',
+  Places: 'linear-gradient(135deg, #b71c1c, #e53935)'
+};
+
+let activeCat = 'Animals';
+let deck = [];
+let score = 0;
+let skipped = [];
+let correct = [];
+let timeLeft = 60;
+let timer = null;
+let lastBeta = null;
+let tiltCooldown = false;
+
+function addTouchFeedback(el) {
+  el.addEventListener('touchstart', () => el.classList.add('btn-pressed'), {passive:true});
+  el.addEventListener('touchend', () => el.classList.remove('btn-pressed'), {passive:true});
+  el.addEventListener('touchcancel', () => el.classList.remove('btn-pressed'), {passive:true});
+}
+document.querySelectorAll('button').forEach(addTouchFeedback);
+
+document.querySelectorAll('.cat-card').forEach(card => {
+  card.addEventListener('click', () => startGame(card.dataset.cat));
+  addTouchFeedback(card);
+});
+
+document.getElementById('correctBtn').addEventListener('click', markCorrect);
+document.getElementById('skipBtnGame').addEventListener('click', markSkip);
+document.getElementById('playAgainBtn').addEventListener('click', () => startGame(activeCat));
+document.getElementById('homeBtn').addEventListener('click', goHome);
+document.getElementById('removeAdsBtn').addEventListener('click', () => { if (window.Android) Android.purchaseNoAds(); });
+
+function startGame(cat) {
+  activeCat = cat;
+  deck = [...(CARDS[cat] || [])];
+  shuffle(deck);
+  score = 0; skipped = []; correct = [];
+  timeLeft = 60;
+  document.getElementById('gameScreen').style.background = CAT_COLORS[cat] || 'linear-gradient(135deg, #FF4081, #c62828)';
+  document.getElementById('gameCategory').textContent = cat.toUpperCase();
+  document.getElementById('scoreDisplay').textContent = 'Score: 0';
+  showScreen('gameScreen');
+  nextCard();
+  updateTimerUI();
+  clearInterval(timer);
+  timer = setInterval(tick, 1000);
+  window.addEventListener('deviceorientation', handleTilt);
+}
+
+function tick() {
+  timeLeft--;
+  updateTimerUI();
+  if (timeLeft <= 0) endGame();
+}
+
+function updateTimerUI() {
+  document.getElementById('timerNum').textContent = timeLeft;
+  const circ = document.getElementById('timerCircle');
+  const pct = timeLeft / 60;
+  circ.style.strokeDashoffset = 220 * (1 - pct);
+  circ.style.stroke = timeLeft <= 10 ? '#ffeb3b' : '#fff';
+}
+
+function nextCard() {
+  if (!deck.length) { deck = [...(CARDS[activeCat] || [])]; shuffle(deck); }
+  document.getElementById('gameWord').textContent = deck.pop().toUpperCase();
+}
+
+function markCorrect() {
+  correct.push(document.getElementById('gameWord').textContent);
+  score++;
+  document.getElementById('scoreDisplay').textContent = 'Score: ' + score;
+  flash('rgba(76,175,80,0.6)');
+  nextCard();
+}
+
+function markSkip() {
+  skipped.push(document.getElementById('gameWord').textContent);
+  flash('rgba(255,193,7,0.5)');
+  nextCard();
+}
+
+function flash(color) {
+  const o = document.getElementById('flashOverlay');
+  o.style.background = color;
+  o.style.opacity = '1';
+  setTimeout(() => { o.style.opacity = '0'; }, 400);
+}
+
+function endGame() {
+  clearInterval(timer);
+  window.removeEventListener('deviceorientation', handleTilt);
+  showScreen('resultsScreen');
+  document.getElementById('finalScore').textContent = score;
+  const list = document.getElementById('resultsList');
+  list.innerHTML = '';
+  correct.forEach(w => list.innerHTML += `<div class="result-row"><span>${w}</span><span style="color:#4CAF50">✓ Correct</span></div>`);
+  skipped.forEach(w => list.innerHTML += `<div class="result-row"><span>${w}</span><span style="color:#ff9800">Skipped</span></div>`);
+}
+
+function goHome() { clearInterval(timer); window.removeEventListener('deviceorientation', handleTilt); showScreen('homeScreen'); }
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+function shuffle(arr) {
+  for (let i = arr.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+}
+
+function handleTilt(e) {
+  if (tiltCooldown) return;
+  const beta = e.beta;
+  if (lastBeta === null) { lastBeta = beta; return; }
+  const diff = beta - lastBeta;
+  if (diff > 25) { tiltCooldown = true; markCorrect(); setTimeout(() => { tiltCooldown = false; lastBeta = null; }, 1200); }
+  else if (diff < -25) { tiltCooldown = true; markSkip(); setTimeout(() => { tiltCooldown = false; lastBeta = null; }, 1200); }
+}
+
+window.onAdMobLoaded = function() {};
+window.onPurchaseComplete = function(sku) {
+  if (sku && sku.includes('no_ads')) {
+    document.getElementById('banner-ad').style.display = 'none';
+    document.getElementById('removeAdsBtn').style.display = 'none';
+  }
+};
+if (window.Android) document.getElementById('banner-ad').style.display = 'none';
+</script>
+</body>
+</html>

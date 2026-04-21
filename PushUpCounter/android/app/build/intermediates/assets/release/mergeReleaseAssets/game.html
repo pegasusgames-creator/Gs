@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Push-Up Counter</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a0a0a; --surface:#2a0f0f; --card:#3a1010; --accent:#EF5350; --text:#eaeaea; --muted:#aa8888; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
+#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+#tap-btn { width:100%; height:160px; background:linear-gradient(135deg,var(--accent),#c62828); border:none; border-radius:var(--radius); cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; margin-bottom:12px; }
+#tap-count { font-size:4rem; font-weight:900; color:#fff; line-height:1; }
+#tap-label { font-size:0.9rem; color:rgba(255,255,255,0.7); margin-top:4px; }
+#tap-btn:active { transform:scale(0.97); }
+.controls { display:flex; gap:8px; margin-bottom:12px; }
+.ctrl-btn { flex:1; background:var(--card); border:none; color:var(--text); font-size:0.9rem; font-weight:700; padding:10px; border-radius:10px; cursor:pointer; }
+.ctrl-btn.accent { background:var(--accent); color:#fff; }
+.set-info { display:flex; justify-content:space-around; background:var(--card); border-radius:10px; padding:12px; margin-bottom:12px; }
+.si { text-align:center; }
+.si-val { font-size:1.3rem; font-weight:700; color:var(--accent); }
+.si-lbl { font-size:0.68rem; color:var(--muted); }
+.rest-banner { background:rgba(239,83,80,0.15); border:2px solid var(--accent); border-radius:var(--radius); padding:14px; text-align:center; margin-bottom:12px; display:none; }
+#rest-timer { font-size:2rem; font-weight:700; color:var(--accent); }
+.plan-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+.plan-btn { flex:1; min-width:100px; background:var(--card); border:2px solid transparent; border-radius:10px; color:var(--muted); font-size:0.8rem; font-weight:700; padding:10px 8px; cursor:pointer; text-align:center; }
+.plan-btn.active { border-color:var(--accent); color:var(--accent); }
+.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.stat-box { background:var(--card); border-radius:10px; padding:10px; text-align:center; }
+.stat-lbl { font-size:0.65rem; color:var(--muted); margin-bottom:2px; }
+.stat-val { font-size:1.2rem; font-weight:700; color:var(--accent); }
+.hist-item { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(239,83,80,0.1); font-size:0.85rem; }
+.hist-item:last-child { border-bottom:none; }
+.empty { text-align:center; color:var(--muted); font-size:0.85rem; padding:20px 0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Push-Up <span>Counter</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
+  <div id="scroll">
+    <div class="card">
+      <div class="card-title">Counter</div>
+      <button id="tap-btn">
+        <span id="tap-count">0</span>
+        <span id="tap-label">TAP TO COUNT</span>
+      </button>
+      <div class="controls">
+        <button class="ctrl-btn" id="btn-undo">Undo</button>
+        <button class="ctrl-btn" id="btn-complete-set">Complete Set</button>
+        <button class="ctrl-btn" id="btn-reset-count" style="background:rgba(239,83,80,0.15);color:var(--accent);">Reset</button>
+      </div>
+      <div class="set-info">
+        <div class="si"><div class="si-val" id="si-set">1</div><div class="si-lbl">Set</div></div>
+        <div class="si"><div class="si-val" id="si-reps">0</div><div class="si-lbl">This Set</div></div>
+        <div class="si"><div class="si-val" id="si-total">0</div><div class="si-lbl">Total</div></div>
+      </div>
+    </div>
+    <div class="rest-banner" id="rest-banner">
+      <div style="font-size:0.9rem;color:var(--muted);margin-bottom:4px;">Rest Time</div>
+      <div id="rest-timer">0:60</div>
+      <button id="skip-rest" style="background:var(--accent);border:none;color:#fff;border-radius:8px;padding:6px 16px;font-size:0.85rem;margin-top:8px;cursor:pointer;">Skip Rest</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Workout Plans</div>
+      <div class="plan-row">
+        <button class="plan-btn" data-plan="beginner">Beginner<br><span style="font-size:0.7rem;font-weight:400;">3x5</span></button>
+        <button class="plan-btn" data-plan="intermediate">Intermediate<br><span style="font-size:0.7rem;font-weight:400;">4x10</span></button>
+        <button class="plan-btn" data-plan="advanced">Advanced<br><span style="font-size:0.7rem;font-weight:400;">5x20</span></button>
+      </div>
+      <div id="plan-detail" style="font-size:0.82rem;color:var(--muted);min-height:24px;"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Stats</div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-lbl">Today</div><div class="stat-val" id="st-today">0</div></div>
+        <div class="stat-box"><div class="stat-lbl">Personal Best</div><div class="stat-val" id="st-pb">0</div></div>
+        <div class="stat-box"><div class="stat-lbl">All Time</div><div class="stat-val" id="st-all">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Workout History</div>
+      <div id="hist-list"><div class="empty">No workouts yet.</div></div>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var state={useCount:0,removeAds:false};
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var count=0, setNum=1, totalWO=0;
+var history=JSON.parse(localStorage.getItem('pu_hist')||'[]');
+var statsD=JSON.parse(localStorage.getItem('pu_stats')||'{"today":0,"pb":0,"all":0,"date":""}');
+var today=new Date().toDateString();
+if(statsD.date!==today){statsD.today=0;statsD.date=today;saveStats();}
+var restTimer=null;
+var PLANS={beginner:{label:'3 sets of 5 reps. 90s rest. Focus on form.',sets:3,reps:5,rest:90},intermediate:{label:'4 sets of 10 reps. 60s rest. Controlled pace.',sets:4,reps:10,rest:60},advanced:{label:'5 sets of 20 reps. 45s rest. Full range of motion.',sets:5,reps:20,rest:45}};
+
+function saveStats(){localStorage.setItem('pu_stats',JSON.stringify(statsD));}
+function saveHist(){localStorage.setItem('pu_hist',JSON.stringify(history));}
+function updateUI(){document.getElementById('tap-count').textContent=count;document.getElementById('si-reps').textContent=count;document.getElementById('si-set').textContent=setNum;document.getElementById('si-total').textContent=totalWO;}
+
+document.getElementById('tap-btn').addEventListener('click',function(){count++;totalWO++;updateUI();});
+document.getElementById('btn-undo').addEventListener('click',function(){if(count>0){count--;totalWO--;updateUI();}});
+document.getElementById('btn-reset-count').addEventListener('click',function(){count=0;setNum=1;totalWO=0;updateUI();});
+
+document.getElementById('btn-complete-set').addEventListener('click',function(){
+  if(count===0)return;
+  statsD.today+=count;
+  statsD.all+=count;
+  if(count>statsD.pb)statsD.pb=count;
+  saveStats();
+  history.unshift({reps:count,set:setNum,t:Date.now()});
+  if(history.length>100)history=history.slice(0,100);
+  saveHist();
+  var prevCount=count; count=0; setNum++;
+  updateUI(); renderStats(); renderHist();
+  startRest(60);
+  maybeInterstitial();
+});
+
+function startRest(secs){
+  clearInterval(restTimer);
+  var rem=secs;
+  document.getElementById('rest-banner').style.display='';
+  document.getElementById('rest-timer').textContent=Math.floor(rem/60)+':'+(rem%60<10?'0':'')+rem%60;
+  restTimer=setInterval(function(){
+    rem--;
+    if(rem<=0){clearInterval(restTimer);document.getElementById('rest-banner').style.display='none';return;}
+    document.getElementById('rest-timer').textContent=Math.floor(rem/60)+':'+(rem%60<10?'0':'')+rem%60;
+  },1000);
+}
+document.getElementById('skip-rest').addEventListener('click',function(){clearInterval(restTimer);document.getElementById('rest-banner').style.display='none';});
+
+document.querySelectorAll('.plan-btn').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.plan-btn').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');
+    document.getElementById('plan-detail').textContent=PLANS[b.dataset.plan].label;
+  });
+});
+
+function renderStats(){
+  document.getElementById('st-today').textContent=statsD.today;
+  document.getElementById('st-pb').textContent=statsD.pb;
+  document.getElementById('st-all').textContent=statsD.all;
+}
+function renderHist(){
+  var el=document.getElementById('hist-list');
+  if(!history.length){el.innerHTML='<div class="empty">No workouts yet.</div>';return;}
+  el.innerHTML=history.slice(0,15).map(function(h){
+    var d=new Date(h.t);
+    return '<div class="hist-item"><span>Set '+h.set+': '+h.reps+' reps</span><span style="color:var(--muted);">'+d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</span></div>';
+  }).join('');
+}
+
+renderStats();renderHist();updateUI();
+</script>
+</body>
+</html>

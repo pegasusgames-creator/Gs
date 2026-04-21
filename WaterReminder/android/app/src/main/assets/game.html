@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Water Reminder</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#0a1a2e; --surface:#0f2a3e; --card:#0d3550; --accent:#29B6F6; --text:#eaeaea; --muted:#7aaacc; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
+#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+#progress-area { display:flex; flex-direction:column; align-items:center; padding:8px 0; }
+#water-icon { font-size:3rem; margin-bottom:8px; }
+#progress-label { font-size:1.8rem; font-weight:900; color:var(--accent); line-height:1; }
+#progress-sub { font-size:0.8rem; color:var(--muted); margin-top:4px; }
+#progress-bar-wrap { width:100%; background:rgba(41,182,246,0.12); border-radius:20px; height:18px; margin-top:14px; overflow:hidden; }
+#progress-bar { height:100%; border-radius:20px; background:linear-gradient(90deg,#29B6F6,#01579b); transition:width 0.5s; }
+.quick-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.qbtn { flex:1; min-width:60px; background:var(--card); border:2px solid rgba(41,182,246,0.2); border-radius:10px; color:var(--accent); font-size:0.85rem; font-weight:700; padding:10px 6px; cursor:pointer; text-align:center; }
+.custom-row { display:flex; gap:8px; margin-bottom:8px; }
+.custom-row input { flex:1; background:var(--card); border:1px solid rgba(41,182,246,0.2); border-radius:8px; color:var(--text); padding:10px 12px; font-size:0.95rem; }
+.btn-p { background:var(--accent); border:none; color:#0a1a2e; font-size:1rem; font-weight:700; padding:12px; border-radius:10px; cursor:pointer; }
+.unit-toggle { display:flex; gap:6px; margin-bottom:10px; }
+.utbtn { flex:1; background:var(--card); border:2px solid transparent; border-radius:8px; color:var(--muted); font-size:0.85rem; font-weight:700; padding:8px; cursor:pointer; text-align:center; }
+.utbtn.active { border-color:var(--accent); color:var(--accent); }
+.goal-row { display:flex; align-items:center; gap:8px; margin-top:10px; }
+.goal-row input { background:var(--card); border:1px solid rgba(41,182,246,0.2); border-radius:8px; color:var(--text); padding:8px 10px; font-size:0.9rem; width:90px; }
+.btn-sm { background:var(--accent); border:none; color:#0a1a2e; font-size:0.85rem; font-weight:700; padding:8px 14px; border-radius:8px; cursor:pointer; }
+.log-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(41,182,246,0.08); font-size:0.85rem; }
+.log-item:last-child { border-bottom:none; }
+.del-btn { background:none; border:none; color:var(--muted); font-size:0.9rem; padding:4px; cursor:pointer; }
+.empty { text-align:center; color:var(--muted); font-size:0.85rem; padding:20px 0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Water <span>Reminder</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
+  <div id="scroll">
+    <div class="card">
+      <div id="progress-area">
+        <div id="water-icon">💧</div>
+        <div id="progress-label">0 ml</div>
+        <div id="progress-sub">of 2000 ml goal</div>
+        <div id="progress-bar-wrap"><div id="progress-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Quick Add</div>
+      <div class="unit-toggle">
+        <button class="utbtn active" data-unit="ml">ml</button>
+        <button class="utbtn" data-unit="oz">fl oz</button>
+      </div>
+      <div class="quick-btns" id="quick-btns">
+        <button class="qbtn" data-ml="200">200ml</button>
+        <button class="qbtn" data-ml="250">250ml</button>
+        <button class="qbtn" data-ml="350">350ml</button>
+        <button class="qbtn" data-ml="500">500ml</button>
+      </div>
+      <div class="custom-row">
+        <input type="number" id="i-custom" placeholder="Custom amount">
+        <button class="btn-p" id="btn-add-custom">Add</button>
+      </div>
+      <div class="goal-row">
+        <span style="font-size:0.72rem;color:var(--muted);">Daily goal (ml):</span>
+        <input type="number" id="i-goal" value="2000" min="500" max="5000" step="100">
+        <button class="btn-sm" id="btn-set-goal">Set</button>
+        <button class="btn-sm" id="btn-reset" style="background:rgba(239,83,80,0.2);color:#ef5350;">Reset</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Today's Log</div>
+      <div id="log-list"><div class="empty">No water logged yet today.</div></div>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var state={useCount:0,removeAds:false};
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var todayKey=new Date().toDateString();
+var logs=JSON.parse(localStorage.getItem('wr_logs')||'[]');
+logs=logs.filter(function(l){return new Date(l.t).toDateString()===todayKey;});
+var dailyGoal=parseInt(localStorage.getItem('wr_goal')||'2000');
+var unit='ml';
+var ML_SIZES=[200,250,350,500];
+var OZ_SIZES=[7,8,12,16];
+
+function save(){var allLogs=JSON.parse(localStorage.getItem('wr_all')||'[]');var others=allLogs.filter(function(l){return new Date(l.t).toDateString()!==todayKey;});localStorage.setItem('wr_all',JSON.stringify(others.concat(logs)));}
+function fmtT(ts){return new Date(ts).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
+
+function addWater(ml){
+  logs.push({ml:ml,t:Date.now()});
+  save();render();
+  var total=logs.reduce(function(s,l){return s+l.ml;},0);
+  if(total>=dailyGoal&&total-ml<dailyGoal){maybeInterstitial();}
+}
+
+function setUnit(u){
+  unit=u;
+  document.querySelectorAll('.utbtn').forEach(function(b){b.classList.toggle('active',b.dataset.unit===u);});
+  var sizes=u==='ml'?ML_SIZES:OZ_SIZES;
+  document.getElementById('quick-btns').querySelectorAll('.qbtn').forEach(function(b,i){
+    b.dataset.ml=u==='ml'?sizes[i]:Math.round(sizes[i]*29.574);
+    b.textContent=sizes[i]+(u==='ml'?'ml':'oz');
+  });
+  document.getElementById('i-custom').placeholder='Custom '+(u==='ml'?'ml':'oz');
+  render();
+}
+
+function render(){
+  var total=logs.reduce(function(s,l){return s+l.ml;},0);
+  var pct=Math.min(total/dailyGoal,1);
+  var disp=unit==='ml'?total+'ml':Math.round(total/29.574)+'oz';
+  var goalDisp=unit==='ml'?dailyGoal+'ml':Math.round(dailyGoal/29.574)+'oz';
+  document.getElementById('progress-label').textContent=disp;
+  document.getElementById('progress-sub').textContent='of '+goalDisp+' goal ('+(Math.round(pct*100))+'%)';
+  document.getElementById('progress-bar').style.width=(pct*100)+'%';
+  document.getElementById('water-icon').textContent=pct>=1?'🎉':'💧';
+  document.getElementById('i-goal').value=dailyGoal;
+  var ll=document.getElementById('log-list');
+  if(!logs.length){ll.innerHTML='<div class="empty">No water logged yet today.</div>';return;}
+  ll.innerHTML=logs.slice().reverse().map(function(l){
+    var d=unit==='ml'?l.ml+'ml':Math.round(l.ml/29.574)+'oz';
+    return '<div class="log-item"><span style="color:var(--accent);font-weight:700;">+'+d+'</span><span style="color:var(--muted);">'+fmtT(l.t)+'</span><button class="del-btn" data-t="'+l.t+'">&#10005;</button></div>';
+  }).join('');
+  ll.querySelectorAll('.del-btn').forEach(function(b){b.addEventListener('click',function(){var t=parseInt(b.dataset.t);logs=logs.filter(function(l){return l.t!==t;});save();render();});});
+}
+
+document.querySelectorAll('.utbtn').forEach(function(b){b.addEventListener('click',function(){setUnit(b.dataset.unit);});});
+document.getElementById('quick-btns').querySelectorAll('.qbtn').forEach(function(b){b.addEventListener('click',function(){addWater(parseInt(b.dataset.ml));});});
+document.getElementById('btn-add-custom').addEventListener('click',function(){
+  var v=parseFloat(document.getElementById('i-custom').value);
+  if(!v||v<1)return;
+  var ml=unit==='ml'?Math.round(v):Math.round(v*29.574);
+  addWater(ml);document.getElementById('i-custom').value='';
+});
+document.getElementById('btn-set-goal').addEventListener('click',function(){
+  dailyGoal=parseInt(document.getElementById('i-goal').value)||2000;
+  localStorage.setItem('wr_goal',dailyGoal);render();
+});
+document.getElementById('btn-reset').addEventListener('click',function(){
+  if(confirm('Reset today\'s water intake?')){logs=[];save();render();}
+});
+
+render();
+</script>
+</body>
+</html>

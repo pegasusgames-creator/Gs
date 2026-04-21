@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Word Ladder</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: #0a1f0a; color: #e8f5e9; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+:root { --accent: #66BB6A; --light: #A5D6A7; }
+header { background: #1b3a1b; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); }
+header h1 { font-size: 1.3rem; color: var(--light); letter-spacing: 2px; }
+.puzzle-header { background: #1b3a1b; padding: 10px 16px; display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--light); }
+.ladder-area { flex: 1; overflow-y: auto; padding: 16px; }
+.target-row { display: flex; justify-content: space-between; align-items: center; background: #0d2e0d; border-radius: 10px; padding: 10px 16px; margin-bottom: 12px; }
+.target-word { font-size: 1.4rem; font-weight: 700; letter-spacing: 6px; }
+.start-word { color: var(--light); }
+.end-word { color: var(--accent); }
+.arrow { color: #aaa; font-size: 1.2rem; }
+.steps-list { display: flex; flex-direction: column; gap: 6px; }
+.step { background: #1b3a1b; border: 2px solid #2a5a2a; border-radius: 10px; padding: 10px 16px; font-size: 1.3rem; letter-spacing: 6px; font-weight: 700; color: #fff; display: flex; align-items: center; justify-content: space-between; }
+.step.changed { border-color: var(--accent); }
+.step.current { border-color: #fff; background: #0d2e0d; }
+.step.error { border-color: #ef5350; animation: shake 0.3s; }
+.step .diff-letter { color: var(--accent); }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+.step-num { font-size: 0.75rem; color: #aaa; }
+.input-area { background: #1b3a1b; border-top: 2px solid #2a5a2a; padding: 12px 16px; }
+.word-editor { display: flex; gap: 6px; justify-content: center; margin-bottom: 10px; }
+.letter-cell { width: 44px; height: 50px; background: #0d2e0d; border: 2px solid #2a5a2a; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 700; color: #fff; cursor: pointer; transition: all 0.1s; }
+.letter-cell.active { border-color: var(--accent); background: #1b4a1b; }
+.keyboard { display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px; margin-bottom: 10px; }
+.key { background: #1b3a1b; border: 1px solid #2a5a2a; border-radius: 6px; padding: 10px 4px; text-align: center; font-size: 0.9rem; font-weight: 700; color: #e8f5e9; cursor: pointer; }
+.key.btn-pressed { opacity: 0.6; transform: scale(0.9); }
+.btn-row { display: flex; gap: 8px; }
+.btn { flex: 1; background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+.btn.btn-pressed { opacity: 0.6; transform: scale(0.96); }
+.btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--light); }
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 100; }
+.overlay.show { display: flex; }
+.modal { background: #1b3a1b; border: 2px solid var(--accent); border-radius: 16px; padding: 24px; max-width: 320px; width: 90%; text-align: center; }
+.modal h2 { color: var(--light); font-size: 1.4rem; margin-bottom: 8px; }
+.big-num { font-size: 3rem; font-weight: 700; color: var(--accent); }
+.solution-steps { text-align: left; margin: 12px 0; font-size: 0.9rem; color: #aaa; max-height: 200px; overflow-y: auto; }
+.sol-step { padding: 4px 0; letter-spacing: 4px; }
+.sol-step.ok { color: var(--light); }
+.banner { background: #111; border: 1px dashed #444; color: #555; text-align: center; padding: 10px; font-size: 0.75rem; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>WORD LADDER</h1>
+  <span style="color:var(--light);font-size:0.9rem">Puzzle <span id="puzzle-num">1</span>/50</span>
+</header>
+<div class="puzzle-header">
+  <span>Steps: <strong id="step-count">0</strong></span>
+  <span>Par: <strong id="par-count">0</strong></span>
+</div>
+
+<div class="ladder-area">
+  <div class="target-row">
+    <span class="target-word start-word" id="start-word">COLD</span>
+    <span class="arrow">→</span>
+    <span class="target-word end-word" id="end-word">WARM</span>
+  </div>
+  <div class="steps-list" id="steps-list"></div>
+</div>
+
+<div class="input-area">
+  <div class="word-editor" id="word-editor"></div>
+  <div class="keyboard" id="keyboard"></div>
+  <div class="btn-row">
+    <button class="btn btn-outline" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="undoStep()">Undo</button>
+    <button class="btn btn-outline" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="showSolution()">Solution</button>
+    <button class="btn" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="submitStep()">Submit</button>
+  </div>
+</div>
+
+<div class="overlay" id="win-overlay">
+  <div class="modal">
+    <h2>Puzzle Solved! 🎉</h2>
+    <div class="big-num" id="win-steps">0</div>
+    <p style="color:#aaa;margin:4px 0 12px">steps (par: <span id="win-par"></span>)</p>
+    <button class="btn" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="nextPuzzle()">Next Puzzle ▶</button>
+  </div>
+</div>
+
+<div class="overlay" id="sol-overlay">
+  <div class="modal">
+    <h2>Solution</h2>
+    <div class="solution-steps" id="solution-steps"></div>
+    <button class="btn btn-outline" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="closeSolution()">Close</button>
+    <button class="btn" style="margin-top:8px" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="closeSolution();nextPuzzle()">Next Puzzle</button>
+  </div>
+</div>
+
+<div class="banner" id="banner-ad">Advertisement</div>
+
+<script>
+// Each puzzle: {start, end, solution (optimal path)}
+const PUZZLES = [
+  {start:'COLD',end:'WARM',solution:['COLD','CORD','WORD','WARD','WARM']},
+  {start:'CAT',end:'DOG',solution:['CAT','COT','DOT','DOG']},
+  {start:'LEAD',end:'GOLD',solution:['LEAD','LOAD','GOAD','GOLD']},
+  {start:'HEAD',end:'TAIL',solution:['HEAD','HEAL','TEAL','TELL','TALL','TAIL']},
+  {start:'FIRE',end:'SIDE',solution:['FIRE','FINE','LINE','LIME','LIKE','BIKE','BILE','BILE','SIDE']},
+  {start:'HATE',end:'LOVE',solution:['HATE','HAVE','CAVE','COVE','LOVE']},
+  {start:'HAND',end:'FOOT',solution:['HAND','BAND','BOND','FOND','FOOD','FOOT']},
+  {start:'DARK',end:'LIGH',solution:['DARK','DARE','BARE','BARN','BORN','CORN','COIN','LOIN','LION','LIEN','LIEN']},
+  {start:'MORE',end:'LESS',solution:['MORE','BORE','BARE','BALE','TALE','MALE','MALE','MESS','LESS']},
+  {start:'FAST',end:'SLOW',solution:['FAST','LAST','LASH','CASH','CASE','CASE','CAGE','SAGE','SALE','SOLE','MOLE','MOLD','BOLD','BLOW','SLOW']},
+  {start:'MAKE',end:'TAKE',solution:['MAKE','LAKE','LIKE','TILE','TALE','TAKE']},
+  {start:'BOOK',end:'READ',solution:['BOOK','COOK','COOL','FOOL','FOAL','REAL','READ']},
+  {start:'STAR',end:'MOON',solution:['STAR','SCAR','SCAN','CLAN','PLAN','PLEA','FLEE','FLEE','FLEE','MOON']},
+  {start:'SHIP',end:'BOAT',solution:['SHIP','SHOP','CHOP','CROP','PROP','POOP','POOL','FOOL','FOAL','COAL','COAT','BOAT']},
+  {start:'HARD',end:'EASY',solution:['HARD','HARE','BARE','BASE','EASE','EASY']},
+  {start:'FOUR',end:'FIVE',solution:['FOUR','POUR','PORE','BORE','BORN','BIRN','FIRE','FINE','FINE','FIVE']},
+  {start:'MINE',end:'YOUR',solution:['MINE','WINE','VINE','VANE','VARE','YORE','YOUR']},
+  {start:'GAVE',end:'TAKE',solution:['GAVE','CAVE','COVE','CORE','BORE','BARE','TALE','TAKE']},
+  {start:'HEAT',end:'COLD',solution:['HEAT','HEAP','REAP','REAL','SEAL','SOAK','SEAK','COAK','COLD']},
+  {start:'PLAY',end:'WORK',solution:['PLAY','CLAY','CLAP','FLAP','FLAT','FRAT','FORT','FORK','FORM','WORM','WORD','WORE','WORK']},
+  {start:'WEST',end:'EAST',solution:['WEST','BEST','BEAT','PEAT','PEAR','SEAR','SEAT','EAST']},
+  {start:'LAND',end:'SEAS',solution:['LAND','LEND','SEND','SEED','FEED','FEEL','PEEL','PEAS','SEAS']},
+  {start:'WOLF',end:'LAMB',solution:['WOLF','GOLF','GOLD','BOLD','BALD','BALL','TALL','TALE','LAME','LAMB']},
+  {start:'HIGH',end:'LOWS',solution:['HIGH','SIGH','SIGN','SING','RING','RIND','LIND','LOWS']},
+  {start:'KICK',end:'BALL',solution:['KICK','LICK','LOCK','LOOK','BOOK','BARK','BAIL','BALL']},
+  {start:'WINE',end:'BEER',solution:['WINE','VINE','VANE','BANE','BARE','BARE','BEER']},
+  {start:'TAME',end:'WILD',solution:['TAME','TALE','TILE','MILE','MILD','WILD']},
+  {start:'LOVE',end:'HATE',solution:['LOVE','LIVE','LIKE','HIKE','HIRE','HARE','HATE']},
+  {start:'ROAD',end:'PATH',solution:['ROAD','LOAD','LEAD','PEAD','PEAT','PEAK','PEAR','PAIR','PAIN','PAIL','PATH']},
+  {start:'BLUE',end:'PINK',solution:['BLUE','GLUE','CLUE','CLUB','CUBE','TUBE','TUNE','PINE','PINT','PINK']},
+  {start:'OPEN',end:'SHUT',solution:['OPEN','OVEN','OVER','EVER','EVEN','OVEN','ONUS','SHUN','SHUT']},
+  {start:'MOVE',end:'STAY',solution:['MOVE','LOVE','LIVE','LINE','PINE','PANE','SANE','STAY']},
+  {start:'TALK',end:'HUSH',solution:['TALK','TALE','HALE','HALF','HALF','HUSH']},
+  {start:'BORN',end:'DEAD',solution:['BORN','CORN','CORD','WORD','WORE','DARE','DARE','DEAD']},
+  {start:'THIN',end:'WIDE',solution:['THIN','THAN','THAT','CHAT','CHAR','CHARE','WARE','MARE','MADE','WADE','WIDE']},
+  {start:'POND',end:'LAKE',solution:['POND','BOND','BONE','BOLE','ROLE','POLE','PALE','TALE','TALE','LAKE']},
+  {start:'BIRD',end:'FISH',solution:['BIRD','BIND','FIND','FINE','FIRE','HIRE','HIKE','BIKE','BILE','FILE','FILL','HILL','SILL','SILK','SILK','FISH']},
+  {start:'ROSE',end:'LILY',solution:['ROSE','NOSE','NOTE','DOTE','DOTE','LIME','LIKE','LINE','LINY','LILY']},
+  {start:'BACK',end:'FORE',solution:['BACK','RACK','RACE','FACE','FAME','FARE','FORE']},
+  {start:'NEAR',end:'AFAR',solution:['NEAR','FEAR','FEAT','FRAT','ARAT','AFAR']},
+  {start:'LONG',end:'WIDE',solution:['LONG','GONG','GONE','BONE','BORE','MORE','MARE','WARE','WADE','WIDE']},
+  {start:'SING',end:'SONG',solution:['SING','RING','RUNG','RUNT','SUNK','SUNK','SONG']},
+  {start:'RICH',end:'POOR',solution:['RICH','RICE','RIDE','RODE','ROBE','ROBE','ROPE','POPE','PORE','POUR','FOUR','FOOL','POOL','POOR']},
+  {start:'KING',end:'PAWN',solution:['KING','RING','RIND','WIND','WINE','MINE','MINT','HINT','HINT','PAWN']},
+  {start:'NOON',end:'DUSK',solution:['NOON','BOON','BOOK','ROOK','ROCK','DOCK','DISK','DUSK']},
+  {start:'WARM',end:'COOL',solution:['WARM','WORM','WORD','WOOD','WOOL','FOOL','COOL']},
+  {start:'LOST',end:'FIND',solution:['LOST','LIST','FIST','FIST','FISH','DISH','DISS','DINT','FIND']},
+  {start:'FALL',end:'RISE',solution:['FALL','TALL','TALE','PALE','PILE','PIRE','RISE']},
+  {start:'LEFT',end:'RIGHT',solution:['LEFT','LOFT','LORE','GORE','GORE','GORE','RIGHT']},
+  {start:'STOP',end:'GOON',solution:['STOP','STEP','SEEP','KEEP','KEEN','TEEN','PEEN','PEON','MOON','MOAN','GOAN','GOON']},
+];
+
+const DICT4 = new Set("able,acid,aged,back,bake,bald,band,bank,bare,barn,base,bath,bear,beat,beer,belt,bent,bird,bite,blow,blue,body,bold,bolt,bone,book,bore,bout,bran,brow,cage,cake,calm,camp,cane,card,care,cart,cave,chin,chip,clam,clay,clip,club,coal,coat,code,coil,coin,cola,comb,cone,cope,cord,core,corn,crab,crew,crop,crow,cube,curl,cute,dare,dart,dash,deal,dean,debt,deck,deed,deny,desk,dial,dice,dime,dirt,disk,dive,doll,dome,dove,drag,draw,drop,drum,duck,dull,dump,dusk,dust,duty,earn,ease,east,edge,emit,face,fail,fall,fare,fast,fate,fear,feat,feel,feet,fell,fill,find,fire,fish,fist,flag,flaw,flea,flee,flew,flex,flip,foam,fold,fond,ford,fork,form,fort,foul,four,frog,fuel,fume,fuse,gate,gear,germ,gist,glee,glob,glue,goal,goes,gold,gore,gown,grab,gram,grin,grip,grit,grow,gust,guts,hack,hail,half,hall,hand,hard,harm,hash,haze,head,hear,heap,heat,heel,helm,herb,herd,high,hike,hill,hire,hive,hold,hole,home,hope,horn,hose,host,hour,hull,hump,huge,hung,hunk,hymn,idle,iron,jerk,jest,jolt,jump,just,keen,kill,kind,knew,know,lace,lame,lamp,land,lane,lark,lash,last,late,lava,lawn,leaf,lean,left,lend,lens,levy,lick,life,limp,line,lint,lion,lips,list,live,load,long,look,lore,lost,loud,lump,lure,lurk,lust,made,main,make,mane,mark,mass,mask,mast,mean,meet,melt,mesh,mild,milk,mill,mind,mine,miss,mist,mock,mold,mole,monk,moon,more,moss,moth,move,much,muse,mute,myth,nail,name,neck,need,nest,news,nick,node,norm,noun,nude,numb,oath,obey,omen,once,open,oven,pace,pack,pact,pain,palm,pang,past,path,pave,peak,peat,peel,peep,peer,pest,pier,pike,pile,pill,pine,pink,pint,pipe,pity,plan,play,plea,plop,plow,ploy,plug,plum,poem,poet,pole,poll,pond,pore,port,pose,post,pout,prep,prey,prim,prod,prop,puck,puff,pump,pure,push,pull,race,rage,rain,ramp,rank,rant,rash,rasp,rate,rave,read,real,reed,reef,reel,rest,rice,ride,rife,rift,rind,ring,rink,riot,ripe,rise,rite,road,roam,roar,robe,rock,rode,role,roll,roof,room,root,rope,rose,rout,rove,ruby,rude,ruin,rule,ruse,rust,safe,sage,salt,same,sane,save,seam,seep,self,sell,send,shed,shin,ship,show,side,sigh,sign,silk,sill,silo,silt,sing,sink,sire,size,skin,slab,slap,slay,sled,slim,slip,slit,slop,slot,slug,slum,slur,slow,snap,snob,soak,soar,sock,soda,soft,soil,sole,some,song,soon,sore,sort,soul,sown,span,spar,spin,spit,spot,star,step,stew,stir,stop,stub,stud,stun,suck,suit,surf,swap,swat,sway,swim,tack,tail,take,talk,tall,tame,tang,task,taut,teal,teen,tell,tend,tent,test,toad,toil,tomb,tone,tool,tops,tore,tort,toss,tour,town,trap,tray,trek,trim,trio,trip,trod,trot,tuba,tuft,turf,turn,twig,twin,type,ugly,unit,vain,vale,vane,veer,veil,vend,verb,vest,veto,vial,vice,vine,vise,void,vole,volt,vote,waif,wake,walk,wane,ward,ware,warm,warn,wary,wasp,wash,wave,wear,weld,welt,well,went,west,wide,will,wilt,wind,wine,wing,wish,wisp,wood,word,work,worn,wrap,yard,year,yore,zeal,zinc,zero,zone,zoom,able,acid,also,arch,area,army,arts,aunt,auto,baby,bike,bill,bite,bold,bolt,bone,boom,boot,bore,boss,both,buck,bulk,bull,bunk".split(','));
+const DICT3 = new Set("ace,act,add,age,ago,aid,aim,air,all,ant,ape,apt,arc,are,arm,art,ash,ask,ate,awe,axe,aye,bad,bag,ban,bar,bat,bay,bed,beg,bet,bid,big,bit,bog,bow,box,boy,bud,bug,bun,bus,but,cab,can,cap,car,cat,cob,cod,cog,cop,cot,cow,cry,cub,cup,cut,dad,dam,day,den,dew,did,die,dig,dim,dip,dog,dot,dry,dub,dud,dug,dye,ear,eat,egg,ego,elf,elm,end,era,eve,ewe,eye,fad,fan,far,fat,fax,fed,few,fib,fig,fit,fix,fly,fog,for,fox,fry,fun,fur,gag,gap,gas,gel,gem,get,gig,gin,god,got,gun,gut,guy,gym,had,hag,ham,has,hat,hay,hen,her,hex,hid,him,hip,his,hit,hog,hop,hot,how,hub,hug,hum,hut,ice,icy,ill,imp,ink,inn,ion,ivy,jab,jam,jar,jaw,jet,job,jog,joy,jug,keg,key,kid,kin,kit,lab,lad,lag,lap,law,lax,lay,leg,let,lid,lip,lit,log,lot,low,lug,mad,man,map,mar,mat,may,men,met,mob,mop,mud,mug,nab,nag,nap,net,new,nip,nod,nor,not,now,nun,nut,oar,odd,ode,off,oil,old,opt,orb,ore,owe,owl,own,pal,pan,par,pat,paw,pay,pea,peg,pen,pep,pet,pie,pig,pin,pit,pod,pop,pot,pub,pun,pup,put,rag,ram,ran,raw,ray,red,ref,rep,rib,rid,rim,rip,rob,rot,row,rub,rug,rum,run,rut,sag,sap,sat,saw,say,sea,set,sew,sin,sip,sir,sit,ski,sob,sod,son,sow,spa,sub,sue,sum,sun,tab,tag,tan,tap,tar,tax,tea,ten,tie,tin,tip,top,toy,tug,two,urn,use,van,vat,via,vow,wad,war,was,web,wig,win,wit,woe,won,woo,yam,yew,yet,zoo".split(','));
+
+function isValidWord(w) {
+  const l = w.toLowerCase();
+  return DICT3.has(l) || DICT4.has(l);
+}
+
+function differsBy1(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) diff++;
+  return diff === 1;
+}
+
+let currentPuz = 0, steps = [], editWord = [], activeCell = 0, gameOver = false;
+
+function loadPuzzle(idx) {
+  currentPuz = idx % PUZZLES.length;
+  const puz = PUZZLES[currentPuz];
+  steps = [puz.start];
+  editWord = puz.start.split('');
+  activeCell = 0; gameOver = false;
+  document.getElementById('start-word').textContent = puz.start;
+  document.getElementById('end-word').textContent = puz.end;
+  document.getElementById('puzzle-num').textContent = currentPuz + 1;
+  document.getElementById('par-count').textContent = puz.solution.length - 1;
+  document.getElementById('win-overlay').classList.remove('show');
+  document.getElementById('sol-overlay').classList.remove('show');
+  renderSteps();
+  renderEditor();
+  buildKeyboard();
+}
+
+function renderSteps() {
+  const list = document.getElementById('steps-list');
+  list.innerHTML = '';
+  const start = PUZZLES[currentPuz].start;
+  steps.forEach((word, i) => {
+    const row = document.createElement('div');
+    row.className = 'step' + (i > 0 ? ' changed' : '');
+    const prev = steps[i - 1] || '';
+    let html = '';
+    for (let j = 0; j < word.length; j++) {
+      if (prev && word[j] !== prev[j]) html += `<span class="diff-letter">${word[j]}</span>`;
+      else html += word[j];
+    }
+    row.innerHTML = `<span>${html}</span><span class="step-num">${i === 0 ? 'Start' : 'Step ' + i}</span>`;
+    list.appendChild(row);
+  });
+  document.getElementById('step-count').textContent = steps.length - 1;
+  list.scrollTop = list.scrollHeight;
+}
+
+function renderEditor() {
+  const editor = document.getElementById('word-editor');
+  editor.innerHTML = '';
+  editWord.forEach((l, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'letter-cell' + (i === activeCell ? ' active' : '');
+    cell.textContent = l;
+    cell.addEventListener('click', () => { activeCell = i; renderEditor(); });
+    editor.appendChild(cell);
+  });
+}
+
+function buildKeyboard() {
+  const kb = document.getElementById('keyboard');
+  kb.innerHTML = '';
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(l => {
+    const key = document.createElement('div');
+    key.className = 'key';
+    key.textContent = l;
+    key.addEventListener('touchstart', e => { e.preventDefault(); key.classList.add('btn-pressed'); pressKey(l); });
+    key.addEventListener('touchend', () => key.classList.remove('btn-pressed'));
+    key.addEventListener('click', () => pressKey(l));
+    kb.appendChild(key);
+  });
+}
+
+function pressKey(l) {
+  editWord[activeCell] = l;
+  activeCell = Math.min(activeCell + 1, editWord.length - 1);
+  renderEditor();
+}
+
+function submitStep() {
+  if (gameOver) return;
+  const puz = PUZZLES[currentPuz];
+  const newWord = editWord.join('');
+  const lastWord = steps[steps.length - 1];
+  if (!differsBy1(newWord, lastWord)) {
+    flashError(); return;
+  }
+  if (!isValidWord(newWord) && newWord !== puz.end) {
+    flashError(); return;
+  }
+  steps.push(newWord);
+  renderSteps();
+  if (newWord === puz.end) {
+    gameOver = true;
+    document.getElementById('win-steps').textContent = steps.length - 1;
+    document.getElementById('win-par').textContent = puz.solution.length - 1;
+    setTimeout(() => document.getElementById('win-overlay').classList.add('show'), 500);
+  } else {
+    editWord = newWord.split('');
+    activeCell = 0;
+    renderEditor();
+  }
+}
+
+function undoStep() {
+  if (steps.length <= 1) return;
+  steps.pop();
+  editWord = steps[steps.length - 1].split('');
+  activeCell = 0;
+  renderSteps();
+  renderEditor();
+}
+
+function flashError() {
+  const list = document.getElementById('steps-list');
+  const last = list.lastElementChild;
+  if (last) { last.classList.add('error'); setTimeout(() => last.classList.remove('error'), 400); }
+}
+
+function showSolution() {
+  const puz = PUZZLES[currentPuz];
+  const sol = document.getElementById('solution-steps');
+  sol.innerHTML = '';
+  puz.solution.forEach((w, i) => {
+    const d = document.createElement('div');
+    d.className = 'sol-step' + (i > 0 ? ' ok' : '');
+    d.textContent = (i === 0 ? 'Start: ' : 'Step ' + i + ': ') + w;
+    sol.appendChild(d);
+  });
+  document.getElementById('sol-overlay').classList.add('show');
+}
+
+function closeSolution() { document.getElementById('sol-overlay').classList.remove('show'); }
+function nextPuzzle() { loadPuzzle(currentPuz + 1); }
+
+loadPuzzle(0);
+window.onPurchaseComplete = function(sku) { console.log('Purchase:', sku); };
+window.onAdMobLoaded = function() { document.getElementById('banner-ad').style.display = 'none'; };
+</script>
+</body>
+</html>

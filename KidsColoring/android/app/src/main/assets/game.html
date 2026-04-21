@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Kids Coloring</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --accent:#FF4081; --bg:#FAFAFA; --text:#333; --muted:#888; --radius:16px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--accent); flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:800; color:#fff; }
+#btn-remove-ads { background:rgba(255,255,255,0.25); border:none; color:#fff; font-size:0.72rem; font-weight:700; padding:5px 10px; border-radius:20px; cursor:pointer; }
+
+/* Scene selector */
+#sceneBar { display:flex; gap:8px; padding:8px 12px; background:#fff; overflow-x:auto; flex-shrink:0; border-bottom:2px solid #f0f0f0; }
+.scene-btn { padding:8px 16px; font-size:0.8rem; font-weight:700; border:2px solid #e0e0e0; border-radius:20px; background:#fff; cursor:pointer; white-space:nowrap; transition:all 0.15s; color:var(--muted); }
+.scene-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+/* Color palette */
+#palette { display:flex; gap:8px; padding:8px 12px; background:#fff; overflow-x:auto; flex-shrink:0; align-items:center; border-bottom:2px solid #f0f0f0; }
+.color-swatch { width:38px; height:38px; border-radius:50%; cursor:pointer; transition:transform 0.15s; border:3px solid transparent; flex-shrink:0; }
+.color-swatch:active { transform:scale(0.9); }
+.color-swatch.selected { border-color:#333; transform:scale(1.15); }
+#selectedColorLabel { font-size:0.75rem; color:var(--muted); font-weight:600; flex-shrink:0; padding-left:4px; }
+
+/* SVG canvas */
+#svgWrap { flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; padding:8px; }
+svg { width:100%; height:100%; max-width:400px; max-height:500px; cursor:pointer; }
+.colorable { cursor:pointer; transition:filter 0.1s; }
+.colorable:active { filter:brightness(1.1); }
+
+/* Footer */
+#footer { display:flex; gap:8px; padding:8px 12px; background:#fff; border-top:2px solid #f0f0f0; flex-shrink:0; }
+.foot-btn { flex:1; padding:12px; font-size:0.85rem; font-weight:700; border:none; border-radius:12px; cursor:pointer; }
+.btn-clear { background:#FFF3E0; color:#E65100; }
+.btn-save  { background:var(--accent); color:#fff; }
+
+/* Toast */
+#toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.75); color:#fff; padding:10px 20px; border-radius:20px; font-size:0.9rem; font-weight:600; opacity:0; transition:opacity 0.3s; pointer-events:none; z-index:50; white-space:nowrap; }
+#toast.show { opacity:1; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>🎨 Kids Coloring</h1>
+    <button id="btn-remove-ads" onclick="purchase('remove_ads')">⭐ Remove Ads</button>
+  </header>
+
+  <div id="sceneBar">
+    <button class="scene-btn active" onclick="loadScene(0)">☀️ Sun</button>
+    <button class="scene-btn" onclick="loadScene(1)">🏠 House</button>
+    <button class="scene-btn" onclick="loadScene(2)">🌳 Tree</button>
+    <button class="scene-btn" onclick="loadScene(3)">🌸 Flower</button>
+    <button class="scene-btn" onclick="loadScene(4)">🚗 Car</button>
+  </div>
+
+  <div id="palette">
+    <span id="selectedColorLabel">Color:</span>
+  </div>
+
+  <div id="svgWrap">
+    <svg id="coloringSVG" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+
+  <div id="footer">
+    <button class="foot-btn btn-clear" onclick="clearScene()">🗑 Clear</button>
+    <button class="foot-btn btn-save" onclick="saveProgress()">💾 Save</button>
+  </div>
+
+  <div id="toast">Saved!</div>
+</div>
+<script>
+function purchase(sku){if(window.Android&&Android.purchase)Android.purchase(sku);}
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+function playPop(freq=600){const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(0.2,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.1);o.start();o.stop(audioCtx.currentTime+0.12);}
+
+const COLORS = [
+  {c:'#FF4081',n:'Pink'},
+  {c:'#FF5722',n:'Orange'},
+  {c:'#FFC107',n:'Yellow'},
+  {c:'#4CAF50',n:'Green'},
+  {c:'#2196F3',n:'Blue'},
+  {c:'#9C27B0',n:'Purple'},
+  {c:'#F44336',n:'Red'},
+  {c:'#795548',n:'Brown'},
+  {c:'#607D8B',n:'Grey'},
+  {c:'#ffffff',n:'White'},
+];
+
+const SCENES = [
+  // SUN SCENE
+  `<g id="scene">
+    <rect class="colorable" id="sky" x="0" y="0" width="300" height="200" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="ground" x="0" y="200" width="300" height="150" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="sun_body" cx="150" cy="80" r="45" fill="#fff" stroke="#ccc" stroke-width="2.5"/>
+    <line id="ray1" x1="150" y1="20" x2="150" y2="8" stroke="#ccc" stroke-width="4" stroke-linecap="round"/>
+    <line id="ray2" x1="195" y1="35" x2="203" y2="26" stroke="#ccc" stroke-width="4" stroke-linecap="round"/>
+    <line id="ray3" x1="210" y1="80" x2="222" y2="80" stroke="#ccc" stroke-width="4" stroke-linecap="round"/>
+    <line id="ray4" x1="195" y1="125" x2="203" y2="134" stroke="#ccc" stroke-width="4" stroke-linecap="round"/>
+    <line id="ray5" x1="105" y1="35" x2="97" y2="26" stroke="#ccc" stroke-width="4" stroke-linecap="round"/>
+    <line id="ray6" x1="90" y1="80" x2="78" y2="80" stroke="#ccc" stroke-width="4" stroke-linecap="round"/>
+    <line id="ray7" x1="105" y1="125" x2="97" y2="134" stroke="#ccc" stroke-width="4" stroke-linecap="round"/>
+    <circle class="colorable" id="cloud1" cx="60" cy="60" r="28" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="cloud2" cx="90" cy="50" r="22" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="sun_face" cx="150" cy="80" r="30" fill="none" stroke="#ccc" stroke-width="1.5" pointer-events="none"/>
+    <circle cx="140" cy="74" r="4" fill="#ccc" pointer-events="none"/>
+    <circle cx="160" cy="74" r="4" fill="#ccc" pointer-events="none"/>
+    <path d="M 138 90 Q 150 100 162 90" fill="none" stroke="#ccc" stroke-width="2.5" pointer-events="none"/>
+  </g>`,
+  // HOUSE SCENE
+  `<g id="scene">
+    <rect class="colorable" id="sky" x="0" y="0" width="300" height="180" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="ground" x="0" y="250" width="300" height="100" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="house_wall" x="60" y="150" width="180" height="130" fill="#fff" stroke="#ccc" stroke-width="2.5"/>
+    <polygon class="colorable" id="house_roof" points="40,160 150,60 260,160" fill="#fff" stroke="#ccc" stroke-width="2.5"/>
+    <rect class="colorable" id="door" x="120" y="220" width="60" height="80" rx="4" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="win_left" x="70" y="170" width="55" height="45" rx="4" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="win_right" x="175" y="170" width="55" height="45" rx="4" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="doorknob" cx="170" cy="265" r="5" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+    <rect class="colorable" id="chimney" x="195" y="70" width="30" height="55" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="sun_s" cx="240" cy="40" r="28" fill="#fff" stroke="#ccc" stroke-width="2"/>
+  </g>`,
+  // TREE SCENE
+  `<g id="scene">
+    <rect class="colorable" id="sky" x="0" y="0" width="300" height="230" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="grass" x="0" y="230" width="300" height="120" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="trunk" x="130" y="200" width="40" height="130" rx="8" fill="#fff" stroke="#ccc" stroke-width="2.5"/>
+    <ellipse class="colorable" id="leaves_bot" cx="150" cy="210" rx="90" ry="70" fill="#fff" stroke="#ccc" stroke-width="2.5"/>
+    <ellipse class="colorable" id="leaves_mid" cx="150" cy="150" rx="72" ry="58" fill="#fff" stroke="#ccc" stroke-width="2.5"/>
+    <ellipse class="colorable" id="leaves_top" cx="150" cy="100" rx="52" ry="45" fill="#fff" stroke="#ccc" stroke-width="2.5"/>
+    <circle class="colorable" id="apple1" cx="110" cy="170" r="16" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="apple2" cx="190" cy="160" r="16" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="cloud_t" cx="240" cy="50" r="30" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="sun_t" cx="50" cy="50" r="32" fill="#fff" stroke="#ccc" stroke-width="2"/>
+  </g>`,
+  // FLOWER SCENE
+  `<g id="scene">
+    <rect class="colorable" id="sky" x="0" y="0" width="300" height="230" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="soil" x="0" y="230" width="300" height="120" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="stem" x="143" y="150" width="14" height="120" rx="7" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <ellipse class="colorable" id="leaf_l" cx="108" cy="220" rx="38" ry="18" transform="rotate(-35,108,220)" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <ellipse class="colorable" id="leaf_r" cx="192" cy="210" rx="38" ry="18" transform="rotate(35,192,210)" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="petal1" cx="150" cy="90" r="28" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="petal2" cx="190" cy="110" r="28" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="petal3" cx="190" cy="155" r="28" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="petal4" cx="150" cy="175" r="28" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="petal5" cx="110" cy="155" r="28" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="petal6" cx="110" cy="110" r="28" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="center" cx="150" cy="133" r="32" fill="#fff" stroke="#ccc" stroke-width="2.5"/>
+    <circle cx="150" cy="133" r="8" fill="#ccc" pointer-events="none"/>
+  </g>`,
+  // CAR SCENE
+  `<g id="scene">
+    <rect class="colorable" id="sky" x="0" y="0" width="300" height="200" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="road" x="0" y="270" width="300" height="80" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="road_line" x="20" y="302" width="80" height="12" rx="6" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+    <rect class="colorable" id="road_line2" x="130" y="302" width="80" height="12" rx="6" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+    <rect class="colorable" id="road_line3" x="230" y="302" width="60" height="12" rx="6" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+    <rect class="colorable" id="car_body" x="30" y="230" width="240" height="70" rx="14" fill="#fff" stroke="#ccc" stroke-width="2.5"/>
+    <rect class="colorable" id="car_top" x="70" y="175" width="160" height="75" rx="16" fill="#fff" stroke="#ccc" stroke-width="2.5"/>
+    <rect class="colorable" id="win_front" x="155" y="185" width="65" height="55" rx="8" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="win_back" x="80" y="185" width="65" height="55" rx="8" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="wheel_l" cx="85" cy="295" r="30" fill="#fff" stroke="#ccc" stroke-width="2.5"/>
+    <circle class="colorable" id="wheel_r" cx="215" cy="295" r="30" fill="#fff" stroke="#ccc" stroke-width="2.5"/>
+    <circle cx="85" cy="295" r="12" fill="#ccc" pointer-events="none"/>
+    <circle cx="215" cy="295" r="12" fill="#ccc" pointer-events="none"/>
+    <rect class="colorable" id="headlight" x="252" y="248" width="22" height="18" rx="6" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <rect class="colorable" id="taillight" x="26" y="248" width="22" height="18" rx="6" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="cloud_c" cx="60" cy="60" r="30" fill="#fff" stroke="#ccc" stroke-width="2"/>
+    <circle class="colorable" id="sun_c" cx="240" cy="50" r="28" fill="#fff" stroke="#ccc" stroke-width="2"/>
+  </g>`,
+];
+
+// Persist colors per scene per element
+const savedColors = JSON.parse(localStorage.getItem('kidsColoring_v1')||'{}');
+let currentScene = 0;
+let selectedColor = '#FFC107';
+let selectedColorName = 'Yellow';
+
+function buildPalette(){
+  const pal = document.getElementById('palette');
+  pal.innerHTML='<span id="selectedColorLabel" style="font-size:0.75rem;color:#888;font-weight:600;white-space:nowrap;">Color:</span>';
+  COLORS.forEach(({c,n})=>{
+    const s=document.createElement('div');
+    s.className='color-swatch'+(c===selectedColor?' selected':'');
+    s.style.background=c;
+    if(c==='#ffffff')s.style.border='3px solid #e0e0e0';
+    s.title=n;
+    s.onclick=()=>selectColor(c,n);
+    pal.appendChild(s);
+  });
+}
+
+function selectColor(c,n){
+  selectedColor=c; selectedColorName=n;
+  document.querySelectorAll('.color-swatch').forEach(s=>s.classList.toggle('selected',s.style.background===c||s.style.backgroundColor===c));
+  document.getElementById('selectedColorLabel').textContent='Color: '+n;
+  playPop(800);
+}
+
+function loadScene(idx){
+  currentScene=idx;
+  document.querySelectorAll('.scene-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  const svg=document.getElementById('coloringSVG');
+  svg.innerHTML=SCENES[idx];
+  // Restore saved colors
+  const key='s'+idx;
+  if(savedColors[key]){
+    Object.entries(savedColors[key]).forEach(([id,fill])=>{
+      const el=svg.getElementById(id);
+      if(el) el.setAttribute('fill',fill);
+    });
+  }
+  // Attach click handlers
+  svg.querySelectorAll('.colorable').forEach(el=>{
+    el.onclick=function(e){
+      e.stopPropagation();
+      this.setAttribute('fill',selectedColor);
+      playPop(500+Math.random()*400);
+      // Save
+      const key='s'+currentScene;
+      if(!savedColors[key]) savedColors[key]={};
+      savedColors[key][this.id]=selectedColor;
+    };
+  });
+}
+
+function clearScene(){
+  const key='s'+currentScene;
+  delete savedColors[key];
+  document.querySelectorAll('#coloringSVG .colorable').forEach(el=>el.setAttribute('fill','#fff'));
+  showToast('Cleared! 🧹');
+}
+
+function saveProgress(){
+  localStorage.setItem('kidsColoring_v1',JSON.stringify(savedColors));
+  showToast('Saved! 💾');
+  playPop(700);
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+buildPalette();
+selectColor('#FFC107','Yellow');
+loadScene(0);
+</script>
+</body>
+</html>

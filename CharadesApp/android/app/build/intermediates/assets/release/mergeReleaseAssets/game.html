@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Charades</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: #1a1a1a; color: #fff; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  :root { --accent: #FF5722; }
+  header { background: #222; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); flex-shrink:0; }
+  header h1 { font-size: 1.3rem; color: var(--accent); }
+  .btn-remove-ads { background: var(--accent); color: #fff; border: none; border-radius: 20px; padding: 8px 16px; font-size: 0.8rem; font-weight: bold; min-height: 44px; cursor: pointer; }
+  .btn-pressed { opacity: 0.7; transform: scale(0.96); }
+  .screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow-y:auto; }
+  .screen.hidden { display: none; }
+  h2 { font-size: 1.5rem; margin-bottom: 20px; text-align: center; }
+  .categories-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 400px; }
+  .cat-btn { background: #2a2a2a; border: 2px solid var(--accent); color: #fff; border-radius: 12px; padding: 18px 12px; font-size: 1rem; font-weight: bold; cursor: pointer; min-height: 60px; text-align: center; }
+  .cat-btn.selected { background: var(--accent); }
+  .setup-row { display: flex; align-items: center; gap: 12px; margin: 10px 0; width:100%; max-width:360px; }
+  .setup-row label { font-size: 1rem; flex: 1; }
+  .setup-row input[type=number] { background: #333; border: 1px solid #555; color: #fff; border-radius: 8px; padding: 8px 12px; width: 80px; font-size: 1rem; }
+  .big-btn { background: var(--accent); color: #fff; border: none; border-radius: 16px; padding: 18px 40px; font-size: 1.2rem; font-weight: bold; cursor: pointer; min-height: 56px; margin: 10px 0; width: 100%; max-width: 360px; }
+  .secondary-btn { background: #333; color: #ccc; border: 1px solid #555; border-radius: 16px; padding: 14px 30px; font-size: 1rem; cursor: pointer; min-height: 50px; width: 100%; max-width: 360px; margin: 6px 0; }
+  .prompt-word { font-size: 2.8rem; font-weight: 900; text-align: center; color: #fff; line-height: 1.2; padding: 20px; }
+  .category-label { color: var(--accent); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+  .timer-display { font-size: 3.5rem; font-weight: 900; color: var(--accent); }
+  .timer-display.warning { color: #ff4444; }
+  .game-actions { display: flex; gap: 12px; width: 100%; max-width: 400px; margin-top: 20px; }
+  .skip-btn { flex: 1; background: #444; color: #fff; border: none; border-radius: 14px; padding: 18px; font-size: 1.1rem; font-weight: bold; cursor: pointer; min-height: 60px; }
+  .got-btn { flex: 1; background: #4CAF50; color: #fff; border: none; border-radius: 14px; padding: 18px; font-size: 1.1rem; font-weight: bold; cursor: pointer; min-height: 60px; }
+  .score-bar { display: flex; gap: 20px; margin-bottom: 16px; width:100%; max-width:400px; }
+  .team-score { background: #2a2a2a; border-radius: 12px; padding: 10px 16px; text-align: center; flex: 1; border: 2px solid #444; }
+  .team-score.active { border-color: var(--accent); }
+  .team-name { font-size: 0.8rem; color: #aaa; }
+  .team-pts { font-size: 1.8rem; font-weight: 900; color: var(--accent); }
+  .tilt-hint { color: #888; font-size: 0.85rem; text-align: center; margin-top: 8px; }
+  .flash-overlay { position: fixed; top:0;left:0;right:0;bottom:0; pointer-events:none; opacity:0; transition: opacity 0.3s; z-index: 100; }
+  .flash-overlay.green { background: rgba(76,175,80,0.5); }
+  .flash-overlay.yellow { background: rgba(255,193,7,0.5); }
+  .results-list { width: 100%; max-width: 400px; max-height: 300px; overflow-y:auto; }
+  .result-item { display: flex; justify-content: space-between; padding: 10px 14px; background: #2a2a2a; border-radius: 10px; margin: 5px 0; font-size: 0.95rem; }
+  #banner-ad { background: #222; text-align: center; padding: 8px; color: #666; font-size: 0.75rem; border-top: 1px solid #333; flex-shrink:0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Charades</h1>
+  <button class="btn-remove-ads" id="removeAdsBtn">Remove Ads</button>
+</header>
+<div class="flash-overlay" id="flashOverlay"></div>
+
+<!-- HOME SCREEN -->
+<div class="screen" id="homeScreen">
+  <h2>Choose Category</h2>
+  <div class="categories-grid" id="catGrid">
+    <button class="cat-btn selected" data-cat="Movies">🎬 Movies</button>
+    <button class="cat-btn" data-cat="Animals">🐾 Animals</button>
+    <button class="cat-btn" data-cat="Actions">🏃 Actions</button>
+    <button class="cat-btn" data-cat="Famous People">⭐ Famous People</button>
+    <button class="cat-btn" data-cat="Objects">📦 Objects</button>
+    <button class="cat-btn" data-cat="TV Shows">📺 TV Shows</button>
+    <button class="cat-btn" data-cat="All" style="grid-column:span 2;">🎲 All Categories</button>
+  </div>
+  <div style="height:16px"></div>
+  <div class="setup-row">
+    <label>Team Mode</label>
+    <input type="checkbox" id="teamModeCheck" style="width:24px;height:24px;cursor:pointer">
+  </div>
+  <div class="setup-row">
+    <label>Round Time (sec)</label>
+    <input type="number" id="roundTime" value="60" min="15" max="120">
+  </div>
+  <button class="big-btn" id="startBtn">Start Game</button>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen hidden" id="gameScreen">
+  <div class="score-bar" id="scoreBar" style="display:none">
+    <div class="team-score active" id="t1score"><div class="team-name">Team 1</div><div class="team-pts" id="t1pts">0</div></div>
+    <div class="team-score" id="t2score"><div class="team-name">Team 2</div><div class="team-pts" id="t2pts">0</div></div>
+  </div>
+  <div class="timer-display" id="timerDisplay">60</div>
+  <div class="category-label" id="catLabel">Movies</div>
+  <div class="prompt-word" id="promptWord">TITANIC</div>
+  <div class="tilt-hint">Tilt forward = Got It &nbsp;|&nbsp; Tilt back = Skip</div>
+  <div class="game-actions">
+    <button class="skip-btn" id="skipBtn">SKIP</button>
+    <button class="got-btn" id="gotBtn">GOT IT!</button>
+  </div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div class="screen hidden" id="resultsScreen">
+  <h2>Round Over!</h2>
+  <div id="resultsSummary" style="text-align:center;margin-bottom:20px;font-size:1.2rem"></div>
+  <div id="teamScoreDisplay" style="display:none;margin-bottom:16px;width:100%;max-width:400px"></div>
+  <div class="results-list" id="resultsList"></div>
+  <button class="big-btn" id="nextRoundBtn" style="margin-top:20px">Next Round</button>
+  <button class="secondary-btn" id="homeBtn">Home</button>
+</div>
+
+<div id="banner-ad">Advertisement</div>
+
+<script>
+const PROMPTS = {
+  Movies: ["Titanic","The Lion King","Jurassic Park","Star Wars","Frozen","Avatar","Forrest Gump","The Matrix","Toy Story","Shrek","Finding Nemo","The Avengers","Jaws","E.T.","Home Alone","Gladiator","The Dark Knight","Inception","Moana","Coco","Up","WALL-E","Grease","Back to the Future","Ghostbusters","The Wizard of Oz","Cinderella","Beauty and the Beast","Aladdin","The Little Mermaid","Kung Fu Panda","Minions","Spider-Man","Black Panther","Encanto","Turning Red","Interstellar","The Godfather","Pulp Fiction","Rocky"],
+  Animals: ["Elephant","Penguin","Giraffe","Kangaroo","Flamingo","Sloth","Gorilla","Cheetah","Octopus","Peacock","Crocodile","Chameleon","Platypus","Armadillo","Meerkat","Jellyfish","Porcupine","Toucan","Wombat","Narwhal","Seahorse","Flying Squirrel","Bison","Hyena","Komodo Dragon","Snow Leopard","Axolotl","Capybara","Mantis Shrimp","Pangolin","Red Panda","Quokka","Mandrill","Tapir","Ocelot"],
+  Actions: ["Swimming","Juggling","Knitting","Playing Guitar","Hula Hooping","Rock Climbing","Painting","Cooking","Doing Yoga","Ice Skating","Surfing","Playing Chess","Gardening","Reading","Dancing","Sleeping","Sneezing","Laughing","Crying","Meditating","Skipping","Rowing","Weight Lifting","Baking","Fishing","Hiking","Taking a Selfie","Texting","Yawning","Stretching","Doing Cartwheels","Eating Spaghetti","Walking the Dog","Brushing Teeth","Building a Sandcastle"],
+  "Famous People": ["Albert Einstein","Marilyn Monroe","Michael Jackson","Cleopatra","Abraham Lincoln","Elon Musk","Taylor Swift","Leonardo da Vinci","Shakespeare","Napoleon","Queen Elizabeth","Beyonce","Steve Jobs","Oprah Winfrey","Michael Jordan","Frida Kahlo","Charles Darwin","Marie Curie","Elvis Presley","Sherlock Holmes","Mahatma Gandhi","Walt Disney","Nikola Tesla","Muhammad Ali","Malala Yousafzai","Serena Williams","Barack Obama","Adele","Harry Styles","Lady Gaga"],
+  Objects: ["Umbrella","Telescope","Accordion","Hammock","Trampoline","Backpack","Compass","Magnifying Glass","Typewriter","Binoculars","Gramophone","Abacus","Periscope","Boomerang","Kaleidoscope","Yo-yo","Sundial","Thermos","Waffle Iron","Stapler","Rubber Duck","Lunchbox","Flashlight","Hourglass","Slinky","Skateboard","Canteen","Piggy Bank","Blender","Wheelbarrow","Corkscrew","Whisk","Trombone","Anvil","Bonsai Tree"],
+  "TV Shows": ["Friends","The Simpsons","Game of Thrones","Breaking Bad","Stranger Things","The Office","Seinfeld","Grey's Anatomy","The Walking Dead","Downton Abbey","Lost","Sherlock","Black Mirror","The Crown","Bridgerton","Succession","Ted Lasso","Squid Game","Loki","WandaVision","Peaky Blinders","Ozark","Cobra Kai","The Mandalorian","Emily in Paris","Yellowstone","Dahmer","Wednesday","The Bear","Abbott Elementary"]
+};
+
+let selectedCats = ["Movies"];
+let teamMode = false;
+let roundTime = 60;
+let currentTeam = 0;
+let scores = [0, 0];
+let timer = null;
+let timeLeft = 60;
+let currentPrompt = "";
+let roundCorrect = [];
+let roundSkipped = [];
+let deckPool = [];
+let lastBeta = null;
+let tiltCooldown = false;
+
+function getAllPrompts(cats) {
+  if (cats.includes("All")) return Object.values(PROMPTS).flat();
+  return cats.flatMap(c => PROMPTS[c] || []);
+}
+
+function addTouchFeedback(btn) {
+  btn.addEventListener('touchstart', () => btn.classList.add('btn-pressed'), {passive:true});
+  btn.addEventListener('touchend', () => btn.classList.remove('btn-pressed'), {passive:true});
+  btn.addEventListener('touchcancel', () => btn.classList.remove('btn-pressed'), {passive:true});
+}
+document.querySelectorAll('button').forEach(addTouchFeedback);
+
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const cat = btn.dataset.cat;
+    if (cat === 'All') {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedCats = ['All'];
+    } else {
+      document.querySelector('[data-cat="All"]').classList.remove('selected');
+      btn.classList.toggle('selected');
+      selectedCats = [...document.querySelectorAll('.cat-btn.selected')].map(b => b.dataset.cat).filter(c => c !== 'All');
+      if (!selectedCats.length) { btn.classList.add('selected'); selectedCats = [cat]; }
+    }
+  });
+});
+
+document.getElementById('startBtn').addEventListener('click', startGame);
+document.getElementById('skipBtn').addEventListener('click', skipWord);
+document.getElementById('gotBtn').addEventListener('click', gotWord);
+document.getElementById('nextRoundBtn').addEventListener('click', nextRound);
+document.getElementById('homeBtn').addEventListener('click', goHome);
+document.getElementById('removeAdsBtn').addEventListener('click', () => {
+  if (window.Android) Android.purchaseNoAds();
+});
+
+function startGame() {
+  teamMode = document.getElementById('teamModeCheck').checked;
+  roundTime = parseInt(document.getElementById('roundTime').value) || 60;
+  scores = [0, 0];
+  currentTeam = 0;
+  deckPool = getAllPrompts(selectedCats);
+  shuffleArray(deckPool);
+  showScreen('gameScreen');
+  document.getElementById('scoreBar').style.display = teamMode ? 'flex' : 'none';
+  updateScoreDisplay();
+  startRound();
+}
+
+function startRound() {
+  roundCorrect = [];
+  roundSkipped = [];
+  timeLeft = roundTime;
+  updateTimer();
+  if (teamMode) {
+    document.getElementById('t1score').classList.toggle('active', currentTeam === 0);
+    document.getElementById('t2score').classList.toggle('active', currentTeam === 1);
+  }
+  nextWord();
+  clearInterval(timer);
+  timer = setInterval(() => {
+    timeLeft--;
+    updateTimer();
+    if (timeLeft <= 0) endRound();
+  }, 1000);
+  setupTilt();
+}
+
+function updateTimer() {
+  const el = document.getElementById('timerDisplay');
+  el.textContent = timeLeft;
+  el.classList.toggle('warning', timeLeft <= 10);
+}
+
+function updateScoreDisplay() {
+  document.getElementById('t1pts').textContent = scores[0];
+  document.getElementById('t2pts').textContent = scores[1];
+}
+
+function nextWord() {
+  if (!deckPool.length) {
+    deckPool = getAllPrompts(selectedCats);
+    shuffleArray(deckPool);
+  }
+  currentPrompt = deckPool.pop();
+  document.getElementById('promptWord').textContent = currentPrompt.toUpperCase();
+  const catLabel = selectedCats.includes('All') ? 'All Categories' : selectedCats.join(' / ');
+  document.getElementById('catLabel').textContent = catLabel;
+}
+
+function gotWord() {
+  roundCorrect.push(currentPrompt);
+  if (teamMode) scores[currentTeam]++;
+  updateScoreDisplay();
+  flashScreen('green');
+  nextWord();
+}
+
+function skipWord() {
+  roundSkipped.push(currentPrompt);
+  flashScreen('yellow');
+  nextWord();
+}
+
+function flashScreen(color) {
+  const o = document.getElementById('flashOverlay');
+  o.className = 'flash-overlay ' + color;
+  o.style.opacity = '1';
+  setTimeout(() => { o.style.opacity = '0'; }, 400);
+}
+
+function endRound() {
+  clearInterval(timer);
+  removeTilt();
+  showScreen('resultsScreen');
+  const summary = document.getElementById('resultsSummary');
+  if (teamMode) {
+    summary.innerHTML = `<strong>Team ${currentTeam + 1}</strong> got <span style="color:var(--accent);font-size:1.5rem">${roundCorrect.length}</span> correct!`;
+    const tsd = document.getElementById('teamScoreDisplay');
+    tsd.style.display = 'flex';
+    tsd.innerHTML = `<div class="score-bar" style="width:100%"><div class="team-score"><div class="team-name">Team 1</div><div class="team-pts">${scores[0]}</div></div><div class="team-score"><div class="team-name">Team 2</div><div class="team-pts">${scores[1]}</div></div></div>`;
+  } else {
+    summary.innerHTML = `You got <span style="color:var(--accent);font-size:1.5rem">${roundCorrect.length}</span> correct!`;
+    document.getElementById('teamScoreDisplay').style.display = 'none';
+  }
+  const list = document.getElementById('resultsList');
+  list.innerHTML = '';
+  roundCorrect.forEach(w => list.innerHTML += `<div class="result-item"><span>${w}</span><span style="color:#4CAF50">✓ Got it</span></div>`);
+  roundSkipped.forEach(w => list.innerHTML += `<div class="result-item"><span>${w}</span><span style="color:#ff9800">— Skipped</span></div>`);
+}
+
+function nextRound() {
+  if (teamMode) currentTeam = currentTeam === 0 ? 1 : 0;
+  showScreen('gameScreen');
+  startRound();
+}
+
+function goHome() {
+  clearInterval(timer);
+  removeTilt();
+  showScreen('homeScreen');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+function setupTilt() {
+  lastBeta = null; tiltCooldown = false;
+  window.addEventListener('deviceorientation', handleTilt);
+}
+
+function removeTilt() {
+  window.removeEventListener('deviceorientation', handleTilt);
+}
+
+function handleTilt(e) {
+  if (tiltCooldown) return;
+  const beta = e.beta;
+  if (lastBeta === null) { lastBeta = beta; return; }
+  const diff = beta - lastBeta;
+  if (diff > 28) { tiltCooldown = true; gotWord(); setTimeout(() => { tiltCooldown = false; lastBeta = null; }, 1200); }
+  else if (diff < -28) { tiltCooldown = true; skipWord(); setTimeout(() => { tiltCooldown = false; lastBeta = null; }, 1200); }
+}
+
+window.onAdMobLoaded = function() {};
+window.onPurchaseComplete = function(sku) {
+  if (sku && sku.includes('no_ads')) {
+    document.getElementById('banner-ad').style.display = 'none';
+    document.getElementById('removeAdsBtn').style.display = 'none';
+  }
+};
+if (window.Android) document.getElementById('banner-ad').style.display = 'none';
+</script>
+</body>
+</html>

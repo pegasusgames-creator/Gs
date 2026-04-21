@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Phonetic Alphabet</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --accent:#455A64; --accent2:#607D8B; --bg:#ECEFF1; --card:#fff; --text:#333; --muted:#777; --radius:16px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--accent); flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:800; color:#fff; }
+#btn-remove-ads { background:rgba(255,255,255,0.25); border:none; color:#fff; font-size:0.72rem; font-weight:700; padding:5px 10px; border-radius:20px; cursor:pointer; }
+
+#tabs { display:flex; background:#fff; flex-shrink:0; border-bottom:3px solid var(--bg); }
+.tab { flex:1; padding:11px 4px; text-align:center; font-size:0.78rem; font-weight:700; color:var(--muted); border:none; background:none; cursor:pointer; border-bottom:3px solid transparent; }
+.tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+.screen { display:none; flex-direction:column; flex:1; overflow:hidden; }
+.screen.active { display:flex; }
+
+/* ---- LEARN ---- */
+#learnScreen { overflow-y:auto; padding:12px; background:var(--bg); }
+.alpha-row { display:flex; align-items:center; gap:0; background:#fff; border-radius:14px; padding:12px 16px; margin-bottom:8px; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; transition:all 0.15s; border:2px solid transparent; }
+.alpha-row:active { transform:scale(0.98); }
+.alpha-row.expanded { border-color:var(--accent); background:#ECEFF1; }
+.alpha-letter { font-size:1.8rem; font-weight:900; color:var(--accent); width:44px; flex-shrink:0; }
+.alpha-main { flex:1; }
+.alpha-nato { font-size:1.1rem; font-weight:800; color:var(--text); }
+.alpha-pronunc { font-size:0.8rem; color:var(--muted); margin-top:2px; }
+.alpha-example { font-size:0.8rem; color:var(--accent); font-style:italic; margin-top:2px; display:none; }
+.alpha-row.expanded .alpha-example { display:block; }
+.alpha-tap-hint { font-size:0.65rem; color:var(--muted); text-align:right; padding-top:2px; }
+
+/* ---- QUIZ ---- */
+#quizScreen { background:var(--bg); padding:14px; gap:12px; align-items:center; overflow-y:auto; }
+.quiz-hdr2 { display:flex; justify-content:space-between; width:100%; max-width:400px; font-size:0.9rem; font-weight:700; color:var(--muted); }
+.q-card2 { background:#fff; border-radius:var(--radius); box-shadow:0 4px 20px rgba(0,0,0,0.08); padding:24px; text-align:center; width:100%; max-width:400px; }
+.q-letter-big { font-size:clamp(60px,18vw,90px); font-weight:900; color:var(--accent); line-height:1; }
+.q-instruct { font-size:0.9rem; color:var(--muted); margin-top:8px; }
+.quiz-opts2 { display:flex; flex-direction:column; gap:10px; width:100%; max-width:400px; }
+.qopt { padding:18px 16px; font-size:1rem; font-weight:700; border:3px solid transparent; border-radius:var(--radius); cursor:pointer; background:#fff; box-shadow:0 2px 10px rgba(0,0,0,0.06); transition:all 0.15s; text-align:left; color:var(--text); }
+.qopt:active { transform:scale(0.98); }
+.qopt.correct { background:#4CAF50; color:#fff; }
+.qopt.wrong   { background:#f44336; color:#fff; }
+.quiz-start-btn2 { width:100%; max-width:400px; padding:18px; font-size:1rem; font-weight:800; border:none; border-radius:var(--radius); background:var(--accent); color:#fff; cursor:pointer; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>📻 Phonetic Alphabet</h1>
+    <button id="btn-remove-ads" onclick="purchase('remove_ads')">⭐ Remove Ads</button>
+  </header>
+  <div id="tabs">
+    <button class="tab active" onclick="switchTab('learn')">📖 Learn</button>
+    <button class="tab" onclick="switchTab('quiz')">🎯 Quiz</button>
+  </div>
+
+  <!-- LEARN -->
+  <div class="screen active" id="learnScreen">
+    <div id="alphaList"></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="screen" id="quizScreen">
+    <div class="quiz-hdr2">
+      <span>Q <span id="qqn">1</span>/26</span>
+      <span>Score: <span id="qqs">0</span></span>
+    </div>
+    <div class="q-card2">
+      <div class="q-letter-big" id="qletter">A</div>
+      <div class="q-instruct">What is the NATO word for this letter?</div>
+    </div>
+    <div class="quiz-opts2" id="qopts2"></div>
+    <button class="quiz-start-btn2" id="qsb2" onclick="startQuiz2()">Start Quiz</button>
+  </div>
+</div>
+<script>
+function purchase(sku){if(window.Android&&Android.purchase)Android.purchase(sku);}
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+function playTone(f,d,t='sine'){const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(0.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+d);o.start();o.stop(audioCtx.currentTime+d);}
+
+const NATO=[
+  {l:'A',n:'Alpha',  p:'AL-fah',    ex:'Used in aviation worldwide'},
+  {l:'B',n:'Bravo',  p:'BRAH-voh',  ex:'Military term of praise'},
+  {l:'C',n:'Charlie',p:'CHAR-lee',  ex:'Common English name'},
+  {l:'D',n:'Delta',  p:'DELL-tah',  ex:'Greek letter & river landform'},
+  {l:'E',n:'Echo',   p:'EK-oh',     ex:'Sound reflection'},
+  {l:'F',n:'Foxtrot',p:'FOKS-trot', ex:'A ballroom dance'},
+  {l:'G',n:'Golf',   p:'GOLF',      ex:'The sport with clubs & holes'},
+  {l:'H',n:'Hotel',  p:'hoh-TELL',  ex:'A place to stay when traveling'},
+  {l:'I',n:'India',  p:'IN-dee-ah',ex:'Country in South Asia'},
+  {l:'J',n:'Juliet', p:'JEW-lee-ETT',ex:'Shakespeare heroine'},
+  {l:'K',n:'Kilo',   p:'KEY-loh',   ex:'Prefix meaning 1,000'},
+  {l:'L',n:'Lima',   p:'LEE-mah',   ex:'Capital city of Peru'},
+  {l:'M',n:'Mike',   p:'MIKE',      ex:'Short for microphone'},
+  {l:'N',n:'November',p:'no-VEM-ber',ex:'The 11th month of the year'},
+  {l:'O',n:'Oscar',  p:'OSS-car',   ex:'Famous film award statuette'},
+  {l:'P',n:'Papa',   p:'pah-PAH',   ex:'Informal word for father'},
+  {l:'Q',n:'Quebec', p:'keh-BECK',  ex:'Province in Canada'},
+  {l:'R',n:'Romeo',  p:'ROW-me-oh', ex:'Shakespeare hero (Juliet\'s love)'},
+  {l:'S',n:'Sierra', p:'see-AIR-ah',ex:'Mountain range or saw-shaped'},
+  {l:'T',n:'Tango',  p:'TANG-go',   ex:'A passionate Latin dance'},
+  {l:'U',n:'Uniform',p:'YOU-ni-form',ex:'Standard outfit worn by groups'},
+  {l:'V',n:'Victor', p:'VIK-tor',   ex:'Latin for "winner"'},
+  {l:'W',n:'Whiskey',p:'WISS-kee',  ex:'A distilled grain spirit'},
+  {l:'X',n:'X-ray',  p:'EKS-ray',   ex:'Medical imaging using radiation'},
+  {l:'Y',n:'Yankee', p:'YANG-kee',  ex:'Nickname for American soldiers'},
+  {l:'Z',n:'Zulu',   p:'ZOO-loo',   ex:'South African ethnic group; UTC+0'},
+];
+
+let expandedIdx=-1;
+function buildLearnList(){
+  const list=document.getElementById('alphaList');
+  list.innerHTML='';
+  NATO.forEach((item,i)=>{
+    const row=document.createElement('div');
+    row.className='alpha-row';
+    row.innerHTML=`<div class="alpha-letter">${item.l}</div><div class="alpha-main"><div class="alpha-nato">${item.n}</div><div class="alpha-pronunc">${item.p}</div><div class="alpha-example">${item.ex}</div></div><div class="alpha-tap-hint">👆 tap</div>`;
+    row.onclick=()=>{
+      document.querySelectorAll('.alpha-row').forEach((r,j)=>r.classList.toggle('expanded',j===i&&expandedIdx!==i));
+      expandedIdx=(expandedIdx===i)?-1:i;
+      if(expandedIdx===i) playTone(400+i*20,0.15,'sine',0.2);
+    };
+    list.appendChild(row);
+  });
+}
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['learn','quiz'][i]===t));
+  document.getElementById('learnScreen').classList.toggle('active',t==='learn');
+  document.getElementById('quizScreen').classList.toggle('active',t==='quiz');
+}
+
+let qs2={q:0,score:0,answered:false,order:[]};
+function startQuiz2(){
+  qs2={q:0,score:0,answered:false,order:NATO.map((_,i)=>i).sort(()=>Math.random()-0.5)};
+  document.getElementById('qqs').textContent=0;
+  document.getElementById('qsb2').style.display='none';
+  nextQQ2();
+}
+
+function nextQQ2(){
+  if(qs2.q>=NATO.length){ endQuiz2(); return; }
+  qs2.answered=false;
+  const idx=qs2.order[qs2.q++];
+  const correct=NATO[idx];
+  document.getElementById('qqn').textContent=qs2.q;
+  document.getElementById('qletter').textContent=correct.l;
+  let opts=[correct];
+  while(opts.length<4){ const r=NATO[Math.floor(Math.random()*NATO.length)]; if(!opts.find(o=>o.l===r.l)) opts.push(r); }
+  opts=opts.sort(()=>Math.random()-0.5);
+  const container=document.getElementById('qopts2');
+  container.innerHTML='';
+  opts.forEach(opt=>{
+    const b=document.createElement('button');
+    b.className='qopt';
+    b.innerHTML=`<b>${opt.n}</b> <span style="color:var(--muted);font-size:0.8rem;">${opt.p}</span>`;
+    b.onclick=()=>ansQQ2(b,opt.l===correct.l,correct.n);
+    container.appendChild(b);
+  });
+}
+
+function ansQQ2(btn,correct,correctName){
+  if(qs2.answered)return; qs2.answered=true;
+  if(correct){ btn.classList.add('correct'); qs2.score++; document.getElementById('qqs').textContent=qs2.score; playTone(880,0.1);setTimeout(()=>playTone(1100,0.15),120); }
+  else { btn.classList.add('wrong'); playTone(200,0.3,'sawtooth'); document.querySelectorAll('.qopt').forEach(b=>{if(b.querySelector('b').textContent===correctName)b.classList.add('correct');}); }
+  setTimeout(nextQQ2,1200);
+}
+
+function endQuiz2(){
+  document.getElementById('qsb2').style.display='block';
+  document.getElementById('qletter').textContent=qs2.score>=23?'🌟':qs2.score>=18?'😄':'💪';
+  document.getElementById('qopts2').innerHTML='';
+  const msg=`${qs2.score}/26 — ${qs2.score>=23?'Expert! 🌟':qs2.score>=18?'Great! 😄':'Keep practicing! 💪'}`;
+  document.querySelector('#quizScreen .quiz-hdr2').innerHTML=`<span>Done!</span><span>${msg}</span>`;
+  [523,659,784].forEach((f,i)=>setTimeout(()=>playTone(f,0.2),i*120));
+}
+
+buildLearnList();
+</script>
+</body>
+</html>

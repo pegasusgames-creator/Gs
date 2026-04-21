@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Geography Quiz</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#26A69A; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+.screen { display:none; flex-direction:column; height:100%; }
+.screen.active { display:flex; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+button { cursor:pointer; border:none; border-radius:var(--radius); font-family:inherit; font-weight:600; transition:transform 0.1s,opacity 0.1s; }
+button:active, button.btn-pressed { transform:scale(0.96); opacity:0.85; }
+.btn-primary { background:var(--accent); color:#fff; padding:14px 28px; font-size:1.1rem; width:100%; }
+.btn-secondary { background:var(--card); color:var(--text); padding:12px 20px; font-size:0.95rem; width:100%; }
+#menuScreen { align-items:center; justify-content:center; gap:20px; padding:30px; }
+.menu-emoji { font-size:5rem; }
+.menu-title { font-size:2.2rem; font-weight:800; color:var(--accent); }
+.menu-sub { color:var(--muted); font-size:0.95rem; text-align:center; }
+.menu-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+#gameScreen { padding:0; }
+.game-header { background:var(--surface); padding:12px 16px; display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.game-top { display:flex; justify-content:space-between; align-items:center; }
+.progress-text { font-size:0.85rem; color:var(--muted); }
+.score-text { font-size:0.95rem; font-weight:700; color:var(--accent); }
+.timer-bar-wrap { height:6px; background:var(--card); border-radius:3px; overflow:hidden; }
+.timer-bar { height:100%; background:var(--accent); border-radius:3px; transition:width 0.1s linear; }
+.question-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; gap:12px; overflow:hidden; }
+.question-emoji { font-size:3.5rem; line-height:1; }
+.question-text { font-size:1.05rem; font-weight:600; text-align:center; line-height:1.4; }
+.answers { width:100%; max-width:480px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ans-btn { background:var(--card); color:var(--text); padding:14px 8px; font-size:0.9rem; border-radius:var(--radius); border:2px solid transparent; min-height:58px; line-height:1.3; }
+.ans-btn.correct { background:#1b5e20; border-color:#66BB6A; color:#fff; }
+.ans-btn.wrong { background:#b71c1c; border-color:#EF5350; color:#fff; }
+.ans-btn:disabled { cursor:default; }
+.feedback-bar { height:38px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0; background:var(--surface); padding:0 12px; text-align:center; }
+.feedback-bar.correct { color:#66BB6A; }
+.feedback-bar.wrong { color:#EF5350; }
+#resultScreen { align-items:center; justify-content:center; gap:18px; padding:30px; }
+.result-emoji { font-size:4rem; }
+.result-title { font-size:1.8rem; font-weight:800; }
+.result-score { font-size:3.5rem; font-weight:900; color:var(--accent); }
+.result-sub { color:var(--muted); font-size:1rem; }
+.result-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="screen active" id="menuScreen">
+    <div class="menu-emoji">🌎</div>
+    <div class="menu-title">Geography Quiz</div>
+    <div class="menu-sub">50 questions on countries, rivers, mountains & more</div>
+    <div class="menu-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Now</button>
+    </div>
+  </div>
+  <div class="screen" id="gameScreen">
+    <div class="game-header">
+      <div class="game-top">
+        <span class="progress-text" id="progressText">1 / 50</span>
+        <span class="score-text" id="scoreText">Score: 0</span>
+      </div>
+      <div class="timer-bar-wrap"><div class="timer-bar" id="timerBar"></div></div>
+    </div>
+    <div class="question-area">
+      <div class="question-emoji" id="qEmoji"></div>
+      <div class="question-text" id="qText"></div>
+      <div class="answers" id="answersDiv"></div>
+    </div>
+    <div class="feedback-bar" id="feedbackBar"></div>
+  </div>
+  <div class="screen" id="resultScreen">
+    <div class="result-emoji" id="resultEmoji">🏆</div>
+    <div class="result-title">Quiz Complete!</div>
+    <div class="result-score" id="resultScore">0%</div>
+    <div class="result-sub" id="resultSub"></div>
+    <div class="result-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Again</button>
+      <button class="btn-secondary" onclick="showScreen('menuScreen')">Menu</button>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+var state={useCount:0,removeAds:false,score:0,qi:0,questions:[],timer:null,timeLeft:0,answered:false};
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%5===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var ALL_QUESTIONS=[
+  {e:'🌊',q:"What is the longest river in the world?",a:["Nile","Amazon","Yangtze","Mississippi"],c:0},
+  {e:'🏔️',q:"What is the tallest mountain in the world?",a:["Mount Everest","K2","Kangchenjunga","Lhotse"],c:0},
+  {e:'🌊',q:"What is the largest ocean?",a:["Pacific","Atlantic","Indian","Arctic"],c:0},
+  {e:'🏜️',q:"What is the largest hot desert in the world?",a:["Sahara","Arabian","Gobi","Kalahari"],c:0},
+  {e:'🌍',q:"What is the largest country by land area?",a:["Russia","Canada","USA","China"],c:0},
+  {e:'🌍',q:"What is the smallest country in the world?",a:["Vatican City","Monaco","San Marino","Liechtenstein"],c:0},
+  {e:'🏝️',q:"What is the world's largest island?",a:["Greenland","New Guinea","Borneo","Madagascar"],c:0},
+  {e:'🌊',q:"What is the deepest lake in the world?",a:["Lake Baikal","Caspian Sea","Lake Superior","Lake Tanganyika"],c:0},
+  {e:'🏔️',q:"Which mountain range contains Mount Everest?",a:["Himalayas","Andes","Alps","Rockies"],c:0},
+  {e:'🌍',q:"How many continents are on Earth?",a:["7","6","5","8"],c:0},
+  {e:'🌊',q:"The Amazon River flows through which continent?",a:["South America","Africa","Asia","North America"],c:0},
+  {e:'🏔️',q:"What is the longest mountain range in the world?",a:["Andes","Rocky Mountains","Himalayas","Alps"],c:0},
+  {e:'🌋',q:"Mount Kilimanjaro is located in which country?",a:["Tanzania","Kenya","Ethiopia","Uganda"],c:0},
+  {e:'🏜️',q:"The Atacama Desert is located in which country?",a:["Chile","Peru","Bolivia","Argentina"],c:0},
+  {e:'🌊',q:"The Mediterranean Sea borders how many countries?",a:["21","15","10","25"],c:0},
+  {e:'🌍',q:"Which country has the most time zones?",a:["France","Russia","USA","China"],c:0},
+  {e:'🏔️',q:"The Alps mountain range spans multiple countries. Which is NOT in the Alps?",a:["Spain","France","Switzerland","Austria"],c:0},
+  {e:'🌊',q:"The Strait of Gibraltar connects the Atlantic Ocean to which sea?",a:["Mediterranean","Red Sea","Black Sea","Adriatic"],c:0},
+  {e:'🌍',q:"What is the most populous city in the world?",a:["Tokyo","Delhi","Shanghai","São Paulo"],c:0},
+  {e:'🌊',q:"Which ocean is the smallest?",a:["Arctic","Indian","Atlantic","Pacific"],c:0},
+  {e:'🏝️',q:"Indonesia has approximately how many islands?",a:["17,000+","1,000","5,000","50,000"],c:0},
+  {e:'🌍',q:"The Tropic of Cancer is at approximately what latitude?",a:["23.5°N","23.5°S","0°","66.5°N"],c:0},
+  {e:'🌋',q:"Iceland sits on which two tectonic plates?",a:["North American & Eurasian","Pacific & North American","African & Eurasian","Arabian & Eurasian"],c:0},
+  {e:'🏜️',q:"The Gobi Desert is mainly in which country?",a:["China & Mongolia","Kazakhstan","India","Russia"],c:0},
+  {e:'🌊',q:"What is the longest river in Europe?",a:["Volga","Rhine","Danube","Elbe"],c:0},
+  {e:'🌍',q:"Which African country has the largest area?",a:["Algeria","Libya","Sudan","Congo"],c:0},
+  {e:'🏔️',q:"What is the highest peak in the Americas?",a:["Aconcagua","Denali","Mont Blanc","Chimborazo"],c:0},
+  {e:'🌊',q:"The Dead Sea borders which two countries?",a:["Israel & Jordan","Israel & Lebanon","Jordan & Saudi Arabia","Egypt & Jordan"],c:0},
+  {e:'🌍',q:"Which is the most densely populated country in the world?",a:["Monaco","Singapore","Bangladesh","Malta"],c:0},
+  {e:'🏝️',q:"The Galapagos Islands belong to which country?",a:["Ecuador","Peru","Colombia","Chile"],c:0},
+  {e:'🌊',q:"The Nile River flows into which body of water?",a:["Mediterranean Sea","Red Sea","Indian Ocean","Gulf of Aden"],c:0},
+  {e:'🌍',q:"Which country borders the most other countries?",a:["China (14)","Russia (14)","Brazil (10)","Germany (9)"],c:0},
+  {e:'🏔️',q:"What is the name of the large plateau that includes Tibet?",a:["Tibetan Plateau","Pamir Plateau","Deccan Plateau","Iranian Plateau"],c:0},
+  {e:'🌋',q:"What is the name of the supercontinent that existed 300 million years ago?",a:["Pangaea","Gondwana","Laurasia","Rodinia"],c:0},
+  {e:'🌊',q:"Lake Victoria is the largest lake in which continent?",a:["Africa","Asia","North America","South America"],c:0},
+  {e:'🌍',q:"What is the capital of Australia?",a:["Canberra","Sydney","Melbourne","Perth"],c:0},
+  {e:'🌍',q:"Which country is known as the 'Land of the Rising Sun'?",a:["Japan","South Korea","China","Thailand"],c:0},
+  {e:'🏝️',q:"The Maldives is located in which ocean?",a:["Indian","Pacific","Atlantic","Arctic"],c:0},
+  {e:'🌊',q:"The Panama Canal connects which two oceans?",a:["Pacific & Atlantic","Atlantic & Indian","Pacific & Indian","Atlantic & Arctic"],c:0},
+  {e:'🌍',q:"Which country has the world's longest coastline?",a:["Canada","Russia","Norway","Australia"],c:0},
+  {e:'🏔️',q:"Mount Fuji is located in which country?",a:["Japan","China","South Korea","Nepal"],c:0},
+  {e:'🌊',q:"The Great Barrier Reef is located off the coast of which country?",a:["Australia","Indonesia","Philippines","Papua New Guinea"],c:0},
+  {e:'🌍',q:"Brazil is the largest country in which continent?",a:["South America","North America","Africa","Asia"],c:0},
+  {e:'🏜️',q:"What percentage of Africa is desert?",a:["About 60%","About 30%","About 80%","About 45%"],c:0},
+  {e:'🌊',q:"Which sea is the saltiest?",a:["Dead Sea","Red Sea","Mediterranean","Caspian Sea"],c:0},
+  {e:'🌍',q:"The equator passes through which continent?",a:["Africa, South America & Asia","Only Africa","Only South America","Africa & Europe"],c:0},
+  {e:'🏔️',q:"Denali (formerly Mt. McKinley) is in which US state?",a:["Alaska","Colorado","Wyoming","Montana"],c:0},
+  {e:'🌊',q:"The Danube River flows into which sea?",a:["Black Sea","Caspian Sea","Mediterranean","Adriatic"],c:0},
+  {e:'🌍',q:"Which country has the most UNESCO World Heritage Sites?",a:["Italy","China","Spain","France"],c:0},
+  {e:'🌋',q:"Which US state has the most active volcanoes?",a:["Alaska","Hawaii","Washington","Oregon"],c:0},
+];
+
+function shuffle(arr){for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
+function startGame(){state.score=0;state.qi=0;state.useCount=0;state.questions=shuffle(ALL_QUESTIONS.slice()).slice(0,50);showScreen('gameScreen');loadQuestion();}
+function loadQuestion(){
+  if(state.qi>=state.questions.length){endGame();return;}
+  var q=state.questions[state.qi];
+  document.getElementById('progressText').textContent=(state.qi+1)+' / '+state.questions.length;
+  document.getElementById('scoreText').textContent='Score: '+state.score;
+  document.getElementById('qEmoji').textContent=q.e;
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('feedbackBar').textContent='';
+  document.getElementById('feedbackBar').className='feedback-bar';
+  state.answered=false;
+  var correctLabel=q.a[q.c];
+  var indices=[0,1,2,3];shuffle(indices);
+  var div=document.getElementById('answersDiv');div.innerHTML='';
+  indices.forEach(function(idx){var btn=document.createElement('button');btn.className='ans-btn';btn.textContent=q.a[idx];btn.onclick=function(){answer(btn,q.a[idx]===correctLabel,correctLabel);};div.appendChild(btn);});
+  startTimer();
+}
+var TIMER_DURATION=15;
+function startTimer(){clearInterval(state.timer);state.timeLeft=TIMER_DURATION;updateTimerBar();state.timer=setInterval(function(){state.timeLeft-=0.1;updateTimerBar();if(state.timeLeft<=0){clearInterval(state.timer);timeUp();}},100);}
+function updateTimerBar(){document.getElementById('timerBar').style.width=Math.max(0,state.timeLeft/TIMER_DURATION*100)+'%';}
+function timeUp(){if(state.answered)return;state.answered=true;var q=state.questions[state.qi];var correctLabel=q.a[q.c];document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});showFeedback(false,"Time up! Correct: "+correctLabel);setTimeout(nextQ,1600);}
+function answer(btn,isCorrect,correctLabel){if(state.answered)return;state.answered=true;clearInterval(state.timer);document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});if(isCorrect){state.score++;btn.classList.add('correct');showFeedback(true,'Correct! 🎉');}else{btn.classList.add('wrong');showFeedback(false,'Wrong! Correct: '+correctLabel);}setTimeout(nextQ,1600);}
+function showFeedback(ok,msg){var bar=document.getElementById('feedbackBar');bar.textContent=msg;bar.className='feedback-bar '+(ok?'correct':'wrong');}
+function nextQ(){state.qi++;if(state.qi%5===0)maybeInterstitial();loadQuestion();}
+function endGame(){clearInterval(state.timer);var pct=Math.round(state.score/state.questions.length*100);document.getElementById('resultScore').textContent=pct+'%';document.getElementById('resultSub').textContent=state.score+' out of '+state.questions.length+' correct';var emojis=['😢','😕','🙂','😊','🏆'];document.getElementById('resultEmoji').textContent=emojis[Math.min(4,Math.floor(pct/20))];showScreen('resultScreen');}
+</script>
+</body>
+</html>

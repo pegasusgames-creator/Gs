@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- App name shown on home screen -->
+    <key>CFBundleDisplayName</key>
+    <string>Sumplete</string>
+
+    <key>CFBundleIdentifier</key>
+    <string>com.pegasusgames.sumplete</string>
+
+    <key>CFBundleVersion</key>
+    <string>1</string>
+
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+
+    <!-- Required: portrait only -->
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+
+    <!-- AppLovin MAX SDK Key -->
+    <!-- Get from: dash.applovin.com → Account → Keys → SDK Key -->
+    <key>AppLovinSdkKey</key>
+    <string>ENTER_YOUR_APPLOVIN_SDK_KEY_HERE</string>
+
+    <!-- AdMob App ID — required for AdMob mediation adapter -->
+    <!-- Get from: apps.admob.com → Your App → App Settings -->
+    <key>GADApplicationIdentifier</key>
+    <string>ca-app-pub-ENTER_YOUR_ADMOB_APP_ID</string>
+
+    <!-- Required for AdMob's SKAdNetwork attribution -->
+    <key>SKAdNetworkItems</key>
+    <array>
+        <dict><key>SKAdNetworkIdentifier</key><string>cstr6suwn9.skadnetwork</string></dict>
+        <dict><key>SKAdNetworkIdentifier</key><string>4fzdc2evr5.skadnetwork</string></dict>
+        <dict><key>SKAdNetworkIdentifier</key><string>2fnua5tdw4.skadnetwork</string></dict>
+        <dict><key>SKAdNetworkIdentifier</key><string>ydx93a7ass.skadnetwork</string></dict>
+        <dict><key>SKAdNetworkIdentifier</key><string>5a6flpkh64.skadnetwork</string></dict>
+        <dict><key>SKAdNetworkIdentifier</key><string>p78axxw29g.skadnetwork</string></dict>
+        <dict><key>SKAdNetworkIdentifier</key><string>v72qych5uu.skadnetwork</string></dict>
+        <dict><key>SKAdNetworkIdentifier</key><string>c6k4g5qg8m.skadnetwork</string></dict>
+        <dict><key>SKAdNetworkIdentifier</key><string>s39g8k73mm.skadnetwork</string></dict>
+        <dict><key>SKAdNetworkIdentifier</key><string>3qy4746246.skadnetwork</string></dict>
+    </array>
+
+    <!-- Hide status bar for fullscreen games -->
+    <key>UIStatusBarHidden</key>
+    <true/>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false/>
+
+    <!-- Prevent screen dimming during gameplay -->
+    <key>UIRequiresPersistentWiFi</key>
+    <false/>
+
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+</dict>
+</plist>

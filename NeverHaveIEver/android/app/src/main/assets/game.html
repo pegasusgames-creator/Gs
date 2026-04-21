@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Never Have I Ever</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+  body{background:#1a1000;color:#ffe8c0;font-family:'Arial',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh;overflow:hidden}
+  h1{font-size:1.4rem;margin:14px 0 4px;color:#ffb030;letter-spacing:2px}
+  #subtitle{font-size:0.78rem;color:#ffb03055;margin-bottom:8px}
+  #level-row{display:flex;gap:8px;margin:6px 0 12px}
+  .lvl-btn{background:#ffffff10;border:1px solid #ffb03033;color:#ffb03077;border-radius:16px;padding:6px 14px;font-size:0.78rem;cursor:pointer}
+  .lvl-btn.active{background:#ffb03033;border-color:#ffb030;color:#ffb030}
+  #card-area{position:relative;width:300px;min-height:160px;margin:0 0 12px}
+  #card{background:linear-gradient(135deg,#2a1800,#3d2400);border:1px solid #ffb03033;border-radius:22px;padding:20px 18px;min-height:160px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:10px;transition:opacity 0.15s}
+  #card.hidden{opacity:0}
+  #card-label{font-size:0.72rem;color:#ffb03088;letter-spacing:2px;font-weight:bold}
+  #card-text{font-size:1.0rem;line-height:1.55;color:#ffe8c0}
+  #card-num{font-size:0.72rem;color:#ffb03044}
+  .vote-row{display:flex;gap:14px;margin-bottom:10px}
+  .vote-btn{flex:1;border:none;border-radius:16px;padding:14px 8px;font-size:1rem;font-weight:bold;cursor:pointer;max-width:130px;transition:transform 0.1s}
+  #have-btn{background:linear-gradient(135deg,#804000,#ffb030);color:#1a1000}
+  #never-btn{background:#ffffff15;color:#ffe8c0;border:1px solid #ffb03044}
+  .vote-btn:active{transform:scale(0.94)}
+  #results-row{display:flex;gap:24px;font-size:0.8rem;color:#ffb03066;margin-bottom:8px}
+  .res-stat{text-align:center}
+  .res-num{font-size:1.5rem;font-weight:bold;color:#ffb030;display:block}
+  .action-row{display:flex;gap:10px;margin-bottom:8px}
+  .action-btn{border:none;border-radius:50px;padding:10px 24px;font-size:0.88rem;font-weight:bold;cursor:pointer;transition:transform 0.1s}
+  #next-btn{background:linear-gradient(135deg,#804000,#ffb030);color:#1a1000}
+  #shuffle-btn{background:#ffffff12;color:#ffe8c0;border:1px solid #ffb03033}
+  .action-btn:active{transform:scale(0.94)}
+  #q-progress{font-size:0.78rem;color:#ffb03044;min-height:1.1rem}
+  #remove-ads{position:fixed;top:8px;right:8px;background:#ffffff10;border:1px solid #ffb03033;color:#ffb03055;font-size:0.65rem;padding:4px 8px;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<button id="remove-ads" onclick="Android.purchase('remove_ads')">Remove Ads</button>
+<h1>🤚 Never Have I Ever</h1>
+<p id="subtitle">Raise your hand if you HAVE done it!</p>
+<div id="level-row">
+  <button class="lvl-btn active" onclick="setLevel('mild',this)">😊 Mild</button>
+  <button class="lvl-btn" onclick="setLevel('spicy',this)">🌶️ Spicy</button>
+  <button class="lvl-btn" onclick="setLevel('wild',this)">🔥 Wild</button>
+</div>
+<div id="card-area">
+  <div id="card">
+    <div id="card-label">NEVER HAVE I EVER…</div>
+    <div id="card-text">Tap NEXT to start! 🙌</div>
+    <div id="card-num"></div>
+  </div>
+</div>
+<div class="vote-row">
+  <button class="vote-btn" id="have-btn" onclick="vote('have')">✋ I HAVE!</button>
+  <button class="vote-btn" id="never-btn" onclick="vote('never')">🤚 NEVER!</button>
+</div>
+<div id="results-row">
+  <div class="res-stat"><span class="res-num" id="have-count">0</span>Have done it</div>
+  <div class="res-stat"><span class="res-num" id="never-count">0</span>Never done it</div>
+</div>
+<div class="action-row">
+  <button class="action-btn" id="next-btn" onclick="nextCard()">NEXT ›</button>
+  <button class="action-btn" id="shuffle-btn" onclick="shuffleDeck()">SHUFFLE</button>
+</div>
+<div id="q-progress"></div>
+
+<script>
+const ALL={
+  mild:["Eaten food off the floor","Fallen asleep in a movie","Forgotten someone's name mid-conversation","Laughed so hard you cried","Talked to a pet like they understand you","Stayed in bed all day doing nothing","Sent a text to the wrong person","Eaten an entire pizza by yourself","Pretended to be busy to avoid someone","Forgotten where you parked your car","Binge-watched an entire season in one day","Used someone else's Netflix account","Called a teacher 'Mom' by accident","Worn the same clothes two days in a row","Lied about finishing a book you never read"],
+  spicy:["Told a lie to get out of plans","Googled someone you just met","Read a friend's messages without them knowing","Pretended to like a gift you hated","Canceled plans last minute via text","Liked someone's old post while stalking their profile","Eaten food from the fridge that wasn't yours","Faked being sick to get a day off","Texted someone about them while talking to them","Blamed a noise on someone else","Fallen asleep during an important meeting or class","Ignored a phone call then texted 'just saw this'","Cried over a fictional character's death","Ordered dessert without sharing","Pretended not to see someone in public"],
+  wild:["Done something embarrassing on a dare","Stayed up until sunrise with friends","Eaten something truly disgusting on a bet","Gone on a spontaneous trip with no plan","Done karaoke sober","Crashed a stranger's party","Forgotten an anniversary or birthday","Laughed at an extremely inappropriate moment","Taken food from someone else's plate without asking","Sneaked out of the house at night","Called in sick to work to play video games","Eaten fast food for breakfast, lunch AND dinner in one day","Run from something scary that turned out to be harmless","Accidentally liked a years-old post while stalking","Had a full conversation with someone and then forgotten who they were"]
+};
+let level='mild',deck=[],cardIdx=0,haveCount=0,neverCount=0,useCount=0,hasVoted=false;
+
+function setLevel(l,btn){level=l;document.querySelectorAll('.lvl-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');shuffleDeck();}
+function shuffleDeck(){deck=shuffle([...ALL[level]]);cardIdx=0;showCard();}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function showCard(){if(cardIdx>=deck.length){deck=shuffle(deck);cardIdx=0;}const card=document.getElementById('card');card.classList.add('hidden');setTimeout(()=>{document.getElementById('card-text').textContent=deck[cardIdx];document.getElementById('card-num').textContent=(cardIdx+1)+' / '+deck.length;document.getElementById('q-progress').textContent='';card.classList.remove('hidden');},150);hasVoted=false;}
+function vote(type){if(hasVoted)return;hasVoted=true;if(type==='have'){haveCount++;document.getElementById('have-count').textContent=haveCount;}else{neverCount++;document.getElementById('never-count').textContent=neverCount;}if(navigator.vibrate)navigator.vibrate(80);}
+function nextCard(){cardIdx++;showCard();if(++useCount%6===0&&window.Android)Android.showInterstitial();}
+shuffleDeck();
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){document.getElementById('remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+</script>
+</body>
+</html>

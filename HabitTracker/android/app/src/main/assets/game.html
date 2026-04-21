@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Habit Tracker</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#7E57C2; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
+#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+.add-row { display:flex; gap:8px; margin-bottom:8px; }
+.add-row input { flex:1; background:var(--card); border:1px solid rgba(126,87,194,0.3); border-radius:8px; color:var(--text); padding:10px 12px; font-size:0.9rem; }
+.add-row input[type=number] { width:60px; flex:none; }
+.btn-p { background:var(--accent); border:none; color:#fff; font-size:1rem; font-weight:700; padding:12px; border-radius:10px; cursor:pointer; }
+.btn-sm { background:var(--accent); border:none; color:#fff; font-size:0.8rem; font-weight:700; padding:8px 14px; border-radius:8px; cursor:pointer; }
+.habit-item { background:var(--card); border-radius:10px; padding:12px; margin-bottom:10px; }
+.habit-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.habit-name { font-size:1rem; font-weight:700; }
+.habit-streak { font-size:0.75rem; color:var(--accent); }
+.habit-actions { display:flex; gap:8px; align-items:center; }
+.done-btn { background:var(--accent); border:none; color:#fff; border-radius:8px; padding:6px 14px; font-size:0.85rem; font-weight:700; cursor:pointer; }
+.done-btn.done { background:#2e7d32; }
+.del-btn { background:none; border:none; color:var(--muted); font-size:0.9rem; cursor:pointer; padding:4px; }
+.heatmap { display:flex; flex-wrap:wrap; gap:3px; margin-top:6px; }
+.hm-day { width:14px; height:14px; border-radius:3px; background:rgba(126,87,194,0.12); }
+.hm-day.done { background:var(--accent); }
+.hm-day.today { outline:2px solid #fff; }
+.freq-lbl { font-size:0.68rem; color:var(--muted); margin-top:4px; }
+.empty { text-align:center; color:var(--muted); font-size:0.85rem; padding:20px 0; }
+.freq-row { display:flex; gap:6px; align-items:center; margin-bottom:4px; }
+.freq-row label { font-size:0.72rem; color:var(--muted); white-space:nowrap; }
+.freq-row select { background:var(--card); border:1px solid rgba(126,87,194,0.3); border-radius:6px; color:var(--text); padding:6px; font-size:0.85rem; flex:1; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Habit <span>Tracker</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
+  <div id="scroll">
+    <div class="card">
+      <div class="card-title">Add New Habit</div>
+      <div class="add-row">
+        <input type="text" id="i-name" placeholder="Habit name e.g. Meditate">
+        <input type="text" id="i-emoji" placeholder="Icon" maxlength="2" style="width:52px;text-align:center;">
+      </div>
+      <div class="freq-row">
+        <label>Frequency:</label>
+        <select id="i-freq">
+          <option value="daily">Daily</option>
+          <option value="weekly3">Weekly x3</option>
+          <option value="weekly5">Weekly x5</option>
+        </select>
+      </div>
+      <button class="btn-p" id="btn-add" style="width:100%;margin-top:8px;">Add Habit</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Today's Habits</div>
+      <div id="habits-list"><div class="empty">No habits yet. Add your first habit above!</div></div>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var state={useCount:0,removeAds:false};
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var habits=JSON.parse(localStorage.getItem('ht_habits')||'[]');
+function save(){localStorage.setItem('ht_habits',JSON.stringify(habits));}
+function todayKey(){return new Date().toISOString().slice(0,10);}
+function dayKey(d){return new Date(d).toISOString().slice(0,10);}
+
+function calcStreak(h){
+  var streak=0, d=new Date();
+  for(var i=0;i<365;i++){
+    var k=dayKey(d.getTime()-i*86400000);
+    if(h.log&&h.log.indexOf(k)>=0){streak++;}
+    else if(i>0)break;
+  }
+  return streak;
+}
+
+function render(){
+  var el=document.getElementById('habits-list');
+  if(!habits.length){el.innerHTML='<div class="empty">No habits yet. Add your first habit above!</div>';return;}
+  var today=todayKey();
+  var now=Date.now();
+  el.innerHTML='';
+  habits.forEach(function(h,idx){
+    var doneToday=h.log&&h.log.indexOf(today)>=0;
+    var streak=calcStreak(h);
+    var div=document.createElement('div');
+    div.className='habit-item';
+    var heatHTML='<div class="heatmap">';
+    for(var i=29;i>=0;i--){
+      var k=dayKey(now-i*86400000);
+      var isDone=h.log&&h.log.indexOf(k)>=0;
+      var isToday=i===0;
+      heatHTML+='<div class="hm-day'+(isDone?' done':'')+(isToday?' today':'')+'"></div>';
+    }
+    heatHTML+='</div>';
+    div.innerHTML='<div class="habit-header"><span class="habit-name">'+(h.em||'')+(h.em?' ':'')+h.name+'</span><span class="habit-streak">'+streak+' day streak</span></div>'+
+      heatHTML+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">'+
+      '<span class="freq-lbl">'+h.freq.replace('weekly','Weekly ').replace('daily','Daily')+'</span>'+
+      '<div class="habit-actions">'+
+      '<button class="done-btn'+(doneToday?' done':'') +'" data-idx="'+idx+'">'+(doneToday?'Done!':'Mark Done')+'</button>'+
+      '<button class="del-btn" data-idx="'+idx+'">&#10005;</button></div></div>';
+    el.appendChild(div);
+  });
+  el.querySelectorAll('.done-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      var idx=parseInt(b.dataset.idx);
+      var h=habits[idx];
+      if(!h.log)h.log=[];
+      var today2=todayKey();
+      if(h.log.indexOf(today2)<0){h.log.push(today2);if(h.log.length>400)h.log=h.log.slice(-400);}
+      save();render();maybeInterstitial();
+    });
+  });
+  el.querySelectorAll('.del-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      var idx=parseInt(b.dataset.idx);
+      if(confirm('Delete "'+habits[idx].name+'"?')){habits.splice(idx,1);save();render();}
+    });
+  });
+}
+
+document.getElementById('btn-add').addEventListener('click',function(){
+  var name=document.getElementById('i-name').value.trim();
+  if(!name){alert('Enter a habit name.');return;}
+  var em=document.getElementById('i-emoji').value.trim();
+  var freq=document.getElementById('i-freq').value;
+  habits.push({name:name,em:em,freq:freq,log:[]});
+  save();
+  document.getElementById('i-name').value='';
+  document.getElementById('i-emoji').value='';
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

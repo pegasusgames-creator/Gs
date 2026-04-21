@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Shapes and Colors</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --accent:#E91E63; --bg:#FCE4EC; --text:#333; --muted:#888; --radius:20px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--accent); flex-shrink:0; }
+header h1 { font-size:1.4rem; font-weight:800; color:#fff; }
+#btn-remove-ads { background:rgba(255,255,255,0.25); border:none; color:#fff; font-size:0.72rem; font-weight:700; padding:6px 12px; border-radius:20px; cursor:pointer; }
+
+#tabs { display:flex; background:#fff; flex-shrink:0; border-bottom:3px solid var(--bg); }
+.tab { flex:1; padding:12px 4px; text-align:center; font-size:0.8rem; font-weight:700; color:var(--muted); border:none; background:none; cursor:pointer; border-bottom:3px solid transparent; }
+.tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+.screen { display:none; flex-direction:column; flex:1; overflow:hidden; }
+.screen.active { display:flex; }
+
+/* ---- LEARN ---- */
+#learnScreen { background:var(--bg); padding:14px; gap:12px; align-items:center; overflow-y:auto; }
+#shapesGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; width:100%; max-width:400px; }
+.shape-card { background:#fff; border-radius:var(--radius); box-shadow:0 4px 18px rgba(0,0,0,0.1); padding:16px 8px; text-align:center; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.shape-card:active { transform:scale(0.94); }
+.shape-card.big { transform:scale(1.08); box-shadow:0 8px 30px rgba(233,30,99,0.25); z-index:5; }
+.shape-svg { width:60px; height:60px; }
+.shape-name { font-size:0.75rem; font-weight:800; color:var(--text); }
+.shape-color-name { font-size:0.7rem; color:var(--muted); }
+
+/* ---- MATCH GAME ---- */
+#matchScreen { background:var(--bg); padding:14px; gap:12px; align-items:center; overflow-y:auto; }
+.match-header { display:flex; justify-content:space-between; width:100%; max-width:400px; align-items:center; }
+.match-score-lbl { font-size:1rem; font-weight:700; color:var(--accent); }
+.match-instruction { font-size:0.9rem; color:var(--muted); text-align:center; font-weight:600; }
+#matchQuestion { background:#fff; border-radius:var(--radius); box-shadow:0 4px 20px rgba(0,0,0,0.08); padding:20px; width:100%; max-width:400px; text-align:center; }
+.mq-shape-svg { width:80px; height:80px; margin:0 auto; }
+.mq-label { font-size:0.9rem; color:var(--muted); margin-top:6px; }
+#matchOpts { display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; max-width:400px; }
+.match-opt { background:#fff; border-radius:16px; box-shadow:0 2px 10px rgba(0,0,0,0.08); padding:14px; text-align:center; cursor:pointer; border:3px solid transparent; font-size:1rem; font-weight:800; transition:all 0.15s; }
+.match-opt:active { transform:scale(0.96); }
+.match-opt.correct { background:#4CAF50; color:#fff; border-color:#2E7D32; }
+.match-opt.wrong   { background:#f44336; color:#fff; border-color:#c62828; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>🔷 Shapes &amp; Colors</h1>
+    <button id="btn-remove-ads" onclick="purchase('remove_ads')">⭐ Remove Ads</button>
+  </header>
+  <div id="tabs">
+    <button class="tab active" onclick="switchTab('learn')">📖 Learn</button>
+    <button class="tab" onclick="switchTab('match')">🎯 Match</button>
+  </div>
+
+  <!-- LEARN -->
+  <div class="screen active" id="learnScreen">
+    <p style="font-size:0.9rem;color:var(--muted);font-weight:600;">👆 Tap a shape to see it bigger!</p>
+    <div id="shapesGrid"></div>
+  </div>
+
+  <!-- MATCH -->
+  <div class="screen" id="matchScreen">
+    <div class="match-header">
+      <span class="match-score-lbl">Score: <span id="matchScore">0</span></span>
+      <button onclick="newMatchRound()" style="padding:8px 16px;font-size:0.8rem;font-weight:700;border:none;border-radius:12px;background:var(--accent);color:#fff;cursor:pointer;">New Round</button>
+    </div>
+    <p class="match-instruction">Match the shape to its name!</p>
+    <div id="matchQuestion">
+      <div class="mq-shape-svg" id="mqShapeSvg"></div>
+      <div class="mq-label" id="mqLabel">What shape is this?</div>
+    </div>
+    <div id="matchOpts"></div>
+  </div>
+</div>
+<script>
+function purchase(sku){if(window.Android&&Android.purchase)Android.purchase(sku);}
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+function playTone(f,d,t='sine'){const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(0.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+d);o.start();o.stop(audioCtx.currentTime+d);}
+
+const SHAPES = [
+  {n:'Circle',    c:'#FF4081', svg:(s,f)=>`<circle cx="30" cy="30" r="26" fill="${f}" stroke="${s}" stroke-width="3"/>`},
+  {n:'Square',    c:'#FF9800', svg:(s,f)=>`<rect x="4" y="4" width="52" height="52" fill="${f}" stroke="${s}" stroke-width="3"/>`},
+  {n:'Triangle',  c:'#FFC107', svg:(s,f)=>`<polygon points="30,3 57,57 3,57" fill="${f}" stroke="${s}" stroke-width="3"/>`},
+  {n:'Rectangle', c:'#4CAF50', svg:(s,f)=>`<rect x="2" y="14" width="56" height="32" fill="${f}" stroke="${s}" stroke-width="3"/>`},
+  {n:'Star',      c:'#2196F3', svg:(s,f)=>`<polygon points="30,3 36,22 56,22 40,34 46,55 30,43 14,55 20,34 4,22 24,22" fill="${f}" stroke="${s}" stroke-width="2"/>`},
+  {n:'Heart',     c:'#E91E63', svg:(s,f)=>`<path d="M30,54 C10,40 2,28 2,18 A14,14,0,0,1,30,14 A14,14,0,0,1,58,18 C58,28 50,40 30,54Z" fill="${f}" stroke="${s}" stroke-width="2"/>`},
+  {n:'Diamond',   c:'#9C27B0', svg:(s,f)=>`<polygon points="30,2 58,30 30,58 2,30" fill="${f}" stroke="${s}" stroke-width="3"/>`},
+  {n:'Oval',      c:'#00BCD4', svg:(s,f)=>`<ellipse cx="30" cy="30" rx="28" ry="18" fill="${f}" stroke="${s}" stroke-width="3"/>`},
+  {n:'Hexagon',   c:'#8BC34A', svg:(s,f)=>`<polygon points="30,2 56,16 56,44 30,58 4,44 4,16" fill="${f}" stroke="${s}" stroke-width="3"/>`},
+  {n:'Pentagon',  c:'#FF5722', svg:(s,f)=>`<polygon points="30,2 57,22 46,54 14,54 3,22" fill="${f}" stroke="${s}" stroke-width="3"/>`},
+  {n:'Octagon',   c:'#795548', svg:(s,f)=>`<polygon points="20,2 40,2 58,20 58,40 40,58 20,58 2,40 2,20" fill="${f}" stroke="${s}" stroke-width="3"/>`},
+  {n:'Cross',     c:'#607D8B', svg:(s,f)=>`<path d="M22,2 L38,2 L38,22 L58,22 L58,38 L38,38 L38,58 L22,58 L22,38 L2,38 L2,22 L22,22 Z" fill="${f}" stroke="${s}" stroke-width="2"/>`},
+];
+
+function makeSVG(shape, size=60, fill=true){
+  const f = fill ? shape.c : shape.c+'33';
+  const s = shape.c;
+  return `<svg viewBox="0 0 60 60" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">${shape.svg(s,f)}</svg>`;
+}
+
+// Build learn grid
+function buildLearnGrid(){
+  const grid=document.getElementById('shapesGrid');
+  grid.innerHTML='';
+  SHAPES.forEach((shape,i)=>{
+    const card=document.createElement('div');
+    card.className='shape-card'; card.id='sc-'+i;
+    card.innerHTML=`<div class="shape-svg">${makeSVG(shape,60)}</div><div class="shape-name">${shape.n}</div>`;
+    card.onclick=()=>toggleBig(i,card);
+    grid.appendChild(card);
+  });
+}
+
+let bigCard=null;
+function toggleBig(i,card){
+  if(bigCard===card){ card.classList.remove('big'); bigCard=null; playTone(400,0.08,'sine',0.15); }
+  else {
+    if(bigCard) bigCard.classList.remove('big');
+    card.classList.add('big'); bigCard=card;
+    playTone(600,0.15,'sine',0.2);
+    // Animate shape
+    card.querySelector('.shape-svg').innerHTML=makeSVG(SHAPES[i],60);
+  }
+}
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',(t==='learn'&&i===0)||(t==='match'&&i===1)));
+  document.getElementById('learnScreen').classList.toggle('active',t==='learn');
+  document.getElementById('matchScreen').classList.toggle('active',t==='match');
+  if(t==='match') newMatchRound();
+}
+
+// Match game
+let matchScore=0, matchAnswered=false;
+function newMatchRound(){
+  matchAnswered=false;
+  const correctIdx=Math.floor(Math.random()*SHAPES.length);
+  const correct=SHAPES[correctIdx];
+  document.getElementById('mqShapeSvg').innerHTML=makeSVG(correct,80);
+  document.getElementById('mqLabel').textContent='What shape is this?';
+  // 4 options
+  let opts=[correct];
+  while(opts.length<4){ const r=SHAPES[Math.floor(Math.random()*SHAPES.length)]; if(!opts.find(o=>o.n===r.n)) opts.push(r); }
+  opts=opts.sort(()=>Math.random()-0.5);
+  const grid=document.getElementById('matchOpts');
+  grid.innerHTML='';
+  opts.forEach(opt=>{
+    const b=document.createElement('button');
+    b.className='match-opt';
+    b.innerHTML=makeSVG(opt,36)+`<br><span>${opt.n}</span>`;
+    b.onclick=()=>answerMatch(b,opt.n===correct.n);
+    grid.appendChild(b);
+  });
+}
+
+function answerMatch(btn,correct){
+  if(matchAnswered)return; matchAnswered=true;
+  if(correct){ btn.classList.add('correct'); matchScore++; document.getElementById('matchScore').textContent=matchScore; playTone(880,0.1);setTimeout(()=>playTone(1100,0.2),120); setTimeout(newMatchRound,1000); }
+  else { btn.classList.add('wrong'); playTone(200,0.3,'sawtooth',0.2); setTimeout(newMatchRound,1200); }
+}
+
+buildLearnGrid();
+</script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Packing Checklist</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#42A5F5; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:0; }
+header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px 10px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
+#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
+/* Template bar */
+#tmpl-bar { display:flex; gap:6px; padding:0 14px 8px; overflow-x:auto; flex-shrink:0; scrollbar-width:none; }
+#tmpl-bar::-webkit-scrollbar { display:none; }
+.tmpl-chip { padding:6px 13px; border:none; border-radius:20px; font-size:0.75rem; cursor:pointer; background:var(--card); color:var(--text); white-space:nowrap; flex-shrink:0; }
+.tmpl-chip.active { background:var(--accent); color:#fff; font-weight:700; }
+/* Progress */
+#progress-bar-wrap { padding:0 14px 6px; flex-shrink:0; }
+#prog-label { display:flex; justify-content:space-between; font-size:0.75rem; color:var(--muted); margin-bottom:4px; }
+#prog-bar { height:6px; background:var(--card); border-radius:3px; overflow:hidden; }
+#prog-fill { height:100%; background:var(--accent); border-radius:3px; transition:width 0.3s; }
+/* Add custom item */
+#add-row { display:flex; gap:7px; padding:0 14px 8px; flex-shrink:0; }
+#add-row input { flex:1; padding:9px 12px; border-radius:10px; border:none; background:var(--surface); color:var(--text); font-size:0.88rem; }
+#add-row button { padding:9px 14px; border:none; border-radius:10px; background:var(--accent); color:#fff; font-weight:700; font-size:1rem; cursor:pointer; }
+/* Action row */
+#act-row { display:flex; gap:7px; padding:0 14px 8px; flex-shrink:0; }
+.act-btn { flex:1; padding:8px; border:none; border-radius:9px; font-size:0.78rem; font-weight:600; cursor:pointer; background:var(--card); color:var(--text); }
+.act-btn.danger { color:#EF5350; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 14px 12px; }
+.pack-item { display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--surface); border-radius:10px; margin-bottom:5px; }
+.pi-check { width:22px; height:22px; border-radius:7px; border:2px solid var(--muted); flex-shrink:0; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.15s; }
+.pi-check.done { background:var(--accent); border-color:var(--accent); }
+.pi-check.done::after { content:'✓'; color:#fff; font-size:0.85rem; font-weight:700; }
+.pi-name { flex:1; font-size:0.9rem; }
+.pack-item.done .pi-name { text-decoration:line-through; color:var(--muted); }
+.pi-del { background:none; border:none; color:#FF7043; cursor:pointer; font-size:0.9rem; padding:0 2px; }
+.pi-custom { font-size:0.65rem; color:var(--accent); margin-left:4px; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Packing <span>Checklist</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
+  <div id="tmpl-bar"></div>
+  <div id="progress-bar-wrap">
+    <div id="prog-label"><span id="prog-text">0 / 0 packed</span><span id="prog-pct">0%</span></div>
+    <div id="prog-bar"><div id="prog-fill" style="width:0%"></div></div>
+  </div>
+  <div id="add-row">
+    <input type="text" id="custom-item" placeholder="Add custom item…" maxlength="40">
+    <button onclick="addCustom()">+</button>
+  </div>
+  <div id="act-row">
+    <button class="act-btn" onclick="resetAll()">Reset All</button>
+    <button class="act-btn danger" onclick="clearCustom()">Clear Custom</button>
+  </div>
+  <div id="scroll"><div id="items-list"></div></div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+
+var TEMPLATES = {
+  'Beach Trip': ['Passport/ID','Sunscreen','Swimsuit','Towel','Sunglasses','Flip flops','Beach bag','Water bottle','Snacks','Camera','Phone charger','Cash','Travel insurance'],
+  'Business Trip': ['Passport/ID','Laptop','Chargers','Business cards','Formal clothes','Dress shoes','Toiletries','Medications','Phone charger','Notebook','Pen','Cash/cards'],
+  'Camping': ['Tent','Sleeping bag','Sleeping pad','Backpack','Headlamp','First aid kit','Multi-tool','Water filter','Food','Cooking gear','Fire starter','Bug spray','Rain gear','Extra clothes','Map/compass'],
+  'General Travel': ['Passport/ID','Tickets','Hotel info','Phone charger','Headphones','Change of clothes','Toiletries','Medications','Snacks','Water bottle','Camera','Wallet/cash','Travel pillow']
+};
+
+var STORE='packing_data';
+var S = { useCount:0, removeAds:false, curTemplate:'Beach Trip', items:{}, customItems:{}, nextId:1 };
+
+function load(){
+  try{var d=JSON.parse(localStorage.getItem(STORE)||'null');
+    if(d){S.items=d.items||{};S.customItems=d.customItems||{};S.nextId=d.nextId||1;S.curTemplate=d.curTemplate||'Beach Trip';}
+  }catch(e){}
+}
+function save(){localStorage.setItem(STORE,JSON.stringify({items:S.items,customItems:S.customItems,nextId:S.nextId,curTemplate:S.curTemplate}));}
+
+function getChecked(name){
+  var key=S.curTemplate+'::'+name;
+  return !!(S.items[key]);
+}
+function setChecked(name,val){
+  var key=S.curTemplate+'::'+name;
+  if(val)S.items[key]=true; else delete S.items[key];
+  save();
+}
+
+function addCustom(){
+  var name=document.getElementById('custom-item').value.trim();
+  if(!name)return;
+  var key=S.curTemplate;
+  if(!S.customItems[key])S.customItems[key]=[];
+  S.customItems[key].push({id:S.nextId++,name:name,done:false});
+  save();
+  document.getElementById('custom-item').value='';
+  render();
+  maybeInterstitial();
+}
+
+function toggleTemplate(t){S.curTemplate=t;save();renderTemplates();render();}
+
+function toggleItem(name){setChecked(name,!getChecked(name));render();}
+
+function toggleCustom(id){
+  var list=S.customItems[S.curTemplate]||[];
+  var item=list.find(function(x){return x.id===id;});
+  if(item){item.done=!item.done;save();render();}
+}
+
+function deleteCustom(id){
+  if(!S.customItems[S.curTemplate])return;
+  S.customItems[S.curTemplate]=S.customItems[S.curTemplate].filter(function(x){return x.id!==id;});
+  save();render();
+}
+
+function resetAll(){
+  var tmpl=S.curTemplate;
+  // clear all checked for this template
+  Object.keys(S.items).forEach(function(k){if(k.startsWith(tmpl+'::'))delete S.items[k];});
+  var ci=S.customItems[tmpl]||[];
+  ci.forEach(function(x){x.done=false;});
+  save();render();
+}
+
+function clearCustom(){
+  S.customItems[S.curTemplate]=[];
+  save();render();
+}
+
+function renderTemplates(){
+  var el=document.getElementById('tmpl-bar');
+  el.innerHTML=Object.keys(TEMPLATES).map(function(t){
+    return '<button class="tmpl-chip'+(t===S.curTemplate?' active':'')+'" onclick="toggleTemplate(\''+t+'\')">'+t+'</button>';
+  }).join('');
+}
+
+function render(){
+  var baseItems=TEMPLATES[S.curTemplate]||[];
+  var customItems=S.customItems[S.curTemplate]||[];
+  var allDone=baseItems.filter(function(n){return getChecked(n);}).length;
+  allDone+=customItems.filter(function(x){return x.done;}).length;
+  var allTotal=baseItems.length+customItems.length;
+  var pct=allTotal?Math.round(allDone/allTotal*100):0;
+  document.getElementById('prog-text').textContent=allDone+' / '+allTotal+' packed';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-fill').style.width=pct+'%';
+
+  var html=baseItems.map(function(name){
+    var done=getChecked(name);
+    return '<div class="pack-item'+(done?' done':'')+'">'+
+      '<div class="pi-check'+(done?' done':'')+'" onclick="toggleItem(\''+name.replace(/'/g,"\\'")+'\')" ></div>'+
+      '<span class="pi-name">'+esc(name)+'</span></div>';
+  }).join('');
+
+  if(customItems.length){
+    html+=customItems.map(function(item){
+      return '<div class="pack-item'+(item.done?' done':'')+'">'+
+        '<div class="pi-check'+(item.done?' done':'')+'" onclick="toggleCustom('+item.id+')"></div>'+
+        '<span class="pi-name">'+esc(item.name)+'<span class="pi-custom">custom</span></span>'+
+        '<button class="pi-del" onclick="deleteCustom('+item.id+')">&#10005;</button></div>';
+    }).join('');
+  }
+  document.getElementById('items-list').innerHTML=html;
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+load();renderTemplates();render();
+
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){S.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){S.useCount++;if(!S.removeAds&&S.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!S.removeAds)document.getElementById('admob-banner').style.display='flex';
+</script>
+</body>
+</html>

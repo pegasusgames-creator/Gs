@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Counting App</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --accent:#FF9800; --accent2:#FFC107; --bg:#FFF3E0; --card:#fff; --text:#333; --muted:#888; --radius:20px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--accent); flex-shrink:0; }
+header h1 { font-size:1.4rem; font-weight:800; color:#fff; }
+#btn-remove-ads { background:rgba(255,255,255,0.25); border:none; color:#fff; font-size:0.72rem; font-weight:700; padding:6px 12px; border-radius:20px; cursor:pointer; }
+
+.screen { display:none; flex-direction:column; flex:1; overflow:hidden; }
+.screen.active { display:flex; }
+
+/* ---- MENU ---- */
+#menuScreen { align-items:center; justify-content:center; padding:20px; gap:16px; background:var(--bg); }
+.menu-emoji { font-size:72px; animation:bob 1.5s ease-in-out infinite alternate; }
+@keyframes bob { from{transform:translateY(0)} to{transform:translateY(-8px)} }
+.menu-title { font-size:1.8rem; font-weight:900; color:var(--accent); text-align:center; }
+.mode-btn { width:100%; max-width:300px; padding:20px 16px; font-size:1.05rem; font-weight:800; border:none; border-radius:var(--radius); cursor:pointer; transition:transform 0.15s; display:flex; align-items:center; gap:14px; }
+.mode-btn:active { transform:scale(0.96); }
+.mode-btn .mode-icon { font-size:1.8rem; }
+.mode-1 { background:#FFF3E0; color:#E65100; box-shadow:0 4px 16px rgba(255,152,0,0.2); }
+.mode-2 { background:#E3F2FD; color:#1565C0; box-shadow:0 4px 16px rgba(33,150,243,0.2); }
+.mode-3 { background:#F3E5F5; color:#6A1B9A; box-shadow:0 4px 16px rgba(156,39,176,0.2); }
+.stars-earned { font-size:1.2rem; }
+
+/* ---- COUNT OBJECTS MODE ---- */
+#countScreen { background:var(--bg); padding:16px; gap:14px; align-items:center; }
+.count-instruction { font-size:1rem; font-weight:700; color:var(--accent); text-align:center; }
+.objects-area { background:#fff; border-radius:var(--radius); box-shadow:0 4px 20px rgba(0,0,0,0.08); padding:20px; width:100%; max-width:360px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; min-height:160px; align-items:center; }
+.count-obj { font-size:clamp(32px,8vw,44px); cursor:pointer; transition:transform 0.15s; display:inline-block; user-select:none; }
+.count-obj.tapped { transform:scale(1.3); filter:drop-shadow(0 0 8px rgba(255,152,0,0.8)); }
+.count-display { font-size:3rem; font-weight:900; color:var(--accent); }
+.count-label { font-size:1rem; color:var(--muted); }
+.check-btn { width:100%; max-width:260px; padding:18px; font-size:1.1rem; font-weight:800; border:none; border-radius:var(--radius); background:var(--accent); color:#fff; cursor:pointer; transition:transform 0.15s; box-shadow:0 4px 16px rgba(255,152,0,0.35); }
+.check-btn:active { transform:scale(0.96); }
+
+/* ---- NUMBER RECOG MODE ---- */
+#recognScreen { background:var(--bg); padding:16px; gap:14px; align-items:center; }
+.big-number-show { font-size:clamp(80px,24vw,120px); font-weight:900; color:var(--accent); line-height:1; text-align:center; }
+.recog-question { font-size:1rem; font-weight:700; color:var(--muted); text-align:center; }
+.tap-objects-area { background:#fff; border-radius:var(--radius); box-shadow:0 4px 20px rgba(0,0,0,0.08); padding:16px; width:100%; max-width:360px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; min-height:100px; align-items:center; }
+.tap-obj { font-size:clamp(28px,8vw,40px); cursor:pointer; transition:all 0.15s; display:inline-block; border-radius:12px; padding:4px; border:3px solid transparent; }
+.tap-obj.selected { background:#FFF3E0; border-color:var(--accent); transform:scale(1.1); }
+
+/* ---- ORDER MODE ---- */
+#orderScreen { background:var(--bg); padding:16px; gap:12px; align-items:center; }
+.order-instruction { font-size:1rem; font-weight:700; color:var(--accent); text-align:center; }
+.number-slots { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; width:100%; max-width:360px; }
+.num-tile { width:56px; height:56px; border-radius:14px; border:3px dashed #e0e0e0; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:900; background:#fff; color:var(--muted); transition:all 0.2s; }
+.num-tile.filled { background:var(--accent); color:#fff; border-color:var(--accent); transform:scale(1.05); }
+.num-tile.correct { background:#4CAF50; border-color:#2E7D32; }
+.number-choices { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; width:100%; max-width:360px; }
+.num-choice { width:56px; height:56px; border-radius:14px; border:none; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:900; background:#fff; box-shadow:0 3px 12px rgba(0,0,0,0.1); cursor:pointer; transition:all 0.15s; color:var(--text); }
+.num-choice:active { transform:scale(0.92); }
+.num-choice.used { background:#e0e0e0; color:#bbb; pointer-events:none; }
+
+/* Feedback overlay */
+#feedback { display:none; position:fixed; inset:0; z-index:60; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; flex-direction:column; gap:12px; }
+#feedback.show { display:flex; }
+#feedbackEmoji { font-size:80px; }
+#feedbackText { color:#fff; font-size:1.8rem; font-weight:900; text-align:center; }
+#feedbackBtn { padding:16px 36px; font-size:1rem; font-weight:800; border:none; border-radius:16px; background:var(--accent); color:#fff; cursor:pointer; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>🔢 Counting App</h1>
+    <button id="btn-remove-ads" onclick="purchase('remove_ads')">⭐ Remove Ads</button>
+  </header>
+
+  <!-- MENU -->
+  <div class="screen active" id="menuScreen">
+    <div class="menu-emoji">🔢</div>
+    <div class="menu-title">Let's Count!</div>
+    <div class="stars-earned" id="totalStars">⭐ Stars: 0</div>
+    <button class="mode-btn mode-1" onclick="startMode(1)"><span class="mode-icon">👆</span><span>Count Objects — Tap each one!</span></button>
+    <button class="mode-btn mode-2" onclick="startMode(2)"><span class="mode-icon">🔢</span><span>Number Recognition — Pick the right amount!</span></button>
+    <button class="mode-btn mode-3" onclick="startMode(3)"><span class="mode-icon">📋</span><span>Put Numbers in Order 1-10!</span></button>
+  </div>
+
+  <!-- COUNT OBJECTS -->
+  <div class="screen" id="countScreen">
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:360px;">
+      <button onclick="showScreen('menuScreen')" style="background:none;border:none;font-size:1.4rem;cursor:pointer;padding:4px;">←</button>
+      <span class="count-instruction">Tap each object to count it!</span>
+      <button onclick="newCountRound()" style="background:none;border:none;font-size:1rem;color:var(--accent);font-weight:700;cursor:pointer;">New</button>
+    </div>
+    <div class="objects-area" id="objectsArea"></div>
+    <div class="count-display" id="countDisplay">0</div>
+    <div class="count-label">tapped so far</div>
+    <button class="check-btn" onclick="checkCount()">Check Answer ✓</button>
+  </div>
+
+  <!-- NUMBER RECOGNITION -->
+  <div class="screen" id="recognScreen">
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:360px;">
+      <button onclick="showScreen('menuScreen')" style="background:none;border:none;font-size:1.4rem;cursor:pointer;padding:4px;">←</button>
+      <span style="font-weight:700;color:var(--accent)">Score: <span id="recognScore">0</span></span>
+      <button onclick="newRecognRound()" style="background:none;border:none;font-size:1rem;color:var(--accent);font-weight:700;cursor:pointer;">New</button>
+    </div>
+    <div class="big-number-show" id="recognNumber">5</div>
+    <div class="recog-question">Tap exactly this many objects!</div>
+    <div class="tap-objects-area" id="recognObjects"></div>
+    <button class="check-btn" onclick="checkRecogn()">Check Answer ✓</button>
+  </div>
+
+  <!-- ORDER SCREEN -->
+  <div class="screen" id="orderScreen">
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:360px;">
+      <button onclick="showScreen('menuScreen')" style="background:none;border:none;font-size:1.4rem;cursor:pointer;padding:4px;">←</button>
+      <span class="order-instruction">Put 1-10 in order!</span>
+      <button onclick="newOrderRound()" style="background:none;border:none;font-size:1rem;color:var(--accent);font-weight:700;cursor:pointer;">Reset</button>
+    </div>
+    <div class="number-slots" id="numberSlots"></div>
+    <div style="font-size:0.85rem;color:var(--muted);text-align:center;">▼ Tap numbers below to fill slots ▼</div>
+    <div class="number-choices" id="numberChoices"></div>
+    <button class="check-btn" id="orderCheckBtn" onclick="checkOrder()" style="display:none;">Check Order ✓</button>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div id="feedback">
+    <div id="feedbackEmoji">🎉</div>
+    <div id="feedbackText">Correct!</div>
+    <button id="feedbackBtn" onclick="hideFeedback()">Next!</button>
+  </div>
+</div>
+<script>
+function purchase(sku){if(window.Android&&Android.purchase)Android.purchase(sku);}
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+function playTone(f,d,t='sine'){const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(0.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+d);o.start();o.stop(audioCtx.currentTime+d);}
+function playCorrect(){playTone(660,0.1);setTimeout(()=>playTone(880,0.15),120);}
+function playWrong(){playTone(200,0.3,'sawtooth');}
+
+let totalStars = 0;
+const EMOJIS = ['🍎','🐶','⭐','🌸','🎈','🍦','🐱','🦋','🍓','🎁'];
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('totalStars').textContent = '⭐ Stars: '+totalStars;
+}
+
+// ---- COUNT OBJECTS MODE ----
+let countState = { target:0, tapped:0 };
+function startMode(m){
+  if(m===1){ showScreen('countScreen'); newCountRound(); }
+  else if(m===2){ showScreen('recognScreen'); newRecognRound(); }
+  else { showScreen('orderScreen'); newOrderRound(); }
+}
+
+function newCountRound(){
+  const target = Math.floor(Math.random()*9)+2; // 2-10
+  countState = { target, tapped:0 };
+  document.getElementById('countDisplay').textContent = '0';
+  const area = document.getElementById('objectsArea');
+  area.innerHTML = '';
+  const emoji = EMOJIS[Math.floor(Math.random()*EMOJIS.length)];
+  for(let i=0;i<target;i++){
+    const el = document.createElement('div');
+    el.className = 'count-obj';
+    el.textContent = emoji;
+    el.dataset.idx = i;
+    el.onclick = function(){
+      if(this.classList.contains('tapped')) return;
+      this.classList.add('tapped');
+      countState.tapped++;
+      document.getElementById('countDisplay').textContent = countState.tapped;
+      playTone(440+countState.tapped*40,0.08,'sine',0.2);
+    };
+    area.appendChild(el);
+  }
+}
+
+function checkCount(){
+  if(countState.tapped===countState.target){
+    showFeedback('🎉','Correct! You counted '+countState.target+'!',true);
+  } else {
+    showFeedback('🤔','Try again! Look carefully!',false);
+    document.querySelectorAll('.count-obj').forEach(el=>el.classList.remove('tapped'));
+    countState.tapped=0; document.getElementById('countDisplay').textContent='0';
+  }
+}
+
+// ---- NUMBER RECOGNITION MODE ----
+let recognState = { target:0, selected:0 };
+let recognScoreVal = 0;
+function newRecognRound(){
+  const target = Math.floor(Math.random()*9)+2;
+  recognState = { target, selected:new Set() };
+  document.getElementById('recognNumber').textContent = target;
+  const area = document.getElementById('recognObjects');
+  area.innerHTML = '';
+  const total = 10;
+  const emoji = EMOJIS[Math.floor(Math.random()*EMOJIS.length)];
+  for(let i=0;i<total;i++){
+    const el = document.createElement('div');
+    el.className = 'tap-obj';
+    el.textContent = emoji;
+    el.dataset.idx = i;
+    el.onclick = function(){
+      const idx = +this.dataset.idx;
+      if(recognState.selected.has(idx)){ recognState.selected.delete(idx); this.classList.remove('selected'); }
+      else { recognState.selected.add(idx); this.classList.add('selected'); }
+      playTone(440,0.07,'sine',0.15);
+    };
+    area.appendChild(el);
+  }
+}
+
+function checkRecogn(){
+  if(recognState.selected.size===recognState.target){
+    recognScoreVal++;
+    document.getElementById('recognScore').textContent=recognScoreVal;
+    showFeedback('⭐','Correct! That\'s '+recognState.target+'!',true);
+  } else {
+    showFeedback('🤔','Not quite! You selected '+recognState.selected.size+', but the number is '+recognState.target,false);
+  }
+}
+
+// ---- ORDER MODE ----
+let orderState = { slots:[], choices:[] };
+function newOrderRound(){
+  // Shuffle 1-10 for choices
+  const nums = [1,2,3,4,5,6,7,8,9,10].sort(()=>Math.random()-0.5);
+  orderState = { slots:Array(10).fill(0), choices:nums, slotIdx:0 };
+  // Render slots
+  const slotsEl = document.getElementById('numberSlots');
+  slotsEl.innerHTML='';
+  for(let i=0;i<10;i++){
+    const s=document.createElement('div');
+    s.className='num-tile'; s.id='slot-'+i; s.textContent=(i+1);
+    s.style.color='#e0e0e0';
+    slotsEl.appendChild(s);
+  }
+  // Render choices
+  const choicesEl = document.getElementById('numberChoices');
+  choicesEl.innerHTML='';
+  nums.forEach(n=>{
+    const c=document.createElement('button');
+    c.className='num-choice'; c.textContent=n; c.id='choice-'+n;
+    c.onclick=()=>placeNumber(n,c);
+    choicesEl.appendChild(c);
+  });
+  document.getElementById('orderCheckBtn').style.display='none';
+  orderState.placedCount=0;
+}
+
+function placeNumber(n, btn){
+  const nextSlot = orderState.slotIdx;
+  if(nextSlot>=10) return;
+  orderState.slots[nextSlot]=n;
+  orderState.slotIdx++;
+  const slot=document.getElementById('slot-'+nextSlot);
+  slot.textContent=n; slot.classList.add('filled'); slot.style.color='';
+  btn.classList.add('used');
+  playTone(440+n*30,0.08,'sine',0.2);
+  if(orderState.slotIdx===10) document.getElementById('orderCheckBtn').style.display='block';
+}
+
+function checkOrder(){
+  const correct = orderState.slots.every((v,i)=>v===i+1);
+  if(correct){
+    document.querySelectorAll('.num-tile').forEach(s=>s.classList.add('correct'));
+    showFeedback('🌟','Perfect Order! 1 to 10!',true);
+  } else {
+    // Show which are wrong
+    orderState.slots.forEach((v,i)=>{ const s=document.getElementById('slot-'+i); if(v!==i+1){s.style.background='#ffebee';s.style.color='#f44336';} });
+    showFeedback('🤔','Some are wrong! Try again!',false);
+    setTimeout(newOrderRound,1500);
+  }
+}
+
+// ---- FEEDBACK ----
+let feedbackCallback = null;
+function showFeedback(emoji, text, correct){
+  if(correct){ playCorrect(); totalStars++; } else { playWrong(); }
+  document.getElementById('feedbackEmoji').textContent=emoji;
+  document.getElementById('feedbackText').textContent=text;
+  document.getElementById('feedbackBtn').textContent=correct?'Next! ⭐':'Try Again';
+  feedbackCallback = correct ? ()=>{
+    const active = document.querySelector('.screen.active').id;
+    if(active==='countScreen') newCountRound();
+    else if(active==='recognScreen') newRecognRound();
+    else newOrderRound();
+  } : null;
+  document.getElementById('feedback').classList.add('show');
+}
+function hideFeedback(){
+  document.getElementById('feedback').classList.remove('show');
+  if(feedbackCallback){ feedbackCallback(); feedbackCallback=null; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VAT Calculator</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#FF5722; --accent2:#BF360C; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; }
+header h1 span { color:var(--accent); }
+#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+label { display:block; font-size:0.85rem; color:var(--muted); margin-bottom:4px; }
+input[type=number] { width:100%; background:var(--card); border:none; color:var(--text); font-size:1rem; padding:10px 12px; border-radius:8px; outline:none; margin-bottom:12px; }
+input[type=number]:focus { box-shadow:0 0 0 2px var(--accent); }
+.toggle-row { display:flex; background:var(--card); border-radius:8px; overflow:hidden; margin-bottom:14px; }
+.toggle-btn { flex:1; min-height:44px; background:transparent; border:none; color:var(--muted); font-size:0.85rem; font-weight:600; cursor:pointer; }
+.toggle-btn.active { background:var(--accent); color:#fff; }
+.toggle-btn.btn-pressed { opacity:0.7; }
+.rate-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.rate-btn { flex:1; min-width:44px; min-height:44px; background:var(--card); border:2px solid transparent; color:var(--text); font-size:0.9rem; font-weight:600; border-radius:8px; cursor:pointer; }
+.rate-btn.active { border-color:var(--accent); color:var(--accent); }
+.rate-btn.btn-pressed { opacity:0.7; }
+.custom-rate-wrap { display:none; margin-bottom:12px; }
+.custom-rate-wrap.show { display:block; }
+.result-grid { display:grid; grid-template-columns:1fr; gap:10px; }
+.result-item { display:flex; justify-content:space-between; align-items:center; background:var(--card); border-radius:10px; padding:14px; }
+.result-label { font-size:0.85rem; color:var(--muted); }
+.result-value { font-size:1.2rem; font-weight:700; color:var(--accent); }
+.result-item.gross { background:#1f1208; border:2px solid var(--accent); }
+.result-item.gross .result-value { font-size:1.5rem; }
+.result-item.gross .result-label { color:var(--text); font-weight:600; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>VAT <span>Calculator</span></h1>
+    <button id="btn-remove-ads">Remove Ads</button>
+  </header>
+  <div id="scroll">
+    <div class="card">
+      <div class="card-title">Mode</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="btn-add-vat">Add VAT</button>
+        <button class="toggle-btn" id="btn-extract-vat">Extract VAT</button>
+      </div>
+      <label id="amount-label">Net Amount (excl. VAT)</label>
+      <input type="number" id="amount" placeholder="100.00" min="0" step="0.01">
+      <label>VAT Rate</label>
+      <div class="rate-row" id="rate-row">
+        <button class="rate-btn" data-rate="5">5%</button>
+        <button class="rate-btn" data-rate="10">10%</button>
+        <button class="rate-btn" data-rate="15">15%</button>
+        <button class="rate-btn active" data-rate="20">20%</button>
+        <button class="rate-btn" data-rate="21">21%</button>
+        <button class="rate-btn" data-rate="25">25%</button>
+        <button class="rate-btn" data-rate="custom">Custom</button>
+      </div>
+      <div class="custom-rate-wrap" id="custom-rate-wrap">
+        <label>Custom VAT %</label>
+        <input type="number" id="custom-rate" placeholder="0" min="0" step="0.1">
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Results</div>
+      <div class="result-grid">
+        <div class="result-item"><span class="result-label" id="r-net-label">Net Amount</span><span class="result-value" id="r-net">$0.00</span></div>
+        <div class="result-item"><span class="result-label" id="r-vat-label">VAT Amount (20%)</span><span class="result-value" id="r-vat">$0.00</span></div>
+        <div class="result-item gross"><span class="result-label" id="r-gross-label">Gross (incl. VAT)</span><span class="result-value" id="r-gross">$0.00</span></div>
+      </div>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+
+var state = { useCount:0, removeAds:false, mode:'add', vatRate:20 };
+
+function fmt(n){ return '$'+(n||0).toFixed(2); }
+
+function calc(){
+  var amt = parseFloat(document.getElementById('amount').value)||0;
+  var rate = state.vatRate;
+  var net, vat, gross;
+  if(state.mode==='add'){
+    net = amt;
+    vat = amt * rate / 100;
+    gross = amt + vat;
+  } else {
+    // extract VAT from inclusive price
+    gross = amt;
+    net = gross / (1 + rate/100);
+    vat = gross - net;
+  }
+  document.getElementById('r-net').textContent = fmt(net);
+  document.getElementById('r-vat').textContent = fmt(vat);
+  document.getElementById('r-gross').textContent = fmt(gross);
+  document.getElementById('r-vat-label').textContent = 'VAT Amount ('+rate+'%)';
+  maybeInterstitial();
+}
+
+document.getElementById('amount').addEventListener('input', calc);
+
+document.getElementById('rate-row').addEventListener('click', function(e){
+  var btn = e.target.closest('.rate-btn');
+  if(!btn) return;
+  document.querySelectorAll('.rate-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  var r = btn.dataset.rate;
+  if(r==='custom'){
+    document.getElementById('custom-rate-wrap').classList.add('show');
+    state.vatRate = parseFloat(document.getElementById('custom-rate').value)||0;
+  } else {
+    document.getElementById('custom-rate-wrap').classList.remove('show');
+    state.vatRate = parseInt(r);
+  }
+  calc();
+});
+
+document.getElementById('custom-rate').addEventListener('input', function(){
+  state.vatRate = parseFloat(this.value)||0;
+  calc();
+});
+
+document.getElementById('btn-add-vat').addEventListener('click', function(){
+  state.mode='add';
+  this.classList.add('active');
+  document.getElementById('btn-extract-vat').classList.remove('active');
+  document.getElementById('amount-label').textContent='Net Amount (excl. VAT)';
+  document.getElementById('r-net-label').textContent='Net Amount';
+  document.getElementById('r-gross-label').textContent='Gross (incl. VAT)';
+  calc();
+});
+
+document.getElementById('btn-extract-vat').addEventListener('click', function(){
+  state.mode='extract';
+  this.classList.add('active');
+  document.getElementById('btn-add-vat').classList.remove('active');
+  document.getElementById('amount-label').textContent='Gross Amount (incl. VAT)';
+  document.getElementById('r-net-label').textContent='Net (excl. VAT)';
+  document.getElementById('r-gross-label').textContent='Gross (as entered)';
+  calc();
+});
+
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+function init(){if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex'; calc();}
+init();
+</script>
+</body>
+</html>

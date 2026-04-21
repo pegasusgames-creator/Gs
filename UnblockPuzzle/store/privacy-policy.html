@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Unblock Puzzle</title>
+  <style>
+    /* -----------------------------------------------------------------------
+       Base reset & typography
+    ----------------------------------------------------------------------- */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #16101f;
+      color: #cfc4e0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                   "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.75;
+      padding: 0 0 60px;
+    }
+
+    /* -----------------------------------------------------------------------
+       Header
+    ----------------------------------------------------------------------- */
+    header {
+      background: linear-gradient(135deg, #1e1430 0%, #2a1645 100%);
+      border-bottom: 1px solid #3d2860;
+      padding: 40px 24px 32px;
+      text-align: center;
+    }
+
+    header .app-name {
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #9b6edc;
+      margin-bottom: 8px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #e6d8ff;
+      margin-bottom: 10px;
+    }
+
+    header .meta {
+      font-size: 0.82rem;
+      color: #7a6a94;
+    }
+
+    /* -----------------------------------------------------------------------
+       Layout
+    ----------------------------------------------------------------------- */
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* -----------------------------------------------------------------------
+       Table of contents
+    ----------------------------------------------------------------------- */
+    .toc {
+      background: #1e1630;
+      border: 1px solid #2e2045;
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin: 36px 0 32px;
+    }
+
+    .toc h2 {
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #7a5faa;
+      margin-bottom: 14px;
+    }
+
+    .toc ol {
+      padding-left: 20px;
+    }
+
+    .toc li {
+      margin-bottom: 6px;
+    }
+
+    .toc a {
+      color: #b48ce0;
+      text-decoration: none;
+      font-size: 0.92rem;
+      transition: color 0.2s;
+    }
+
+    .toc a:hover {
+      color: #d9baff;
+      text-decoration: underline;
+    }
+
+    /* -----------------------------------------------------------------------
+       Sections
+    ----------------------------------------------------------------------- */
+    section {
+      margin-bottom: 44px;
+    }
+
+    section h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e0d0ff;
+      border-left: 4px solid #7c3aed;
+      padding-left: 14px;
+      margin-bottom: 16px;
+      scroll-margin-top: 24px;
+    }
+
+    section p {
+      margin-bottom: 14px;
+      color: #c4b5d8;
+      font-size: 0.95rem;
+    }
+
+    section ul, section ol {
+      padding-left: 22px;
+      margin-bottom: 14px;
+    }
+
+    section li {
+      margin-bottom: 8px;
+      color: #c4b5d8;
+      font-size: 0.95rem;
+    }
+
+    /* -----------------------------------------------------------------------
+       Callout / info box
+    ----------------------------------------------------------------------- */
+    .callout {
+      background: #1c1430;
+      border: 1px solid #3d2860;
+      border-left: 4px solid #7c3aed;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-size: 0.92rem;
+      color: #c4b5d8;
+    }
+
+    .callout strong {
+      color: #d9baff;
+    }
+
+    /* -----------------------------------------------------------------------
+       Third-party table
+    ----------------------------------------------------------------------- */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 0.88rem;
+    }
+
+    thead tr {
+      background: #241940;
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 14px;
+      color: #b48ce0;
+      font-weight: 600;
+      border-bottom: 1px solid #3d2860;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #221838;
+      color: #baafd0;
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:nth-child(even) td {
+      background: #1a1230;
+    }
+
+    a {
+      color: #a87de0;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: #c9a0ff;
+    }
+
+    /* -----------------------------------------------------------------------
+       Footer
+    ----------------------------------------------------------------------- */
+    footer {
+      margin-top: 60px;
+      padding: 28px 20px;
+      text-align: center;
+      border-top: 1px solid #221838;
+      color: #5a4a72;
+      font-size: 0.8rem;
+    }
+
+    footer span {
+      color: #7a5faa;
+    }
+
+    /* -----------------------------------------------------------------------
+       Responsive
+    ----------------------------------------------------------------------- */
+    @media (max-width: 520px) {
+      header h1   { font-size: 1.5rem; }
+      section h2  { font-size: 1.1rem; }
+      table       { font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================================
+       HEADER
+  ====================================================================== -->
+  <header>
+    <p class="app-name">com.pegasusgames.unblock</p>
+    <h1>Privacy Policy</h1>
+    <p class="meta">
+      Unblock Puzzle &nbsp;|&nbsp; Pegasus Games &nbsp;|&nbsp;
+      Last updated: <strong style="color:#9b6edc;">March 19, 2026</strong>
+    </p>
+  </header>
+
+  <main>
+
+    <!-- Table of contents -->
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#information-we-collect">Information We Collect</a></li>
+        <li><a href="#third-party-services">Third-Party Services</a></li>
+        <li><a href="#childrens-privacy">Children's Privacy</a></li>
+        <li><a href="#changes">Changes to This Policy</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ol>
+    </nav>
+
+    <!-- ====================================================================
+         1. INTRODUCTION
+    ==================================================================== -->
+    <section id="introduction">
+      <h2>1. Introduction</h2>
+      <p>
+        Welcome to <strong>Unblock Puzzle</strong>, developed and published by
+        <strong>Pegasus Games</strong> ("we", "us", or "our"). This Privacy Policy explains
+        how we handle information in connection with your use of the Unblock Puzzle mobile
+        application (the "App"), available on Google Play under the package identifier
+        <code>com.pegasusgames.unblock</code>.
+      </p>
+      <p>
+        We are committed to protecting your privacy. Please read this policy carefully. By
+        downloading or using the App, you agree to the practices described here. If you do
+        not agree with this policy, please do not use the App.
+      </p>
+      <p>
+        This policy applies solely to information processed in connection with the App.
+        It does not apply to third-party websites or services that may be linked from
+        within the App.
+      </p>
+    </section>
+
+    <!-- ====================================================================
+         2. INFORMATION WE COLLECT
+    ==================================================================== -->
+    <section id="information-we-collect">
+      <h2>2. Information We Collect</h2>
+
+      <p>
+        <strong>We do not collect, transmit, or store any personally identifiable
+        information (PII).</strong> We do not require you to create an account, and we do
+        not ask for your name, email address, phone number, or any other identifying
+        details in order to play the game.
+      </p>
+
+      <div class="callout">
+        <strong>Key point:</strong> All gameplay progress — including completed levels,
+        coin balance, hint usage, daily streak, and settings — is stored exclusively on
+        your device using the device's local storage. This data never leaves your device
+        and is not accessible to us.
+      </div>
+
+      <p>The following types of data may be present on your device locally:</p>
+      <ul>
+        <li><strong>Gameplay progress</strong> — which levels you have completed, your
+            current level, and star ratings.</li>
+        <li><strong>Virtual currency balance</strong> — the number of in-game coins you
+            have earned or purchased.</li>
+        <li><strong>Hint and lives state</strong> — how many hints remain and your lives
+            regeneration timer.</li>
+        <li><strong>Daily challenge streak</strong> — consecutive days you have completed
+            the daily puzzle.</li>
+        <li><strong>App preferences</strong> — sound and music on/off settings.</li>
+      </ul>
+      <p>
+        None of this data is transmitted to our servers or any third party by us directly.
+        It exists solely to allow the App to remember your progress between sessions.
+      </p>
+
+      <h3 style="font-size:1rem; color:#c8b4e8; margin: 20px 0 10px;">
+        Automatically Collected Technical Data
+      </h3>
+      <p>
+        Certain third-party SDKs integrated into the App (see Section 3) may
+        automatically collect limited technical information such as device identifiers,
+        IP addresses, and crash reports as part of their own operation. We do not
+        control this data collection; it is governed by the respective third party's
+        privacy policy.
+      </p>
+    </section>
+
+    <!-- ====================================================================
+         3. THIRD-PARTY SERVICES
+    ==================================================================== -->
+    <section id="third-party-services">
+      <h2>3. Third-Party Services</h2>
+      <p>
+        The App integrates the following third-party services. Each operates under its
+        own privacy policy, which we encourage you to review.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Purpose</th>
+            <th>Data they may collect</th>
+            <th>Privacy Policy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Google AdMob</strong></td>
+            <td>Display in-app advertisements</td>
+            <td>Advertising ID, IP address, device info, interaction data</td>
+            <td>
+              <a href="https://policies.google.com/privacy" target="_blank"
+                 rel="noopener noreferrer">policies.google.com/privacy</a>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Google Play Billing</strong></td>
+            <td>Process in-app purchases (ad removal, hint packs, unlimited lives)</td>
+            <td>Purchase records handled entirely by Google Play; we receive only
+                purchase confirmation tokens.</td>
+            <td>
+              <a href="https://play.google.com/about/play-terms/" target="_blank"
+                 rel="noopener noreferrer">play.google.com/about/play-terms</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size:1rem; color:#c8b4e8; margin: 20px 0 10px;">
+        Advertising &amp; Your Choices
+      </h3>
+      <p>
+        Google AdMob may use your device's advertising identifier (e.g., Android
+        Advertising ID) to show you interest-based advertisements. You can opt out of
+        personalised advertising at any time through your device settings:
+      </p>
+      <ul>
+        <li>
+          <strong>Android:</strong> Settings &rarr; Google &rarr; Ads &rarr;
+          "Opt out of Ads Personalization" (or "Delete advertising ID" on Android 12+).
+        </li>
+      </ul>
+      <p>
+        Purchasing the "Remove Ads" in-app product will disable all advertisement
+        display within the App.
+      </p>
+
+      <h3 style="font-size:1rem; color:#c8b4e8; margin: 20px 0 10px;">
+        In-App Purchases
+      </h3>
+      <p>
+        All payment processing for in-app purchases is handled entirely by Google Play.
+        We do not receive or store your payment card details. We only receive a
+        confirmation token from Google Play indicating whether a purchase was successful.
+      </p>
+    </section>
+
+    <!-- ====================================================================
+         4. CHILDREN'S PRIVACY
+    ==================================================================== -->
+    <section id="childrens-privacy">
+      <h2>4. Children's Privacy</h2>
+      <p>
+        Unblock Puzzle is a general-audience puzzle game suitable for all ages. We do
+        not knowingly collect personal information from children under the age of 13
+        (or the applicable age of digital consent in your jurisdiction).
+      </p>
+      <p>
+        Because we do not collect any personal data ourselves, the App does not pose
+        inherent data-collection risks for children. However, third-party advertising
+        (Google AdMob) is present by default. Parents or guardians who wish to ensure
+        no interest-based advertising is shown can either:
+      </p>
+      <ul>
+        <li>Reset or disable the Android Advertising ID in device settings, or</li>
+        <li>Purchase the "Remove Ads" in-app product to disable all ads entirely.</li>
+      </ul>
+      <p>
+        If you believe a child under 13 has provided personal information through the
+        App, please contact us immediately at
+        <a href="mailto:support@pegasusgames.com">support@pegasusgames.com</a> and we
+        will take prompt steps to address the situation.
+      </p>
+    </section>
+
+    <!-- ====================================================================
+         5. CHANGES TO THIS POLICY
+    ==================================================================== -->
+    <section id="changes">
+      <h2>5. Changes to This Policy</h2>
+      <p>
+        We may update this Privacy Policy from time to time. When we do, we will revise
+        the "Last updated" date at the top of this page. If we make material changes, we
+        will endeavour to notify you either through the App's update notes on Google Play
+        or by a notice displayed within the App the next time you launch it.
+      </p>
+      <p>
+        Your continued use of the App after any changes to this policy constitutes your
+        acceptance of the revised policy. We encourage you to review this page
+        periodically to stay informed about how we are protecting your information.
+      </p>
+      <div class="callout">
+        The most current version of this Privacy Policy is always available at the URL
+        linked from the App's Google Play store listing.
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         6. CONTACT US
+    ==================================================================== -->
+    <section id="contact">
+      <h2>6. Contact Us</h2>
+      <p>
+        If you have any questions, concerns, or requests regarding this Privacy Policy
+        or our data practices, please contact us:
+      </p>
+      <ul>
+        <li>
+          <strong>Email:</strong>
+          <a href="mailto:support@pegasusgames.com">support@pegasusgames.com</a>
+        </li>
+        <li>
+          <strong>Developer:</strong> Pegasus Games
+        </li>
+        <li>
+          <strong>App package:</strong> com.pegasusgames.unblock
+        </li>
+      </ul>
+      <p>
+        We aim to respond to all privacy-related enquiries within 5 business days.
+      </p>
+    </section>
+
+  </main>
+
+  <!-- ======================================================================
+       FOOTER
+  ====================================================================== -->
+  <footer>
+    <p>
+      &copy; 2026 <span>Pegasus Games</span>. All rights reserved.
+      &nbsp;&middot;&nbsp;
+      Unblock Puzzle &nbsp;&middot;&nbsp; com.pegasusgames.unblock
+    </p>
+    <p style="margin-top: 6px;">
+      Privacy enquiries:
+      <a href="mailto:support@pegasusgames.com">support@pegasusgames.com</a>
+    </p>
+  </footer>
+
+</body>
+</html>

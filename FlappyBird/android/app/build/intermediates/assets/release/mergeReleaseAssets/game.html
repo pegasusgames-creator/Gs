@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Flappy Bird</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html,body { height:100%; background:#1a1a00; overflow:hidden; font-family:'Segoe UI',system-ui,sans-serif; color:#fff; }
+canvas { display:block; touch-action:none; }
+#overlay { position:absolute; inset:0; background:rgba(0,0,0,0.8); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:20; gap:14px; }
+#overlay h2 { font-size:2.2rem; font-weight:900; color:#FFD600; }
+#overlay .sub { font-size:0.95rem; color:#aaa; }
+#overlay .big { font-size:1.5rem; font-weight:800; }
+#btn-play { background:#FFD600; border:none; border-radius:30px; color:#000; font-size:1.2rem; font-weight:900; padding:14px 48px; cursor:pointer; }
+#admob-banner { position:absolute; bottom:0; left:0; right:0; height:50px; background:#111; display:none; align-items:center; justify-content:center; color:#555; font-size:0.7rem; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="overlay">
+  <h2>Flappy Bird</h2>
+  <div class="sub">Tap to flap! Avoid the pipes.</div>
+  <div class="big" id="score-msg"></div>
+  <button id="btn-play">Play!</button>
+</div>
+<div id="admob-banner">Advertisement</div>
+<script>
+'use strict';
+var canvas=document.getElementById('c'), ctx=canvas.getContext('2d');
+var W,H;
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize(); window.addEventListener('resize',resize);
+
+var PIPE_W=60, PIPE_GAP=160, PIPE_SPEED=2.5;
+var GRAVITY=0.35, FLAP_POWER=-7;
+var BIRD_W=34, BIRD_H=26;
+var best=parseInt(localStorage.getItem('fb_best')||'0');
+
+var state={running:false,removeAds:false,
+  bird:{x:0,y:0,vy:0,angle:0,alive:true},
+  pipes:[],score:0,frame:0,started:false};
+
+function resetGame(){
+  state.bird={x:W*0.25,y:H/2,vy:0,angle:0,alive:true};
+  state.pipes=[];state.score=0;state.frame=0;state.started=false;
+  state.running=true;
+  document.getElementById('overlay').style.display='none';
+}
+
+function flap(){
+  if(!state.running)return;
+  if(!state.started)state.started=true;
+  state.bird.vy=FLAP_POWER;
+}
+
+canvas.addEventListener('touchstart',function(e){e.preventDefault();flap();},{passive:false});
+canvas.addEventListener('mousedown',flap);
+document.getElementById('btn-play').addEventListener('click',resetGame);
+
+function spawnPipe(){
+  var minY=80, maxY=H-80-PIPE_GAP;
+  var gapY=minY+Math.random()*(maxY-minY);
+  state.pipes.push({x:W+PIPE_W,gapY:gapY,scored:false});
+}
+
+function drawBird(b){
+  ctx.save();
+  ctx.translate(b.x,b.y);
+  b.angle=Math.max(-0.4,Math.min(1.2,b.vy*0.06));
+  ctx.rotate(b.angle);
+  // Body
+  ctx.fillStyle='#FFD600';
+  ctx.beginPath();ctx.ellipse(0,0,BIRD_W/2,BIRD_H/2,0,0,Math.PI*2);ctx.fill();
+  // Wing
+  var wingY=Math.sin(state.frame*0.3)*4;
+  ctx.fillStyle='#FFA000';
+  ctx.beginPath();ctx.ellipse(-4,4+wingY,10,7,0.3,0,Math.PI*2);ctx.fill();
+  // Eye
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(8,-4,6,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#111';ctx.beginPath();ctx.arc(10,-4,3,0,Math.PI*2);ctx.fill();
+  // Beak
+  ctx.fillStyle='#FF6F00';
+  ctx.beginPath();ctx.moveTo(14,-1);ctx.lineTo(22,2);ctx.lineTo(14,5);ctx.closePath();ctx.fill();
+  ctx.restore();
+}
+
+function drawPipe(pipe){
+  // Top pipe
+  ctx.fillStyle='#388E3C';
+  ctx.fillRect(pipe.x,0,PIPE_W,pipe.gapY);
+  ctx.fillStyle='#4CAF50';
+  ctx.fillRect(pipe.x-4,pipe.gapY-24,PIPE_W+8,24);
+  // Bottom pipe
+  var botY=pipe.gapY+PIPE_GAP;
+  ctx.fillStyle='#388E3C';
+  ctx.fillRect(pipe.x,botY,PIPE_W,H-botY);
+  ctx.fillStyle='#4CAF50';
+  ctx.fillRect(pipe.x-4,botY,PIPE_W+8,24);
+}
+
+function checkCollision(b,pipe){
+  var bLeft=b.x-BIRD_W/2+4, bRight=b.x+BIRD_W/2-4;
+  var bTop=b.y-BIRD_H/2+4, bBottom=b.y+BIRD_H/2-4;
+  if(bRight>pipe.x&&bLeft<pipe.x+PIPE_W){
+    if(bTop<pipe.gapY||bBottom>pipe.gapY+PIPE_GAP)return true;
+  }
+  return false;
+}
+
+function gameOver(){
+  state.running=false;state.bird.alive=false;
+  if(state.score>best){best=state.score;localStorage.setItem('fb_best',best);}
+  document.getElementById('score-msg').textContent='Score: '+state.score+' | Best: '+best;
+  document.getElementById('btn-play').textContent='Play Again';
+  document.getElementById('overlay').style.display='flex';
+  if(!state.removeAds&&window.Android)Android.showInterstitial();
+}
+
+function loop(){
+  requestAnimationFrame(loop);
+  ctx.clearRect(0,0,W,H);
+
+  // Sky gradient
+  var sky=ctx.createLinearGradient(0,0,0,H);
+  sky.addColorStop(0,'#1a2a3a');sky.addColorStop(1,'#2a4a1a');
+  ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+
+  // Ground
+  ctx.fillStyle='#5D4037';
+  ctx.fillRect(0,H-40,W,40);
+  ctx.fillStyle='#8BC34A';
+  ctx.fillRect(0,H-40,W,12);
+
+  if(!state.running){
+    // Draw static bird
+    drawBird(state.bird);
+    return;
+  }
+
+  state.frame++;
+
+  // Physics
+  if(state.started){
+    state.bird.vy+=GRAVITY;
+    state.bird.y+=state.bird.vy;
+  }
+
+  // Ceiling / floor
+  if(state.bird.y-BIRD_H/2<0){state.bird.y=BIRD_H/2;state.bird.vy=0;}
+  if(state.bird.y+BIRD_H/2>H-40){gameOver();return;}
+
+  // Spawn pipes
+  if(state.frame%100===0||state.pipes.length===0)spawnPipe();
+
+  // Move pipes
+  state.pipes.forEach(function(pipe){
+    pipe.x-=PIPE_SPEED+(state.score*0.03);
+    if(!pipe.scored&&pipe.x+PIPE_W<state.bird.x){
+      pipe.scored=true;state.score++;
+    }
+    if(checkCollision(state.bird,pipe)){gameOver();return;}
+  });
+  state.pipes=state.pipes.filter(function(p){return p.x>-PIPE_W-10;});
+
+  // Draw pipes
+  state.pipes.forEach(drawPipe);
+
+  // Draw bird
+  drawBird(state.bird);
+
+  // Score
+  ctx.fillStyle='#FFD600';ctx.font='bold 32px sans-serif';ctx.textAlign='center';
+  ctx.strokeStyle='rgba(0,0,0,0.5)';ctx.lineWidth=3;
+  ctx.strokeText(state.score,W/2,50);
+  ctx.fillText(state.score,W/2,50);
+  ctx.textAlign='left';
+  ctx.fillStyle='#aaa';ctx.font='14px sans-serif';
+  ctx.fillText('Best:'+best,10,30);
+}
+loop();
+
+if(!state.removeAds&&!window.Android)document.getElementById('admob-banner').style.display='flex';
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';}};
+window.onAdMobLoaded=function(){};
+</script>
+</body>
+</html>

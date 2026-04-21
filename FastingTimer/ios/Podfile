@@ -1,0 +1,23 @@
+platform :ios, '14.0'
+use_frameworks!
+
+target 'FastingTimer' do   # <- replace 'GameApp' with your Xcode target name
+
+  # AppLovin MAX SDK
+  pod 'AppLovinSDK'
+
+  # Mediation adapters — add networks for higher eCPM
+  pod 'AppLovinMediationGoogleAdMobAdapter'         # AdMob (requires GoogleService-Info.plist)
+  # pod 'AppLovinMediationMetaAudienceNetworkAdapter' # Meta/Facebook
+  # pod 'AppLovinMediationUnityAdsAdapter'            # Unity Ads
+  # pod 'AppLovinMediationIronSourceAdapter'          # IronSource
+
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
+    end
+  end
+end

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>YarnSort</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#1a0a1a;--surface:#280f28;--accent:#FF80AB;--text:#eaeaea;--muted:#886;--radius:12px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;padding:8px 8px 0;}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-shrink:0;}
+header h1{font-size:1.2rem;font-weight:700;}header h1 span{color:var(--accent);}
+#lv-info{font-size:0.82rem;color:var(--muted);}
+#tubes-wrap{flex:1;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;padding:8px;}
+.tube{
+  width:60px;min-height:180px;border-radius:0 0 30px 30px;
+  border:3px solid #555;border-top:none;
+  display:flex;flex-direction:column-reverse;align-items:center;
+  cursor:pointer;touch-action:manipulation;position:relative;
+  padding:4px;background:rgba(255,255,255,0.05);
+  transition:transform 0.1s,border-color 0.1s;
+}
+.tube.selected{border-color:var(--accent);transform:translateY(-8px);}
+.tube.btn-pressed{transform:scale(0.92);}
+.yarn{
+  width:44px;height:44px;border-radius:50%;margin:2px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;flex-shrink:0;
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  transition:transform 0.15s;
+}
+.tube-label{
+  position:absolute;top:-24px;left:50%;transform:translateX(-50%);
+  font-size:0.7rem;color:var(--muted);white-space:nowrap;
+}
+#btns{display:flex;gap:8px;flex-shrink:0;padding:8px 0;}
+.btn{flex:1;background:var(--surface);border:1px solid #442244;color:var(--text);padding:10px;border-radius:var(--radius);font-size:0.8rem;cursor:pointer;touch-action:manipulation;}
+.btn.btn-pressed{transform:scale(0.93);}
+.btn.primary{background:var(--accent);color:#000;}
+#banner{height:50px;background:#111;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.75rem;flex-shrink:0;}
+#win-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:10;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Yarn<span>Sort</span> 🧶</h1><span id="lv-info">Level 1/50</span></header>
+  <div id="tubes-wrap"></div>
+  <div id="btns">
+    <button class="btn" id="btn-undo">Undo</button>
+    <button class="btn primary" id="btn-restart">Restart</button>
+    <button class="btn" id="btn-next">Next</button>
+  </div>
+  <div id="banner">Ad Banner</div>
+</div>
+<div id="win-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:10;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <h2 style="color:var(--accent);font-size:1.8rem;">Level Complete! 🧶</h2>
+  <button id="btn-win-next" style="background:var(--accent);border:none;color:#000;padding:14px 32px;border-radius:var(--radius);font-size:1rem;font-weight:700;cursor:pointer;">Next Level</button>
+</div>
+<script>
+const YARN_COLORS=[
+  {color:'#F44336',emoji:'🔴'},
+  {color:'#2196F3',emoji:'🔵'},
+  {color:'#4CAF50',emoji:'🟢'},
+  {color:'#FF9800',emoji:'🟠'},
+  {color:'#9C27B0',emoji:'🟣'},
+  {color:'#FFEB3B',emoji:'🟡'},
+  {color:'#00BCD4',emoji:'💠'},
+  {color:'#E91E63',emoji:'🌸'},
+  {color:'#795548',emoji:'🟤'},
+  {color:'#607D8B',emoji:'🩶'},
+];
+
+// Level configs: [numColors, extraTubes, stackHeight]
+const LEVEL_CONFIGS=[];
+for(let i=0;i<50;i++){
+  const nc=Math.min(3+Math.floor(i/5),YARN_COLORS.length);
+  const et=Math.min(1+Math.floor(i/10),3);
+  const sh=3+Math.min(Math.floor(i/8),1);
+  LEVEL_CONFIGS.push({nc,et,sh});
+}
+
+let currentLevel=0,tubes=[],selected=null,undoStack=[],origTubes=null;
+
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+function generateLevel(cfg){
+  const {nc,et,sh}=cfg;
+  const allBalls=[];
+  for(let c=0;c<nc;c++){
+    for(let s=0;s<sh;s++)allBalls.push(c);
+  }
+  shuffle(allBalls);
+  const ts=[];
+  for(let i=0;i<nc;i++){
+    ts.push({balls:allBalls.splice(0,sh),cap:sh});
+  }
+  for(let i=0;i<et;i++)ts.push({balls:[],cap:sh});
+  return ts;
+}
+
+function loadLevel(idx){
+  currentLevel=idx;
+  document.getElementById('lv-info').textContent='Level '+(idx+1)+'/50';
+  tubes=generateLevel(LEVEL_CONFIGS[idx]);
+  origTubes=JSON.parse(JSON.stringify(tubes));
+  selected=null;undoStack=[];
+  render();
+  document.getElementById('win-overlay').style.display='none';
+}
+
+function render(){
+  const wrap=document.getElementById('tubes-wrap');wrap.innerHTML='';
+  tubes.forEach((t,ti)=>{
+    const el=document.createElement('div');
+    el.className='tube'+(ti===selected?' selected':'');
+    // Draw balls bottom to top
+    t.balls.forEach(ci=>{
+      const ball=document.createElement('div');
+      ball.className='yarn';
+      ball.style.background=YARN_COLORS[ci].color;
+      ball.textContent='🧶';
+      el.appendChild(ball);
+    });
+    // Empty slots
+    const empty=t.cap-t.balls.length;
+    for(let e=0;e<empty;e++){
+      const slot=document.createElement('div');
+      slot.style.cssText='width:44px;height:44px;margin:2px;flex-shrink:0;';
+      el.appendChild(slot);
+    }
+    el.addEventListener('touchstart',function(e){
+      e.preventDefault();this.classList.add('btn-pressed');
+      setTimeout(()=>this.classList.remove('btn-pressed'),120);
+      tapTube(ti);
+    },{passive:false});
+    el.addEventListener('click',()=>tapTube(ti));
+    wrap.appendChild(el);
+  });
+}
+
+function tapTube(ti){
+  if(selected===null){
+    if(tubes[ti].balls.length===0)return;
+    selected=ti;render();return;
+  }
+  if(selected===ti){selected=null;render();return;}
+  // Try to move top ball from selected to ti
+  const src=tubes[selected],dst=tubes[ti];
+  if(src.balls.length===0){selected=ti;render();return;}
+  if(dst.balls.length>=dst.cap){selected=ti;render();return;}
+  const topBall=src.balls[src.balls.length-1];
+  if(dst.balls.length>0&&dst.balls[dst.balls.length-1]!==topBall){selected=ti;render();return;}
+  // Move as many matching top balls as possible
+  undoStack.push(JSON.parse(JSON.stringify(tubes)));
+  let moved=0;
+  while(src.balls.length>0&&dst.balls.length<dst.cap){
+    if(src.balls[src.balls.length-1]===topBall){
+      dst.balls.push(src.balls.pop());moved++;
+    }else break;
+  }
+  selected=null;render();
+  if(checkWin()){
+    setTimeout(()=>document.getElementById('win-overlay').style.display='flex',400);
+  }
+}
+
+function checkWin(){
+  return tubes.every(t=>t.balls.length===0||(t.balls.length===t.cap&&t.balls.every(b=>b===t.balls[0])));
+}
+
+document.getElementById('btn-undo').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  if(undoStack.length===0)return;
+  tubes=undoStack.pop();selected=null;render();
+});
+document.getElementById('btn-restart').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  tubes=JSON.parse(JSON.stringify(origTubes));selected=null;undoStack=[];render();
+});
+document.getElementById('btn-next').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  document.getElementById('win-overlay').style.display='none';
+  if(currentLevel<49)loadLevel(currentLevel+1);
+});
+document.getElementById('btn-win-next').addEventListener('click',()=>{
+  document.getElementById('win-overlay').style.display='none';
+  if(currentLevel<49)loadLevel(currentLevel+1);
+});
+
+window.onPurchaseComplete=function(sku){};
+window.onAdMobLoaded=function(){document.getElementById('banner').style.display='none';};
+
+loadLevel(0);
+</script>
+</body>
+</html>

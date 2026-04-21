@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Stroop Test</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html,body { height:100%; background:#120012; overflow:hidden; font-family:'Segoe UI',system-ui,sans-serif; color:#fff; }
+#app { display:flex; flex-direction:column; height:100%; }
+#hud { display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:rgba(0,0,0,0.5); flex-shrink:0; }
+.hud-val { font-size:1.3rem; font-weight:900; color:#9C27B0; }
+.hud-lbl { font-size:0.6rem; text-transform:uppercase; letter-spacing:1px; color:#777; }
+#timer-bar-wrap { height:8px; background:#222; flex-shrink:0; }
+#timer-bar { height:8px; background:#9C27B0; transition:width 0.1s linear; }
+#word-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; }
+#word-display { font-size:3rem; font-weight:900; letter-spacing:4px; text-shadow:0 0 20px currentColor; }
+#question { font-size:0.9rem; color:#aaa; }
+#feedback { font-size:1.2rem; font-weight:700; min-height:30px; }
+#buttons { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:16px; flex-shrink:0; }
+.color-btn {
+  padding:18px 10px; border:none; border-radius:14px; color:#fff;
+  font-size:1.1rem; font-weight:900; cursor:pointer; letter-spacing:1px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.4);
+}
+.color-btn:active { transform:scale(0.95); }
+#overlay { position:absolute; inset:0; background:rgba(0,0,0,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:20; gap:14px; }
+#overlay h2 { font-size:2rem; font-weight:900; color:#9C27B0; }
+#overlay .sub { color:#aaa; font-size:0.9rem; text-align:center; max-width:280px; }
+#overlay .big { font-size:1.2rem; font-weight:800; text-align:center; }
+#btn-play { background:#9C27B0; border:none; border-radius:30px; color:#fff; font-size:1.2rem; font-weight:800; padding:14px 48px; cursor:pointer; }
+#admob-banner { height:50px; background:#111; display:none; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="hud">
+    <div><div class="hud-lbl">Score</div><div class="hud-val" id="score-disp">0</div></div>
+    <div style="text-align:center"><div class="hud-lbl">Time</div><div class="hud-val" id="time-disp">30</div></div>
+    <div style="text-align:right"><div class="hud-lbl">Accuracy</div><div class="hud-val" id="acc-disp">—</div></div>
+  </div>
+  <div id="timer-bar-wrap"><div id="timer-bar" style="width:100%"></div></div>
+  <div id="word-area">
+    <div id="word-display">STROOP</div>
+    <div id="question">Tap the COLOR of the ink (not the word)</div>
+    <div id="feedback"></div>
+  </div>
+  <div id="buttons">
+    <button class="color-btn" style="background:#e74c3c" data-color="red">RED</button>
+    <button class="color-btn" style="background:#3498db" data-color="blue">BLUE</button>
+    <button class="color-btn" style="background:#2ecc71" data-color="green">GREEN</button>
+    <button class="color-btn" style="background:#f1c40f;color:#111" data-color="yellow">YELLOW</button>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<div id="overlay">
+  <h2>Stroop Test</h2>
+  <div class="sub">The word shows a color name but is written in a DIFFERENT color.<br>Tap the color of the INK!</div>
+  <div class="big" id="final-msg"></div>
+  <button id="btn-play">Start!</button>
+</div>
+<script>
+'use strict';
+var COLORS=['red','blue','green','yellow'];
+var COLORHEX={red:'#e74c3c',blue:'#3498db',green:'#2ecc71',yellow:'#f1c40f'};
+var DURATION=30;
+var best=parseInt(localStorage.getItem('st_best')||'0');
+
+var state={running:false,removeAds:false,
+  score:0,correct:0,total:0,
+  timeLeft:DURATION,timer:null,
+  currentWord:'',currentInk:'',
+  tapTimes:[],lastTap:0};
+
+function nextWord(){
+  // Word and ink must be different (incongruent)
+  var word=COLORS[Math.floor(Math.random()*COLORS.length)];
+  var inkOptions=COLORS.filter(function(c){return c!==word;});
+  var ink=inkOptions[Math.floor(Math.random()*inkOptions.length)];
+  state.currentWord=word;state.currentInk=ink;
+  var wd=document.getElementById('word-display');
+  wd.textContent=word.toUpperCase();
+  wd.style.color=COLORHEX[ink];
+  state.lastTap=performance.now();
+}
+
+function startGame(){
+  state.score=0;state.correct=0;state.total=0;state.timeLeft=DURATION;
+  state.tapTimes=[];
+  document.getElementById('score-disp').textContent='0';
+  document.getElementById('acc-disp').textContent='—';
+  document.getElementById('feedback').textContent='';
+  document.getElementById('timer-bar').style.width='100%';
+  document.getElementById('overlay').style.display='none';
+  state.running=true;
+  nextWord();
+  if(state.timer)clearInterval(state.timer);
+  state.timer=setInterval(function(){
+    state.timeLeft--;
+    document.getElementById('time-disp').textContent=state.timeLeft;
+    document.getElementById('timer-bar').style.width=(state.timeLeft/DURATION*100)+'%';
+    if(state.timeLeft<=0){
+      clearInterval(state.timer);
+      endGame();
+    }
+  },1000);
+}
+document.getElementById('btn-play').addEventListener('click',startGame);
+
+document.querySelectorAll('.color-btn').forEach(function(btn){
+  btn.addEventListener('touchstart',function(e){
+    e.preventDefault();
+    handleAnswer(btn.dataset.color);
+  },{passive:false});
+  btn.addEventListener('mousedown',function(){handleAnswer(btn.dataset.color);});
+});
+
+function handleAnswer(color){
+  if(!state.running)return;
+  var rt=Math.round(performance.now()-state.lastTap);
+  state.tapTimes.push(rt);
+  state.total++;
+  var fb=document.getElementById('feedback');
+  if(color===state.currentInk){
+    state.correct++;state.score++;
+    fb.textContent='✓ Correct! '+rt+'ms';
+    fb.style.color='#2ecc71';
+  } else {
+    state.score=Math.max(0,state.score-0.5);
+    fb.textContent='✗ Wrong!';
+    fb.style.color='#e74c3c';
+  }
+  document.getElementById('score-disp').textContent=Math.round(state.score);
+  document.getElementById('acc-disp').textContent=Math.round(state.correct/state.total*100)+'%';
+  nextWord();
+}
+
+function endGame(){
+  state.running=false;
+  var avg=state.tapTimes.length?Math.round(state.tapTimes.reduce(function(a,b){return a+b;},0)/state.tapTimes.length):0;
+  var acc=state.total?Math.round(state.correct/state.total*100):0;
+  var sc=Math.round(state.score);
+  if(sc>best){best=sc;localStorage.setItem('st_best',best);}
+  var rating='';
+  if(acc>=95&&avg<400)rating='Excellent!';
+  else if(acc>=85)rating='Good';
+  else rating='Average';
+  document.getElementById('final-msg').textContent=
+    'Score: '+sc+' | Accuracy: '+acc+'%\nAvg RT: '+avg+'ms | '+rating+'\nBest: '+best;
+  document.getElementById('btn-play').textContent='Play Again';
+  document.getElementById('overlay').style.display='flex';
+  if(!state.removeAds&&window.Android)Android.showInterstitial();
+}
+
+if(!state.removeAds&&!window.Android)document.getElementById('admob-banner').style.display='flex';
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';}};
+window.onAdMobLoaded=function(){};
+</script>
+</body>
+</html>

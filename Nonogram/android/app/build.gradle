@@ -1,0 +1,24 @@
+plugins { id 'com.android.application' }
+def kpf = rootProject.file("keystore.properties"); def kp = new Properties(); if (kpf.exists()) { kp.load(new FileInputStream(kpf)) }
+android {
+    compileSdk 36; namespace "com.pegasusgames.nonogram"
+    defaultConfig { applicationId "com.pegasusgames.nonogram"; minSdk 23; targetSdk 36; versionCode 8; versionName "1.6" }
+    signingConfigs { release { storeFile file(kp['storeFile']); storePassword kp['storePassword']; keyAlias kp['keyAlias']; keyPassword kp['keyPassword'] } }
+    buildTypes {
+        release { minifyEnabled true; proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'; signingConfig signingConfigs.release }
+        debug { debuggable true }
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 }
+    packaging { jniLibs { useLegacyPackaging = false } }
+}
+dependencies {
+    implementation 'com.applovin:applovin-sdk:13.+'
+    implementation 'com.applovin.mediation:google-adapter:23.+'
+    implementation 'com.android.billingclient:billing:8.3.0'
+    implementation platform('com.google.firebase:firebase-bom:34.12.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.12.0'
+}
+
+apply plugin: 'com.google.gms.google-services'

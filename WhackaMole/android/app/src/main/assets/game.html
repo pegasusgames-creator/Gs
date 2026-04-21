@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Whack-a-Mole</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html,body { height:100%; background:#1a2a00; overflow:hidden; font-family:'Segoe UI',system-ui,sans-serif; color:#fff; }
+#app { display:flex; flex-direction:column; height:100%; }
+#hud { display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:#0a1400; flex-shrink:0; }
+.hv { font-size:1.4rem; font-weight:900; color:#8BC34A; }
+.hl { font-size:0.6rem; text-transform:uppercase; letter-spacing:1px; color:#556; }
+#timer-bar-wrap { height:10px; background:#0a1400; flex-shrink:0; }
+#timer-bar { height:10px; background:#8BC34A; transition:width 0.1s linear; }
+#game-area { flex:1; display:flex; align-items:center; justify-content:center; padding:10px; }
+#grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; width:100%; max-width:380px; }
+.hole {
+  aspect-ratio:1; background:#3a2200; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:2.8rem; cursor:pointer; user-select:none;
+  border:4px solid #5a3a00; overflow:hidden;
+  position:relative;
+  box-shadow:inset 0 8px 20px rgba(0,0,0,0.6);
+}
+.hole .mole {
+  position:absolute; bottom:-100%; width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:2.8rem;
+  transition:bottom 0.12s ease-out;
+}
+.hole.up .mole { bottom:0; }
+.hole.hit .mole { bottom:30%; opacity:0; transition:all 0.1s; }
+#miss-penalty { position:absolute; top:60px; right:16px; font-size:1.4rem; font-weight:900; color:#f44336; opacity:0; pointer-events:none; }
+#overlay { position:absolute; inset:0; background:rgba(0,0,0,0.85); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:20; gap:14px; }
+#overlay h2 { font-size:2rem; font-weight:900; color:#8BC34A; }
+#overlay .sub { color:#aaa; font-size:0.9rem; text-align:center; }
+#overlay .big { font-size:1.2rem; font-weight:800; }
+#btn-play { background:#8BC34A; border:none; border-radius:30px; color:#fff; font-size:1.2rem; font-weight:800; padding:14px 48px; cursor:pointer; }
+#admob-banner { height:50px; background:#111; display:none; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="hud">
+    <div><div class="hl">Score</div><div class="hv" id="score-disp">0</div></div>
+    <div style="text-align:center"><div class="hl">Time</div><div class="hv" id="time-disp">60</div></div>
+    <div style="text-align:right"><div class="hl">Best</div><div class="hv" id="best-disp">0</div></div>
+  </div>
+  <div id="timer-bar-wrap"><div id="timer-bar" style="width:100%"></div></div>
+  <div id="game-area">
+    <div id="grid"></div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<div id="overlay">
+  <h2>Whack-a-Mole</h2>
+  <div class="sub">Tap moles before they hide!<br>🐭 = 1 pt &nbsp;|&nbsp; ⭐ Golden = 3 pts</div>
+  <div class="big" id="final-msg"></div>
+  <button id="btn-play">Play!</button>
+</div>
+<script>
+'use strict';
+var DURATION=60, HOLES=9;
+var best=parseInt(localStorage.getItem('wm_best')||'0');
+document.getElementById('best-disp').textContent=best;
+
+var state={running:false,removeAds:false,score:0,timeLeft:DURATION,
+  holes:[],timer:null,spawnTimer:null,frame:0};
+
+// Build grid
+var grid=document.getElementById('grid');
+for(var i=0;i<HOLES;i++){
+  var hole=document.createElement('div');
+  hole.className='hole';
+  hole.innerHTML='<div class="mole">🐭</div>';
+  (function(idx){
+    hole.addEventListener('touchstart',function(e){e.preventDefault();whack(idx);},{passive:false});
+    hole.addEventListener('mousedown',function(){whack(idx);});
+  })(i);
+  grid.appendChild(hole);
+  state.holes.push({el:hole,up:false,golden:false,timer:null});
+}
+
+function popUp(idx){
+  var h=state.holes[idx];
+  if(h.up)return;
+  h.up=true;
+  h.golden=Math.random()<0.12;
+  h.el.querySelector('.mole').textContent=h.golden?'⭐':'🐭';
+  h.el.classList.add('up');
+  h.el.style.borderColor=h.golden?'#FFD600':'#5a3a00';
+  var stayTime=700+Math.random()*1000-state.frame*0.5;
+  stayTime=Math.max(400,stayTime);
+  if(h.timer)clearTimeout(h.timer);
+  h.timer=setTimeout(function(){hideHole(idx);},stayTime);
+}
+
+function hideHole(idx){
+  var h=state.holes[idx];
+  h.up=false;
+  h.el.classList.remove('up','hit');
+  h.el.style.borderColor='';
+}
+
+function whack(idx){
+  if(!state.running)return;
+  var h=state.holes[idx];
+  if(!h.up)return;
+  clearTimeout(h.timer);
+  var pts=h.golden?3:1;
+  state.score+=pts;
+  document.getElementById('score-disp').textContent=state.score;
+  h.el.classList.add('hit');
+  setTimeout(function(){hideHole(idx);},120);
+  // Visual feedback
+  showPopText(h.el,h.golden?'+3 ★':'+1');
+}
+
+function showPopText(el,txt){
+  var pop=document.createElement('div');
+  pop.style.cssText='position:absolute;top:10%;left:50%;transform:translateX(-50%);font-size:1.3rem;font-weight:900;color:#FFD600;z-index:5;pointer-events:none;animation:popfade 0.6s forwards';
+  pop.textContent=txt;
+  el.appendChild(pop);
+  setTimeout(function(){if(pop.parentNode)pop.parentNode.removeChild(pop);},600);
+}
+
+// Inject animation
+var style=document.createElement('style');
+style.textContent='@keyframes popfade{0%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(-30px)}}';
+document.head.appendChild(style);
+
+function spawnMole(){
+  if(!state.running)return;
+  var available=[];
+  for(var i=0;i<HOLES;i++){if(!state.holes[i].up)available.push(i);}
+  if(available.length===0)return;
+  var idx=available[Math.floor(Math.random()*available.length)];
+  popUp(idx);
+  // Speed up over time
+  var interval=Math.max(300,800-state.frame*2);
+  state.spawnTimer=setTimeout(spawnMole,interval);
+}
+
+function startGame(){
+  state.score=0;state.timeLeft=DURATION;state.frame=0;
+  document.getElementById('score-disp').textContent='0';
+  document.getElementById('timer-bar').style.width='100%';
+  // Hide all
+  state.holes.forEach(function(h,i){hideHole(i);});
+  document.getElementById('overlay').style.display='none';
+  state.running=true;
+  spawnMole();
+  if(state.timer)clearInterval(state.timer);
+  state.timer=setInterval(function(){
+    state.timeLeft--;state.frame++;
+    document.getElementById('time-disp').textContent=state.timeLeft;
+    document.getElementById('timer-bar').style.width=(state.timeLeft/DURATION*100)+'%';
+    if(state.timeLeft<=0){clearInterval(state.timer);clearTimeout(state.spawnTimer);endGame();}
+  },1000);
+}
+document.getElementById('btn-play').addEventListener('click',startGame);
+
+function endGame(){
+  state.running=false;
+  state.holes.forEach(function(h,i){hideHole(i);});
+  if(state.score>best){best=state.score;localStorage.setItem('wm_best',best);document.getElementById('best-disp').textContent=best;}
+  document.getElementById('final-msg').textContent='Score: '+state.score+' | Best: '+best;
+  document.getElementById('btn-play').textContent='Play Again';
+  document.getElementById('overlay').style.display='flex';
+  if(!state.removeAds&&window.Android)Android.showInterstitial();
+}
+
+if(!state.removeAds&&!window.Android)document.getElementById('admob-banner').style.display='flex';
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';}};
+window.onAdMobLoaded=function(){};
+</script>
+</body>
+</html>

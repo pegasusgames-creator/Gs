@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.pegasusgames.timestable.app-mergeReleaseResources-44:/values-v18/values-v18.xml",
+            "map": [
+                {
+                    "source": "/home/pgs/.gradle/caches/transforms-4/0b0e17157898f3d790d1e3a3d2253c5a/transformed/appcompat-1.6.1/res/values-v18/values-v18.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "48",
+                        "endOffsets": "99"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>GAME_TITLE</title>
+
+<!-- ============================================================
+  THEME BLOCK — change these per app to make each one look unique
+  Colors: pick from the palette list at bottom of this file
+  Font:   change the Google Fonts import AND --font-family below
+  Emojis: used in buttons and UI elements throughout the game
+  ============================================================ -->
+<link href="https://fonts.googleapis.com/css2?family=FONT_NAME:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script>
+window.THEME = {
+  appId:      'GAME_ID',           // unique per app (no spaces)
+  primary:    'VAR_PRIMARY',       // main accent color (buttons, highlights)
+  secondary:  'VAR_SECONDARY',     // secondary accent
+  bgDeep:     'VAR_BG_DEEP',       // darkest background
+  bgMid:      'VAR_BG_MID',        // mid background
+  bgLight:    'VAR_BG_LIGHT',      // lighter surface
+  text:       '#ffffff',           // primary text
+  textMuted:  'rgba(255,255,255,0.6)',
+  btnRadius:  'VAR_RADIUS',        // '8px' | '16px' | '50px' (pill)
+  font:       'FONT_NAME',         // must match Google Fonts import above
+  emoji: {
+    win:      'VAR_EMOJI_WIN',     // 🎉 🏆 ✨ 🌟 💎
+    hint:     'VAR_EMOJI_HINT',    // 💡 🔍 🧿 🪄 💫
+    undo:     'VAR_EMOJI_UNDO',    // ↩️ 🔄 ⏪ 🔁
+    life:     'VAR_EMOJI_LIFE',    // ❤️ 💜 💙 🌸 ⭐
+    coin:     'VAR_EMOJI_COIN',    // 🪙 💰 💎 ⭐ 🌟
+  }
+};
+</script>
+<style>
+/* ============================================================
+   CSS CUSTOM PROPERTIES — driven by window.THEME above
+   Applied via the initTheme() call at the bottom of the script
+   ============================================================ */
+:root {
+  --primary:     #6C63FF;
+  --secondary:   #FF6584;
+  --bg-deep:     #1a1a2e;
+  --bg-mid:      #16213e;
+  --bg-light:    #0f3460;
+  --text:        #ffffff;
+  --text-muted:  rgba(255,255,255,0.6);
+  --btn-radius:  16px;
+  --font:        'Nunito', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  background: var(--bg-deep);
+  font-family: var(--font);
+  overflow: hidden;
+  width: 100vw; height: 100vh;
+  touch-action: none; user-select: none;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* ---- Layout ---- */
+#app { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+.screen { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; }
+.screen.active { display: flex; }
+
+/* ---- Menu screen ---- */
+#menuScreen {
+  background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-mid) 50%, var(--bg-light) 100%);
+  justify-content: center;
+}
+
+/* ---- Common elements ---- */
+.game-title h1 {
+  font-size: clamp(32px, 8vw, 60px);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  line-height: 1.1;
+}
+.game-title p { color: var(--text-muted); font-size: 15px; margin-top: 6px; text-align: center; }
+
+.btn {
+  border: none;
+  border-radius: var(--btn-radius);
+  padding: 16px 32px;
+  font-family: var(--font);
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s;
+  width: 100%;
+}
+.btn:active { transform: scale(0.96); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(108,99,255,0.35);
+}
+.btn-secondary {
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.btn-gold {
+  background: linear-gradient(135deg, #ffd700, #f39c12);
+  color: var(--bg-deep);
+  box-shadow: 0 6px 20px rgba(255,215,0,0.3);
+}
+
+.screen-header {
+  width: 100%;
+  padding: 16px 20px 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0,0,0,0.25);
+}
+.screen-header h2 { color: var(--text); font-size: 20px; font-weight: 700; flex: 1; text-align: center; }
+.back-btn {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  border-radius: 10px;
+  padding: 7px 14px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: var(--font);
+  cursor: pointer;
+}
+
+.coin-display, .lives-display {
+  display: flex; align-items: center; gap: 6px;
+  border-radius: 20px; padding: 5px 12px;
+}
+.coin-display {
+  background: rgba(255,215,0,0.12);
+  border: 1px solid rgba(255,215,0,0.3);
+}
+.coin-display span { color: #ffd700; font-weight: 700; font-size: 15px; }
+.lives-display {
+  background: rgba(255,100,100,0.12);
+  border: 1px solid rgba(255,100,100,0.3);
+}
+.lives-display span { color: #ff6b6b; font-weight: 700; font-size: 15px; }
+
+/* ---- Game screen ---- */
+#gameScreen { background: var(--bg-deep); }
+.game-header, .game-footer {
+  width: 100%; padding: 10px 16px;
+  display: flex; align-items: center;
+  background: rgba(0,0,0,0.25);
+}
+.game-header { justify-content: space-between; }
+.game-footer { justify-content: space-between; }
+.game-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 8px 16px;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 5px;
+}
+
+/* ---- Modal overlays ---- */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; display: none;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--bg-mid);
+  border-radius: 20px;
+  padding: 28px 24px;
+  width: min(340px, 90vw);
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.modal h2 { color: var(--text); font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.modal p  { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
+.modal-buttons { display: flex; flex-direction: column; gap: 10px; }
+
+/* ============================================================
+   ADD YOUR GAME-SPECIFIC CSS BELOW THIS LINE
+   ============================================================ */
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============================================================
+       MENU SCREEN
+       ============================================================ -->
+  <div class="screen active" id="menuScreen">
+    <div style="position:absolute;top:16px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 20px;">
+      <div class="coin-display"><span id="menuCoins">0</span><span id="coinEmoji">🪙</span></div>
+      <div class="lives-display"><span id="menuLives">5</span><span id="lifeEmoji">❤️</span></div>
+    </div>
+    <div class="game-title" style="margin-bottom:48px;">
+      <h1 id="gameTitle">GAME_TITLE</h1>
+      <p id="gameSubtitle">GAME_SUBTITLE</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;width:100%;max-width:300px;padding:0 24px;">
+      <button class="btn btn-primary" onclick="startGame()">▶ Play</button>
+      <button class="btn btn-secondary" onclick="showScreen('levelScreen')">📋 Levels</button>
+      <button class="btn btn-secondary" onclick="showScreen('shopScreen')">🛒 Shop</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       GAME SCREEN — replace canvas/content with your game
+       ============================================================ -->
+  <div class="screen" id="gameScreen">
+    <div class="game-header">
+      <button class="back-btn" onclick="showScreen('menuScreen')">← Menu</button>
+      <div id="levelLabel" style="color:var(--text);font-weight:700;font-size:15px;">Level 1</div>
+      <div class="lives-display"><span id="gameLives">5</span><span>❤️</span></div>
+    </div>
+
+    <!-- *** YOUR GAME CANVAS / CONTENT GOES HERE *** -->
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <div class="game-footer">
+      <button class="game-btn" onclick="requestUndo()">↩️ Undo</button>
+      <button class="game-btn" onclick="requestHint()">💡 Hint</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       LEVEL SELECT SCREEN
+       ============================================================ -->
+  <div class="screen" id="levelScreen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="showScreen('menuScreen')">←</button>
+      <h2>Choose Level</h2>
+    </div>
+    <div id="levelGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:16px;overflow-y:auto;width:100%;"></div>
+  </div>
+
+  <!-- ============================================================
+       SHOP SCREEN
+       ============================================================ -->
+  <div class="screen" id="shopScreen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="showScreen('menuScreen')">←</button>
+      <h2>Shop</h2>
+    </div>
+    <div style="padding:16px;width:100%;display:flex;flex-direction:column;gap:12px;">
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="color:var(--text);font-weight:700;">Remove Ads</div>
+          <div style="color:var(--text-muted);font-size:13px;">Play without interruptions</div>
+        </div>
+        <button class="btn btn-primary" style="width:auto;padding:10px 20px;" onclick="purchase('remove_ads')">$1.99</button>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="color:var(--text);font-weight:700;">Watch Ad for Hint</div>
+          <div style="color:var(--text-muted);font-size:13px;">Free — just watch a short video</div>
+        </div>
+        <button class="btn btn-secondary" style="width:auto;padding:10px 20px;" onclick="watchAdForHint()">Watch</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       WIN MODAL
+       ============================================================ -->
+  <div class="modal-overlay" id="winModal">
+    <div class="modal">
+      <div style="font-size:56px;margin-bottom:8px;" id="winEmoji">🎉</div>
+      <h2>Level Complete!</h2>
+      <p id="winSubtext">Great job! Keep going!</p>
+      <div class="modal-buttons">
+        <button class="btn btn-primary" onclick="nextLevel()">Next Level →</button>
+        <button class="btn btn-secondary" onclick="showScreen('menuScreen')">Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       NO LIVES MODAL
+       ============================================================ -->
+  <div class="modal-overlay" id="noLivesModal">
+    <div class="modal">
+      <div style="font-size:48px;margin-bottom:8px;">⏰</div>
+      <h2>Out of Lives!</h2>
+      <p>Watch a video to get a free life, or wait for refill.</p>
+      <div class="modal-buttons">
+        <button class="btn btn-gold" onclick="watchAdForLife()">▶ Watch Ad — Get Life</button>
+        <button class="btn btn-secondary" onclick="hideModal('noLivesModal')">Wait</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #app -->
+
+<script>
+// ============================================================
+// THEME INIT — apply CSS variables from window.THEME
+// ============================================================
+(function initTheme() {
+  const t = window.THEME;
+  if (!t) return;
+  const r = document.documentElement.style;
+  if (t.primary)    r.setProperty('--primary', t.primary);
+  if (t.secondary)  r.setProperty('--secondary', t.secondary);
+  if (t.bgDeep)     r.setProperty('--bg-deep', t.bgDeep);
+  if (t.bgMid)      r.setProperty('--bg-mid', t.bgMid);
+  if (t.bgLight)    r.setProperty('--bg-light', t.bgLight);
+  if (t.text)       r.setProperty('--text', t.text);
+  if (t.textMuted)  r.setProperty('--text-muted', t.textMuted);
+  if (t.btnRadius)  r.setProperty('--btn-radius', t.btnRadius);
+  if (t.font)       r.setProperty('--font', `'${t.font}', sans-serif`);
+  if (t.emoji) {
+    const e = t.emoji;
+    if (e.coin) document.querySelectorAll('[id="coinEmoji"]').forEach(el => el.textContent = e.coin);
+    if (e.life) document.querySelectorAll('[id="lifeEmoji"]').forEach(el => el.textContent = e.life);
+    if (e.win)  document.querySelectorAll('[id="winEmoji"]').forEach(el => el.textContent = e.win);
+  }
+  // Set app title
+  const titleEl = document.getElementById('gameTitle');
+  if (titleEl && t.title) titleEl.textContent = t.title;
+})();
+
+// ============================================================
+// STATE — expand as needed for your game
+// ============================================================
+const State = {
+  coins:         0,
+  lives:         5,
+  maxLives:      5,
+  currentLevel:  1,
+  totalLevels:   100,
+  removeAds:     false,
+  // Add game-specific state here
+};
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id)?.classList.add('active');
+}
+
+function showModal(id) {
+  document.getElementById(id)?.classList.add('active');
+}
+
+function hideModal(id) {
+  document.getElementById(id)?.classList.remove('active');
+}
+
+// ============================================================
+// GAME LOGIC — replace this section with your game
+// ============================================================
+function startGame() {
+  showScreen('gameScreen');
+  renderLevel(State.currentLevel);
+}
+
+function renderLevel(level) {
+  document.getElementById('levelLabel').textContent = `Level ${level}`;
+  // TODO: Initialize your game for this level
+}
+
+function nextLevel() {
+  hideModal('winModal');
+  State.currentLevel = Math.min(State.currentLevel + 1, State.totalLevels);
+  renderLevel(State.currentLevel);
+}
+
+function requestUndo() {
+  if (State.coins >= 5) {
+    State.coins -= 5;
+    updateHUD();
+    // TODO: perform undo
+  } else {
+    watchAdForUndo();
+  }
+}
+
+function requestHint() {
+  watchAdForHint();
+}
+
+function winLevel() {
+  showModal('winModal');
+  // Show interstitial every 3 levels
+  if (State.currentLevel % 3 === 0 && !State.removeAds) {
+    if (window.Android) Android.showInterstitial();
+  }
+  if (window.Android) Android.logEvent('level_complete', `level=${State.currentLevel}`);
+}
+
+// ============================================================
+// HUD UPDATE
+// ============================================================
+function updateHUD() {
+  document.getElementById('menuCoins').textContent = State.coins;
+  document.getElementById('menuLives').textContent = State.lives;
+  document.getElementById('gameLives').textContent = State.lives;
+}
+
+// ============================================================
+// AD INTEGRATION
+// ============================================================
+function watchAdForUndo() {
+  if (window.Android) Android.showRewarded('undo');
+}
+function watchAdForHint() {
+  if (window.Android) Android.showRewarded('skip');
+}
+function watchAdForLife() {
+  if (window.Android) Android.showRewarded('life');
+}
+
+// Called by native after user watches rewarded ad
+window.onAdReward = function(type) {
+  if (type === 'undo') {
+    // TODO: perform undo
+  } else if (type === 'skip') {
+    // TODO: reveal hint
+  } else if (type === 'life') {
+    hideModal('noLivesModal');
+    State.lives = Math.min(State.lives + 1, State.maxLives);
+    updateHUD();
+  }
+};
+
+// Called when rewarded ad is not available
+window.onAdNotReady = function() {
+  // Show a toast or message — ad not available right now
+};
+
+// Called by native once ad SDK is ready
+window.onAdMobLoaded = function() {
+  // Ads are ready — show banner if not already
+};
+
+// ============================================================
+// IAP
+// ============================================================
+function purchase(productId) {
+  if (window.Android) Android.purchase(productId);
+}
+
+window.onPurchaseComplete = function(productId) {
+  if (productId === 'remove_ads') {
+    State.removeAds = true;
+    if (window.Android) Android.hideBannerAd();
+  } else if (productId === 'coins_small') {
+    State.coins += 100;
+  } else if (productId === 'coins_large') {
+    State.coins += 500;
+  }
+  saveState();
+  updateHUD();
+};
+
+// ============================================================
+// BACK BUTTON (Android hardware back)
+// Return true to consume (prevent app close), false to close
+// ============================================================
+window.onBackPressed = function() {
+  const active = document.querySelector('.screen.active');
+  if (active && active.id !== 'menuScreen') {
+    showScreen('menuScreen');
+    return true;
+  }
+  return false;
+};
+
+// ============================================================
+// PERSISTENCE (localStorage)
+// ============================================================
+const SAVE_KEY = (window.THEME?.appId || 'game') + '_save';
+
+function saveState() {
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify({
+      coins:        State.coins,
+      lives:        State.lives,
+      currentLevel: State.currentLevel,
+      removeAds:    State.removeAds,
+    }));
+  } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
+    if (saved.coins        !== undefined) State.coins        = saved.coins;
+    if (saved.lives        !== undefined) State.lives        = saved.lives;
+    if (saved.currentLevel !== undefined) State.currentLevel = saved.currentLevel;
+    if (saved.removeAds    !== undefined) State.removeAds    = saved.removeAds;
+  } catch(e) {}
+}
+
+// ============================================================
+// INIT
+// ============================================================
+loadState();
+updateHUD();
+if (State.removeAds && window.Android) Android.hideBannerAd();
+
+if (window.Android) Android.log(`${window.THEME?.appId || 'game'}: loaded`);
+</script>
+</body>
+</html>
+
+<!--
+============================================================
+THEME PALETTE — copy one block into window.THEME above
+============================================================
+
+THEME 1 — Deep Purple (BallSort default)
+  primary: '#6C63FF', secondary: '#FF6584'
+  bgDeep: '#1a1a2e', bgMid: '#16213e', bgLight: '#0f3460'
+  btnRadius: '16px', font: 'Nunito'
+  emoji: { win:'🎉', hint:'💡', undo:'↩️', life:'❤️', coin:'🪙' }
+
+THEME 2 — Ocean Blue
+  primary: '#00B4D8', secondary: '#90E0EF'
+  bgDeep: '#03045e', bgMid: '#023e8a', bgLight: '#0077b6'
+  btnRadius: '12px', font: 'Quicksand'
+  emoji: { win:'🌊', hint:'🐚', undo:'🔄', life:'💙', coin:'💠' }
+
+THEME 3 — Forest Green
+  primary: '#52B788', secondary: '#74C69D'
+  bgDeep: '#1b4332', bgMid: '#2d6a4f', bgLight: '#40916c'
+  btnRadius: '8px', font: 'Nunito'
+  emoji: { win:'🌿', hint:'🍀', undo:'↩️', life:'💚', coin:'🌱' }
+
+THEME 4 — Sunset Orange
+  primary: '#F4845F', secondary: '#F4A261'
+  bgDeep: '#370617', bgMid: '#6a040f', bgLight: '#9d0208'
+  btnRadius: '20px', font: 'Poppins'
+  emoji: { win:'🌅', hint:'🔥', undo:'↩️', life:'🧡', coin:'✨' }
+
+THEME 5 — Royal Gold (utility apps)
+  primary: '#FFD700', secondary: '#FFC300'
+  bgDeep: '#1a1208', bgMid: '#2d1f00', bgLight: '#4a3300'
+  btnRadius: '10px', font: 'Nunito'
+  emoji: { win:'🏆', hint:'💡', undo:'↩️', life:'⭐', coin:'💰' }
+
+THEME 6 — Cotton Candy (kids apps)
+  primary: '#FF70A6', secondary: '#FF9770'
+  bgDeep: '#2d1b69', bgMid: '#3d2b79', bgLight: '#553a9e'
+  btnRadius: '50px', font: 'Nunito'
+  emoji: { win:'🦄', hint:'🌈', undo:'↩️', life:'🩷', coin:'⭐' }
+
+THEME 7 — Neon Cyberpunk
+  primary: '#00FF87', secondary: '#60EFFF'
+  bgDeep: '#0a0a0f', bgMid: '#0d0d1a', bgLight: '#1a1a2e'
+  btnRadius: '4px', font: 'Nunito'
+  emoji: { win:'⚡', hint:'🔬', undo:'↩️', life:'💚', coin:'💎' }
+
+THEME 8 — Warm Light (2048 / calculators)
+  primary: '#f67c5f', secondary: '#f65e3b'
+  bgDeep: '#faf8ef', bgMid: '#eee4da', bgLight: '#ede0c8'
+  text: '#776e65', textMuted: '#a9a09a',
+  btnRadius: '6px', font: 'Nunito'
+  emoji: { win:'🎊', hint:'💡', undo:'↩️', life:'⭐', coin:'🪙' }
+
+============================================================
+HOW TO REGISTER A NEW APP:
+1. Copy this file to YourGame/android/app/src/main/assets/game.html
+2. Set window.THEME values at top
+3. Replace game canvas/logic section with your game code
+4. Copy android/ template folder, update package name
+5. Copy ios/ template files, update GameConfig constants
+============================================================
+-->

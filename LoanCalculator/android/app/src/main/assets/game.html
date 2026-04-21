@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Loan Calculator</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#F44336; --accent2:#B71C1C; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; }
+header h1 span { color:var(--accent); }
+#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+label { display:block; font-size:0.85rem; color:var(--muted); margin-bottom:4px; }
+input[type=number] { width:100%; background:var(--card); border:none; color:var(--text); font-size:1rem; padding:10px 12px; border-radius:8px; outline:none; margin-bottom:12px; }
+input[type=number]:focus { box-shadow:0 0 0 2px var(--accent); }
+.toggle-row { display:flex; background:var(--card); border-radius:8px; overflow:hidden; margin-bottom:14px; }
+.toggle-btn { flex:1; min-height:44px; background:transparent; border:none; color:var(--muted); font-size:0.9rem; font-weight:600; cursor:pointer; }
+.toggle-btn.active { background:var(--accent); color:#fff; }
+.toggle-btn.btn-pressed { opacity:0.7; }
+.result-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.result-item { background:var(--card); border-radius:10px; padding:12px; text-align:center; }
+.result-label { font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+.result-value { font-size:1.25rem; font-weight:700; color:var(--accent); }
+.result-item.big { grid-column:span 2; background:#1f0000; border:2px solid var(--accent); }
+.result-item.big .result-value { font-size:1.8rem; }
+table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+th { color:var(--muted); text-align:left; padding:6px 4px; border-bottom:1px solid #334; font-size:0.7rem; text-transform:uppercase; }
+td { padding:7px 4px; border-bottom:1px solid #223; }
+td:nth-child(2),td:nth-child(3),td:nth-child(4) { text-align:right; }
+td:nth-child(4) { color:var(--accent); font-weight:600; }
+#btn-calc { width:100%; min-height:48px; background:var(--accent); border:none; color:#fff; font-size:1rem; font-weight:700; border-radius:10px; cursor:pointer; margin-bottom:12px; }
+#btn-calc.btn-pressed { opacity:0.8; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Loan <span>Calculator</span></h1>
+    <button id="btn-remove-ads">Remove Ads</button>
+  </header>
+  <div id="scroll">
+    <div class="card">
+      <div class="card-title">Loan Details</div>
+      <label>Loan Amount ($)</label>
+      <input type="number" id="loan-amt" placeholder="250000" min="0" step="1000">
+      <label>Annual Interest Rate (%)</label>
+      <input type="number" id="loan-rate" placeholder="6.5" min="0" step="0.1">
+      <label>Loan Term</label>
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="btn-years">Years</button>
+        <button class="toggle-btn" id="btn-months">Months</button>
+      </div>
+      <input type="number" id="loan-term" placeholder="30" min="1" step="1">
+      <button id="btn-calc">Calculate</button>
+    </div>
+    <div class="card" id="results-card" style="display:none;">
+      <div class="card-title">Results</div>
+      <div class="result-grid">
+        <div class="result-item big"><div class="result-label">Monthly Payment</div><div class="result-value" id="r-monthly">$0.00</div></div>
+        <div class="result-item"><div class="result-label">Total Payment</div><div class="result-value" id="r-total">$0.00</div></div>
+        <div class="result-item"><div class="result-label">Total Interest</div><div class="result-value" id="r-interest">$0.00</div></div>
+      </div>
+    </div>
+    <div class="card" id="amort-card" style="display:none;">
+      <div class="card-title">Amortization (Yearly)</div>
+      <table>
+        <thead><tr><th>Yr</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
+        <tbody id="amort-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+
+var state = { useCount:0, removeAds:false, useYears:true };
+
+function fmt(n){ return '$'+(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+
+document.getElementById('btn-years').addEventListener('click',function(){
+  state.useYears=true;
+  this.classList.add('active');
+  document.getElementById('btn-months').classList.remove('active');
+  document.getElementById('loan-term').placeholder='30';
+});
+document.getElementById('btn-months').addEventListener('click',function(){
+  state.useYears=false;
+  this.classList.add('active');
+  document.getElementById('btn-years').classList.remove('active');
+  document.getElementById('loan-term').placeholder='360';
+});
+
+document.getElementById('btn-calc').addEventListener('click', function(){
+  var P = parseFloat(document.getElementById('loan-amt').value)||0;
+  var annualRate = parseFloat(document.getElementById('loan-rate').value)||0;
+  var term = parseInt(document.getElementById('loan-term').value)||0;
+  var months = state.useYears ? term*12 : term;
+  if(P<=0 || months<=0){ return; }
+  var r = annualRate / 100 / 12;
+  var monthly;
+  if(r===0){
+    monthly = P / months;
+  } else {
+    monthly = P * r * Math.pow(1+r, months) / (Math.pow(1+r, months)-1);
+  }
+  var totalPay = monthly * months;
+  var totalInt = totalPay - P;
+  document.getElementById('r-monthly').textContent = fmt(monthly);
+  document.getElementById('r-total').textContent = fmt(totalPay);
+  document.getElementById('r-interest').textContent = fmt(totalInt);
+  document.getElementById('results-card').style.display = '';
+  // Yearly amortization
+  var tbody = document.getElementById('amort-body');
+  tbody.innerHTML = '';
+  var balance = P;
+  var years = Math.ceil(months/12);
+  var maxYears = Math.min(years, 30);
+  for(var y=1; y<=maxYears; y++){
+    var startBal = balance;
+    var yearPrincipal = 0, yearInterest = 0;
+    var mthsThisYear = (y===years && months%12!==0) ? months%12 : 12;
+    for(var m=0; m<mthsThisYear; m++){
+      var intPart = balance * r;
+      var prinPart = monthly - intPart;
+      if(prinPart > balance) prinPart = balance;
+      yearInterest += intPart;
+      yearPrincipal += prinPart;
+      balance -= prinPart;
+      if(balance < 0.01) balance = 0;
+    }
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>'+y+'</td><td>'+fmt(yearPrincipal)+'</td><td>'+fmt(yearInterest)+'</td><td>'+fmt(Math.max(0,balance))+'</td>';
+    tbody.appendChild(tr);
+    if(balance <= 0) break;
+  }
+  document.getElementById('amort-card').style.display = '';
+  maybeInterstitial();
+});
+
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+function init(){if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';}
+init();
+</script>
+</body>
+</html>

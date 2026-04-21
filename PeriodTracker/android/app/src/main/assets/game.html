@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Period Tracker</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a0a1a; --surface:#2a0f2a; --card:#3a103a; --accent:#F06292; --text:#eaeaea; --muted:#aa88aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
+#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+.ig { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
+.ig label { font-size:0.72rem; color:var(--muted); }
+.ig input, .ig textarea { background:var(--card); border:1px solid rgba(240,98,146,0.2); border-radius:8px; color:var(--text); padding:10px 12px; font-size:0.95rem; width:100%; }
+.ig textarea { resize:none; height:56px; }
+.row2 { display:flex; gap:8px; } .row2 .ig { flex:1; }
+.btn-p { background:var(--accent); border:none; color:#fff; font-size:1rem; font-weight:700; padding:12px; border-radius:10px; cursor:pointer; width:100%; margin-top:4px; }
+.info-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:4px; }
+.info-box { background:var(--card); border-radius:10px; padding:12px; text-align:center; }
+.info-lbl { font-size:0.65rem; color:var(--muted); margin-bottom:4px; }
+.info-val { font-size:1rem; font-weight:700; color:var(--accent); }
+.calendar { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-top:4px; }
+.cal-hdr { text-align:center; font-size:0.62rem; color:var(--muted); padding:4px 0; }
+.cal-day { aspect-ratio:1; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:0.72rem; background:rgba(255,255,255,0.04); }
+.cal-day.period { background:rgba(240,98,146,0.6); color:#fff; font-weight:700; }
+.cal-day.fertile { background:rgba(102,187,106,0.4); }
+.cal-day.predicted { background:rgba(240,98,146,0.25); border:1px dashed #F06292; }
+.cal-day.today { outline:2px solid var(--accent); }
+.log-item { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(240,98,146,0.1); font-size:0.85rem; }
+.log-item:last-child { border-bottom:none; }
+.del-btn { background:none; border:none; color:var(--muted); font-size:0.9rem; padding:4px; cursor:pointer; }
+.empty { text-align:center; color:var(--muted); font-size:0.85rem; padding:20px 0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Period <span>Tracker</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
+  <div id="scroll">
+    <div class="card">
+      <div class="card-title">Log Period</div>
+      <div class="row2">
+        <div class="ig"><label>Start Date</label><input type="date" id="i-start"></div>
+        <div class="ig"><label>End Date</label><input type="date" id="i-end"></div>
+      </div>
+      <div class="ig"><label>Notes (symptoms etc.)</label><textarea id="i-notes" placeholder="Cramps, mood, flow..."></textarea></div>
+      <button class="btn-p" id="btn-log">Log Period</button>
+    </div>
+    <div class="card" id="info-card" style="display:none">
+      <div class="card-title">Cycle Info</div>
+      <div class="info-grid">
+        <div class="info-box"><div class="info-lbl">Avg Cycle Length</div><div class="info-val" id="inf-cycle">--</div></div>
+        <div class="info-box"><div class="info-lbl">Next Period (est.)</div><div class="info-val" id="inf-next">--</div></div>
+        <div class="info-box"><div class="info-lbl">Fertile Window</div><div class="info-val" id="inf-fertile">--</div></div>
+        <div class="info-box"><div class="info-lbl">Avg Period Length</div><div class="info-val" id="inf-plen">-- days</div></div>
+      </div>
+    </div>
+    <div class="card" id="cal-card" style="display:none">
+      <div class="card-title">Calendar (this month)</div>
+      <div class="calendar" id="cal-wrap"></div>
+      <div style="display:flex;gap:12px;margin-top:8px;font-size:0.68rem;color:var(--muted);">
+        <span><span style="color:#F06292;">&#9632;</span> Period</span>
+        <span><span style="color:#66bb6a;">&#9632;</span> Fertile</span>
+        <span><span style="color:rgba(240,98,146,0.5);">&#9632;</span> Predicted</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Period History</div>
+      <div id="log-list"><div class="empty">No periods logged yet.</div></div>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var state={useCount:0,removeAds:false};
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var periods=JSON.parse(localStorage.getItem('pt_p')||'[]');
+function save(){localStorage.setItem('pt_p',JSON.stringify(periods));}
+function dayDiff(a,b){return Math.round((b-a)/86400000);}
+function dateStr(d){return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+function ymd(ts){return new Date(ts).toISOString().slice(0,10);}
+function parseDate(s){var p=s.split('-');return new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2])).getTime();}
+
+var today=new Date(); today.setHours(0,0,0,0);
+document.getElementById('i-start').value=today.toISOString().slice(0,10);
+
+function calcCycleLen(){
+  if(periods.length<2)return 28;
+  var sorted=periods.slice().sort(function(a,b){return a.start-b.start;});
+  var diffs=[];
+  for(var i=1;i<sorted.length;i++)diffs.push(dayDiff(sorted[i-1].start,sorted[i].start));
+  return Math.round(diffs.reduce(function(s,v){return s+v;},0)/diffs.length);
+}
+
+function render(){
+  var ic=document.getElementById('info-card');
+  var cc=document.getElementById('cal-card');
+  var ll=document.getElementById('log-list');
+  if(!periods.length){ic.style.display='none';cc.style.display='none';ll.innerHTML='<div class="empty">No periods logged yet.</div>';return;}
+  ic.style.display='';cc.style.display='';
+  var sorted=periods.slice().sort(function(a,b){return b.start-a.start;});
+  var cycle=calcCycleLen();
+  var last=sorted[0];
+  var nextStart=last.start+cycle*86400000;
+  var fertileStart=nextStart-14*86400000-3*86400000;
+  var fertileEnd=nextStart-14*86400000+3*86400000;
+  var avgLen=Math.round(periods.filter(function(p){return p.end;}).reduce(function(s,p){return s+dayDiff(p.start,p.end)+1;},0)/(periods.filter(function(p){return p.end;}).length||1));
+  document.getElementById('inf-cycle').textContent=cycle+' days';
+  document.getElementById('inf-next').textContent=dateStr(nextStart);
+  document.getElementById('inf-fertile').textContent=dateStr(fertileStart)+' - '+dateStr(fertileEnd);
+  document.getElementById('inf-plen').textContent=avgLen+' days';
+  renderCalendar(sorted,nextStart,fertileStart,fertileEnd);
+  ll.innerHTML=sorted.slice(0,10).map(function(p){
+    var dur=p.end?dayDiff(p.start,p.end)+1+'d':'ongoing';
+    return '<div class="log-item"><div><div>'+dateStr(p.start)+(p.end?' - '+dateStr(p.end):'')+'</div>'+(p.notes?'<div style="font-size:0.72rem;color:var(--muted);">'+p.notes+'</div>':'')+'</div><div style="display:flex;align-items:center;gap:8px;"><span style="color:var(--accent);">'+dur+'</span><button class="del-btn" data-t="'+p.start+'">&#10005;</button></div></div>';
+  }).join('');
+  ll.querySelectorAll('.del-btn').forEach(function(b){b.addEventListener('click',function(){var t=parseInt(b.dataset.t);periods=periods.filter(function(p){return p.start!==t;});save();render();});});
+}
+
+function renderCalendar(sorted,nextStart,fertileStart,fertileEnd){
+  var cw=document.getElementById('cal-wrap');
+  var now=new Date(); var y=now.getFullYear(),m=now.getMonth();
+  var first=new Date(y,m,1); var lastDay=new Date(y,m+1,0).getDate();
+  var html=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(function(d){return '<div class="cal-hdr">'+d+'</div>';}).join('');
+  var startDow=first.getDay();
+  for(var i=0;i<startDow;i++)html+='<div></div>';
+  var periodSet={};
+  sorted.forEach(function(p){var d=p.start;var end=p.end||(p.start+4*86400000);while(d<=end){periodSet[ymd(d)]=true;d+=86400000;}});
+  for(var day=1;day<=lastDay;day++){
+    var ts=new Date(y,m,day).getTime();
+    var k=ymd(ts);
+    var cls='cal-day';
+    if(periodSet[k])cls+=' period';
+    else if(ts>=fertileStart&&ts<=fertileEnd)cls+=' fertile';
+    else if(ts>=nextStart&&ts<=nextStart+4*86400000)cls+=' predicted';
+    if(day===now.getDate())cls+=' today';
+    html+='<div class="'+cls+'">'+day+'</div>';
+  }
+  cw.innerHTML=html;
+}
+
+document.getElementById('btn-log').addEventListener('click',function(){
+  var sVal=document.getElementById('i-start').value;
+  var eVal=document.getElementById('i-end').value;
+  if(!sVal){alert('Select a start date.');return;}
+  var start=parseDate(sVal);
+  var end=eVal?parseDate(eVal):null;
+  if(end&&end<start){alert('End date must be after start date.');return;}
+  var notes=document.getElementById('i-notes').value.trim();
+  periods.push({start:start,end:end,notes:notes});
+  periods=periods.sort(function(a,b){return b.start-a.start;});
+  if(periods.length>100)periods=periods.slice(0,100);
+  save();
+  document.getElementById('i-end').value='';
+  document.getElementById('i-notes').value='';
+  render();maybeInterstitial();
+});
+
+render();
+</script>
+</body>
+</html>

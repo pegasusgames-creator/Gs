@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Would You Rather</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+  body{background:#0d1520;color:#c8e0ff;font-family:'Arial',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh;overflow:hidden}
+  h1{font-size:1.4rem;margin:14px 0 4px;color:#60a0ff;letter-spacing:2px}
+  #category-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:6px 0 10px;max-width:340px;padding:0 10px}
+  .cat-btn{background:#ffffff10;border:1px solid #2060ff33;color:#6090ff;border-radius:20px;padding:5px 12px;font-size:0.75rem;cursor:pointer}
+  .cat-btn.active{background:#2060ff33;border-color:#60a0ff;color:#60a0ff}
+  #q-count{font-size:0.8rem;color:#6090ff44;margin-bottom:8px}
+  #wyr-card{background:#ffffff08;border:1px solid #2060ff22;border-radius:24px;padding:16px 14px;width:310px;display:flex;flex-direction:column;gap:10px;margin-bottom:10px}
+  #wyr-label{text-align:center;font-size:0.85rem;color:#60a0ff99;letter-spacing:1px;margin-bottom:2px}
+  .choice-btn{background:linear-gradient(135deg,#0d1a40,#1a3080);border:2px solid #2060ff55;border-radius:16px;padding:16px 12px;font-size:0.95rem;line-height:1.45;color:#c8e0ff;cursor:pointer;text-align:center;transition:background 0.1s,border-color 0.1s,transform 0.1s;position:relative;overflow:hidden}
+  .choice-btn:active{transform:scale(0.97)}
+  .choice-btn.voted{border-color:#60a0ff}
+  .choice-btn .pct-bar{position:absolute;top:0;left:0;height:100%;background:#60a0ff18;transition:width 0.5s ease;width:0%}
+  .choice-btn .pct-label{position:relative;z-index:1}
+  .choice-btn .pct-num{position:absolute;top:6px;right:10px;font-size:0.8rem;color:#60a0ffaa;z-index:1}
+  #or-divider{text-align:center;font-size:1.1rem;color:#2060ff88;font-weight:bold}
+  .action-row{display:flex;gap:12px;margin-bottom:8px}
+  .action-btn{border:none;border-radius:50px;padding:11px 28px;font-size:0.9rem;font-weight:bold;cursor:pointer;transition:transform 0.1s}
+  #next-btn{background:linear-gradient(135deg,#1030a0,#2060ff);color:#c8e0ff}
+  #skip-btn{background:#ffffff12;color:#c8e0ff;border:1px solid #2060ff33}
+  .action-btn:active{transform:scale(0.94)}
+  #streak-info{font-size:0.8rem;color:#60a0ff55;min-height:1.2rem}
+  #remove-ads{position:fixed;top:8px;right:8px;background:#ffffff10;border:1px solid #2060ff33;color:#6090ff55;font-size:0.65rem;padding:4px 8px;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<button id="remove-ads" onclick="Android.purchase('remove_ads')">Remove Ads</button>
+<h1>🤔 Would You Rather</h1>
+<div id="category-row">
+  <button class="cat-btn active" onclick="setCategory('all',this)">All</button>
+  <button class="cat-btn" onclick="setCategory('fun',this)">Fun</button>
+  <button class="cat-btn" onclick="setCategory('food',this)">Food</button>
+  <button class="cat-btn" onclick="setCategory('superpower',this)">Superpower</button>
+  <button class="cat-btn" onclick="setCategory('life',this)">Life</button>
+</div>
+<div id="q-count"></div>
+<div id="wyr-card">
+  <div id="wyr-label">WOULD YOU RATHER…</div>
+  <button class="choice-btn" id="choice-a" onclick="vote('a')">
+    <div class="pct-bar" id="bar-a"></div>
+    <div class="pct-label" id="text-a">Loading…</div>
+    <div class="pct-num" id="pct-a"></div>
+  </button>
+  <div id="or-divider">— OR —</div>
+  <button class="choice-btn" id="choice-b" onclick="vote('b')">
+    <div class="pct-bar" id="bar-b"></div>
+    <div class="pct-label" id="text-b"></div>
+    <div class="pct-num" id="pct-b"></div>
+  </button>
+</div>
+<div class="action-row">
+  <button class="action-btn" id="next-btn" onclick="nextQuestion()">NEXT ›</button>
+  <button class="action-btn" id="skip-btn" onclick="nextQuestion()">SKIP</button>
+</div>
+<div id="streak-info"></div>
+
+<script>
+const ALL_Q=[
+  {a:"Always be 10 minutes late to everything",b:"Always be 2 hours early to everything",cat:'fun'},
+  {a:"Have unlimited pizza for life",b:"Have unlimited sushi for life",cat:'food'},
+  {a:"Be able to fly",b:"Be able to become invisible",cat:'superpower'},
+  {a:"Live in a treehouse",b:"Live in an underwater house",cat:'life'},
+  {a:"Have super speed",b:"Have super strength",cat:'superpower'},
+  {a:"Never need to sleep",b:"Never need to eat",cat:'superpower'},
+  {a:"Win the lottery but never tell anyone",b:"Be famous but never be wealthy",cat:'life'},
+  {a:"Eat only sweet foods forever",b:"Eat only savory foods forever",cat:'food'},
+  {a:"Be able to speak every language",b:"Be able to play every instrument",cat:'superpower'},
+  {a:"Go back in time but only to observe",b:"See the future but only once",cat:'fun'},
+  {a:"Have a rewind button for life's mistakes",b:"Have a fast-forward button for boring moments",cat:'fun'},
+  {a:"Only eat your favorite food forever",b:"Never eat your favorite food again",cat:'food'},
+  {a:"Live without music",b:"Live without movies and TV",cat:'life'},
+  {a:"Always say exactly what you think",b:"Never be able to express your real opinion",cat:'life'},
+  {a:"Be 3 inches shorter",b:"Be 3 inches taller",cat:'fun'},
+  {a:"Have a personal chef",b:"Have a personal driver",cat:'life'},
+  {a:"Know how every movie ends before watching it",b:"Forget every movie you've ever seen",cat:'fun'},
+  {a:"Only eat food that's spicy",b:"Only eat food that's bland",cat:'food'},
+  {a:"Have the ability to read minds",b:"Have the ability to control time",cat:'superpower'},
+  {a:"Be stuck in an elevator with a stranger",b:"Be stuck on a ski lift alone",cat:'fun'},
+  {a:"Have no phone for a year",b:"Have no internet for a year",cat:'life'},
+  {a:"Eat a bug once",b:"Never eat your favorite snack again",cat:'food'},
+  {a:"Be famous for something embarrassing",b:"Never be recognized for your greatest achievement",cat:'life'},
+  {a:"Have gills",b:"Have wings",cat:'superpower'},
+  {a:"Work a job you hate that pays well",b:"Work a job you love that pays little",cat:'life'},
+  {a:"Travel to the past",b:"Travel to the future",cat:'fun'},
+  {a:"Only drink water for the rest of your life",b:"Never eat dessert again",cat:'food'},
+  {a:"Be the smartest person in every room",b:"Be the funniest person in every room",cat:'fun'},
+  {a:"Wake up as a different person each day",b:"Relive the same perfect day forever",cat:'fun'},
+  {a:"Have a photographic memory",b:"Be able to sleep only 2 hours a night",cat:'superpower'},
+];
+let category='all',pool=[],qIndex=0,voted=false,useCount=0;
+const simVotes=()=>({a:Math.floor(20+Math.random()*60),b:null});
+let voteData={};
+
+function setCategory(cat,btn){category=cat;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');startPool();}
+function startPool(){pool=shuffle(category==='all'?[...ALL_Q]:ALL_Q.filter(q=>q.cat===category));qIndex=0;showQuestion();}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function showQuestion(){if(qIndex>=pool.length){pool=shuffle(pool);qIndex=0;}const q=pool[qIndex];document.getElementById('text-a').textContent=q.a;document.getElementById('text-b').textContent=q.b;document.getElementById('q-count').textContent=(qIndex+1)+' of '+pool.length;document.getElementById('pct-a').textContent='';document.getElementById('pct-b').textContent='';document.getElementById('bar-a').style.width='0%';document.getElementById('bar-b').style.width='0%';document.getElementById('choice-a').classList.remove('voted');document.getElementById('choice-b').classList.remove('voted');voteData={a:Math.floor(30+Math.random()*40)};voteData.b=100-voteData.a;voted=false;}
+function vote(side){if(voted)return;voted=true;const total=voteData.a+voteData.b;const pctA=Math.round(voteData.a/total*100),pctB=100-pctA;document.getElementById('bar-a').style.width=pctA+'%';document.getElementById('bar-b').style.width=pctB+'%';document.getElementById('pct-a').textContent=pctA+'%';document.getElementById('pct-b').textContent=pctB+'%';document.getElementById('choice-'+side).classList.add('voted');if(navigator.vibrate)navigator.vibrate(80);if(++useCount%5===0&&window.Android)Android.showInterstitial();}
+function nextQuestion(){qIndex++;showQuestion();}
+startPool();
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){document.getElementById('remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+</script>
+</body>
+</html>

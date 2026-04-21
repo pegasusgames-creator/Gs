@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Golf Scorecard</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#0a1a0a; --surface:#0f2a0f; --card:#0d3a0d; --accent:#66BB6A; --text:#eaeaea; --muted:#88aa88; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
+#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+.ig { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
+.ig label { font-size:0.72rem; color:var(--muted); }
+.ig input, .ig select { background:var(--card); border:1px solid rgba(102,187,106,0.2); border-radius:8px; color:var(--text); padding:10px 12px; font-size:0.95rem; width:100%; }
+.row2 { display:flex; gap:8px; } .row2 .ig { flex:1; }
+.btn-p { background:var(--accent); border:none; color:#0a1a0a; font-size:1rem; font-weight:700; padding:12px; border-radius:10px; cursor:pointer; width:100%; margin-top:4px; }
+.btn-sec { background:var(--card); border:none; color:var(--text); font-size:0.9rem; font-weight:600; padding:10px; border-radius:8px; cursor:pointer; width:100%; margin-top:8px; }
+#scorecard-view { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:0.78rem; min-width:320px; }
+th { background:rgba(102,187,106,0.15); color:var(--accent); padding:6px 4px; text-align:center; font-weight:700; border-bottom:2px solid rgba(102,187,106,0.3); }
+td { padding:6px 4px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.06); }
+td input { background:var(--card); border:1px solid rgba(102,187,106,0.2); border-radius:4px; color:var(--text); width:36px; text-align:center; padding:4px; font-size:0.85rem; }
+.total-row td { font-weight:700; background:rgba(102,187,106,0.08); }
+.under { color:#66BB6A; } .over { color:#ef5350; } .even { color:var(--muted); }
+.score-summary { display:flex; justify-content:space-around; margin-top:12px; }
+.ss-item { text-align:center; }
+.ss-val { font-size:1.3rem; font-weight:700; }
+.ss-lbl { font-size:0.68rem; color:var(--muted); }
+.empty { text-align:center; color:var(--muted); font-size:0.85rem; padding:20px 0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Golf <span>Scorecard</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
+  <div id="scroll">
+    <div class="card" id="setup-card">
+      <div class="card-title">Course Setup</div>
+      <div class="ig"><label>Course Name</label><input type="text" id="i-course" placeholder="Augusta National..."></div>
+      <div class="row2">
+        <div class="ig"><label>Holes</label>
+          <select id="i-holes"><option value="9">9 Holes</option><option value="18" selected>18 Holes</option></select>
+        </div>
+        <div class="ig"><label>Players (1-4)</label><input type="number" id="i-players" value="1" min="1" max="4"></div>
+      </div>
+      <div class="ig"><label>Par per hole (default 4)</label><input type="number" id="i-par" value="4" min="3" max="5"></div>
+      <div id="player-names"></div>
+      <button class="btn-p" id="btn-start">Start Round</button>
+    </div>
+    <div class="card" id="round-card" style="display:none">
+      <div class="card-title" id="round-title">Scorecard</div>
+      <div id="scorecard-view"></div>
+      <div class="score-summary" id="score-summary"></div>
+      <button class="btn-sec" id="btn-finish">Finish Round</button>
+      <button class="btn-sec" id="btn-new" style="background:rgba(239,83,80,0.2);color:#ef5350;">New Round</button>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var state={useCount:0,removeAds:false};
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var round=null;
+document.getElementById('i-players').addEventListener('input',updatePlayerNames);
+
+function updatePlayerNames(){
+  var n=Math.min(4,Math.max(1,parseInt(document.getElementById('i-players').value)||1));
+  var el=document.getElementById('player-names');
+  var html='<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">';
+  for(var i=0;i<n;i++){
+    html+='<div class="ig" style="flex:1;min-width:100px;"><label>Player '+(i+1)+'</label><input type="text" id="pname'+i+'" placeholder="Player '+(i+1)+'" style="background:var(--card);border:1px solid rgba(102,187,106,0.2);border-radius:8px;color:var(--text);padding:8px 10px;font-size:0.9rem;width:100%;"></div>';
+  }
+  html+='</div>';
+  el.innerHTML=html;
+}
+updatePlayerNames();
+
+document.getElementById('btn-start').addEventListener('click',function(){
+  var course=document.getElementById('i-course').value.trim()||'Golf Course';
+  var holes=parseInt(document.getElementById('i-holes').value);
+  var par=parseInt(document.getElementById('i-par').value)||4;
+  var nPlayers=Math.min(4,Math.max(1,parseInt(document.getElementById('i-players').value)||1));
+  var players=[];
+  for(var i=0;i<nPlayers;i++){
+    var nm=document.getElementById('pname'+i).value.trim()||'Player '+(i+1);
+    players.push({name:nm,scores:new Array(holes).fill('')});
+  }
+  var pars=new Array(holes).fill(par);
+  round={course:course,holes:holes,pars:pars,players:players};
+  document.getElementById('setup-card').style.display='none';
+  document.getElementById('round-card').style.display='';
+  document.getElementById('round-title').textContent=course+' - '+holes+' Holes';
+  renderScorecard();
+});
+
+function renderScorecard(){
+  var el=document.getElementById('scorecard-view');
+  var h=round.holes;
+  var html='<table><thead><tr><th>Hole</th>';
+  round.players.forEach(function(p){html+='<th>'+p.name+'</th>';});
+  html+='<th>Par</th></tr></thead><tbody>';
+  for(var i=0;i<h;i++){
+    html+='<tr><td>'+(i+1)+'</td>';
+    round.players.forEach(function(p,pi){
+      html+='<td><input type="number" min="1" max="20" value="'+(p.scores[i]||'')+'" data-hole="'+i+'" data-player="'+pi+'" class="score-input"></td>';
+    });
+    html+='<td>'+round.pars[i]+'</td></tr>';
+  }
+  html+='<tr class="total-row"><td>Total</td>';
+  round.players.forEach(function(p){
+    var tot=p.scores.reduce(function(s,v){return s+(parseInt(v)||0);},0);
+    var totPar=round.pars.reduce(function(s,v){return s+v;},0);
+    var diff=tot-totPar;
+    var cls=diff<0?'under':diff>0?'over':'even';
+    html+='<td class="'+cls+'">'+(tot||'--')+(tot?(diff>0?'+'+diff:diff===0?'E':diff):'')+'</td>';
+  });
+  html+='<td>'+round.pars.reduce(function(s,v){return s+v;},0)+'</td></tr></tbody></table>';
+  el.innerHTML=html;
+  el.querySelectorAll('.score-input').forEach(function(inp){
+    inp.addEventListener('input',function(){
+      var hole=parseInt(inp.dataset.hole);
+      var pi=parseInt(inp.dataset.player);
+      round.players[pi].scores[hole]=inp.value;
+      updateSummary();
+    });
+  });
+  updateSummary();
+}
+
+function updateSummary(){
+  var ss=document.getElementById('score-summary');
+  var totPar=round.pars.reduce(function(s,v){return s+v;},0);
+  ss.innerHTML=round.players.map(function(p){
+    var tot=p.scores.reduce(function(s,v){return s+(parseInt(v)||0);},0);
+    var diff=tot-totPar;
+    var cls=diff<0?'under':diff>0?'over':'even';
+    return '<div class="ss-item"><div class="ss-val '+cls+'">'+(tot||'--')+'</div><div class="ss-lbl">'+p.name+'</div></div>';
+  }).join('');
+}
+
+document.getElementById('btn-finish').addEventListener('click',function(){maybeInterstitial();alert('Round finished! Great game!');});
+document.getElementById('btn-new').addEventListener('click',function(){
+  round=null;
+  document.getElementById('setup-card').style.display='';
+  document.getElementById('round-card').style.display='none';
+});
+</script>
+</body>
+</html>

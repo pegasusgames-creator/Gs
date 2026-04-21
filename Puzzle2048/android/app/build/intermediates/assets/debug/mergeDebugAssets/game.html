@@ -1,0 +1,3148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>2048 Puzzle</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  background: #1a1a18;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  touch-action: none;
+  user-select: none;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+#gameContainer { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+.screen { position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px); display: none; flex-direction: column; align-items: center; overflow: hidden; }
+.screen.active { display: flex; }
+
+/* ===== MENU SCREEN ===== */
+#menuScreen {
+  background: linear-gradient(160deg, #1a1a18 0%, #2c2b27 50%, #1a1a18 100%);
+  justify-content: flex-start;
+  padding-top: 0;
+}
+.menu-header {
+  width: 100%; padding: 16px 20px 10px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.coin-display {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,215,0,0.12); border: 1px solid rgba(255,215,0,0.35);
+  border-radius: 20px; padding: 6px 14px;
+}
+.coin-display span { color: #ffd700; font-weight: 700; font-size: 15px; }
+.lives-display {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,100,100,0.12); border: 1px solid rgba(255,100,100,0.35);
+  border-radius: 20px; padding: 6px 14px;
+}
+.lives-display span { color: #ff6b6b; font-weight: 700; font-size: 15px; }
+.settings-btn {
+  background: rgba(255,255,255,0.08); border: none; border-radius: 50%;
+  width: 42px; height: 42px; font-size: 20px; cursor: pointer;
+  color: white; display: flex; align-items: center; justify-content: center;
+}
+.game-title { text-align: center; padding: 10px 0 16px; }
+.game-title h1 {
+  font-size: clamp(48px, 13vw, 80px); font-weight: 800;
+  background: linear-gradient(135deg, #edc22e, #f2b179, #edc22e);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; line-height: 1.0;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 12px rgba(237,194,46,0.4));
+}
+.game-title p { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 4px; }
+
+/* Mini grid preview */
+.mini-grid-wrap { margin: 0 0 16px; }
+.mini-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 5px; background: #2c2b27; border-radius: 10px;
+  padding: 8px; width: 180px;
+}
+.mini-cell {
+  width: 36px; height: 36px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: white;
+}
+
+.menu-scores {
+  display: flex; gap: 20px; margin-bottom: 16px;
+}
+.score-box {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 8px 20px; text-align: center; min-width: 100px;
+}
+.score-box .label { color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.score-box .value { color: white; font-size: 22px; font-weight: 800; }
+
+.menu-buttons { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 300px; padding: 0 20px; }
+.btn { border: none; border-radius: 14px; padding: 14px 28px; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.15s; width: 100%; }
+.btn:active { transform: scale(0.96); }
+.btn.btn-pressed { transform: scale(0.96); }
+.game-btn.btn-pressed { transform: scale(0.94); }
+.btn-primary { background: linear-gradient(135deg, #edc22e, #f2a500); color: #1a1a18; box-shadow: 0 6px 20px rgba(237,194,46,0.4); }
+.btn-secondary { background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.15); }
+.btn-daily { background: linear-gradient(135deg, #f67c5f, #f65e3b); color: white; box-shadow: 0 6px 20px rgba(246,94,59,0.35); }
+.btn-gold { background: linear-gradient(135deg, #ffd700, #f39c12); color: #1a1a18; box-shadow: 0 6px 20px rgba(255,215,0,0.3); }
+.btn-danger { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+
+/* ===== GAME SCREEN ===== */
+#gameScreen { background: #1a1a18; justify-content: space-between; }
+.game-header {
+  width: 100%; padding: 10px 16px 8px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(0,0,0,0.2); flex-shrink: 0;
+}
+.score-panel { display: flex; gap: 10px; }
+.score-tile {
+  background: #2c2b27; border-radius: 10px;
+  padding: 6px 14px; text-align: center; min-width: 80px;
+}
+.score-tile .stl { color: rgba(255,255,255,0.55); font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.score-tile .stv { color: white; font-size: 20px; font-weight: 800; line-height: 1.1; }
+.level-badge {
+  background: linear-gradient(135deg, #edc22e, #f2a500);
+  border-radius: 10px; padding: 6px 14px; text-align: center;
+}
+.level-badge .stl { color: rgba(26,26,24,0.6); font-size: 9px; font-weight: 700; text-transform: uppercase; }
+.level-badge .stv { color: #1a1a18; font-size: 18px; font-weight: 800; line-height: 1.1; }
+
+#gridCanvas { flex: 1; width: 100%; touch-action: none; display: block; }
+.game-footer {
+  width: 100%; padding: 8px 16px 10px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(0,0,0,0.2); flex-shrink: 0;
+}
+.game-btn {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px; padding: 10px 18px; color: white;
+  font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; gap: 6px;
+}
+.game-btn:active { transform: scale(0.94); }
+.game-btn.undo-btn { background: rgba(237,194,46,0.12); border-color: rgba(237,194,46,0.35); color: #edc22e; }
+
+/* ===== HIGH SCORES SCREEN ===== */
+#scoresScreen { background: #1a1a18; }
+.screen-header {
+  width: 100%; padding: 16px 20px 12px;
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(0,0,0,0.3); flex-shrink: 0;
+}
+.screen-header h2 { color: white; font-size: 20px; font-weight: 700; flex: 1; text-align: center; }
+.back-btn {
+  background: rgba(255,255,255,0.1); border: none; border-radius: 10px;
+  padding: 8px 14px; color: white; font-size: 13px; cursor: pointer;
+  font-family: 'Poppins', sans-serif; font-weight: 600;
+}
+.scores-content { flex: 1; overflow-y: auto; padding: 20px; width: 100%; }
+.achievement-card {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px; padding: 20px; margin-bottom: 16px; text-align: center;
+}
+.achievement-card h3 { color: #edc22e; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.achievement-card p { color: rgba(255,255,255,0.6); font-size: 13px; }
+.big-score { font-size: 48px; font-weight: 800; color: white; }
+.daily-streak {
+  background: linear-gradient(135deg, rgba(246,94,59,0.15), rgba(246,124,95,0.05));
+  border: 1px solid rgba(246,94,59,0.3);
+  border-radius: 16px; padding: 16px; margin-bottom: 16px; text-align: center;
+}
+.daily-streak h3 { color: #f65e3b; font-size: 16px; font-weight: 700; }
+.daily-streak .streak-num { font-size: 40px; font-weight: 800; color: white; }
+
+/* ===== SHOP SCREEN ===== */
+#shopScreen { background: #1a1a18; }
+.shop-grid { display: flex; flex-direction: column; gap: 10px; padding: 14px; width: 100%; overflow-y: auto; flex: 1; }
+.shop-card {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 14px;
+}
+.shop-icon {
+  font-size: 32px; width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.05); border-radius: 12px; flex-shrink: 0;
+}
+.shop-info { flex: 1; }
+.shop-info h3 { color: white; font-size: 14px; font-weight: 700; }
+.shop-info p { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
+.shop-price-btn {
+  background: linear-gradient(135deg, #edc22e, #f2a500); border: none;
+  border-radius: 10px; padding: 8px 12px; color: #1a1a18;
+  font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 700;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+}
+.shop-price-btn.owned { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.45); }
+.shop-price-btn.coin-price { background: linear-gradient(135deg, #4ecdc4, #44a3aa); color: white; }
+
+/* ===== MORE GAMES SCREEN ===== */
+#moreGamesScreen { background: #1a1a18; }
+.more-games-grid { display: flex; flex-direction: column; gap: 10px; padding: 14px; width: 100%; overflow-y: auto; flex: 1; }
+.promo-card {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 14px;
+}
+.promo-icon {
+  font-size: 32px; width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.05); border-radius: 12px; flex-shrink: 0;
+}
+.promo-info { flex: 1; }
+.promo-info h3 { color: white; font-size: 14px; font-weight: 700; }
+.promo-info p { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
+.promo-btn {
+  background: linear-gradient(135deg, #4ecdc4, #44a3aa); border: none;
+  border-radius: 10px; padding: 8px 10px; color: white;
+  font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 700;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0; text-align: center; line-height: 1.3;
+}
+.promo-btn.claimed {
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.45); cursor: default;
+}
+
+/* ===== SETTINGS SCREEN ===== */
+#settingsScreen { background: #1a1a18; }
+.settings-list { display: flex; flex-direction: column; gap: 14px; padding: 18px; width: 100%; overflow-y: auto; flex: 1; }
+.setting-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,0.05); border-radius: 12px; padding: 14px 16px;
+}
+.setting-label { color: white; font-size: 15px; font-weight: 600; }
+.toggle { position: relative; width: 50px; height: 26px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; inset: 0; background: #444; border-radius: 26px;
+  cursor: pointer; transition: 0.3s;
+}
+.toggle-slider:before {
+  content: ''; position: absolute; height: 20px; width: 20px;
+  left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s;
+}
+input:checked + .toggle-slider { background: #edc22e; }
+input:checked + .toggle-slider:before { transform: translateX(24px); }
+
+/* ===== OVERLAYS ===== */
+.overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  display: none; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.82); z-index: 100; backdrop-filter: blur(5px);
+}
+.overlay.active { display: flex; }
+.overlay-card {
+  background: linear-gradient(135deg, #2c2b27, #1a1a18);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 24px; padding: 30px; max-width: 340px; width: 90%; text-align: center;
+}
+.overlay-card h2 { color: white; font-size: 26px; font-weight: 800; margin-bottom: 10px; }
+.overlay-card .sub { color: rgba(255,255,255,0.55); font-size: 14px; margin-bottom: 22px; }
+.overlay-buttons { display: flex; flex-direction: column; gap: 10px; }
+.overlay-score { font-size: 42px; font-weight: 800; color: #edc22e; margin: 8px 0 16px; }
+.win-emoji { font-size: 56px; display: block; margin-bottom: 8px; }
+.gameover-emoji { font-size: 56px; display: block; margin-bottom: 8px; }
+
+/* ===== AD BANNER PLACEHOLDER ===== */
+#admob-banner {
+  position: fixed; bottom: 0; left: 0; right: 0; height: 60px;
+  background: rgba(0,0,0,0.4); border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center; z-index: 200;
+}
+#admob-banner span { color: rgba(255,255,255,0.25); font-size: 11px; }
+
+/* ===== TOAST ===== */
+#toast {
+  position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: rgba(0,0,0,0.85); color: white; padding: 10px 20px;
+  border-radius: 20px; font-size: 13px; opacity: 0; transition: all 0.3s;
+  z-index: 300; pointer-events: none; white-space: nowrap;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Confirm dialog */
+.confirm-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.75); z-index: 400; display: none;
+  align-items: center; justify-content: center;
+}
+.confirm-overlay.active { display: flex; }
+.confirm-card {
+  background: #2c2b27; border-radius: 20px; padding: 26px;
+  max-width: 290px; width: 90%; text-align: center; border: 1px solid rgba(255,255,255,0.1);
+}
+.confirm-card h3 { color: white; font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+.confirm-card p { color: rgba(255,255,255,0.55); font-size: 13px; margin-bottom: 18px; }
+.confirm-buttons { display: flex; gap: 10px; }
+.confirm-buttons .btn { flex: 1; padding: 11px; font-size: 14px; }
+
+/* Tile spawn & merge animations */
+@keyframes tileSpawn {
+  0%   { transform: scale(0); }
+  60%  { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+@keyframes tileMerge {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+</style>
+</head>
+<body>
+<div id="gameContainer">
+
+  <!-- MENU SCREEN -->
+  <div id="menuScreen" class="screen active">
+    <div class="menu-header">
+      <div class="coin-display"><span>🪙</span><span id="menuCoins">0</span></div>
+      <div class="lives-display"><span>❤️</span><span id="menuLives">5</span></div>
+      <button class="settings-btn" onclick="Game.showScreen('settingsScreen')">⚙️</button>
+    </div>
+    <div class="game-title">
+      <h1>2048</h1>
+      <p>Merge tiles to reach 2048!</p>
+    </div>
+    <div class="menu-scores">
+      <div class="score-box"><div class="label">Score</div><div class="value" id="menuScore">0</div></div>
+      <div class="score-box"><div class="label">Best</div><div class="value" id="menuBest">0</div></div>
+    </div>
+    <div class="mini-grid-wrap">
+      <div class="mini-grid" id="miniGrid"></div>
+    </div>
+    <div class="menu-buttons">
+      <button class="btn btn-primary" onclick="Game.startOrResumeGame()">▶ Play</button>
+      <button class="btn btn-daily" onclick="Game.startDailyChallenge()">📅 Daily Challenge</button>
+      <button class="btn btn-secondary" onclick="Game.showScreen('scoresScreen')">🏆 High Scores</button>
+      <button class="btn btn-gold" onclick="Game.showScreen('shopScreen')">🛒 Shop</button>
+      <button class="btn btn-secondary" onclick="Game.showScreen('moreGamesScreen')">🎮 More Games</button>
+      <button class="btn btn-secondary" onclick="Game.showScreen('missionsScreen')">🎯 Missions</button>
+      <button class="btn btn-secondary" onclick="Game.showScreen('statsScreen')">📊 Stats</button>
+    </div>
+    <div id="comebackBanner" style="display:none;margin-top:10px;width:100%;max-width:320px;background:rgba(237,194,46,0.1);border:1.5px solid rgba(237,194,46,0.35);border-radius:14px;padding:12px 18px;text-align:center;cursor:pointer" onclick="Game.resumeLastLevel()">
+      <div style="color:#edc22e;font-size:14px;font-weight:700">↩ Resume In-Progress Game</div>
+      <div id="comebackDetail" style="color:rgba(255,255,255,0.5);font-size:12px;margin-top:2px"></div>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="gameScreen" class="screen">
+    <div class="game-header">
+      <div class="score-panel">
+        <div class="score-tile"><div class="stl">Score</div><div class="stv" id="gameScore">0</div></div>
+        <div class="score-tile"><div class="stl">Best</div><div class="stv" id="gameBest">0</div></div>
+      </div>
+      <div class="level-badge">
+        <div class="stl">Best Tile</div>
+        <div class="stv" id="bestTile">2</div>
+      </div>
+    </div>
+    <canvas id="gridCanvas"></canvas>
+    <div class="game-footer">
+      <button class="game-btn" onclick="Game.goToMenu()">← Menu</button>
+      <button class="game-btn undo-btn" id="undoBtn" onclick="Game.doUndo()">↩ Undo</button>
+      <button class="game-btn" onclick="Game.confirmNewGame()">↺ New</button>
+    </div>
+    <div id="tutorialOverlay" style="display:none;position:absolute;bottom:90px;left:0;right:0;justify-content:center;pointer-events:none;z-index:50">
+      <div style="background:rgba(26,26,24,0.96);border:1.5px solid rgba(237,194,46,0.55);border-radius:18px;padding:16px 22px;max-width:280px;text-align:center;pointer-events:all">
+        <div style="color:#edc22e;font-size:15px;font-weight:800;margin-bottom:6px">✨ How to Play</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:13px;line-height:1.4">Swipe or use arrow keys to move all tiles. When two tiles with the same number collide, they merge. Reach 2048!</div>
+        <div style="color:rgba(255,255,255,0.35);font-size:11px;margin-top:10px">Tap anywhere to start</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HIGH SCORES SCREEN -->
+  <div id="scoresScreen" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Game.showScreen('menuScreen')">← Back</button>
+      <h2>High Scores</h2>
+      <div style="width:60px"></div>
+    </div>
+    <div class="scores-content">
+      <div class="achievement-card">
+        <h3>🏆 Best Score</h3>
+        <div class="big-score" id="hsBestScore">0</div>
+        <p>Keep merging to beat your record!</p>
+      </div>
+      <div class="achievement-card" id="tile2048Card" style="display:none">
+        <h3>✨ 2048 Achieved!</h3>
+        <p>You've reached the legendary 2048 tile!</p>
+      </div>
+      <div class="achievement-card">
+        <h3>🎯 Highest Tile</h3>
+        <div class="big-score" id="hsHighTile">2</div>
+      </div>
+      <div class="daily-streak">
+        <h3>🔥 Daily Challenge Streak</h3>
+        <div class="streak-num" id="hsStreak">0</div>
+        <p>days in a row</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHOP SCREEN -->
+  <div id="shopScreen" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Game.showScreen('menuScreen')">← Back</button>
+      <h2>Shop</h2>
+      <div class="coin-display" style="font-size:13px"><span>🪙</span><span id="shopCoins">0</span></div>
+    </div>
+    <div class="shop-grid">
+      <div class="shop-card">
+        <div class="shop-icon">🚫</div>
+        <div class="shop-info">
+          <h3>Remove Ads</h3>
+          <p>Enjoy 2048 ad-free forever</p>
+        </div>
+        <button class="shop-price-btn" id="btnRemoveAds" onclick="Game.purchase('remove_ads')">$1.99</button>
+      </div>
+      <div class="shop-card">
+        <div class="shop-icon">🪙</div>
+        <div class="shop-info">
+          <h3>100 Coins</h3>
+          <p>Small coin pack</p>
+        </div>
+        <button class="shop-price-btn" onclick="Game.purchase('coins_small')">$0.99</button>
+      </div>
+      <div class="shop-card">
+        <div class="shop-icon">💰</div>
+        <div class="shop-info">
+          <h3>500 Coins</h3>
+          <p>Best value coin pack</p>
+        </div>
+        <button class="shop-price-btn" onclick="Game.purchase('coins_large')">$3.99</button>
+      </div>
+      <div class="shop-card">
+        <div class="shop-icon">↩</div>
+        <div class="shop-info">
+          <h3>Undo Pack</h3>
+          <p>10 extra undos to use any time</p>
+        </div>
+        <button class="shop-price-btn" onclick="Game.purchase('undo_pack')">$0.99</button>
+      </div>
+      <div class="shop-card">
+        <div class="shop-icon">❤️</div>
+        <div class="shop-info">
+          <h3>5 Lives</h3>
+          <p>Instantly restore 5 lives</p>
+        </div>
+        <button class="shop-price-btn" onclick="Game.purchase('five_lives')">$0.99</button>
+      </div>
+      <div class="shop-card">
+        <div class="shop-icon">♾️</div>
+        <div class="shop-info">
+          <h3>Unlimited Lives (1h)</h3>
+          <p>Play freely for 1 hour</p>
+        </div>
+        <button class="shop-price-btn" onclick="Game.purchase('unlimited_lives_1h')">$1.49</button>
+      </div>
+      <div class="shop-card">
+        <div class="shop-icon">👑</div>
+        <div class="shop-info">
+          <h3>Unlimited Lives Forever</h3>
+          <p>Never run out of lives again</p>
+        </div>
+        <button class="shop-price-btn" onclick="Game.purchase('unlimited_lives_forever')">$4.99</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MORE GAMES SCREEN -->
+  <div id="moreGamesScreen" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Game.showScreen('menuScreen')">← Back</button>
+      <h2>More Games</h2>
+      <div style="width:60px"></div>
+    </div>
+    <div class="more-games-grid" id="moreGamesGrid">
+      <!-- Promo cards injected by JS -->
+    </div>
+  </div>
+
+  <!-- SETTINGS SCREEN -->
+  <div id="settingsScreen" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Game.showScreen('menuScreen')">← Back</button>
+      <h2>Settings</h2>
+      <div style="width:60px"></div>
+    </div>
+    <div class="settings-list">
+      <div class="setting-row">
+        <span class="setting-label">🔊 Sound Effects</span>
+        <label class="toggle">
+          <input type="checkbox" id="soundToggle" onchange="Game.toggleSound(this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">🎵 Music</span>
+        <label class="toggle">
+          <input type="checkbox" id="musicToggle" onchange="Game.toggleMusic(this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">🔁 Reset All Progress</span>
+        <button class="btn btn-danger" style="width:auto;padding:8px 16px;font-size:13px" onclick="Game.confirmReset()">Reset</button>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">🎨 Tile Theme</span>
+        <button onclick="Game.showScreen('themeScreen')" id="themeBtn" style="background:rgba(237,194,46,0.12);border:1px solid rgba(237,194,46,0.3);border-radius:10px;padding:7px 16px;color:#edc22e;font-size:13px;font-weight:600;cursor:pointer">Classic</button>
+      </div>
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:6px">
+        <span class="setting-label">About</span>
+        <p style="color:rgba(255,255,255,0.4);font-size:12px">2048 Puzzle v1.0<br>© 2024 Pegasus Games</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- THEME SCREEN -->
+  <div id="themeScreen" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Game.showScreen('settingsScreen')">← Back</button>
+      <h2>🎨 Tile Themes</h2>
+      <div style="width:60px"></div>
+    </div>
+    <div id="themesGrid" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px"></div>
+    <div style="padding:0 16px 16px;color:rgba(255,255,255,0.3);font-size:11px;text-align:center">Complete games to unlock new themes!</div>
+  </div>
+
+  <!-- STATS SCREEN -->
+  <div id="statsScreen" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Game.showScreen('menuScreen')">← Back</button>
+      <h2>📊 Stats</h2>
+      <div style="width:60px"></div>
+    </div>
+    <div id="statsList" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+
+  <!-- MISSIONS SCREEN -->
+  <div id="missionsScreen" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Game.showScreen('menuScreen')">← Back</button>
+      <h2>🎯 Missions</h2>
+      <div style="width:60px"></div>
+    </div>
+    <div style="padding:8px 16px 4px;color:rgba(255,255,255,0.4);font-size:11px;text-transform:uppercase;letter-spacing:1px">Daily — resets at midnight</div>
+    <div id="missionsList" style="flex:1;overflow-y:auto;padding:0 16px 16px"></div>
+  </div>
+
+  <!-- WIN OVERLAY -->
+  <div id="winOverlay" class="overlay">
+    <div class="overlay-card">
+      <span class="win-emoji">🎉</span>
+      <h2>You reached 2048!</h2>
+      <div class="sub">Amazing! Keep going for a higher score!</div>
+      <div class="overlay-buttons">
+        <button class="btn btn-primary" onclick="Game.dismissWin()">▶ Keep Playing</button>
+        <button class="btn btn-secondary" onclick="Game.goToMenu()">← Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME OVER OVERLAY -->
+  <div id="gameOverOverlay" class="overlay">
+    <div class="overlay-card">
+      <span class="gameover-emoji">😔</span>
+      <h2>Game Over</h2>
+      <div class="overlay-score" id="finalScore">0</div>
+      <div class="sub" id="gameOverMsg">No more moves! Try again?</div>
+      <div class="overlay-buttons">
+        <button class="btn btn-secondary" id="btnContinueAd" onclick="Game.continueWithAd()" style="display:none">📺 Watch Ad to Continue</button>
+        <button class="btn btn-primary" onclick="Game.startNewGame()">↺ New Game</button>
+        <button class="btn btn-secondary" onclick="Game.goToMenu()">← Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO LIVES OVERLAY -->
+  <div id="noLivesOverlay" class="overlay">
+    <div class="overlay-card">
+      <span class="gameover-emoji">💔</span>
+      <h2>Out of Lives!</h2>
+      <div class="sub" id="lifeTimerMsg">Next life in 30:00</div>
+      <div class="overlay-buttons">
+        <button class="btn btn-secondary" onclick="Game.watchAdForLife()">📺 Watch Ad for 1 Life</button>
+        <button class="btn btn-gold" onclick="Game.purchase('five_lives')">❤️ Buy 5 Lives</button>
+        <button class="btn btn-secondary" onclick="Game.hideNoLives()">← Back</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRM DIALOG -->
+  <div id="confirmOverlay" class="confirm-overlay">
+    <div class="confirm-card">
+      <h3 id="confirmTitle">Are you sure?</h3>
+      <p id="confirmMsg">This action cannot be undone.</p>
+      <div class="confirm-buttons">
+        <button class="btn btn-secondary" onclick="Game.confirmNo()">Cancel</button>
+        <button class="btn btn-danger" onclick="Game.confirmYes()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BANNER AD PLACEHOLDER -->
+  <div id="admob-banner"><span>Advertisement</span></div>
+
+  <!-- TOAST -->
+  <div id="toast"></div>
+</div>
+
+<script>
+// =====================================================================
+// SECURITY: Whitelist validation before all Android bridge calls
+// =====================================================================
+const VALID_PRODUCTS = new Set([
+  'remove_ads','coins_small','coins_large',
+  'undo_pack','five_lives','unlimited_lives_1h','unlimited_lives_forever'
+]);
+const VALID_REWARD_TYPES = new Set(['undo','continue','life']);
+
+function safePurchase(productId) {
+  if (!VALID_PRODUCTS.has(productId)) return;
+  if (window.Android) window.Android.purchase(productId);
+}
+function safeShowRewarded(rewardType) {
+  if (!VALID_REWARD_TYPES.has(rewardType)) return;
+  if (window.Android) {
+    window.Android.showRewarded(rewardType);
+  }
+}
+function safeShowInterstitial() {
+  if (State.removeAds) return;
+  if (window.Android) {
+    window.Android.showInterstitial();
+  }
+}
+
+// =====================================================================
+// WEB AUDIO — Procedural sound effects
+// =====================================================================
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+// =================================================================
+// AMBIENT MUSIC ENGINE
+// =================================================================
+let _mCtx=null,_mGain=null,_mPlaying=false,_mTimer=null,_mNext=0,_mBar=0;
+const _TEMPO=75,_BEAT=60/_TEMPO;
+const _PENTA=[130.81,146.83,164.81,196.00,220.00,261.63,293.66,329.63,392.00,440.00];
+const _PROG=[[0,2,4,7],[2,4,7,9],[0,4,7,9],[0,2,4,9]];
+function _mCtxGet(){
+  if(!_mCtx){_mCtx=new(window.AudioContext||window.webkitAudioContext)();_mGain=_mCtx.createGain();_mGain.gain.value=0.13;_mGain.connect(_mCtx.destination);}
+  return _mCtx;
+}
+function _mNote(freq,t,dur,vol){
+  const ctx=_mCtxGet(),o=ctx.createOscillator(),g=ctx.createGain();
+  o.type='sine';o.frequency.value=freq;
+  o.connect(g);g.connect(_mGain);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+Math.min(0.08,dur*0.2));
+  g.gain.setValueAtTime(vol,t+dur*0.7);
+  g.gain.linearRampToValueAtTime(0,t+dur);
+  o.start(t);o.stop(t+dur+0.05);
+}
+function _mSchedule(){
+  if(!_mPlaying)return;
+  const ctx=_mCtxGet(),now=ctx.currentTime;
+  while(_mNext<now+_BEAT*12){
+    const chord=_PROG[_mBar%_PROG.length];
+    const bar=_mNext;
+    chord.forEach(d=>_mNote(_PENTA[d],bar,_BEAT*4,0.25));
+    for(let i=0;i<8;i++){
+      const d=chord[i%chord.length]+(i>=4?1:0);
+      if(d<_PENTA.length)_mNote(_PENTA[d],bar+i*_BEAT*0.5,_BEAT*0.38,0.12);
+    }
+    _mNext+=_BEAT*4;_mBar++;
+  }
+  _mTimer=setTimeout(_mSchedule,_BEAT*2*1000);
+}
+function startMusic(){
+  if(_mPlaying)return;_mPlaying=true;
+  const ctx=_mCtxGet();
+  if(ctx.state==='suspended')ctx.resume();
+  _mNext=ctx.currentTime+0.1;_mSchedule();
+}
+function stopMusic(){
+  _mPlaying=false;
+  if(_mTimer){clearTimeout(_mTimer);_mTimer=null;}
+  if(_mGain)_mGain.gain.setTargetAtTime(0,_mCtxGet().currentTime,0.3);
+  setTimeout(()=>{if(!_mPlaying&&_mGain)_mGain.gain.value=0.13;},1500);
+}
+
+function playMergeSound(value) {
+  if (!State.soundEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    // Higher pitched thunk for higher values
+    const freq = 180 + Math.log2(value) * 40;
+    o.frequency.setValueAtTime(freq, ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(freq * 0.6, ctx.currentTime + 0.12);
+    o.type = 'triangle';
+    g.gain.setValueAtTime(0.18, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+    o.start(ctx.currentTime);
+    o.stop(ctx.currentTime + 0.18);
+  } catch(e) {}
+}
+
+function playSpawnSound() {
+  if (!State.soundEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sine';
+    o.frequency.setValueAtTime(600, ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.06);
+    g.gain.setValueAtTime(0.07, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+    o.start(ctx.currentTime);
+    o.stop(ctx.currentTime + 0.08);
+  } catch(e) {}
+}
+
+function playGameOverSound() {
+  if (!State.soundEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    [220, 196, 165].forEach((f, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(f, ctx.currentTime + i * 0.12);
+      g.gain.setValueAtTime(0.14, ctx.currentTime + i * 0.12);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.2);
+      o.start(ctx.currentTime + i * 0.12);
+      o.stop(ctx.currentTime + i * 0.12 + 0.2);
+    });
+  } catch(e) {}
+}
+
+function playWinSound() {
+  if (!State.soundEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    [523, 659, 784, 1047].forEach((f, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(f, ctx.currentTime + i * 0.1);
+      g.gain.setValueAtTime(0.12, ctx.currentTime + i * 0.1);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.25);
+      o.start(ctx.currentTime + i * 0.1);
+      o.stop(ctx.currentTime + i * 0.1 + 0.25);
+    });
+  } catch(e) {}
+}
+
+// =====================================================================
+// STATE
+// =====================================================================
+const SAVE_KEY = 'puzzle2048_save';
+const LIFE_REGEN_MS = 30 * 60 * 1000; // 30 minutes
+const MAX_LIVES = 5;
+
+function defaultState() {
+  return {
+    score: 0,
+    bestScore: 0,
+    grid: null,
+    highestTile: 0,
+    achieved2048: false,
+    coins: 0,
+    lives: MAX_LIVES,
+    maxLives: MAX_LIVES,
+    lastLifeTime: Date.now(),
+    removeAds: false,
+    unlimitedLivesPermanent: false,
+    unlimitedLivesExpiry: 0,
+    undoPack: 0,
+    dailyChallengeDate: '',
+    dailyChallengeStreak: 0,
+    dailyChallengeBest: 0,
+    soundEnabled: true,
+    musicEnabled: false,
+    isDailyChallenge: false,
+    activeTheme: 'default',
+    lastLevelProgress: null,
+  };
+}
+
+let State = defaultState();
+
+function saveState() {
+  try {
+    const json = JSON.stringify(State);
+    localStorage.setItem(SAVE_KEY, json);
+  } catch(e) {}
+}
+function loadState() {
+  try {
+    const s = localStorage.getItem(SAVE_KEY);
+    if (s) {
+      const loaded = JSON.parse(s);
+      State = Object.assign(defaultState(), loaded);
+    }
+  } catch(e) {}
+}
+
+// =====================================================================
+// LIVES SYSTEM
+// =====================================================================
+function hasUnlimitedLives() {
+  return State.unlimitedLivesPermanent ||
+    (State.unlimitedLivesExpiry && Date.now() < State.unlimitedLivesExpiry);
+}
+
+function regenLives() {
+  if (hasUnlimitedLives()) {
+    State.lives = State.maxLives;
+    return;
+  }
+  if (State.lives < State.maxLives) {
+    const elapsed = Date.now() - State.lastLifeTime;
+    const regen = Math.floor(elapsed / LIFE_REGEN_MS);
+    if (regen > 0) {
+      State.lives = Math.min(State.maxLives, State.lives + regen);
+      State.lastLifeTime += regen * LIFE_REGEN_MS;
+      saveState();
+    }
+  }
+}
+
+function getLifeTimer() {
+  if (State.lives >= State.maxLives || hasUnlimitedLives()) return '';
+  const elapsed = Date.now() - State.lastLifeTime;
+  const remaining = LIFE_REGEN_MS - (elapsed % LIFE_REGEN_MS);
+  const m = Math.floor(remaining / 60000);
+  const s = Math.floor((remaining % 60000) / 1000);
+  return `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+// =====================================================================
+// 2048 GRID LOGIC
+// =====================================================================
+const GRID_SIZE = 4;
+
+function emptyGrid() {
+  return Array.from({length: GRID_SIZE}, () => new Array(GRID_SIZE).fill(0));
+}
+
+function randomEmpty(grid) {
+  const cells = [];
+  for (let r = 0; r < GRID_SIZE; r++)
+    for (let c = 0; c < GRID_SIZE; c++)
+      if (grid[r][c] === 0) cells.push([r,c]);
+  if (cells.length === 0) return null;
+  return cells[Math.floor(Math.random() * cells.length)];
+}
+
+function spawnTile(grid) {
+  const cell = randomEmpty(grid);
+  if (!cell) return false;
+  grid[cell[0]][cell[1]] = Math.random() < 0.9 ? 2 : 4;
+  return cell;
+}
+
+function copyGrid(grid) {
+  return grid.map(row => [...row]);
+}
+
+function gridsEqual(a, b) {
+  for (let r = 0; r < GRID_SIZE; r++)
+    for (let c = 0; c < GRID_SIZE; c++)
+      if (a[r][c] !== b[r][c]) return false;
+  return true;
+}
+
+// Slide & merge a single row left; returns {row, score, mergedCols}
+function slideRowLeft(row) {
+  let score = 0;
+  const mergedCols = [];
+  // Compact
+  let tiles = row.filter(v => v !== 0);
+  // Merge
+  for (let i = 0; i < tiles.length - 1; i++) {
+    if (tiles[i] === tiles[i+1]) {
+      tiles[i] *= 2;
+      score += tiles[i];
+      mergedCols.push(i);
+      tiles.splice(i+1, 1);
+    }
+  }
+  // Pad
+  while (tiles.length < GRID_SIZE) tiles.push(0);
+  return { row: tiles, score, mergedCols };
+}
+
+// Returns {grid, score, moved, mergedCells, spawnedCell}
+function move(grid, dir) {
+  let totalScore = 0;
+  let moved = false;
+  const mergedCells = [];
+  let newGrid = copyGrid(grid);
+
+  // Rotate grid so we always slide left
+  function rotateLeft(g) {
+    const n = GRID_SIZE;
+    const r = emptyGrid();
+    for (let row = 0; row < n; row++)
+      for (let col = 0; col < n; col++)
+        r[n-1-col][row] = g[row][col];
+    return r;
+  }
+  function rotateRight(g) {
+    const n = GRID_SIZE;
+    const r = emptyGrid();
+    for (let row = 0; row < n; row++)
+      for (let col = 0; col < n; col++)
+        r[col][n-1-row] = g[row][col];
+    return r;
+  }
+
+  let rotations = 0;
+  if (dir === 'right')  { newGrid = rotateLeft(rotateLeft(newGrid)); rotations = 2; }
+  else if (dir === 'up')    { newGrid = rotateRight(newGrid); rotations = 3; }
+  else if (dir === 'down')  { newGrid = rotateLeft(newGrid); rotations = 1; }
+
+  for (let r = 0; r < GRID_SIZE; r++) {
+    const result = slideRowLeft(newGrid[r]);
+    if (JSON.stringify(result.row) !== JSON.stringify(newGrid[r])) moved = true;
+    result.mergedCols.forEach(c => mergedCells.push([r, c]));
+    totalScore += result.score;
+    newGrid[r] = result.row;
+  }
+
+  // Rotate back
+  for (let i = 0; i < (4 - rotations) % 4; i++) newGrid = rotateLeft(newGrid);
+
+  // Convert mergedCells back from rotated coordinates
+  // (simplified: just record positions post-rotation-back)
+  // Re-derive merged positions from diff
+  const finalMerged = [];
+  for (let r = 0; r < GRID_SIZE; r++)
+    for (let c = 0; c < GRID_SIZE; c++)
+      if (newGrid[r][c] !== 0 && newGrid[r][c] !== grid[r][c] && newGrid[r][c] > (grid[r][c] || 0))
+        finalMerged.push([r, c]);
+
+  let spawnedCell = null;
+  if (moved) {
+    spawnedCell = spawnTile(newGrid);
+  }
+
+  return { grid: newGrid, score: totalScore, moved, mergedCells: finalMerged, spawnedCell };
+}
+
+function hasValidMoves(grid) {
+  // Any empty cell?
+  for (let r = 0; r < GRID_SIZE; r++)
+    for (let c = 0; c < GRID_SIZE; c++)
+      if (grid[r][c] === 0) return true;
+  // Any adjacent merge?
+  for (let r = 0; r < GRID_SIZE; r++)
+    for (let c = 0; c < GRID_SIZE; c++) {
+      if (c < GRID_SIZE-1 && grid[r][c] === grid[r][c+1]) return true;
+      if (r < GRID_SIZE-1 && grid[r][c] === grid[r+1][c]) return true;
+    }
+  return false;
+}
+
+function getMaxTile(grid) {
+  let max = 0;
+  for (let r = 0; r < GRID_SIZE; r++)
+    for (let c = 0; c < GRID_SIZE; c++)
+      if (grid[r][c] > max) max = grid[r][c];
+  return max;
+}
+
+// Daily challenge: seed from date string
+function dateSeededRand(seed) {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (Math.imul(31, h) + seed.charCodeAt(i)) | 0;
+  return function() {
+    h ^= h << 13; h ^= h >> 17; h ^= h << 5;
+    return (h >>> 0) / 0xFFFFFFFF;
+  };
+}
+
+function makeDailyGrid(dateStr) {
+  const rng = dateSeededRand(dateStr);
+  const grid = emptyGrid();
+  // Place 4 tiles to create an interesting starting position
+  const cells = [];
+  for (let r = 0; r < GRID_SIZE; r++)
+    for (let c = 0; c < GRID_SIZE; c++)
+      cells.push([r,c]);
+  // shuffle
+  for (let i = cells.length-1; i > 0; i--) {
+    const j = Math.floor(rng() * (i+1));
+    [cells[i], cells[j]] = [cells[j], cells[i]];
+  }
+  const vals = [2,2,4,4];
+  for (let i = 0; i < 4; i++) grid[cells[i][0]][cells[i][1]] = vals[i];
+  return grid;
+}
+
+// =====================================================================
+// CANVAS RENDERER
+// =====================================================================
+const TILE_COLORS = {
+  0:    { bg: '#3c3b37', text: '#776e65' },
+  2:    { bg: '#eee4da', text: '#776e65' },
+  4:    { bg: '#ede0c8', text: '#776e65' },
+  8:    { bg: '#f2b179', text: '#f9f6f2' },
+  16:   { bg: '#f59563', text: '#f9f6f2' },
+  32:   { bg: '#f67c5f', text: '#f9f6f2' },
+  64:   { bg: '#f65e3b', text: '#f9f6f2' },
+  128:  { bg: '#edcf72', text: '#f9f6f2' },
+  256:  { bg: '#edcc61', text: '#f9f6f2' },
+  512:  { bg: '#edc850', text: '#f9f6f2' },
+  1024: { bg: '#edc53f', text: '#f9f6f2' },
+  2048: { bg: '#edc22e', text: '#f9f6f2' },
+};
+
+function getTileColor(value) {
+  if (TILE_COLORS[value]) return TILE_COLORS[value];
+  return { bg: '#3c3a32', text: '#f9f6f2' };
+}
+
+let canvas, ctx;
+let canvasW = 0, canvasH = 0;
+let gridPad = 0, cellSize = 0, cellGap = 0, gridRadius = 0;
+
+// Animation state
+let animTiles = []; // [{r,c,value,scale,opacity,isMerge,isNew}]
+let animFrame = 0;
+let animating = false;
+
+function setupCanvas() {
+  canvas = document.getElementById('gridCanvas');
+  ctx = canvas.getContext('2d');
+  resizeCanvas();
+}
+
+function resizeCanvas() {
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  canvasW = rect.width || window.innerWidth;
+  canvasH = rect.height || (window.innerHeight - 120);
+
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvasW * dpr;
+  canvas.height = canvasH * dpr;
+  ctx.scale(dpr, dpr);
+
+  // Compute grid layout
+  const gridSize = Math.min(canvasW, canvasH) * 0.92;
+  cellGap = Math.round(gridSize * 0.03);
+  cellSize = Math.round((gridSize - cellGap * (GRID_SIZE + 1)) / GRID_SIZE);
+  gridPad = cellGap;
+  gridRadius = Math.round(cellSize * 0.12);
+
+  drawGrid();
+}
+
+function getCellXY(r, c) {
+  const gridW = GRID_SIZE * cellSize + (GRID_SIZE + 1) * cellGap;
+  const gridH = gridW;
+  const ox = (canvasW - gridW) / 2;
+  const oy = (canvasH - gridH) / 2;
+  const x = ox + gridPad + c * (cellSize + cellGap);
+  const y = oy + gridPad + r * (cellSize + cellGap);
+  return { x, y, ox, oy, gridW, gridH };
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function drawGrid(mergedCells, spawnedCell, animProgress) {
+  if (!ctx || !State.grid) return;
+  const ap = animProgress !== undefined ? animProgress : 1;
+  ctx.clearRect(0, 0, canvasW, canvasH);
+
+  const {ox, oy, gridW, gridH} = getCellXY(0, 0);
+
+  // Draw grid background
+  ctx.fillStyle = '#2c2b27';
+  roundRect(ctx, ox - gridPad, oy - gridPad, gridW, gridH, gridRadius * 1.5);
+  ctx.fill();
+
+  // Draw cells
+  for (let r = 0; r < GRID_SIZE; r++) {
+    for (let c = 0; c < GRID_SIZE; c++) {
+      const {x, y} = getCellXY(r, c);
+      const val = State.grid[r][c];
+      const colors = getTileColor(0);
+
+      // Empty cell background
+      ctx.fillStyle = colors.bg;
+      roundRect(ctx, x, y, cellSize, cellSize, gridRadius);
+      ctx.fill();
+
+      if (val === 0) continue;
+
+      const tileColors = getTileColor(val);
+
+      // Animation scale
+      let scale = 1;
+      const isMerge = mergedCells && mergedCells.some(([mr,mc]) => mr===r && mc===c);
+      const isNew = spawnedCell && spawnedCell[0]===r && spawnedCell[1]===c;
+
+      if (isNew) {
+        scale = ap < 0.6 ? ap/0.6 * 1.0 : 1 + (1 - ap) * 0.1;
+        scale = Math.min(scale, 1.12);
+      } else if (isMerge) {
+        scale = 1 + Math.sin(ap * Math.PI) * 0.18;
+      }
+
+      // Draw tile with scale
+      const cx = x + cellSize / 2;
+      const cy = y + cellSize / 2;
+      const ts = cellSize * scale;
+
+      // Special glow for large tiles
+      if (val > 2048) {
+        ctx.shadowColor = '#edc22e';
+        ctx.shadowBlur = 12 * scale;
+      }
+
+      ctx.fillStyle = tileColors.bg;
+      roundRect(ctx, cx - ts/2, cy - ts/2, ts, ts, gridRadius * scale);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Tile text
+      ctx.fillStyle = tileColors.text;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      let fontSize;
+      if (val < 100) fontSize = cellSize * 0.45;
+      else if (val < 1000) fontSize = cellSize * 0.36;
+      else if (val < 10000) fontSize = cellSize * 0.28;
+      else fontSize = cellSize * 0.22;
+      fontSize *= scale;
+
+      ctx.font = `800 ${Math.round(fontSize)}px Poppins, Arial, sans-serif`;
+      ctx.fillText(String(val), cx, cy + 1);
+    }
+  }
+}
+
+// =====================================================================
+// MINI GRID (Menu preview)
+// =====================================================================
+function renderMiniGrid() {
+  const container = document.getElementById('miniGrid');
+  if (!container) return;
+  container.innerHTML = '';
+  if (!State.grid) {
+    // Show placeholder
+    for (let i = 0; i < 16; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'mini-cell';
+      cell.style.background = '#3c3b37';
+      container.appendChild(cell);
+    }
+    return;
+  }
+  for (let r = 0; r < GRID_SIZE; r++) {
+    for (let c = 0; c < GRID_SIZE; c++) {
+      const val = State.grid[r][c];
+      const cell = document.createElement('div');
+      cell.className = 'mini-cell';
+      const colors = getTileColor(val);
+      cell.style.background = colors.bg;
+      if (val > 0) {
+        cell.textContent = val >= 1000 ? (val >= 2048 ? '2k+' : val) : val;
+        cell.style.color = colors.text;
+      }
+      container.appendChild(cell);
+    }
+  }
+}
+
+// =====================================================================
+// GAME LOGIC
+// =====================================================================
+let undoGrid = null;
+let undoScore = 0;
+let usedUndo = false;
+let wonThis = false;
+let isDailyMode = false;
+
+// =====================================================================
+// MORE GAMES / CROSS-PROMOTION
+// =====================================================================
+const PROMO_GAMES = [
+  {
+    id: 'ballsort',
+    pkg: 'com.pegasusgames.ballsort',
+    icon: '🎱',
+    title: 'Ball Sort Puzzle',
+    desc: 'Sort colorful balls into tubes!',
+  },
+  {
+    id: 'watersort',
+    pkg: 'com.pegasusgames.watersort',
+    icon: '💧',
+    title: 'Water Sort',
+    desc: 'Pour colored water into flasks!',
+  },
+  {
+    id: 'nonogram',
+    pkg: 'com.pegasusgames.nonogram',
+    icon: '🖼️',
+    title: 'Nonogram',
+    desc: 'Solve pixel art grid puzzles!',
+  },
+  {
+    id: 'pipeconnect',
+    pkg: 'com.pegasusgames.pipeconnect',
+    icon: '🔧',
+    title: 'Pipe Connect',
+    desc: 'Connect matching colored pipes!',
+  },
+  {
+    id: 'unblock',
+    pkg: 'com.pegasusgames.unblock',
+    icon: '🧩',
+    title: 'Unblock Puzzle',
+    desc: 'Slide blocks to free the red piece!',
+  },
+];
+
+function promoKey(id) { return 'promo_claimed_' + id; }
+function isPromoClaimed(id) { return !!localStorage.getItem(promoKey(id)); }
+
+function renderMoreGames() {
+  const grid = document.getElementById('moreGamesGrid');
+  grid.innerHTML = '';
+  PROMO_GAMES.forEach(g => {
+    const claimed = isPromoClaimed(g.id);
+    const card = document.createElement('div');
+    card.className = 'promo-card';
+    card.innerHTML = `
+      <div class="promo-icon">${g.icon}</div>
+      <div class="promo-info">
+        <h3>${g.icon} ${g.title}</h3>
+        <p>${g.desc}</p>
+      </div>
+      <button class="promo-btn${claimed ? ' claimed' : ''}" id="promo-btn-${g.id}"
+        onclick="claimPromo('${g.id}','${g.pkg}')">
+        ${claimed ? '✅ Claimed' : 'Download\n& Get 50 🪙'}
+      </button>`;
+    grid.appendChild(card);
+  });
+}
+
+function claimPromo(id, pkg) {
+  const alreadyClaimed = isPromoClaimed(id);
+  if (!alreadyClaimed) {
+    localStorage.setItem(promoKey(id), '1');
+    State.coins += 50;
+    saveState();
+    showToast('+50 🪙 Coins! Thanks for trying our game!');
+    // Update button immediately
+    const btn = document.getElementById('promo-btn-' + id);
+    if (btn) {
+      btn.textContent = '✅ Claimed';
+      btn.classList.add('claimed');
+    }
+  }
+  const url = 'https://play.google.com/store/apps/details?id=' + pkg;
+  if (window.Android && typeof window.Android.openUrl === 'function') {
+    window.Android.openUrl(url);
+  } else {
+    window.open(url, '_blank');
+  }
+}
+
+const Game = {
+
+  init() {
+    loadState();
+    regenLives();
+    this.updateUI();
+    this.setupTouch();
+    this.setupKeyboard();
+    setupCanvas();
+    renderMiniGrid();
+
+    // Apply settings
+    document.getElementById('soundToggle').checked = State.soundEnabled;
+    document.getElementById('musicToggle').checked = State.musicEnabled;
+    if (State.musicEnabled) startMusic();
+
+    // Life timer updater
+    setInterval(() => {
+      regenLives();
+      this.updateUI();
+    }, 5000);
+  },
+
+  updateUI() {
+    // Menu
+    document.getElementById('menuCoins').textContent = State.coins;
+    document.getElementById('menuLives').textContent = hasUnlimitedLives() ? '∞' : State.lives;
+    document.getElementById('menuScore').textContent = State.score;
+    document.getElementById('menuBest').textContent = State.bestScore;
+    document.getElementById('shopCoins').textContent = State.coins;
+
+    // Game header
+    if (State.grid) {
+      const max = getMaxTile(State.grid);
+      document.getElementById('gameScore').textContent = State.score;
+      document.getElementById('gameBest').textContent = State.bestScore;
+      document.getElementById('bestTile').textContent = max || 2;
+    }
+
+    // Shop remove ads
+    if (State.removeAds) {
+      document.getElementById('btnRemoveAds').textContent = '✓ Owned';
+      document.getElementById('btnRemoveAds').classList.add('owned');
+    }
+
+    // High scores
+    document.getElementById('hsBestScore').textContent = State.bestScore;
+    document.getElementById('hsHighTile').textContent = State.highestTile || 2;
+    document.getElementById('hsStreak').textContent = State.dailyChallengeStreak || 0;
+    if (State.achieved2048) document.getElementById('tile2048Card').style.display = 'block';
+
+    // Undo button
+    const undoBtn = document.getElementById('undoBtn');
+    if (usedUndo && !State.undoPack) {
+      undoBtn.style.opacity = '0.4';
+    } else {
+      undoBtn.style.opacity = '1';
+    }
+  },
+
+  showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (id === 'menuScreen') {
+      renderMiniGrid();
+      this.updateUI();
+      const cb = document.getElementById('comebackBanner');
+      if(cb){ if(State.lastLevelProgress&&State.grid&&hasValidMoves(State.grid)){ document.getElementById('comebackDetail').textContent='Score: '+State.score+' — keep merging!'; cb.style.display='block'; } else cb.style.display='none'; }
+    }
+    if (id === 'scoresScreen') this.updateUI();
+    if (id === 'shopScreen') this.updateUI();
+    if (id === 'moreGamesScreen') renderMoreGames();
+    if (id === 'themeScreen') window.renderThemes && window.renderThemes();
+    if (id === 'statsScreen') window.renderStats2048 && window.renderStats2048();
+    if (id === 'missionsScreen') window.renderMissions && window.renderMissions();
+    if (id === 'gameScreen') {
+      setTimeout(() => resizeCanvas(), 0);
+    }
+  },
+
+  startOrResumeGame() {
+    regenLives();
+    if (!hasUnlimitedLives() && State.lives <= 0) {
+      this.showNoLives();
+      return;
+    }
+    if (State.grid && hasValidMoves(State.grid)) {
+      // Resume existing game
+      this.showScreen('gameScreen');
+drawGrid();
+    } else {
+      this.startNewGame();
+    }
+  },
+
+  startNewGame() {
+    regenLives();
+    if (!hasUnlimitedLives() && State.lives <= 0) {
+      this.showNoLives();
+      return;
+    }
+    isDailyMode = false;
+    wonThis = false;
+    usedUndo = false;
+    undoGrid = null;
+    State.score = 0;
+    State.grid = emptyGrid();
+    spawnTile(State.grid);
+    spawnTile(State.grid);
+    State.isDailyChallenge = false;
+    saveState();
+    this.showScreen('gameScreen');
+this.hideOverlays();
+    this.updateUI();
+    drawGrid();
+    renderMiniGrid();
+  },
+
+  startDailyChallenge() {
+    regenLives();
+    if (!hasUnlimitedLives() && State.lives <= 0) {
+      this.showNoLives();
+      return;
+    }
+    const today = new Date().toISOString().slice(0,10);
+    isDailyMode = true;
+    wonThis = false;
+    usedUndo = false;
+    undoGrid = null;
+    State.score = 0;
+    State.grid = makeDailyGrid(today);
+    State.isDailyChallenge = true;
+    saveState();
+    this.showScreen('gameScreen');
+this.hideOverlays();
+    this.updateUI();
+    drawGrid();
+    showToast('Daily Challenge started!');
+  },
+
+  doMove(dir) {
+    if (!State.grid || animating) return;
+    const prevGrid = copyGrid(State.grid);
+    const result = move(State.grid, dir);
+    if (!result.moved) return;
+
+    // Save undo state before move
+    undoGrid = prevGrid;
+    undoScore = State.score;
+
+    State.grid = result.grid;
+    State.score += result.score;
+    if (State.score > State.bestScore) State.bestScore = State.score;
+
+    const max = getMaxTile(State.grid);
+    if (max > (State.highestTile || 0)) State.highestTile = max;
+    if (max >= 2048 && !State.achieved2048) {
+      State.achieved2048 = true;
+    }
+
+    saveState();
+    this.updateUI();
+
+    // Animate then check game state
+    if (result.mergedCells.length > 0) {
+      result.mergedCells.forEach(([r,c]) => playMergeSound(State.grid[r][c]));
+    }
+    if (result.spawnedCell) playSpawnSound();
+
+    // Animate
+    animating = true;
+    let start = null;
+    const duration = 120;
+    const animate = (ts) => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / duration, 1);
+      drawGrid(result.mergedCells, result.spawnedCell, p);
+      if (p < 1) { requestAnimationFrame(animate); }
+      else {
+        animating = false;
+        drawGrid();
+        // Check 2048 win
+        if (max >= 2048 && !wonThis && State.achieved2048) {
+          wonThis = true;
+          setTimeout(() => {
+            playWinSound();
+            document.getElementById('winOverlay').classList.add('active');
+          }, 200);
+        }
+        // Check game over
+        if (!hasValidMoves(State.grid)) {
+          setTimeout(() => this.triggerGameOver(), 300);
+        }
+      }
+    };
+    requestAnimationFrame(animate);
+  },
+
+  doUndo() {
+    if (!undoGrid) { showToast('Nothing to undo!'); return; }
+    if (usedUndo && !State.undoPack) {
+      // Offer rewarded ad
+      safeShowRewarded('undo');
+      showToast('Watch an ad to use another undo!');
+      return;
+    }
+    if (State.undoPack > 0) {
+      State.undoPack--;
+    }
+    usedUndo = true;
+    State.grid = copyGrid(undoGrid);
+    State.score = undoScore;
+    undoGrid = null;
+    saveState();
+    this.updateUI();
+    drawGrid();
+    showToast('Undone!');
+  },
+
+  triggerGameOver() {
+    if (!hasUnlimitedLives()) {
+      State.lives = Math.max(0, State.lives - 1);
+      if (State.lives === 0) State.lastLifeTime = Date.now();
+      saveState();
+    }
+    playGameOverSound();
+
+    if (!State.removeAds) safeShowInterstitial();
+
+    document.getElementById('finalScore').textContent = State.score;
+    document.getElementById('gameOverMsg').textContent =
+      State.score > 0 ? `Score: ${State.score} — No more moves!` : 'No more moves!';
+
+    // Daily challenge streak update
+    if (isDailyMode) {
+      const today = new Date().toISOString().slice(0,10);
+      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+      if (State.dailyChallengeDate === yesterday) {
+        State.dailyChallengeStreak = (State.dailyChallengeStreak || 0) + 1;
+      } else if (State.dailyChallengeDate !== today) {
+        State.dailyChallengeStreak = 1;
+      }
+      State.dailyChallengeDate = today;
+      if (State.score > (State.dailyChallengeBest || 0)) {
+        State.dailyChallengeBest = State.score;
+        State.coins += 20;
+        showToast('+20 coins for daily challenge!');
+      }
+      saveState();
+    }
+
+    document.getElementById('btnContinueAd').style.display = 'block';
+    document.getElementById('gameOverOverlay').classList.add('active');
+    this.updateUI();
+  },
+
+  continueWithAd() {
+    document.getElementById('btnContinueAd').style.display = 'none';
+    safeShowRewarded('continue');
+  },
+
+  dismissWin() {
+    document.getElementById('winOverlay').classList.remove('active');
+  },
+
+  hideOverlays() {
+    document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
+  },
+
+  goToMenu() {
+    this.hideOverlays();
+    if(State.grid && hasValidMoves(State.grid) && !isDailyMode){ State.lastLevelProgress = {score: State.score}; }
+    saveState();
+    this.showScreen('menuScreen');
+  },
+
+  resumeLastLevel() {
+    State.lastLevelProgress = null; saveState();
+    this.startOrResumeGame();
+  },
+
+  confirmNewGame() {
+    this._pendingConfirm = 'newgame';
+    document.getElementById('confirmTitle').textContent = 'New Game?';
+    document.getElementById('confirmMsg').textContent = 'Your current game will be lost.';
+    document.getElementById('confirmOverlay').classList.add('active');
+  },
+
+  confirmReset() {
+    this._pendingConfirm = 'reset';
+    document.getElementById('confirmTitle').textContent = 'Reset Everything?';
+    document.getElementById('confirmMsg').textContent = 'All progress, scores and coins will be deleted.';
+    document.getElementById('confirmOverlay').classList.add('active');
+  },
+
+  confirmYes() {
+    document.getElementById('confirmOverlay').classList.remove('active');
+    if (this._pendingConfirm === 'newgame') this.startNewGame();
+    else if (this._pendingConfirm === 'reset') {
+      State = defaultState();
+      saveState();
+      this.updateUI();
+      showToast('Progress reset!');
+    }
+    this._pendingConfirm = null;
+  },
+
+  confirmNo() {
+    document.getElementById('confirmOverlay').classList.remove('active');
+    this._pendingConfirm = null;
+  },
+
+  showNoLives() {
+    const timer = getLifeTimer();
+    document.getElementById('lifeTimerMsg').textContent =
+      timer ? `Next life in ${timer}` : 'Lives are recharging...';
+    document.getElementById('noLivesOverlay').classList.add('active');
+  },
+
+  hideNoLives() {
+    document.getElementById('noLivesOverlay').classList.remove('active');
+  },
+
+  watchAdForLife() {
+    safeShowRewarded('life');
+  },
+
+  toggleSound(on) {
+    State.soundEnabled = on;
+    saveState();
+  },
+
+  toggleMusic(on) {
+    State.musicEnabled = on;
+    saveState();
+    if (on) startMusic(); else stopMusic();
+  },
+
+  purchase(productId) {
+    if (!VALID_PRODUCTS.has(productId)) return;
+    safePurchase(productId);
+  },
+
+  setupTouch() {
+    let startX = 0, startY = 0, moved = false;
+    const SWIPE_MIN = 30;
+
+    canvas = document.getElementById('gridCanvas');
+
+    canvas.addEventListener('touchstart', e => {
+      e.preventDefault();
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      moved = false;
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', e => {
+      e.preventDefault();
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', e => {
+      e.preventDefault();
+      if (moved) return;
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) < SWIPE_MIN && Math.abs(dy) < SWIPE_MIN) return;
+      moved = true;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        this.doMove(dx > 0 ? 'right' : 'left');
+      } else {
+        this.doMove(dy > 0 ? 'down' : 'up');
+      }
+    }, { passive: false });
+
+    // Mouse drag support (desktop/web)
+    let mouseDown = false;
+    canvas.addEventListener('mousedown', e => {
+      startX = e.clientX; startY = e.clientY; moved = false; mouseDown = true;
+    });
+    canvas.addEventListener('mouseup', e => {
+      if (!mouseDown) return;
+      mouseDown = false;
+      if (moved) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (Math.abs(dx) < SWIPE_MIN && Math.abs(dy) < SWIPE_MIN) return;
+      moved = true;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        this.doMove(dx > 0 ? 'right' : 'left');
+      } else {
+        this.doMove(dy > 0 ? 'down' : 'up');
+      }
+    });
+    canvas.addEventListener('mouseleave', () => { mouseDown = false; });
+  },
+
+  setupKeyboard() {
+    document.addEventListener('keydown', e => {
+      const screen = document.getElementById('gameScreen');
+      if (!screen.classList.contains('active')) return;
+      const map = {
+        ArrowLeft: 'left', ArrowRight: 'right',
+        ArrowUp: 'up', ArrowDown: 'down'
+      };
+      if (map[e.key]) {
+        e.preventDefault();
+        this.doMove(map[e.key]);
+      }
+    });
+  },
+};
+
+// =====================================================================
+// ANDROID BRIDGE CALLBACKS
+// =====================================================================
+window.onAdMobLoaded = function() {
+  if (State.removeAds) {
+    if (window.Android) window.Android.hideBannerAd();
+    document.getElementById('admob-banner').style.display = 'none';
+  }
+};
+
+window.onPurchaseComplete = function(productId) {
+  if (!VALID_PRODUCTS.has(productId)) return;
+  switch(productId) {
+    case 'remove_ads':
+      State.removeAds = true;
+      if (window.Android) window.Android.hideBannerAd();
+      document.getElementById('admob-banner').style.display = 'none';
+      showToast('Ads removed! Thank you!');
+      break;
+    case 'coins_small':
+      State.coins += 100;
+      showToast('+100 Coins!');
+      break;
+    case 'coins_large':
+      State.coins += 500;
+      showToast('+500 Coins!');
+      break;
+    case 'undo_pack':
+      State.undoPack = (State.undoPack || 0) + 10;
+      showToast('+10 Undos!');
+      break;
+    case 'five_lives':
+      State.lives = Math.min(State.maxLives, State.lives + 5);
+      showToast('+5 Lives!');
+      break;
+    case 'unlimited_lives_1h':
+      State.unlimitedLivesExpiry = Date.now() + 3600000;
+      showToast('Unlimited lives for 1 hour!');
+      break;
+    case 'unlimited_lives_forever':
+      State.unlimitedLivesPermanent = true;
+      showToast('Unlimited lives forever!');
+      break;
+  }
+  saveState();
+  Game.updateUI();
+};
+
+window.onAdReward = function(rewardType) {
+  if (!VALID_REWARD_TYPES.has(rewardType)) return;
+  switch(rewardType) {
+    case 'undo':
+      usedUndo = false;
+      Game.doUndo();
+      break;
+    case 'continue':
+      // Restore to last state before game over
+      if (undoGrid) {
+        State.grid = copyGrid(undoGrid);
+        State.score = undoScore;
+        undoGrid = null;
+        Game.hideOverlays();
+        drawGrid();
+        Game.updateUI();
+        showToast('Game continued!');
+      } else {
+        showToast('No previous state to restore!');
+      }
+      break;
+    case 'life':
+      State.lives = Math.min(State.maxLives, State.lives + 1);
+      saveState();
+      Game.hideNoLives();
+      Game.updateUI();
+      showToast('+1 Life!');
+      break;
+  }
+  saveState();
+};
+
+window.onAdNotReady = function() {
+  // Ad not loaded yet — no action needed
+};
+
+window.onBackPressed = function() {
+  const gameScreen = document.getElementById('gameScreen');
+  const overlays = document.querySelectorAll('.overlay.active, .confirm-overlay.active');
+  if (overlays.length > 0) {
+    overlays.forEach(o => o.classList.remove('active'));
+    return true;
+  }
+  if (gameScreen.classList.contains('active')) {
+    Game.goToMenu();
+    return true;
+  }
+  const nonMenu = document.querySelector('.screen.active:not(#menuScreen)');
+  if (nonMenu) {
+    Game.showScreen('menuScreen');
+    return true;
+  }
+  return false;
+};
+
+// =====================================================================
+// TOAST
+// =====================================================================
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// =====================================================================
+// RESIZE
+// =====================================================================
+window.addEventListener('resize', () => {
+  setTimeout(() => {
+    resizeCanvas();
+    drawGrid();
+  }, 100);
+});
+
+
+// =====================================================================
+// BOOT
+// =====================================================================
+window.addEventListener('DOMContentLoaded', () => {
+  Game.init();
+});
+</script>
+<style>
+/* ===== DAILY LOGIN STREAK ===== */
+@keyframes ls-fire { 0%,100%{transform:scale(1) rotate(-4deg)} 50%{transform:scale(1.18) rotate(4deg)} }
+@keyframes ls-card-in { from{transform:scale(0.85) translateY(30px);opacity:0} to{transform:none;opacity:1} }
+#ls-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.88);
+  z-index:9999; display:none; align-items:center; justify-content:center;
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+}
+#ls-card {
+  background:linear-gradient(145deg,#1e1b4b 0%,#1a1a2e 100%);
+  border:1px solid rgba(255,215,0,0.25); border-radius:26px;
+  padding:30px 24px; max-width:320px; width:88%; text-align:center;
+  box-shadow:0 24px 64px rgba(0,0,0,0.65); animation:ls-card-in 0.35s ease;
+}
+.ls-fire-icon { font-size:58px; display:block; margin-bottom:6px; animation:ls-fire 1s ease-in-out infinite; }
+.ls-h1 { color:#fff; font-size:23px; font-weight:800; margin-bottom:3px; }
+.ls-sub { color:rgba(255,255,255,0.45); font-size:12px; margin-bottom:18px; }
+.ls-days-row { display:flex; justify-content:center; gap:5px; margin-bottom:18px; }
+.ls-day-cell { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.ls-day-dot {
+  width:36px; height:36px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;
+}
+.ls-day-lbl { font-size:8px; color:rgba(255,255,255,0.35); }
+.ls-reward-box {
+  background:rgba(255,215,0,0.07); border:1px solid rgba(255,215,0,0.22);
+  border-radius:14px; padding:14px; margin-bottom:20px;
+}
+.ls-reward-lbl { color:rgba(255,255,255,0.45); font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+.ls-reward-amount { color:#ffd700; font-size:36px; font-weight:800; line-height:1; }
+.ls-claim-btn {
+  width:100%; padding:15px; border:none; border-radius:15px;
+  background:linear-gradient(135deg,#ffd700,#f39c12);
+  color:#1a1a00; font-size:18px; font-weight:800; cursor:pointer;
+  letter-spacing:0.3px; transition:transform 0.1s;
+}
+.ls-claim-btn:active { transform:scale(0.96); }
+/* Achievement pop */
+#ls-ach-toast {
+  position:fixed; top:72px; left:50%; transform:translateX(-50%) translateY(-24px);
+  background:linear-gradient(135deg,#6c5ce7,#a29bfe); color:#fff;
+  padding:10px 22px; border-radius:50px; font-size:13px; font-weight:700;
+  opacity:0; transition:all 0.4s; z-index:10000;
+  pointer-events:none; white-space:nowrap; box-shadow:0 4px 20px rgba(108,92,231,0.5);
+}
+#ls-ach-toast.ls-show { opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+<!-- ===== DAILY LOGIN STREAK OVERLAY ===== -->
+<div id="ls-overlay">
+  <div id="ls-card">
+    <span class="ls-fire-icon" id="ls-fire-icon">🔥</span>
+    <div class="ls-h1">Day <span id="ls-day-num">1</span> Streak!</div>
+    <div class="ls-sub">Come back every day for bigger rewards</div>
+    <div class="ls-days-row" id="ls-days-row"></div>
+    <div class="ls-reward-box">
+      <div class="ls-reward-lbl">Today's Bonus</div>
+      <div class="ls-reward-amount" id="ls-reward-amount">+50 🪙</div>
+    </div>
+    <button class="ls-claim-btn" onclick="window.lsClaimStreak()">Claim Reward!</button>
+  </div>
+</div>
+<div id="ls-ach-toast"></div>
+<script>
+/* ===== DAILY LOGIN STREAK MODULE ===== */
+(function() {
+  var LS_KEY = 'ls_v2';
+  var DAY_COINS = [20, 30, 40, 50, 60, 80, 120];
+  var MILESTONES = {3:30, 7:100, 14:150, 30:300};
+  var MILESTONE_LABELS = {3:'🌟 3-Day Streak! ', 7:'🏆 One Full Week! ', 14:'💎 Two Weeks! ', 30:'👑 Legend! '};
+
+  function getData() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || '{"n":0,"d":"","ach":[]}'); }
+    catch(e) { return {n:0, d:'', ach:[]}; }
+  }
+  function setData(v) { try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch(e) {} }
+
+  // Grant coins using whatever pattern this game uses
+  function grantCoins(n) {
+    try {
+      if (typeof addCoins === 'function') { addCoins(n); return; }
+      var s = (typeof State !== 'undefined') ? State
+            : (typeof state !== 'undefined') ? state
+            : (typeof save  !== 'undefined') ? save : null;
+      if (!s) return;
+      s.coins = (s.coins || 0) + n;
+      if (typeof State !== 'undefined' && typeof State.save === 'function') State.save();
+      else if (typeof saveState === 'function') saveState();
+      else if (typeof persist   === 'function') persist();
+      if      (typeof updateCoinDisplays === 'function') updateCoinDisplays();
+      else if (typeof updateHUD          === 'function') updateHUD();
+      else if (typeof renderMenu         === 'function') renderMenu();
+    } catch(e) {}
+  }
+
+  function showAchievement(txt) {
+    var el = document.getElementById('ls-ach-toast');
+    if (!el) return;
+    el.textContent = txt;
+    el.classList.add('ls-show');
+    setTimeout(function() { el.classList.remove('ls-show'); }, 3500);
+  }
+
+  function renderDays(n) {
+    var row = document.getElementById('ls-days-row');
+    if (!row) return;
+    var pos = ((n - 1) % 7) + 1; // 1–7
+    var html = '';
+    for (var i = 1; i <= 7; i++) {
+      var past    = i < pos;
+      var current = i === pos;
+      var bg  = current ? '#ffd700' : past ? '#4ecdc4' : 'rgba(255,255,255,0.1)';
+      var fg  = (current || past) ? '#1a1a1a' : 'rgba(255,255,255,0.35)';
+      var ico = current ? '⭐' : past ? '✓' : i;
+      html += '<div class="ls-day-cell">'
+            + '<div class="ls-day-dot" style="background:' + bg + ';color:' + fg + '">' + ico + '</div>'
+            + '<div class="ls-day-lbl">+' + DAY_COINS[i-1] + '</div>'
+            + '</div>';
+    }
+    row.innerHTML = html;
+  }
+
+  function showOverlay(n) {
+    var pos   = ((n - 1) % 7) + 1;
+    var coins = DAY_COINS[pos - 1];
+    var el;
+    el = document.getElementById('ls-day-num');    if (el) el.textContent = n;
+    el = document.getElementById('ls-reward-amount'); if (el) el.textContent = '+' + coins + ' 🪙';
+    el = document.getElementById('ls-fire-icon');
+    if (el) el.textContent = n >= 7 ? '🔥' : n >= 3 ? '🔥' : '✨';
+    renderDays(n);
+    var ov = document.getElementById('ls-overlay');
+    if (ov) { ov.style.display = 'flex'; }
+  }
+
+  window.lsClaimStreak = function() {
+    var data = getData();
+    var pos   = ((data.n - 1) % 7) + 1;
+    var coins = DAY_COINS[pos - 1];
+    grantCoins(coins);
+    var ov = document.getElementById('ls-overlay');
+    if (ov) ov.style.display = 'none';
+    // Milestone bonus
+    var mil = MILESTONES[data.n];
+    if (mil && data.ach.indexOf(data.n) === -1) {
+      data.ach.push(data.n);
+      setData(data);
+      setTimeout(function() {
+        grantCoins(mil);
+        showAchievement(MILESTONE_LABELS[data.n] + '+' + mil + ' 🪙 bonus!');
+      }, 500);
+    }
+    if (window.Android) try { window.Android.logEvent('login_streak_claim', 'day=' + data.n); } catch(e) {}
+  };
+
+  function run() {
+    var today = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+    var data  = getData();
+
+    // Always cancel pending notif and reschedule for ~23h from now
+    if (window.Android) {
+      try { window.Android.cancelNotification(); } catch(e) {}
+      try { window.Android.scheduleNotification(23 * 60); } catch(e) {}
+    }
+
+    if (data.d === today) return; // already logged in today
+
+    var yesterday = new Date(Date.now() - 86400000).toLocaleDateString('en-CA');
+    data.n = (data.d === yesterday) ? data.n + 1 : 1;
+    data.d = today;
+    setData(data);
+
+    showOverlay(data.n);
+    if (window.Android) try { window.Android.logEvent('login_streak_show', 'day=' + data.n); } catch(e) {}
+  }
+
+  // Small delay so the game fully initialises before we show the overlay
+  setTimeout(run, 900);
+})();
+</script>
+
+
+<script>
+/* ===== I18N TRANSLATIONS MODULE ===== */
+window.GAME_I18N = {
+  en: {
+    play:'Play', levels:'Levels', levelSelect:'Level Select', shop:'Shop',
+    settings:'Settings', dailyChallenge:'Daily Challenge', back:'Back',
+    sound:'Sound', music:'Music', resetProgress:'Reset Progress',
+    removeAds:'Remove Ads', language:'Language',
+    levelComplete:'Level Complete!', gameOver:'Game Over',
+    hint:'Hint', undo:'Undo', skip:'Skip', quit:'Quit', menu:'Menu',
+    noLives:'No Lives Left', watchAd:'Watch Ad for Life',
+    lives:'Lives', coins:'Coins', buy:'Buy', owned:'Owned',
+    next:'Next Level', retry:'Try Again',
+    // Login streak
+    ls_title:'Day %d Streak!',
+    ls_sub:'Come back every day for bigger rewards',
+    ls_bonus:'Today\'s Bonus',
+    ls_claim:'Claim Reward!',
+    ls_week:'One Week!',
+    // Achievements
+    ls_ach3:'🌟 3-Day Streak! +%d 🪙',
+    ls_ach7:'🏆 One Full Week! +%d 🪙',
+    ls_ach14:'💎 Two Weeks! +%d 🪙',
+    ls_ach30:'👑 Legend! +%d 🪙',
+  },
+  de: {
+    play:'Spielen', levels:'Level', levelSelect:'Level Auswahl', shop:'Shop',
+    settings:'Einstellungen', dailyChallenge:'Tägliche Aufgabe', back:'Zurück',
+    sound:'Ton', music:'Musik', resetProgress:'Fortschritt Zurücksetzen',
+    removeAds:'Werbung Entfernen', language:'Sprache',
+    levelComplete:'Level Geschafft!', gameOver:'Spiel Vorbei',
+    hint:'Hinweis', undo:'Rückgängig', skip:'Überspringen', quit:'Beenden', menu:'Menü',
+    noLives:'Keine Leben mehr', watchAd:'Werbung für ein Leben ansehen',
+    lives:'Leben', coins:'Münzen', buy:'Kaufen', owned:'Besessen',
+    next:'Nächstes Level', retry:'Nochmal versuchen',
+    ls_title:'Tag %d Streak!',
+    ls_sub:'Komm jeden Tag zurück für größere Belohnungen',
+    ls_bonus:'Heutige Belohnung',
+    ls_claim:'Belohnung Einfordern!',
+    ls_ach3:'🌟 3-Tage Streak! +%d 🪙',
+    ls_ach7:'🏆 Eine volle Woche! +%d 🪙',
+    ls_ach14:'💎 Zwei Wochen! +%d 🪙',
+    ls_ach30:'👑 Legende! +%d 🪙',
+  },
+  fr: {
+    play:'Jouer', levels:'Niveaux', levelSelect:'Choisir un Niveau', shop:'Boutique',
+    settings:'Paramètres', dailyChallenge:'Défi du Jour', back:'Retour',
+    sound:'Son', music:'Musique', resetProgress:'Réinitialiser',
+    removeAds:'Supprimer les Pubs', language:'Langue',
+    levelComplete:'Niveau Terminé!', gameOver:'Partie Terminée',
+    hint:'Indice', undo:'Annuler', skip:'Passer', quit:'Quitter', menu:'Menu',
+    noLives:'Plus de Vies', watchAd:'Voir une Pub pour une Vie',
+    lives:'Vies', coins:'Pièces', buy:'Acheter', owned:'Possédé',
+    next:'Niveau Suivant', retry:'Réessayer',
+    ls_title:'Jour %d Streak!',
+    ls_sub:'Revenez chaque jour pour de meilleures récompenses',
+    ls_bonus:'Bonus du Jour',
+    ls_claim:'Récupérer!',
+    ls_ach3:'🌟 3 Jours! +%d 🪙',
+    ls_ach7:'🏆 Une Semaine Complète! +%d 🪙',
+    ls_ach14:'💎 Deux Semaines! +%d 🪙',
+    ls_ach30:'👑 Légende! +%d 🪙',
+  },
+  es: {
+    play:'Jugar', levels:'Niveles', levelSelect:'Seleccionar Nivel', shop:'Tienda',
+    settings:'Ajustes', dailyChallenge:'Reto Diario', back:'Volver',
+    sound:'Sonido', music:'Música', resetProgress:'Reiniciar Progreso',
+    removeAds:'Quitar Anuncios', language:'Idioma',
+    levelComplete:'¡Nivel Completado!', gameOver:'Game Over',
+    hint:'Pista', undo:'Deshacer', skip:'Saltar', quit:'Salir', menu:'Menú',
+    noLives:'Sin Vidas', watchAd:'Ver Anuncio por una Vida',
+    lives:'Vidas', coins:'Monedas', buy:'Comprar', owned:'Comprado',
+    next:'Siguiente Nivel', retry:'Intentar de Nuevo',
+    ls_title:'¡Día %d seguido!',
+    ls_sub:'Vuelve cada día para mejores premios',
+    ls_bonus:'Premio de Hoy',
+    ls_claim:'¡Reclamar Premio!',
+    ls_ach3:'🌟 ¡3 días! +%d 🪙',
+    ls_ach7:'🏆 ¡Una semana completa! +%d 🪙',
+    ls_ach14:'💎 ¡Dos semanas! +%d 🪙',
+    ls_ach30:'👑 ¡Leyenda! +%d 🪙',
+  },
+  pt: {
+    play:'Jogar', levels:'Níveis', levelSelect:'Selecionar Nível', shop:'Loja',
+    settings:'Configurações', dailyChallenge:'Desafio Diário', back:'Voltar',
+    sound:'Som', music:'Música', resetProgress:'Redefinir Progresso',
+    removeAds:'Remover Anúncios', language:'Idioma',
+    levelComplete:'Nível Completo!', gameOver:'Fim de Jogo',
+    hint:'Dica', undo:'Desfazer', skip:'Pular', quit:'Sair', menu:'Menu',
+    noLives:'Sem Vidas', watchAd:'Assistir Anúncio por uma Vida',
+    lives:'Vidas', coins:'Moedas', buy:'Comprar', owned:'Adquirido',
+    next:'Próximo Nível', retry:'Tentar Novamente',
+    ls_title:'Dia %d seguido!',
+    ls_sub:'Volte todo dia para prêmios maiores',
+    ls_bonus:'Bônus de Hoje',
+    ls_claim:'Resgatar Prêmio!',
+    ls_ach3:'🌟 3 dias! +%d 🪙',
+    ls_ach7:'🏆 Uma semana completa! +%d 🪙',
+    ls_ach14:'💎 Duas semanas! +%d 🪙',
+    ls_ach30:'👑 Lenda! +%d 🪙',
+  },
+  ru: {
+    play:'Играть', levels:'Уровни', levelSelect:'Выбор Уровня', shop:'Магазин',
+    settings:'Настройки', dailyChallenge:'Ежедневный Вызов', back:'Назад',
+    sound:'Звук', music:'Музыка', resetProgress:'Сбросить Прогресс',
+    removeAds:'Убрать Рекламу', language:'Язык',
+    levelComplete:'Уровень Пройден!', gameOver:'Игра Окончена',
+    hint:'Подсказка', undo:'Отмена', skip:'Пропустить', quit:'Выйти', menu:'Меню',
+    noLives:'Нет жизней', watchAd:'Смотреть рекламу за жизнь',
+    lives:'Жизни', coins:'Монеты', buy:'Купить', owned:'Куплено',
+    next:'Следующий уровень', retry:'Попробовать снова',
+    ls_title:'День %d подряд!',
+    ls_sub:'Возвращайтесь каждый день за большими наградами',
+    ls_bonus:'Бонус дня',
+    ls_claim:'Забрать награду!',
+    ls_ach3:'🌟 3 дня! +%d 🪙',
+    ls_ach7:'🏆 Целая неделя! +%d 🪙',
+    ls_ach14:'💎 Две недели! +%d 🪙',
+    ls_ach30:'👑 Легенда! +%d 🪙',
+  },
+  ja: {
+    play:'プレイ', levels:'レベル', levelSelect:'レベル選択', shop:'ショップ',
+    settings:'設定', dailyChallenge:'デイリーチャレンジ', back:'戻る',
+    sound:'サウンド', music:'音楽', resetProgress:'進行状況をリセット',
+    removeAds:'広告を削除', language:'言語',
+    levelComplete:'レベルクリア！', gameOver:'ゲームオーバー',
+    hint:'ヒント', undo:'元に戻す', skip:'スキップ', quit:'終了', menu:'メニュー',
+    noLives:'ライフがありません', watchAd:'広告を見てライフを獲得',
+    lives:'ライフ', coins:'コイン', buy:'購入', owned:'購入済み',
+    next:'次のレベル', retry:'もう一度',
+    ls_title:'%d日連続ログイン！',
+    ls_sub:'毎日ログインしてより大きな報酬をゲット',
+    ls_bonus:'本日のボーナス',
+    ls_claim:'報酬を受け取る！',
+    ls_ach3:'🌟 3日連続！ +%d 🪙',
+    ls_ach7:'🏆 1週間！ +%d 🪙',
+    ls_ach14:'💎 2週間！ +%d 🪙',
+    ls_ach30:'👑 レジェンド！ +%d 🪙',
+  },
+  ko: {
+    play:'플레이', levels:'레벨', levelSelect:'레벨 선택', shop:'상점',
+    settings:'설정', dailyChallenge:'일일 도전', back:'뒤로',
+    sound:'사운드', music:'음악', resetProgress:'진행 초기화',
+    removeAds:'광고 제거', language:'언어',
+    levelComplete:'레벨 완료!', gameOver:'게임 오버',
+    hint:'힌트', undo:'실행 취소', skip:'건너뛰기', quit:'종료', menu:'메뉴',
+    noLives:'목숨 없음', watchAd:'광고 보고 목숨 얻기',
+    lives:'목숨', coins:'코인', buy:'구매', owned:'구매됨',
+    next:'다음 레벨', retry:'다시 시도',
+    ls_title:'%d일 연속 접속!',
+    ls_sub:'매일 돌아와서 더 큰 보상을 받으세요',
+    ls_bonus:'오늘의 보너스',
+    ls_claim:'보상 받기!',
+    ls_ach3:'🌟 3일 연속! +%d 🪙',
+    ls_ach7:'🏆 일주일 완료! +%d 🪙',
+    ls_ach14:'💎 2주 완료! +%d 🪙',
+    ls_ach30:'👑 레전드! +%d 🪙',
+  },
+  zh: {
+    play:'开始游戏', levels:'关卡', levelSelect:'选择关卡', shop:'商店',
+    settings:'设置', dailyChallenge:'每日挑战', back:'返回',
+    sound:'音效', music:'音乐', resetProgress:'重置进度',
+    removeAds:'去除广告', language:'语言',
+    levelComplete:'关卡完成！', gameOver:'游戏结束',
+    hint:'提示', undo:'撤销', skip:'跳过', quit:'退出', menu:'菜单',
+    noLives:'没有生命了', watchAd:'看广告获得生命',
+    lives:'生命', coins:'金币', buy:'购买', owned:'已购买',
+    next:'下一关', retry:'再试一次',
+    ls_title:'第%d天连续登录！',
+    ls_sub:'每天回来获得更大的奖励',
+    ls_bonus:'今日奖励',
+    ls_claim:'领取奖励！',
+    ls_ach3:'🌟 3天连续！ +%d 🪙',
+    ls_ach7:'🏆 满一周！ +%d 🪙',
+    ls_ach14:'💎 两周！ +%d 🪙',
+    ls_ach30:'👑 传奇！ +%d 🪙',
+  },
+  ar: {
+    play:'العب', levels:'المستويات', levelSelect:'اختر المستوى', shop:'المتجر',
+    settings:'الإعدادات', dailyChallenge:'التحدي اليومي', back:'رجوع',
+    sound:'الصوت', music:'الموسيقى', resetProgress:'إعادة التعيين',
+    removeAds:'إزالة الإعلانات', language:'اللغة',
+    levelComplete:'اكتمل المستوى!', gameOver:'انتهت اللعبة',
+    hint:'تلميح', undo:'تراجع', skip:'تخطي', quit:'خروج', menu:'القائمة',
+    noLives:'لا حياة متبقية', watchAd:'شاهد إعلاناً للحصول على حياة',
+    lives:'حياة', coins:'عملات', buy:'اشتر', owned:'مُمتَلك',
+    next:'المستوى التالي', retry:'حاول مجدداً',
+    ls_title:'يوم %d متتالي!',
+    ls_sub:'عد كل يوم للحصول على مكافآت أكبر',
+    ls_bonus:'مكافأة اليوم',
+    ls_claim:'احصل على المكافأة!',
+    ls_ach3:'🌟 3 أيام! +%d 🪙',
+    ls_ach7:'🏆 أسبوع كامل! +%d 🪙',
+    ls_ach14:'💎 أسبوعان! +%d 🪙',
+    ls_ach30:'👑 أسطورة! +%d 🪙',
+  },
+  tr: {
+    play:'Oyna', levels:'Seviyeler', levelSelect:'Seviye Seç', shop:'Mağaza',
+    settings:'Ayarlar', dailyChallenge:'Günlük Görev', back:'Geri',
+    sound:'Ses', music:'Müzik', resetProgress:'İlerlemeyi Sıfırla',
+    removeAds:'Reklamları Kaldır', language:'Dil',
+    levelComplete:'Seviye Tamamlandı!', gameOver:'Oyun Bitti',
+    hint:'İpucu', undo:'Geri Al', skip:'Geç', quit:'Çıkış', menu:'Menü',
+    noLives:'Can Kalmadı', watchAd:'Reklam İzle Can Kazan',
+    lives:'Can', coins:'Jeton', buy:'Satın Al', owned:'Sahipsin',
+    next:'Sonraki Seviye', retry:'Tekrar Dene',
+    ls_title:'%d. Gün Serisi!',
+    ls_sub:'Daha büyük ödüller için her gün geri gel',
+    ls_bonus:'Bugünkü Ödül',
+    ls_claim:'Ödülü Al!',
+    ls_ach3:'🌟 3 gün! +%d 🪙',
+    ls_ach7:'🏆 Tam bir hafta! +%d 🪙',
+    ls_ach14:'💎 İki hafta! +%d 🪙',
+    ls_ach30:'👑 Efsane! +%d 🪙',
+  },
+  it: {
+    play:'Gioca', levels:'Livelli', levelSelect:'Scegli Livello', shop:'Negozio',
+    settings:'Impostazioni', dailyChallenge:'Sfida Quotidiana', back:'Indietro',
+    sound:'Suono', music:'Musica', resetProgress:'Azzera Progressi',
+    removeAds:'Rimuovi Pubblicità', language:'Lingua',
+    levelComplete:'Livello Completato!', gameOver:'Fine del Gioco',
+    hint:'Suggerimento', undo:'Annulla', skip:'Salta', quit:'Esci', menu:'Menu',
+    noLives:'Nessuna Vita', watchAd:'Guarda un\'offerta per una vita',
+    lives:'Vite', coins:'Monete', buy:'Acquista', owned:'Acquistato',
+    next:'Prossimo Livello', retry:'Riprova',
+    ls_title:'Giorno %d di fila!',
+    ls_sub:'Torna ogni giorno per premi sempre più grandi',
+    ls_bonus:'Premio di Oggi',
+    ls_claim:'Ritira il Premio!',
+    ls_ach3:'🌟 3 giorni! +%d 🪙',
+    ls_ach7:'🏆 Una settimana intera! +%d 🪙',
+    ls_ach14:'💎 Due settimane! +%d 🪙',
+    ls_ach30:'👑 Leggenda! +%d 🪙',
+  },
+  nl: {
+    play:'Spelen', levels:'Niveaus', levelSelect:'Niveau Kiezen', shop:'Winkel',
+    settings:'Instellingen', dailyChallenge:'Dagelijkse Uitdaging', back:'Terug',
+    sound:'Geluid', music:'Muziek', resetProgress:'Voortgang Wissen',
+    removeAds:'Advertenties Verwijderen', language:'Taal',
+    levelComplete:'Niveau Voltooid!', gameOver:'Game Over',
+    hint:'Hint', undo:'Ongedaan Maken', skip:'Overslaan', quit:'Stoppen', menu:'Menu',
+    ls_title:'Dag %d op rij!',
+    ls_sub:'Kom elke dag terug voor grotere beloningen',
+    ls_bonus:'Bonus van Vandaag', ls_claim:'Beloning Claimen!',
+    ls_ach3:'🌟 3 dagen! +%d 🪙', ls_ach7:'🏆 Een week! +%d 🪙',
+    ls_ach14:'💎 Twee weken! +%d 🪙', ls_ach30:'👑 Legende! +%d 🪙',
+  },
+  pl: {
+    play:'Graj', levels:'Poziomy', levelSelect:'Wybierz Poziom', shop:'Sklep',
+    settings:'Ustawienia', dailyChallenge:'Wyzwanie Dnia', back:'Wróć',
+    sound:'Dźwięk', music:'Muzyka', resetProgress:'Resetuj Postęp',
+    removeAds:'Usuń Reklamy', language:'Język',
+    levelComplete:'Poziom Ukończony!', gameOver:'Koniec Gry',
+    hint:'Wskazówka', undo:'Cofnij', skip:'Pomiń', quit:'Wyjście', menu:'Menu',
+    ls_title:'Dzień %d z rzędu!',
+    ls_sub:'Wracaj każdego dnia po większe nagrody',
+    ls_bonus:'Dzisiejszy Bonus', ls_claim:'Odbierz Nagrodę!',
+    ls_ach3:'🌟 3 dni! +%d 🪙', ls_ach7:'🏆 Pełny tydzień! +%d 🪙',
+    ls_ach14:'💎 Dwa tygodnie! +%d 🪙', ls_ach30:'👑 Legenda! +%d 🪙',
+  },
+  sv: {
+    play:'Spela', levels:'Nivåer', levelSelect:'Välj Nivå', shop:'Butik',
+    settings:'Inställningar', dailyChallenge:'Daglig Utmaning', back:'Tillbaka',
+    sound:'Ljud', music:'Musik', resetProgress:'Återställ Framsteg',
+    removeAds:'Ta bort Annonser', language:'Språk',
+    levelComplete:'Nivå Klar!', gameOver:'Game Over',
+    hint:'Tips', undo:'Ångra', skip:'Hoppa Över', quit:'Avsluta', menu:'Meny',
+    ls_title:'Dag %d i rad!',
+    ls_sub:'Kom tillbaka varje dag för större belöningar',
+    ls_bonus:'Dagens Bonus', ls_claim:'Hämta Belöning!',
+    ls_ach3:'🌟 3 dagar! +%d 🪙', ls_ach7:'🏆 En hel vecka! +%d 🪙',
+    ls_ach14:'💎 Två veckor! +%d 🪙', ls_ach30:'👑 Legende! +%d 🪙',
+  },
+  no: {
+    play:'Spill', levels:'Nivåer', levelSelect:'Velg Nivå', shop:'Butikk',
+    settings:'Innstillinger', dailyChallenge:'Daglig Utfordring', back:'Tilbake',
+    sound:'Lyd', music:'Musikk', resetProgress:'Tilbakestill Fremgang',
+    removeAds:'Fjern Annonser', language:'Språk',
+    levelComplete:'Nivå Fullført!', gameOver:'Game Over',
+    hint:'Hint', undo:'Angre', skip:'Hopp Over', quit:'Avslutt', menu:'Meny',
+    ls_title:'Dag %d på rad!', ls_sub:'Kom tilbake hver dag for større premier',
+    ls_bonus:'Dagens Bonus', ls_claim:'Krev Premien!',
+    ls_ach3:'🌟 3 dager! +%d 🪙', ls_ach7:'🏆 En hel uke! +%d 🪙',
+    ls_ach14:'💎 To uker! +%d 🪙', ls_ach30:'👑 Legende! +%d 🪙',
+  },
+  da: {
+    play:'Spil', levels:'Niveauer', levelSelect:'Vælg Niveau', shop:'Butik',
+    settings:'Indstillinger', dailyChallenge:'Daglig Udfordring', back:'Tilbage',
+    sound:'Lyd', music:'Musik', resetProgress:'Nulstil Fremgang',
+    removeAds:'Fjern Annoncer', language:'Sprog',
+    levelComplete:'Niveau Fuldført!', gameOver:'Game Over',
+    hint:'Tip', undo:'Fortryd', skip:'Spring Over', quit:'Afslut', menu:'Menu',
+    ls_title:'Dag %d i træk!', ls_sub:'Vend tilbage hver dag for større præmier',
+    ls_bonus:'Dagens Bonus', ls_claim:'Claim Præmie!',
+    ls_ach3:'🌟 3 dage! +%d 🪙', ls_ach7:'🏆 En hel uge! +%d 🪙',
+    ls_ach14:'💎 To uger! +%d 🪙', ls_ach30:'👑 Legende! +%d 🪙',
+  },
+  fi: {
+    play:'Pelaa', levels:'Tasot', levelSelect:'Valitse Taso', shop:'Kauppa',
+    settings:'Asetukset', dailyChallenge:'Päivän Haaste', back:'Takaisin',
+    sound:'Ääni', music:'Musiikki', resetProgress:'Nollaa Edistyminen',
+    removeAds:'Poista Mainokset', language:'Kieli',
+    levelComplete:'Taso Läpäisty!', gameOver:'Peli Ohi',
+    hint:'Vihje', undo:'Kumoa', skip:'Ohita', quit:'Lopeta', menu:'Valikko',
+    ls_title:'Päivä %d putkessa!', ls_sub:'Tule takaisin joka päivä suurempien palkintojen vuoksi',
+    ls_bonus:'Päivän Bonus', ls_claim:'Lunasta Palkinto!',
+    ls_ach3:'🌟 3 päivää! +%d 🪙', ls_ach7:'🏆 Kokonainen viikko! +%d 🪙',
+    ls_ach14:'💎 Kaksi viikkoa! +%d 🪙', ls_ach30:'👑 Legenda! +%d 🪙',
+  },
+  th: {
+    play:'เล่น', levels:'ด่าน', levelSelect:'เลือกด่าน', shop:'ร้านค้า',
+    settings:'ตั้งค่า', dailyChallenge:'ความท้าทายรายวัน', back:'กลับ',
+    sound:'เสียง', music:'เพลง', resetProgress:'รีเซ็ตความคืบหน้า',
+    removeAds:'ลบโฆษณา', language:'ภาษา',
+    levelComplete:'ผ่านด่านแล้ว!', gameOver:'เกมโอเวอร์',
+    hint:'คำใบ้', undo:'เลิกทำ', skip:'ข้าม', quit:'ออก', menu:'เมนู',
+    ls_title:'วันที่ %d ติดต่อกัน!', ls_sub:'กลับมาทุกวันเพื่อรับรางวัลใหญ่ขึ้น',
+    ls_bonus:'โบนัสวันนี้', ls_claim:'รับรางวัล!',
+    ls_ach3:'🌟 3 วัน! +%d 🪙', ls_ach7:'🏆 หนึ่งสัปดาห์! +%d 🪙',
+    ls_ach14:'💎 สองสัปดาห์! +%d 🪙', ls_ach30:'👑 ตำนาน! +%d 🪙',
+  },
+  vi: {
+    play:'Chơi', levels:'Cấp độ', levelSelect:'Chọn Cấp Độ', shop:'Cửa hàng',
+    settings:'Cài đặt', dailyChallenge:'Thử thách hàng ngày', back:'Quay lại',
+    sound:'Âm thanh', music:'Nhạc', resetProgress:'Đặt lại tiến độ',
+    removeAds:'Xóa quảng cáo', language:'Ngôn ngữ',
+    levelComplete:'Hoàn thành cấp!', gameOver:'Trò chơi kết thúc',
+    hint:'Gợi ý', undo:'Hoàn tác', skip:'Bỏ qua', quit:'Thoát', menu:'Thực đơn',
+    ls_title:'Ngày %d liên tiếp!', ls_sub:'Quay lại mỗi ngày để nhận phần thưởng lớn hơn',
+    ls_bonus:'Thưởng hôm nay', ls_claim:'Nhận Thưởng!',
+    ls_ach3:'🌟 3 ngày! +%d 🪙', ls_ach7:'🏆 Một tuần đầy đủ! +%d 🪙',
+    ls_ach14:'💎 Hai tuần! +%d 🪙', ls_ach30:'👑 Huyền thoại! +%d 🪙',
+  },
+  id: {
+    play:'Mainkan', levels:'Level', levelSelect:'Pilih Level', shop:'Toko',
+    settings:'Pengaturan', dailyChallenge:'Tantangan Harian', back:'Kembali',
+    sound:'Suara', music:'Musik', resetProgress:'Reset Progres',
+    removeAds:'Hapus Iklan', language:'Bahasa',
+    levelComplete:'Level Selesai!', gameOver:'Game Over',
+    hint:'Petunjuk', undo:'Batalkan', skip:'Lewati', quit:'Keluar', menu:'Menu',
+    ls_title:'Hari %d berturut-turut!', ls_sub:'Kembali setiap hari untuk hadiah lebih besar',
+    ls_bonus:'Bonus Hari Ini', ls_claim:'Klaim Hadiah!',
+    ls_ach3:'🌟 3 hari! +%d 🪙', ls_ach7:'🏆 Satu minggu penuh! +%d 🪙',
+    ls_ach14:'💎 Dua minggu! +%d 🪙', ls_ach30:'👑 Legenda! +%d 🪙',
+  },
+  hi: {
+    play:'खेलें', levels:'स्तर', levelSelect:'स्तर चुनें', shop:'दुकान',
+    settings:'सेटिंग्स', dailyChallenge:'दैनिक चुनौती', back:'वापस',
+    sound:'ध्वनि', music:'संगीत', resetProgress:'प्रगति रीसेट करें',
+    removeAds:'विज्ञापन हटाएं', language:'भाषा',
+    levelComplete:'स्तर पूरा!', gameOver:'गेम ओवर',
+    hint:'संकेत', undo:'पूर्ववत', skip:'छोड़ें', quit:'बाहर निकलें', menu:'मेनू',
+    ls_title:'%d दिन की श्रृंखला!', ls_sub:'बड़े इनाम के लिए हर दिन वापस आएं',
+    ls_bonus:'आज का बोनस', ls_claim:'इनाम लें!',
+    ls_ach3:'🌟 3 दिन! +%d 🪙', ls_ach7:'🏆 पूरा एक सप्ताह! +%d 🪙',
+    ls_ach14:'💎 दो सप्ताह! +%d 🪙', ls_ach30:'👑 लीजेंड! +%d 🪙',
+  },
+};
+
+window.LANG_NAMES = {
+  en:'English', de:'Deutsch', fr:'Français', es:'Español', pt:'Português',
+  ru:'Русский', ja:'日本語', ko:'한국어', zh:'中文', ar:'العربية',
+  tr:'Türkçe', it:'Italiano', nl:'Nederlands', pl:'Polski', sv:'Svenska',
+  no:'Norsk', da:'Dansk', fi:'Suomi', th:'ภาษาไทย', vi:'Tiếng Việt',
+  id:'Bahasa Indonesia', hi:'हिन्दी',
+};
+
+window.i18n = {
+  _lang: localStorage.getItem('app_lang') || (() => {
+    // Auto-detect from browser locale
+    var nav = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
+    return window.GAME_I18N[nav] ? nav : 'en';
+  })(),
+
+  t: function(key, n) {
+    var t = (window.GAME_I18N[this._lang] || window.GAME_I18N['en']);
+    var s = t[key] || window.GAME_I18N['en'][key] || key;
+    return n !== undefined ? s.replace('%d', n) : s;
+  },
+
+  setLang: function(lang) {
+    if (!window.GAME_I18N[lang]) return;
+    this._lang = lang;
+    localStorage.setItem('app_lang', lang);
+    this.applyToPage();
+    // Update RTL for Arabic
+    document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  },
+
+  getLang: function() { return this._lang; },
+
+  // Apply translations to key static elements by scanning text nodes
+  applyToPage: function() {
+    var lang = this._lang;
+    if (lang === 'en') { document.documentElement.dir = 'ltr'; return; }
+    var t = window.GAME_I18N[lang];
+    var en = window.GAME_I18N['en'];
+    // Build reverse map: English text → translated text
+    var map = {};
+    Object.keys(en).forEach(function(k) {
+      if (t[k] && t[k] !== en[k] && !en[k].includes('%d')) map[en[k]] = t[k];
+    });
+    // Walk DOM and replace matching text nodes
+    function walk(node) {
+      if (!node) return;
+      if (node.nodeType === 3) {
+        var txt = node.textContent;
+        var trimmed = txt.trim();
+        if (map[trimmed]) node.textContent = txt.replace(trimmed, map[trimmed]);
+      } else if (node.nodeType === 1) {
+        var tag = node.tagName;
+        if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'CANVAS') return;
+        node.childNodes.forEach(walk);
+      }
+    }
+    walk(document.body);
+    // Update login streak overlay
+    var sub = document.getElementById('ls-sub-text');
+    if (sub) sub.textContent = t['ls_sub'] || en['ls_sub'];
+    var lbl = document.getElementById('ls-bonus-label');
+    if (lbl) lbl.textContent = t['ls_bonus'] || en['ls_bonus'];
+    var btn = document.getElementById('ls-claim-btn-text');
+    if (btn) btn.textContent = t['ls_claim'] || en['ls_claim'];
+    // Update language selector if exists
+    var sel = document.getElementById('i18n-lang-select');
+    if (sel) sel.value = lang;
+    // RTL
+    document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  },
+
+  // Build and inject language selector row into settings screen
+  injectLangSelector: function() {
+    var self = this;
+    // Build options HTML
+    var opts = Object.keys(window.LANG_NAMES).map(function(code) {
+      return '<option value="' + code + '">' + window.LANG_NAMES[code] + '</option>';
+    }).join('');
+
+    var row = document.createElement('div');
+    row.id = 'i18n-lang-row';
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;' +
+      'background:rgba(255,255,255,0.05);border-radius:14px;padding:14px 16px;margin:8px 0;';
+    row.innerHTML =
+      '<span style="color:white;font-size:15px;font-weight:600">' + this.t('language') + ' 🌐</span>' +
+      '<select id="i18n-lang-select" onchange="window.i18n.setLang(this.value)" ' +
+      'style="background:#333;color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;' +
+      'padding:6px 10px;font-size:14px;outline:none;max-width:160px">' +
+      opts + '</select>';
+
+    // Try to find the settings container in each game's variant
+    var containers = [
+      document.querySelector('.settings-list'),
+      document.querySelector('.settings-scroll'),
+      document.querySelector('#screen-settings .settings-scroll'),
+      document.querySelector('#settingsScreen .settings-list'),
+      document.querySelector('#settingsScreen'),
+      document.querySelector('#screen-settings'),
+    ];
+    var container = containers.find(function(c) { return c !== null; });
+    if (container) {
+      // Insert before the first child for visibility
+      container.insertBefore(row, container.firstChild);
+      document.getElementById('i18n-lang-select').value = self._lang;
+    }
+  },
+
+  init: function() {
+    var self = this;
+    // Inject after the page's own init
+    setTimeout(function() {
+      self.injectLangSelector();
+      if (self._lang !== 'en') self.applyToPage();
+    }, 1000);
+  }
+};
+// Init on load
+window.addEventListener('load', function() { window.i18n.init(); });
+</script>
+<script>
+// Update login streak overlay to use i18n
+(function() {
+  var origShow = window.lsShowOverlay_orig;
+  // Patch the streak overlay to show translated text
+  var origRun = window.__lsRun;
+
+  // Override ls-sub and ls-bonus-label with i18n IDs for dynamic translation
+  function patchLsHTML() {
+    var sub = document.querySelector('#ls-card .ls-sub');
+    if (sub) { sub.id = 'ls-sub-text'; }
+    var lbl = document.querySelector('.ls-reward-lbl');
+    if (lbl) { lbl.id = 'ls-bonus-label'; }
+    var btn = document.querySelector('.ls-claim-btn');
+    if (btn) { btn.id = 'ls-claim-btn-text'; }
+    // Apply current lang to these elements
+    if (window.i18n && window.i18n._lang !== 'en') {
+      if (sub) sub.textContent = window.i18n.t('ls_sub');
+      if (lbl) lbl.textContent = window.i18n.t('ls_bonus');
+      if (btn) btn.textContent = window.i18n.t('ls_claim');
+    }
+  }
+  setTimeout(patchLsHTML, 1200);
+})();
+</script>
+
+<style>
+.theme-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.theme-card.active{border-color:rgba(237,194,46,0.5);background:rgba(237,194,46,0.07)}
+.theme-card.locked{opacity:0.4;cursor:default}
+.theme-balls{display:flex;gap:5px;flex-shrink:0}.theme-ball{width:18px;height:18px;border-radius:4px}
+.theme-info{flex:1}.theme-info h3{color:white;font-size:13px;font-weight:700}
+.theme-info p{color:rgba(255,255,255,0.4);font-size:11px;margin-top:1px}
+.theme-badge{font-size:11px;font-weight:700;padding:4px 9px;border-radius:7px;white-space:nowrap}
+.active-badge{background:rgba(237,194,46,0.15);color:#edc22e}.locked-badge{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.25)}
+.stat-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.stat-icon{font-size:26px;width:40px;text-align:center;flex-shrink:0}.stat-info{flex:1}
+.stat-info h3{color:white;font-size:13px;font-weight:700}.stat-info p{color:rgba(255,255,255,0.4);font-size:11px}
+.stat-value{color:#edc22e;font-size:20px;font-weight:800;flex-shrink:0}
+.mission-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px;margin-bottom:10px}
+.mission-top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.mission-icon{font-size:24px;width:36px;text-align:center;flex-shrink:0}
+.mission-info{flex:1}.mission-info h3{color:white;font-size:13px;font-weight:700}
+.mission-info p{color:rgba(255,255,255,0.4);font-size:11px}.mission-reward{color:#edc22e;font-size:13px;font-weight:700;flex-shrink:0}
+.mission-bar-bg{height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden}
+.mission-bar-fill{height:6px;background:linear-gradient(90deg,#edc22e,#f65e3b);border-radius:3px;transition:width 0.4s}
+.mission-claim-btn{margin-top:10px;width:100%;padding:10px;border:none;border-radius:10px;background:linear-gradient(135deg,#edc22e,#f65e3b);color:#1a1a18;font-size:13px;font-weight:700;cursor:pointer}
+</style>
+
+<script>
+/* navGuard */
+var _navLock=false;
+function navGuard(fn){if(_navLock)return;_navLock=true;try{fn();}catch(e){}setTimeout(function(){_navLock=false;},350);}
+
+/* Stats */
+window.renderStats2048=function(){
+  var list=document.getElementById('statsList'); if(!list) return;
+  var stats=[
+    {icon:'🏆',label:'Best Score',sub:'all time',value:State.bestScore||0},
+    {icon:'🔢',label:'Highest Tile',sub:'ever reached',value:State.highestTile||0},
+    {icon:'✨',label:'2048 Achieved',sub:'legendary milestone',value:State.achieved2048?'Yes':'No'},
+    {icon:'🔥',label:'Daily Streak',sub:'days in a row',value:State.dailyChallengeStreak||0},
+    {icon:'🪙',label:'Coins',sub:'current balance',value:State.coins||0},
+  ];
+  list.innerHTML=stats.map(function(s){
+    return '<div class="stat-card"><div class="stat-icon">'+s.icon+'</div><div class="stat-info"><h3>'+s.label+'</h3><p>'+s.sub+'</p></div><div class="stat-value">'+s.value+'</div></div>';
+  }).join('');
+};
+
+/* Themes for 2048 tiles */
+(function(){
+  var THEMES=[
+    {id:'default',name:'Classic',emoji:'🎨',unlockLevel:0,palette:{2:'#eee4da',4:'#ede0c8',8:'#f2b179',16:'#f59563',32:'#f67c5f',64:'#f65e3b',128:'#edcf72',256:'#edcc61',512:'#edc850',1024:'#edc53f',2048:'#edc22e'}},
+    {id:'neon',name:'Neon',emoji:'⚡',unlockLevel:10,palette:{2:'#00f5ff',4:'#39ff14',8:'#ffff00',16:'#ff6600',32:'#ff073a',64:'#bf00ff',128:'#00ffcc',256:'#ff69b4',512:'#7fff00',1024:'#ff1493',2048:'#ffd700'}},
+    {id:'pastel',name:'Pastel',emoji:'🌸',unlockLevel:20,palette:{2:'#bae1ff',4:'#b5ead7',8:'#ffffba',16:'#ffdfba',32:'#ffb3ba',64:'#e0b3ff',128:'#b3fff0',256:'#c4ffc4',512:'#fff9b3',1024:'#ffd1dc',2048:'#ffe4b5'}},
+    {id:'ocean',name:'Ocean',emoji:'🌊',unlockLevel:30,palette:{2:'#b2ebf2',4:'#80deea',8:'#4dd0e1',16:'#26c6da',32:'#00bcd4',64:'#00acc1',128:'#0097a7',256:'#00838f',512:'#006064',1024:'#004d56',2048:'#003540'}},
+    {id:'fire',name:'Inferno',emoji:'🔥',unlockLevel:50,palette:{2:'#ffccbc',4:'#ffab91',8:'#ff8a65',16:'#ff7043',32:'#ff5722',64:'#f4511e',128:'#e64a19',256:'#d84315',512:'#bf360c',1024:'#bf2200',2048:'#8b0000'}},
+    {id:'galaxy',name:'Galaxy',emoji:'🌌',unlockLevel:100,palette:{2:'#e8d5f5',4:'#c39bd3',8:'#9b59b6',16:'#7d3c98',32:'#6c3483',64:'#512e5f',128:'#3498db',256:'#1a5276',512:'#0e4d6e',1024:'#1abc9c',2048:'#0e6655'}},
+  ];
+  window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel};});
+
+  window.renderThemes=function(){
+    var grid=document.getElementById('themesGrid'); if(!grid) return;
+    grid.innerHTML='';
+    THEMES.forEach(function(t){
+      var unlocked=true; // 2048 doesn't have level count, unlock by games played
+      var isActive=State.activeTheme===t.id;
+      var balls=Object.values(t.palette).slice(0,5);
+      var card=document.createElement('div');
+      card.className='theme-card'+(isActive?' active':'');
+      card.innerHTML='<div class="theme-balls">'+balls.map(function(c){return '<div class="theme-ball" style="background:'+c+'"></div>';}).join('')+'</div>'+
+        '<div class="theme-info"><h3>'+t.emoji+' '+t.name+'</h3><p>Unlocked</p></div>'+
+        '<div class="theme-badge '+(isActive?'active-badge':'locked-badge')+'">'+(isActive?'✓ Active':'Use')+'</div>';
+      card.addEventListener('click',function(){
+        State.activeTheme=t.id; saveState();
+        var btn=document.getElementById('themeBtn'); if(btn) btn.textContent=t.name;
+        window._activePalette=t.palette;
+        window.renderThemes(); if(typeof drawGrid==='function') drawGrid();
+      });
+      grid.appendChild(card);
+    });
+  };
+
+  // Override getTileColor to use active theme
+  var _origGetTileColor=window.getTileColor;
+  window.getTileColor=function(value){
+    var tp=window._activePalette;
+    if(tp&&tp[value]) return {bg:tp[value],text:value>=8?'#f9f6f2':'#776e65'};
+    return _origGetTileColor?_origGetTileColor(value):{bg:'#eee4da',text:'#776e65'};
+  };
+
+  setTimeout(function(){
+    var t=THEMES.find(function(x){return x.id===State.activeTheme;})||THEMES[0];
+    window._activePalette=t.palette;
+    var btn=document.getElementById('themeBtn'); if(btn) btn.textContent=t.name;
+  },400);
+})();
+
+/* Missions */
+(function(){
+  var MISSION_KEY='2048_missions_v1';
+  var MISSION_POOL=[
+    {id:'win3',desc:'Win 3 games',goal:3,reward:30,icon:'🏆',track:'levels'},
+    {id:'win5',desc:'Win 5 games',goal:5,reward:50,icon:'🎯',track:'levels'},
+    {id:'daily',desc:'Finish daily challenge',goal:1,reward:25,icon:'📅',track:'daily'},
+    {id:'score500',desc:'Reach score 500',goal:500,reward:20,icon:'✨',track:'score'},
+    {id:'win1',desc:'Win any game',goal:1,reward:10,icon:'✅',track:'levels'},
+    {id:'tile128',desc:'Reach tile 128',goal:1,reward:15,icon:'🔢',track:'tile128'},
+    {id:'win2',desc:'Win 2 games',goal:2,reward:20,icon:'🌟',track:'levels'},
+    {id:'score1000',desc:'Reach score 1000',goal:1000,reward:30,icon:'🔥',track:'score'},
+  ];
+  function getToday(){return new Date().toLocaleDateString('en-CA');}
+  function pickMissions(){var seed=getToday().split('').reduce(function(a,c){return(a*31+c.charCodeAt(0))|0;},9999);var idxs=[],s=seed;while(idxs.length<3){s=(s*1664525+1013904223)&0xffffffff;var i=(s>>>0)%MISSION_POOL.length;if(idxs.indexOf(i)===-1)idxs.push(i);}return idxs.map(function(i){return MISSION_POOL[i];});}
+  function loadMState(){try{var d=JSON.parse(localStorage.getItem(MISSION_KEY)||'{}');if(d.date!==getToday()){d={date:getToday(),progress:{},claimed:{}};localStorage.setItem(MISSION_KEY,JSON.stringify(d));}return d;}catch(e){return{date:getToday(),progress:{},claimed:{}};}}
+  function saveMState(d){try{localStorage.setItem(MISSION_KEY,JSON.stringify(d));}catch(e){}}
+
+  window.missionProgress=function(track,amount){
+    if(!amount||amount<=0)return;
+    var missions=pickMissions(),d=loadMState(),updated=false;
+    missions.forEach(function(m){if(m.track===track&&!d.claimed[m.id]){var prev=d.progress[m.id]||0,nv=Math.min(m.goal,prev+amount);if(nv!==prev){d.progress[m.id]=nv;updated=true;if(nv>=m.goal)if(typeof showToast==='function')showToast(m.icon+' Mission ready! +'+m.reward+' 🪙');}}});
+    if(updated){saveMState(d);_updateMBadge();}
+  };
+  function _updateMBadge(){var d=loadMState(),missions=pickMissions();var ct=missions.filter(function(m){return(d.progress[m.id]||0)>=m.goal&&!d.claimed[m.id];}).length;document.querySelectorAll('button').forEach(function(b){if(b.textContent.indexOf('Missions')!==-1&&b.textContent.indexOf('🎯')!==-1)b.textContent=ct>0?'🎯 Missions ('+ct+')':'🎯 Missions';});}
+  window.renderMissions=function(){
+    var list=document.getElementById('missionsList'); if(!list) return;
+    var missions=pickMissions(),d=loadMState(); list.innerHTML='';
+    missions.forEach(function(m){var prog=d.progress[m.id]||0,done=prog>=m.goal,claimed=d.claimed[m.id],pct=Math.min(100,Math.round(prog/m.goal*100));
+      var card=document.createElement('div'); card.className='mission-card';
+      card.innerHTML='<div class="mission-top"><div class="mission-icon">'+m.icon+'</div><div class="mission-info"><h3>'+m.desc+'</h3><p>'+prog+' / '+m.goal+'</p></div><div class="mission-reward">+'+m.reward+' 🪙</div></div><div class="mission-bar-bg"><div class="mission-bar-fill" style="width:'+pct+'%"></div></div>';
+      if(done&&!claimed){var btn=document.createElement('button');btn.className='mission-claim-btn';btn.textContent='Claim Reward!';btn.addEventListener('click',function(){d.claimed[m.id]=true;saveMState(d);State.coins+=m.reward;saveState();if(typeof showToast==='function')showToast('+'+m.reward+' 🪙 claimed!');window.renderMissions();_updateMBadge();});card.appendChild(btn);}
+      else if(claimed){var sp=document.createElement('div');sp.style.cssText='margin-top:8px;color:rgba(255,255,255,0.3);font-size:12px;text-align:center';sp.textContent='✓ Claimed';card.appendChild(sp);}
+      list.appendChild(card);
+    });
+  };
+  setTimeout(_updateMBadge,800);
+})();
+
+/* Tutorial on first game */
+(function(){
+  var origStart=Game.startNewGame&&Game.startNewGame.bind(Game);
+  if(!origStart) return;
+  var shown=false;
+  Game.startNewGame=function(){
+    origStart.apply(this,arguments);
+    if(!shown){shown=true;
+      var el=document.getElementById('tutorialOverlay');
+      if(el){el.style.display='flex';el.addEventListener('click',function(){el.style.display='none';},{once:true});}
+    }
+  };
+})();
+</script>
+
+
+<!-- ===== MONETIZATION & RETENTION EXTRAS ===== -->
+<style>
+#starterPackModal {
+  position:fixed;inset:0;background:rgba(13,17,23,0.92);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  z-index:9999;padding:1.5rem;backdrop-filter:blur(6px);
+}
+.starter-card {
+  background:linear-gradient(135deg,#1a3a5c,#0d1117);
+  border:2px solid #3fb950;border-radius:22px;
+  padding:1.8rem;width:100%;max-width:320px;
+  display:flex;flex-direction:column;align-items:center;gap:0.9rem;
+  text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.7);
+}
+.starter-badge { font-size:2.8rem; }
+.starter-title { font-size:1.4rem;font-weight:800;color:#3fb950; }
+.starter-subtitle { font-size:0.8rem;color:#8b949e;letter-spacing:1px;text-transform:uppercase; }
+.starter-price-row { display:flex;align-items:center;gap:0.8rem; }
+.starter-old-price { font-size:1.1rem;color:#8b949e;text-decoration:line-through; }
+.starter-new-price { font-size:1.6rem;font-weight:800;color:#3fb950; }
+.starter-perks { font-size:0.85rem;color:#e6edf3;text-align:left;line-height:1.8;width:100%; }
+.starter-buy-btn {
+  background:linear-gradient(135deg,#3fb950,#2ea040);color:#000;border:none;
+  border-radius:12px;padding:0.8rem 2rem;font-size:1rem;font-weight:800;
+  cursor:pointer;width:100%;box-shadow:0 4px 15px rgba(63,185,80,0.4);
+}
+.starter-skip { background:transparent;color:#8b949e;border:none;font-size:0.82rem;cursor:pointer; }
+
+#weeklyEventBanner {
+  margin-top:0.7rem;padding:0.55rem 1rem;
+  background:linear-gradient(135deg,#3a1f00,#0d1117);
+  border:1px solid #ff6b35;border-radius:16px;
+  color:#ff6b35;font-size:0.78rem;font-weight:600;
+  cursor:pointer;text-align:center;width:220px;max-width:90vw;
+  animation:xPulseOrange 2.5s infinite;
+}
+@keyframes xPulseOrange {
+  0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,0.3);}
+  50%{box-shadow:0 0 0 7px rgba(255,107,53,0);}
+}
+.x-season-active-badge {
+  display:inline-block;background:#d29922;color:#000;
+  font-size:0.65rem;font-weight:800;border-radius:8px;
+  padding:2px 7px;margin-left:6px;vertical-align:middle;
+}
+</style>
+
+<script>
+(function(){
+'use strict';
+
+// ── UNIVERSAL STATE ADAPTER ──────────────────────────────────────
+var G = {
+  st: function(){
+    if(typeof State!=='undefined'&&State&&typeof State.coins!=='undefined') return State;
+    if(typeof state!=='undefined'&&state&&typeof state.coins!=='undefined') return state;
+    if(typeof save!=='undefined'&&save&&typeof save.coins!=='undefined') return save;
+    return null;
+  },
+  coins: function(){ var s=this.st(); return s?(s.coins||0):0; },
+  addCoins: function(n){
+    var s=this.st(); if(!s) return;
+    s.coins=(s.coins||0)+n;
+    this.doSave();
+    if(typeof updateCoinDisplays==='function') updateCoinDisplays();
+    else if(typeof updateUI==='function') updateUI();
+    else if(typeof updateHUD==='function') updateHUD();
+  },
+  doSave: function(){
+    if(typeof State!=='undefined'&&typeof State.save==='function') State.save();
+    else if(typeof saveState==='function') saveState();
+    else if(typeof persist==='function') persist();
+  },
+  lives: function(){ var s=this.st(); return s?(s.lives||0):0; },
+  addLives: function(n){
+    var s=this.st(); if(!s) return;
+    s.lives=Math.min(5,(s.lives||0)+n);
+    this.doSave();
+    if(typeof updateCoinDisplays==='function') updateCoinDisplays();
+    else if(typeof updateUI==='function') updateUI();
+  },
+  completed: function(){ var s=this.st(); if(!s) return 0; return (s.completedLevels||[]).length; },
+  currentLevel: function(){ var s=this.st(); return s?(s.currentLevel||1):1; },
+  flag: function(k){ try{return localStorage.getItem(k);}catch(e){return null;} },
+  setFlag: function(k,v){ try{localStorage.setItem(k,v);}catch(e){} }
+};
+
+// ── EXTRAS TOAST ─────────────────────────────────────────────────
+function xToast(msg){
+  if(typeof showToast==='function'){ showToast(msg); return; }
+  var t=document.createElement('div');
+  t.textContent=msg;
+  t.style.cssText='position:fixed;bottom:20%;left:50%;transform:translateX(-50%);' +
+    'background:rgba(0,0,0,0.88);color:#fff;padding:10px 22px;border-radius:20px;' +
+    'z-index:99999;font-size:0.9rem;font-weight:600;pointer-events:none;';
+  document.body.appendChild(t);
+  setTimeout(function(){t.remove();},2500);
+}
+
+// ── SESSION STREAK ────────────────────────────────────────────────
+var _sessionCount=0;
+var _STREAK_BONUSES={3:{coins:10,msg:'🔥 3-in-a-row! +10 🪙'},5:{coins:25,msg:'🔥🔥 5-in-a-row! +25 🪙'},10:{coins:60,msg:'🔥🔥🔥 10-in-a-row! +60 🪙'}};
+
+function onLevelWin(){
+  _sessionCount++;
+  var bonus=_STREAK_BONUSES[_sessionCount];
+  if(bonus){
+    var coins=bonus.coins;
+    if(isSeasonActive()) coins*=2;
+    G.addCoins(coins);
+    xToast(bonus.msg+(isSeasonActive()?' ×2🌟':''));
+  }
+  // Weekly event tracking
+  var week=getWeekNum();
+  var wKey='xweekly_'+week;
+  var wCount=parseInt(G.flag(wKey)||'0')+1;
+  G.setFlag(wKey,String(wCount));
+  if(wCount===5&&!G.flag('xweekly_claimed_'+week)){
+    G.setFlag('xweekly_claimed_'+week,'1');
+    G.addCoins(50);
+    xToast('⚡ Weekly Challenge complete! +50 🪙');
+    updateWeeklyBanner();
+  }
+  // Starter pack trigger
+  maybeShowStarter();
+  // Notify life regen
+  setTimeout(scheduleLifeNotif,500);
+}
+
+// ── SEASON PASS ──────────────────────────────────────────────────
+function isSeasonActive(){
+  var s=G.st(); if(!s) return false;
+  if(s.seasonPassForever) return true;
+  return !!(s.seasonPassUntil&&Date.now()<s.seasonPassUntil);
+}
+
+function activateSeason(ms){
+  var s=G.st(); if(!s) return;
+  s.seasonPassUntil=Date.now()+(ms||30*24*60*60*1000);
+  G.doSave();
+  updateSeasonBadges();
+  xToast('🌟 Season Pass active — 2× coins for 30 days!');
+}
+
+function updateSeasonBadges(){
+  document.querySelectorAll('.x-season-badge-target').forEach(function(el){
+    var badge=el.querySelector('.x-season-active-badge');
+    if(isSeasonActive()){
+      if(!badge){ var b=document.createElement('span'); b.className='x-season-active-badge'; b.textContent='2× ACTIVE'; el.appendChild(b); }
+    } else {
+      if(badge) badge.remove();
+    }
+  });
+}
+
+// ── STARTER PACK ─────────────────────────────────────────────────
+function maybeShowStarter(){
+  if(G.flag('xstarter_seen')) return;
+  if(G.completed()<5) return;
+  G.setFlag('xstarter_seen','1');
+  setTimeout(function(){ var m=document.getElementById('starterPackModal'); if(m) m.style.display='flex'; },800);
+}
+
+window.buyStarterPack=function(){
+  closeStarterPack();
+  if(window.Android&&window.Android.purchase) window.Android.purchase('starter_pack');
+  else xToast('Purchase unavailable in browser');
+};
+window.closeStarterPack=function(){ var m=document.getElementById('starterPackModal'); if(m) m.style.display='none'; };
+
+// ── CONTINUE WITH COINS / AD ─────────────────────────────────────
+window.xContinueCoins=function(){
+  if(G.coins()<30){ xToast('Not enough 🪙 (need 30)'); return; }
+  G.addCoins(-30);
+  G.addLives(1);
+  closeNoLivesOverlay();
+  xToast('❤ +1 Life restored!');
+};
+window.xContinueAd=function(){
+  closeNoLivesOverlay();
+  if(window.Android&&window.Android.showRewarded) window.Android.showRewarded('extra_life');
+  else{ G.addLives(1); xToast('❤ +1 Life!'); }
+};
+
+function closeNoLivesOverlay(){
+  ['overlay-nolives','noLivesOverlay','overlayNoLives','nolivesOverlay'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el){ el.classList.remove('active'); el.style.display=''; }
+  });
+}
+
+function injectContinueBtns(){
+  ['overlay-nolives','noLivesOverlay','overlayNoLives','nolivesOverlay'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el||el.querySelector('.x-continue-btns')) return;
+    var div=document.createElement('div');
+    div.className='x-continue-btns';
+    div.style.cssText='display:flex;flex-direction:column;gap:8px;width:100%;margin-top:10px;';
+    div.innerHTML=
+      '<button onclick="xContinueCoins()" style="background:#d29922;color:#000;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:0.88rem;cursor:pointer;width:100%">💰 Continue (30 🪙)</button>'+
+      '<button onclick="xContinueAd()" style="background:#3fb950;color:#000;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:0.88rem;cursor:pointer;width:100%">📺 Continue (Watch Ad)</button>';
+    var card=el.querySelector('.overlay-card,.overlay-inner');
+    (card||el).appendChild(div);
+  });
+}
+
+// ── WEEKLY EVENT ─────────────────────────────────────────────────
+function getWeekNum(){
+  var d=new Date(); d.setHours(0,0,0,0);
+  d.setDate(d.getDate()+4-(d.getDay()||7));
+  var y=new Date(d.getFullYear(),0,1);
+  return Math.ceil((((d-y)/86400000)+1)/7);
+}
+
+function getWeeklyLevels(){
+  var w=getWeekNum();
+  var base=((w*7)%490)+1;
+  return [base,base+1,base+2,base+3,base+4];
+}
+
+function updateWeeklyBanner(){
+  var b=document.getElementById('weeklyEventBanner');
+  if(!b) return;
+  var week=getWeekNum();
+  var count=parseInt(G.flag('xweekly_'+week)||'0');
+  var claimed=G.flag('xweekly_claimed_'+week);
+  if(claimed){
+    b.textContent='✅ Weekly Challenge Done! Come back next week';
+    b.style.opacity='0.6';
+    b.style.cursor='default';
+    b.onclick=null;
+  } else {
+    var levels=getWeeklyLevels();
+    b.innerHTML='⚡ Weekly: Play any 5 levels · '+count+'/5 · Earn 50 🪙';
+    b.onclick=function(){
+      xToast('Play any 5 levels this week to earn 50 🪙!');
+    };
+  }
+}
+
+function injectWeeklyBanner(){
+  if(document.getElementById('weeklyEventBanner')) return;
+  var b=document.createElement('div');
+  b.id='weeklyEventBanner';
+  // Try to place it after .menu-daily or .come-back banner or inside menu screen
+  var anchors=[
+    document.querySelector('.menu-daily'),
+    document.getElementById('comebackBanner'),
+    document.querySelector('#comebackBanner'),
+    document.querySelector('#screen-menu .menu-buttons'),
+    document.querySelector('#menuScreen .menu-buttons'),
+    document.querySelector('#screen-menu'),
+    document.querySelector('#menuScreen')
+  ].filter(Boolean);
+  if(anchors.length){
+    var a=anchors[0];
+    if(a.parentNode) a.parentNode.insertBefore(b, a.nextSibling);
+    else a.appendChild(b);
+  } else {
+    document.body.appendChild(b);
+  }
+  updateWeeklyBanner();
+}
+
+// ── LIFE REGEN NOTIFICATION ──────────────────────────────────────
+function scheduleLifeNotif(){
+  if(!window.Android||!window.Android.scheduleNotification) return;
+  var lives=G.lives();
+  if(lives>=5) return;
+  var needed=5-lives;
+  var delayMs=needed*30*60*1000;
+  try{ window.Android.scheduleNotification('Lives Ready!','Your lives are full — come back and play!',delayMs); }catch(e){}
+}
+
+// ── GLOBAL RANK ──────────────────────────────────────────────────
+function getRank(){
+  var c=G.completed();
+  if(c>=400) return 1; if(c>=200) return 3; if(c>=100) return 8;
+  if(c>=50) return 15;  if(c>=20) return 30; if(c>=10) return 50;
+  return 70;
+}
+function injectRankCard(){
+  var container=document.getElementById('stats-content');
+  if(!container||container.querySelector('.x-rank-card')) return;
+  var div=document.createElement('div');
+  div.className='x-rank-card stat-card';
+  div.innerHTML='<div class="stat-card-icon">🏆</div><div class="stat-card-info"><div class="stat-card-label">Global Rank</div><div class="stat-card-value">Top '+getRank()+'%</div></div>';
+  container.insertBefore(div,container.firstChild);
+}
+
+// Patch renderStats variants to inject rank
+['renderNonoStats','renderStats','renderPipeStats','renderBallStats'].forEach(function(fn){
+  if(typeof window[fn]==='function'){
+    var orig=window[fn];
+    window[fn]=function(){ orig(); setTimeout(injectRankCard,60); };
+  }
+});
+
+// ── COIN SINK: DRAGON THEME ──────────────────────────────────────
+function injectDragonTheme(){
+  if(!window._THEMES_META) return;
+  if(window._THEMES_META.find(function(t){return t.id==='dragon';})) return;
+  window._THEMES_META.push({
+    id:'dragon', name:'Dragon 🐉', unlock:0, coinCost:300,
+    colors:['#ff4444','#ff8800','#ffdd00','#1a0000','#cc2200']
+  });
+
+  // Patch selectTheme to handle coinCost
+  var origST=window.selectTheme;
+  if(typeof origST==='function'){
+    window.selectTheme=function(id, unlockAt){
+      var meta=window._THEMES_META&&window._THEMES_META.find(function(t){return t.id===id;});
+      if(meta&&meta.coinCost){
+        var ownKey='xtheme_owned_'+id;
+        if(!G.flag(ownKey)){
+          if(G.coins()<meta.coinCost){ xToast('Need '+meta.coinCost+' 🪙 to unlock Dragon theme!'); return; }
+          G.addCoins(-meta.coinCost);
+          G.setFlag(ownKey,'1');
+          xToast('🐉 Dragon Theme unlocked!');
+        }
+      }
+      origST(id, unlockAt||0);
+    };
+  }
+
+  // Patch renderThemes to show coin cost on Dragon card
+  var origRT=window.renderThemes;
+  if(typeof origRT==='function'){
+    window.renderThemes=function(){
+      origRT();
+      setTimeout(function(){
+        var container=document.getElementById('themes-grid-container');
+        if(!container) return;
+        container.querySelectorAll('.theme-card').forEach(function(card){
+          if(card.innerHTML.indexOf('Dragon')>=0&&!card.querySelector('.x-coin-cost')){
+            var owned=G.flag('xtheme_owned_dragon');
+            if(!owned){
+              var lbl=document.createElement('div');
+              lbl.className='x-coin-cost theme-unlock';
+              lbl.style.color='#d29922';
+              lbl.textContent='🪙 300 coins to unlock';
+              card.appendChild(lbl);
+            }
+          }
+        });
+      },50);
+    };
+  }
+}
+
+// ── SEASON PASS IN SHOP ───────────────────────────────────────────
+function injectSeasonPassShop(){
+  document.querySelectorAll('.shop-scroll,.shop-list').forEach(function(scroll){
+    if(scroll.querySelector('#x-season-pass-item')) return;
+    var div=document.createElement('div');
+    div.id='x-season-pass-item';
+    div.className='shop-item';
+    var btnTxt=isSeasonActive()?'✅ Active':'$1.99/month';
+    div.innerHTML=
+      '<div class="shop-item-icon">🌟</div>'+
+      '<div class="shop-item-info x-season-badge-target">'+
+        '<div class="shop-item-name">Season Pass</div>'+
+        '<div class="shop-item-desc">2× coins on every level for 30 days</div>'+
+      '</div>'+
+      '<button id="x-season-btn" class="shop-item-price" onclick="xBuySeason()">'+btnTxt+'</button>';
+    scroll.insertBefore(div, scroll.firstChild);
+    updateSeasonBadges();
+  });
+}
+
+window.xBuySeason=function(){
+  if(isSeasonActive()){ xToast('Season Pass already active!'); return; }
+  if(window.Android&&window.Android.purchase) window.Android.purchase('season_pass_monthly');
+  else xToast('Purchase unavailable in browser');
+};
+
+// ── HOOK WIN OVERLAY (streak + season 2x + weekly) ───────────────
+function hookWinOverlay(){
+  var winIds=['levelCompleteOverlay','overlay-win','winOverlay','overlayWin','levelComplete'];
+  winIds.forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el||el._xWinHooked) return;
+    el._xWinHooked=true;
+    var obs=new MutationObserver(function(){
+      var active=el.classList.contains('active')||el.style.display==='flex'||el.style.display==='block';
+      if(active&&!el._xWinFired){
+        el._xWinFired=true;
+        onLevelWin();
+        // 2x coins display
+        if(isSeasonActive()){
+          var coinEl=el.querySelector('.overlay-coins,#win-coins-text,.win-coins,.coins-earned');
+          if(coinEl&&!coinEl._x2x){
+            coinEl._x2x=true;
+            var m=coinEl.textContent.match(/(\d+)/);
+            if(m){ G.addCoins(parseInt(m[1])); coinEl.textContent+=(' ×2🌟'); }
+          }
+        }
+      }
+      if(!active) el._xWinFired=false;
+    });
+    obs.observe(el,{attributes:true,attributeFilter:['class','style']});
+  });
+}
+
+function hookNoLivesOverlay(){
+  ['overlay-nolives','noLivesOverlay','overlayNoLives','nolivesOverlay'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el||el._xNoLivesHooked) return;
+    el._xNoLivesHooked=true;
+    var obs=new MutationObserver(function(){
+      var active=el.classList.contains('active')||el.style.display==='flex';
+      if(active){ injectContinueBtns(); scheduleLifeNotif(); }
+    });
+    obs.observe(el,{attributes:true,attributeFilter:['class','style']});
+  });
+}
+
+// ── HOOK onPurchaseSuccess ────────────────────────────────────────
+var _origPurchase=window.onPurchaseSuccess;
+window.onPurchaseSuccess=function(id){
+  if(id==='season_pass_monthly'){ activateSeason(); return; }
+  if(id==='starter_pack'){
+    var s=G.st(); if(s){ s.removeAds=true; G.addCoins(100); G.doSave(); }
+    xToast('🎁 Starter Pack activated! Ads removed + 100 🪙');
+    var adBanner=document.getElementById('admob-banner');
+    if(adBanner) adBanner.style.display='none';
+    if(window.Android&&window.Android.hideBannerAd) window.Android.hideBannerAd();
+    return;
+  }
+  if(typeof _origPurchase==='function') _origPurchase(id);
+};
+
+// ── PATCH VALID_PRODUCTS ──────────────────────────────────────────
+function patchValidProducts(){
+  if(typeof VALID_PRODUCTS!=='undefined'){
+    VALID_PRODUCTS.add('season_pass_monthly');
+    VALID_PRODUCTS.add('starter_pack');
+  }
+}
+
+// ── INJECT STARTER PACK MODAL ────────────────────────────────────
+function injectStarterModal(){
+  if(document.getElementById('starterPackModal')) return;
+  var modal=document.createElement('div');
+  modal.id='starterPackModal';
+  modal.innerHTML=
+    '<div class="starter-card">'+
+    '<div class="starter-badge">🎁</div>'+
+    '<div class="starter-title">Starter Pack</div>'+
+    '<div class="starter-subtitle">Limited time offer</div>'+
+    '<div class="starter-price-row"><span class="starter-old-price">$4.99</span><span class="starter-new-price">$0.99</span></div>'+
+    '<div class="starter-perks">✅ Remove Ads forever<br>✅ 100 bonus coins<br>✅ 1 hour unlimited lives</div>'+
+    '<button class="starter-buy-btn" onclick="buyStarterPack()">Get for $0.99!</button>'+
+    '<button class="starter-skip" onclick="closeStarterPack()">Maybe later</button>'+
+    '</div>';
+  document.body.appendChild(modal);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+window.addEventListener('load',function(){
+  setTimeout(function(){
+    injectStarterModal();
+    injectWeeklyBanner();
+    injectContinueBtns();
+    hookWinOverlay();
+    hookNoLivesOverlay();
+    injectDragonTheme();
+    injectSeasonPassShop();
+    updateWeeklyBanner();
+    updateSeasonBadges();
+    patchValidProducts();
+    injectRankCard();
+  },900);
+});
+
+})();
+</script>
+
+</body>
+</html>

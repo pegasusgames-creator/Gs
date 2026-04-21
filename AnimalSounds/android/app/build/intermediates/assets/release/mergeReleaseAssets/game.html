@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Animal Sounds</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --accent:#4CAF50; --accent2:#8BC34A; --bg:#E8F5E9; --card:#fff; --text:#333; --muted:#777; --radius:20px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--accent); flex-shrink:0; }
+header h1 { font-size:1.4rem; font-weight:800; color:#fff; }
+#btn-remove-ads { background:rgba(255,255,255,0.25); border:none; color:#fff; font-size:0.72rem; font-weight:700; padding:6px 12px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px; }
+.section-title { font-size:1rem; font-weight:700; color:var(--accent); margin:8px 0 10px 2px; }
+#animalGrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; }
+.animal-card { background:#fff; border-radius:var(--radius); box-shadow:0 4px 16px rgba(0,0,0,0.1); padding:16px 10px; text-align:center; cursor:pointer; transition:transform 0.15s, box-shadow 0.15s; border:3px solid transparent; position:relative; overflow:hidden; min-height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; }
+.animal-card:active { transform:scale(0.95); }
+.animal-card.playing { border-color:var(--accent); box-shadow:0 6px 24px rgba(76,175,80,0.4); transform:scale(1.05); }
+.animal-emoji { font-size:clamp(40px,12vw,56px); line-height:1; }
+.animal-name { font-size:0.85rem; font-weight:700; color:var(--text); }
+.animal-sound-text { font-size:0.8rem; font-weight:600; color:var(--accent); opacity:0; transition:opacity 0.3s; position:absolute; bottom:6px; left:0; right:0; text-align:center; }
+.animal-card.playing .animal-sound-text { opacity:1; }
+.wave-ring { position:absolute; inset:0; border-radius:var(--radius); border:3px solid var(--accent); animation:wave-expand 0.6s ease-out; pointer-events:none; }
+@keyframes wave-expand { from{transform:scale(1);opacity:0.8} to{transform:scale(1.15);opacity:0} }
+#animalPopup { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:50; align-items:center; justify-content:center; }
+#animalPopup.show { display:flex; }
+.popup-card { background:#fff; border-radius:28px; padding:32px 28px; text-align:center; width:min(320px,88vw); box-shadow:0 12px 40px rgba(0,0,0,0.25); animation:pop-in 0.3s ease; }
+@keyframes pop-in { from{transform:scale(0.7);opacity:0} to{transform:scale(1);opacity:1} }
+.popup-emoji { font-size:clamp(80px,22vw,110px); line-height:1; margin-bottom:12px; animation:wiggle 0.5s ease; }
+@keyframes wiggle { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-10deg)} 75%{transform:rotate(10deg)} }
+.popup-name { font-size:1.8rem; font-weight:900; color:var(--text); margin-bottom:6px; }
+.popup-sound { font-size:1.4rem; font-weight:700; color:var(--accent); margin-bottom:6px; }
+.popup-desc { font-size:0.9rem; color:var(--muted); margin-bottom:20px; }
+.popup-close { padding:14px 32px; font-size:1rem; font-weight:800; border:none; border-radius:16px; background:var(--accent); color:#fff; cursor:pointer; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>🐾 Animal Sounds</h1>
+    <button id="btn-remove-ads" onclick="purchase('remove_ads')">⭐ Remove Ads</button>
+  </header>
+  <div id="scroll">
+    <p class="section-title">👆 Tap an animal to hear its sound!</p>
+    <div id="animalGrid"></div>
+  </div>
+  <div id="animalPopup">
+    <div class="popup-card">
+      <div class="popup-emoji" id="popEmoji">🐄</div>
+      <div class="popup-name" id="popName">Cow</div>
+      <div class="popup-sound" id="popSound">Moo! 🐄</div>
+      <div class="popup-desc" id="popDesc">Low, rumbling sound</div>
+      <button class="popup-close" onclick="closePopup()">Close ✕</button>
+    </div>
+  </div>
+</div>
+<script>
+function purchase(sku){if(window.Android&&Android.purchase)Android.purchase(sku);}
+
+const ANIMALS = [
+  {e:'🐄',n:'Cow',s:'Moo! Moo!',d:'Low, rumbling sound',freq:180,type:'sawtooth',dur:0.6},
+  {e:'🐶',n:'Dog',s:'Woof! Woof!',d:'Sharp, barking sound',freq:520,type:'square',dur:0.3},
+  {e:'🐱',n:'Cat',s:'Meow~',d:'Soft, whining sound',freq:700,type:'sine',dur:0.5},
+  {e:'🐷',n:'Pig',s:'Oink! Oink!',d:'Short, nasal grunts',freq:350,type:'sawtooth',dur:0.25},
+  {e:'🦁',n:'Lion',s:'ROARRR!',d:'Deep, powerful roar',freq:120,type:'sawtooth',dur:0.8},
+  {e:'🐘',n:'Elephant',s:'TOOOOT!',d:'Loud trumpet blast',freq:200,type:'sawtooth',dur:0.7},
+  {e:'🐸',n:'Frog',s:'Ribbit! Ribbit!',d:'Croaking sound',freq:600,type:'square',dur:0.2},
+  {e:'🐦',n:'Bird',s:'Tweet! Tweet!',d:'High, chirping sound',freq:1200,type:'sine',dur:0.15},
+  {e:'🐝',n:'Bee',s:'Bzzzzz~',d:'Buzzing sound',freq:450,type:'square',dur:0.4},
+  {e:'🦆',n:'Duck',s:'Quack! Quack!',d:'Flat, nasal quack',freq:500,type:'sawtooth',dur:0.2},
+  {e:'🐴',n:'Horse',s:'Neigh!',d:'High whinny sound',freq:800,type:'sine',dur:0.5},
+  {e:'🐑',n:'Sheep',s:'Baaaa~',d:'Soft, bleating sound',freq:400,type:'sine',dur:0.5},
+  {e:'🦅',n:'Eagle',s:'SCREEE!',d:'Sharp, piercing cry',freq:1400,type:'sine',dur:0.4},
+  {e:'🐺',n:'Wolf',s:'Awooooo!',d:'Haunting howl',freq:300,type:'sine',dur:1.0},
+  {e:'🐊',n:'Croc',s:'HISSS!',d:'Low, hissing sound',freq:150,type:'sawtooth',dur:0.5},
+  {e:'🦜',n:'Parrot',s:'Squawk!',d:'Loud, sharp squawk',freq:900,type:'square',dur:0.3},
+  {e:'🐍',n:'Snake',s:'Ssssss~',d:'Soft hissing sound',freq:250,type:'square',dur:0.6},
+  {e:'🦒',n:'Giraffe',s:'Hmmm~',d:'Almost silent hum',freq:220,type:'sine',dur:0.8},
+  {e:'🐧',n:'Penguin',s:'Ork! Ork!',d:'Braying sound',freq:750,type:'sawtooth',dur:0.25},
+  {e:'🦖',n:'T-Rex',s:'GROARRR!',d:'Massive, deep roar',freq:100,type:'sawtooth',dur:1.0},
+];
+
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+
+function playAnimalSound(a){
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type = a.type;
+  o.frequency.setValueAtTime(a.freq, audioCtx.currentTime);
+  if(a.n==='Wolf') o.frequency.linearRampToValueAtTime(a.freq*2, audioCtx.currentTime+a.dur*0.5);
+  if(a.n==='Eagle') o.frequency.linearRampToValueAtTime(a.freq*0.7, audioCtx.currentTime+a.dur);
+  if(a.n==='Bird'){ o.frequency.setValueAtTime(a.freq,audioCtx.currentTime); o.frequency.linearRampToValueAtTime(a.freq*1.3,audioCtx.currentTime+0.07); o.frequency.linearRampToValueAtTime(a.freq,audioCtx.currentTime+0.14); }
+  g.gain.setValueAtTime(0.35, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+a.dur);
+  o.start(); o.stop(audioCtx.currentTime+a.dur+0.05);
+}
+
+function buildGrid(){
+  const grid = document.getElementById('animalGrid');
+  ANIMALS.forEach((a,i)=>{
+    const card = document.createElement('div');
+    card.className = 'animal-card';
+    card.innerHTML = `<div class="animal-emoji">${a.e}</div><div class="animal-name">${a.n}</div><div class="animal-sound-text">${a.s}</div>`;
+    card.onclick = ()=>tapAnimal(a,card);
+    grid.appendChild(card);
+  });
+}
+
+function tapAnimal(a, card){
+  document.querySelectorAll('.animal-card').forEach(c=>{ c.classList.remove('playing'); c.querySelectorAll('.wave-ring').forEach(r=>r.remove()); });
+  card.classList.add('playing');
+  const ring = document.createElement('div');
+  ring.className = 'wave-ring';
+  card.appendChild(ring);
+  setTimeout(()=>ring.remove(), 700);
+  playAnimalSound(a);
+  setTimeout(()=>showPopup(a), 200);
+  setTimeout(()=>card.classList.remove('playing'), 1200);
+}
+
+function showPopup(a){
+  document.getElementById('popEmoji').textContent = a.e;
+  document.getElementById('popName').textContent = a.n;
+  document.getElementById('popSound').textContent = a.s;
+  document.getElementById('popDesc').textContent = a.d;
+  document.getElementById('animalPopup').classList.add('show');
+}
+function closePopup(){ document.getElementById('animalPopup').classList.remove('show'); }
+document.getElementById('animalPopup').onclick = function(e){ if(e.target===this) closePopup(); };
+
+buildGrid();
+</script>
+</body>
+</html>

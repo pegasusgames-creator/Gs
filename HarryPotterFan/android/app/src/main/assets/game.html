@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Harry Potter Fan Quiz</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#7B1FA2; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+.screen { display:none; flex-direction:column; height:100%; }
+.screen.active { display:flex; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+button { cursor:pointer; border:none; border-radius:var(--radius); font-family:inherit; font-weight:600; transition:transform 0.1s,opacity 0.1s; }
+button:active, button.btn-pressed { transform:scale(0.96); opacity:0.85; }
+.btn-primary { background:var(--accent); color:#fff; padding:14px 28px; font-size:1.1rem; width:100%; }
+.btn-secondary { background:var(--card); color:var(--text); padding:12px 20px; font-size:0.95rem; width:100%; }
+#menuScreen { align-items:center; justify-content:center; gap:20px; padding:30px; }
+.menu-emoji { font-size:5rem; }
+.menu-title { font-size:2rem; font-weight:800; color:var(--accent); }
+.menu-sub { color:var(--muted); font-size:0.95rem; text-align:center; }
+.menu-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+#gameScreen { padding:0; }
+.game-header { background:var(--surface); padding:12px 16px; display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.game-top { display:flex; justify-content:space-between; align-items:center; }
+.progress-text { font-size:0.85rem; color:var(--muted); }
+.score-text { font-size:0.95rem; font-weight:700; color:var(--accent); }
+.timer-bar-wrap { height:6px; background:var(--card); border-radius:3px; overflow:hidden; }
+.timer-bar { height:100%; background:var(--accent); border-radius:3px; transition:width 0.1s linear; }
+.question-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; gap:12px; overflow:hidden; }
+.question-emoji { font-size:3.5rem; line-height:1; }
+.question-text { font-size:1.05rem; font-weight:600; text-align:center; line-height:1.4; }
+.answers { width:100%; max-width:480px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ans-btn { background:var(--card); color:var(--text); padding:14px 8px; font-size:0.9rem; border-radius:var(--radius); border:2px solid transparent; min-height:58px; line-height:1.3; }
+.ans-btn.correct { background:#1b5e20; border-color:#66BB6A; color:#fff; }
+.ans-btn.wrong { background:#b71c1c; border-color:#EF5350; color:#fff; }
+.ans-btn:disabled { cursor:default; }
+.feedback-bar { height:38px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0; background:var(--surface); padding:0 12px; text-align:center; }
+.feedback-bar.correct { color:#66BB6A; }
+.feedback-bar.wrong { color:#EF5350; }
+#resultScreen { align-items:center; justify-content:center; gap:18px; padding:30px; }
+.result-emoji { font-size:4rem; }
+.result-title { font-size:1.8rem; font-weight:800; }
+.result-score { font-size:3.5rem; font-weight:900; color:var(--accent); }
+.result-sub { color:var(--muted); font-size:1rem; }
+.result-buttons { width:100%; max-width:320px; display:flex; flex-direction:column; gap:12px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="screen active" id="menuScreen">
+    <div class="menu-emoji">⚡🧙</div>
+    <div class="menu-title">Harry Potter Quiz</div>
+    <div class="menu-sub">50 questions — are you a true Potterhead?</div>
+    <div class="menu-buttons">
+      <button class="btn-primary" onclick="startGame()">Lumos!</button>
+    </div>
+  </div>
+  <div class="screen" id="gameScreen">
+    <div class="game-header">
+      <div class="game-top">
+        <span class="progress-text" id="progressText">1 / 50</span>
+        <span class="score-text" id="scoreText">Score: 0</span>
+      </div>
+      <div class="timer-bar-wrap"><div class="timer-bar" id="timerBar"></div></div>
+    </div>
+    <div class="question-area">
+      <div class="question-emoji" id="qEmoji"></div>
+      <div class="question-text" id="qText"></div>
+      <div class="answers" id="answersDiv"></div>
+    </div>
+    <div class="feedback-bar" id="feedbackBar"></div>
+  </div>
+  <div class="screen" id="resultScreen">
+    <div class="result-emoji" id="resultEmoji">🏆</div>
+    <div class="result-title">Quiz Complete!</div>
+    <div class="result-score" id="resultScore">0%</div>
+    <div class="result-sub" id="resultSub"></div>
+    <div class="result-buttons">
+      <button class="btn-primary" onclick="startGame()">Play Again</button>
+      <button class="btn-secondary" onclick="showScreen('menuScreen')">Menu</button>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+var state={useCount:0,removeAds:false,score:0,qi:0,questions:[],timer:null,timeLeft:0,answered:false};
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%5===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var ALL_QUESTIONS=[
+  {e:'⚡',q:"What is Harry Potter's middle name?",a:["James","Sirius","Albus","Remus"],c:0},
+  {e:'🦁',q:"Which Hogwarts house is Harry Potter sorted into?",a:["Gryffindor","Slytherin","Ravenclaw","Hufflepuff"],c:0},
+  {e:'🐍',q:"What is the name of Voldemort's snake?",a:["Nagini","Salazar","Basilisk","Serpentia"],c:0},
+  {e:'🏰',q:"What is the name of the magical school Harry attends?",a:["Hogwarts","Beauxbatons","Durmstrang","Ilvermorny"],c:0},
+  {e:'🪄',q:"What spell is used to disarm an opponent?",a:["Expelliarmus","Stupefy","Accio","Lumos"],c:0},
+  {e:'🪄',q:"What does 'Lumos' do?",a:["Creates light from the wand tip","Opens locked doors","Summons objects","Repels dementors"],c:0},
+  {e:'🧙',q:"What is Dumbledore's full name?",a:["Albus Percival Wulfric Brian Dumbledore","Albus Cornelius Dumbledore","Albus Severus Dumbledore","Albus Godric Dumbledore"],c:0},
+  {e:'🎩',q:"The Sorting Hat once belonged to which Hogwarts founder?",a:["Godric Gryffindor","Salazar Slytherin","Helga Hufflepuff","Rowena Ravenclaw"],c:0},
+  {e:'⚡',q:"How did Harry Potter get his lightning bolt scar?",a:["From Voldemort's killing curse as a baby","In a Quidditch accident","From a dark magic explosion","From a basilisk attack"],c:0},
+  {e:'🐸',q:"What magical creatures appear on the famous Chocolate Frog cards?",a:["Famous witches and wizards","Magical beasts","Hogwarts founders","Ministry officials"],c:0},
+  {e:'🔴',q:"What is the core of Harry Potter's wand?",a:["Phoenix feather","Dragon heartstring","Unicorn hair","Basilisk fang"],c:0},
+  {e:'🎭',q:"Who is the Half-Blood Prince?",a:["Severus Snape","Tom Riddle","Dumbledore","Sirius Black"],c:0},
+  {e:'👻',q:"What is the name of the Gryffindor ghost?",a:["Nearly Headless Nick","The Bloody Baron","The Fat Friar","Moaning Myrtle"],c:0},
+  {e:'🏆',q:"What are the three Unforgivable Curses?",a:["Avada Kedavra, Crucio, Imperius","Avada Kedavra, Stupefy, Crucio","Imperius, Expelliarmus, Crucio","Avada Kedavra, Sectumsempra, Imperius"],c:0},
+  {e:'🏅',q:"What is the name of Harry's pet owl?",a:["Hedwig","Errol","Pigwidgeon","Crookshanks"],c:0},
+  {e:'🐾',q:"What animal is Ron's pet?",a:["Rat (Scabbers)","Toad (Trevor)","Cat (Crookshanks)","Owl (Pigwidgeon)"],c:0},
+  {e:'🏆',q:"In Quidditch, how many points is catching the Golden Snitch worth?",a:["150","100","200","50"],c:0},
+  {e:'🧪',q:"What is the name of the potion that makes the drinker irresistibly lucky?",a:["Felix Felicis","Polyjuice Potion","Veritaserum","Amortentia"],c:0},
+  {e:'🗺️',q:"What magical map shows every person's real-time location in Hogwarts?",a:["Marauder's Map","Hogwarts Map","The Trace","Locating Spell"],c:0},
+  {e:'🚂',q:"What is the name of the magical train that takes students to Hogwarts?",a:["Hogwarts Express","The Magic Train","Knight Bus","Platform 9¾ Express"],c:0},
+  {e:'🪄',q:"What spell causes instant death?",a:["Avada Kedavra","Crucio","Stupefy","Sectumsempra"],c:0},
+  {e:'⚡',q:"What does Lord Voldemort mean in French?",a:["Flight from death","Lord of death","Dark flight","Shadow lord"],c:0},
+  {e:'🔮',q:"What class does Professor Trelawney teach?",a:["Divination","Astronomy","Herbology","Care of Magical Creatures"],c:0},
+  {e:'🌿',q:"Who teaches Herbology at Hogwarts?",a:["Professor Sprout","Professor Flitwick","Professor McGonagall","Professor Binns"],c:0},
+  {e:'🦅',q:"What animal is on the Ravenclaw house crest?",a:["Eagle","Raven","Snake","Badger"],c:0},
+  {e:'🏰',q:"Where is the Chamber of Secrets hidden?",a:["In the girls' bathroom (Moaning Myrtle's)","In the dungeons","Under the Quidditch pitch","In the Forbidden Forest"],c:0},
+  {e:'🪄',q:"What is the incantation for the Patronus charm?",a:["Expecto Patronum","Patronus Maxima","Expecto Dementor","Riddikulus"],c:0},
+  {e:'🎭',q:"Who is the Prisoner of Azkaban?",a:["Sirius Black","Bartemius Crouch Jr.","Bellatrix Lestrange","Peter Pettigrew"],c:0},
+  {e:'🏆',q:"What is the name of the death eater who kills Dumbledore?",a:["Severus Snape","Bellatrix Lestrange","Lucius Malfoy","Peter Pettigrew"],c:0},
+  {e:'🐺',q:"What is Professor Lupin's condition?",a:["Werewolf","Vampire","Animagus","Squib"],c:0},
+  {e:'📚',q:"Who wrote 'The Standard Book of Spells'?",a:["Miranda Goshawk","Bathilda Bagshot","Adalbert Waffling","Phyllida Spore"],c:0},
+  {e:'🏦',q:"What is the name of the magical bank in the wizarding world?",a:["Gringotts","Hogwarts Bank","The Vault","Galleon Bank"],c:0},
+  {e:'🦹',q:"What is Voldemort's real name?",a:["Tom Marvolo Riddle","Thomas Slytherin","Marvolo Gaunt","Thomas Gaunt Riddle"],c:0},
+  {e:'🪞',q:"What does the Mirror of Erised show?",a:["The viewer's deepest desire","The viewer's future","The viewer's worst fear","The viewer's true self"],c:0},
+  {e:'🌲',q:"What is the name of the half-giant gamekeeper at Hogwarts?",a:["Rubeus Hagrid","Angus Hagrid","Cornelius Fudge","Olympe Maxime"],c:0},
+  {e:'🔑',q:"What is the name of the seven Horcruxes? (one of these is NOT a Horcrux)",a:["Harry's wand","Tom Riddle's diary","Rowena Ravenclaw's diadem","Helga Hufflepuff's cup"],c:0},
+  {e:'🚌',q:"What is the name of the magical bus for stranded witches and wizards?",a:["Knight Bus","The Broomstick Bus","Hogwarts Express","The Floo Network"],c:0},
+  {e:'🎭',q:"Who played Harry Potter in the film series?",a:["Daniel Radcliffe","Rupert Grint","Tom Felton","Matthew Lewis"],c:0},
+  {e:'🌟',q:"What is the name of Dumbledore's phoenix?",a:["Fawkes","Phoenix","Hedwig","Gryffin"],c:0},
+  {e:'🧙',q:"What O.W.L. stands for in the wizarding world?",a:["Ordinary Wizarding Level","Outstanding Wizarding Level","Official Wizard's License","Order of Wizardly Learning"],c:0},
+  {e:'🗡️',q:"What sword appears in the Sorting Hat when Neville kills Nagini?",a:["Sword of Gryffindor","Sword of Slytherin","The Sword of Merlin","Excalibur"],c:0},
+  {e:'⚡',q:"Which Deathly Hallow grants mastery over death according to the tale?",a:["The Resurrection Stone","The Elder Wand","The Invisibility Cloak","All three together"],c:0},
+  {e:'🐦',q:"What is the name of Draco Malfoy's father?",a:["Lucius Malfoy","Abraxas Malfoy","Narcissa Malfoy","Scorpius Malfoy"],c:0},
+  {e:'🏰',q:"Hogwarts is described as being in which country?",a:["Scotland","England","Wales","Ireland"],c:0},
+  {e:'📖',q:"How many books are in the Harry Potter series (main series)?",a:["7","6","8","5"],c:0},
+  {e:'🦁',q:"What is Hermione Granger's cat's name?",a:["Crookshanks","Scabbers","Pigwidgeon","Nagini"],c:0},
+  {e:'🎯',q:"What is the tiny golden ball in Quidditch called?",a:["Golden Snitch","Quaffle","Bludger","Snitch"],c:0},
+  {e:'👁️',q:"What is Moody's magical eye called?",a:["Mad-Eye","The Magical Eye","Magical Orb","Eye of Truth"],c:0},
+  {e:'🗻',q:"What is the name of the village near Hogwarts where students can visit in third year?",a:["Hogsmeade","Diagon Alley","Godric's Hollow","Ottery St Catchpole"],c:0},
+  {e:'🪄',q:"Which spell reverses another spell or jinx?",a:["Finite Incantatem","Stupefy","Expelliarmus","Nox"],c:0},
+];
+
+function shuffle(arr){for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
+function startGame(){state.score=0;state.qi=0;state.useCount=0;state.questions=shuffle(ALL_QUESTIONS.slice()).slice(0,50);showScreen('gameScreen');loadQuestion();}
+function loadQuestion(){
+  if(state.qi>=state.questions.length){endGame();return;}
+  var q=state.questions[state.qi];
+  document.getElementById('progressText').textContent=(state.qi+1)+' / '+state.questions.length;
+  document.getElementById('scoreText').textContent='Score: '+state.score;
+  document.getElementById('qEmoji').textContent=q.e;
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('feedbackBar').textContent='';
+  document.getElementById('feedbackBar').className='feedback-bar';
+  state.answered=false;
+  var correctLabel=q.a[q.c];
+  var indices=[0,1,2,3];shuffle(indices);
+  var div=document.getElementById('answersDiv');div.innerHTML='';
+  indices.forEach(function(idx){var btn=document.createElement('button');btn.className='ans-btn';btn.textContent=q.a[idx];btn.onclick=function(){answer(btn,q.a[idx]===correctLabel,correctLabel);};div.appendChild(btn);});
+  startTimer();
+}
+var TIMER_DURATION=15;
+function startTimer(){clearInterval(state.timer);state.timeLeft=TIMER_DURATION;updateTimerBar();state.timer=setInterval(function(){state.timeLeft-=0.1;updateTimerBar();if(state.timeLeft<=0){clearInterval(state.timer);timeUp();}},100);}
+function updateTimerBar(){document.getElementById('timerBar').style.width=Math.max(0,state.timeLeft/TIMER_DURATION*100)+'%';}
+function timeUp(){if(state.answered)return;state.answered=true;var q=state.questions[state.qi];var correctLabel=q.a[q.c];document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});showFeedback(false,"Time up! Correct: "+correctLabel);setTimeout(nextQ,1600);}
+function answer(btn,isCorrect,correctLabel){if(state.answered)return;state.answered=true;clearInterval(state.timer);document.querySelectorAll('.ans-btn').forEach(function(b){b.disabled=true;if(b.textContent===correctLabel)b.classList.add('correct');});if(isCorrect){state.score++;btn.classList.add('correct');showFeedback(true,'Correct! 🎉');}else{btn.classList.add('wrong');showFeedback(false,'Wrong! Correct: '+correctLabel);}setTimeout(nextQ,1600);}
+function showFeedback(ok,msg){var bar=document.getElementById('feedbackBar');bar.textContent=msg;bar.className='feedback-bar '+(ok?'correct':'wrong');}
+function nextQ(){state.qi++;if(state.qi%5===0)maybeInterstitial();loadQuestion();}
+function endGame(){clearInterval(state.timer);var pct=Math.round(state.score/state.questions.length*100);document.getElementById('resultScore').textContent=pct+'%';document.getElementById('resultSub').textContent=state.score+' out of '+state.questions.length+' correct';var emojis=['😢','😕','🙂','😊','🏆'];document.getElementById('resultEmoji').textContent=emojis[Math.min(4,Math.floor(pct/20))];showScreen('resultScreen');}
+</script>
+</body>
+</html>

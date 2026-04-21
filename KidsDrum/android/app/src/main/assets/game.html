@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Kids Drum</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --accent:#FF5722; --bg:#FFF8E1; --text:#333; --muted:#777; --radius:16px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--accent); flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:800; color:#fff; }
+#btn-remove-ads { background:rgba(255,255,255,0.25); border:none; color:#fff; font-size:0.72rem; font-weight:700; padding:5px 10px; border-radius:20px; cursor:pointer; }
+
+/* BPM bar */
+#bpmBar { display:flex; align-items:center; gap:10px; padding:8px 14px; background:#fff; border-bottom:2px solid #f0e0d0; flex-shrink:0; }
+#bpmBar label { font-size:0.8rem; font-weight:700; color:var(--muted); }
+#bpmSlider { flex:1; }
+#bpmVal { font-size:0.85rem; font-weight:800; color:var(--accent); min-width:52px; }
+.ctrl-btn { padding:8px 14px; font-size:0.8rem; font-weight:700; border:none; border-radius:10px; cursor:pointer; transition:transform 0.1s; }
+.ctrl-btn:active { transform:scale(0.93); }
+.btn-record { background:#FF4081; color:#fff; }
+.btn-play { background:#4CAF50; color:#fff; }
+.btn-stop { background:#9E9E9E; color:#fff; }
+.btn-clear-loop { background:#FFF3E0; color:#E65100; }
+
+/* Drum pads */
+#padGrid { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:12px; flex:1; overflow-y:auto; }
+.pad {
+  border:none; border-radius:var(--radius);
+  cursor:pointer; transition:transform 0.08s, filter 0.1s;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:4px; min-height:80px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.15);
+  user-select:none;
+}
+.pad:active, .pad.hit { transform:scale(0.93); filter:brightness(1.2); }
+.pad-icon { font-size:clamp(28px,7vw,36px); }
+.pad-label { font-size:0.8rem; font-weight:800; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,0.3); }
+
+/* Loop sequencer */
+#loopWrap { padding:8px 12px; background:#fff; border-top:2px solid #f0e0d0; flex-shrink:0; }
+#loopTitle { font-size:0.8rem; font-weight:700; color:var(--muted); margin-bottom:6px; }
+#loopSteps { display:flex; gap:5px; justify-content:center; }
+.loop-step { width:32px; height:32px; border-radius:8px; background:#f0f0f0; border:2px solid #e0e0e0; cursor:pointer; transition:all 0.1s; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#ccc; }
+.loop-step.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+.loop-step.playing { box-shadow:0 0 0 3px rgba(255,87,34,0.5); }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>🥁 Kids Drum</h1>
+    <button id="btn-remove-ads" onclick="purchase('remove_ads')">⭐ Remove Ads</button>
+  </header>
+
+  <div id="bpmBar">
+    <label>BPM:</label>
+    <input type="range" id="bpmSlider" min="60" max="180" value="100" oninput="updateBPM()">
+    <span id="bpmVal">100</span>
+    <button class="ctrl-btn btn-record" id="recordBtn" onclick="toggleRecord()">⏺ Rec</button>
+    <button class="ctrl-btn btn-play" id="playBtn" onclick="togglePlay()">▶ Play</button>
+    <button class="ctrl-btn btn-clear-loop" onclick="clearLoop()">🗑</button>
+  </div>
+
+  <div id="padGrid"></div>
+
+  <div id="loopWrap">
+    <div id="loopTitle">Loop (8 steps) — tap a pad while recording!</div>
+    <div id="loopSteps"></div>
+  </div>
+</div>
+<script>
+function purchase(sku){if(window.Android&&Android.purchase)Android.purchase(sku);}
+
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+
+const PADS = [
+  {id:'kick', label:'Kick', icon:'🥁', color:'#FF5722', fn:playKick},
+  {id:'snare', label:'Snare', icon:'🪘', color:'#FF9800', fn:playSnare},
+  {id:'hihat', label:'Hi-Hat', icon:'🎵', color:'#FFC107', fn:playHihat},
+  {id:'clap', label:'Clap', icon:'👏', color:'#4CAF50', fn:playClap},
+  {id:'cowbell', label:'Cowbell', icon:'🔔', color:'#2196F3', fn:playCowbell},
+  {id:'cymbal', label:'Cymbal', icon:'✨', color:'#9C27B0', fn:playCymbal},
+  {id:'bass', label:'Bass', icon:'🎸', color:'#E91E63', fn:playBass},
+  {id:'tom', label:'Tom', icon:'🥁', color:'#795548', fn:playTom},
+];
+
+function playKick(){
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.frequency.setValueAtTime(150,audioCtx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.5);
+  g.gain.setValueAtTime(1,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.5);
+  o.start(); o.stop(audioCtx.currentTime+0.5);
+}
+function playSnare(){
+  const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*0.2,audioCtx.sampleRate);
+  const data=buf.getChannelData(0);
+  for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*Math.exp(-i/500);
+  const src=audioCtx.createBufferSource(), g=audioCtx.createGain();
+  src.buffer=buf; src.connect(g); g.connect(audioCtx.destination);
+  g.gain.setValueAtTime(0.6,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.2);
+  src.start();
+}
+function playHihat(){
+  const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*0.05,audioCtx.sampleRate);
+  const data=buf.getChannelData(0);
+  for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*Math.exp(-i/100);
+  const src=audioCtx.createBufferSource(), g=audioCtx.createGain();
+  src.buffer=buf; src.connect(g); g.connect(audioCtx.destination);
+  g.gain.setValueAtTime(0.3,audioCtx.currentTime);
+  src.start();
+}
+function playClap(){
+  for(let i=0;i<3;i++){
+    const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*0.02,audioCtx.sampleRate);
+    const data=buf.getChannelData(0);
+    for(let j=0;j<data.length;j++) data[j]=(Math.random()*2-1)*0.8;
+    const src=audioCtx.createBufferSource(), g=audioCtx.createGain();
+    src.buffer=buf; src.connect(g); g.connect(audioCtx.destination);
+    g.gain.setValueAtTime(0.5,audioCtx.currentTime+i*0.01);
+    src.start(audioCtx.currentTime+i*0.01);
+  }
+}
+function playCowbell(){
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type='square'; o.frequency.value=562;
+  g.gain.setValueAtTime(0.4,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.4);
+  o.start(); o.stop(audioCtx.currentTime+0.4);
+}
+function playCymbal(){
+  const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*0.6,audioCtx.sampleRate);
+  const data=buf.getChannelData(0);
+  for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*Math.exp(-i/8000);
+  const src=audioCtx.createBufferSource(), g=audioCtx.createGain();
+  src.buffer=buf; src.connect(g); g.connect(audioCtx.destination);
+  g.gain.setValueAtTime(0.3,audioCtx.currentTime);
+  src.start();
+}
+function playBass(){
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type='triangle'; o.frequency.value=80;
+  g.gain.setValueAtTime(0.8,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.6);
+  o.start(); o.stop(audioCtx.currentTime+0.6);
+}
+function playTom(){
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.frequency.setValueAtTime(200,audioCtx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(60,audioCtx.currentTime+0.3);
+  g.gain.setValueAtTime(0.7,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.3);
+  o.start(); o.stop(audioCtx.currentTime+0.3);
+}
+
+// Build pads
+const padGrid = document.getElementById('padGrid');
+PADS.forEach(p=>{
+  const btn=document.createElement('button');
+  btn.className='pad'; btn.id='pad-'+p.id;
+  btn.style.background=`linear-gradient(135deg,${p.color},${p.color}cc)`;
+  btn.innerHTML=`<div class="pad-icon">${p.icon}</div><div class="pad-label">${p.label}</div>`;
+  btn.ontouchstart=btn.onclick=function(e){ e.preventDefault(); hitPad(p, btn); };
+  padGrid.appendChild(btn);
+});
+
+// Build loop steps
+const loopStepsEl = document.getElementById('loopSteps');
+const STEPS = 8;
+const loopData = Array(STEPS).fill(null); // each slot: pad id or null
+for(let i=0;i<STEPS;i++){
+  const s=document.createElement('div');
+  s.className='loop-step'; s.id='step-'+i; s.textContent=(i+1);
+  s.onclick=()=>clearStep(i);
+  loopStepsEl.appendChild(s);
+}
+
+let bpm=100, isRecording=false, isPlaying=false, playInterval=null, playStep=0, recStep=0;
+
+function updateBPM(){
+  bpm=+document.getElementById('bpmSlider').value;
+  document.getElementById('bpmVal').textContent=bpm;
+  if(isPlaying){ stopPlayback(); startPlayback(); }
+}
+
+function hitPad(p, btn){
+  p.fn();
+  btn.classList.add('hit');
+  setTimeout(()=>btn.classList.remove('hit'),120);
+  if(isRecording){
+    loopData[recStep]=p.id;
+    const stepEl=document.getElementById('step-'+recStep);
+    stepEl.classList.add('active');
+    stepEl.textContent=p.icon;
+    recStep=(recStep+1)%STEPS;
+  }
+}
+
+function toggleRecord(){
+  isRecording=!isRecording;
+  recStep=0;
+  const btn=document.getElementById('recordBtn');
+  btn.textContent=isRecording?'⏹ Stop':'⏺ Rec';
+  btn.style.background=isRecording?'#f44336':'#FF4081';
+}
+
+function togglePlay(){
+  if(isPlaying){ stopPlayback(); } else { startPlayback(); }
+}
+
+function startPlayback(){
+  isPlaying=true; playStep=0;
+  document.getElementById('playBtn').textContent='⏹ Stop';
+  document.getElementById('playBtn').style.background='#f44336';
+  const ms=60000/bpm/2;
+  playInterval=setInterval(()=>{
+    document.querySelectorAll('.loop-step').forEach(s=>s.classList.remove('playing'));
+    const el=document.getElementById('step-'+playStep);
+    el.classList.add('playing');
+    const padId=loopData[playStep];
+    if(padId){
+      const p=PADS.find(x=>x.id===padId);
+      if(p){ p.fn(); const btn=document.getElementById('pad-'+padId); if(btn){btn.classList.add('hit');setTimeout(()=>btn.classList.remove('hit'),120);} }
+    }
+    playStep=(playStep+1)%STEPS;
+  },ms);
+}
+
+function stopPlayback(){
+  isPlaying=false;
+  clearInterval(playInterval);
+  document.getElementById('playBtn').textContent='▶ Play';
+  document.getElementById('playBtn').style.background='#4CAF50';
+  document.querySelectorAll('.loop-step').forEach(s=>s.classList.remove('playing'));
+}
+
+function clearStep(i){
+  loopData[i]=null;
+  const el=document.getElementById('step-'+i);
+  el.classList.remove('active'); el.textContent=(i+1);
+}
+
+function clearLoop(){
+  stopPlayback(); isRecording=false;
+  document.getElementById('recordBtn').textContent='⏺ Rec';
+  document.getElementById('recordBtn').style.background='#FF4081';
+  for(let i=0;i<STEPS;i++) clearStep(i);
+}
+</script>
+</body>
+</html>

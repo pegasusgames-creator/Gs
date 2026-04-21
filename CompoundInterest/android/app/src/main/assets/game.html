@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Compound Interest</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#FF9800; --accent2:#E65100; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; }
+header h1 span { color:var(--accent); }
+#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+label { display:block; font-size:0.85rem; color:var(--muted); margin-bottom:4px; }
+input[type=number] { width:100%; background:var(--card); border:none; color:var(--text); font-size:1rem; padding:10px 12px; border-radius:8px; outline:none; margin-bottom:12px; }
+input[type=number]:focus { box-shadow:0 0 0 2px var(--accent); }
+select { width:100%; background:var(--card); border:none; color:var(--text); font-size:1rem; padding:10px 12px; border-radius:8px; outline:none; margin-bottom:12px; }
+.result-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+.result-item { background:var(--card); border-radius:10px; padding:12px; text-align:center; }
+.result-label { font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+.result-value { font-size:1.2rem; font-weight:700; color:var(--accent); }
+.result-item.big { grid-column:span 2; background:#1f1000; border:2px solid var(--accent); }
+.result-item.big .result-value { font-size:1.8rem; }
+table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+th { color:var(--muted); text-align:left; padding:6px 4px; border-bottom:1px solid #334; font-size:0.72rem; text-transform:uppercase; }
+td { padding:8px 4px; border-bottom:1px solid #223; }
+td:last-child { color:var(--accent); text-align:right; font-weight:600; }
+td:first-child { color:var(--muted); }
+#btn-calc { width:100%; min-height:48px; background:var(--accent); border:none; color:#fff; font-size:1rem; font-weight:700; border-radius:10px; cursor:pointer; margin-bottom:12px; }
+#btn-calc.btn-pressed { opacity:0.8; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Compound <span>Interest</span></h1>
+    <button id="btn-remove-ads">Remove Ads</button>
+  </header>
+  <div id="scroll">
+    <div class="card">
+      <div class="card-title">Inputs</div>
+      <label>Principal Amount ($)</label>
+      <input type="number" id="principal" placeholder="10000" min="0" step="100">
+      <label>Annual Interest Rate (%)</label>
+      <input type="number" id="rate" placeholder="7" min="0" step="0.1">
+      <label>Time (Years)</label>
+      <input type="number" id="years" placeholder="10" min="1" step="1">
+      <label>Compounding Frequency</label>
+      <select id="freq">
+        <option value="365">Daily (365x/year)</option>
+        <option value="12" selected>Monthly (12x/year)</option>
+        <option value="4">Quarterly (4x/year)</option>
+        <option value="1">Annually (1x/year)</option>
+      </select>
+      <button id="btn-calc">Calculate</button>
+    </div>
+    <div class="card" id="results-card" style="display:none;">
+      <div class="card-title">Results</div>
+      <div class="result-grid">
+        <div class="result-item big"><div class="result-label">Final Amount</div><div class="result-value" id="r-final">$0.00</div></div>
+        <div class="result-item"><div class="result-label">Principal</div><div class="result-value" id="r-principal">$0.00</div></div>
+        <div class="result-item"><div class="result-label">Interest Earned</div><div class="result-value" id="r-interest">$0.00</div></div>
+      </div>
+    </div>
+    <div class="card" id="table-card" style="display:none;">
+      <div class="card-title">Year-by-Year</div>
+      <table>
+        <thead><tr><th>Year</th><th>Balance</th><th>Interest</th></tr></thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+
+var state = { useCount:0, removeAds:false };
+
+function fmt(n){ return '$'+(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+
+document.getElementById('btn-calc').addEventListener('click', function(){
+  var P = parseFloat(document.getElementById('principal').value)||0;
+  var r = parseFloat(document.getElementById('rate').value)||0;
+  var t = parseInt(document.getElementById('years').value)||0;
+  var n = parseInt(document.getElementById('freq').value)||12;
+  if(P<=0 || r<0 || t<=0){ return; }
+  var rateD = r/100;
+  var final = P * Math.pow(1 + rateD/n, n*t);
+  document.getElementById('r-final').textContent = fmt(final);
+  document.getElementById('r-principal').textContent = fmt(P);
+  document.getElementById('r-interest').textContent = fmt(final - P);
+  document.getElementById('results-card').style.display = '';
+  // Year-by-year table
+  var tbody = document.getElementById('table-body');
+  tbody.innerHTML = '';
+  var maxRows = Math.min(t, 30);
+  for(var y=1; y<=maxRows; y++){
+    var bal = P * Math.pow(1 + rateD/n, n*y);
+    var prevBal = y===1 ? P : P * Math.pow(1 + rateD/n, n*(y-1));
+    var intYear = bal - prevBal;
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>'+y+'</td><td>'+fmt(bal)+'</td><td>'+fmt(intYear)+'</td>';
+    tbody.appendChild(tr);
+  }
+  if(t > 30){
+    var tr2 = document.createElement('tr');
+    tr2.innerHTML = '<td colspan="3" style="color:var(--muted);text-align:center;font-size:0.8rem;">Showing first 30 years</td>';
+    tbody.appendChild(tr2);
+  }
+  document.getElementById('table-card').style.display = '';
+  maybeInterstitial();
+});
+
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+function init(){if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';}
+init();
+</script>
+</body>
+</html>

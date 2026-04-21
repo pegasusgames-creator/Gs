@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mental Math Quiz</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --accent:#009688; --accent2:#4DB6AC; --bg:#E0F2F1; --card:#fff; --text:#333; --muted:#777; --radius:16px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--accent); flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:800; color:#fff; }
+#btn-remove-ads { background:rgba(255,255,255,0.25); border:none; color:#fff; font-size:0.72rem; font-weight:700; padding:5px 10px; border-radius:20px; cursor:pointer; }
+
+.screen { display:none; flex-direction:column; flex:1; overflow:hidden; }
+.screen.active { display:flex; }
+
+/* MENU */
+#menuScreen { background:var(--bg); align-items:center; justify-content:center; padding:20px; gap:16px; }
+.menu-icon { font-size:72px; }
+.menu-title { font-size:1.8rem; font-weight:900; color:var(--accent); }
+.hs-display { background:#fff; border-radius:12px; padding:10px 24px; font-size:0.9rem; color:var(--muted); font-weight:600; }
+.hs-display b { color:var(--accent); }
+.mode-row { display:flex; gap:10px; width:100%; max-width:340px; }
+.mode-btn { flex:1; padding:16px 8px; font-size:0.9rem; font-weight:800; border:none; border-radius:var(--radius); cursor:pointer; transition:transform 0.15s; }
+.mode-btn:active { transform:scale(0.96); }
+.mode-30 { background:#E0F2F1; color:#004D40; }
+.mode-60 { background:#B2DFDB; color:#004D40; }
+.mode-inf { background:var(--accent); color:#fff; box-shadow:0 4px 16px rgba(0,150,136,0.35); }
+.ops-row { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; width:100%; max-width:340px; }
+.op-toggle { padding:10px 18px; font-size:1.1rem; font-weight:800; border:3px solid #B2DFDB; border-radius:12px; background:#fff; cursor:pointer; transition:all 0.15s; color:var(--muted); }
+.op-toggle.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+.diff-row { display:flex; gap:8px; width:100%; max-width:340px; }
+.diff-btn2 { flex:1; padding:12px; font-size:0.85rem; font-weight:800; border:3px solid #B2DFDB; border-radius:12px; background:#fff; cursor:pointer; color:var(--muted); transition:all 0.15s; }
+.diff-btn2.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+/* GAME */
+#gameScreen { background:var(--bg); padding:14px; gap:12px; align-items:center; }
+.timer-bar-wrap { width:100%; max-width:400px; background:#B2DFDB; border-radius:20px; height:16px; }
+.timer-bar-fill { height:16px; border-radius:20px; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width 0.1s linear; }
+.game-stats { display:flex; justify-content:space-between; width:100%; max-width:400px; font-size:0.9rem; font-weight:700; color:var(--muted); }
+.question-card { background:#fff; border-radius:var(--radius); box-shadow:0 4px 24px rgba(0,0,0,0.08); padding:24px; text-align:center; width:100%; max-width:400px; }
+.q-text { font-size:clamp(32px,11vw,52px); font-weight:900; color:var(--text); letter-spacing:3px; }
+.q-text .eq { color:var(--accent); }
+.answer-display { font-size:2rem; font-weight:900; color:var(--accent); min-height:44px; letter-spacing:2px; }
+.answer-display.wrong-flash { animation:flash-red 0.3s; }
+@keyframes flash-red { 0%,100%{color:var(--accent)} 50%{color:#f44336} }
+.numpad { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; width:100%; max-width:300px; }
+.np-btn { padding:18px; font-size:1.3rem; font-weight:900; border:none; border-radius:14px; cursor:pointer; transition:transform 0.1s; }
+.np-btn:active { transform:scale(0.92); }
+.np-num { background:#fff; color:var(--text); box-shadow:0 2px 10px rgba(0,0,0,0.08); }
+.np-del { background:#FFEBEE; color:#C62828; }
+.np-ok  { background:var(--accent); color:#fff; font-size:1rem; box-shadow:0 4px 16px rgba(0,150,136,0.35); }
+
+/* RESULT */
+#resultScreen { background:var(--bg); align-items:center; justify-content:center; padding:20px; gap:14px; }
+.res-emoji { font-size:72px; }
+.res-title { font-size:1.8rem; font-weight:900; color:var(--accent); }
+.res-stats { background:#fff; border-radius:16px; padding:16px 24px; width:100%; max-width:320px; display:flex; flex-direction:column; gap:8px; }
+.res-row { display:flex; justify-content:space-between; font-size:0.95rem; }
+.res-row b { color:var(--accent); }
+.res-hs { font-size:0.85rem; color:#4CAF50; font-weight:700; text-align:center; }
+.big-btn { width:100%; max-width:280px; padding:18px; font-size:1rem; font-weight:800; border:none; border-radius:var(--radius); cursor:pointer; }
+.btn-play-a { background:var(--accent); color:#fff; box-shadow:0 4px 16px rgba(0,150,136,0.35); }
+.btn-menu-a { background:#fff; color:var(--accent); }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>🧮 Mental Math</h1>
+    <button id="btn-remove-ads" onclick="purchase('remove_ads')">⭐ Remove Ads</button>
+  </header>
+
+  <!-- MENU -->
+  <div class="screen active" id="menuScreen">
+    <div class="menu-icon">🧠</div>
+    <div class="menu-title">Mental Math Quiz</div>
+    <div class="hs-display">🏆 High Score: <b id="hsDisplay">0</b> correct/min</div>
+    <div style="font-size:0.85rem;font-weight:700;color:var(--muted);">Operations:</div>
+    <div class="ops-row">
+      <button class="op-toggle on" id="op-plus" onclick="toggleOp('plus',this)">+</button>
+      <button class="op-toggle on" id="op-minus" onclick="toggleOp('minus',this)">−</button>
+      <button class="op-toggle on" id="op-times" onclick="toggleOp('times',this)">×</button>
+      <button class="op-toggle" id="op-div" onclick="toggleOp('div',this)">÷</button>
+    </div>
+    <div style="font-size:0.85rem;font-weight:700;color:var(--muted);">Difficulty:</div>
+    <div class="diff-row">
+      <button class="diff-btn2 on" id="d-easy" onclick="setDiff('easy',this)">Easy</button>
+      <button class="diff-btn2" id="d-med" onclick="setDiff('medium',this)">Medium</button>
+      <button class="diff-btn2" id="d-hard" onclick="setDiff('hard',this)">Hard</button>
+    </div>
+    <div style="font-size:0.85rem;font-weight:700;color:var(--muted);">Time limit:</div>
+    <div class="mode-row">
+      <button class="mode-btn mode-30" onclick="startGame(30)">⏱ 30s</button>
+      <button class="mode-btn mode-60" onclick="startGame(60)">⏱ 60s</button>
+      <button class="mode-btn mode-inf" onclick="startGame(0)">∞ Endless</button>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div class="screen" id="gameScreen">
+    <div class="timer-bar-wrap"><div class="timer-bar-fill" id="timerBar" style="width:100%"></div></div>
+    <div class="game-stats">
+      <span>⏱ <span id="timerDisplay">60</span>s</span>
+      <span>✓ <span id="correctCount">0</span> | ✗ <span id="wrongCount">0</span></span>
+      <span>🔥 <span id="streak">0</span> streak</span>
+    </div>
+    <div class="question-card">
+      <div class="q-text" id="questionText">3 × 4 = <span class="eq">?</span></div>
+      <div class="answer-display" id="answerDisplay">_</div>
+    </div>
+    <div class="numpad">
+      <button class="np-btn np-num" onclick="numPress(7)">7</button>
+      <button class="np-btn np-num" onclick="numPress(8)">8</button>
+      <button class="np-btn np-num" onclick="numPress(9)">9</button>
+      <button class="np-btn np-num" onclick="numPress(4)">4</button>
+      <button class="np-btn np-num" onclick="numPress(5)">5</button>
+      <button class="np-btn np-num" onclick="numPress(6)">6</button>
+      <button class="np-btn np-num" onclick="numPress(1)">1</button>
+      <button class="np-btn np-num" onclick="numPress(2)">2</button>
+      <button class="np-btn np-num" onclick="numPress(3)">3</button>
+      <button class="np-btn np-del" onclick="numDel()">⌫</button>
+      <button class="np-btn np-num" onclick="numPress(0)">0</button>
+      <button class="np-btn np-ok" onclick="submitAnswer()">✓</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="resultScreen">
+    <div class="res-emoji" id="resEmoji">🌟</div>
+    <div class="res-title" id="resTitle">Great!</div>
+    <div class="res-stats">
+      <div class="res-row"><span>Correct:</span><b id="resCorrect">0</b></div>
+      <div class="res-row"><span>Wrong:</span><b id="resWrong">0</b></div>
+      <div class="res-row"><span>Best streak:</span><b id="resStreak">0</b></div>
+      <div class="res-row"><span>Score/min:</span><b id="resSPM">0</b></div>
+    </div>
+    <div class="res-hs" id="resHS"></div>
+    <button class="big-btn btn-play-a" onclick="restartGame()">Play Again</button>
+    <button class="big-btn btn-menu-a" onclick="goMenu()">Menu</button>
+  </div>
+</div>
+<script>
+function purchase(sku){if(window.Android&&Android.purchase)Android.purchase(sku);}
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+function playTone(f,d,t='sine'){const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(0.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+d);o.start();o.stop(audioCtx.currentTime+d);}
+
+let ops = {plus:true,minus:true,times:true,div:false};
+let difficulty = 'easy';
+let gameState = {};
+let timerInterval=null, lastTimeSec=0;
+const hs = {30:+localStorage.getItem('mm_hs30')||0, 60:+localStorage.getItem('mm_hs60')||0, 0:+localStorage.getItem('mm_hs0')||0};
+
+document.getElementById('hsDisplay').textContent = Math.max(...Object.values(hs));
+
+function toggleOp(op,btn){ ops[op]=!ops[op]; btn.classList.toggle('on',ops[op]); }
+function setDiff(d,btn){ difficulty=d; document.querySelectorAll('.diff-btn2').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); }
+
+function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+function genQuestion(){
+  const avail=Object.entries(ops).filter(([k,v])=>v).map(([k])=>k);
+  if(!avail.length) return {text:'2 + 2',ans:4};
+  const op=avail[Math.floor(Math.random()*avail.length)];
+  let a,b,ans,sym;
+  const lim = difficulty==='easy'?10:difficulty==='medium'?20:50;
+  if(op==='plus'){ a=rnd(1,lim); b=rnd(1,lim); ans=a+b; sym='+'; }
+  else if(op==='minus'){ a=rnd(1,lim); b=rnd(1,a); ans=a-b; sym='−'; }
+  else if(op==='times'){ const ml=difficulty==='easy'?5:difficulty==='medium'?10:12; a=rnd(1,ml); b=rnd(1,ml); ans=a*b; sym='×'; }
+  else { b=rnd(1,12); ans=rnd(1,difficulty==='easy'?5:10); a=b*ans; sym='÷'; }
+  return { text:`${a} ${sym} ${b}`, ans };
+}
+
+function startGame(timeSec){
+  gameState={timeSec,timeLeft:timeSec||999,correct:0,wrong:0,streak:0,bestStreak:0,answered:true,started:Date.now()};
+  document.getElementById('timerBar').style.width='100%';
+  document.getElementById('timerDisplay').textContent=timeSec||'∞';
+  document.getElementById('correctCount').textContent=0;
+  document.getElementById('wrongCount').textContent=0;
+  document.getElementById('streak').textContent=0;
+  clearInterval(timerInterval);
+  showScreen('gameScreen');
+  nextQuestion();
+  if(timeSec>0){
+    timerInterval=setInterval(()=>{
+      gameState.timeLeft--;
+      document.getElementById('timerDisplay').textContent=gameState.timeLeft;
+      document.getElementById('timerBar').style.width=(gameState.timeLeft/timeSec*100)+'%';
+      if(gameState.timeLeft<=0){ clearInterval(timerInterval); endGame(); }
+    },1000);
+  }
+}
+
+function nextQuestion(){
+  gameState.currentQ=genQuestion();
+  gameState.answer='';
+  gameState.answered=false;
+  document.getElementById('questionText').innerHTML=gameState.currentQ.text+' = <span class="eq">?</span>';
+  document.getElementById('answerDisplay').textContent='_';
+}
+
+function numPress(n){
+  if(gameState.answered)return;
+  if(gameState.answer.length>=4)return;
+  gameState.answer+=n;
+  document.getElementById('answerDisplay').textContent=gameState.answer;
+}
+function numDel(){
+  gameState.answer=gameState.answer.slice(0,-1);
+  document.getElementById('answerDisplay').textContent=gameState.answer||'_';
+}
+function submitAnswer(){
+  if(gameState.answered||!gameState.answer)return;
+  const typed=+gameState.answer;
+  if(typed===gameState.currentQ.ans){
+    gameState.correct++;
+    gameState.streak++;
+    if(gameState.streak>gameState.bestStreak)gameState.bestStreak=gameState.streak;
+    document.getElementById('correctCount').textContent=gameState.correct;
+    document.getElementById('streak').textContent=gameState.streak;
+    playTone(880,0.08);setTimeout(()=>playTone(1100,0.12),100);
+    if(gameState.timeSec===0) nextQuestion();
+    else nextQuestion();
+  } else {
+    gameState.wrong++;
+    gameState.streak=0;
+    document.getElementById('wrongCount').textContent=gameState.wrong;
+    document.getElementById('streak').textContent=0;
+    const d=document.getElementById('answerDisplay');
+    d.classList.add('wrong-flash');
+    setTimeout(()=>d.classList.remove('wrong-flash'),300);
+    playTone(200,0.2,'sawtooth');
+    gameState.answer='';
+    document.getElementById('answerDisplay').textContent='_';
+  }
+}
+
+function endGame(){
+  clearInterval(timerInterval);
+  const elapsed=(Date.now()-gameState.started)/60000;
+  const spm=Math.round(gameState.correct/Math.max(elapsed,0.1));
+  // Save HS
+  const key=gameState.timeSec;
+  let newHS=false;
+  if(spm>hs[key]){ hs[key]=spm; localStorage.setItem('mm_hs'+key,spm); newHS=true; }
+  document.getElementById('resEmoji').textContent=gameState.correct>=20?'🌟':gameState.correct>=10?'😄':'💪';
+  document.getElementById('resTitle').textContent=gameState.correct>=20?'Amazing!':gameState.correct>=10?'Great job!':'Keep going!';
+  document.getElementById('resCorrect').textContent=gameState.correct;
+  document.getElementById('resWrong').textContent=gameState.wrong;
+  document.getElementById('resStreak').textContent=gameState.bestStreak;
+  document.getElementById('resSPM').textContent=spm;
+  document.getElementById('resHS').textContent=newHS?'🏆 New High Score!':'Best: '+hs[key];
+  document.getElementById('hsDisplay').textContent=Math.max(...Object.values(hs));
+  showScreen('resultScreen');
+}
+
+function restartGame(){ startGame(gameState.timeSec); }
+function goMenu(){ clearInterval(timerInterval); showScreen('menuScreen'); }
+function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+</script>
+</body>
+</html>

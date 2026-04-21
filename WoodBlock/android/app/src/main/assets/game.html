@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WoodBlock</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#1a0f07;--surface:#2a1a0a;--accent:#795548;--accent2:#A1887F;--text:#f0e0c8;--muted:#8a6040;--radius:8px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;padding:6px 6px 0;}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-shrink:0;}
+header h1{font-size:1.1rem;font-weight:700;}header h1 span{color:var(--accent2);}
+#scores{display:flex;gap:14px;font-size:0.8rem;color:var(--muted);flex-shrink:0;margin-bottom:4px;}
+#scores span{color:var(--text);}
+#board-wrap{flex-shrink:0;display:flex;justify-content:center;}
+#board{display:grid;grid-template-columns:repeat(9,1fr);gap:2px;background:#111;padding:2px;border-radius:6px;}
+.cell{width:36px;height:36px;border-radius:3px;background:#1e1408;transition:background 0.1s;}
+.cell.filled{background:var(--accent);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2),inset 0 -1px 0 rgba(0,0,0,0.3);}
+.cell.preview{background:var(--accent2);opacity:0.6;}
+.cell.clearing{animation:clear 0.3s ease-out forwards;}
+@keyframes clear{0%{background:#FFD54F;}50%{background:#FFEB3B;transform:scale(1.05);}100%{background:#1e1408;transform:scale(1);}}
+#pieces-wrap{flex:1;display:flex;justify-content:space-around;align-items:center;padding:8px 0;}
+.piece-container{display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;padding:6px;border-radius:8px;border:2px solid transparent;min-width:80px;}
+.piece-container.selected{border-color:var(--accent2);background:rgba(161,136,127,0.15);}
+.piece-container.btn-pressed{transform:scale(0.92);}
+.piece-grid{display:grid;gap:2px;}
+.piece-cell{width:14px;height:14px;border-radius:2px;background:var(--accent);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);}
+.piece-cell.empty{background:transparent;}
+#btns{display:flex;gap:6px;flex-shrink:0;padding:4px 0 6px;}
+.btn{flex:1;background:var(--surface);border:1px solid #4a2a10;color:var(--text);padding:9px;border-radius:var(--radius);font-size:0.78rem;cursor:pointer;touch-action:manipulation;}
+.btn.btn-pressed{transform:scale(0.93);}
+.btn.primary{background:var(--accent);color:#fff;}
+#banner{height:50px;background:#111;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.75rem;flex-shrink:0;}
+#game-over{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:10;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Wood<span>Block</span></h1></header>
+  <div id="scores">Score:<span id="score">0</span> Best:<span id="best">0</span></div>
+  <div id="board-wrap"><div id="board"></div></div>
+  <div id="pieces-wrap" id="pieces-area"></div>
+  <div id="btns">
+    <button class="btn primary" id="btn-new">New Game</button>
+  </div>
+  <div id="banner">Ad Banner</div>
+</div>
+<div id="game-over" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:10;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <h2 style="color:var(--accent2);font-size:1.6rem;">No More Moves!</h2>
+  <p id="go-score" style="color:#ccc;font-size:1.1rem;"></p>
+  <button id="btn-go-new" style="background:var(--accent);border:none;color:#fff;padding:14px 32px;border-radius:var(--radius);font-size:1rem;font-weight:700;cursor:pointer;">Play Again</button>
+</div>
+<script>
+const GRID=9;
+const PIECES_DEFS=[
+  // 1x1
+  [[1]],
+  // 1x2
+  [[1,1]],
+  // 2x1
+  [[1],[1]],
+  // 1x3
+  [[1,1,1]],
+  // 3x1
+  [[1],[1],[1]],
+  // 2x2
+  [[1,1],[1,1]],
+  // L shape
+  [[1,0],[1,0],[1,1]],
+  [[0,1],[0,1],[1,1]],
+  [[1,1],[1,0],[1,0]],
+  [[1,1],[0,1],[0,1]],
+  // 1x4
+  [[1,1,1,1]],
+  // 4x1
+  [[1],[1],[1],[1]],
+  // 2x3
+  [[1,1,1],[1,1,1]],
+  // 3x2
+  [[1,1],[1,1],[1,1]],
+  // T
+  [[1,1,1],[0,1,0]],
+  [[0,1],[1,1],[0,1]],
+  // S/Z
+  [[0,1,1],[1,1,0]],
+  [[1,0],[1,1],[0,1]],
+  // 1x5
+  [[1,1,1,1,1]],
+  // corner 3x3
+  [[1,0,0],[1,0,0],[1,1,1]],
+];
+
+let board=Array(GRID*GRID).fill(0);
+let pieces=[null,null,null];
+let selected=null,score=0,best=parseInt(localStorage.getItem('woodblock_best')||'0');
+let previewPos=null;
+
+function randPiece(){return JSON.parse(JSON.stringify(PIECES_DEFS[Math.floor(Math.random()*PIECES_DEFS.length)]));}
+function refillPieces(){pieces=[randPiece(),randPiece(),randPiece()];}
+
+function idx(r,c){return r*GRID+c;}
+function canPlace(shape,row,col){
+  for(let r=0;r<shape.length;r++){
+    for(let c=0;c<shape[r].length;c++){
+      if(!shape[r][c])continue;
+      const br=row+r,bc=col+c;
+      if(br<0||br>=GRID||bc<0||bc>=GRID)return false;
+      if(board[idx(br,bc)])return false;
+    }
+  }
+  return true;
+}
+function placePiece(shape,row,col){
+  for(let r=0;r<shape.length;r++){
+    for(let c=0;c<shape[r].length;c++){
+      if(shape[r][c])board[idx(row+r,col+c)]=1;
+    }
+  }
+}
+function clearLines(){
+  const fullRows=[];
+  for(let r=0;r<GRID;r++){if([...Array(GRID)].every((_,c)=>board[idx(r,c)]))fullRows.push(r);}
+  const fullCols=[];
+  for(let c=0;c<GRID;c++){if([...Array(GRID)].every((_,r)=>board[idx(r,c)]))fullCols.push(c);}
+  if(fullRows.length===0&&fullCols.length===0)return 0;
+  const toAnim=new Set();
+  fullRows.forEach(r=>{for(let c=0;c<GRID;c++)toAnim.add(idx(r,c));});
+  fullCols.forEach(c=>{for(let r=0;r<GRID;r++)toAnim.add(idx(r,c));});
+  toAnim.forEach(i=>{board[i]=0;});
+  const lines=fullRows.length+fullCols.length;
+  return lines;
+}
+
+function checkGameOver(){
+  for(let pi=0;pi<3;pi++){
+    if(!pieces[pi])continue;
+    const shape=pieces[pi];
+    for(let r=0;r<=GRID-shape.length;r++){
+      for(let c=0;c<=GRID-shape[0].length;c++){
+        if(canPlace(shape,r,c))return false;
+      }
+    }
+  }
+  return true;
+}
+
+function newGame(){
+  board=Array(GRID*GRID).fill(0);score=0;selected=null;previewPos=null;
+  refillPieces();
+  updateScore();render();
+  document.getElementById('game-over').style.display='none';
+}
+
+function updateScore(){
+  document.getElementById('score').textContent=score;
+  if(score>best){best=score;localStorage.setItem('woodblock_best',best);}
+  document.getElementById('best').textContent=best;
+}
+
+// Render
+function render(){
+  const boardEl=document.getElementById('board');
+  const cells=[...boardEl.querySelectorAll('.cell')];
+  cells.forEach((c,i)=>{
+    c.classList.toggle('filled',!!board[i]);
+    c.classList.remove('preview');
+  });
+  if(selected!==null&&previewPos){
+    const {row,col}=previewPos;
+    const shape=pieces[selected];
+    for(let r=0;r<shape.length;r++){
+      for(let c=0;c<shape[r].length;c++){
+        if(!shape[r][c])continue;
+        const i=idx(row+r,col+c);
+        if(i>=0&&i<GRID*GRID&&!board[i]){
+          cells[i].classList.remove('filled');
+          cells[i].classList.add('preview');
+        }
+      }
+    }
+  }
+  renderPieces();
+}
+
+function renderPieces(){
+  const pw=document.getElementById('pieces-wrap');pw.innerHTML='';
+  pieces.forEach((p,pi)=>{
+    const cont=document.createElement('div');
+    cont.className='piece-container'+(pi===selected?' selected':'');
+    if(p){
+      const rows=p.length,cols=p[0].length;
+      const pg=document.createElement('div');
+      pg.className='piece-grid';
+      pg.style.gridTemplateColumns=`repeat(${cols},14px)`;
+      for(let r=0;r<rows;r++){
+        for(let c=0;c<cols;c++){
+          const cell=document.createElement('div');
+          cell.className='piece-cell'+(p[r][c]?' ':' empty');
+          pg.appendChild(cell);
+        }
+      }
+      cont.appendChild(pg);
+    }else{
+      cont.style.opacity='0.3';
+      const ph=document.createElement('div');ph.style.cssText='width:40px;height:40px;';
+      cont.appendChild(ph);
+    }
+    cont.addEventListener('touchstart',function(e){
+      e.preventDefault();this.classList.add('btn-pressed');
+      setTimeout(()=>this.classList.remove('btn-pressed'),120);
+      if(p){selected=selected===pi?null:pi;previewPos=null;render();}
+    },{passive:false});
+    cont.addEventListener('click',()=>{if(p){selected=selected===pi?null:pi;previewPos=null;render();}});
+    pw.appendChild(cont);
+  });
+}
+
+// Board tap to place
+document.getElementById('board').addEventListener('click',function(e){
+  if(selected===null)return;
+  const cell=e.target.closest('.cell');if(!cell)return;
+  const cells=[...this.querySelectorAll('.cell')];
+  const i=cells.indexOf(cell);if(i<0)return;
+  const row=Math.floor(i/GRID),col=i%GRID;
+  const shape=pieces[selected];
+  if(canPlace(shape,row,col)){
+    placePiece(shape,row,col);
+    const lines=clearLines();
+    score+=shape.flat().filter(Boolean).length+lines*lines*10;
+    updateScore();
+    pieces[selected]=null;
+    selected=null;previewPos=null;
+    if(pieces.every(p=>!p))refillPieces();
+    render();
+    if(checkGameOver()){
+      setTimeout(()=>{
+        document.getElementById('go-score').textContent='Score: '+score;
+        document.getElementById('game-over').style.display='flex';
+      },400);
+    }
+  }
+});
+
+// Board hover for preview
+document.getElementById('board').addEventListener('mouseover',function(e){
+  if(selected===null){previewPos=null;return;}
+  const cell=e.target.closest('.cell');if(!cell)return;
+  const cells=[...this.querySelectorAll('.cell')];
+  const i=cells.indexOf(cell);if(i<0)return;
+  previewPos={row:Math.floor(i/GRID),col:i%GRID};
+  render();
+});
+document.getElementById('board').addEventListener('touchmove',function(e){
+  e.preventDefault();
+  if(selected===null)return;
+  const t=e.touches[0];
+  const el=document.elementFromPoint(t.clientX,t.clientY);
+  if(!el||!el.classList.contains('cell'))return;
+  const cells=[...this.querySelectorAll('.cell')];
+  const i=cells.indexOf(el);if(i<0)return;
+  previewPos={row:Math.floor(i/GRID),col:i%GRID};
+  render();
+},{passive:false});
+document.getElementById('board').addEventListener('touchend',function(e){
+  e.preventDefault();
+  if(selected===null||!previewPos)return;
+  const shape=pieces[selected];
+  if(canPlace(shape,previewPos.row,previewPos.col)){
+    placePiece(shape,previewPos.row,previewPos.col);
+    const lines=clearLines();
+    score+=shape.flat().filter(Boolean).length+lines*lines*10;
+    updateScore();
+    pieces[selected]=null;selected=null;previewPos=null;
+    if(pieces.every(p=>!p))refillPieces();
+    render();
+    if(checkGameOver()){
+      setTimeout(()=>{
+        document.getElementById('go-score').textContent='Score: '+score;
+        document.getElementById('game-over').style.display='flex';
+      },400);
+    }
+  }else{selected=null;previewPos=null;render();}
+},{passive:false});
+
+// Build board cells
+const boardEl=document.getElementById('board');
+for(let i=0;i<GRID*GRID;i++){
+  const c=document.createElement('div');c.className='cell';boardEl.appendChild(c);
+}
+
+document.getElementById('btn-new').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);newGame();});
+document.getElementById('btn-go-new').addEventListener('click',()=>{
+  document.getElementById('game-over').style.display='none';newGame();});
+
+window.onPurchaseComplete=function(sku){};
+window.onAdMobLoaded=function(){document.getElementById('banner').style.display='none';};
+
+newGame();
+</script>
+</body>
+</html>

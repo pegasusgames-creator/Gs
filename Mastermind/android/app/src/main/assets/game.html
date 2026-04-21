@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Mastermind</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #121212; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+#banner { width:100%; height:50px; background:#1e1e1e; display:flex; align-items:center; justify-content:center; color:#555; font-size:12px; border-bottom:1px solid #333; }
+#header { width:100%; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; background:#1a1a1a; }
+h1 { font-size:20px; color:#EF5350; font-weight:700; }
+#info { font-size:13px; color:#aaa; }
+#controls { display:flex; gap:8px; padding:8px 16px; flex-wrap:wrap; justify-content:center; }
+button { background:#1e1e1e; color:#EF5350; border:1.5px solid #EF5350; border-radius:8px; padding:8px 16px; font-size:14px; cursor:pointer; touch-action:manipulation; }
+button:active { background:#EF5350; color:#fff; }
+#msg { padding:6px 16px; text-align:center; font-size:15px; min-height:32px; color:#EF5350; }
+#guess-area { display:flex; align-items:center; gap:10px; padding:8px 16px; justify-content:center; }
+.peg-slot { width:48px; height:48px; border-radius:50%; border:3px solid #444; cursor:pointer; touch-action:manipulation; transition:border-color 0.15s; display:flex; align-items:center; justify-content:center; }
+.peg-slot.active { border-color:#fff; }
+#color-picker { display:flex; gap:8px; padding:4px 16px; justify-content:center; flex-wrap:wrap; }
+.color-btn { width:44px; height:44px; border-radius:50%; border:3px solid #333; cursor:pointer; touch-action:manipulation; transition:transform 0.1s; }
+.color-btn:active { transform:scale(0.9); }
+.color-btn.selected-color { border-color:#fff; border-width:3px; }
+#history { width:100%; max-width:420px; padding:8px; overflow-y:auto; max-height:320px; }
+.history-row { display:flex; align-items:center; gap:8px; padding:4px 8px; border-bottom:1px solid #222; justify-content:center; }
+.h-peg { width:32px; height:32px; border-radius:50%; border:2px solid #333; }
+.h-feedback { display:grid; grid-template-columns:repeat(2,12px); gap:3px; }
+.fb-dot { width:12px; height:12px; border-radius:50%; }
+.fb-black { background:#fff; }
+.fb-white { background:#888; }
+.fb-empty { background:#222; }
+#submit-btn { font-size:16px; padding:10px 28px; }
+</style>
+</head>
+<body>
+<div id="banner">Advertisement</div>
+<div id="header">
+  <h1>Mastermind</h1>
+  <span id="info">Guess 1/10</span>
+</div>
+<div id="controls">
+  <button onclick="newGame()">New Game</button>
+  <button id="submit-btn" onclick="submitGuess()">Submit</button>
+  <button onclick="hintAd()">Hint (Ad)</button>
+  <button onclick="removeAds()">No Ads</button>
+</div>
+<div id="msg">Pick 4 colors and submit your guess!</div>
+<div id="guess-area">
+  <div class="peg-slot" id="slot0" onclick="selectSlot(0)"></div>
+  <div class="peg-slot" id="slot1" onclick="selectSlot(1)"></div>
+  <div class="peg-slot" id="slot2" onclick="selectSlot(2)"></div>
+  <div class="peg-slot" id="slot3" onclick="selectSlot(3)"></div>
+</div>
+<div id="color-picker"></div>
+<div id="history"></div>
+
+<script>
+const COLORS = ['#EF5350','#1E88E5','#43A047','#FF9800','#9C27B0','#FFEB3B'];
+const NAMES = ['Red','Blue','Green','Orange','Purple','Yellow'];
+const state = { secret:[], guesses:[], currentGuess:[null,null,null,null], activeSlot:0, removeAds:false, won:false };
+
+function randomSecret() {
+  return Array.from({length:4},()=>Math.floor(Math.random()*COLORS.length));
+}
+
+function newGame() {
+  state.secret = randomSecret();
+  state.guesses = [];
+  state.currentGuess = [null,null,null,null];
+  state.activeSlot = 0;
+  state.won = false;
+  document.getElementById('info').textContent = 'Guess 1/10';
+  document.getElementById('msg').textContent = 'Pick 4 colors and submit!';
+  document.getElementById('history').innerHTML = '';
+  buildPicker();
+  updateSlots();
+}
+
+function buildPicker() {
+  const cp = document.getElementById('color-picker');
+  cp.innerHTML = '';
+  COLORS.forEach((c,i) => {
+    const btn = document.createElement('div');
+    btn.className = 'color-btn';
+    btn.style.background = c;
+    btn.onclick = () => pickColor(i);
+    btn.id = 'cpick-' + i;
+    cp.appendChild(btn);
+  });
+}
+
+function selectSlot(i) {
+  state.activeSlot = i;
+  document.querySelectorAll('.peg-slot').forEach((s,j) => s.classList.toggle('active', j===i));
+}
+
+function pickColor(ci) {
+  state.currentGuess[state.activeSlot] = ci;
+  // Advance to next empty slot
+  let next = (state.activeSlot+1) % 4;
+  for (let k=0;k<4;k++) {
+    if (state.currentGuess[next] === null) break;
+    next = (next+1)%4;
+  }
+  state.activeSlot = next;
+  updateSlots();
+}
+
+function updateSlots() {
+  for (let i=0;i<4;i++) {
+    const slot = document.getElementById('slot'+i);
+    slot.style.background = state.currentGuess[i]!==null ? COLORS[state.currentGuess[i]] : '#1a1a1a';
+    slot.classList.toggle('active', i===state.activeSlot);
+  }
+}
+
+function calcFeedback(guess, secret) {
+  let black=0, white=0;
+  const sLeft=[], gLeft=[];
+  for (let i=0;i<4;i++) {
+    if (guess[i]===secret[i]) black++;
+    else { sLeft.push(secret[i]); gLeft.push(guess[i]); }
+  }
+  gLeft.forEach(g => {
+    const idx=sLeft.indexOf(g);
+    if (idx>=0) { white++; sLeft.splice(idx,1); }
+  });
+  return {black,white};
+}
+
+function submitGuess() {
+  if (state.won) return;
+  if (state.currentGuess.includes(null)) { document.getElementById('msg').textContent='Fill all 4 slots first!'; return; }
+  if (state.guesses.length >= 10) return;
+
+  const guess = [...state.currentGuess];
+  const fb = calcFeedback(guess, state.secret);
+  state.guesses.push({guess, fb});
+
+  addHistoryRow(guess, fb);
+
+  const remaining = 10 - state.guesses.length;
+  document.getElementById('info').textContent = 'Guess '+(state.guesses.length+1)+'/10';
+
+  if (fb.black === 4) {
+    state.won = true;
+    document.getElementById('msg').textContent = '🎉 Cracked it in '+state.guesses.length+' guesses!';
+    document.getElementById('info').textContent = 'Solved!';
+    revealSecret();
+    return;
+  }
+  if (state.guesses.length >= 10) {
+    document.getElementById('msg').textContent = 'Game over! Secret: ' + state.secret.map(i=>NAMES[i]).join('-');
+    revealSecret();
+    return;
+  }
+  document.getElementById('msg').textContent = fb.black + ' black, ' + fb.white + ' white pegs.';
+  state.currentGuess = [null,null,null,null];
+  state.activeSlot = 0;
+  updateSlots();
+}
+
+function addHistoryRow(guess, fb) {
+  const hist = document.getElementById('history');
+  const row = document.createElement('div');
+  row.className = 'history-row';
+  guess.forEach(ci => {
+    const p = document.createElement('div');
+    p.className = 'h-peg';
+    p.style.background = COLORS[ci];
+    row.appendChild(p);
+  });
+  const fbGrid = document.createElement('div');
+  fbGrid.className = 'h-feedback';
+  for (let i=0;i<4;i++) {
+    const d = document.createElement('div');
+    d.className = 'fb-dot ' + (i<fb.black?'fb-black':i<fb.black+fb.white?'fb-white':'fb-empty');
+    fbGrid.appendChild(d);
+  }
+  row.appendChild(fbGrid);
+  hist.appendChild(row);
+  hist.scrollTop = hist.scrollHeight;
+}
+
+function revealSecret() {
+  const area = document.getElementById('guess-area');
+  for (let i=0;i<4;i++) {
+    const slot = document.getElementById('slot'+i);
+    slot.style.background = COLORS[state.secret[i]];
+  }
+}
+
+function hintAd() {
+  if (window.Android) Android.showRewardedAd();
+  else giveHint();
+}
+
+window.onRewardedAdComplete = function() { giveHint(); };
+
+function giveHint() {
+  // Reveal one secret color
+  const unknowns = [];
+  for (let i=0;i<4;i++) if (state.currentGuess[i]===null) unknowns.push(i);
+  if (unknowns.length>0) {
+    const pos = unknowns[Math.floor(Math.random()*unknowns.length)];
+    state.currentGuess[pos] = state.secret[pos];
+    updateSlots();
+    document.getElementById('msg').textContent = 'Hint: position '+(pos+1)+' revealed!';
+  }
+}
+
+function removeAds() {
+  if (window.Android) Android.purchaseRemoveAds();
+  else { state.removeAds=true; document.getElementById('msg').textContent='Ads removed!'; }
+}
+window.onPurchaseComplete = function() { state.removeAds=true; };
+window.onAdMobLoaded = function() {};
+
+newGame();
+</script>
+</body>
+</html>

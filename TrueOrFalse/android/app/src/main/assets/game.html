@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>True or False</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+  body{background:#0d1a0d;color:#c8ffc8;font-family:'Arial',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh;overflow:hidden}
+  h1{font-size:1.5rem;margin:14px 0 4px;color:#60e060;letter-spacing:2px}
+  #category-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:6px 0 10px;max-width:340px;padding:0 10px}
+  .cat-btn{background:#ffffff10;border:1px solid #40c04033;color:#80e080;border-radius:20px;padding:5px 12px;font-size:0.75rem;cursor:pointer}
+  .cat-btn.active{background:#40c04033;border-color:#60e060;color:#60e060}
+  #progress-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:0.8rem;color:#60e06066}
+  #q-num{font-size:0.85rem;color:#60e06088}
+  #score-bar-wrap{width:180px;height:6px;background:#ffffff15;border-radius:3px;overflow:hidden}
+  #score-bar{height:100%;background:#60e060;border-radius:3px;transition:width 0.4s;width:0%}
+  #question-card{background:#ffffff0a;border:1px solid #40c04033;border-radius:20px;padding:20px 18px;width:310px;min-height:130px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:1.05rem;line-height:1.5;color:#c8ffc8;margin-bottom:14px;position:relative}
+  #q-category{position:absolute;top:8px;right:12px;font-size:0.68rem;color:#60e06044}
+  .answer-row{display:flex;gap:16px;margin-bottom:12px}
+  .ans-btn{flex:1;border:none;border-radius:16px;padding:16px 10px;font-size:1.2rem;font-weight:bold;cursor:pointer;transition:transform 0.1s,box-shadow 0.1s;max-width:130px}
+  #true-btn{background:linear-gradient(135deg,#1a6020,#40c040);color:#c8ffc8;box-shadow:0 4px 16px #40c04044}
+  #false-btn{background:linear-gradient(135deg,#601818,#c04040);color:#ffc8c8;box-shadow:0 4px 16px #c0404044}
+  .ans-btn:active{transform:scale(0.93)}
+  .ans-btn.correct{animation:flash-correct 0.4s ease-out}
+  .ans-btn.wrong{animation:flash-wrong 0.4s ease-out}
+  @keyframes flash-correct{0%,100%{box-shadow:0 4px 16px #40c04044}50%{box-shadow:0 0 40px #40c040cc}}
+  @keyframes flash-wrong{0%,100%{}50%{opacity:0.4}}
+  #feedback{font-size:1rem;min-height:1.4rem;font-weight:bold;margin-bottom:6px}
+  #fact{font-size:0.82rem;color:#60e06077;min-height:2rem;text-align:center;max-width:300px;padding:0 12px;margin-bottom:8px}
+  #score-display{font-size:0.9rem;color:#60e06088}
+  /* End screen */
+  #end-screen{display:none;flex-direction:column;align-items:center;gap:12px;padding:30px 16px}
+  #end-title{font-size:2rem;font-weight:bold;color:#60e060}
+  #end-score{font-size:1.1rem;color:#c8ffc8}
+  #restart-btn{background:linear-gradient(135deg,#1a6020,#40c040);color:#c8ffc8;border:none;border-radius:50px;padding:13px 36px;font-size:1rem;font-weight:bold;cursor:pointer}
+  #remove-ads{position:fixed;top:8px;right:8px;background:#ffffff10;border:1px solid #40c04033;color:#60e06066;font-size:0.65rem;padding:4px 8px;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<button id="remove-ads" onclick="Android.purchase('remove_ads')">Remove Ads</button>
+<h1>✅ True or False</h1>
+<div id="category-row">
+  <button class="cat-btn active" onclick="setCategory('all',this)">All</button>
+  <button class="cat-btn" onclick="setCategory('science',this)">Science</button>
+  <button class="cat-btn" onclick="setCategory('history',this)">History</button>
+  <button class="cat-btn" onclick="setCategory('nature',this)">Nature</button>
+  <button class="cat-btn" onclick="setCategory('food',this)">Food</button>
+  <button class="cat-btn" onclick="setCategory('space',this)">Space</button>
+</div>
+<div id="progress-row">
+  <span id="q-num">Q 1/10</span>
+  <div id="score-bar-wrap"><div id="score-bar"></div></div>
+</div>
+<div id="question-card"><span id="question-text">Loading…</span><span id="q-category"></span></div>
+<div class="answer-row">
+  <button class="ans-btn" id="true-btn" onclick="answer(true)">✅ TRUE</button>
+  <button class="ans-btn" id="false-btn" onclick="answer(false)">❌ FALSE</button>
+</div>
+<div id="feedback"></div>
+<div id="fact"></div>
+<div id="score-display">Score: 0</div>
+<div id="end-screen">
+  <div id="end-title">🎉</div>
+  <div id="end-score"></div>
+  <button id="restart-btn" onclick="startGame()">PLAY AGAIN</button>
+</div>
+
+<script>
+const ALL_Q=[
+  {q:"Humans have more than 600 muscles in their body.",a:true,fact:"The human body has about 640 skeletal muscles.",cat:'science'},
+  {q:"Lightning never strikes the same place twice.",a:false,fact:"Lightning can and does strike the same place repeatedly.",cat:'science'},
+  {q:"Water boils at 100°C at sea level.",a:true,fact:"At standard atmospheric pressure, water boils at exactly 100°C.",cat:'science'},
+  {q:"The Great Wall of China is visible from space with the naked eye.",a:false,fact:"It's too narrow to see from space without aid.",cat:'history'},
+  {q:"Napoleon Bonaparte was unusually short for his time.",a:false,fact:"He was about 5'7\" — average height for the era.",cat:'history'},
+  {q:"The Eiffel Tower was built as a permanent structure.",a:false,fact:"It was designed as a temporary installation for the 1889 World's Fair.",cat:'history'},
+  {q:"Cleopatra lived closer in time to the Moon landing than to the construction of the Great Pyramid.",a:true,fact:"Pyramids: ~2560 BC, Cleopatra: ~30 BC, Moon landing: 1969 AD.",cat:'history'},
+  {q:"A group of flamingos is called a flamboyance.",a:true,fact:"Other group names: flamboyance, colony, or stand.",cat:'nature'},
+  {q:"Honey never spoils.",a:true,fact:"Archaeologists have found 3,000-year-old honey in Egyptian tombs that was still edible.",cat:'nature'},
+  {q:"An octopus has three hearts.",a:true,fact:"Two pump blood to the gills; one pumps to the rest of the body.",cat:'nature'},
+  {q:"Elephants are the only animals that cannot jump.",a:false,fact:"Hippos, rhinos and sloths also cannot jump.",cat:'nature'},
+  {q:"Bananas are technically berries, but strawberries are not.",a:true,fact:"Botanically, bananas qualify as berries; strawberries are accessory fruits.",cat:'food'},
+  {q:"Carrots were originally purple.",a:true,fact:"Orange carrots were selectively bred in the Netherlands in the 17th century.",cat:'food'},
+  {q:"Sushi means \"raw fish\" in Japanese.",a:false,fact:"Sushi means \"sour-tasting\" and refers to the vinegared rice, not the fish.",cat:'food'},
+  {q:"Coffee is made from the seeds of a fruit.",a:true,fact:"Coffee beans are the seeds inside the red coffee cherry fruit.",cat:'food'},
+  {q:"The Sun is about 150 million kilometers from Earth.",a:true,fact:"The average distance is ~149.6 million km, known as 1 Astronomical Unit.",cat:'space'},
+  {q:"Saturn is the only planet in our solar system with rings.",a:false,fact:"Jupiter, Uranus and Neptune also have rings — just much less visible.",cat:'space'},
+  {q:"A day on Venus is longer than a year on Venus.",a:true,fact:"Venus rotates so slowly that one rotation takes 243 Earth days, but it orbits the Sun in 225 days.",cat:'space'},
+  {q:"Pluto is larger than Earth's Moon.",a:false,fact:"Pluto's diameter is about 2,377 km; the Moon's is 3,474 km.",cat:'space'},
+  {q:"The average human brain weighs about 1.4 kg.",a:true,fact:"The adult human brain weighs approximately 1.3–1.5 kg.",cat:'science'},
+  {q:"Diamonds can burn.",a:true,fact:"Diamond is carbon — it will combust in oxygen at high temperatures.",cat:'science'},
+  {q:"The Amazon River flows into the Pacific Ocean.",a:false,fact:"The Amazon flows eastward and empties into the Atlantic Ocean.",cat:'nature'},
+  {q:"Goldfish have a memory span of only 3 seconds.",a:false,fact:"Goldfish can remember things for months — they can be trained.",cat:'nature'},
+  {q:"The first pizza was invented in China.",a:false,fact:"Pizza originated in Naples, Italy, in the 18th century.",cat:'food'},
+  {q:"The universe is approximately 13.8 billion years old.",a:true,fact:"Based on measurements of the cosmic microwave background radiation.",cat:'space'},
+];
+let category='all',questions=[],qIndex=0,score=0,answered=false,lives=3;
+function setCategory(cat,btn){category=cat;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');startGame();}
+function startGame(){const pool=category==='all'?ALL_Q:ALL_Q.filter(q=>q.cat===category);questions=shuffle(pool).slice(0,10);qIndex=0;score=0;answered=false;document.getElementById('end-screen').style.display='none';document.getElementById('question-card').style.display='flex';document.querySelectorAll('.ans-btn').forEach(b=>{b.style.display='';});document.querySelector('.answer-row').style.display='flex';showQuestion();}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function showQuestion(){if(qIndex>=questions.length){endGame();return;}const q=questions[qIndex];document.getElementById('question-text').textContent=q.q;document.getElementById('q-category').textContent=q.cat;document.getElementById('q-num').textContent='Q '+(qIndex+1)+'/'+questions.length;document.getElementById('score-bar').style.width=(score/questions.length*100)+'%';document.getElementById('feedback').textContent='';document.getElementById('fact').textContent='';document.getElementById('feedback').style.color='';answered=false;document.querySelectorAll('.ans-btn').forEach(b=>{b.disabled=false;b.classList.remove('correct','wrong');});}
+function answer(val){if(answered)return;answered=true;const q=questions[qIndex];const correct=val===q.a;if(correct){score++;document.getElementById('feedback').style.color='#60e060';document.getElementById('feedback').textContent='✅ Correct!';document.getElementById('true-btn').classList.add(val?'correct':'');document.getElementById('false-btn').classList.add(!val?'correct':'');}else{document.getElementById('feedback').style.color='#e06060';document.getElementById('feedback').textContent='❌ Wrong! Answer: '+(q.a?'TRUE':'FALSE');(val?document.getElementById('true-btn'):document.getElementById('false-btn')).classList.add('wrong');}document.getElementById('fact').textContent=q.fact;document.getElementById('score-display').textContent='Score: '+score;if(navigator.vibrate)navigator.vibrate(correct?[50,50,100]:[300]);qIndex++;if(qIndex%5===0&&window.Android)Android.showInterstitial();setTimeout(showQuestion,1600);}
+function endGame(){document.getElementById('question-card').style.display='none';document.querySelector('.answer-row').style.display='none';document.getElementById('feedback').textContent='';document.getElementById('fact').textContent='';document.getElementById('end-screen').style.display='flex';document.getElementById('end-title').textContent=score>=8?'🎉':score>=5?'👍':'😅';document.getElementById('end-score').textContent='You scored '+score+' out of '+questions.length+'!';if(window.Android)Android.showInterstitial();}
+startGame();
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){document.getElementById('remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+</script>
+</body>
+</html>

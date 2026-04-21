@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ABC Learning</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root {
+  --accent:#FF5722; --accent2:#FF9800; --bg:#FFF8E1;
+  --card:#fff; --text:#333; --muted:#888;
+  --radius:20px;
+}
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+
+/* Header */
+header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px; background:var(--accent);
+  flex-shrink:0;
+}
+header h1 { font-size:1.4rem; font-weight:800; color:#fff; }
+#btn-remove-ads {
+  background:rgba(255,255,255,0.25); border:none; color:#fff;
+  font-size:0.72rem; font-weight:700; padding:6px 12px;
+  border-radius:20px; cursor:pointer;
+}
+
+/* Tab bar */
+#tabs {
+  display:flex; background:#fff; border-bottom:3px solid var(--bg);
+  flex-shrink:0;
+}
+.tab {
+  flex:1; padding:12px 4px; text-align:center; font-size:0.8rem;
+  font-weight:700; color:var(--muted); border:none; background:none;
+  cursor:pointer; border-bottom:3px solid transparent;
+  transition:all 0.2s;
+}
+.tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+/* Screens */
+.screen { display:none; flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.screen.active { display:flex; flex-direction:column; }
+
+/* ---- LEARN SCREEN ---- */
+#learnScreen { align-items:center; padding:16px; gap:16px; background:var(--bg); }
+
+.progress-bar-wrap { width:100%; background:#e0e0e0; border-radius:20px; height:12px; }
+.progress-bar-fill { height:12px; border-radius:20px; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width 0.4s; }
+
+.letter-card {
+  background:#fff; border-radius:var(--radius);
+  box-shadow:0 6px 24px rgba(0,0,0,0.12);
+  width:100%; max-width:340px;
+  padding:28px 20px; text-align:center;
+  cursor:pointer; transition:transform 0.15s;
+  position:relative;
+}
+.letter-card:active { transform:scale(0.97); }
+
+.letter-rainbow {
+  font-size:clamp(80px,22vw,120px);
+  font-weight:900; line-height:1;
+  background:linear-gradient(135deg,#FF5722,#FF9800,#FFC107,#4CAF50,#2196F3,#9C27B0);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.letter-emoji { font-size:clamp(50px,14vw,80px); margin:8px 0; }
+.letter-word { font-size:1.6rem; font-weight:700; color:var(--text); margin-bottom:4px; }
+.letter-phonics { font-size:1rem; color:var(--muted); font-style:italic; }
+.tap-hint { font-size:0.8rem; color:var(--muted); margin-top:8px; }
+
+.nav-row { display:flex; gap:16px; width:100%; max-width:340px; }
+.nav-btn {
+  flex:1; padding:18px; font-size:1.1rem; font-weight:800;
+  border:none; border-radius:16px; cursor:pointer;
+  transition:transform 0.15s;
+}
+.nav-btn:active { transform:scale(0.94); }
+.btn-prev { background:#FFF3E0; color:var(--accent); }
+.btn-next { background:var(--accent); color:#fff; box-shadow:0 4px 16px rgba(255,87,34,0.35); }
+
+.counter-label { font-size:0.9rem; color:var(--muted); font-weight:600; }
+
+/* ---- QUIZ SCREEN ---- */
+#quizScreen { padding:16px; gap:14px; background:var(--bg); }
+.quiz-header { text-align:center; }
+.quiz-header h2 { font-size:1.4rem; font-weight:800; color:var(--accent); }
+.quiz-score { font-size:1rem; color:var(--muted); }
+
+.quiz-card {
+  background:#fff; border-radius:var(--radius);
+  box-shadow:0 4px 20px rgba(0,0,0,0.1);
+  padding:24px 16px; text-align:center;
+}
+.quiz-big-letter {
+  font-size:clamp(60px,18vw,90px);
+  font-weight:900;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text; line-height:1;
+}
+.quiz-question { font-size:1rem; color:var(--muted); margin-top:8px; font-weight:600; }
+
+.answers-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.ans-btn {
+  padding:20px 12px; font-size:1.1rem; font-weight:700;
+  border:3px solid transparent; border-radius:16px;
+  cursor:pointer; transition:all 0.15s;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  min-height:70px;
+}
+.ans-btn:active { transform:scale(0.96); }
+.ans-btn.opt-a { background:#FFF3E0; color:#E64A19; }
+.ans-btn.opt-b { background:#E8F5E9; color:#2E7D32; }
+.ans-btn.opt-c { background:#E3F2FD; color:#1565C0; }
+.ans-btn.opt-d { background:#FCE4EC; color:#C2185B; }
+.ans-btn.correct { background:#4CAF50 !important; color:#fff !important; border-color:#2E7D32; }
+.ans-btn.wrong   { background:#f44336 !important; color:#fff !important; border-color:#c62828; }
+
+.stars-row { display:flex; justify-content:center; gap:6px; font-size:1.6rem; }
+
+/* ---- Celebration overlay ---- */
+#celebrate {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.5); z-index:50;
+  align-items:center; justify-content:center;
+  flex-direction:column; gap:12px;
+}
+#celebrate.show { display:flex; }
+#celebrate .big-emoji { font-size:80px; animation:bounce 0.5s ease infinite alternate; }
+#celebrate h2 { color:#fff; font-size:2rem; font-weight:900; text-align:center; }
+#celebrate p  { color:#FFD700; font-size:1.1rem; }
+@keyframes bounce { from{transform:scale(1)} to{transform:scale(1.15)} }
+#celebrateBtn { margin-top:8px; padding:16px 40px; font-size:1.1rem; font-weight:800; border:none; border-radius:20px; background:var(--accent); color:#fff; cursor:pointer; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <h1>🔤 ABC Learning</h1>
+    <button id="btn-remove-ads" onclick="purchase('remove_ads')">⭐ Remove Ads</button>
+  </header>
+
+  <div id="tabs">
+    <button class="tab active" onclick="switchTab('learn')">📖 Learn</button>
+    <button class="tab" onclick="switchTab('quiz')">🎯 Quiz</button>
+  </div>
+
+  <!-- LEARN SCREEN -->
+  <div class="screen active" id="learnScreen">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="learnProgress" style="width:4%"></div>
+    </div>
+    <span class="counter-label" id="letterCounter">1 / 26</span>
+    <div class="letter-card" onclick="playLetterSound()">
+      <div class="letter-rainbow" id="bigLetter">A</div>
+      <div class="letter-emoji" id="bigEmoji">🍎</div>
+      <div class="letter-word" id="letterWord">Apple</div>
+      <div class="letter-phonics" id="letterPhonics">"ah" sound</div>
+      <div class="tap-hint">👆 Tap to hear!</div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn btn-prev" onclick="prevLetter()">◀ Back</button>
+      <button class="nav-btn btn-next" onclick="nextLetter()">Next ▶</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div class="screen" id="quizScreen">
+    <div class="quiz-header">
+      <h2>🎯 Letter Quiz</h2>
+      <div class="quiz-score">Score: <span id="quizScore">0</span> | Q <span id="quizNum">1</span>/10</div>
+    </div>
+    <div class="stars-row" id="starsRow">⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐</div>
+    <div class="quiz-card">
+      <div class="quiz-big-letter" id="quizLetter">A</div>
+      <div class="quiz-question">Which word starts with this letter?</div>
+    </div>
+    <div class="answers-grid" id="answersGrid"></div>
+    <button onclick="startQuiz()" id="quizStartBtn" style="padding:18px;font-size:1.1rem;font-weight:800;border:none;border-radius:16px;background:var(--accent);color:#fff;cursor:pointer;margin-top:4px;">Start New Quiz</button>
+  </div>
+
+  <!-- Celebration overlay -->
+  <div id="celebrate">
+    <div class="big-emoji" id="celebEmoji">🎉</div>
+    <h2 id="celebTitle">Amazing!</h2>
+    <p id="celebMsg">You got 10/10!</p>
+    <button id="celebrateBtn" onclick="hideCelebrate()">Play Again!</button>
+  </div>
+
+</div>
+<script>
+// Android bridge
+function purchase(sku){if(window.Android&&Android.purchase)Android.purchase(sku);}
+function showAd(){if(window.Android&&Android.showAd)Android.showAd();}
+
+const LETTERS = [
+  {l:'A',e:'🍎',w:'Apple',p:'"ah" sound'},
+  {l:'B',e:'🐻',w:'Bear',p:'"buh" sound'},
+  {l:'C',e:'🐱',w:'Cat',p:'"kuh" sound'},
+  {l:'D',e:'🐶',w:'Dog',p:'"duh" sound'},
+  {l:'E',e:'🥚',w:'Egg',p:'"eh" sound'},
+  {l:'F',e:'🐟',w:'Fish',p:'"fuh" sound'},
+  {l:'G',e:'🍇',w:'Grapes',p:'"guh" sound'},
+  {l:'H',e:'🏠',w:'House',p:'"huh" sound'},
+  {l:'I',e:'🍦',w:'Ice Cream',p:'"ih" sound'},
+  {l:'J',e:'🃏',w:'Joker',p:'"juh" sound'},
+  {l:'K',e:'🦘',w:'Kangaroo',p:'"kuh" sound'},
+  {l:'L',e:'🦁',w:'Lion',p:'"luh" sound'},
+  {l:'M',e:'🐵',w:'Monkey',p:'"muh" sound'},
+  {l:'N',e:'🎵',w:'Note',p:'"nuh" sound'},
+  {l:'O',e:'🦉',w:'Owl',p:'"oh" sound'},
+  {l:'P',e:'🐧',w:'Penguin',p:'"puh" sound'},
+  {l:'Q',e:'👑',w:'Queen',p:'"kwuh" sound'},
+  {l:'R',e:'🐇',w:'Rabbit',p:'"ruh" sound'},
+  {l:'S',e:'☀️',w:'Sun',p:'"suh" sound'},
+  {l:'T',e:'🐯',w:'Tiger',p:'"tuh" sound'},
+  {l:'U',e:'☂️',w:'Umbrella',p:'"uh" sound'},
+  {l:'V',e:'🌋',w:'Volcano',p:'"vuh" sound'},
+  {l:'W',e:'🐋',w:'Whale',p:'"wuh" sound'},
+  {l:'X',e:'🎸',w:'Xylophone',p:'"ex" sound'},
+  {l:'Y',e:'🪀',w:'Yo-yo',p:'"yuh" sound'},
+  {l:'Z',e:'🦓',w:'Zebra',p:'"zuh" sound'},
+];
+
+let currentIdx = 0;
+let quizState = { score:0, q:0, total:10, active:false, answered:false };
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+
+function playTone(freq, dur, type='sine', vol=0.3){
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type = type; o.frequency.value = freq;
+  g.gain.setValueAtTime(vol, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+dur);
+  o.start(); o.stop(audioCtx.currentTime+dur);
+}
+
+function playLetterSound(){
+  // Play a fun ascending tone sequence for each letter
+  const baseFreqs = [261,277,293,311,329,349,370,392,415,440,466,494,523,554,587,622,659,698,740,784,831,880,932,988,1046,1108];
+  const freq = baseFreqs[currentIdx] || 440;
+  playTone(freq, 0.3, 'sine');
+  setTimeout(()=>playTone(freq*1.25, 0.25, 'sine'), 200);
+  // Bounce animation
+  const card = document.querySelector('.letter-card');
+  card.style.transform = 'scale(1.05)';
+  setTimeout(()=>card.style.transform='', 200);
+}
+
+function updateLearnDisplay(){
+  const d = LETTERS[currentIdx];
+  document.getElementById('bigLetter').textContent = d.l;
+  document.getElementById('bigEmoji').textContent = d.e;
+  document.getElementById('letterWord').textContent = d.w;
+  document.getElementById('letterPhonics').textContent = d.p;
+  document.getElementById('letterCounter').textContent = (currentIdx+1)+' / 26';
+  document.getElementById('learnProgress').style.width = ((currentIdx+1)/26*100)+'%';
+}
+
+function nextLetter(){
+  currentIdx = (currentIdx+1) % 26;
+  updateLearnDisplay();
+  playTone(600,0.1,'square',0.2);
+}
+function prevLetter(){
+  currentIdx = (currentIdx+25) % 26;
+  updateLearnDisplay();
+  playTone(400,0.1,'square',0.2);
+}
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',(t==='learn'&&i===0)||(t==='quiz'&&i===1)));
+  document.getElementById('learnScreen').classList.toggle('active',t==='learn');
+  document.getElementById('quizScreen').classList.toggle('active',t==='quiz');
+  if(t==='quiz' && !quizState.active) startQuiz();
+}
+
+function startQuiz(){
+  quizState = {score:0, q:0, total:10, active:true, answered:false};
+  document.getElementById('quizScore').textContent = 0;
+  document.getElementById('quizStartBtn').style.display='none';
+  nextQuizQuestion();
+}
+
+function nextQuizQuestion(){
+  if(quizState.q >= quizState.total){ endQuiz(); return; }
+  quizState.q++;
+  quizState.answered = false;
+  document.getElementById('quizNum').textContent = quizState.q;
+  // Pick random letter
+  const correctIdx = Math.floor(Math.random()*26);
+  const correct = LETTERS[correctIdx];
+  document.getElementById('quizLetter').textContent = correct.l;
+  // Build 4 choices: 1 correct + 3 wrong
+  let options = [correct];
+  while(options.length < 4){
+    const r = LETTERS[Math.floor(Math.random()*26)];
+    if(!options.find(o=>o.l===r.l)) options.push(r);
+  }
+  options = options.sort(()=>Math.random()-0.5);
+  const classes = ['opt-a','opt-b','opt-c','opt-d'];
+  const grid = document.getElementById('answersGrid');
+  grid.innerHTML = '';
+  options.forEach((opt,i)=>{
+    const b = document.createElement('button');
+    b.className = 'ans-btn '+classes[i];
+    b.innerHTML = opt.e+' '+opt.w;
+    b.onclick = ()=>answerQuiz(b, opt.l === correct.l);
+    grid.appendChild(b);
+  });
+  // Update stars
+  const filled = quizState.score;
+  document.getElementById('starsRow').textContent = '⭐'.repeat(filled)+'☆'.repeat(quizState.total-filled);
+}
+
+function answerQuiz(btn, correct){
+  if(quizState.answered) return;
+  quizState.answered = true;
+  if(correct){
+    btn.classList.add('correct');
+    quizState.score++;
+    document.getElementById('quizScore').textContent = quizState.score;
+    playTone(880,0.15,'sine'); setTimeout(()=>playTone(1100,0.2,'sine'),150);
+  } else {
+    btn.classList.add('wrong');
+    // Show correct
+    document.querySelectorAll('.ans-btn').forEach(b=>{
+      if(b.innerHTML.includes(document.getElementById('quizLetter').textContent)) b.classList.add('correct');
+    });
+    playTone(200,0.3,'sawtooth',0.2);
+  }
+  setTimeout(nextQuizQuestion, 1200);
+}
+
+function endQuiz(){
+  quizState.active = false;
+  document.getElementById('quizStartBtn').style.display='block';
+  const s = quizState.score;
+  document.getElementById('celebEmoji').textContent = s>=8?'🌟':s>=5?'😊':'💪';
+  document.getElementById('celebTitle').textContent = s>=8?'Amazing!':s>=5?'Good Job!':'Keep Trying!';
+  document.getElementById('celebMsg').textContent = 'You got '+s+'/'+quizState.total+'!';
+  document.getElementById('celebrate').classList.add('show');
+  if(s>=8){ playTone(523,0.1); setTimeout(()=>playTone(659,0.1),100); setTimeout(()=>playTone(784,0.3),200); }
+}
+
+function hideCelebrate(){
+  document.getElementById('celebrate').classList.remove('show');
+}
+
+updateLearnDisplay();
+</script>
+</body>
+</html>

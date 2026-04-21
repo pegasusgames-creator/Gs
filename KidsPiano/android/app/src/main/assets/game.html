@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Kids Piano</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --accent:#9C27B0; --accent2:#E040FB; --bg:#F3E5F5; --text:#333; --muted:#777; --radius:16px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--accent); flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:800; color:#fff; }
+#btn-remove-ads { background:rgba(255,255,255,0.25); border:none; color:#fff; font-size:0.72rem; font-weight:700; padding:5px 10px; border-radius:20px; cursor:pointer; }
+
+/* Note display */
+#noteDisplay { text-align:center; padding:8px 14px; background:#fff; flex-shrink:0; border-bottom:2px solid #e8d5f5; min-height:46px; display:flex; align-items:center; justify-content:center; gap:8px; }
+#currentNote { font-size:1.4rem; font-weight:900; color:var(--accent); }
+#noteHint { font-size:0.85rem; color:var(--muted); }
+
+/* Song selector */
+#songBar { display:flex; gap:8px; padding:8px 12px; background:#f9f0ff; border-bottom:2px solid #e8d5f5; overflow-x:auto; flex-shrink:0; }
+.song-btn { padding:7px 14px; font-size:0.78rem; font-weight:700; border:2px solid #ce93d8; border-radius:20px; background:#fff; cursor:pointer; white-space:nowrap; color:var(--accent); transition:all 0.15s; flex-shrink:0; }
+.song-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+.song-btn.stopped { background:#fff; color:var(--accent); border-color:#ce93d8; }
+
+/* Song notes display */
+#songNotes { padding:8px 12px; background:#f9f0ff; flex-shrink:0; border-bottom:2px solid #e8d5f5; min-height:44px; }
+#songNoteRow { display:flex; flex-wrap:wrap; gap:4px; }
+.song-note-chip { padding:3px 10px; border-radius:12px; font-size:0.78rem; font-weight:700; background:#e8d5f5; color:var(--accent); transition:all 0.2s; }
+.song-note-chip.next { background:var(--accent); color:#fff; transform:scale(1.1); }
+.song-note-chip.played { background:#4CAF50; color:#fff; opacity:0.6; }
+
+/* Piano */
+#pianoWrap { flex:1; overflow-x:auto; overflow-y:hidden; display:flex; align-items:flex-end; padding:8px; background:var(--bg); }
+#piano { position:relative; display:flex; height:100%; min-height:180px; max-height:260px; width:max-content; margin:auto; }
+.white-key {
+  width:44px; height:100%; background:#fff;
+  border:2px solid #ccc; border-radius:0 0 8px 8px;
+  cursor:pointer; transition:background 0.08s;
+  position:relative; z-index:1; flex-shrink:0;
+  display:flex; align-items:flex-end; justify-content:center; padding-bottom:6px;
+}
+.white-key:active, .white-key.pressed { background:#f3e5f5; }
+.white-key .key-label { font-size:0.65rem; font-weight:700; color:#9C27B0; pointer-events:none; }
+.black-key {
+  width:28px; height:60%; background:#333;
+  border-radius:0 0 6px 6px; border:2px solid #111;
+  cursor:pointer; transition:background 0.08s;
+  position:absolute; z-index:2; top:0;
+  display:flex; align-items:flex-end; justify-content:center; padding-bottom:4px;
+}
+.black-key:active, .black-key.pressed { background:#555; }
+.black-key .key-label { font-size:0.55rem; font-weight:700; color:#ce93d8; pointer-events:none; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>🎹 Kids Piano</h1>
+    <button id="btn-remove-ads" onclick="purchase('remove_ads')">⭐ Remove Ads</button>
+  </header>
+
+  <div id="noteDisplay">
+    <span id="currentNote">🎵 Touch a key!</span>
+    <span id="noteHint"></span>
+  </div>
+
+  <div id="songBar">
+    <button class="song-btn active" onclick="selectSong(-1)">🎹 Free Play</button>
+    <button class="song-btn" onclick="selectSong(0)">⭐ Twinkle</button>
+    <button class="song-btn" onclick="selectSong(1)">🎂 Happy Birthday</button>
+    <button class="song-btn" onclick="selectSong(2)">🐑 Mary's Lamb</button>
+  </div>
+
+  <div id="songNotes"><div id="songNoteRow"></div></div>
+
+  <div id="pianoWrap">
+    <div id="piano"></div>
+  </div>
+</div>
+<script>
+function purchase(sku){if(window.Android&&Android.purchase)Android.purchase(sku);}
+
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+
+// C4 to B5 — 2 octaves (24 white + 17 black)
+const NOTES = [
+  {n:'C4', f:261.63, black:false},
+  {n:'C#4',f:277.18, black:true},
+  {n:'D4', f:293.66, black:false},
+  {n:'D#4',f:311.13, black:true},
+  {n:'E4', f:329.63, black:false},
+  {n:'F4', f:349.23, black:false},
+  {n:'F#4',f:369.99, black:true},
+  {n:'G4', f:392.00, black:false},
+  {n:'G#4',f:415.30, black:true},
+  {n:'A4', f:440.00, black:false},
+  {n:'A#4',f:466.16, black:true},
+  {n:'B4', f:493.88, black:false},
+  {n:'C5', f:523.25, black:false},
+  {n:'C#5',f:554.37, black:true},
+  {n:'D5', f:587.33, black:false},
+  {n:'D#5',f:622.25, black:true},
+  {n:'E5', f:659.25, black:false},
+  {n:'F5', f:698.46, black:false},
+  {n:'F#5',f:739.99, black:true},
+  {n:'G5', f:783.99, black:false},
+  {n:'G#5',f:830.61, black:true},
+  {n:'A5', f:880.00, black:false},
+  {n:'A#5',f:932.33, black:true},
+  {n:'B5', f:987.77, black:false},
+];
+
+const SONGS = [
+  { name:'Twinkle Twinkle', notes:['C4','C4','G4','G4','A4','A4','G4','F4','F4','E4','E4','D4','D4','C4','G4','G4','F4','F4','E4','E4','D4','G4','G4','F4','F4','E4','E4','D4','C4','C4','G4','G4','A4','A4','G4','F4','F4','E4','E4','D4','D4','C4'] },
+  { name:'Happy Birthday', notes:['C4','C4','D4','C4','F4','E4','C4','C4','D4','C4','G4','F4','C4','C4','C5','A4','F4','E4','D4','A#4','A#4','A4','F4','G4','F4'] },
+  { name:"Mary's Lamb", notes:['E4','D4','C4','D4','E4','E4','E4','D4','D4','D4','E4','G4','G4','E4','D4','C4','D4','E4','E4','E4','E4','D4','D4','E4','D4','C4'] },
+];
+
+function playNote(freq, dur=0.4){
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type = 'triangle';
+  o.frequency.value = freq;
+  g.gain.setValueAtTime(0.5, audioCtx.currentTime);
+  g.gain.setValueAtTime(0.5, audioCtx.currentTime+0.05);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+dur);
+  o.start(); o.stop(audioCtx.currentTime+dur);
+}
+
+function buildPiano(){
+  const piano = document.getElementById('piano');
+  const whiteNotes = NOTES.filter(n=>!n.black);
+  const pianoWidth = whiteNotes.length * 44;
+  piano.style.width = pianoWidth+'px';
+
+  // Place white keys
+  let wIdx = 0;
+  whiteNotes.forEach((note,i)=>{
+    const key = document.createElement('div');
+    key.className='white-key'; key.id='key-'+note.n.replace('#','s');
+    key.innerHTML=`<span class="key-label">${note.n.replace('4','').replace('5',"'")}</span>`;
+    key.ontouchstart = key.onmousedown = function(e){ e.preventDefault(); triggerKey(note); };
+    piano.appendChild(key);
+  });
+
+  // Place black keys
+  let whitePos = 0;
+  NOTES.forEach((note,i)=>{
+    if(!note.black){ whitePos++; return; }
+    const key = document.createElement('div');
+    key.className='black-key'; key.id='key-'+note.n.replace('#','s');
+    key.innerHTML=`<span class="key-label">${note.n.replace('4','').replace('5',"'")}</span>`;
+    // Position: black key sits between whitePos-1 and whitePos
+    const left = (whitePos-1)*44 + 44 - 14;
+    key.style.left = left+'px';
+    key.ontouchstart = key.onmousedown = function(e){ e.preventDefault(); triggerKey(note); };
+    piano.appendChild(key);
+  });
+}
+
+function triggerKey(note){
+  playNote(note.f);
+  document.getElementById('currentNote').textContent = '🎵 '+note.n;
+  const keyEl = document.getElementById('key-'+note.n.replace('#','s'));
+  if(keyEl){ keyEl.classList.add('pressed'); setTimeout(()=>keyEl.classList.remove('pressed'),200); }
+  if(currentSong>=0) checkSongNote(note.n);
+}
+
+// Song mode
+let currentSong=-1, songPos=0;
+function selectSong(idx){
+  document.querySelectorAll('.song-btn').forEach((b,i)=>b.classList.toggle('active',i===idx+1));
+  currentSong=idx; songPos=0;
+  if(idx<0){
+    document.getElementById('songNoteRow').innerHTML='';
+    document.getElementById('noteHint').textContent='';
+    return;
+  }
+  renderSongNotes();
+}
+
+function renderSongNotes(){
+  const song=SONGS[currentSong];
+  const row=document.getElementById('songNoteRow');
+  row.innerHTML='';
+  song.notes.forEach((n,i)=>{
+    const chip=document.createElement('span');
+    chip.className='song-note-chip'+(i===songPos?' next':i<songPos?' played':'');
+    chip.textContent=n;
+    row.appendChild(chip);
+  });
+  // Scroll to current
+  const chips=row.querySelectorAll('.song-note-chip');
+  if(chips[songPos]) chips[songPos].scrollIntoView({inline:'center',behavior:'smooth'});
+  document.getElementById('noteHint').textContent = '▶ Play: '+song.notes[songPos];
+}
+
+function checkSongNote(noteName){
+  const song=SONGS[currentSong];
+  if(noteName===song.notes[songPos]){
+    songPos++;
+    if(songPos>=song.notes.length){
+      document.getElementById('currentNote').textContent='🌟 Song Complete!';
+      songPos=0;
+      [523,659,784,1047].forEach((f,i)=>setTimeout(()=>playNote(f,0.3),i*150));
+    }
+    renderSongNotes();
+  }
+}
+
+buildPiano();
+</script>
+</body>
+</html>

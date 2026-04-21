@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Workout Log</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#FF7043; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
+#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+.ig { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
+.ig label { font-size:0.72rem; color:var(--muted); }
+.ig input, .ig select, .ig textarea { background:var(--card); border:1px solid rgba(255,112,67,0.2); border-radius:8px; color:var(--text); padding:10px 12px; font-size:0.95rem; width:100%; }
+.ig textarea { resize:none; height:56px; }
+.row2 { display:flex; gap:8px; } .row2 .ig { flex:1; }
+.btn-p { background:var(--accent); border:none; color:#fff; font-size:1rem; font-weight:700; padding:12px; border-radius:10px; cursor:pointer; width:100%; margin-top:4px; }
+.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.stat-box { background:var(--card); border-radius:10px; padding:10px; text-align:center; }
+.stat-lbl { font-size:0.65rem; color:var(--muted); margin-bottom:2px; }
+.stat-val { font-size:1.1rem; font-weight:700; color:var(--accent); }
+.wo-item { background:var(--card); border-radius:10px; padding:12px; margin-bottom:10px; }
+.wo-header { display:flex; justify-content:space-between; align-items:flex-start; }
+.wo-type { font-size:0.75rem; font-weight:700; text-transform:uppercase; padding:2px 8px; border-radius:12px; }
+.type-cardio { background:rgba(239,83,80,0.2); color:#ef5350; }
+.type-strength { background:rgba(255,112,67,0.2); color:#FF7043; }
+.type-yoga { background:rgba(156,39,176,0.2); color:#ab47bc; }
+.type-hiit { background:rgba(255,193,7,0.2); color:#ffc107; }
+.type-other { background:rgba(96,125,139,0.2); color:#90a4ae; }
+.wo-dur { font-size:1rem; font-weight:700; color:var(--accent); }
+.wo-details { font-size:0.75rem; color:var(--muted); margin-top:5px; }
+.wo-cals { font-size:0.8rem; color:var(--muted); margin-top:3px; }
+.del-btn { background:none; border:none; color:var(--muted); font-size:0.9rem; padding:4px; cursor:pointer; }
+.streak-badge { display:inline-block; background:rgba(255,112,67,0.15); border:1px solid var(--accent); border-radius:8px; padding:4px 10px; font-size:0.8rem; color:var(--accent); font-weight:700; }
+.empty { text-align:center; color:var(--muted); font-size:0.85rem; padding:20px 0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Workout <span>Log</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
+  <div id="scroll">
+    <div class="card">
+      <div class="card-title">Log Workout</div>
+      <div class="row2">
+        <div class="ig"><label>Type</label>
+          <select id="i-type">
+            <option value="Cardio">Cardio</option>
+            <option value="Strength">Strength</option>
+            <option value="Yoga">Yoga</option>
+            <option value="HIIT">HIIT</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="ig"><label>Duration (min)</label><input type="number" id="i-dur" placeholder="30" min="1" max="600"></div>
+      </div>
+      <div class="ig"><label>Notes (optional)</label><textarea id="i-notes" placeholder="Exercises, sets, reps..."></textarea></div>
+      <button class="btn-p" id="btn-log">Log Workout</button>
+    </div>
+    <div class="card" id="stats-card">
+      <div class="card-title">Stats</div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-lbl">This Week (min)</div><div class="stat-val" id="st-week">0</div></div>
+        <div class="stat-box"><div class="stat-lbl">Total Workouts</div><div class="stat-val" id="st-total">0</div></div>
+        <div class="stat-box"><div class="stat-lbl">Cals This Week</div><div class="stat-val" id="st-cals">0</div></div>
+      </div>
+      <div style="margin-top:10px;text-align:center;"><span class="streak-badge" id="streak-badge">0 day streak</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Recent Workouts</div>
+      <div id="wo-list"><div class="empty">No workouts yet. Log your first workout above!</div></div>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var state={useCount:0,removeAds:false};
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+
+var workouts=JSON.parse(localStorage.getItem('wl_wos')||'[]');
+function save(){localStorage.setItem('wl_wos',JSON.stringify(workouts));}
+function fmtDate(ts){return new Date(ts).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});}
+var CAL_RATES={Cardio:8,Strength:6,Yoga:4,HIIT:10,Other:6};
+var TYPE_CLS={Cardio:'type-cardio',Strength:'type-strength',Yoga:'type-yoga',HIIT:'type-hiit',Other:'type-other'};
+
+function calcCals(type,dur){return Math.round((CAL_RATES[type]||6)*dur);}
+
+function calcStreak(){
+  var dates=workouts.map(function(w){return new Date(w.t).toDateString();});
+  var unique=[...new Set(dates)].sort(function(a,b){return new Date(b)-new Date(a);});
+  var streak=0;
+  var today=new Date(); today.setHours(0,0,0,0);
+  for(var i=0;i<unique.length;i++){
+    var d=new Date(unique[i]); d.setHours(0,0,0,0);
+    var expected=new Date(today.getTime()-i*86400000); expected.setHours(0,0,0,0);
+    if(d.getTime()===expected.getTime())streak++;
+    else break;
+  }
+  return streak;
+}
+
+function render(){
+  var el=document.getElementById('wo-list');
+  var now=new Date(); var weekAgo=now.getTime()-7*86400000;
+  var weekWos=workouts.filter(function(w){return w.t>=weekAgo;});
+  var weekMin=weekWos.reduce(function(s,w){return s+w.dur;},0);
+  var weekCals=weekWos.reduce(function(s,w){return s+w.cals;},0);
+  document.getElementById('st-week').textContent=weekMin;
+  document.getElementById('st-total').textContent=workouts.length;
+  document.getElementById('st-cals').textContent=weekCals;
+  document.getElementById('streak-badge').textContent=calcStreak()+' day streak';
+  if(!workouts.length){el.innerHTML='<div class="empty">No workouts yet.</div>';return;}
+  el.innerHTML=workouts.slice(0,10).map(function(w){
+    return '<div class="wo-item"><div class="wo-header"><div><span class="wo-type '+TYPE_CLS[w.type]+'">'+w.type+'</span></div><div style="text-align:right;"><span class="wo-dur">'+w.dur+' min</span><button class="del-btn" data-t="'+w.t+'">&#10005;</button></div></div><div class="wo-cals">~'+w.cals+' calories burned</div><div class="wo-details">'+fmtDate(w.t)+(w.notes?' &bull; '+w.notes:'')+'</div></div>';
+  }).join('');
+  el.querySelectorAll('.del-btn').forEach(function(b){b.addEventListener('click',function(){var t=parseInt(b.dataset.t);workouts=workouts.filter(function(w){return w.t!==t;});save();render();});});
+}
+
+document.getElementById('btn-log').addEventListener('click',function(){
+  var type=document.getElementById('i-type').value;
+  var dur=parseInt(document.getElementById('i-dur').value);
+  if(!dur||dur<1){alert('Enter workout duration in minutes.');return;}
+  var notes=document.getElementById('i-notes').value.trim();
+  var cals=calcCals(type,dur);
+  workouts.unshift({type:type,dur:dur,notes:notes,cals:cals,t:Date.now()});
+  if(workouts.length>500)workouts=workouts.slice(0,500);
+  save();
+  document.getElementById('i-dur').value='';
+  document.getElementById('i-notes').value='';
+  render();maybeInterstitial();
+});
+
+render();
+</script>
+</body>
+</html>

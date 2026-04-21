@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Spin the Bottle</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: #1a0a1e; color: #fff; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  :root { --accent: #E91E63; }
+  header { background: #2a0a2e; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); flex-shrink:0; }
+  header h1 { font-size: 1.3rem; color: var(--accent); }
+  .btn-remove-ads { background: var(--accent); color: #fff; border: none; border-radius: 20px; padding: 8px 16px; font-size: 0.8rem; font-weight: bold; min-height: 44px; cursor: pointer; }
+  .btn-pressed { opacity: 0.7; transform: scale(0.96); }
+  .screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px 16px; overflow-y:auto; }
+  .screen.hidden { display: none; }
+  h2 { font-size: 1.4rem; font-weight: bold; margin-bottom: 16px; text-align: center; }
+  .mode-toggle { display: flex; background: #2a1a30; border-radius: 30px; padding: 4px; margin-bottom: 20px; width: 100%; max-width: 360px; }
+  .mode-btn { flex: 1; background: none; border: none; color: #aaa; border-radius: 26px; padding: 10px 4px; font-size: 0.8rem; cursor: pointer; min-height: 44px; font-weight: bold; }
+  .mode-btn.active { background: var(--accent); color: #fff; }
+  .players-section { width: 100%; max-width: 360px; }
+  .players-section label { font-size: 0.85rem; color: #aaa; margin-bottom: 8px; display: block; }
+  .player-input-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .player-input { flex: 1; background: #2a1a30; border: 1px solid #4a1a4e; color: #fff; border-radius: 10px; padding: 12px 14px; font-size: 1rem; outline: none; }
+  .add-player-btn { background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 12px 16px; font-size: 1.2rem; cursor: pointer; min-height: 48px; min-width: 48px; }
+  .players-list { margin-bottom: 16px; }
+  .player-chip { display: flex; align-items: center; justify-content: space-between; background: #2a1a30; border: 1px solid #4a2a50; border-radius: 10px; padding: 10px 14px; margin-bottom: 6px; }
+  .player-chip span { font-size: 1rem; }
+  .remove-player { background: none; border: none; color: #ff4081; font-size: 1.1rem; cursor: pointer; padding: 4px 8px; min-height: 36px; min-width: 36px; }
+  .big-btn { background: var(--accent); color: #fff; border: none; border-radius: 16px; padding: 18px 40px; font-size: 1.2rem; font-weight: bold; cursor: pointer; min-height: 56px; width: 100%; max-width: 360px; margin: 8px 0; }
+  .bottle-container { position: relative; width: 260px; height: 260px; cursor: pointer; margin: 12px 0; user-select:none; }
+  .bottle-ring { width: 260px; height: 260px; border-radius: 50%; border: 3px solid #4a1a4e; background: radial-gradient(circle, #2a0a2e, #1a0a1e); }
+  .player-dots-container { position: absolute; top:0; left:0; width:100%; height:100%; }
+  .player-dot { position: absolute; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: bold; text-align: center; transform: translate(-50%, -50%); line-height:1.1; border: 2px solid rgba(255,255,255,0.2); }
+  .bottle-wrapper { position: absolute; top: 50%; left: 50%; width: 0; height: 0; transform-origin: 0 0; }
+  .bottle-inner { position: absolute; left: -110px; top: -15px; width: 220px; height: 30px; }
+  .spin-result { font-size: 1.2rem; font-weight: bold; color: var(--accent); text-align: center; min-height: 34px; margin: 8px 0; }
+  .spin-tap-hint { color: #888; font-size: 0.85rem; }
+  .popup-overlay { position: fixed; top:0;left:0;right:0;bottom:0; background: rgba(0,0,0,0.75); z-index: 100; display:none; align-items:center; justify-content:center; padding: 20px; }
+  .popup-overlay.show { display: flex; }
+  .popup-card { background: #2a1a30; border: 2px solid var(--accent); border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 380px; text-align: center; }
+  .popup-title { color: var(--accent); font-size: 1.1rem; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .popup-players { font-size: 1.3rem; font-weight: bold; margin-bottom: 16px; color: #fff; }
+  .popup-dare { font-size: 1.05rem; line-height: 1.6; color: #ddd; margin-bottom: 20px; min-height: 60px; }
+  .popup-btns { display: flex; gap: 10px; }
+  .popup-btn { flex: 1; background: #3a2a40; border: 1px solid #5a2a5e; color: #ccc; border-radius: 12px; padding: 14px; font-size: 0.95rem; cursor: pointer; min-height: 50px; font-weight: bold; }
+  .popup-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  #banner-ad { background: #2a0a2e; text-align: center; padding: 8px; color: #666; font-size: 0.75rem; border-top: 1px solid #3a1a3e; flex-shrink:0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>💃 Spin the Bottle</h1>
+  <button class="btn-remove-ads" id="removeAdsBtn">Remove Ads</button>
+</header>
+
+<div class="screen" id="setupScreen">
+  <h2>Set Up Players</h2>
+  <div class="mode-toggle">
+    <button class="mode-btn active" data-mode="spin">🍾 Spin</button>
+    <button class="mode-btn" data-mode="truth">🎭 Truth/Dare</button>
+    <button class="mode-btn" data-mode="dare">🔥 Dares</button>
+  </div>
+  <div class="players-section">
+    <label>Add Players (2–8)</label>
+    <div class="player-input-row">
+      <input type="text" class="player-input" id="playerInput" placeholder="Player name..." maxlength="12">
+      <button class="add-player-btn" id="addPlayerBtn">+</button>
+    </div>
+    <div class="players-list" id="playersList"></div>
+  </div>
+  <button class="big-btn" id="startSpinBtn">Start Spinning!</button>
+</div>
+
+<div class="screen hidden" id="spinScreen" style="justify-content:center">
+  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;max-width:340px;margin-bottom:10px">
+    <button style="background:#2a1a30;border:1px solid #4a1a4e;color:#ccc;border-radius:10px;padding:8px 14px;font-size:0.85rem;cursor:pointer;min-height:44px" id="backBtn">← Setup</button>
+    <div style="color:#aaa;font-size:0.8rem" id="modeLabel">Spin Only</div>
+  </div>
+  <div class="bottle-container" id="bottleContainer">
+    <div class="bottle-ring"></div>
+    <div class="player-dots-container" id="playerDots"></div>
+    <div class="bottle-wrapper" id="bottleWrapper">
+      <div class="bottle-inner">
+        <svg viewBox="0 0 220 30" width="220" height="30">
+          <defs>
+            <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#388E3C"/>
+              <stop offset="100%" style="stop-color:#66BB6A"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="8" width="18" height="14" rx="3" fill="#81C784"/>
+          <rect x="4" y="2" width="10" height="10" rx="2" fill="#A5D6A7"/>
+          <rect x="18" y="4" width="150" height="22" rx="7" fill="url(#bg)"/>
+          <rect x="22" y="7" width="110" height="7" rx="3" fill="rgba(255,255,255,0.2)"/>
+          <rect x="4" y="0" width="10" height="5" rx="2" fill="#E91E63"/>
+          <polygon points="168,0 220,15 168,30" fill="#E91E63"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="spin-result" id="spinResult">Tap the bottle to spin!</div>
+  <div class="spin-tap-hint">Tap anywhere on the circle</div>
+</div>
+
+<div class="popup-overlay" id="darePopup">
+  <div class="popup-card">
+    <div class="popup-title" id="popupTitle">Truth or Dare?</div>
+    <div class="popup-players" id="popupPlayers"></div>
+    <div class="popup-dare" id="popupContent"></div>
+    <div class="popup-btns" id="choiceBtns">
+      <button class="popup-btn" id="truthBtn">Truth</button>
+      <button class="popup-btn primary" id="dareBtn">Dare!</button>
+    </div>
+    <div id="doneBtnWrap" style="display:none">
+      <button class="popup-btn primary" style="width:100%" id="doneBtn">Done! ✓ Next Spin</button>
+    </div>
+  </div>
+</div>
+
+<div id="banner-ad">Advertisement</div>
+
+<script>
+const TRUTHS = [
+  "What's the most embarrassing thing that's happened to you in public?",
+  "Have you ever lied to get out of trouble? What did you say?",
+  "What's something you've done that you're not proud of?",
+  "Have you ever had a crush on someone in this room?",
+  "What's the most childish thing you still do?",
+  "What's the biggest secret you've never told anyone here?",
+  "Have you ever ghosted someone? Why?",
+  "What's the worst date you've ever been on?",
+  "What's your most embarrassing childhood memory?",
+  "Have you ever stolen anything? What was it?",
+  "What's the most ridiculous lie you've ever told?",
+  "If you could change one decision you've made, what would it be?",
+  "What's your biggest phobia?",
+  "Have you ever cheated on a test or at a game?",
+  "What's your guilty pleasure?",
+  "What's the meanest thing you've said to someone?",
+  "What's something you pretend to like but actually hate?",
+  "Have you ever pretended to be sick to avoid something?",
+  "What's the most money you've spent on something silly?",
+  "What's a secret talent you've never told anyone about?"
+];
+
+const DARES = [
+  "Do your best impression of someone in the group.",
+  "Speak in a funny accent for the next 3 rounds.",
+  "Do 10 push-ups right now.",
+  "Sing the chorus of the last song you listened to.",
+  "Do your best robot dance for 30 seconds.",
+  "Let the group look through your camera roll for 30 seconds.",
+  "Post an unflattering selfie to your story right now.",
+  "Text your most recent contact 'I have something to tell you' and wait.",
+  "Wear your shirt inside out for the rest of the game.",
+  "Speak only in questions for the next 2 rounds.",
+  "Do your best catwalk across the room.",
+  "Do 20 jumping jacks while humming a song.",
+  "Try to lick your elbow for 10 seconds.",
+  "Make a silly face every time anyone talks for the next round.",
+  "Moonwalk across the room right now.",
+  "Act out a scene from your favorite movie.",
+  "Let someone in the group style your hair however they want.",
+  "Talk in slow motion for the next 3 minutes.",
+  "Do your best celebrity impression.",
+  "Say the alphabet backwards.",
+  "Let the group write something on your arm in marker.",
+  "Do 5 burpees without stopping.",
+  "Speak only in rhymes for the next 2 rounds.",
+  "Describe the last dream you remember in full detail.",
+  "Try to stand on one foot with your eyes closed for 30 seconds.",
+  "Tell a 60-second story about an imaginary adventure you just had.",
+  "Let the person to your left tickle you for 5 seconds.",
+  "Call someone on your phone and sing them a line from a song."
+];
+
+let players = ['Alice', 'Bob', 'Carol', 'Dave'];
+let gameMode = 'spin';
+let isSpinning = false;
+let currentAngle = 0;
+
+function addTouchFeedback(el) {
+  el.addEventListener('touchstart', () => el.classList.add('btn-pressed'), {passive:true});
+  el.addEventListener('touchend', () => el.classList.remove('btn-pressed'), {passive:true});
+  el.addEventListener('touchcancel', () => el.classList.remove('btn-pressed'), {passive:true});
+}
+document.querySelectorAll('button').forEach(addTouchFeedback);
+
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    gameMode = btn.dataset.mode;
+  });
+});
+
+document.getElementById('playerInput').addEventListener('keydown', e => { if (e.key === 'Enter') addPlayer(); });
+document.getElementById('addPlayerBtn').addEventListener('click', addPlayer);
+document.getElementById('startSpinBtn').addEventListener('click', startGame);
+document.getElementById('backBtn').addEventListener('click', () => showScreen('setupScreen'));
+document.getElementById('bottleContainer').addEventListener('click', doSpin);
+document.getElementById('removeAdsBtn').addEventListener('click', () => { if (window.Android) Android.purchaseNoAds(); });
+document.getElementById('truthBtn').addEventListener('click', revealTruth);
+document.getElementById('dareBtn').addEventListener('click', revealDare);
+document.getElementById('doneBtn').addEventListener('click', () => document.getElementById('darePopup').classList.remove('show'));
+
+renderPlayers();
+
+function addPlayer() {
+  const inp = document.getElementById('playerInput');
+  const name = inp.value.trim();
+  if (!name || players.length >= 8) return;
+  players.push(name);
+  inp.value = '';
+  renderPlayers();
+}
+
+function renderPlayers() {
+  document.getElementById('playersList').innerHTML = players.map((p,i) =>
+    `<div class="player-chip"><span>${p}</span><button class="remove-player" onclick="removePlayer(${i})">✕</button></div>`
+  ).join('');
+}
+
+function removePlayer(i) { players.splice(i, 1); renderPlayers(); }
+
+function startGame() {
+  if (players.length < 2) { alert('Add at least 2 players!'); return; }
+  const labels = {spin:'Spin Only', truth:'Truth or Dare', dare:'Dares Only'};
+  document.getElementById('modeLabel').textContent = labels[gameMode];
+  showScreen('spinScreen');
+  renderDots();
+  document.getElementById('spinResult').textContent = 'Tap the bottle to spin!';
+}
+
+const DOT_COLORS = ['#E91E63','#9C27B0','#2196F3','#4CAF50','#FF9800','#00BCD4','#FF5722','#795548'];
+
+function renderDots() {
+  const el = document.getElementById('playerDots');
+  el.innerHTML = '';
+  players.forEach((name, i) => {
+    const angle = (i / players.length) * 2 * Math.PI - Math.PI / 2;
+    const x = 130 + 100 * Math.cos(angle);
+    const y = 130 + 100 * Math.sin(angle);
+    const dot = document.createElement('div');
+    dot.className = 'player-dot';
+    dot.style.cssText = `left:${x}px;top:${y}px;background:${DOT_COLORS[i%DOT_COLORS.length]};`;
+    dot.textContent = name.substring(0, 6);
+    el.appendChild(dot);
+  });
+}
+
+function doSpin() {
+  if (isSpinning) return;
+  isSpinning = true;
+  document.getElementById('spinResult').textContent = 'Spinning...';
+  const targetIdx = Math.floor(Math.random() * players.length);
+  const targetAngle = (targetIdx / players.length) * 360;
+  const normalizedCurrent = currentAngle % 360;
+  let diff = targetAngle - normalizedCurrent;
+  if (diff < 0) diff += 360;
+  const spins = (5 + Math.floor(Math.random() * 4)) * 360;
+  const finalAngle = currentAngle + spins + diff;
+  const wrapper = document.getElementById('bottleWrapper');
+  wrapper.style.transition = 'transform 3.2s cubic-bezier(0.17, 0.67, 0.25, 1)';
+  wrapper.style.transform = `rotate(${finalAngle}deg)`;
+  currentAngle = finalAngle;
+  setTimeout(() => {
+    isSpinning = false;
+    wrapper.style.transition = '';
+    const target = players[targetIdx];
+    document.getElementById('spinResult').textContent = `Points to: ${target}!`;
+    if (gameMode !== 'spin') showDarePopup(target);
+  }, 3400);
+}
+
+function showDarePopup(target) {
+  document.getElementById('popupPlayers').textContent = target;
+  document.getElementById('popupContent').textContent = '';
+  if (gameMode === 'truth') {
+    document.getElementById('popupTitle').textContent = 'Truth or Dare?';
+    document.getElementById('choiceBtns').style.display = 'flex';
+    document.getElementById('doneBtnWrap').style.display = 'none';
+  } else {
+    revealDare();
+    return;
+  }
+  document.getElementById('darePopup').classList.add('show');
+}
+
+function revealTruth() {
+  document.getElementById('popupTitle').textContent = 'Truth!';
+  document.getElementById('popupContent').textContent = TRUTHS[Math.floor(Math.random() * TRUTHS.length)];
+  document.getElementById('choiceBtns').style.display = 'none';
+  document.getElementById('doneBtnWrap').style.display = 'block';
+  document.getElementById('darePopup').classList.add('show');
+}
+
+function revealDare() {
+  document.getElementById('popupTitle').textContent = 'Dare!';
+  document.getElementById('popupContent').textContent = DARES[Math.floor(Math.random() * DARES.length)];
+  document.getElementById('choiceBtns').style.display = 'none';
+  document.getElementById('doneBtnWrap').style.display = 'block';
+  document.getElementById('darePopup').classList.add('show');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+window.onAdMobLoaded = function() {};
+window.onPurchaseComplete = function(sku) {
+  if (sku && sku.includes('no_ads')) {
+    document.getElementById('banner-ad').style.display = 'none';
+    document.getElementById('removeAdsBtn').style.display = 'none';
+  }
+};
+if (window.Android) document.getElementById('banner-ad').style.display = 'none';
+</script>
+</body>
+</html>

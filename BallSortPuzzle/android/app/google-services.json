@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "427523190688",
+    "project_id": "ballsortpuzzle-168c1",
+    "storage_bucket": "ballsortpuzzle-168c1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427523190688:android:fa6cfac9f501516f23bec5",
+        "android_client_info": {
+          "package_name": "com.pegasusgames.ballsort"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaDSD5NXezpVsgOoXgB4eW9I-Rub152fE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

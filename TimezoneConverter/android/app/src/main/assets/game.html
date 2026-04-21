@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Timezone Converter</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#29B6F6; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:0; }
+header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px 10px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
+#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 14px 12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:14px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+/* Input */
+.input-group { display:flex; flex-direction:column; gap:8px; }
+.input-group label { font-size:0.78rem; color:var(--muted); }
+.input-group select, .input-group input[type=time] { padding:10px 12px; border-radius:10px; border:none; background:var(--card); color:var(--text); font-size:0.9rem; width:100%; -webkit-appearance:none; }
+.btn-convert { background:var(--accent); border:none; border-radius:10px; color:#fff; font-size:1rem; font-weight:700; padding:13px; cursor:pointer; width:100%; margin-top:4px; }
+/* Results table */
+.result-row { display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:var(--card); border-radius:10px; margin-bottom:6px; }
+.result-row.source { border:2px solid var(--accent); background:#0a2a3a; }
+.rr-left { }
+.rr-city { font-size:0.9rem; font-weight:600; }
+.rr-region { font-size:0.68rem; color:var(--muted); margin-top:1px; }
+.rr-right { text-align:right; }
+.rr-time { font-size:1.15rem; font-weight:700; color:var(--accent); font-variant-numeric:tabular-nums; }
+.result-row.source .rr-time { color:#fff; }
+.rr-day { font-size:0.68rem; color:var(--muted); margin-top:1px; }
+.rr-day.next { color:#66BB6A; }
+.rr-day.prev { color:#EF5350; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Timezone <span>Converter</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
+  <div id="scroll">
+    <div class="card">
+      <div class="card-title">Convert Time</div>
+      <div class="input-group">
+        <label>Source Timezone</label>
+        <select id="src-tz"></select>
+        <label>Time</label>
+        <input type="time" id="src-time" value="12:00">
+        <button class="btn-convert" onclick="convert()">Convert</button>
+      </div>
+    </div>
+    <div class="card" id="results-card" style="display:none;">
+      <div class="card-title">Results</div>
+      <div id="results-list"></div>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+
+var ZONES = [
+  {city:'New York',    region:'USA – Eastern',    tz:'America/New_York'},
+  {city:'Los Angeles', region:'USA – Pacific',    tz:'America/Los_Angeles'},
+  {city:'Chicago',     region:'USA – Central',    tz:'America/Chicago'},
+  {city:'São Paulo',   region:'Brazil',            tz:'America/Sao_Paulo'},
+  {city:'London',      region:'UK',                tz:'Europe/London'},
+  {city:'Paris',       region:'France',            tz:'Europe/Paris'},
+  {city:'Dubai',       region:'UAE',               tz:'Asia/Dubai'},
+  {city:'Singapore',   region:'Singapore',         tz:'Asia/Singapore'},
+  {city:'Tokyo',       region:'Japan',             tz:'Asia/Tokyo'},
+  {city:'Sydney',      region:'Australia',         tz:'Australia/Sydney'},
+];
+
+var state = { useCount:0, removeAds:false };
+
+// Populate select
+var sel=document.getElementById('src-tz');
+ZONES.forEach(function(z,i){
+  var o=document.createElement('option');
+  o.value=i; o.textContent=z.city+' ('+z.region+')';
+  sel.appendChild(o);
+});
+
+function getTzOffset(tz, date) {
+  // Get the UTC offset in minutes for a given timezone at a given date
+  try {
+    var fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz, hour:'2-digit', minute:'2-digit', hour12:false,
+      year:'numeric', month:'2-digit', day:'2-digit'
+    });
+    var parts = fmt.formatToParts(date);
+    var p = {};
+    parts.forEach(function(x){p[x.type]=x.value;});
+    var local = new Date(p.year+'-'+p.month+'-'+p.day+'T'+(p.hour==='24'?'00':p.hour)+':'+p.minute+':00Z');
+    return (local.getTime()-date.getTime())/60000;
+  } catch(e){ return 0; }
+}
+
+function convert() {
+  var srcIdx=parseInt(document.getElementById('src-tz').value);
+  var timeVal=document.getElementById('src-time').value;
+  if(!timeVal){alert('Pick a time');return;}
+  var srcZone=ZONES[srcIdx];
+
+  // Build a reference date with the input time in source timezone
+  var now=new Date();
+  var [hh,mm]=timeVal.split(':').map(Number);
+
+  // Create a date in source timezone at the given time
+  // We use today's date as reference
+  var srcOff=getTzOffset(srcZone.tz, now);
+  // Treat the input time as local time in the source TZ
+  var utcMs = now.setHours(0,0,0,0) + (hh*60+mm)*60000 - srcOff*60000;
+  var refDate=new Date(utcMs);
+
+  var srcDateStr=refDate.toLocaleDateString('en-US',{timeZone:srcZone.tz,weekday:'short',month:'short',day:'numeric'});
+
+  var list=document.getElementById('results-list');
+  list.innerHTML=ZONES.map(function(z,i){
+    var isSrc=i===srcIdx;
+    var tStr=new Intl.DateTimeFormat('en-US',{timeZone:z.tz,hour:'2-digit',minute:'2-digit',hour12:true}).format(refDate);
+    var dStr=new Intl.DateTimeFormat('en-US',{timeZone:z.tz,weekday:'short',month:'short',day:'numeric'}).format(refDate);
+    var dayDiff='';var dayCls='';
+    if(!isSrc){
+      if(dStr!==srcDateStr){
+        // simple heuristic: compare day number
+        var srcDay=new Date(refDate.toLocaleString('en-US',{timeZone:srcZone.tz})).getDate();
+        var dstDay=new Date(refDate.toLocaleString('en-US',{timeZone:z.tz})).getDate();
+        if(dstDay>srcDay||(srcDay>25&&dstDay<5)){dayDiff='+1 day';dayCls='next';}
+        else{dayDiff='-1 day';dayCls='prev';}
+      }
+    }
+    return '<div class="result-row'+(isSrc?' source':'')+'">'+
+      '<div class="rr-left"><div class="rr-city">'+z.city+'</div><div class="rr-region">'+z.region+'</div></div>'+
+      '<div class="rr-right"><div class="rr-time">'+tStr+'</div>'+
+      (dayDiff?'<div class="rr-day '+dayCls+'">'+dayDiff+'</div>':'<div class="rr-day">'+dStr+'</div>')+
+      '</div></div>';
+  }).join('');
+
+  document.getElementById('results-card').style.display='block';
+  maybeInterstitial();
+}
+
+// Auto convert on load
+convert();
+
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+</script>
+</body>
+</html>

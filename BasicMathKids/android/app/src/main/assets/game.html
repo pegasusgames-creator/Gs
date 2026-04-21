@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Basic Math for Kids</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --accent:#FF4081; --accent2:#FF80AB; --bg:#F3E5F5; --card:#fff; --text:#333; --muted:#888; --radius:20px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; }
+
+header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--accent); flex-shrink:0; }
+header h1 { font-size:1.4rem; font-weight:800; color:#fff; }
+#btn-remove-ads { background:rgba(255,255,255,0.25); border:none; color:#fff; font-size:0.72rem; font-weight:700; padding:6px 12px; border-radius:20px; cursor:pointer; }
+
+/* Screens */
+.screen { display:none; flex-direction:column; flex:1; overflow:hidden; }
+.screen.active { display:flex; }
+
+/* ---- MENU ---- */
+#menuScreen { align-items:center; justify-content:center; padding:20px; gap:16px; background:var(--bg); }
+.menu-title { font-size:2rem; font-weight:900; color:var(--accent); text-align:center; }
+.menu-sub { font-size:1rem; color:var(--muted); text-align:center; }
+.diff-btn { width:100%; max-width:300px; padding:20px; font-size:1.1rem; font-weight:800; border:none; border-radius:var(--radius); cursor:pointer; transition:transform 0.15s; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.diff-btn:active { transform:scale(0.96); }
+.diff-easy  { background:#E8F5E9; color:#2E7D32; box-shadow:0 4px 16px rgba(76,175,80,0.2); }
+.diff-med   { background:#FFF3E0; color:#E65100; box-shadow:0 4px 16px rgba(255,152,0,0.2); }
+.diff-hard  { background:#FCE4EC; color:#880E4F; box-shadow:0 4px 16px rgba(255,64,129,0.2); }
+.diff-icon { font-size:1.6rem; }
+
+/* ---- GAME SCREEN ---- */
+#gameScreen { background:var(--bg); padding:16px; gap:14px; align-items:center; }
+
+.progress-wrap { width:100%; max-width:360px; background:#e0e0e0; border-radius:20px; height:14px; }
+.progress-fill { height:14px; border-radius:20px; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width 0.4s; }
+
+.info-row { display:flex; justify-content:space-between; width:100%; max-width:360px; font-size:0.9rem; font-weight:700; color:var(--muted); }
+
+.stars-row { font-size:1.5rem; letter-spacing:2px; min-height:32px; }
+
+.problem-card { background:#fff; border-radius:var(--radius); box-shadow:0 6px 24px rgba(0,0,0,0.1); padding:28px 24px; text-align:center; width:100%; max-width:360px; }
+.problem-text { font-size:clamp(36px,12vw,56px); font-weight:900; color:var(--text); letter-spacing:4px; }
+.problem-text .question-mark { color:var(--accent); }
+.problem-hint { font-size:0.85rem; color:var(--muted); margin-top:6px; }
+
+.answers-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; max-width:360px; }
+.ans-btn { padding:22px 12px; font-size:1.4rem; font-weight:900; border:3px solid transparent; border-radius:var(--radius); cursor:pointer; transition:all 0.15s; min-height:70px; }
+.ans-btn:active { transform:scale(0.96); }
+.ans-a { background:#FFF3E0; color:#E64A19; }
+.ans-b { background:#E8F5E9; color:#2E7D32; }
+.ans-c { background:#E3F2FD; color:#1565C0; }
+.ans-d { background:#FCE4EC; color:#C2185B; }
+.ans-btn.correct { background:#4CAF50 !important; color:#fff !important; border-color:#2E7D32; transform:scale(1.05); }
+.ans-btn.wrong   { background:#f44336 !important; color:#fff !important; border-color:#c62828; }
+
+/* ---- RESULT SCREEN ---- */
+#resultScreen { align-items:center; justify-content:center; padding:24px; gap:16px; background:var(--bg); }
+.result-emoji { font-size:80px; animation:bounce 0.5s ease infinite alternate; }
+@keyframes bounce { from{transform:translateY(0)} to{transform:translateY(-12px)} }
+.result-title { font-size:2rem; font-weight:900; color:var(--accent); text-align:center; }
+.result-score { font-size:1.3rem; font-weight:700; color:var(--text); text-align:center; }
+.result-stars { font-size:2rem; }
+.result-btn { width:100%; max-width:280px; padding:20px; font-size:1.1rem; font-weight:800; border:none; border-radius:var(--radius); cursor:pointer; }
+.btn-play-again { background:var(--accent); color:#fff; box-shadow:0 4px 16px rgba(255,64,129,0.35); }
+.btn-menu { background:#fff; color:var(--accent); border:2px solid var(--accent); }
+
+/* Celebration particles */
+.confetti { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:99; }
+.conf-piece { position:absolute; width:10px; height:10px; border-radius:2px; animation:fall linear forwards; }
+@keyframes fall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>➕ Math for Kids</h1>
+    <button id="btn-remove-ads" onclick="purchase('remove_ads')">⭐ Remove Ads</button>
+  </header>
+
+  <!-- MENU -->
+  <div class="screen active" id="menuScreen">
+    <div class="menu-title">🧮 Basic Math</div>
+    <div class="menu-sub">Choose your difficulty!</div>
+    <button class="diff-btn diff-easy" onclick="startGame('easy')">
+      <span class="diff-icon">😊</span>
+      <span>Easy — Numbers 1-10</span>
+      <span>+</span>
+    </button>
+    <button class="diff-btn diff-med" onclick="startGame('medium')">
+      <span class="diff-icon">🤔</span>
+      <span>Medium — Numbers 1-20</span>
+      <span>+−</span>
+    </button>
+    <button class="diff-btn diff-hard" onclick="startGame('hard')">
+      <span class="diff-icon">🔥</span>
+      <span>Hard — Numbers 1-50</span>
+      <span>+−</span>
+    </button>
+  </div>
+
+  <!-- GAME -->
+  <div class="screen" id="gameScreen">
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:10%"></div></div>
+    <div class="info-row">
+      <span>Question <span id="qNum">1</span>/10</span>
+      <span>Score: <span id="score">0</span></span>
+    </div>
+    <div class="stars-row" id="starsRow">☆☆☆☆☆☆☆☆☆☆</div>
+    <div class="problem-card">
+      <div class="problem-text" id="problemText">7 + 3 = <span class="question-mark">?</span></div>
+      <div class="problem-hint" id="problemHint">Choose the correct answer below!</div>
+    </div>
+    <div class="answers-grid" id="answersGrid"></div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="resultScreen">
+    <div class="result-emoji" id="resultEmoji">🌟</div>
+    <div class="result-title" id="resultTitle">Excellent!</div>
+    <div class="result-score" id="resultScore">You got 9 out of 10!</div>
+    <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+    <button class="result-btn btn-play-again" onclick="restartSameDiff()">Play Again!</button>
+    <button class="result-btn btn-menu" onclick="goMenu()">Change Difficulty</button>
+  </div>
+
+  <canvas class="confetti" id="confettiCanvas"></canvas>
+</div>
+<script>
+function purchase(sku){if(window.Android&&Android.purchase)Android.purchase(sku);}
+
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+function playTone(freq,dur,type='sine',vol=0.3){
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type=type; o.frequency.value=freq;
+  g.gain.setValueAtTime(vol,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+dur);
+  o.start(); o.stop(audioCtx.currentTime+dur);
+}
+function playCorrect(){ playTone(660,0.1); setTimeout(()=>playTone(880,0.1),100); setTimeout(()=>playTone(1100,0.2),200); }
+function playWrong(){ playTone(200,0.4,'sawtooth',0.2); }
+function playFinish(){ [523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f,0.2),i*120)); }
+
+let state = { diff:'easy', q:0, score:0, total:10, answered:false };
+
+function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+function genQuestion(diff){
+  let a,b,op;
+  if(diff==='easy'){ a=rnd(1,10); b=rnd(1,10); op='+'; }
+  else if(diff==='medium'){
+    op = Math.random()<0.5?'+':'-';
+    a=rnd(1,20); b=rnd(1,a);
+    if(op==='+' && a+b>20){ b=rnd(1,20-a)||1; }
+  } else {
+    op = Math.random()<0.5?'+':'-';
+    a=rnd(1,50); b=rnd(1,a);
+  }
+  const ans = op==='+'?a+b:a-b;
+  // Generate 3 wrong answers
+  const wrongs = new Set();
+  while(wrongs.size<3){
+    const w = ans + (Math.random()<0.5?1:-1)*rnd(1,5);
+    if(w!==ans && w>=0) wrongs.add(w);
+  }
+  const opts = [...wrongs, ans].sort(()=>Math.random()-0.5);
+  return { text:`${a} ${op} ${b}`, answer:ans, opts };
+}
+
+function startGame(diff){
+  state = { diff, q:0, score:0, total:10, answered:false };
+  showScreen('gameScreen');
+  nextQuestion();
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function nextQuestion(){
+  if(state.q >= state.total){ endGame(); return; }
+  state.q++;
+  state.answered = false;
+  const q = genQuestion(state.diff);
+  state.currentAnswer = q.answer;
+  document.getElementById('progressFill').style.width = (state.q/state.total*100)+'%';
+  document.getElementById('qNum').textContent = state.q;
+  document.getElementById('problemText').innerHTML = q.text+' = <span class="question-mark">?</span>';
+  // Stars
+  const filled = state.score;
+  document.getElementById('starsRow').textContent = '⭐'.repeat(filled)+'☆'.repeat(state.total-filled);
+  // Answers
+  const classes = ['ans-a','ans-b','ans-c','ans-d'];
+  const grid = document.getElementById('answersGrid');
+  grid.innerHTML = '';
+  q.opts.forEach((opt,i)=>{
+    const b = document.createElement('button');
+    b.className = 'ans-btn '+classes[i];
+    b.textContent = opt;
+    b.onclick = ()=>answer(b, opt === q.answer);
+    grid.appendChild(b);
+  });
+}
+
+function answer(btn, correct){
+  if(state.answered) return;
+  state.answered = true;
+  if(correct){
+    btn.classList.add('correct');
+    state.score++;
+    document.getElementById('score').textContent = state.score;
+    playCorrect();
+    spawnConfetti(3);
+  } else {
+    btn.classList.add('wrong');
+    // Highlight correct
+    document.querySelectorAll('.ans-btn').forEach(b=>{ if(+b.textContent===state.currentAnswer) b.classList.add('correct'); });
+    playWrong();
+  }
+  setTimeout(nextQuestion, 1200);
+}
+
+function endGame(){
+  const s = state.score;
+  document.getElementById('resultEmoji').textContent = s>=9?'🌟':s>=7?'😄':s>=5?'😊':'💪';
+  document.getElementById('resultTitle').textContent = s>=9?'Excellent!':s>=7?'Great Job!':s>=5?'Well Done!':'Keep Practicing!';
+  document.getElementById('resultScore').textContent = `You got ${s} out of ${state.total}!`;
+  const stars = s>=9?'⭐⭐⭐':s>=7?'⭐⭐':s>=5?'⭐':'';
+  document.getElementById('resultStars').textContent = stars;
+  showScreen('resultScreen');
+  if(s>=7){ playFinish(); spawnConfetti(20); }
+}
+
+function restartSameDiff(){ startGame(state.diff); }
+function goMenu(){ showScreen('menuScreen'); }
+
+function spawnConfetti(count){
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#FF4081','#FF9800','#4CAF50','#2196F3','#9C27B0','#FFC107'];
+  const pieces = Array.from({length:count*8},()=>({
+    x:Math.random()*canvas.width, y:-10,
+    vx:(Math.random()-0.5)*4, vy:Math.random()*6+4,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    r:Math.random()*360,
+    size:8+Math.random()*8
+  }));
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.r+=4; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r*Math.PI/180); ctx.fillStyle=p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size); ctx.restore(); });
+    pieces.splice(0, pieces.filter(p=>p.y>canvas.height).length);
+    frame++;
+    if(pieces.length>0 && frame<120) requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  draw();
+}
+</script>
+</body>
+</html>

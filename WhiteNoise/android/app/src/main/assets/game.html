@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WhiteNoise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#0a0f14;--surface:#111820;--accent:#546E7A;--text:#eaeaea;--muted:#446;--radius:14px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;padding:12px 12px 0;align-items:center;}
+header{width:100%;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+header h1{font-size:1.3rem;font-weight:700;}header h1 span{color:var(--accent);}
+#visualizer{width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,#1a2a36 0%,#0a0f14 70%);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+  position:relative;flex-shrink:0;}
+#play-btn{width:80px;height:80px;border-radius:50%;background:var(--accent);border:none;
+  font-size:1.8rem;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 30px rgba(84,110,122,0.4);transition:transform 0.1s;}
+#play-btn.btn-pressed{transform:scale(0.9);}
+#play-btn.playing{background:#ff6b35;box-shadow:0 0 30px rgba(255,107,53,0.4);}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(84,110,122,0.3);animation:pulse 2s ease-out infinite;}
+.ring:nth-child(1){width:100px;height:100px;animation-delay:0s;}
+.ring:nth-child(2){width:140px;height:140px;animation-delay:0.5s;}
+.ring:nth-child(3){width:180px;height:180px;animation-delay:1s;}
+@keyframes pulse{0%{opacity:0;transform:scale(0.9);}50%{opacity:0.6;}100%{opacity:0;transform:scale(1.05);}}
+.ring.active{animation:pulse-active 1.5s ease-out infinite;}
+@keyframes pulse-active{0%{opacity:0.4;transform:scale(0.95);}50%{opacity:1;}100%{opacity:0.4;transform:scale(1.02);}}
+#noise-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;margin-bottom:16px;}
+.noise-btn{background:var(--surface);border:1px solid #334455;color:var(--text);padding:14px;border-radius:var(--radius);
+  font-size:0.82rem;cursor:pointer;touch-action:manipulation;text-align:center;transition:transform 0.1s;}
+.noise-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.noise-btn.btn-pressed{transform:scale(0.92);}
+.noise-btn .emoji{font-size:1.4rem;display:block;margin-bottom:4px;}
+#vol-row{display:flex;align-items:center;gap:10px;width:100%;margin-bottom:16px;}
+#vol-row label{font-size:0.8rem;color:var(--muted);flex-shrink:0;}
+#vol{flex:1;accent-color:var(--accent);}
+#timer-row{display:flex;gap:8px;width:100%;margin-bottom:8px;}
+.timer-btn{flex:1;background:var(--surface);border:1px solid #334455;color:var(--text);padding:8px;border-radius:var(--radius);font-size:0.75rem;cursor:pointer;touch-action:manipulation;text-align:center;}
+.timer-btn.active{background:#335544;border-color:#44aa88;color:#aaffcc;}
+.timer-btn.btn-pressed{transform:scale(0.93);}
+#timer-display{font-size:0.8rem;color:var(--muted);text-align:center;width:100%;}
+#banner{height:50px;background:#111;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.75rem;flex-shrink:0;width:100%;margin-top:auto;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>White<span>Noise</span></h1></header>
+  <div id="visualizer">
+    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+    <button id="play-btn">▶</button>
+  </div>
+  <div id="noise-grid">
+    <div class="noise-btn active" data-type="white"><span class="emoji">🌫️</span>White</div>
+    <div class="noise-btn" data-type="brown"><span class="emoji">🌊</span>Brown</div>
+    <div class="noise-btn" data-type="pink"><span class="emoji">🌸</span>Pink</div>
+    <div class="noise-btn" data-type="rain"><span class="emoji">🌧️</span>Rain</div>
+    <div class="noise-btn" data-type="ocean"><span class="emoji">🌊</span>Ocean</div>
+    <div class="noise-btn" data-type="fan"><span class="emoji">💨</span>Fan</div>
+  </div>
+  <div id="vol-row"><label>Volume</label><input type="range" id="vol" min="0" max="1" step="0.02" value="0.5"></div>
+  <div id="timer-row">
+    <div class="timer-btn" data-min="15">15 min</div>
+    <div class="timer-btn" data-min="30">30 min</div>
+    <div class="timer-btn" data-min="60">60 min</div>
+    <div class="timer-btn" data-min="0">No timer</div>
+  </div>
+  <div id="timer-display"></div>
+  <div id="banner">Ad Banner</div>
+</div>
+<script>
+const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+let noiseNode=null,gainNode=null,playing=false,noiseType='white';
+let timerEnd=null,timerInt=null,sleepMin=0;
+
+gainNode=audioCtx.createGain();
+gainNode.gain.value=0.5;
+gainNode.connect(audioCtx.destination);
+
+function makeNoise(type){
+  const bufSize=audioCtx.sampleRate*2;
+  const buf=audioCtx.createBuffer(1,bufSize,audioCtx.sampleRate);
+  const data=buf.getChannelData(0);
+  if(type==='white'){
+    for(let i=0;i<bufSize;i++)data[i]=Math.random()*2-1;
+  }else if(type==='brown'){
+    let last=0;
+    for(let i=0;i<bufSize;i++){
+      const wn=Math.random()*2-1;
+      data[i]=(last+0.02*wn)/1.02;
+      last=data[i];
+      data[i]*=3.5;
+    }
+  }else if(type==='pink'){
+    let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+    for(let i=0;i<bufSize;i++){
+      const wn=Math.random()*2-1;
+      b0=0.99886*b0+wn*0.0555179;b1=0.99332*b1+wn*0.0750759;
+      b2=0.96900*b2+wn*0.1538520;b3=0.86650*b3+wn*0.3104856;
+      b4=0.55000*b4+wn*0.5329522;b5=-0.7616*b5-wn*0.0168980;
+      data[i]=(b0+b1+b2+b3+b4+b5+b6+wn*0.5362)*0.11;b6=wn*0.115926;
+    }
+  }else if(type==='rain'){
+    for(let i=0;i<bufSize;i++){
+      const t=i/audioCtx.sampleRate;
+      data[i]=(Math.random()*2-1)*0.4*Math.sin(Math.PI*2*8*t)*0.5+Math.random()*0.3;
+    }
+  }else if(type==='ocean'){
+    for(let i=0;i<bufSize;i++){
+      const t=i/audioCtx.sampleRate;
+      const wave=Math.sin(Math.PI*2*0.1*t)*0.4+Math.sin(Math.PI*2*0.17*t)*0.2;
+      data[i]=(Math.random()*2-1)*0.3*(0.5+wave);
+    }
+  }else if(type==='fan'){
+    for(let i=0;i<bufSize;i++){
+      const t=i/audioCtx.sampleRate;
+      data[i]=(Math.random()*2-1)*0.15+Math.sin(Math.PI*2*60*t)*0.05;
+    }
+  }
+  const src=audioCtx.createBufferSource();
+  src.buffer=buf;src.loop=true;
+  const filter=audioCtx.createBiquadFilter();
+  filter.type='lowpass';
+  filter.frequency.value=type==='fan'?2000:(type==='ocean'?600:8000);
+  src.connect(filter);filter.connect(gainNode);
+  return src;
+}
+
+function startNoise(){
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  stopNoise();
+  noiseNode=makeNoise(noiseType);
+  noiseNode.start();
+  playing=true;
+  document.getElementById('play-btn').textContent='⏹';
+  document.getElementById('play-btn').classList.add('playing');
+  document.querySelectorAll('.ring').forEach(r=>r.classList.add('active'));
+  if(sleepMin>0){
+    timerEnd=Date.now()+sleepMin*60000;
+    timerInt=setInterval(updateTimer,1000);
+    updateTimer();
+  }
+}
+function stopNoise(){
+  if(noiseNode){try{noiseNode.stop();}catch(e){}noiseNode=null;}
+  playing=false;
+  document.getElementById('play-btn').textContent='▶';
+  document.getElementById('play-btn').classList.remove('playing');
+  document.querySelectorAll('.ring').forEach(r=>r.classList.remove('active'));
+  clearInterval(timerInt);timerInt=null;timerEnd=null;
+  document.getElementById('timer-display').textContent='';
+}
+function updateTimer(){
+  if(!timerEnd)return;
+  const rem=Math.max(0,Math.ceil((timerEnd-Date.now())/1000));
+  const m=Math.floor(rem/60),s=rem%60;
+  document.getElementById('timer-display').textContent='Stopping in '+m+':'+(s<10?'0':'')+s;
+  if(rem===0)stopNoise();
+}
+
+document.getElementById('play-btn').addEventListener('touchstart',function(e){
+  e.preventDefault();this.classList.add('btn-pressed');},{passive:false});
+document.getElementById('play-btn').addEventListener('touchend',function(e){
+  e.preventDefault();this.classList.remove('btn-pressed');
+  if(playing)stopNoise();else startNoise();
+},{passive:false});
+document.getElementById('play-btn').addEventListener('click',function(){
+  if(playing)stopNoise();else startNoise();
+});
+
+document.querySelectorAll('.noise-btn').forEach(b=>{
+  b.addEventListener('click',function(){
+    noiseType=this.dataset.type;
+    document.querySelectorAll('.noise-btn').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+    if(playing){stopNoise();startNoise();}
+  });
+});
+
+document.getElementById('vol').addEventListener('input',function(){
+  gainNode.gain.value=parseFloat(this.value);
+});
+
+document.querySelectorAll('.timer-btn').forEach(b=>{
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.timer-btn').forEach(x=>x.classList.remove('active'));
+    sleepMin=parseInt(this.dataset.min);
+    if(sleepMin>0)this.classList.add('active');
+    if(playing&&sleepMin>0){
+      timerEnd=Date.now()+sleepMin*60000;
+      clearInterval(timerInt);timerInt=setInterval(updateTimer,1000);updateTimer();
+    }else if(sleepMin===0){
+      clearInterval(timerInt);timerInt=null;timerEnd=null;
+      document.getElementById('timer-display').textContent='';
+    }
+  });
+});
+
+// Auto-start
+setTimeout(startNoise,300);
+
+window.onPurchaseComplete=function(sku){};
+window.onAdMobLoaded=function(){document.getElementById('banner').style.display='none';};
+</script>
+</body>
+</html>

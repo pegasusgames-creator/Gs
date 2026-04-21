@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DrumMachine</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#0f0800;--surface:#1a1000;--accent:#FF5722;--text:#eaeaea;--muted:#885533;--radius:8px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;padding:6px 6px 0;}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-shrink:0;}
+header h1{font-size:1.1rem;font-weight:700;}header h1 span{color:var(--accent);}
+#transport{display:flex;gap:8px;align-items:center;flex-shrink:0;margin-bottom:6px;flex-wrap:wrap;}
+.t-btn{background:var(--surface);border:1px solid #553322;color:var(--text);padding:8px 14px;border-radius:var(--radius);font-size:0.8rem;cursor:pointer;touch-action:manipulation;}
+.t-btn.active,.t-btn.playing{background:var(--accent);color:#000;}
+.t-btn.btn-pressed{transform:scale(0.92);}
+#bpm-wrap{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+#bpm-label{font-size:0.78rem;color:var(--muted);}
+#bpm{width:80px;accent-color:var(--accent);}
+#bpm-val{font-size:0.78rem;color:var(--text);min-width:28px;}
+#swing-wrap{display:flex;align-items:center;gap:4px;}
+#swing-label{font-size:0.72rem;color:var(--muted);}
+#swing{width:60px;accent-color:var(--accent);}
+#sequencer{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.track{display:flex;align-items:center;gap:3px;margin-bottom:4px;}
+.track-name{width:44px;font-size:0.65rem;color:var(--muted);flex-shrink:0;text-align:right;padding-right:4px;}
+.steps{display:flex;gap:2px;flex:1;}
+.step{flex:1;height:30px;border-radius:4px;background:#1e1408;border:1px solid #332211;cursor:pointer;touch-action:manipulation;position:relative;}
+.step.on{background:var(--accent);}
+.step.current{box-shadow:0 0 0 2px #fff inset;}
+.step.on.current{background:#ff8a65;}
+.step.group-start{margin-left:3px;}
+.step.btn-pressed{transform:scale(0.85);}
+#btns{display:flex;gap:6px;flex-shrink:0;padding:6px 0;}
+.btn{flex:1;background:var(--surface);border:1px solid #553322;color:var(--text);padding:8px;border-radius:var(--radius);font-size:0.75rem;cursor:pointer;touch-action:manipulation;}
+.btn.btn-pressed{transform:scale(0.93);}
+#banner{height:50px;background:#111;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.75rem;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Drum<span>Machine</span></h1></header>
+  <div id="transport">
+    <button class="t-btn" id="btn-play">▶ Play</button>
+    <button class="t-btn" id="btn-stop">⏹ Stop</button>
+    <div id="bpm-wrap">
+      <span id="bpm-label">BPM</span>
+      <input type="range" id="bpm" min="60" max="180" value="120">
+      <span id="bpm-val">120</span>
+    </div>
+    <div id="swing-wrap">
+      <span id="swing-label">Swing</span>
+      <input type="range" id="swing" min="0" max="0.3" step="0.01" value="0">
+    </div>
+  </div>
+  <div id="sequencer"></div>
+  <div id="btns">
+    <button class="btn" id="btn-clear">Clear</button>
+    <button class="btn" id="btn-save">Save</button>
+    <button class="btn" id="btn-load">Load</button>
+    <button class="btn" id="btn-random">Random</button>
+  </div>
+  <div id="banner">Ad Banner</div>
+</div>
+<script>
+const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+const STEPS=16;
+const TRACKS=[
+  {name:'Kick',color:'#FF5722'},
+  {name:'Snare',color:'#FF9800'},
+  {name:'HiHat',color:'#FFC107'},
+  {name:'Clap',color:'#FFEB3B'},
+  {name:'Tom',color:'#4CAF50'},
+  {name:'Cowbel',color:'#00BCD4'},
+  {name:'Rim',color:'#2196F3'},
+  {name:'Perc',color:'#9C27B0'},
+];
+
+let pattern=Array(TRACKS.length).fill(null).map(()=>Array(STEPS).fill(false));
+let playing=false,currentStep=0,nextStepTime=0,bpm=120,swing=0;
+let scheduleAhead=0.1,schedInterval=null;
+
+function playDrum(trackIdx,when){
+  try{
+    const g=audioCtx.createGain();g.connect(audioCtx.destination);
+    switch(trackIdx){
+      case 0:// Kick
+        const ko=audioCtx.createOscillator(),kg=audioCtx.createGain();
+        ko.frequency.setValueAtTime(150,when);ko.frequency.exponentialRampToValueAtTime(0.001,when+0.4);
+        kg.gain.setValueAtTime(0.7,when);kg.gain.exponentialRampToValueAtTime(0.001,when+0.4);
+        ko.connect(kg);kg.connect(audioCtx.destination);ko.start(when);ko.stop(when+0.4);
+        break;
+      case 1:// Snare
+        const sn=makeNoiseBuf(0.15),sg=audioCtx.createGain();
+        sg.gain.setValueAtTime(0.5,when);sg.gain.exponentialRampToValueAtTime(0.001,when+0.15);
+        sn.connect(sg);sg.connect(audioCtx.destination);sn.start(when);
+        const so=audioCtx.createOscillator(),sog=audioCtx.createGain();
+        so.frequency.value=200;sog.gain.setValueAtTime(0.2,when);sog.gain.exponentialRampToValueAtTime(0.001,when+0.1);
+        so.connect(sog);sog.connect(audioCtx.destination);so.start(when);so.stop(when+0.1);
+        break;
+      case 2:// HiHat
+        const hn=makeNoiseBuf(0.05),hf=audioCtx.createBiquadFilter(),hg=audioCtx.createGain();
+        hf.type='highpass';hf.frequency.value=8000;
+        hg.gain.setValueAtTime(0.3,when);hg.gain.exponentialRampToValueAtTime(0.001,when+0.05);
+        hn.connect(hf);hf.connect(hg);hg.connect(audioCtx.destination);hn.start(when);
+        break;
+      case 3:// Clap
+        [0,0.01,0.02].forEach(d=>{
+          const cn=makeNoiseBuf(0.08),cg=audioCtx.createGain();
+          cg.gain.setValueAtTime(0.4,when+d);cg.gain.exponentialRampToValueAtTime(0.001,when+d+0.08);
+          cn.connect(cg);cg.connect(audioCtx.destination);cn.start(when+d);
+        });break;
+      case 4:// Tom
+        const to=audioCtx.createOscillator(),tg=audioCtx.createGain();
+        to.frequency.setValueAtTime(120,when);to.frequency.exponentialRampToValueAtTime(40,when+0.3);
+        tg.gain.setValueAtTime(0.5,when);tg.gain.exponentialRampToValueAtTime(0.001,when+0.3);
+        to.connect(tg);tg.connect(audioCtx.destination);to.start(when);to.stop(when+0.3);
+        break;
+      case 5:// Cowbell
+        const co=audioCtx.createOscillator(),c2=audioCtx.createOscillator(),cg2=audioCtx.createGain();
+        co.frequency.value=562;c2.frequency.value=845;
+        cg2.gain.setValueAtTime(0.3,when);cg2.gain.exponentialRampToValueAtTime(0.001,when+0.5);
+        co.connect(cg2);c2.connect(cg2);cg2.connect(audioCtx.destination);
+        co.start(when);c2.start(when);co.stop(when+0.5);c2.stop(when+0.5);
+        break;
+      case 6:// Rim
+        const ro=audioCtx.createOscillator(),rg=audioCtx.createGain();
+        ro.type='square';ro.frequency.value=1500;
+        rg.gain.setValueAtTime(0.15,when);rg.gain.exponentialRampToValueAtTime(0.001,when+0.05);
+        ro.connect(rg);rg.connect(audioCtx.destination);ro.start(when);ro.stop(when+0.05);
+        break;
+      case 7:// Perc
+        const po=audioCtx.createOscillator(),pg=audioCtx.createGain();
+        po.type='triangle';po.frequency.setValueAtTime(600,when);po.frequency.exponentialRampToValueAtTime(200,when+0.2);
+        pg.gain.setValueAtTime(0.4,when);pg.gain.exponentialRampToValueAtTime(0.001,when+0.2);
+        po.connect(pg);pg.connect(audioCtx.destination);po.start(when);po.stop(when+0.2);
+        break;
+    }
+  }catch(e){}
+}
+
+function makeNoiseBuf(dur){
+  const bufSize=Math.ceil(audioCtx.sampleRate*dur);
+  const buf=audioCtx.createBuffer(1,bufSize,audioCtx.sampleRate);
+  const data=buf.getChannelData(0);
+  for(let i=0;i<bufSize;i++)data[i]=Math.random()*2-1;
+  const src=audioCtx.createBufferSource();src.buffer=buf;return src;
+}
+
+function scheduleSteps(){
+  while(nextStepTime<audioCtx.currentTime+scheduleAhead){
+    // Calculate swing offset
+    const isOdd=currentStep%2===1;
+    const swingOffset=isOdd?swing*60/bpm:0;
+    const when=nextStepTime+swingOffset;
+    pattern.forEach((track,ti)=>{
+      if(track[currentStep])playDrum(ti,when);
+    });
+    updateUI(currentStep);
+    currentStep=(currentStep+1)%STEPS;
+    nextStepTime+=60/(bpm*4);// 16th notes
+  }
+}
+
+let lastDisplayStep=-1;
+function updateUI(step){
+  if(step===lastDisplayStep)return;
+  lastDisplayStep=step;
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.step').forEach(el=>{
+      el.classList.remove('current');
+    });
+    const stepEls=document.querySelectorAll('.step[data-step="'+step+'"]');
+    stepEls.forEach(el=>el.classList.add('current'));
+  });
+}
+
+function startPlaying(){
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  playing=true;currentStep=0;
+  nextStepTime=audioCtx.currentTime+0.05;
+  schedInterval=setInterval(scheduleSteps,25);
+  document.getElementById('btn-play').classList.add('playing');
+}
+function stopPlaying(){
+  playing=false;clearInterval(schedInterval);
+  document.getElementById('btn-play').classList.remove('playing');
+  document.querySelectorAll('.step').forEach(el=>el.classList.remove('current'));
+  lastDisplayStep=-1;
+}
+
+// Render sequencer
+function buildSeq(){
+  const seq=document.getElementById('sequencer');seq.innerHTML='';
+  TRACKS.forEach((t,ti)=>{
+    const row=document.createElement('div');row.className='track';
+    const name=document.createElement('div');name.className='track-name';name.textContent=t.name;row.appendChild(name);
+    const steps=document.createElement('div');steps.className='steps';
+    for(let s=0;s<STEPS;s++){
+      const cell=document.createElement('div');
+      cell.className='step'+(s%4===0?' group-start':'');
+      cell.dataset.step=s;cell.dataset.track=ti;
+      if(pattern[ti][s]){cell.classList.add('on');cell.style.background=t.color;}
+      cell.addEventListener('touchstart',function(e){
+        e.preventDefault();this.classList.add('btn-pressed');
+        pattern[ti][s]=!pattern[ti][s];
+        if(pattern[ti][s]){this.classList.add('on');this.style.background=t.color;}
+        else{this.classList.remove('on');this.style.background='';}
+        setTimeout(()=>this.classList.remove('btn-pressed'),100);
+      },{passive:false});
+      cell.addEventListener('click',function(){
+        pattern[ti][s]=!pattern[ti][s];
+        if(pattern[ti][s]){this.classList.add('on');this.style.background=t.color;}
+        else{this.classList.remove('on');this.style.background='';}
+      });
+      steps.appendChild(cell);
+    }
+    row.appendChild(steps);seq.appendChild(row);
+  });
+}
+
+document.getElementById('btn-play').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  if(playing)stopPlaying();else startPlaying();
+});
+document.getElementById('btn-stop').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);stopPlaying();});
+document.getElementById('bpm').addEventListener('input',function(){
+  bpm=parseInt(this.value);document.getElementById('bpm-val').textContent=bpm;});
+document.getElementById('swing').addEventListener('input',function(){swing=parseFloat(this.value);});
+
+document.getElementById('btn-clear').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  pattern=Array(TRACKS.length).fill(null).map(()=>Array(STEPS).fill(false));buildSeq();});
+document.getElementById('btn-save').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  localStorage.setItem('drum_pattern',JSON.stringify(pattern));
+  this.textContent='Saved!';setTimeout(()=>this.textContent='Save',1000);});
+document.getElementById('btn-load').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  const d=localStorage.getItem('drum_pattern');if(!d)return;
+  pattern=JSON.parse(d);buildSeq();});
+document.getElementById('btn-random').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  pattern=TRACKS.map((t,ti)=>Array(STEPS).fill(false).map((_,s)=>{
+    const prob=ti===0?0.25:ti===1?0.15:ti===2?0.5:0.1;
+    return Math.random()<prob;
+  }));buildSeq();});
+
+window.onPurchaseComplete=function(sku){};
+window.onAdMobLoaded=function(){document.getElementById('banner').style.display='none';};
+buildSeq();
+</script>
+</body>
+</html>

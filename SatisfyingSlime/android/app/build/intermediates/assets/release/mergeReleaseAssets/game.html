@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SatisfyingSlime</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#0a1a1f;--accent:#B2EBF2;--text:#eaeaea;--muted:#446677;--radius:12px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;}
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;flex-shrink:0;}
+header h1{font-size:1.2rem;font-weight:700;}header h1 span{color:var(--accent);}
+#canvas{display:block;width:100%;flex:1;touch-action:none;}
+#controls{display:flex;gap:8px;padding:8px 12px;flex-shrink:0;flex-wrap:wrap;justify-content:center;}
+.color-btn{width:36px;height:36px;border-radius:50%;border:3px solid transparent;cursor:pointer;touch-action:manipulation;}
+.color-btn.active{border-color:#fff;transform:scale(1.15);}
+.color-btn.btn-pressed{transform:scale(0.85);}
+#banner{height:50px;background:#111;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.75rem;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Satisfying<span>Slime</span></h1><span style="font-size:0.8rem;color:var(--muted)">Touch to play!</span></header>
+  <canvas id="canvas"></canvas>
+  <div id="controls" id="color-row"></div>
+  <div id="banner">Ad Banner</div>
+</div>
+<script>
+const canvas=document.getElementById('canvas');
+const ctx=canvas.getContext('2d');
+
+const SLIME_COLORS=[
+  {name:'Aqua',base:'#00BCD4',light:'#B2EBF2'},
+  {name:'Lavender',base:'#9C27B0',light:'#E1BEE7'},
+  {name:'Mint',base:'#4CAF50',light:'#C8E6C9'},
+  {name:'Peach',base:'#FF5722',light:'#FFCCBC'},
+  {name:'Pink',base:'#E91E63',light:'#FCE4EC'},
+  {name:'Gold',base:'#FFC107',light:'#FFF9C4'},
+];
+
+let slimeColor=SLIME_COLORS[0];
+let mouseX=null,mouseY=null,touching=false;
+
+function resize(){
+  canvas.width=canvas.offsetWidth;
+  canvas.height=canvas.offsetHeight;
+  initParticles();
+}
+
+const NUM_PARTICLES=120;
+let particles=[];
+
+function initParticles(){
+  particles=[];
+  const w=canvas.width,h=canvas.height;
+  for(let i=0;i<NUM_PARTICLES;i++){
+    particles.push({
+      x:w/2+(Math.random()-0.5)*200,
+      y:h/2+(Math.random()-0.5)*200,
+      vx:(Math.random()-0.5)*0.5,
+      vy:(Math.random()-0.5)*0.5,
+      r:8+Math.random()*12,
+      phase:Math.random()*Math.PI*2,
+    });
+  }
+}
+
+function animate(){
+  requestAnimationFrame(animate);
+  const w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+
+  const t=Date.now()*0.001;
+
+  // Update particles
+  particles.forEach(p=>{
+    p.phase+=0.02;
+    // Ambient drift
+    p.vx+=(Math.random()-0.5)*0.1+Math.sin(p.phase)*0.05;
+    p.vy+=(Math.random()-0.5)*0.1+Math.cos(p.phase)*0.05;
+
+    if(touching&&mouseX!==null){
+      const dx=mouseX-p.x,dy=mouseY-p.y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<120){
+        const force=0.8*(1-dist/120);
+        p.vx+=dx/dist*force;
+        p.vy+=dy/dist*force;
+      }
+    }else{
+      // Cohesion: attract to center of mass
+      const cx=particles.reduce((s,q)=>s+q.x,0)/NUM_PARTICLES;
+      const cy=particles.reduce((s,q)=>s+q.y,0)/NUM_PARTICLES;
+      p.vx+=(cx-p.x)*0.002;
+      p.vy+=(cy-p.y)*0.002;
+    }
+
+    // Damping
+    p.vx*=0.92;p.vy*=0.92;
+    p.x+=p.vx;p.y+=p.vy;
+
+    // Bounds
+    if(p.x<p.r){p.x=p.r;p.vx*=-0.6;}
+    if(p.x>w-p.r){p.x=w-p.r;p.vx*=-0.6;}
+    if(p.y<p.r){p.y=p.r;p.vy*=-0.6;}
+    if(p.y>h-p.r){p.y=h-p.r;p.vy*=-0.6;}
+  });
+
+  // Draw blobs using radial gradients
+  ctx.globalCompositeOperation='source-over';
+  particles.forEach(p=>{
+    const grad=ctx.createRadialGradient(p.x-p.r*0.3,p.y-p.r*0.3,p.r*0.1,p.x,p.y,p.r*1.2);
+    grad.addColorStop(0,slimeColor.light+'ee');
+    grad.addColorStop(0.5,slimeColor.base+'cc');
+    grad.addColorStop(1,slimeColor.base+'00');
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r*1.4,0,Math.PI*2);
+    ctx.fillStyle=grad;
+    ctx.fill();
+  });
+
+  // Glossy highlight
+  if(touching&&mouseX!==null){
+    const hgrad=ctx.createRadialGradient(mouseX,mouseY,0,mouseX,mouseY,60);
+    hgrad.addColorStop(0,'rgba(255,255,255,0.3)');
+    hgrad.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.beginPath();ctx.arc(mouseX,mouseY,60,0,Math.PI*2);
+    ctx.fillStyle=hgrad;ctx.fill();
+  }
+}
+
+// Controls
+const controls=document.getElementById('controls');
+SLIME_COLORS.forEach((c,i)=>{
+  const b=document.createElement('div');
+  b.className='color-btn'+(i===0?' active':'');
+  b.style.background=c.base;
+  b.addEventListener('touchstart',function(e){
+    e.preventDefault();
+    this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+    slimeColor=c;
+    document.querySelectorAll('.color-btn').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+  },{passive:false});
+  b.addEventListener('click',()=>{
+    slimeColor=c;
+    document.querySelectorAll('.color-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+  });
+  controls.appendChild(b);
+});
+
+canvas.addEventListener('touchstart',e=>{
+  e.preventDefault();touching=true;
+  const r=canvas.getBoundingClientRect();
+  mouseX=e.touches[0].clientX-r.left;
+  mouseY=e.touches[0].clientY-r.top;
+},{passive:false});
+canvas.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  const r=canvas.getBoundingClientRect();
+  mouseX=e.touches[0].clientX-r.left;
+  mouseY=e.touches[0].clientY-r.top;
+},{passive:false});
+canvas.addEventListener('touchend',()=>{touching=false;mouseX=null;mouseY=null;});
+canvas.addEventListener('mousemove',e=>{
+  const r=canvas.getBoundingClientRect();
+  mouseX=e.clientX-r.left;mouseY=e.clientY-r.top;touching=true;
+});
+canvas.addEventListener('mouseleave',()=>{touching=false;mouseX=null;mouseY=null;});
+
+window.addEventListener('resize',resize);
+resize();
+animate();
+
+window.onPurchaseComplete=function(sku){};
+window.onAdMobLoaded=function(){document.getElementById('banner').style.display='none';};
+</script>
+</body>
+</html>

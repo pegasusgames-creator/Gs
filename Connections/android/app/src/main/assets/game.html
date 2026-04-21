@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Connections</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #121212; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+#banner { width:100%; height:50px; background:#1e1e1e; display:flex; align-items:center; justify-content:center; color:#555; font-size:12px; border-bottom:1px solid #333; }
+#header { width:100%; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; background:#1a1a1a; }
+h1 { font-size:20px; color:#5C8A3C; font-weight:700; }
+#controls { display:flex; gap:8px; padding:8px 16px; flex-wrap:wrap; justify-content:center; }
+button { background:#1e1e1e; color:#5C8A3C; border:1.5px solid #5C8A3C; border-radius:8px; padding:8px 16px; font-size:14px; cursor:pointer; touch-action:manipulation; }
+button:active { background:#5C8A3C; color:#fff; }
+#lives { font-size:20px; letter-spacing:4px; text-align:center; padding:4px; min-height:30px; }
+#msg { padding:6px 16px; text-align:center; font-size:15px; min-height:32px; color:#5C8A3C; }
+#solved-groups { padding:0 10px; width:100%; max-width:420px; }
+.solved-row { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:4px; margin:4px 0; padding:10px; border-radius:8px; font-size:13px; font-weight:600; }
+#word-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; padding:10px; max-width:420px; width:100%; }
+.word-btn { background:#2a2a2a; color:#fff; border:2px solid #333; border-radius:8px; padding:12px 4px; font-size:13px; font-weight:600; cursor:pointer; touch-action:manipulation; text-align:center; min-height:52px; display:flex; align-items:center; justify-content:center; word-break:break-word; line-height:1.2; }
+.word-btn.selected { background:#4a4a4a; border-color:#5C8A3C; }
+.word-btn.correct { opacity:0.4; pointer-events:none; }
+#level-select { display:none; flex-wrap:wrap; gap:6px; padding:8px 16px; justify-content:center; max-width:420px; }
+.lvl-btn { padding:6px 12px; font-size:13px; min-width:38px; }
+.lvl-btn.done { background:#5C8A3C; color:#fff; border-color:#5C8A3C; }
+</style>
+</head>
+<body>
+<div id="banner">Advertisement</div>
+<div id="header">
+  <h1>Connections</h1>
+  <span id="puzzle-num">Puzzle 1/30</span>
+</div>
+<div id="controls">
+  <button onclick="shuffleWords()">Shuffle</button>
+  <button onclick="submitGuess()">Submit</button>
+  <button onclick="toggleLevelSelect()">Puzzles</button>
+  <button onclick="removeAds()">No Ads</button>
+</div>
+<div id="lives">❤️❤️❤️</div>
+<div id="msg">Find 4 groups of 4 words that share a connection!</div>
+<div id="solved-groups"></div>
+<div id="word-grid"></div>
+<div id="level-select"></div>
+
+<script>
+// 30 puzzles: each has 4 groups, each group has a label and 4 words
+// difficulty: 0=yellow(easy),1=green,2=blue,3=purple(hard)
+const COLORS = ['#E9C46A','#2A9D8F','#457B9D','#9B5DE5'];
+const DIFF_NAMES = ['Straightforward','Medium','Tricky','Devious'];
+
+const puzzles = [
+  { groups: [
+    {label:'Fruits',words:['APPLE','MANGO','GRAPE','PEACH'],d:0},
+    {label:'Colors',words:['RED','BLUE','GREEN','PINK'],d:1},
+    {label:'Dog Breeds',words:['POODLE','BOXER','HUSKY','BEAGLE'],d:2},
+    {label:'___ Ball',words:['FOOT','BASKET','BASE','SOFT'],d:3},
+  ]},
+  { groups: [
+    {label:'Planets',words:['MARS','VENUS','EARTH','SATURN'],d:0},
+    {label:'Card Games',words:['POKER','SNAP','RUMMY','WAR'],d:1},
+    {label:'Types of Music',words:['JAZZ','ROCK','SOUL','POP'],d:2},
+    {label:'Fire ___',words:['PLACE','WORKS','TRUCK','SIDE'],d:3},
+  ]},
+  { groups: [
+    {label:'Ocean Animals',words:['SHARK','WHALE','OCTOPUS','SEAL'],d:0},
+    {label:'Kitchen Tools',words:['WHISK','LADLE','GRATER','TONGS'],d:1},
+    {label:'Movies: Animated',words:['FROZEN','SHREK','COCO','UP'],d:2},
+    {label:'___ Point',words:['GUN','BALL','KNIFE','SWORD'],d:3},
+  ]},
+  { groups: [
+    {label:'Sports',words:['TENNIS','GOLF','RUGBY','HOCKEY'],d:0},
+    {label:'Flowers',words:['ROSE','TULIP','DAISY','LILAC'],d:1},
+    {label:'European Capitals',words:['ROME','PARIS','OSLO','LIMA'],d:2},
+    {label:'Water ___',words:['FALL','MELON','SHED','PROOF'],d:3},
+  ]},
+  { groups: [
+    {label:'Currencies',words:['EURO','YEN','PESO','POUND'],d:0},
+    {label:'Desserts',words:['BROWNIE','TART','MOUSSE','FUDGE'],d:1},
+    {label:'Things in Space',words:['COMET','NEBULA','PULSAR','QUASAR'],d:2},
+    {label:'___ Stone',words:['SAND','LIME','KEY','BROWN'],d:3},
+  ]},
+  { groups: [
+    {label:'Musical Instruments',words:['FLUTE','HARP','BANJO','CELLO'],d:0},
+    {label:'Vegetables',words:['KALE','LEEK','BEET','CHARD'],d:1},
+    {label:'Superheroes',words:['THOR','FLASH','STORM','BLADE'],d:2},
+    {label:'Black ___',words:['BIRD','BERRY','SMITH','BOARD'],d:3},
+  ]},
+  { groups: [
+    {label:'Countries in Asia',words:['JAPAN','NEPAL','LAOS','QATAR'],d:0},
+    {label:'Precious Stones',words:['RUBY','OPAL','JADE','ONYX'],d:1},
+    {label:'Types of Bread',words:['RYE','NAAN','PITA','BAGUETTE'],d:2},
+    {label:'___ Fish',words:['SWORD','STAR','CAT','BLOW'],d:3},
+  ]},
+  { groups: [
+    {label:'Tree Types',words:['OAK','ELM','ASH','YEW'],d:0},
+    {label:'Board Games',words:['CHESS','RISK','GO','CLUE'],d:1},
+    {label:'Dance Styles',words:['TANGO','SALSA','WALTZ','POLKA'],d:2},
+    {label:'___ House',words:['FULL','OPEN','STORE','GLASS'],d:3},
+  ]},
+  { groups: [
+    {label:'Insects',words:['MOTH','WASP','FLEA','MITE'],d:0},
+    {label:'Spices',words:['CUMIN','SAGE','THYME','MACE'],d:1},
+    {label:'Video Game Genres',words:['RPG','SHOOTER','PUZZLE','RACER'],d:2},
+    {label:'___ Cap',words:['ICE','HUB','MAD','KNEE'],d:3},
+  ]},
+  { groups: [
+    {label:'Cheeses',words:['BRIE','GOUDA','EDAM','FETA'],d:0},
+    {label:'Weather',words:['SLEET','HAIL','SMOG','HAZE'],d:1},
+    {label:'Body of Water',words:['FJORD','BAYOU','CREEK','CANAL'],d:2},
+    {label:'Eye ___',words:['LASH','LID','BROW','SIGHT'],d:3},
+  ]},
+  { groups: [
+    {label:'Pasta Types',words:['PENNE','ZITI','ORZO','RIGATONI'],d:0},
+    {label:'Constellation',words:['ORION','LYRA','CYGNUS','VEGA'],d:1},
+    {label:'Baby Animals',words:['FOAL','CALF','JOEY','PIGLET'],d:2},
+    {label:'___ Pool',words:['CAR','GUN','DEAD','SWIM'],d:3},
+  ]},
+  { groups: [
+    {label:'Cats',words:['TABBY','MAINE','SIAMESE','BENGAL'],d:0},
+    {label:'Rocks',words:['BASALT','SHALE','QUARTZ','FLINT'],d:1},
+    {label:'Fictional Detectives',words:['POIROT','MARPLE','MORSE','FROST'],d:2},
+    {label:'___ Bar',words:['CROW','HAND','SIDE','SAND'],d:3},
+  ]},
+  { groups: [
+    {label:'Coins',words:['DIME','PENNY','NICKEL','QUARTER'],d:0},
+    {label:'Math Terms',words:['PRIME','CHORD','VECTOR','RATIO'],d:1},
+    {label:'Harry Potter Spells',words:['LUMOS','EXPECTO','ALOHOMORA','ACCIO'],d:2},
+    {label:'___ Light',words:['SUN','FLASH','MOON','STAR'],d:3},
+  ]},
+  { groups: [
+    {label:'Punctuation',words:['COMMA','COLON','DASH','SLASH'],d:0},
+    {label:'Shapes',words:['RHOMBUS','OVAL','TORUS','PRISM'],d:1},
+    {label:'Famous Artists',words:['MONET','KLIMT','MUNCH','HIRST'],d:2},
+    {label:'___ Ring',words:['BOX','EAR','KEY','BOOK'],d:3},
+  ]},
+  { groups: [
+    {label:'Dog Commands',words:['SIT','STAY','HEEL','FETCH'],d:0},
+    {label:'Types of Yoga',words:['HOT','HATHA','POWER','YIN'],d:1},
+    {label:'Cocktails',words:['MOJITO','COSMO','NEGRONI','GIMLET'],d:2},
+    {label:'___ Guard',words:['BODY','LIFE','BOOT','MUD'],d:3},
+  ]},
+  { groups: [
+    {label:'Fairy Tale Characters',words:['CINDERELLA','RAPUNZEL','SNOW','BELLE'],d:0},
+    {label:'Phobias',words:['CLAUSTRO','ARACHNO','ACRO','HYDRO'],d:1},
+    {label:'Cycling Terms',words:['CADENCE','DRAFT','PELOTON','BONK'],d:2},
+    {label:'___ Coat',words:['OVER','SUGAR','TOP','RAIN'],d:3},
+  ]},
+  { groups: [
+    {label:'Pizza Toppings',words:['PEPPERONI','MUSHROOM','OLIVE','ANCHOVY'],d:0},
+    {label:'Fabric Types',words:['LINEN','DENIM','SATIN','TWEED'],d:1},
+    {label:'Famous Mountains',words:['BLANC','FUJI','DENALI','K2'],d:2},
+    {label:'___ Stick',words:['CHOP','LIP','CANDLE','DRUM'],d:3},
+  ]},
+  { groups: [
+    {label:'Nuts',words:['ALMOND','WALNUT','HAZEL','PECAN'],d:0},
+    {label:'Phobias about Fear',words:['DARK','SPIDER','CLOWN','HEIGHT'],d:1},
+    {label:'Shakespeare Plays',words:['OTHELLO','TEMPEST','HAMLET','LEAR'],d:2},
+    {label:'___ Bell',words:['DOOR','JINGLE','COW','DUMB'],d:3},
+  ]},
+  { groups: [
+    {label:'Cold Drinks',words:['LEMONADE','ICED TEA','SLUSHIE','COLA'],d:0},
+    {label:'Wrestling Moves',words:['SLAM','SUPLEX','CHOKE','PILEDRIVER'],d:1},
+    {label:'NASA Missions',words:['APOLLO','GEMINI','VOYAGER','CASSINI'],d:2},
+    {label:'___ Line',words:['FINE','HAIR','SIDE','HOT'],d:3},
+  ]},
+  { groups: [
+    {label:'Types of Hat',words:['BERET','TURBAN','FEDORA','STETSON'],d:0},
+    {label:'Camera Parts',words:['LENS','SHUTTER','APERTURE','FLASH'],d:1},
+    {label:'Anime',words:['NARUTO','BLEACH','DEATH NOTE','ATTACK'],d:2},
+    {label:'___ Work',words:['OVER','NET','FRAME','CLOCK'],d:3},
+  ]},
+  { groups: [
+    {label:'Types of Beer',words:['STOUT','LAGER','PORTER','PILSNER'],d:0},
+    {label:'Clouds',words:['CIRRUS','STRATUS','CUMULUS','NIMBUS'],d:1},
+    {label:'Nobel Prize Categories',words:['PEACE','PHYSICS','CHEMISTRY','ECONOMICS'],d:2},
+    {label:'___ Shot',words:['GUN','BIG','LONG','MOON'],d:3},
+  ]},
+  { groups: [
+    {label:'Fast Food',words:['SUBWAY','WENDYS','ARBYS','SONIC'],d:0},
+    {label:'Computer Parts',words:['RAM','ROM','GPU','BIOS'],d:1},
+    {label:'Elements',words:['XENON','OSMIUM','IRIDIUM','CESIUM'],d:2},
+    {label:'___ Tank',words:['FISH','THINK','FUEL','GAS'],d:3},
+  ]},
+  { groups: [
+    {label:'Olympic Sports',words:['ARCHERY','FENCING','LUGE','CURLING'],d:0},
+    {label:'Clouds',words:['FOG','MIST','SMOG','HAZE'],d:1},
+    {label:'Roman Gods',words:['JANUS','VULCAN','BACCHUS','PLUTUS'],d:2},
+    {label:'___ Pack',words:['JET','BACK','SIX','RAT'],d:3},
+  ]},
+  { groups: [
+    {label:'UK Cities',words:['LEEDS','HULL','EXETER','BATH'],d:0},
+    {label:'Bike Parts',words:['CHAIN','SPOKE','PEDAL','FORK'],d:1},
+    {label:'Chemical Symbols',words:['AU','FE','CU','HG'],d:2},
+    {label:'___ Leaf',words:['OAK','BAY','GOLD','FOUR'],d:3},
+  ]},
+  { groups: [
+    {label:'Card Suits',words:['HEARTS','SPADES','CLUBS','DIAMONDS'],d:0},
+    {label:'Fish',words:['TROUT','PERCH','BREAM','DACE'],d:1},
+    {label:'Architects',words:['ZAHA','GEHRY','FOSTER','PIANO'],d:2},
+    {label:'___ Net',words:['BASKET','HAM','DRAG','HAIR'],d:3},
+  ]},
+  { groups: [
+    {label:'Months (abbrev)',words:['JAN','MAR','JUN','AUG'],d:0},
+    {label:'Keyboard Keys',words:['SHIFT','ALT','TAB','ESC'],d:1},
+    {label:'Greek Letters',words:['SIGMA','LAMBDA','OMEGA','DELTA'],d:2},
+    {label:'___ Down',words:['BREAK','COUNT','LOCK','SHOW'],d:3},
+  ]},
+  { groups: [
+    {label:'Pizza Styles',words:['NEAPOLITAN','ROMAN','CALZONE','SICILIAN'],d:0},
+    {label:'Poker Hands',words:['FLUSH','STRAIGHT','PAIR','FULL HOUSE'],d:1},
+    {label:'Languages',words:['CATALAN','BASQUE','GAELIC','MAORI'],d:2},
+    {label:'___ Bank',words:['RIVER','PIG','FOOD','SAND'],d:3},
+  ]},
+  { groups: [
+    {label:'Spiders',words:['REDBACK','TARANTULA','RECLUSE','TRAPDOOR'],d:0},
+    {label:'Printing Terms',words:['SERIF','KERNING','GLYPH','LEADING'],d:1},
+    {label:'Philosophers',words:['KANT','HUME','LOCKE','MILL'],d:2},
+    {label:'___ Man',words:['SUPER','SPIDER','SNOW','BENCH'],d:3},
+  ]},
+  { groups: [
+    {label:'Teas',words:['OOLONG','CHAI','ROOIBOS','MATCHA'],d:0},
+    {label:'Knitting Terms',words:['PURL','CAST','YARN','KNIT'],d:1},
+    {label:'Dinosaurs',words:['RAPTOR','TRICERATOPS','SPINOSAURUS','IGUANODON'],d:2},
+    {label:'___ Bridge',words:['DRAW','TOLL','ROPE','LAND'],d:3},
+  ]},
+  { groups: [
+    {label:'Currencies (symbols)',words:['DOLLAR','EURO','POUND','RUPEE'],d:0},
+    {label:'Joints',words:['ELBOW','KNEE','ANKLE','WRIST'],d:1},
+    {label:'Programming Languages',words:['RUST','SWIFT','KOTLIN','SCALA'],d:2},
+    {label:'___ Drop',words:['EAR','RAIN','BACK','TEAR'],d:3},
+  ]},
+];
+
+const state = { puzzle: 0, lives: 3, selected: [], solved: [], removeAds: false, completed: new Set(), words: [] };
+
+function loadPuzzle(n) {
+  state.puzzle = n;
+  state.lives = 3;
+  state.selected = [];
+  state.solved = [];
+  const puz = puzzles[(n) % puzzles.length];
+  // Flatten and shuffle words
+  const all = [];
+  puz.groups.forEach((g,gi) => g.words.forEach(w => all.push({word:w,group:gi,d:g.d})));
+  shuffle(all);
+  state.words = all;
+  document.getElementById('puzzle-num').textContent = 'Puzzle ' + (n+1) + '/' + puzzles.length;
+  document.getElementById('msg').textContent = 'Find 4 groups of 4 words!';
+  updateLives();
+  document.getElementById('solved-groups').innerHTML = '';
+  renderWords();
+}
+
+function shuffle(arr) {
+  for (let i = arr.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+}
+
+function updateLives() {
+  const l = state.lives;
+  document.getElementById('lives').textContent = (l>=1?'❤️':l>=0?'🖤':'') + (l>=2?'❤️':'🖤') + (l>=3?'❤️':'🖤');
+}
+
+function renderWords() {
+  const grid = document.getElementById('word-grid');
+  grid.innerHTML = '';
+  state.words.forEach((item, i) => {
+    if (state.solved.includes(item.group)) return;
+    const btn = document.createElement('button');
+    btn.className = 'word-btn' + (state.selected.includes(i) ? ' selected' : '');
+    btn.textContent = item.word;
+    btn.onclick = () => toggleSelect(i);
+    grid.appendChild(btn);
+  });
+}
+
+function toggleSelect(i) {
+  const idx = state.selected.indexOf(i);
+  if (idx >= 0) { state.selected.splice(idx,1); }
+  else if (state.selected.length < 4) { state.selected.push(i); }
+  renderWords();
+}
+
+function submitGuess() {
+  if (state.selected.length !== 4) { document.getElementById('msg').textContent = 'Select exactly 4 words!'; return; }
+  const groups = state.selected.map(i => state.words[i].group);
+  const correct = groups.every(g => g === groups[0]);
+  if (correct) {
+    const g = groups[0];
+    state.solved.push(g);
+    const puz = puzzles[state.puzzle % puzzles.length];
+    const grp = puz.groups[g];
+    const row = document.createElement('div');
+    row.className = 'solved-row';
+    row.style.background = COLORS[grp.d];
+    row.style.color = '#000';
+    row.innerHTML = '<strong>' + grp.label + ':</strong>&nbsp;' + grp.words.join(', ');
+    document.getElementById('solved-groups').appendChild(row);
+    document.getElementById('msg').textContent = 'Correct! ' + DIFF_NAMES[grp.d];
+    state.selected = [];
+    renderWords();
+    if (state.solved.length === 4) {
+      setTimeout(winPuzzle, 500);
+    }
+  } else {
+    state.lives--;
+    updateLives();
+    // Check if one away
+    const counts = {};
+    groups.forEach(g => counts[g] = (counts[g]||0)+1);
+    const max = Math.max(...Object.values(counts));
+    if (max === 3) document.getElementById('msg').textContent = 'So close! One away...';
+    else document.getElementById('msg').textContent = 'Wrong! Try again.';
+    state.selected = [];
+    renderWords();
+    if (state.lives <= 0) {
+      document.getElementById('msg').textContent = 'No lives left! Better luck next time.';
+    }
+  }
+}
+
+function shuffleWords() {
+  shuffle(state.words);
+  state.selected = [];
+  renderWords();
+}
+
+function winPuzzle() {
+  state.completed.add(state.puzzle);
+  document.getElementById('msg').textContent = '🎉 All groups found!';
+  buildLevelSelect();
+  setTimeout(() => {
+    const next = state.puzzle + 1;
+    if (!state.removeAds && (next+1) % 3 === 0 && window.Android) Android.showInterstitial();
+    if (next < puzzles.length) loadPuzzle(next);
+  }, 1500);
+}
+
+function toggleLevelSelect() {
+  const ls = document.getElementById('level-select');
+  ls.style.display = ls.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function buildLevelSelect() {
+  const ls = document.getElementById('level-select');
+  ls.innerHTML = '';
+  puzzles.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.className = 'lvl-btn' + (state.completed.has(i) ? ' done' : '');
+    b.textContent = i+1;
+    b.onclick = () => { loadPuzzle(i); ls.style.display='none'; };
+    ls.appendChild(b);
+  });
+}
+
+function removeAds() {
+  if (window.Android) Android.purchaseRemoveAds();
+  else { state.removeAds = true; document.getElementById('msg').textContent = 'Ads removed!'; }
+}
+window.onPurchaseComplete = function() { state.removeAds = true; };
+window.onAdMobLoaded = function() {};
+
+loadPuzzle(0);
+buildLevelSelect();
+</script>
+</body>
+</html>

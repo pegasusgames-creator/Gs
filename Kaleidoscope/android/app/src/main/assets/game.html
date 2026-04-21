@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Kaleidoscope</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#0f0a1a;--accent:#E040FB;--text:#eaeaea;--muted:#664477;--radius:10px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;}
+header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;flex-shrink:0;}
+header h1{font-size:1.2rem;font-weight:700;}header h1 span{color:var(--accent);}
+#canvas{display:block;width:100%;touch-action:none;}
+#controls{flex-shrink:0;padding:6px 10px;display:flex;flex-direction:column;gap:6px;}
+.row{display:flex;gap:6px;align-items:center;}
+.btn{background:#1a0f2a;border:1px solid #442255;color:var(--text);padding:8px 12px;border-radius:var(--radius);font-size:0.78rem;cursor:pointer;touch-action:manipulation;flex-shrink:0;}
+.btn.active,.btn:active{background:var(--accent);color:#000;border-color:var(--accent);}
+.btn.btn-pressed{transform:scale(0.92);}
+label{font-size:0.75rem;color:var(--muted);flex-shrink:0;}
+input[type=range]{flex:1;accent-color:var(--accent);}
+#banner{height:50px;background:#111;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.75rem;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Kaleido<span>scope</span></h1></header>
+  <canvas id="canvas"></canvas>
+  <div id="controls">
+    <div class="row">
+      <button class="btn active" id="btn-rainbow">Rainbow</button>
+      <button class="btn" id="btn-sunset">Sunset</button>
+      <button class="btn" id="btn-ocean">Ocean</button>
+      <button class="btn" id="btn-fire">Fire</button>
+      <button class="btn" id="btn-clear">Clear</button>
+    </div>
+    <div class="row">
+      <label>Size</label>
+      <input type="range" id="brush-size" min="2" max="18" value="6">
+    </div>
+  </div>
+  <div id="banner">Ad Banner</div>
+</div>
+<script>
+const canvas=document.getElementById('canvas');
+const ctx=canvas.getContext('2d');
+let hue=0,isDrawing=false,lastX=null,lastY=null;
+let colorMode='rainbow';
+const SCHEMES={
+  rainbow:()=>`hsl(${hue},100%,65%)`,
+  sunset:()=>`hsl(${(hue%80)+0},90%,60%)`,
+  ocean:()=>`hsl(${180+(hue%60)},90%,60%)`,
+  fire:()=>`hsl(${(hue%50)},100%,55%)`
+};
+
+function resize(){
+  const size=Math.min(window.innerWidth,window.innerHeight-160);
+  canvas.width=size;canvas.height=size;
+  canvas.style.width=size+'px';canvas.style.height=size+'px';
+  canvas.style.margin='0 auto';canvas.style.display='block';
+}
+resize();window.addEventListener('resize',resize);
+
+function drawMirrored(x,y,px,py){
+  const cx=canvas.width/2,cy=canvas.height/2;
+  const segments=8;
+  const color=SCHEMES[colorMode]();
+  const size=parseInt(document.getElementById('brush-size').value);
+  ctx.lineWidth=size;ctx.lineCap='round';
+  for(let i=0;i<segments;i++){
+    const angle=(Math.PI*2/segments)*i;
+    ctx.save();
+    ctx.translate(cx,cy);ctx.rotate(angle);
+    if(i%2===1)ctx.scale(-1,1);
+    ctx.strokeStyle=color;
+    ctx.globalAlpha=0.85;
+    ctx.beginPath();
+    if(px!==null){
+      ctx.moveTo(px-cx,py-cy);
+      ctx.lineTo(x-cx,y-cy);
+    }else{
+      ctx.arc(x-cx,y-cy,size/2,0,Math.PI*2);
+      ctx.fillStyle=color;ctx.fill();
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+  ctx.globalAlpha=1;
+  hue=(hue+1)%360;
+}
+
+canvas.addEventListener('touchstart',e=>{
+  e.preventDefault();isDrawing=true;lastX=null;lastY=null;
+  const r=canvas.getBoundingClientRect();
+  const t=e.touches[0];
+  drawMirrored(t.clientX-r.left,t.clientY-r.top,null,null);
+},{passive:false});
+canvas.addEventListener('touchmove',e=>{
+  e.preventDefault();if(!isDrawing)return;
+  const r=canvas.getBoundingClientRect();
+  const t=e.touches[0];
+  const x=t.clientX-r.left,y=t.clientY-r.top;
+  drawMirrored(x,y,lastX,lastY);
+  lastX=x;lastY=y;
+},{passive:false});
+canvas.addEventListener('touchend',()=>{isDrawing=false;lastX=null;lastY=null;});
+
+canvas.addEventListener('mousedown',e=>{
+  isDrawing=true;lastX=null;lastY=null;
+  const r=canvas.getBoundingClientRect();
+  drawMirrored(e.clientX-r.left,e.clientY-r.top,null,null);
+});
+canvas.addEventListener('mousemove',e=>{
+  if(!isDrawing)return;
+  const r=canvas.getBoundingClientRect();
+  const x=e.clientX-r.left,y=e.clientY-r.top;
+  drawMirrored(x,y,lastX,lastY);
+  lastX=x;lastY=y;
+});
+canvas.addEventListener('mouseup',()=>{isDrawing=false;lastX=null;lastY=null;});
+
+['rainbow','sunset','ocean','fire'].forEach(s=>{
+  document.getElementById('btn-'+s).addEventListener('click',function(){
+    colorMode=s;
+    document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+document.getElementById('btn-clear').addEventListener('click',function(){
+  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+});
+
+window.onPurchaseComplete=function(sku){};
+window.onAdMobLoaded=function(){document.getElementById('banner').style.display='none';};
+</script>
+</body>
+</html>

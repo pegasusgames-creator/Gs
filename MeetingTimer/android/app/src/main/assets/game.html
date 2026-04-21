@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Meeting Timer</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#FFA726; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
+#app { display:flex; flex-direction:column; height:100%; padding:0; }
+header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px 10px; flex-shrink:0; }
+header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
+#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
+#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 14px 12px; }
+.card { background:var(--surface); border-radius:var(--radius); padding:14px; margin-bottom:12px; }
+.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+/* Time display */
+#time-display { display:flex; gap:10px; margin-bottom:12px; }
+.td-box { flex:1; background:var(--card); border-radius:12px; padding:12px 8px; text-align:center; }
+.td-val { font-size:1.8rem; font-weight:700; font-variant-numeric:tabular-nums; }
+.td-lbl { font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
+#elapsed-val { color:var(--accent); }
+#remaining-val { color:#80CBC4; }
+#remaining-val.overtime { color:#EF5350 !important; }
+/* Progress bar */
+#meet-progress { height:6px; background:rgba(255,255,255,0.08); border-radius:3px; margin-bottom:12px; overflow:hidden; }
+#meet-fill { height:100%; background:var(--accent); border-radius:3px; transition:width 0.5s linear; }
+#meet-fill.overtime { background:#EF5350; }
+/* Controls row */
+.ctrl-row { display:flex; gap:8px; }
+.cbtn { flex:1; padding:11px 6px; border:none; border-radius:10px; font-size:0.85rem; font-weight:600; cursor:pointer; }
+.cbtn.grn { background:#2E7D32; color:#fff; }
+.cbtn.red { background:#c62828; color:#fff; }
+.cbtn.muted { background:var(--card); color:var(--text); }
+/* Meeting duration */
+.dur-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+.dur-row label { font-size:0.8rem; color:var(--muted); flex-shrink:0; }
+.dur-row input[type=number] { width:64px; padding:7px 8px; border-radius:8px; border:none; background:var(--card); color:var(--text); font-size:0.9rem; text-align:center; }
+.preset-chip { padding:6px 12px; border:none; border-radius:20px; font-size:0.78rem; cursor:pointer; background:var(--card); color:var(--text); }
+.preset-chip.sel { background:var(--accent); color:#1a1a2e; font-weight:700; }
+/* Agenda */
+#agenda-add { display:flex; gap:7px; margin-bottom:8px; }
+#agenda-add input[type=text] { flex:1; padding:8px 10px; border-radius:9px; border:none; background:var(--card); color:var(--text); font-size:0.85rem; }
+#agenda-add input[type=number] { width:58px; padding:8px; border-radius:9px; border:none; background:var(--card); color:var(--text); font-size:0.85rem; text-align:center; }
+#agenda-add button { padding:8px 14px; border:none; border-radius:9px; background:var(--accent); color:#1a1a2e; font-weight:700; cursor:pointer; }
+.ag-item { display:flex; align-items:center; gap:8px; padding:9px 10px; background:var(--card); border-radius:9px; margin-bottom:6px; }
+.ag-item.current { border:2px solid var(--accent); background:#1a2a10; }
+.ag-item.done { opacity:0.5; }
+.ag-dot { width:10px; height:10px; border-radius:50%; background:var(--muted); flex-shrink:0; }
+.ag-item.current .ag-dot { background:var(--accent); }
+.ag-item.done .ag-dot { background:#4CAF50; }
+.ag-name { flex:1; font-size:0.88rem; }
+.ag-dur { font-size:0.75rem; color:var(--muted); flex-shrink:0; }
+.ag-del { background:none; border:none; color:#FF7043; cursor:pointer; font-size:0.9rem; padding:0 2px; }
+#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1>Meeting <span>Timer</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
+  <div id="scroll">
+    <div class="card">
+      <div id="time-display">
+        <div class="td-box"><div class="td-val" id="elapsed-val">00:00</div><div class="td-lbl">Elapsed</div></div>
+        <div class="td-box"><div class="td-val" id="remaining-val">30:00</div><div class="td-lbl">Remaining</div></div>
+      </div>
+      <div id="meet-progress"><div id="meet-fill" style="width:0%"></div></div>
+      <div class="ctrl-row">
+        <button class="cbtn grn" id="btn-toggle" onclick="toggleMeeting()">Start</button>
+        <button class="cbtn muted" onclick="resetMeeting()">Reset</button>
+        <button class="cbtn muted" onclick="nextAgenda()">Next Item</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Meeting Duration</div>
+      <div class="dur-row">
+        <label>Duration:</label>
+        <input type="number" id="dur-input" min="1" max="480" value="30">
+        <span style="font-size:0.8rem;color:var(--muted);">min</span>
+      </div>
+      <div class="dur-row" id="dur-presets">
+        <button class="preset-chip" onclick="setDur(15,this)">15m</button>
+        <button class="preset-chip sel" onclick="setDur(30,this)">30m</button>
+        <button class="preset-chip" onclick="setDur(45,this)">45m</button>
+        <button class="preset-chip" onclick="setDur(60,this)">1h</button>
+        <button class="preset-chip" onclick="setDur(90,this)">1.5h</button>
+        <button class="preset-chip" onclick="setDur(120,this)">2h</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Agenda Items</div>
+      <div id="agenda-add">
+        <input type="text" id="ag-name" placeholder="Item name…" maxlength="30">
+        <input type="number" id="ag-min" min="1" max="120" value="5" placeholder="min">
+        <button onclick="addAgenda()">+</button>
+      </div>
+      <div id="agenda-list"></div>
+    </div>
+  </div>
+  <div id="admob-banner">Advertisement</div>
+</div>
+<script>
+'use strict';
+(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+
+var S = { useCount:0, removeAds:false, durMs:30*60000, elapsed:0, running:false, last:0, iv:null, agenda:[], curAgenda:0, agElapsed:0 };
+
+function p2(n){return String(n).padStart(2,'0');}
+function fmtMs(ms) {
+  var t=Math.abs(Math.round(ms/1000));
+  var m=Math.floor(t/60), s=t%60;
+  return (ms<0?'-':'')+p2(m)+':'+p2(s);
+}
+
+function toggleMeeting() {
+  if(S.running){S.running=false;clearInterval(S.iv);S.iv=null;}
+  else{S.running=true;S.last=Date.now();S.iv=setInterval(tick,250);}
+  render();
+}
+
+function resetMeeting() {
+  S.running=false;clearInterval(S.iv);S.iv=null;
+  S.elapsed=0;S.curAgenda=0;S.agElapsed=0;
+  S.durMs=(parseInt(document.getElementById('dur-input').value)||30)*60000;
+  render();
+}
+
+function nextAgenda() {
+  if(S.curAgenda<S.agenda.length-1){S.curAgenda++;S.agElapsed=0;}
+  render();
+}
+
+function addAgenda() {
+  var name=document.getElementById('ag-name').value.trim();
+  var min=parseInt(document.getElementById('ag-min').value)||5;
+  if(!name)return;
+  S.agenda.push({name:name,durMs:min*60000});
+  document.getElementById('ag-name').value='';
+  renderAgenda();
+  maybeInterstitial();
+}
+
+function removeAgenda(i) {
+  S.agenda.splice(i,1);
+  if(S.curAgenda>=S.agenda.length)S.curAgenda=Math.max(0,S.agenda.length-1);
+  renderAgenda();
+}
+
+function tick() {
+  var now=Date.now(), d=now-S.last; S.last=now;
+  S.elapsed+=d;
+  if(S.agenda.length>0&&S.curAgenda<S.agenda.length) S.agElapsed+=d;
+  if(S.agElapsed>0&&S.agenda.length>0&&S.curAgenda<S.agenda.length){
+    if(S.agElapsed>=S.agenda[S.curAgenda].durMs&&S.curAgenda<S.agenda.length-1){
+      S.curAgenda++;S.agElapsed=0;
+    }
+  }
+  render();
+}
+
+function setDur(m,btn) {
+  document.getElementById('dur-input').value=m;
+  document.querySelectorAll('#dur-presets .preset-chip').forEach(function(b){b.classList.remove('sel');});
+  btn.classList.add('sel');
+  if(!S.running){S.durMs=m*60000;S.elapsed=0;render();}
+}
+
+function render() {
+  var rem=S.durMs-S.elapsed;
+  var ot=rem<0;
+  document.getElementById('elapsed-val').textContent=fmtMs(S.elapsed);
+  var rv=document.getElementById('remaining-val');
+  rv.textContent=fmtMs(Math.abs(rem))+(ot?' OT':'');
+  rv.className='td-val'+(ot?' overtime':'');
+  var pct=Math.min(100,S.elapsed/S.durMs*100);
+  var mf=document.getElementById('meet-fill');
+  mf.style.width=pct+'%';
+  mf.className=ot?'overtime':'';
+  document.getElementById('btn-toggle').textContent=S.running?'Pause':'Start';
+  document.getElementById('btn-toggle').className='cbtn '+(S.running?'red':'grn');
+  renderAgenda();
+}
+
+function renderAgenda() {
+  var el=document.getElementById('agenda-list');
+  if(!S.agenda.length){el.innerHTML='<div style="color:var(--muted);font-size:0.82rem;text-align:center;padding:8px;">No agenda items.</div>';return;}
+  el.innerHTML=S.agenda.map(function(a,i){
+    var cur=i===S.curAgenda&&S.running;
+    var done=i<S.curAgenda||(i===S.curAgenda&&S.agElapsed>=a.durMs);
+    var rem=cur?fmtMs(Math.max(0,a.durMs-S.agElapsed)):fmtMs(a.durMs);
+    return '<div class="ag-item'+(cur?' current':'')+(done&&!cur?' done':'')+'">'+
+      '<div class="ag-dot"></div><div class="ag-name">'+esc(a.name)+'</div>'+
+      '<div class="ag-dur">'+rem+'</div>'+
+      '<button class="ag-del" onclick="removeAgenda('+i+')">&#10005;</button></div>';
+  }).join('');
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+render();
+
+document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){S.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function maybeInterstitial(){S.useCount++;if(!S.removeAds&&S.useCount%8===0&&window.Android)Android.showInterstitial();}
+window.onAdMobLoaded=function(){};
+if(!window.Android&&!S.removeAds)document.getElementById('admob-banner').style.display='flex';
+</script>
+</body>
+</html>

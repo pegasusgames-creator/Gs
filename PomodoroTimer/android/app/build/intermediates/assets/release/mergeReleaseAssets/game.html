@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Pomodoro Timer</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+  body{background:#1a0808;color:#ffe0e0;font-family:'Arial',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh;overflow:hidden}
+  h1{font-size:1.5rem;margin:12px 0 4px;color:#ff6060;letter-spacing:2px}
+  #mode-tabs{display:flex;gap:0;margin:8px 0 14px;background:#ffffff10;border-radius:12px;overflow:hidden}
+  .mode-tab{padding:8px 16px;font-size:0.8rem;cursor:pointer;color:#ff808066;transition:background 0.15s,color 0.15s}
+  .mode-tab.active{background:#ff404044;color:#ff8080}
+  #ring-wrap{position:relative;width:210px;height:210px;margin:0 auto 10px}
+  #ring-svg{transform:rotate(-90deg)}
+  #ring-bg{fill:none;stroke:#ffffff15;stroke-width:14}
+  #ring-fg{fill:none;stroke:#ff4040;stroke-width:14;stroke-linecap:round;transition:stroke-dashoffset 0.5s linear,stroke 0.5s}
+  #ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+  #timer-display{font-size:3rem;font-weight:bold;color:#ff8080;text-shadow:0 0 20px #ff404066;font-variant-numeric:tabular-nums}
+  #timer-label{font-size:0.8rem;color:#ff808066;letter-spacing:2px;margin-top:2px}
+  #session-dots{display:flex;gap:8px;justify-content:center;margin:8px 0;min-height:18px}
+  .dot{width:13px;height:13px;border-radius:50%;background:#ffffff15}
+  .dot.done{background:#ff4040}
+  .dot.cur{background:#ff8040;animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+  .btn-row{display:flex;gap:12px;margin:8px 0}
+  .action-btn{border:none;border-radius:50px;padding:12px 30px;font-size:1rem;font-weight:bold;cursor:pointer;transition:transform 0.1s}
+  #start-btn{background:linear-gradient(135deg,#ff4040,#ff8040);color:#1a0808}
+  #skip-btn{background:#ffffff12;color:#ffe0e0;border:1px solid #ff404033}
+  .action-btn:active{transform:scale(0.94)}
+  #status-msg{font-size:0.88rem;color:#ff804066;min-height:1.3rem;margin-bottom:4px;text-align:center;padding:0 16px}
+  #stats-row{display:flex;gap:24px;margin-top:6px;font-size:0.8rem;color:#ff808066}
+  .stat{text-align:center}
+  .stat-num{font-size:1.4rem;font-weight:bold;color:#ff8080;display:block}
+  #remove-ads{position:fixed;top:8px;right:8px;background:#ffffff10;border:1px solid #ff404033;color:#ff804066;font-size:0.65rem;padding:4px 8px;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<button id="remove-ads" onclick="Android.purchase('remove_ads')">Remove Ads</button>
+<h1>🍅 Pomodoro</h1>
+<div id="mode-tabs">
+  <div class="mode-tab active" onclick="setMode('work',this)">Work 25m</div>
+  <div class="mode-tab" onclick="setMode('short',this)">Break 5m</div>
+  <div class="mode-tab" onclick="setMode('long',this)">Long 15m</div>
+</div>
+<div id="ring-wrap">
+  <svg id="ring-svg" width="210" height="210" viewBox="0 0 210 210">
+    <circle id="ring-bg" cx="105" cy="105" r="91"/>
+    <circle id="ring-fg" cx="105" cy="105" r="91"/>
+  </svg>
+  <div id="ring-center">
+    <div id="timer-display">25:00</div>
+    <div id="timer-label">FOCUS</div>
+  </div>
+</div>
+<div id="session-dots"></div>
+<div id="status-msg">Stay focused. You got this! 💪</div>
+<div class="btn-row">
+  <button class="action-btn" id="start-btn" onclick="toggleTimer()">START</button>
+  <button class="action-btn" id="skip-btn" onclick="skipSession()">SKIP</button>
+</div>
+<div id="stats-row">
+  <div class="stat"><span class="stat-num" id="pomodoros-done">0</span>Pomodoros</div>
+  <div class="stat"><span class="stat-num" id="total-min">0</span>Min focused</div>
+</div>
+<script>
+const MODES={work:{secs:1500,label:'FOCUS',color:'#ff4040',msg:'Stay focused. You got this! 💪'},short:{secs:300,label:'BREAK',color:'#40ff80',msg:'Take a short break! ☕'},long:{secs:900,label:'LONG BREAK',color:'#4080ff',msg:'Great work! Long break time. 🎉'}};
+const CIRC=2*Math.PI*91;
+let mode='work',totalSecs=1500,remaining=1500,running=false,interval=null,cyclePos=0;
+let sessions=parseInt(localStorage.getItem('pt_s')||'0'),focusMins=parseInt(localStorage.getItem('pt_m')||'0');
+document.getElementById('ring-fg').style.strokeDasharray=CIRC;
+renderDots();updateStats();updateDisplay();
+function setMode(m,btn){mode=m;document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');totalSecs=MODES[m].secs;remaining=totalSecs;if(running)stopTimer();document.getElementById('ring-fg').style.stroke=MODES[m].color;document.getElementById('timer-label').textContent=MODES[m].label;document.getElementById('status-msg').textContent=MODES[m].msg;document.getElementById('start-btn').textContent='START';updateDisplay();}
+function toggleTimer(){if(running){stopTimer();document.getElementById('start-btn').textContent='RESUME';}else startTimer();}
+function startTimer(){running=true;document.getElementById('start-btn').textContent='PAUSE';interval=setInterval(tick,1000);}
+function stopTimer(){running=false;clearInterval(interval);}
+function skipSession(){stopTimer();finishSession();}
+function tick(){remaining--;updateDisplay();if(remaining<=0){stopTimer();finishSession();}}
+function finishSession(){
+  if(mode==='work'){sessions++;focusMins+=25;cyclePos=(cyclePos+1)%4;localStorage.setItem('pt_s',sessions);localStorage.setItem('pt_m',focusMins);updateStats();renderDots();document.getElementById('status-msg').textContent='✅ Pomodoro done! Take a break.';if(navigator.vibrate)navigator.vibrate([300,150,300]);if(window.Android)Android.showInterstitial();setTimeout(()=>{if(cyclePos===0)setMode('long',document.querySelectorAll('.mode-tab')[2]);else setMode('short',document.querySelectorAll('.mode-tab')[1]);},1800);}
+  else{document.getElementById('status-msg').textContent='⏰ Break over! Time to focus.';if(navigator.vibrate)navigator.vibrate([200,100,200,100,200]);setTimeout(()=>setMode('work',document.querySelectorAll('.mode-tab')[0]),1800);}
+}
+function updateDisplay(){const m=Math.floor(remaining/60),s=remaining%60;document.getElementById('timer-display').textContent=m+':'+(s<10?'0':'')+s;const pct=totalSecs>0?remaining/totalSecs:1;document.getElementById('ring-fg').style.strokeDashoffset=CIRC*(1-pct);}
+function renderDots(){const row=document.getElementById('session-dots');row.innerHTML='';for(let i=0;i<4;i++){const d=document.createElement('div');d.className='dot'+(i<cyclePos?' done':i===cyclePos&&mode==='work'?' cur':'');row.appendChild(d);}}
+function updateStats(){document.getElementById('pomodoros-done').textContent=sessions;document.getElementById('total-min').textContent=focusMins;}
+window.onPurchaseComplete=function(id){if(id==='remove_ads'){document.getElementById('remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+</script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Word Connect</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: #001a1a; color: #e0f7fa; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+:root { --accent: #26A69A; --light: #80CBC4; }
+header { background: #003333; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); }
+header h1 { font-size: 1.3rem; color: var(--light); letter-spacing: 2px; }
+.level-info { font-size: 0.85rem; color: var(--light); }
+.progress { display: flex; gap: 6px; padding: 10px 16px; overflow-x: auto; }
+.word-slot { background: #003333; border: 2px solid #555; border-radius: 8px; padding: 5px 10px; font-size: 0.85rem; color: #aaa; white-space: nowrap; min-width: fit-content; transition: all 0.3s; }
+.word-slot.found { border-color: var(--accent); color: var(--light); background: #003d3d; }
+.current-word { text-align: center; font-size: 1.8rem; letter-spacing: 6px; color: #fff; min-height: 48px; padding: 8px; }
+.letter-grid { display: flex; justify-content: center; padding: 8px 16px; }
+.circle-container { position: relative; width: 280px; height: 280px; }
+.circle-letter { position: absolute; width: 56px; height: 56px; background: #003333; border: 2px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 700; color: #fff; cursor: pointer; transition: all 0.1s; transform: translate(-50%, -50%); user-select: none; }
+.circle-letter.selected { background: var(--accent); color: #fff; transform: translate(-50%, -50%) scale(1.12); }
+.circle-letter.used { background: #005555; }
+svg.lines { position: absolute; inset: 0; pointer-events: none; }
+.msg-row { text-align: center; font-size: 1rem; min-height: 28px; padding: 4px; }
+.msg-row.good { color: #66bb6a; }
+.msg-row.bad { color: #ef5350; }
+.btn-row { display: flex; gap: 8px; padding: 10px 16px; }
+.btn { flex: 1; background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+.btn.btn-pressed { opacity: 0.6; transform: scale(0.96); }
+.btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--light); }
+.hints-row { text-align: center; font-size: 0.85rem; color: #aaa; padding: 4px; }
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 100; }
+.overlay.show { display: flex; }
+.modal { background: #003333; border: 2px solid var(--accent); border-radius: 16px; padding: 24px; max-width: 300px; width: 90%; text-align: center; }
+.modal h2 { color: var(--light); font-size: 1.5rem; margin-bottom: 12px; }
+.level-select { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-height: 200px; overflow-y: auto; margin: 12px 0; }
+.lv-btn { background: #003d3d; border: 1px solid #555; border-radius: 6px; padding: 8px 4px; font-size: 0.8rem; color: #aaa; cursor: pointer; }
+.lv-btn.done { border-color: var(--accent); color: var(--light); }
+.lv-btn.btn-pressed { opacity: 0.6; transform: scale(0.9); }
+.banner { background: #111; border: 1px dashed #444; color: #555; text-align: center; padding: 10px; font-size: 0.75rem; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>WORD CONNECT</h1>
+  <span class="level-info">Level <span id="level-num">1</span></span>
+</header>
+<div class="progress" id="progress"></div>
+<div class="current-word" id="current-word"></div>
+<div class="letter-grid">
+  <div class="circle-container" id="circle-container">
+    <svg class="lines" id="lines-svg"></svg>
+  </div>
+</div>
+<div class="msg-row" id="msg-row"></div>
+<div class="hints-row">Hints: <span id="hints">3</span></div>
+<div class="btn-row">
+  <button class="btn btn-outline" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="clearSel()">Clear</button>
+  <button class="btn btn-outline" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="useHint()">Hint</button>
+  <button class="btn" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="submitWord()">Submit</button>
+</div>
+<div class="banner" id="banner-ad">Advertisement</div>
+
+<!-- Level Select Overlay -->
+<div class="overlay" id="win-overlay">
+  <div class="modal">
+    <h2>Level Complete! 🎉</h2>
+    <p style="color:#aaa;margin-bottom:16px">All words found!</p>
+    <button class="btn" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="nextLevel()">Next Level</button>
+  </div>
+</div>
+
+<script>
+// 100 levels: each has letters (circle) and words to find
+const LEVELS = [
+  {letters:'CATDO',words:['CAT','COD','DOT','OAT','TAD']},
+  {letters:'BEARF',words:['BARE','BEAR','BRAE','FEAR','FARE']},
+  {letters:'STONE',words:['TONE','NOTE','NOSE','ONES','TONS']},
+  {letters:'CLAMP',words:['CAMP','CLAM','CALM','LAMP','PALM']},
+  {letters:'DRAPE',words:['DARE','DEAR','PEAR','REAP','DRAPE']},
+  {letters:'SLOTH',words:['SLOT','SHOT','HOST','HOLT','LOTS']},
+  {letters:'CRANE',words:['CANE','RACE','ACRE','CARE','NEAR']},
+  {letters:'PLUME',words:['PLUM','MULE','LUMP','POLE','MOPE']},
+  {letters:'BRINE',words:['REIN','REIN','BIER','RIME','BRINE']},
+  {letters:'GRACE',words:['RACE','CARE','ACRE','CAGE','GRACE']},
+  {letters:'FLINT',words:['FLIT','LINT','LILT','TILT','FLINT']},
+  {letters:'CHORE',words:['CORE','HERO','HORN','HORE','ECHO']},
+  {letters:'STAMP',words:['MAPS','TAPS','PATS','MAST','STAMP']},
+  {letters:'BLEND',words:['LEND','BEND','BLED','LEND','BLEND']},
+  {letters:'THICK',words:['TICK','ITCH','HICK','WICK','THICK']},
+  {letters:'GROVE',words:['GORE','ROVE','OVER','GORE','GROVE']},
+  {letters:'BASTE',words:['BASE','BEST','BEAT','BETS','BASTE']},
+  {letters:'PRONE',words:['PORE','ROPE','NONE','NOPE','PRONE']},
+  {letters:'GLIDE',words:['GILD','LIED','IDLE','DELI','GLIDE']},
+  {letters:'CRIMP',words:['RIMS','CRIM','GRIP','RIME','CRIMP']},
+  {letters:'SLAKE',words:['LAKE','SALE','LASE','LEAK','SLAKE']},
+  {letters:'TROVE',words:['ROVE','TORE','VETO','OVER','TROVE']},
+  {letters:'BRISK',words:['RISK','BRIM','IRKS','RIBS','BRISK']},
+  {letters:'SWAMP',words:['MAPS','WASM','SWAM','PAWS','SWAMP']},
+  {letters:'GLOOM',words:['GROOM','LOGO','MOOL','GLOM','GLOOM']},
+  {letters:'FROTH',words:['FORT','ROTH','BOTH','THRO','FROTH']},
+  {letters:'BLAND',words:['LAND','BAND','BALD','PLAN','BLAND']},
+  {letters:'TRYST',words:['RUST','STRY','TYRS','TRYS','TRYST']},
+  {letters:'CLOTH',words:['CLOT','LOCH','COLT','LOTS','CLOTH']},
+  {letters:'SHELF',words:['FLESH','LESH','HEAL','SHEL','SHELF']},
+  {letters:'PRISM',words:['RIMS','SUMP','IMPS','GRIP','PRISM']},
+  {letters:'SWORE',words:['WORE','ROWS','ROWE','ORES','SWORE']},
+  {letters:'BROIL',words:['ROIL','BOIL','LAIR','ORAL','BROIL']},
+  {letters:'FLOSS',words:['LOSS','SOLS','FOSS','FLOSS','FLOS']},
+  {letters:'CRISP',words:['CRIP','SPUR','RICS','PICS','CRISP']},
+  {letters:'PLANK',words:['PLAN','LAND','LANK','PANK','PLANK']},
+  {letters:'GROUT',words:['GOUT','ROUT','TOUR','GROUT','GROT']},
+  {letters:'SHRED',words:['SHED','HERD','REDS','SHRED','REND']},
+  {letters:'BLUNT',words:['BUNT','LUNT','BLUNT','TUBS','NUBS']},
+  {letters:'SWIRL',words:['WIRL','RILS','SWIRL','WRIS','LIRS']},
+  {letters:'PLEAD',words:['PALE','PLEA','LEAD','DEAL','PLEAD']},
+  {letters:'CRYPT',words:['PYRE','CYRT','RYPT','TYPC','CRYPT']},
+  {letters:'GROWL',words:['GLOW','ROWL','OWLS','LROW','GROWL']},
+  {letters:'BLANK',words:['BANK','LAND','LANK','BALK','BLANK']},
+  {letters:'THRUM',words:['HURT','THUM','RUMS','HURL','THRUM']},
+  {letters:'FLARE',words:['FARE','FLEA','LEAF','REAL','FLARE']},
+  {letters:'SCOUT',words:['CUTS','OUST','OUTS','COST','SCOUT']},
+  {letters:'GRIPE',words:['GRIP','RIPE','PIER','PRIG','GRIPE']},
+  {letters:'BLOOM',words:['BOOM','MOOL','LOBO','LOOM','BLOOM']},
+  {letters:'SWATH',words:['WASH','THAW','WHAT','SHAW','SWATH']},
+  {letters:'PEARL',words:['REAL','PEAR','REAP','EARL','PEARL']},
+  {letters:'BRAND',words:['BARN','BRAD','DRAB','BRAN','BRAND']},
+  {letters:'THICK',words:['TICK','ITCH','WICK','HICK','THICK']},
+  {letters:'CLOWN',words:['COWL','TOWN','NOWL','CLOWN','WOCL']},
+  {letters:'ADORN',words:['DARN','ROAD','ADOR','RAND','ADORN']},
+  {letters:'BLEND',words:['LEND','BEND','BLED','ENDS','BLEND']},
+  {letters:'GRAZE',words:['GAZE','RAZÉ','AGER','RAZE','GRAZE']},
+  {letters:'PLUSH',words:['PLUS','SLUP','HUPS','LUSH','PLUSH']},
+  {letters:'CRISP',words:['CRIS','SPUR','PICS','RISP','CRISP']},
+  {letters:'FROND',words:['FOND','FORD','DRON','FRON','FROND']},
+  {letters:'STEAM',words:['TEAM','MEAT','TAME','MATES','STEAM']},
+  {letters:'CLOUD',words:['LOUD','COLD','CLOU','UDOL','CLOUD']},
+  {letters:'PRANK',words:['PARK','RANK','RAMP','NARK','PRANK']},
+  {letters:'STUMP',words:['SUMP','TUMP','MUTS','PUTS','STUMP']},
+  {letters:'WRATH',words:['WART','THAT','TWAH','RATH','WRATH']},
+  {letters:'GLINT',words:['GRIT','LINT','GINT','TONG','GLINT']},
+  {letters:'TRAMP',words:['RAMP','TRAM','MART','TRAP','TRAMP']},
+  {letters:'PLUNGE',words:['LUNG','PLUG','PUNG','LUNE','PLUNGE']},
+  {letters:'BRIGHT',words:['GRIT','BRIT','IGHT','GRIB','BRIGHT']},
+  {letters:'BRANCH',words:['BARN','BRAN','ARCH','RANCH','BRANCH']},
+  {letters:'FLIGHT',words:['FLIT','GILT','LOFT','LIFT','FLIGHT']},
+  {letters:'STARCH',words:['ARTS','ARCH','CART','STAR','STARCH']},
+  {letters:'GLANCE',words:['CLAN','LANE','GALE','CLEAN','GLANCE']},
+  {letters:'SQUIRT',words:['SUIT','QUIT','RUST','GUST','SQUIRT']},
+  {letters:'THROWN',words:['HORN','THORN','TOWN','WORN','THROWN']},
+  {letters:'BREEZE',words:['BEER','BREE','RAZE','REEZ','BREEZE']},
+  {letters:'SPRAWL',words:['PAWS','LAWS','SWAP','RAWL','SPRAWL']},
+  {letters:'GROWTH',words:['GROW','GROT','GROH','ROWTH','GROWTH']},
+  {letters:'SPROUT',words:['SPOUT','ROUT','POUR','SPUR','SPROUT']},
+  {letters:'SCREECH',words:['SCREE','CERE','RECS','CRECHE','SCREECH']},
+  {letters:'BLANKET',words:['BLANK','TANK','BENT','ANTE','BLANKET']},
+  {letters:'CRUMBLE',words:['CURL','RUBLE','LURE','CUBE','CRUMBLE']},
+  {letters:'SHINGLE',words:['SHINE','LINGE','GLEN','SLING','SHINGLE']},
+  {letters:'TREMBLE',words:['TREMB','REBEL','MELT','BELT','TREMBLE']},
+  {letters:'FRECKLE',words:['FREE','RECK','FLEE','REEL','FRECKLE']},
+  {letters:'STUMBLE',words:['STUB','MULE','LUBE','BUST','STUMBLE']},
+  {letters:'TWINKLE',words:['WINE','WILT','TIKE','LINK','TWINKLE']},
+  {letters:'PRETZEL',words:['PEER','LAZE','PELT','TREE','PRETZEL']},
+  {letters:'DRIZZLE',words:['RILE','RIDE','LIED','DIRE','DRIZZLE']},
+  {letters:'SPARKLE',words:['PARK','REAP','LAPS','PEAR','SPARKLE']},
+  {letters:'SWINDLE',words:['SLIDE','WIELD','WILD','WIND','SWINDLE']},
+  {letters:'CRINKLE',words:['RINK','LINER','LINK','RILE','CRINKLE']},
+  {letters:'FRUGAL',words:['GRUF','LARG','GAUL','FRUG','FRUGAL']},
+  {letters:'GRAVEL',words:['RAVE','VALE','GALE','AVEL','GRAVEL']},
+  {letters:'PROPEL',words:['POLE','ROPE','LOPE','PROP','PROPEL']},
+  {letters:'FIDDLE',words:['FILE','LIED','FLED','IDLE','FIDDLE']},
+  {letters:'MIDDLE',words:['MILD','MELD','DELI','LIED','MIDDLE']},
+  {letters:'BUBBLE',words:['BULB','BLUE','CUBE','LUBE','BUBBLE']},
+  {letters:'GIGGLE',words:['GILL','GLEG','GILE','GIGG','GIGGLE']},
+  {letters:'PURPLE',words:['PURL','RULE','PURE','LURE','PURPLE']},
+  {letters:'SIMPLE',words:['LIME','SLIP','SLIM','PILE','SIMPLE']},
+];
+
+const completedLevels = new Set(JSON.parse(localStorage.getItem('wc_done') || '[]'));
+let currentLevel = 0, letters = [], words = [], foundWords = new Set(), selected = [], hints = 3;
+
+function loadLevel(idx) {
+  currentLevel = idx;
+  const lv = LEVELS[idx];
+  letters = lv.letters.split('');
+  words = lv.words;
+  foundWords = new Set(); selected = []; hints = 3;
+  document.getElementById('level-num').textContent = idx + 1;
+  document.getElementById('hints').textContent = hints;
+  document.getElementById('msg-row').textContent = '';
+  renderProgress();
+  renderCircle();
+  renderCurrentWord();
+}
+
+function renderProgress() {
+  const prog = document.getElementById('progress');
+  prog.innerHTML = '';
+  words.forEach(w => {
+    const slot = document.createElement('div');
+    slot.className = 'word-slot' + (foundWords.has(w) ? ' found' : '');
+    slot.textContent = foundWords.has(w) ? w : '_ '.repeat(w.length).trim();
+    prog.appendChild(slot);
+  });
+}
+
+function renderCircle() {
+  const cont = document.getElementById('circle-container');
+  // Remove old letter elements
+  cont.querySelectorAll('.circle-letter').forEach(e => e.remove());
+  const n = letters.length;
+  const cx = 140, cy = 140, r = 100;
+  letters.forEach((l, i) => {
+    const angle = (2 * Math.PI * i / n) - Math.PI / 2;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    const el = document.createElement('div');
+    el.className = 'circle-letter' + (selected.includes(i) ? ' selected' : '');
+    el.textContent = l;
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.dataset.idx = i;
+    el.addEventListener('touchstart', e => { e.preventDefault(); el.classList.add('selected'); selectLetter(i); });
+    el.addEventListener('click', () => selectLetter(i));
+    cont.appendChild(el);
+  });
+  drawLines();
+}
+
+function drawLines() {
+  const svg = document.getElementById('lines-svg');
+  svg.innerHTML = '';
+  if (selected.length < 2) return;
+  const cont = document.getElementById('circle-container');
+  for (let i = 0; i < selected.length - 1; i++) {
+    const a = cont.querySelector(`.circle-letter[data-idx="${selected[i]}"]`);
+    const b = cont.querySelector(`.circle-letter[data-idx="${selected[i+1]}"]`);
+    if (!a || !b) continue;
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', parseInt(a.style.left));
+    line.setAttribute('y1', parseInt(a.style.top));
+    line.setAttribute('x2', parseInt(b.style.left));
+    line.setAttribute('y2', parseInt(b.style.top));
+    line.setAttribute('stroke', '#26A69A');
+    line.setAttribute('stroke-width', '3');
+    line.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(line);
+  }
+}
+
+function selectLetter(i) {
+  if (selected.includes(i)) return;
+  selected.push(i);
+  renderCircle();
+  renderCurrentWord();
+}
+
+function renderCurrentWord() {
+  document.getElementById('current-word').textContent = selected.map(i => letters[i]).join('');
+}
+
+function clearSel() {
+  selected = [];
+  renderCircle();
+  renderCurrentWord();
+}
+
+function submitWord() {
+  const word = selected.map(i => letters[i]).join('').toUpperCase();
+  const msg = document.getElementById('msg-row');
+  if (word.length < 2) { showMsg('Too short!', 'bad'); return; }
+  if (foundWords.has(word)) { showMsg('Already found!', 'bad'); clearSel(); return; }
+  if (words.includes(word)) {
+    foundWords.add(word);
+    showMsg('+' + word + '!', 'good');
+    renderProgress();
+    if (foundWords.size === words.length) {
+      completedLevels.add(currentLevel);
+      localStorage.setItem('wc_done', JSON.stringify([...completedLevels]));
+      setTimeout(() => document.getElementById('win-overlay').classList.add('show'), 600);
+    }
+  } else {
+    showMsg('Not in puzzle!', 'bad');
+  }
+  clearSel();
+}
+
+function showMsg(text, cls) {
+  const msg = document.getElementById('msg-row');
+  msg.textContent = text; msg.className = 'msg-row ' + cls;
+  clearTimeout(msg._t);
+  msg._t = setTimeout(() => { msg.textContent = ''; msg.className = 'msg-row'; }, 1200);
+}
+
+function useHint() {
+  if (hints <= 0) return;
+  const unfound = words.filter(w => !foundWords.has(w));
+  if (!unfound.length) return;
+  const word = unfound[0];
+  hints--;
+  document.getElementById('hints').textContent = hints;
+  showMsg('Hint: ' + word[0] + '_ '.repeat(word.length - 1).trim(), 'good');
+}
+
+function nextLevel() {
+  document.getElementById('win-overlay').classList.remove('show');
+  if (currentLevel + 1 < LEVELS.length) loadLevel(currentLevel + 1);
+  else loadLevel(0);
+}
+
+loadLevel(0);
+window.onPurchaseComplete = function(sku) { console.log('Purchase:', sku); };
+window.onAdMobLoaded = function() { document.getElementById('banner-ad').style.display = 'none'; };
+</script>
+</body>
+</html>

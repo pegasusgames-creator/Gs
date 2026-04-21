@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Hangman</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: #1a0a0a; color: #ffcccc; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+:root { --accent: #EF5350; --light: #FFCDD2; }
+header { background: #2d1010; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); }
+header h1 { font-size: 1.3rem; color: var(--light); letter-spacing: 2px; }
+.score-area { font-size: 0.95rem; color: var(--light); }
+.category-row { display: flex; gap: 6px; padding: 10px 16px; overflow-x: auto; }
+.cat-btn { background: #2d1010; border: 2px solid #555; border-radius: 20px; padding: 6px 14px; font-size: 0.8rem; color: #ccc; cursor: pointer; white-space: nowrap; transition: all 0.1s; }
+.cat-btn.active { border-color: var(--accent); color: var(--light); }
+.cat-btn.btn-pressed { opacity: 0.6; transform: scale(0.95); }
+.game-area { display: flex; flex-direction: column; align-items: center; padding: 8px 16px; gap: 10px; }
+canvas { display: block; }
+.word-display { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.letter-dash { font-size: 1.6rem; font-weight: 700; color: #fff; border-bottom: 3px solid var(--accent); min-width: 24px; text-align: center; line-height: 1.6; }
+.wrong-letters { font-size: 0.9rem; color: #aaa; text-align: center; min-height: 24px; }
+.hint-row { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #aaa; }
+.keyboard { display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px; padding: 10px 16px; }
+.key { background: #2d1010; border: 1px solid #555; border-radius: 6px; padding: 10px 4px; text-align: center; font-size: 0.95rem; font-weight: 700; color: #ffcccc; cursor: pointer; transition: all 0.1s; }
+.key.correct { background: #1a3a1a; border-color: #66bb6a; color: #66bb6a; }
+.key.wrong { background: #3a1010; border-color: var(--accent); color: var(--accent); text-decoration: line-through; }
+.key.btn-pressed { transform: scale(0.88); opacity: 0.6; }
+.key.used { pointer-events: none; }
+.btn-row { display: flex; gap: 8px; padding: 8px 16px; }
+.btn { flex: 1; background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+.btn.btn-pressed { opacity: 0.6; transform: scale(0.96); }
+.btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--light); }
+.result-msg { text-align: center; font-size: 1.1rem; font-weight: 700; min-height: 28px; padding: 4px; }
+.result-msg.win { color: #66bb6a; }
+.result-msg.lose { color: var(--accent); }
+.banner { background: #111; border: 1px dashed #444; color: #555; text-align: center; padding: 10px; font-size: 0.75rem; flex-shrink: 0; margin-top: auto; }
+</style>
+</head>
+<body>
+<header>
+  <h1>HANGMAN</h1>
+  <div class="score-area">W:<span id="wins">0</span> L:<span id="losses">0</span></div>
+</header>
+<div class="category-row" id="categories"></div>
+<div class="game-area">
+  <canvas id="hangman-canvas" width="200" height="200"></canvas>
+  <div class="result-msg" id="result-msg"></div>
+  <div class="word-display" id="word-display"></div>
+  <div class="wrong-letters">Wrong: <span id="wrong-letters"></span></div>
+  <div class="hint-row">
+    <span>Hints: <span id="hint-count">1</span></span>
+    <button class="btn btn-outline" style="padding:6px 14px;font-size:0.85rem" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="useHint()">Use Hint</button>
+  </div>
+</div>
+<div class="keyboard" id="keyboard"></div>
+<div class="btn-row">
+  <button class="btn" ontouchstart="this.classList.add('btn-pressed')" ontouchend="this.classList.remove('btn-pressed')" onclick="newGame()">New Word</button>
+</div>
+<div class="banner" id="banner-ad">Advertisement</div>
+
+<script>
+const WORDS = {
+  Animals: ["ELEPHANT","GIRAFFE","PENGUIN","DOLPHIN","CHEETAH","GORILLA","PLATYPUS","FLAMINGO","CHIMPANZEE","CROCODILE","LEOPARD","PANTHER","VULTURE","OCTOPUS","LOBSTER","HAMSTER","PORCUPINE","ARMADILLO","CHAMELEON","HEDGEHOG","MONGOOSE","WOLVERINE","ALBATROSS","ANACONDA","BARRACUDA","CASSOWARY","DACHSHUND","EARTHWORM","FIREFLY","GAZELLE","HORNBILL","IMPALA","JAGUAR","KINGFISHER","LEMUR","MANDRILL","NARWHAL","OCELOT","PIRANHA","QUETZAL","RHINOCEROS","SALAMANDER","TAPIR","UAKARI","VIPER","WALRUS","XENOPS","YABBY","ZORILLA"],
+  Countries: ["AUSTRALIA","BRAZIL","CANADA","DENMARK","ECUADOR","FINLAND","GERMANY","HUNGARY","ICELAND","JAMAICA","KENYA","LATVIA","MEXICO","NAMIBIA","OMAN","PORTUGAL","QATAR","RUSSIA","SWEDEN","THAILAND","UKRAINE","VIETNAM","WALES","XENON","YEMEN","ZAMBIA","ARGENTINA","BELGIUM","CAMBODIA","ETHIOPIA","FRANCE","GREECE","HONDURAS","INDONESIA","JORDAN","KAZAKHSTAN","LEBANON","MALAYSIA","NIGERIA","PAKISTAN","RWANDA","SERBIA","TAIWAN","URUGUAY","VENEZUELA","ZIMBABWE","ALBANIA","BAHRAIN","CROATIA","DOMINICA"],
+  Movies: ["INCEPTION","INTERSTELLAR","GLADIATOR","BRAVEHEART","CASABLANCA","GODFATHER","TITANIC","AVATAR","JAWS","PSYCHO","VERTIGO","MATRIX","ALIEN","PREDATOR","TERMINATOR","JURASSIC","BATMAN","SUPERMAN","SPIDERMAN","IRONMAN","AVENGERS","FROZEN","MOANA","ZOOTOPIA","COCO","MULAN","ALADDIN","DUMBO","BAMBI","PINOCCHIO","CINDERELLA","ANASTASIA","FANTASIA","POCAHONTAS","HERCULES","TARZAN","SHREK","RATATOUILLE","WALLE","NEMO","INCREDIBLES","CARS","BRAVE","INSIDE","TANGLED","BOLT","UP","PLANES","BUGS"],
+  Foods: ["PIZZA","HAMBURGER","SPAGHETTI","LASAGNA","CROISSANT","PANCAKE","WAFFLE","BURRITO","QUESADILLA","GUACAMOLE","ENCHILADA","RATATOUILLE","BRIOCHE","MACARON","TIRAMISU","BAKLAVA","HUMMUS","FALAFEL","TAHINI","KIMCHI","SUSHI","TEMPURA","RAMEN","UDON","BIBIMBAP","PHO","RENDANG","SATAY","NAAN","BIRYANI","SAMOSA","TZATZIKI","MOUSSAKA","PAELLA","RISOTTO","CARPACCIO","PROSCIUTTO","TAPIOCA","QUINOA","AVOCADO","MANGO","PAPAYA","LYCHEE","DURIAN","JACKFRUIT","SOURSOP","POMELO","STARFRUIT","RAMBUTAN","PERSIMMON"],
+  Sports: ["BASKETBALL","VOLLEYBALL","BADMINTON","SWIMMING","GYMNASTICS","WRESTLING","TAEKWONDO","ARCHERY","FENCING","BOBSLED","BIATHLON","TRIATHLON","DECATHLON","PENTATHLON","WATERPOLO","CRICKET","LACROSSE","HANDBALL","SQUASH","RACQUETBALL","SNOWBOARD","SKATEBOARD","SURFBOARD","KITEBOARD","PADDLEBOARD","WEIGHTLIFTING","POWERLIFTING","BODYBUILDING","CROSSFIT","MARATHON","SPRINTING","HURDLING","JAVELIN","DISCUS","HAMMER","SHOTPUT","LONGJUMP","HIGHJUMP","POLEVAULT","ROWING","KAYAKING","CANOEING","SAILING","WINDSURFING","CYCLING","TRIATHLON","EQUESTRIAN","DRESSAGE","POLO","FALCONRY"]
+};
+
+const CATEGORIES = Object.keys(WORDS);
+let category = 'Animals', word = '', guessed = new Set(), wrong = 0, wins = 0, losses = 0, gameOver = false, hints = 1;
+
+function buildCategories() {
+  const row = document.getElementById('categories');
+  row.innerHTML = '';
+  CATEGORIES.forEach(c => {
+    const btn = document.createElement('div');
+    btn.className = 'cat-btn' + (c === category ? ' active' : '');
+    btn.textContent = c;
+    btn.addEventListener('touchstart', e => { e.preventDefault(); btn.classList.add('btn-pressed'); });
+    btn.addEventListener('touchend', () => { btn.classList.remove('btn-pressed'); category = c; document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); newGame(); });
+    btn.addEventListener('click', () => { category = c; document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); newGame(); });
+    row.appendChild(btn);
+  });
+}
+
+function newGame() {
+  const pool = WORDS[category];
+  word = pool[Math.floor(Math.random() * pool.length)];
+  guessed = new Set(); wrong = 0; gameOver = false; hints = 1;
+  document.getElementById('hint-count').textContent = hints;
+  document.getElementById('result-msg').textContent = '';
+  document.getElementById('wrong-letters').textContent = '';
+  buildKeyboard();
+  renderWord();
+  drawHangman(0);
+}
+
+function buildKeyboard() {
+  const kb = document.getElementById('keyboard');
+  kb.innerHTML = '';
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(l => {
+    const key = document.createElement('div');
+    key.className = 'key';
+    key.id = 'key-' + l;
+    key.textContent = l;
+    key.addEventListener('touchstart', e => { e.preventDefault(); key.classList.add('btn-pressed'); guess(l); });
+    key.addEventListener('touchend', () => key.classList.remove('btn-pressed'));
+    key.addEventListener('click', () => guess(l));
+    kb.appendChild(key);
+  });
+}
+
+function guess(l) {
+  if (gameOver || guessed.has(l)) return;
+  guessed.add(l);
+  const key = document.getElementById('key-' + l);
+  if (word.includes(l)) {
+    key.classList.add('correct', 'used');
+  } else {
+    wrong++;
+    key.classList.add('wrong', 'used');
+    document.getElementById('wrong-letters').textContent = [...guessed].filter(g => !word.includes(g)).join(' ');
+  }
+  drawHangman(wrong);
+  renderWord();
+  checkWin();
+}
+
+function renderWord() {
+  const display = document.getElementById('word-display');
+  display.innerHTML = '';
+  for (const l of word) {
+    const d = document.createElement('div');
+    d.className = 'letter-dash';
+    d.textContent = guessed.has(l) ? l : '';
+    display.appendChild(d);
+  }
+}
+
+function checkWin() {
+  if (word.split('').every(l => guessed.has(l))) {
+    gameOver = true; wins++;
+    document.getElementById('wins').textContent = wins;
+    const msg = document.getElementById('result-msg');
+    msg.textContent = 'You got it! 🎉'; msg.className = 'result-msg win';
+    revealWord();
+  } else if (wrong >= 6) {
+    gameOver = true; losses++;
+    document.getElementById('losses').textContent = losses;
+    const msg = document.getElementById('result-msg');
+    msg.textContent = 'The word was: ' + word; msg.className = 'result-msg lose';
+    revealWord();
+  }
+}
+
+function revealWord() {
+  const display = document.getElementById('word-display');
+  display.innerHTML = '';
+  for (const l of word) {
+    const d = document.createElement('div');
+    d.className = 'letter-dash';
+    d.textContent = l;
+    if (!guessed.has(l)) d.style.color = '#ef5350';
+    display.appendChild(d);
+  }
+}
+
+function useHint() {
+  if (hints <= 0 || gameOver) return;
+  const unguessed = word.split('').filter(l => !guessed.has(l));
+  if (!unguessed.length) return;
+  const pick = unguessed[Math.floor(Math.random() * unguessed.length)];
+  wrong++; hints--;
+  document.getElementById('hint-count').textContent = hints;
+  guess(pick);
+}
+
+function drawHangman(n) {
+  const canvas = document.getElementById('hangman-canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, 200, 200);
+  ctx.strokeStyle = '#EF5350';
+  ctx.lineWidth = 3;
+  ctx.lineCap = 'round';
+
+  // Gallows
+  ctx.beginPath();
+  ctx.moveTo(20, 190); ctx.lineTo(180, 190); // base
+  ctx.moveTo(60, 190); ctx.lineTo(60, 20);   // pole
+  ctx.moveTo(60, 20); ctx.lineTo(130, 20);   // top bar
+  ctx.moveTo(130, 20); ctx.lineTo(130, 50);  // rope
+  ctx.strokeStyle = '#555'; ctx.stroke();
+  ctx.strokeStyle = '#EF5350';
+
+  if (n >= 1) { ctx.beginPath(); ctx.arc(130, 65, 16, 0, Math.PI * 2); ctx.stroke(); } // head
+  if (n >= 2) { ctx.beginPath(); ctx.moveTo(130, 81); ctx.lineTo(130, 130); ctx.stroke(); } // body
+  if (n >= 3) { ctx.beginPath(); ctx.moveTo(130, 95); ctx.lineTo(105, 118); ctx.stroke(); } // L arm
+  if (n >= 4) { ctx.beginPath(); ctx.moveTo(130, 95); ctx.lineTo(155, 118); ctx.stroke(); } // R arm
+  if (n >= 5) { ctx.beginPath(); ctx.moveTo(130, 130); ctx.lineTo(108, 160); ctx.stroke(); } // L leg
+  if (n >= 6) { ctx.beginPath(); ctx.moveTo(130, 130); ctx.lineTo(152, 160); ctx.stroke(); } // R leg
+}
+
+buildCategories();
+newGame();
+window.onPurchaseComplete = function(sku) { console.log('Purchase:', sku); };
+window.onAdMobLoaded = function() { document.getElementById('banner-ad').style.display = 'none'; };
+</script>
+</body>
+</html>

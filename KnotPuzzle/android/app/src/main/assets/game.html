@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Knot Puzzle</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #121212; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+#banner { width:100%; height:50px; background:#1e1e1e; display:flex; align-items:center; justify-content:center; color:#555; font-size:12px; border-bottom:1px solid #333; }
+#header { width:100%; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; background:#1a1a1a; }
+h1 { font-size:20px; color:#9C27B0; font-weight:700; }
+#info { font-size:13px; color:#aaa; }
+#controls { display:flex; gap:8px; padding:8px 16px; flex-wrap:wrap; justify-content:center; }
+button { background:#1e1e1e; color:#9C27B0; border:1.5px solid #9C27B0; border-radius:8px; padding:8px 16px; font-size:14px; cursor:pointer; touch-action:manipulation; }
+button:active { background:#9C27B0; color:#fff; }
+#msg { padding:6px 16px; text-align:center; font-size:15px; min-height:32px; color:#9C27B0; }
+canvas { display:block; margin:4px auto; border-radius:8px; border:2px solid #9C27B0; touch-action:none; }
+#level-select { display:none; flex-wrap:wrap; gap:6px; padding:8px 16px; justify-content:center; max-width:360px; }
+.lvl-btn { padding:6px 12px; font-size:13px; min-width:38px; }
+.lvl-btn.done { background:#9C27B0; color:#fff; border-color:#9C27B0; }
+</style>
+</head>
+<body>
+<div id="banner">Advertisement</div>
+<div id="header">
+  <h1>Knot Puzzle</h1>
+  <span id="info">Level 1</span>
+</div>
+<div id="controls">
+  <button onclick="resetLevel()">Reset</button>
+  <button onclick="checkWin()">Check</button>
+  <button onclick="toggleLevelSelect()">Levels</button>
+  <button onclick="removeAds()">No Ads</button>
+</div>
+<div id="msg">Drag nodes to untangle the ropes!</div>
+<canvas id="c"></canvas>
+<div id="level-select"></div>
+
+<script>
+// Knot untangling: nodes connected by edges, drag to remove all crossings
+// 30 levels with increasing complexity
+
+const ACC = '#9C27B0';
+const NODE_R = 18;
+const W = Math.min(window.innerWidth - 20, 380);
+const H = W;
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+canvas.width = W; canvas.height = H;
+
+// Level definitions: each level has {nodes:[[x,y],...], edges:[[a,b],...]}
+// Nodes are in 0-1 range, scaled to canvas
+// These are placed in tangled positions initially
+
+function mkLevel(nNodes, edges, initPos) {
+  return { n: nNodes, edges, initPos };
+}
+
+// 30 levels of increasing complexity
+const levelDefs = [
+  // 3 nodes
+  mkLevel(3,[[0,1],[1,2],[0,2]],[[0.5,0.1],[0.2,0.8],[0.8,0.8]]),
+  mkLevel(3,[[0,1],[1,2],[2,0]],[[0.3,0.3],[0.7,0.2],[0.5,0.8]]),
+  // 4 nodes
+  mkLevel(4,[[0,1],[1,2],[2,3],[3,0],[0,2]],[[0.5,0.1],[0.2,0.5],[0.5,0.9],[0.8,0.5]]),
+  mkLevel(4,[[0,1],[1,2],[2,3],[3,0],[1,3]],[[0.3,0.2],[0.7,0.2],[0.7,0.8],[0.3,0.8]]),
+  mkLevel(4,[[0,2],[1,3],[0,1],[2,3]],[[0.1,0.1],[0.9,0.1],[0.1,0.9],[0.9,0.9]]),
+  // 5 nodes
+  mkLevel(5,[[0,1],[1,2],[2,3],[3,4],[4,0],[0,2]],[[0.5,0.1],[0.15,0.5],[0.3,0.9],[0.7,0.9],[0.85,0.5]]),
+  mkLevel(5,[[0,1],[1,2],[2,3],[3,4],[4,0],[1,3]],[[0.5,0.15],[0.2,0.4],[0.4,0.8],[0.6,0.8],[0.8,0.4]]),
+  mkLevel(5,[[0,2],[1,3],[2,4],[3,0],[4,1]],[[0.2,0.2],[0.8,0.2],[0.5,0.1],[0.2,0.8],[0.8,0.8]]),
+  mkLevel(5,[[0,1],[0,2],[0,3],[0,4],[1,2],[2,3],[3,4]],[[0.5,0.5],[0.5,0.1],[0.9,0.5],[0.5,0.9],[0.1,0.5]]),
+  mkLevel(5,[[0,1],[1,2],[2,3],[3,4],[4,0],[0,3],[1,4]],[[0.3,0.1],[0.7,0.1],[0.9,0.5],[0.7,0.9],[0.3,0.9]]),
+  // 6 nodes
+  mkLevel(6,[[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[0,3],[1,4]],[[0.3,0.1],[0.7,0.1],[0.9,0.5],[0.7,0.9],[0.3,0.9],[0.1,0.5]]),
+  mkLevel(6,[[0,2],[1,3],[2,4],[3,5],[4,0],[5,1]],[[0.5,0.1],[0.9,0.4],[0.7,0.9],[0.1,0.8],[0.1,0.3],[0.6,0.1]]),
+  mkLevel(6,[[0,1],[0,2],[0,3],[1,4],[2,4],[3,5],[4,5]],[[0.5,0.1],[0.1,0.4],[0.9,0.4],[0.5,0.5],[0.2,0.8],[0.8,0.8]]),
+  mkLevel(6,[[0,3],[1,4],[2,5],[0,1],[1,2],[3,4],[4,5]],[[0.2,0.2],[0.5,0.1],[0.8,0.2],[0.2,0.8],[0.5,0.9],[0.8,0.8]]),
+  mkLevel(6,[[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[1,4],[0,3]],[[0.5,0.05],[0.85,0.3],[0.85,0.7],[0.5,0.95],[0.15,0.7],[0.15,0.3]]),
+  // 7 nodes
+  mkLevel(7,[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,0],[0,3],[1,4]],[[0.5,0.05],[0.82,0.18],[0.95,0.55],[0.8,0.88],[0.45,0.98],[0.12,0.82],[0.05,0.45]]),
+  mkLevel(7,[[0,2],[1,3],[2,4],[3,5],[4,6],[5,0],[6,1]],[[0.5,0.1],[0.85,0.35],[0.9,0.7],[0.6,0.95],[0.2,0.85],[0.05,0.5],[0.25,0.15]]),
+  mkLevel(7,[[0,1],[0,2],[0,3],[1,4],[2,5],[3,6],[4,5],[5,6]],[[0.5,0.1],[0.2,0.3],[0.8,0.3],[0.5,0.5],[0.1,0.7],[0.5,0.9],[0.9,0.7]]),
+  mkLevel(7,[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,0],[2,5],[3,6]],[[0.5,0.05],[0.82,0.18],[0.95,0.55],[0.82,0.88],[0.5,0.98],[0.18,0.88],[0.05,0.55]]),
+  mkLevel(7,[[0,3],[1,4],[2,5],[3,6],[0,1],[1,2],[4,5],[5,6]],[[0.1,0.5],[0.3,0.1],[0.7,0.1],[0.9,0.5],[0.7,0.9],[0.3,0.9],[0.5,0.5]]),
+  // 8 nodes
+  mkLevel(8,[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,0],[0,4],[1,5],[2,6]],[[0.5,0.05],[0.82,0.15],[0.98,0.45],[0.92,0.78],[0.65,0.97],[0.32,0.97],[0.08,0.78],[0.05,0.45]]),
+  mkLevel(8,[[0,2],[1,3],[2,4],[3,5],[4,6],[5,7],[6,0],[7,1]],[[0.5,0.05],[0.85,0.25],[0.97,0.6],[0.75,0.93],[0.4,0.98],[0.08,0.78],[0.03,0.42],[0.22,0.12]]),
+  mkLevel(8,[[0,4],[1,5],[2,6],[3,7],[0,1],[1,2],[2,3],[4,5],[5,6],[6,7]],[[0.1,0.2],[0.4,0.2],[0.6,0.2],[0.9,0.2],[0.1,0.8],[0.4,0.8],[0.6,0.8],[0.9,0.8]]),
+  mkLevel(8,[[0,1],[0,2],[0,3],[0,4],[1,5],[2,6],[3,7],[4,5],[5,6],[6,7]],[[0.5,0.5],[0.5,0.1],[0.9,0.5],[0.5,0.9],[0.1,0.5],[0.7,0.2],[0.7,0.8],[0.3,0.8]]),
+  mkLevel(8,[[0,3],[1,4],[2,5],[3,6],[4,7],[5,0],[6,1],[7,2]],[[0.5,0.1],[0.85,0.35],[0.9,0.72],[0.62,0.96],[0.28,0.96],[0.05,0.72],[0.08,0.35],[0.4,0.1]]),
+  // 9 nodes
+  mkLevel(9,[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,0],[0,4],[1,5],[2,6]],[[0.5,0.05],[0.8,0.12],[0.97,0.38],[0.97,0.68],[0.8,0.9],[0.5,0.97],[0.2,0.9],[0.03,0.68],[0.03,0.38]]),
+  mkLevel(9,[[0,3],[1,4],[2,5],[3,6],[4,7],[5,8],[6,0],[7,1],[8,2]],[[0.5,0.08],[0.82,0.2],[0.97,0.5],[0.88,0.82],[0.62,0.97],[0.32,0.95],[0.08,0.78],[0.03,0.45],[0.2,0.18]]),
+  mkLevel(9,[[0,1],[0,2],[0,3],[1,4],[2,5],[3,6],[4,7],[5,8],[6,4],[7,8]],[[0.5,0.1],[0.2,0.3],[0.8,0.3],[0.5,0.5],[0.1,0.55],[0.9,0.55],[0.5,0.7],[0.25,0.9],[0.75,0.9]]),
+  mkLevel(9,[[0,2],[1,3],[2,4],[3,5],[4,6],[5,7],[6,8],[7,0],[8,1]],[[0.5,0.05],[0.8,0.15],[0.97,0.42],[0.92,0.72],[0.68,0.95],[0.35,0.97],[0.1,0.8],[0.03,0.5],[0.18,0.22]]),
+  mkLevel(10,[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0],[0,5],[1,6],[2,7],[3,8]],[[0.5,0.04],[0.79,0.1],[0.96,0.35],[0.99,0.65],[0.84,0.88],[0.58,0.98],[0.28,0.96],[0.05,0.78],[0.01,0.5],[0.18,0.22]]),
+];
+
+// Tangle: scramble initPos randomly for gameplay
+function tanglePos(initPos, seed) {
+  const r = lcg(seed);
+  const pad = 0.1;
+  return initPos.map(() => [pad + r()*(1-2*pad), pad + r()*(1-2*pad)]);
+}
+
+function lcg(seed) {
+  let x = seed;
+  return () => { x=(x*1664525+1013904223)>>>0; return x/0xffffffff; };
+}
+
+const state = { level:1, nodes:[], dragging:-1, removeAds:false, completed:new Set() };
+let edges = [];
+
+function loadLevel(n) {
+  state.level = n;
+  state.dragging = -1;
+  const def = levelDefs[(n-1) % levelDefs.length];
+  edges = def.edges;
+  // Tangle the positions
+  const tangled = tanglePos(def.initPos, n * 7 + 13);
+  state.nodes = tangled.map(([x,y]) => ({ x: x*W, y: y*H }));
+  document.getElementById('info').textContent = 'Level ' + n + ' | ' + def.n + ' nodes';
+  document.getElementById('msg').textContent = 'Drag nodes to untangle!';
+  draw();
+}
+
+function segmentsIntersect(ax,ay,bx,by,cx,cy,dx,dy) {
+  const d1x=bx-ax,d1y=by-ay,d2x=dx-cx,d2y=dy-cy;
+  const denom=d1x*d2y-d1y*d2x;
+  if (Math.abs(denom)<1e-10) return false;
+  const t=((cx-ax)*d2y-(cy-ay)*d2x)/denom;
+  const u=((cx-ax)*d1y-(cy-ay)*d1x)/denom;
+  return t>0.05&&t<0.95&&u>0.05&&u<0.95;
+}
+
+function countIntersections() {
+  let count = 0;
+  for (let i=0;i<edges.length;i++) for (let j=i+1;j<edges.length;j++) {
+    const [a,b]=edges[i],[c,d]=edges[j];
+    if (a===c||a===d||b===c||b===d) continue;
+    const na=state.nodes[a],nb=state.nodes[b],nc=state.nodes[c],nd=state.nodes[d];
+    if (segmentsIntersect(na.x,na.y,nb.x,nb.y,nc.x,nc.y,nd.x,nd.y)) count++;
+  }
+  return count;
+}
+
+function draw() {
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#1a1a1a';
+  ctx.fillRect(0,0,W,H);
+  const crossings = new Set();
+  for (let i=0;i<edges.length;i++) for (let j=i+1;j<edges.length;j++) {
+    const [a,b]=edges[i],[c,d]=edges[j];
+    if (a===c||a===d||b===c||b===d) continue;
+    const na=state.nodes[a],nb=state.nodes[b],nc=state.nodes[c],nd=state.nodes[d];
+    if (segmentsIntersect(na.x,na.y,nb.x,nb.y,nc.x,nc.y,nd.x,nd.y)) {
+      crossings.add(i); crossings.add(j);
+    }
+  }
+  // Draw edges
+  edges.forEach(([a,b],i) => {
+    const na=state.nodes[a],nb=state.nodes[b];
+    ctx.beginPath();
+    ctx.moveTo(na.x,na.y);
+    ctx.lineTo(nb.x,nb.y);
+    ctx.strokeStyle = crossings.has(i) ? '#f44336' : '#5C8A3C';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  });
+  // Draw nodes
+  state.nodes.forEach((n,i) => {
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,NODE_R,0,Math.PI*2);
+    ctx.fillStyle = i===state.dragging ? '#fff' : ACC;
+    ctx.fill();
+    ctx.strokeStyle='#fff';
+    ctx.lineWidth=2;
+    ctx.stroke();
+    ctx.fillStyle='#fff';
+    ctx.font='bold 12px sans-serif';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(i+1,n.x,n.y);
+  });
+}
+
+function getNodeAt(x,y) {
+  for (let i=0;i<state.nodes.length;i++) {
+    const n=state.nodes[i];
+    if ((x-n.x)**2+(y-n.y)**2 <= (NODE_R+8)**2) return i;
+  }
+  return -1;
+}
+
+canvas.addEventListener('pointerdown', e => {
+  e.preventDefault();
+  const rect=canvas.getBoundingClientRect();
+  const x=(e.clientX-rect.left)*(W/rect.width);
+  const y=(e.clientY-rect.top)*(H/rect.height);
+  state.dragging=getNodeAt(x,y);
+});
+canvas.addEventListener('pointermove', e => {
+  if (state.dragging<0) return;
+  e.preventDefault();
+  const rect=canvas.getBoundingClientRect();
+  const x=Math.max(NODE_R,Math.min(W-NODE_R,(e.clientX-rect.left)*(W/rect.width)));
+  const y=Math.max(NODE_R,Math.min(H-NODE_R,(e.clientY-rect.top)*(H/rect.height)));
+  state.nodes[state.dragging]={x,y};
+  draw();
+});
+canvas.addEventListener('pointerup', e => {
+  if (state.dragging>=0) {
+    state.dragging=-1;
+    draw();
+    if (countIntersections()===0) {
+      document.getElementById('msg').textContent='🎉 Untangled!';
+      state.completed.add(state.level);
+      buildLevelSelect();
+      setTimeout(()=>{
+        const next=state.level+1;
+        if (!state.removeAds&&next%3===0&&window.Android) Android.showInterstitial();
+        if (next<=levelDefs.length) loadLevel(next);
+      },1200);
+    }
+  }
+});
+
+function checkWin() {
+  const n=countIntersections();
+  if (n===0) document.getElementById('msg').textContent='🎉 No crossings! Puzzle solved!';
+  else document.getElementById('msg').textContent=n+' crossing'+(n===1?'':'s')+' remaining.';
+}
+
+function resetLevel() { loadLevel(state.level); }
+
+function toggleLevelSelect() {
+  const ls=document.getElementById('level-select');
+  ls.style.display=ls.style.display==='flex'?'none':'flex';
+}
+
+function buildLevelSelect() {
+  const ls=document.getElementById('level-select');
+  ls.innerHTML='';
+  levelDefs.forEach((_,i)=>{
+    const b=document.createElement('button');
+    b.className='lvl-btn'+(state.completed.has(i+1)?' done':'');
+    b.textContent=i+1;
+    b.onclick=()=>{loadLevel(i+1);ls.style.display='none';};
+    ls.appendChild(b);
+  });
+}
+
+function removeAds() {
+  if (window.Android) Android.purchaseRemoveAds();
+  else { state.removeAds=true; document.getElementById('msg').textContent='Ads removed!'; }
+}
+window.onPurchaseComplete=function(){state.removeAds=true;};
+window.onAdMobLoaded=function(){};
+
+loadLevel(1);
+buildLevelSelect();
+</script>
+</body>
+</html>
