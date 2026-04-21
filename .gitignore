@@ -1,0 +1,26 @@
+# Signing credentials — never commit
+keystore.properties
+*.jks
+*.keystore
+
+# Android build outputs
+**/build/
+**/.gradle/
+**/*.apk
+**/*.aab
+**/local.properties
+
+# IDE
+.idea/
+**/*.iml
+.DS_Store
+
+# Python scripts (internal tooling)
+gen_store_assets.py
+gen_store_listings_1.py
+fix_gamehtml_ads.py
+fix_duplicate_handlers.py
+fix_duplicate2.py
+add_login_streak.py
+add_retention_features.py
+add_translations.py
