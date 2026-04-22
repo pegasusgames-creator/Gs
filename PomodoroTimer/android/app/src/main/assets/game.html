@@ -5,85 +5,508 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Pomodoro Timer</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
-  body{background:#1a0808;color:#ffe0e0;font-family:'Arial',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh;overflow:hidden}
-  h1{font-size:1.5rem;margin:12px 0 4px;color:#ff6060;letter-spacing:2px}
-  #mode-tabs{display:flex;gap:0;margin:8px 0 14px;background:#ffffff10;border-radius:12px;overflow:hidden}
-  .mode-tab{padding:8px 16px;font-size:0.8rem;cursor:pointer;color:#ff808066;transition:background 0.15s,color 0.15s}
-  .mode-tab.active{background:#ff404044;color:#ff8080}
-  #ring-wrap{position:relative;width:210px;height:210px;margin:0 auto 10px}
-  #ring-svg{transform:rotate(-90deg)}
-  #ring-bg{fill:none;stroke:#ffffff15;stroke-width:14}
-  #ring-fg{fill:none;stroke:#ff4040;stroke-width:14;stroke-linecap:round;transition:stroke-dashoffset 0.5s linear,stroke 0.5s}
-  #ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
-  #timer-display{font-size:3rem;font-weight:bold;color:#ff8080;text-shadow:0 0 20px #ff404066;font-variant-numeric:tabular-nums}
-  #timer-label{font-size:0.8rem;color:#ff808066;letter-spacing:2px;margin-top:2px}
-  #session-dots{display:flex;gap:8px;justify-content:center;margin:8px 0;min-height:18px}
-  .dot{width:13px;height:13px;border-radius:50%;background:#ffffff15}
-  .dot.done{background:#ff4040}
-  .dot.cur{background:#ff8040;animation:pulse 1s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-  .btn-row{display:flex;gap:12px;margin:8px 0}
-  .action-btn{border:none;border-radius:50px;padding:12px 30px;font-size:1rem;font-weight:bold;cursor:pointer;transition:transform 0.1s}
-  #start-btn{background:linear-gradient(135deg,#ff4040,#ff8040);color:#1a0808}
-  #skip-btn{background:#ffffff12;color:#ffe0e0;border:1px solid #ff404033}
-  .action-btn:active{transform:scale(0.94)}
-  #status-msg{font-size:0.88rem;color:#ff804066;min-height:1.3rem;margin-bottom:4px;text-align:center;padding:0 16px}
-  #stats-row{display:flex;gap:24px;margin-top:6px;font-size:0.8rem;color:#ff808066}
-  .stat{text-align:center}
-  .stat-num{font-size:1.4rem;font-weight:bold;color:#ff8080;display:block}
-  #remove-ads{position:fixed;top:8px;right:8px;background:#ffffff10;border:1px solid #ff404033;color:#ff804066;font-size:0.65rem;padding:4px 8px;border-radius:8px;cursor:pointer}
+:root{
+  --bg:#1a0606;--surface:#280a0a;--card:#340e0e;
+  --work:#ff4040;--brk:#40c080;--long:#4080ff;
+  --accent:#ff4040;--text:#ffe0e0;--muted:#886060;--border:#60202088;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{width:100%;height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;display:flex;flex-direction:column;height:100vh}
+
+.nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.nav-btn{flex:1;padding:11px 4px;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:none;border:none;cursor:pointer}
+.nav-btn.active{color:var(--accent);border-bottom:2px solid var(--accent)}
+
+.screen{flex:1;overflow-y:auto;display:none;min-height:0}
+.screen.active{display:flex;flex-direction:column}
+
+/* TIMER SCREEN */
+#timerScreen{align-items:center;padding:10px 14px 10px}
+.coins-row{display:flex;justify-content:flex-end;width:100%;margin-bottom:4px}
+.coins-badge{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:4px 10px;font-size:0.82rem;font-weight:700;color:var(--accent)}
+
+.mode-tabs{display:flex;gap:4px;margin-bottom:14px;background:var(--surface);border-radius:14px;padding:4px;width:100%}
+.mode-tab{flex:1;padding:8px 4px;font-size:0.72rem;font-weight:700;border-radius:10px;text-align:center;cursor:pointer;color:var(--muted);transition:all .2s}
+.mode-tab.work.active{background:var(--work);color:#fff}
+.mode-tab.short.active{background:var(--brk);color:#fff}
+.mode-tab.long.active{background:var(--long);color:#fff}
+
+.ring-wrap{position:relative;flex-shrink:0;margin:0 auto 10px}
+.ring-wrap svg{display:block}
+.ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.timer-display{font-size:3rem;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;text-shadow:0 0 24px var(--accent)44;line-height:1}
+.timer-mode-label{font-size:0.72rem;font-weight:700;color:var(--muted);letter-spacing:2px;margin-top:4px}
+
+.session-dots{display:flex;gap:8px;justify-content:center;margin-bottom:8px}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--card);border:1px solid var(--border)}
+.dot.done{background:var(--accent);border-color:var(--accent)}
+.dot.cur{background:var(--accent);border-color:var(--accent);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+.task-row{display:flex;align-items:center;gap:8px;width:100%;margin-bottom:8px}
+.task-input{flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:10px;font-size:0.82rem;outline:none}
+.task-input::placeholder{color:var(--muted)}
+
+.status-msg{font-size:0.82rem;color:var(--muted);text-align:center;min-height:18px;margin-bottom:6px}
+
+.btn-row{display:flex;gap:10px;width:100%}
+.big-btn{flex:1;border:none;border-radius:16px;padding:14px;font-size:1rem;font-weight:800;cursor:pointer;transition:transform .1s}
+.big-btn:active{transform:scale(.95)}
+.start-btn{background:linear-gradient(135deg,var(--work),#ff8040);color:#fff}
+.start-btn.brk-mode{background:linear-gradient(135deg,var(--brk),#80e0c0)}
+.start-btn.long-mode{background:linear-gradient(135deg,var(--long),#80c0ff)}
+.skip-btn{background:var(--surface);color:var(--muted);border:1px solid var(--border);flex:0;padding:14px 18px;border-radius:16px;font-size:0.8rem;font-weight:700;cursor:pointer}
+
+/* STATS SCREEN */
+#statsScreen{padding:12px 14px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center}
+.stat-val{font-size:2rem;font-weight:800;color:var(--accent)}
+.stat-label{font-size:0.7rem;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
+
+/* SETTINGS SCREEN */
+#settingsScreen{padding:12px 14px}
+.setting-row{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.setting-label{font-size:0.85rem;font-weight:700}
+.setting-sub{font-size:0.7rem;color:var(--muted);margin-top:2px}
+.setting-control{display:flex;align-items:center;gap:8px}
+.num-btn{background:var(--surface);border:1px solid var(--border);color:var(--text);width:30px;height:30px;border-radius:8px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.num-val{font-size:0.9rem;font-weight:700;color:var(--accent);min-width:28px;text-align:center}
+.toggle{width:44px;height:24px;background:var(--surface);border:1px solid var(--border);border-radius:12px;cursor:pointer;position:relative;transition:background .2s}
+.toggle.on{background:var(--accent);border-color:var(--accent)}
+.toggle-knob{width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:2px;left:3px;transition:left .2s}
+.toggle.on .toggle-knob{left:23px}
+
+/* SHOP SCREEN */
+#shopScreen{padding:12px 14px}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.theme-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;text-align:center;cursor:pointer}
+.theme-card.owned{border-color:var(--accent)}
+.theme-preview{height:40px;border-radius:8px;margin-bottom:6px}
+.theme-name{font-size:0.78rem;font-weight:700}
+.theme-price{font-size:0.68rem;color:var(--muted);margin-top:2px}
+
+#toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(12px);background:#222;color:#fff;padding:8px 18px;border-radius:16px;font-size:0.82rem;opacity:0;pointer-events:none;transition:all .3s;z-index:99;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
-<button id="remove-ads" onclick="Android.purchase('remove_ads')">Remove Ads</button>
-<h1>🍅 Pomodoro</h1>
-<div id="mode-tabs">
-  <div class="mode-tab active" onclick="setMode('work',this)">Work 25m</div>
-  <div class="mode-tab" onclick="setMode('short',this)">Break 5m</div>
-  <div class="mode-tab" onclick="setMode('long',this)">Long 15m</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="switchTab('timer')">Timer</button>
+  <button class="nav-btn" onclick="switchTab('stats')">Stats</button>
+  <button class="nav-btn" onclick="switchTab('settings')">Settings</button>
+  <button class="nav-btn" onclick="switchTab('shop')">Shop</button>
 </div>
-<div id="ring-wrap">
-  <svg id="ring-svg" width="210" height="210" viewBox="0 0 210 210">
-    <circle id="ring-bg" cx="105" cy="105" r="91"/>
-    <circle id="ring-fg" cx="105" cy="105" r="91"/>
-  </svg>
-  <div id="ring-center">
-    <div id="timer-display">25:00</div>
-    <div id="timer-label">FOCUS</div>
+
+<!-- TIMER -->
+<div class="screen active" id="timerScreen">
+  <div class="coins-row">
+    <div class="coins-badge">🪙 <span id="coinCount">0</span></div>
+  </div>
+
+  <div class="mode-tabs">
+    <div class="mode-tab work active" id="tab-work" onclick="setMode('work')">Focus</div>
+    <div class="mode-tab short" id="tab-short" onclick="setMode('short')">Short</div>
+    <div class="mode-tab long" id="tab-long" onclick="setMode('long')">Long</div>
+  </div>
+
+  <div class="ring-wrap" id="ringWrap">
+    <svg id="ringSvg" viewBox="0 0 220 220">
+      <circle id="ringBg" cx="110" cy="110" r="96" fill="none" stroke="#ffffff10" stroke-width="14"/>
+      <circle id="ringFg" cx="110" cy="110" r="96" fill="none" stroke="var(--work)" stroke-width="14"
+        stroke-linecap="round" stroke-dasharray="603" stroke-dashoffset="0"
+        style="transform:rotate(-90deg);transform-origin:110px 110px;transition:stroke-dashoffset .5s linear,stroke .4s"/>
+    </svg>
+    <div class="ring-center">
+      <div class="timer-display" id="timerDisplay">25:00</div>
+      <div class="timer-mode-label" id="modeLabel">FOCUS</div>
+    </div>
+  </div>
+
+  <div class="session-dots" id="sessionDots"></div>
+
+  <div class="task-row">
+    <input class="task-input" id="taskInput" type="text" placeholder="What are you working on?" maxlength="50">
+  </div>
+
+  <div class="status-msg" id="statusMsg">Stay focused. You got this!</div>
+
+  <div class="btn-row">
+    <button class="big-btn start-btn" id="startBtn" onclick="toggleTimer()">START</button>
+    <button class="skip-btn" onclick="skipSession()">Skip</button>
   </div>
 </div>
-<div id="session-dots"></div>
-<div id="status-msg">Stay focused. You got this! 💪</div>
-<div class="btn-row">
-  <button class="action-btn" id="start-btn" onclick="toggleTimer()">START</button>
-  <button class="action-btn" id="skip-btn" onclick="skipSession()">SKIP</button>
+
+<!-- STATS -->
+<div class="screen" id="statsScreen">
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="stat-poms">0</div><div class="stat-label">Pomodoros</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-mins">0m</div><div class="stat-label">Focus Time</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-today">0</div><div class="stat-label">Today</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-streak">0</div><div class="stat-label">Day Streak</div></div>
+  </div>
+  <button style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--muted);padding:10px;border-radius:10px;font-size:0.75rem;cursor:pointer" onclick="doPurchase('remove_ads')">Remove Ads — $2.99</button>
 </div>
-<div id="stats-row">
-  <div class="stat"><span class="stat-num" id="pomodoros-done">0</span>Pomodoros</div>
-  <div class="stat"><span class="stat-num" id="total-min">0</span>Min focused</div>
+
+<!-- SETTINGS -->
+<div class="screen" id="settingsScreen">
+  <div class="setting-row">
+    <div><div class="setting-label">Focus duration</div><div class="setting-sub">Minutes per session</div></div>
+    <div class="setting-control">
+      <button class="num-btn" onclick="adjustSetting('work',-1)">−</button>
+      <div class="num-val" id="set-work">25</div>
+      <button class="num-btn" onclick="adjustSetting('work',1)">+</button>
+    </div>
+  </div>
+  <div class="setting-row">
+    <div><div class="setting-label">Short break</div><div class="setting-sub">Minutes</div></div>
+    <div class="setting-control">
+      <button class="num-btn" onclick="adjustSetting('short',-1)">−</button>
+      <div class="num-val" id="set-short">5</div>
+      <button class="num-btn" onclick="adjustSetting('short',1)">+</button>
+    </div>
+  </div>
+  <div class="setting-row">
+    <div><div class="setting-label">Long break</div><div class="setting-sub">Minutes</div></div>
+    <div class="setting-control">
+      <button class="num-btn" onclick="adjustSetting('long',-1)">−</button>
+      <div class="num-val" id="set-long">15</div>
+      <button class="num-btn" onclick="adjustSetting('long',1)">+</button>
+    </div>
+  </div>
+  <div class="setting-row">
+    <div><div class="setting-label">Sessions before long break</div><div class="setting-sub">Pomodoros per cycle</div></div>
+    <div class="setting-control">
+      <button class="num-btn" onclick="adjustSetting('cycle',-1)">−</button>
+      <div class="num-val" id="set-cycle">4</div>
+      <button class="num-btn" onclick="adjustSetting('cycle',1)">+</button>
+    </div>
+  </div>
+  <div class="setting-row">
+    <div><div class="setting-label">Auto-start next</div><div class="setting-sub">Advance without tapping</div></div>
+    <div class="toggle" id="toggleAuto" onclick="toggleAutoStart()">
+      <div class="toggle-knob"></div>
+    </div>
+  </div>
 </div>
+
+<!-- SHOP -->
+<div class="screen" id="shopScreen">
+  <div style="font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px">Focus Themes</div>
+  <div class="theme-grid" id="themeGrid"></div>
+  <button style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;font-size:0.8rem;cursor:pointer;margin-bottom:6px" onclick="doPurchase('coins_small')">Buy 100 Coins — $0.99</button>
+  <button style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;font-size:0.8rem;cursor:pointer" onclick="doPurchase('coins_large')">Buy 500 Coins — $2.99</button>
+</div>
+
+<div id="toast"></div>
+
 <script>
-const MODES={work:{secs:1500,label:'FOCUS',color:'#ff4040',msg:'Stay focused. You got this! 💪'},short:{secs:300,label:'BREAK',color:'#40ff80',msg:'Take a short break! ☕'},long:{secs:900,label:'LONG BREAK',color:'#4080ff',msg:'Great work! Long break time. 🎉'}};
-const CIRC=2*Math.PI*91;
-let mode='work',totalSecs=1500,remaining=1500,running=false,interval=null,cyclePos=0;
-let sessions=parseInt(localStorage.getItem('pt_s')||'0'),focusMins=parseInt(localStorage.getItem('pt_m')||'0');
-document.getElementById('ring-fg').style.strokeDasharray=CIRC;
-renderDots();updateStats();updateDisplay();
-function setMode(m,btn){mode=m;document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');totalSecs=MODES[m].secs;remaining=totalSecs;if(running)stopTimer();document.getElementById('ring-fg').style.stroke=MODES[m].color;document.getElementById('timer-label').textContent=MODES[m].label;document.getElementById('status-msg').textContent=MODES[m].msg;document.getElementById('start-btn').textContent='START';updateDisplay();}
-function toggleTimer(){if(running){stopTimer();document.getElementById('start-btn').textContent='RESUME';}else startTimer();}
-function startTimer(){running=true;document.getElementById('start-btn').textContent='PAUSE';interval=setInterval(tick,1000);}
-function stopTimer(){running=false;clearInterval(interval);}
-function skipSession(){stopTimer();finishSession();}
-function tick(){remaining--;updateDisplay();if(remaining<=0){stopTimer();finishSession();}}
-function finishSession(){
-  if(mode==='work'){sessions++;focusMins+=25;cyclePos=(cyclePos+1)%4;localStorage.setItem('pt_s',sessions);localStorage.setItem('pt_m',focusMins);updateStats();renderDots();document.getElementById('status-msg').textContent='✅ Pomodoro done! Take a break.';if(navigator.vibrate)navigator.vibrate([300,150,300]);if(window.Android)Android.showInterstitial();setTimeout(()=>{if(cyclePos===0)setMode('long',document.querySelectorAll('.mode-tab')[2]);else setMode('short',document.querySelectorAll('.mode-tab')[1]);},1800);}
-  else{document.getElementById('status-msg').textContent='⏰ Break over! Time to focus.';if(navigator.vibrate)navigator.vibrate([200,100,200,100,200]);setTimeout(()=>setMode('work',document.querySelectorAll('.mode-tab')[0]),1800);}
+const THEMES = [
+  {id:'tomato', name:'Tomato',  price:0,   bg:'#1a0606', surface:'#280a0a', card:'#340e0e', work:'#ff4040', brk:'#40c080', long:'#4080ff', text:'#ffe0e0', muted:'#886060'},
+  {id:'ocean',  name:'Ocean',  price:80,  bg:'#020f1a', surface:'#041a28', card:'#062030', work:'#00b4d8', brk:'#48cae4', long:'#90e0ef', text:'#caf0f8', muted:'#407080'},
+  {id:'forest', name:'Forest', price:80,  bg:'#060f06', surface:'#0a1a0a', card:'#0e240e', work:'#52b788', brk:'#74c69d', long:'#95d5b2', text:'#d8f3dc', muted:'#507050'},
+  {id:'night',  name:'Night',  price:120, bg:'#070714', surface:'#0e0e20', card:'#14142c', work:'#7c4dff', brk:'#b388ff', long:'#4fc3f7', text:'#e0d0ff', muted:'#504070'},
+  {id:'sunset', name:'Sunset', price:120, bg:'#1a0a00', surface:'#281200', card:'#341800', work:'#ff6b35', brk:'#ffd166', long:'#06d6a0', text:'#ffeedd', muted:'#806040'},
+  {id:'mono',   name:'Mono',   price:160, bg:'#0a0a0a', surface:'#141414', card:'#1e1e1e', work:'#ffffff', brk:'#aaaaaa', long:'#666666', text:'#ffffff', muted:'#666666'},
+];
+
+let _settings = {work:25, short:5, long:15, cycle:4, autoStart:false};
+let _coins = 0, _adsRemoved = false;
+let _unlockedThemes = ['tomato'];
+let _activeTheme = 'tomato';
+let _stats = {pomodoros:0, focusMins:0, today:0, todayDate:'', streak:0, lastDate:''};
+
+let _mode = 'work';
+let _totalSecs = 1500;
+let _remaining = 1500;
+let _running = false;
+let _cyclePos = 0;
+let _interval = null;
+const CIRC = 2 * Math.PI * 96;
+
+function save() {
+  localStorage.setItem('pm_coins', _coins);
+  localStorage.setItem('pm_ads', _adsRemoved);
+  localStorage.setItem('pm_themes', JSON.stringify(_unlockedThemes));
+  localStorage.setItem('pm_theme', _activeTheme);
+  localStorage.setItem('pm_stats', JSON.stringify(_stats));
+  localStorage.setItem('pm_settings', JSON.stringify(_settings));
 }
-function updateDisplay(){const m=Math.floor(remaining/60),s=remaining%60;document.getElementById('timer-display').textContent=m+':'+(s<10?'0':'')+s;const pct=totalSecs>0?remaining/totalSecs:1;document.getElementById('ring-fg').style.strokeDashoffset=CIRC*(1-pct);}
-function renderDots(){const row=document.getElementById('session-dots');row.innerHTML='';for(let i=0;i<4;i++){const d=document.createElement('div');d.className='dot'+(i<cyclePos?' done':i===cyclePos&&mode==='work'?' cur':'');row.appendChild(d);}}
-function updateStats(){document.getElementById('pomodoros-done').textContent=sessions;document.getElementById('total-min').textContent=focusMins;}
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){document.getElementById('remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+function load() {
+  _coins = +localStorage.getItem('pm_coins') || 0;
+  _adsRemoved = localStorage.getItem('pm_ads') === 'true';
+  try { _unlockedThemes = JSON.parse(localStorage.getItem('pm_themes')) || ['tomato']; } catch(e){}
+  _activeTheme = localStorage.getItem('pm_theme') || 'tomato';
+  try { _stats = {..._stats, ...JSON.parse(localStorage.getItem('pm_stats'))}; } catch(e){}
+  try { _settings = {..._settings, ...JSON.parse(localStorage.getItem('pm_settings'))}; } catch(e){}
+}
+
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const r = document.documentElement.style;
+  r.setProperty('--bg', t.bg);
+  r.setProperty('--surface', t.surface);
+  r.setProperty('--card', t.card);
+  r.setProperty('--work', t.work);
+  r.setProperty('--brk', t.brk);
+  r.setProperty('--long', t.long);
+  r.setProperty('--text', t.text);
+  r.setProperty('--muted', t.muted);
+  document.body.style.background = t.bg;
+  updateAccent();
+}
+
+function updateAccent() {
+  const color = _mode === 'work' ? 'var(--work)' : _mode === 'short' ? 'var(--brk)' : 'var(--long)';
+  document.documentElement.style.setProperty('--accent', _mode === 'work' ?
+    getComputedStyle(document.documentElement).getPropertyValue('--work').trim() :
+    _mode === 'short' ? getComputedStyle(document.documentElement).getPropertyValue('--brk').trim() :
+    getComputedStyle(document.documentElement).getPropertyValue('--long').trim());
+}
+
+function updateCoinDisplay() { document.getElementById('coinCount').textContent = _coins; }
+
+function switchTab(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(name + 'Screen').classList.add('active');
+  const idx = ['timer','stats','settings','shop'].indexOf(name);
+  if (idx >= 0) document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  if (name === 'stats') renderStats();
+  if (name === 'shop') renderShop();
+  if (name === 'settings') renderSettings();
+}
+
+function getModeSecs(m) {
+  if (m === 'work') return _settings.work * 60;
+  if (m === 'short') return _settings.short * 60;
+  return _settings.long * 60;
+}
+
+function setMode(m) {
+  stopTimer();
+  _mode = m;
+  _totalSecs = getModeSecs(m);
+  _remaining = _totalSecs;
+  document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + m).classList.add('active');
+  const ringFg = document.getElementById('ringFg');
+  ringFg.style.stroke = m === 'work' ? 'var(--work)' : m === 'short' ? 'var(--brk)' : 'var(--long)';
+  document.getElementById('modeLabel').textContent = m === 'work' ? 'FOCUS' : m === 'short' ? 'SHORT BREAK' : 'LONG BREAK';
+  const sb = document.getElementById('startBtn');
+  sb.className = 'big-btn start-btn' + (m !== 'work' ? (m === 'short' ? ' brk-mode' : ' long-mode') : '');
+  sb.textContent = 'START';
+  document.getElementById('statusMsg').textContent = m === 'work' ? 'Stay focused. You got this!' :
+    m === 'short' ? 'Take a short break!' : 'Great work! Long break time.';
+  updateDisplay();
+  renderDots();
+}
+
+function toggleTimer() {
+  if (_running) { stopTimer(); document.getElementById('startBtn').textContent = 'RESUME'; }
+  else { startTimer(); }
+}
+
+function startTimer() {
+  _running = true;
+  document.getElementById('startBtn').textContent = 'PAUSE';
+  _interval = setInterval(tick, 1000);
+}
+
+function stopTimer() {
+  _running = false;
+  clearInterval(_interval);
+  _interval = null;
+}
+
+function skipSession() { stopTimer(); finishSession(); }
+
+function tick() {
+  _remaining--;
+  updateDisplay();
+  if (_remaining <= 0) { stopTimer(); finishSession(); }
+}
+
+function updateDisplay() {
+  const m = Math.floor(_remaining / 60), s = _remaining % 60;
+  document.getElementById('timerDisplay').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  const pct = _totalSecs > 0 ? _remaining / _totalSecs : 0;
+  document.getElementById('ringFg').style.strokeDashoffset = CIRC * (1 - pct);
+}
+
+function finishSession() {
+  playBeep(_mode === 'work');
+  if (_mode === 'work') {
+    _cyclePos = (_cyclePos + 1) % _settings.cycle;
+    _stats.pomodoros++;
+    _stats.focusMins += _settings.work;
+    const today = new Date().toDateString();
+    if (_stats.todayDate !== today) { _stats.todayDate = today; _stats.today = 0; }
+    _stats.today++;
+    // streak
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    if (_stats.lastDate === yesterday || _stats.lastDate === today) {
+      if (_stats.lastDate !== today) _stats.streak++;
+    } else if (_stats.lastDate !== today) { _stats.streak = 1; }
+    _stats.lastDate = today;
+    const reward = 5;
+    _coins += reward;
+    _stats.coinsEarned = (_stats.coinsEarned || 0) + reward;
+    save();
+    updateCoinDisplay();
+    renderDots();
+    document.getElementById('statusMsg').textContent = 'Pomodoro complete! +' + reward + ' coins';
+    if (!_adsRemoved && typeof Android !== 'undefined') try { Android.showInterstitial(); } catch(e){}
+    setTimeout(() => {
+      const nextMode = _cyclePos === 0 ? 'long' : 'short';
+      setMode(nextMode);
+      if (_settings.autoStart) startTimer();
+    }, 1800);
+  } else {
+    document.getElementById('statusMsg').textContent = 'Break over! Time to focus.';
+    setTimeout(() => {
+      setMode('work');
+      if (_settings.autoStart) startTimer();
+    }, 1800);
+  }
+}
+
+let _ac = null;
+function playBeep(isWork) {
+  try {
+    if (!_ac) _ac = new (window.AudioContext || window.webkitAudioContext)();
+    const freqs = isWork ? [880, 660, 880] : [660, 880];
+    freqs.forEach((freq, i) => {
+      const osc = _ac.createOscillator(), gain = _ac.createGain();
+      osc.connect(gain); gain.connect(_ac.destination);
+      osc.type = 'sine'; osc.frequency.value = freq;
+      const t = _ac.currentTime + i * 0.3;
+      gain.gain.setValueAtTime(0.3, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+      osc.start(t); osc.stop(t + 0.25);
+    });
+  } catch(e) {}
+}
+
+function renderDots() {
+  const row = document.getElementById('sessionDots');
+  row.innerHTML = '';
+  for (let i = 0; i < _settings.cycle; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i < _cyclePos ? ' done' : (i === _cyclePos && _mode === 'work' ? ' cur' : ''));
+    row.appendChild(d);
+  }
+}
+
+function renderStats() {
+  const h = Math.floor(_stats.focusMins / 60), m = _stats.focusMins % 60;
+  document.getElementById('stat-poms').textContent = _stats.pomodoros;
+  document.getElementById('stat-mins').textContent = _stats.focusMins >= 60 ? h + 'h' : _stats.focusMins + 'm';
+  document.getElementById('stat-today').textContent = _stats.today || 0;
+  document.getElementById('stat-streak').textContent = _stats.streak || 0;
+}
+
+function renderSettings() {
+  document.getElementById('set-work').textContent = _settings.work;
+  document.getElementById('set-short').textContent = _settings.short;
+  document.getElementById('set-long').textContent = _settings.long;
+  document.getElementById('set-cycle').textContent = _settings.cycle;
+  const tog = document.getElementById('toggleAuto');
+  tog.classList.toggle('on', _settings.autoStart);
+}
+
+function adjustSetting(key, delta) {
+  const mins = {work:[5,60], short:[1,30], long:[5,60], cycle:[2,8]};
+  const [min, max] = mins[key];
+  if (key === 'cycle') { _settings.cycle = Math.min(max, Math.max(min, _settings.cycle + delta)); }
+  else { _settings[key] = Math.min(max, Math.max(min, _settings[key] + delta)); }
+  renderSettings();
+  save();
+  if (_mode === key || (key === 'work' && _mode === 'work')) {
+    _totalSecs = getModeSecs(_mode);
+    _remaining = _totalSecs;
+    updateDisplay();
+  }
+}
+
+function toggleAutoStart() {
+  _settings.autoStart = !_settings.autoStart;
+  renderSettings();
+  save();
+}
+
+function renderShop() {
+  const grid = document.getElementById('themeGrid');
+  grid.innerHTML = '';
+  THEMES.forEach(th => {
+    const owned = _unlockedThemes.includes(th.id);
+    const div = document.createElement('div');
+    div.className = 'theme-card' + (owned ? ' owned' : '');
+    div.innerHTML = `<div class="theme-preview" style="background:linear-gradient(135deg,${th.work},${th.brk},${th.long})"></div><div class="theme-name" style="color:${th.work}">${th.name}</div><div class="theme-price">${owned?(_activeTheme===th.id?'Active':'Owned'):(th.price===0?'Free':th.price+' coins')}</div>`;
+    div.addEventListener('click', () => selectTheme(th));
+    grid.appendChild(div);
+  });
+}
+
+function selectTheme(th) {
+  if (!_unlockedThemes.includes(th.id)) {
+    if (th.price === 0) { _unlockedThemes.push(th.id); save(); }
+    else if (_coins >= th.price) { _coins -= th.price; _unlockedThemes.push(th.id); save(); updateCoinDisplay(); }
+    else { showToast('Need ' + th.price + ' coins'); return; }
+  }
+  _activeTheme = th.id;
+  applyTheme(th.id);
+  save();
+  renderShop();
+  showToast(th.name + ' theme applied');
+}
+
+function doPurchase(id) {
+  if (typeof Android !== 'undefined') try { Android.purchase(id); } catch(e){}
+  else showToast('Purchases not available here');
+}
+
+window.onPurchaseComplete = function(id) {
+  if (id === 'remove_ads') {
+    _adsRemoved = true;
+    if (typeof Android !== 'undefined') try { Android.hideBannerAd(); } catch(e){}
+    showToast('Ads removed. Thank you!');
+  } else if (id === 'coins_small') { _coins += 100; showToast('+100 coins!'); }
+  else if (id === 'coins_large') { _coins += 500; showToast('+500 coins!'); }
+  save(); updateCoinDisplay();
+};
+
+let _toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+// resize ring to fit
+function resizeRing() {
+  const screen = document.getElementById('timerScreen');
+  const available = screen.clientHeight - 320;
+  const size = Math.min(Math.max(available, 160), 260);
+  const wrap = document.getElementById('ringWrap');
+  wrap.style.width = size + 'px';
+  wrap.style.height = size + 'px';
+  document.getElementById('ringSvg').setAttribute('width', size);
+  document.getElementById('ringSvg').setAttribute('height', size);
+}
+
+load();
+applyTheme(_activeTheme);
+updateCoinDisplay();
+document.getElementById('ringFg').style.strokeDasharray = CIRC;
+setMode('work');
+resizeRing();
+window.addEventListener('resize', resizeRing);
+
+if (!_adsRemoved && typeof Android !== 'undefined') try { Android.showBannerAd(); } catch(e){}
 </script>
 </body>
 </html>
