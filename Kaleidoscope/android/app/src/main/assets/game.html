@@ -2,166 +2,378 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Kaleidoscope</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-:root{--bg:#0f0a1a;--accent:#E040FB;--text:#eaeaea;--muted:#664477;--radius:10px;}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;}
-#app{display:flex;flex-direction:column;height:100%;}
-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;flex-shrink:0;}
-header h1{font-size:1.2rem;font-weight:700;}header h1 span{color:var(--accent);}
-#canvas{display:block;width:100%;touch-action:none;}
-#controls{flex-shrink:0;padding:6px 10px;display:flex;flex-direction:column;gap:6px;}
-.row{display:flex;gap:6px;align-items:center;}
-.btn{background:#1a0f2a;border:1px solid #442255;color:var(--text);padding:8px 12px;border-radius:var(--radius);font-size:0.78rem;cursor:pointer;touch-action:manipulation;flex-shrink:0;}
-.btn.active,.btn:active{background:var(--accent);color:#000;border-color:var(--accent);}
-.btn.btn-pressed{transform:scale(0.92);}
-label{font-size:0.75rem;color:var(--muted);flex-shrink:0;}
-input[type=range]{flex:1;accent-color:var(--accent);}
-#banner{height:50px;background:#111;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.75rem;flex-shrink:0;}
+:root{
+  --bg:#0a0614;--surface:#140a22;--card:#1e1030;
+  --accent:#e040fb;--accent2:#7c4dff;
+  --text:#eaeaea;--muted:#8860aa;--border:#44226688;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{width:100%;height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;display:flex;flex-direction:column}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border)}
+.topbar-title{font-size:1.1rem;font-weight:800;color:var(--accent)}
+.coins-badge{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:4px 10px;font-size:0.82rem;font-weight:700;color:var(--accent)}
+
+.canvas-wrap{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;min-height:0}
+#canvas{display:block;touch-action:none}
+
+.controls{flex-shrink:0;padding:8px 12px;background:var(--surface);border-top:1px solid var(--border);display:flex;flex-direction:column;gap:7px}
+.ctrl-row{display:flex;gap:6px;align-items:center}
+.chip{background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 12px;border-radius:20px;font-size:0.72rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap}
+.chip.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.chip:active{transform:scale(.93)}
+.ctrl-label{font-size:0.7rem;color:var(--muted);flex-shrink:0;min-width:36px}
+input[type=range]{flex:1;accent-color:var(--accent);height:24px}
+
+.modal{position:fixed;inset:0;background:#0009;z-index:50;display:none;align-items:center;justify-content:center}
+.modal.show{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px;width:calc(100% - 32px);max-width:340px;max-height:80vh;overflow-y:auto}
+.modal-title{font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:12px}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.theme-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;cursor:pointer}
+.theme-card.owned{border-color:var(--accent)}
+.theme-preview{height:40px;border-radius:8px;margin-bottom:6px}
+.theme-name{font-size:0.75rem;font-weight:700}
+.theme-price{font-size:0.68rem;color:var(--muted);margin-top:2px}
+.modal-close{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;margin-top:12px;cursor:pointer;font-size:0.85rem}
+
+#toast{position:fixed;bottom:180px;left:50%;transform:translateX(-50%) translateY(12px);background:#222;color:#fff;padding:8px 18px;border-radius:16px;font-size:0.82rem;opacity:0;pointer-events:none;transition:all .3s;z-index:99;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
-<button id="btn-remove-ads" onclick="if(window.Android)Android.purchase('remove_ads')" style="position:fixed;top:8px;right:8px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:0.65rem;font-weight:700;padding:5px 10px;border-radius:20px;cursor:pointer;z-index:9999;letter-spacing:0.5px">Remove Ads</button>
-<div id="app">
-  <header><h1>Kaleido<span>scope</span></h1></header>
-  <canvas id="canvas"></canvas>
-  <div id="controls">
-    <div class="row">
-      <button class="btn active" id="btn-rainbow">Rainbow</button>
-      <button class="btn" id="btn-sunset">Sunset</button>
-      <button class="btn" id="btn-ocean">Ocean</button>
-      <button class="btn" id="btn-fire">Fire</button>
-      <button class="btn" id="btn-clear">Clear</button>
-    </div>
-    <div class="row">
-      <label>Size</label>
-      <input type="range" id="brush-size" min="2" max="18" value="6">
-    </div>
+
+<div class="topbar">
+  <div class="topbar-title">Kaleidoscope</div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button style="background:var(--card);border:1px solid var(--border);color:var(--accent);padding:5px 10px;border-radius:14px;font-size:0.7rem;font-weight:700;cursor:pointer" onclick="openShop()">Themes</button>
+    <div class="coins-badge">🪙 <span id="coinCount">0</span></div>
   </div>
-  <div id="banner">Ad Banner</div>
 </div>
+
+<div class="canvas-wrap">
+  <canvas id="canvas"></canvas>
+</div>
+
+<div class="controls">
+  <div class="ctrl-row">
+    <span class="ctrl-label">Palette</span>
+    <div id="palette-row" style="display:flex;gap:5px;overflow-x:auto;flex:1;padding-bottom:2px"></div>
+  </div>
+  <div class="ctrl-row">
+    <span class="ctrl-label">Fold</span>
+    <div id="fold-row" style="display:flex;gap:5px"></div>
+    <button class="chip" id="autoBtn" onclick="toggleAuto()">Auto</button>
+    <button class="chip" style="background:var(--card);color:var(--muted)" onclick="clearCanvas()">Clear</button>
+  </div>
+  <div class="ctrl-row">
+    <span class="ctrl-label">Brush</span>
+    <input type="range" id="brushSize" min="2" max="20" value="6">
+    <span class="ctrl-label" style="text-align:right" id="brushVal">6</span>
+  </div>
+</div>
+
+<!-- Shop Modal -->
+<div class="modal" id="shopModal">
+  <div class="modal-box">
+    <div class="modal-title">Colour Palettes</div>
+    <div class="theme-grid" id="themeGrid"></div>
+    <div style="margin-top:12px">
+      <button style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;cursor:pointer;font-size:0.8rem;margin-bottom:6px" onclick="doPurchase('coins_small')">Buy 100 Coins — $0.99</button>
+      <button style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;cursor:pointer;font-size:0.8rem;margin-bottom:6px" onclick="doPurchase('coins_large')">Buy 500 Coins — $2.99</button>
+      <button style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--muted);padding:10px;border-radius:10px;cursor:pointer;font-size:0.75rem" onclick="doPurchase('remove_ads')">Remove Ads — $2.99</button>
+    </div>
+    <button class="modal-close" onclick="closeShop()">Close</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
 <script>
-const canvas=document.getElementById('canvas');
-const ctx=canvas.getContext('2d');
-let hue=0,isDrawing=false,lastX=null,lastY=null;
-let colorMode='rainbow';
-const SCHEMES={
-  rainbow:()=>`hsl(${hue},100%,65%)`,
-  sunset:()=>`hsl(${(hue%80)+0},90%,60%)`,
-  ocean:()=>`hsl(${180+(hue%60)},90%,60%)`,
-  fire:()=>`hsl(${(hue%50)},100%,55%)`
-};
+const PALETTES = [
+  {id:'rainbow',  name:'Rainbow', price:0,   fn:(h)=>`hsl(${h},100%,65%)`},
+  {id:'sunset',   name:'Sunset',  price:0,   fn:(h)=>`hsl(${(h%80)+10},90%,62%)`},
+  {id:'ocean',    name:'Ocean',   price:60,  fn:(h)=>`hsl(${180+(h%80)},90%,62%)`},
+  {id:'fire',     name:'Fire',    price:60,  fn:(h)=>`hsl(${(h%55)},100%,58%)`},
+  {id:'neon',     name:'Neon',    price:100, fn:(h)=>`hsl(${(h*2)%360},100%,70%)`},
+  {id:'pastel',   name:'Pastel',  price:100, fn:(h)=>`hsl(${h},60%,80%)`},
+  {id:'mono',     name:'Mono',    price:140, fn:(h)=>`hsl(270,${40+(h%50)}%,${50+(h%30)}%)`},
+  {id:'gold',     name:'Gold',    price:140, fn:(h)=>`hsl(${40+(h%30)},${80+(h%20)}%,${50+(h%20)}%)`},
+];
 
-function resize(){
-  const size=Math.min(window.innerWidth,window.innerHeight-160);
-  canvas.width=size;canvas.height=size;
-  canvas.style.width=size+'px';canvas.style.height=size+'px';
-  canvas.style.margin='0 auto';canvas.style.display='block';
+const FOLDS = [2, 4, 6, 8, 12];
+
+let _coins = 0, _adsRemoved = false;
+let _unlockedPalettes = ['rainbow','sunset'];
+let _palette = 'rainbow';
+let _folds = 8;
+let _brushSize = 6;
+let _hue = 0;
+let _isDrawing = false, _lastX = null, _lastY = null;
+let _autoMode = false, _autoRaf = null;
+let _autoAngle = 0, _autoRadius = 0, _autoDir = 1, _autoRadDir = 1;
+let _drawCount = 0;
+
+function save() {
+  localStorage.setItem('kk_coins', _coins);
+  localStorage.setItem('kk_ads', _adsRemoved);
+  localStorage.setItem('kk_unlocked', JSON.stringify(_unlockedPalettes));
+  localStorage.setItem('kk_palette', _palette);
+  localStorage.setItem('kk_folds', _folds);
 }
-resize();window.addEventListener('resize',resize);
+function load() {
+  _coins = +localStorage.getItem('kk_coins') || 0;
+  _adsRemoved = localStorage.getItem('kk_ads') === 'true';
+  try { _unlockedPalettes = JSON.parse(localStorage.getItem('kk_unlocked')) || ['rainbow','sunset']; } catch(e){}
+  _palette = localStorage.getItem('kk_palette') || 'rainbow';
+  _folds = +localStorage.getItem('kk_folds') || 8;
+}
 
-function drawMirrored(x,y,px,py){
-  const cx=canvas.width/2,cy=canvas.height/2;
-  const segments=8;
-  const color=SCHEMES[colorMode]();
-  const size=parseInt(document.getElementById('brush-size').value);
-  ctx.lineWidth=size;ctx.lineCap='round';
-  for(let i=0;i<segments;i++){
-    const angle=(Math.PI*2/segments)*i;
+function updateCoinDisplay() {
+  document.getElementById('coinCount').textContent = _coins;
+}
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  const wrap = canvas.parentElement;
+  const size = Math.min(wrap.clientWidth, wrap.clientHeight);
+  canvas.width = size;
+  canvas.height = size;
+}
+
+function getPaletteColor() {
+  const p = PALETTES.find(x => x.id === _palette) || PALETTES[0];
+  return p.fn(_hue);
+}
+
+function drawSegment(x, y, px, py) {
+  const cx = canvas.width / 2, cy = canvas.height / 2;
+  const color = getPaletteColor();
+  ctx.lineWidth = _brushSize;
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.88;
+  for (let i = 0; i < _folds; i++) {
+    const angle = (Math.PI * 2 / _folds) * i;
     ctx.save();
-    ctx.translate(cx,cy);ctx.rotate(angle);
-    if(i%2===1)ctx.scale(-1,1);
-    ctx.strokeStyle=color;
-    ctx.globalAlpha=0.85;
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+    if (i % 2 === 1) ctx.scale(-1, 1);
     ctx.beginPath();
-    if(px!==null){
-      ctx.moveTo(px-cx,py-cy);
-      ctx.lineTo(x-cx,y-cy);
-    }else{
-      ctx.arc(x-cx,y-cy,size/2,0,Math.PI*2);
-      ctx.fillStyle=color;ctx.fill();
+    if (px !== null) {
+      ctx.moveTo(px - cx, py - cy);
+      ctx.lineTo(x - cx, y - cy);
+    } else {
+      ctx.arc(x - cx, y - cy, _brushSize / 2, 0, Math.PI * 2);
+      ctx.fill();
     }
     ctx.stroke();
     ctx.restore();
   }
-  ctx.globalAlpha=1;
-  hue=(hue+1)%360;
+  ctx.globalAlpha = 1;
+  _hue = (_hue + 1) % 360;
 }
 
-canvas.addEventListener('touchstart',e=>{
-  e.preventDefault();isDrawing=true;lastX=null;lastY=null;
-  const r=canvas.getBoundingClientRect();
-  const t=e.touches[0];
-  drawMirrored(t.clientX-r.left,t.clientY-r.top,null,null);
-},{passive:false});
-canvas.addEventListener('touchmove',e=>{
-  e.preventDefault();if(!isDrawing)return;
-  const r=canvas.getBoundingClientRect();
-  const t=e.touches[0];
-  const x=t.clientX-r.left,y=t.clientY-r.top;
-  drawMirrored(x,y,lastX,lastY);
-  lastX=x;lastY=y;
-},{passive:false});
-canvas.addEventListener('touchend',()=>{isDrawing=false;lastX=null;lastY=null;});
+function clearCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  _drawCount = 0;
+}
 
-canvas.addEventListener('mousedown',e=>{
-  isDrawing=true;lastX=null;lastY=null;
-  const r=canvas.getBoundingClientRect();
-  drawMirrored(e.clientX-r.left,e.clientY-r.top,null,null);
-});
-canvas.addEventListener('mousemove',e=>{
-  if(!isDrawing)return;
-  const r=canvas.getBoundingClientRect();
-  const x=e.clientX-r.left,y=e.clientY-r.top;
-  drawMirrored(x,y,lastX,lastY);
-  lastX=x;lastY=y;
-});
-canvas.addEventListener('mouseup',()=>{isDrawing=false;lastX=null;lastY=null;});
+function rewardCoin() {
+  _drawCount++;
+  if (_drawCount % 50 === 0) {
+    _coins++;
+    save();
+    updateCoinDisplay();
+    showToast('+1 coin');
+  }
+}
 
-['rainbow','sunset','ocean','fire'].forEach(s=>{
-  document.getElementById('btn-'+s).addEventListener('click',function(){
-    colorMode=s;
-    document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));
-    this.classList.add('active');
+// Touch/mouse
+function getPos(e) {
+  const r = canvas.getBoundingClientRect();
+  const src = e.touches ? e.touches[0] : e;
+  return [src.clientX - r.left, src.clientY - r.top];
+}
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  _isDrawing = true; _lastX = null; _lastY = null;
+  const [x, y] = getPos(e);
+  drawSegment(x, y, null, null);
+  rewardCoin();
+}, {passive: false});
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (!_isDrawing) return;
+  const [x, y] = getPos(e);
+  drawSegment(x, y, _lastX, _lastY);
+  _lastX = x; _lastY = y;
+  rewardCoin();
+}, {passive: false});
+
+canvas.addEventListener('touchend', () => { _isDrawing = false; _lastX = null; _lastY = null; });
+
+canvas.addEventListener('mousedown', e => {
+  _isDrawing = true; _lastX = null; _lastY = null;
+  const [x, y] = getPos(e);
+  drawSegment(x, y, null, null);
+});
+canvas.addEventListener('mousemove', e => {
+  if (!_isDrawing) return;
+  const [x, y] = getPos(e);
+  drawSegment(x, y, _lastX, _lastY);
+  _lastX = x; _lastY = y;
+});
+canvas.addEventListener('mouseup', () => { _isDrawing = false; _lastX = null; _lastY = null; });
+
+// Auto-draw mode
+function toggleAuto() {
+  _autoMode = !_autoMode;
+  document.getElementById('autoBtn').classList.toggle('active', _autoMode);
+  if (_autoMode) runAuto();
+  else if (_autoRaf) { cancelAnimationFrame(_autoRaf); _autoRaf = null; }
+}
+
+function runAuto() {
+  let px = null, py = null;
+  const cx = canvas.width / 2, cy = canvas.height / 2;
+  let speed = 1.5;
+  let radiusMax = Math.min(cx, cy) * 0.9;
+
+  function step() {
+    if (!_autoMode) return;
+    _autoAngle += speed * 0.04;
+    _autoRadius += _autoRadDir * 0.8;
+    if (_autoRadius > radiusMax || _autoRadius < 10) {
+      _autoRadDir *= -1;
+      if (_autoRadius < 10) { _autoRadius = 10; }
+    }
+    const nx = cx + Math.cos(_autoAngle) * _autoRadius;
+    const ny = cy + Math.sin(_autoAngle * 1.3) * _autoRadius;
+    drawSegment(nx, ny, px, py);
+    px = nx; py = ny;
+    rewardCoin();
+    _autoRaf = requestAnimationFrame(step);
+  }
+  _autoRaf = requestAnimationFrame(step);
+}
+
+// Controls setup
+function renderPaletteRow() {
+  const row = document.getElementById('palette-row');
+  row.innerHTML = '';
+  PALETTES.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'chip' + (p.id === _palette ? ' active' : '');
+    btn.style.opacity = _unlockedPalettes.includes(p.id) ? '1' : '0.45';
+    btn.textContent = p.name;
+    btn.addEventListener('click', () => {
+      if (!_unlockedPalettes.includes(p.id)) { showToast('Unlock in Themes shop'); return; }
+      _palette = p.id;
+      save();
+      renderPaletteRow();
+    });
+    row.appendChild(btn);
   });
-});
-document.getElementById('btn-clear').addEventListener('click',function(){
-  this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-});
-
-// ── AppLovin MAX / IAP bridge ──────────────────────────────────────────
-var _adsRemoved = false;
-var _interstitialCount = 0;
-
-function _showInterstitial() {
-  if (_adsRemoved) return;
-  _interstitialCount++;
-  if (_interstitialCount % 3 === 0 && window.Android) {
-    try { Android.showInterstitial(); } catch(e) {}
-  }
 }
 
-window.onPurchaseComplete = function(sku) {
-  if (sku === 'remove_ads') {
+function renderFoldRow() {
+  const row = document.getElementById('fold-row');
+  row.innerHTML = '';
+  FOLDS.forEach(f => {
+    const btn = document.createElement('button');
+    btn.className = 'chip' + (f === _folds ? ' active' : '');
+    btn.textContent = f + 'x';
+    btn.addEventListener('click', () => {
+      _folds = f;
+      save();
+      renderFoldRow();
+    });
+    row.appendChild(btn);
+  });
+}
+
+// Brush size
+const brushSlider = document.getElementById('brushSize');
+brushSlider.addEventListener('input', () => {
+  _brushSize = parseInt(brushSlider.value);
+  document.getElementById('brushVal').textContent = _brushSize;
+});
+
+// Shop
+function openShop() {
+  renderThemeGrid();
+  document.getElementById('shopModal').classList.add('show');
+}
+function closeShop() {
+  document.getElementById('shopModal').classList.remove('show');
+}
+function renderThemeGrid() {
+  const grid = document.getElementById('themeGrid');
+  grid.innerHTML = '';
+  PALETTES.forEach(p => {
+    const owned = _unlockedPalettes.includes(p.id);
+    const div = document.createElement('div');
+    div.className = 'theme-card' + (owned ? ' owned' : '');
+    const preview = `background:linear-gradient(135deg,${p.fn(0)},${p.fn(120)},${p.fn(240)})`;
+    div.innerHTML = `<div class="theme-preview" style="${preview}"></div><div class="theme-name">${p.name}</div><div class="theme-price">${owned?(p.id===_palette?'Active':'Owned'):(p.price===0?'Free':p.price+' coins')}</div>`;
+    div.addEventListener('click', () => {
+      if (!owned) {
+        if (p.price === 0) { _unlockedPalettes.push(p.id); save(); }
+        else if (_coins >= p.price) { _coins -= p.price; _unlockedPalettes.push(p.id); save(); updateCoinDisplay(); }
+        else { showToast('Need ' + p.price + ' coins'); return; }
+      }
+      _palette = p.id;
+      save();
+      renderPaletteRow();
+      renderThemeGrid();
+      showToast(p.name + ' palette activated');
+    });
+    grid.appendChild(div);
+  });
+}
+
+function doPurchase(id) {
+  if (typeof Android !== 'undefined') try { Android.purchase(id); } catch(e){}
+  else showToast('Purchases not available here');
+}
+
+window.onPurchaseComplete = function(id) {
+  if (id === 'remove_ads') {
     _adsRemoved = true;
-    var btn = document.getElementById('btn-remove-ads');
-    if (btn) btn.style.display = 'none';
-    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
-  }
+    if (typeof Android !== 'undefined') try { Android.hideBannerAd(); } catch(e){}
+    showToast('Ads removed. Thank you!');
+  } else if (id === 'coins_small') { _coins += 100; showToast('+100 coins!'); }
+  else if (id === 'coins_large') { _coins += 500; showToast('+500 coins!'); }
+  save(); updateCoinDisplay();
 };
 
-// Restore remove-ads state on load
-if (window.Android) {
-  try { if (Android.isPurchased && Android.isPurchased('remove_ads')) {
-    _adsRemoved = true;
-    var btn = document.getElementById('btn-remove-ads');
-    if (btn) btn.style.display = 'none';
-  }} catch(e) {}
+let _toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
 }
 
+// Init
+load();
+resizeCanvas();
+window.addEventListener('resize', () => { resizeCanvas(); });
+updateCoinDisplay();
+renderPaletteRow();
+renderFoldRow();
+
+if (!_adsRemoved && typeof Android !== 'undefined') try { Android.showBannerAd(); } catch(e){}
 </script>
 </body>
 </html>
