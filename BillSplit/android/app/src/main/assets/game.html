@@ -5,124 +5,495 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Bill Split</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#4CAF50; --accent2:#388E3C; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
-#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
-header h1 { font-size:1.3rem; font-weight:700; }
-header h1 span { color:var(--accent); }
-#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
-#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
-.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
-label { display:block; font-size:0.85rem; color:var(--muted); margin-bottom:4px; }
-input[type=number] { width:100%; background:var(--card); border:none; color:var(--text); font-size:1rem; padding:10px 12px; border-radius:8px; outline:none; margin-bottom:12px; }
-input[type=number]:focus { box-shadow:0 0 0 2px var(--accent); }
-.tip-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
-.tip-btn { flex:1; min-width:44px; min-height:44px; background:var(--card); border:2px solid transparent; color:var(--text); font-size:0.9rem; font-weight:600; border-radius:8px; cursor:pointer; }
-.tip-btn.active { border-color:var(--accent); color:var(--accent); }
-.tip-btn.btn-pressed { opacity:0.7; }
-.custom-wrap { display:none; margin-bottom:12px; }
-.custom-wrap.show { display:block; }
-.result-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.result-item { background:var(--card); border-radius:10px; padding:12px; text-align:center; }
-.result-label { font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
-.result-value { font-size:1.3rem; font-weight:700; color:var(--accent); }
-.result-item.highlight { grid-column:span 2; background:#1a3a1a; border:2px solid var(--accent); }
-.result-item.highlight .result-value { font-size:1.8rem; color:var(--accent); }
-#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#0d1f0f;--surface:#122214;--card:#1a3320;--accent:#4caf50;--accent2:#81c784;--text:#e8f5e9;--muted:#7da882;--border:#2a4a2e;--radius:14px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;flex-shrink:0;border-bottom:1px solid var(--border);}
+header h1{font-size:1.25rem;font-weight:800;letter-spacing:-0.5px;}
+header h1 span{color:var(--accent);}
+.hdr-right{display:flex;align-items:center;gap:8px;}
+.coins-pill{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:4px 10px;}
+.coins-dot{width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#ffd700,#ffaa00);display:flex;align-items:center;justify-content:center;font-size:0.5rem;font-weight:800;color:#7a4f00;}
+.coins-val{font-size:0.78rem;font-weight:700;color:#ffd700;}
+.hdr-btn{background:var(--card);border:1px solid var(--border);color:var(--text);font-size:0.68rem;font-family:Inter,sans-serif;padding:5px 10px;border-radius:20px;cursor:pointer;}
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.tab{flex:1;padding:9px;font-size:0.73rem;font-weight:600;text-align:center;cursor:pointer;color:var(--muted);border:none;background:none;font-family:Inter,sans-serif;transition:color 0.15s;}
+.tab.active{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent);}
+/* Scroll */
+#scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px;}
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;}
+.card-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;}
+/* Inputs */
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:0.78rem;color:var(--muted);margin-bottom:4px;}
+.field input[type=number],.field input[type=text]{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:1rem;font-family:Inter,sans-serif;padding:10px 12px;border-radius:8px;outline:none;}
+.field input:focus{border-color:var(--accent);}
+/* Tip buttons */
+.tip-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.tip-btn{flex:1;min-width:44px;padding:9px 4px;background:var(--card);border:2px solid transparent;color:var(--text);font-size:0.85rem;font-weight:600;font-family:Inter,sans-serif;border-radius:8px;cursor:pointer;transition:all 0.15s;}
+.tip-btn.active{border-color:var(--accent);color:var(--accent);}
+.custom-wrap{display:none;margin-bottom:8px;}
+.custom-wrap.show{display:block;}
+/* Results */
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.res-item{background:var(--card);border-radius:10px;padding:12px;text-align:center;}
+.res-label{font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.res-value{font-size:1.2rem;font-weight:700;color:var(--accent);}
+.res-item.big{grid-column:span 2;border:2px solid var(--accent);}
+.res-item.big .res-value{font-size:1.8rem;}
+/* People list */
+.person-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);}
+.person-row:last-child{border-bottom:none;}
+.person-name{flex:1;font-size:0.9rem;font-weight:600;}
+.person-amt{font-size:0.85rem;color:var(--accent);font-weight:700;min-width:60px;text-align:right;}
+.person-pct{font-size:0.72rem;color:var(--muted);min-width:40px;text-align:right;}
+.remove-btn{background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:2px 6px;}
+/* Add person row */
+.add-row{display:flex;gap:8px;align-items:center;}
+.add-row input{flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:0.85rem;font-family:Inter,sans-serif;padding:8px 10px;border-radius:8px;outline:none;}
+.add-row input:focus{border-color:var(--accent);}
+.add-btn{background:var(--accent);border:none;color:#fff;padding:8px 14px;border-radius:8px;font-size:0.85rem;font-family:Inter,sans-serif;font-weight:700;cursor:pointer;}
+/* History */
+.hist-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:8px;}
+.hist-date{font-size:0.68rem;color:var(--muted);margin-bottom:4px;}
+.hist-summary{font-size:0.9rem;font-weight:700;margin-bottom:4px;}
+.hist-detail{font-size:0.75rem;color:var(--muted);}
+.hist-per{font-size:1rem;font-weight:700;color:var(--accent);}
+.empty{text-align:center;padding:40px 20px;color:var(--muted);}
+/* Shop */
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.theme-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:10px;cursor:pointer;text-align:center;}
+.theme-card.owned{border-color:var(--accent2);}
+.theme-card.active{border-color:var(--accent);}
+.theme-preview{height:36px;border-radius:8px;margin-bottom:6px;}
+.theme-name{font-size:0.78rem;font-weight:700;margin-bottom:2px;}
+.theme-price{font-size:0.7rem;color:var(--muted);}
+.theme-price.free{color:var(--accent2);}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;}
+.stat-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:4px;}
+.stat-val{font-size:1.4rem;font-weight:800;color:var(--accent);}
+.action-btn{width:100%;background:var(--accent);border:none;color:#fff;padding:12px;border-radius:var(--radius);font-size:0.95rem;font-family:Inter,sans-serif;font-weight:700;cursor:pointer;margin-top:8px;}
+.coin-row{display:flex;flex-direction:column;gap:8px;}
+.coin-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:10px;font-size:0.82rem;font-family:Inter,sans-serif;cursor:pointer;text-align:left;}
+/* Toast */
+#toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:8px 16px;border-radius:20px;font-size:0.8rem;opacity:0;transition:all 0.3s;pointer-events:none;z-index:999;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 <div id="app">
   <header>
     <h1>Bill <span>Split</span></h1>
-    <button id="btn-remove-ads">Remove Ads</button>
+    <div class="hdr-right">
+      <div class="coins-pill"><div class="coins-dot">C</div><span class="coins-val" id="coins-display">0</span></div>
+      <button class="hdr-btn" id="btn-remove-ads">Remove Ads</button>
+    </div>
   </header>
-  <div id="scroll">
-    <div class="card">
-      <div class="card-title">Bill Details</div>
-      <label>Total Bill ($)</label>
-      <input type="number" id="bill" placeholder="0.00" min="0" step="0.01">
-      <label>Number of People</label>
-      <input type="number" id="people" placeholder="2" min="1" step="1" value="2">
-      <label>Tip Percentage</label>
-      <div class="tip-row" id="tip-row">
-        <button class="tip-btn" data-tip="10">10%</button>
-        <button class="tip-btn active" data-tip="15">15%</button>
-        <button class="tip-btn" data-tip="18">18%</button>
-        <button class="tip-btn" data-tip="20">20%</button>
-        <button class="tip-btn" data-tip="25">25%</button>
-        <button class="tip-btn" data-tip="custom">Custom</button>
-      </div>
-      <div class="custom-wrap" id="custom-wrap">
-        <label>Custom Tip %</label>
-        <input type="number" id="custom-tip" placeholder="0" min="0" step="1">
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">Results</div>
-      <div class="result-grid">
-        <div class="result-item"><div class="result-label">Tip Amount</div><div class="result-value" id="r-tip">$0.00</div></div>
-        <div class="result-item"><div class="result-label">Total with Tip</div><div class="result-value" id="r-total">$0.00</div></div>
-        <div class="result-item"><div class="result-label">Per Person (no tip)</div><div class="result-value" id="r-pp">$0.00</div></div>
-        <div class="result-item highlight"><div class="result-label">Per Person with Tip</div><div class="result-value" id="r-pp-tip">$0.00</div></div>
-      </div>
-    </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('calc')">Split</button>
+    <button class="tab" onclick="switchTab('custom')">Custom</button>
+    <button class="tab" onclick="switchTab('history')">History</button>
+    <button class="tab" onclick="switchTab('shop')">Shop</button>
   </div>
-  <div id="admob-banner">Advertisement</div>
+  <div id="scroll"></div>
+  <div id="toast"></div>
 </div>
 <script>
 'use strict';
-(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
 
-var state = { useCount:0, removeAds:false, tipPct:15 };
+/* ── Themes ── */
+var THEMES = [
+  {id:'forest',  name:'Forest',  price:0,   bg:'#0d1f0f', surface:'#122214', card:'#1a3320', accent:'#4caf50', accent2:'#81c784', text:'#e8f5e9', muted:'#7da882', border:'#2a4a2e'},
+  {id:'ocean',   name:'Ocean',   price:60,  bg:'#051929', surface:'#071e33', card:'#0a2a44', accent:'#29b6f6', accent2:'#81d4fa', text:'#e1f5fe', muted:'#6096b4', border:'#0d3b5e'},
+  {id:'sunset',  name:'Sunset',  price:60,  bg:'#1a0800', surface:'#2d1200', card:'#3d1c00', accent:'#ff7043', accent2:'#ffab91', text:'#fff3e0', muted:'#a07060', border:'#4a2a10'},
+  {id:'violet',  name:'Violet',  price:80,  bg:'#120a1f', surface:'#1a1230', card:'#221840', accent:'#ab47bc', accent2:'#ce93d8', text:'#f3e5f5', muted:'#9070a0', border:'#362050'},
+  {id:'gold',    name:'Gold',    price:80,  bg:'#0f0c00', surface:'#1c1800', card:'#272200', accent:'#ffd700', accent2:'#ffec6e', text:'#fff9c4', muted:'#a09040', border:'#3a3000'},
+  {id:'arctic',  name:'Arctic',  price:100, bg:'#040d1a', surface:'#071529', card:'#0a1f3a', accent:'#80deea', accent2:'#b2ebf2', text:'#e0f7fa', muted:'#5a8a90', border:'#103050'},
+];
 
-function fmt(n){ return '$'+n.toFixed(2); }
+/* ── State ── */
+var _coins = 0;
+var _removeAds = false;
+var _tipPct = 15;
+var _people = [];
+var _history = [];
+var _stats = {calcs:0, totalSaved:0, coinsEarned:0, historySaved:0};
+var _owned = ['forest'];
+var _activeTheme = 'forest';
+var _currentTab = 'calc';
+var _useCount = 0;
+var _nextPersonId = 1;
 
-function calc(){
-  var bill = parseFloat(document.getElementById('bill').value)||0;
-  var people = Math.max(1, parseInt(document.getElementById('people').value)||1);
-  var tip = state.tipPct;
-  var tipAmt = bill * tip / 100;
-  var total = bill + tipAmt;
-  document.getElementById('r-tip').textContent = fmt(tipAmt);
-  document.getElementById('r-total').textContent = fmt(total);
-  document.getElementById('r-pp').textContent = fmt(bill / people);
-  document.getElementById('r-pp-tip').textContent = fmt(total / people);
+/* ── Persist ── */
+function save() {
+  try {
+    localStorage.setItem('bs2_state', JSON.stringify({
+      coins:_coins, removeAds:_removeAds, tipPct:_tipPct, people:_people,
+      history:_history, stats:_stats, owned:_owned, theme:_activeTheme, nextId:_nextPersonId
+    }));
+  } catch(e) {}
+}
+function load() {
+  try {
+    var s = JSON.parse(localStorage.getItem('bs2_state'));
+    if (!s) return;
+    if (typeof s.coins === 'number') _coins = s.coins;
+    if (s.removeAds) _removeAds = true;
+    if (typeof s.tipPct === 'number') _tipPct = s.tipPct;
+    if (Array.isArray(s.people)) _people = s.people;
+    if (Array.isArray(s.history)) _history = s.history;
+    if (s.stats) _stats = Object.assign(_stats, s.stats);
+    if (Array.isArray(s.owned)) _owned = s.owned;
+    if (s.theme) _activeTheme = s.theme;
+    if (typeof s.nextId === 'number') _nextPersonId = s.nextId;
+  } catch(e) {}
 }
 
-document.getElementById('bill').addEventListener('input', calc);
-document.getElementById('people').addEventListener('input', calc);
+/* ── Theme ── */
+function applyTheme() {
+  var t = THEMES.find(function(x){return x.id===_activeTheme;}) || THEMES[0];
+  var r = document.documentElement.style;
+  r.setProperty('--bg', t.bg);
+  r.setProperty('--surface', t.surface);
+  r.setProperty('--card', t.card);
+  r.setProperty('--accent', t.accent);
+  r.setProperty('--accent2', t.accent2);
+  r.setProperty('--text', t.text);
+  r.setProperty('--muted', t.muted);
+  r.setProperty('--border', t.border);
+}
 
-document.getElementById('tip-row').addEventListener('click', function(e){
-  var btn = e.target.closest('.tip-btn');
-  if(!btn) return;
-  document.querySelectorAll('.tip-btn').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
-  var t = btn.dataset.tip;
-  if(t === 'custom'){
-    document.getElementById('custom-wrap').classList.add('show');
-    state.tipPct = parseFloat(document.getElementById('custom-tip').value)||0;
-  } else {
-    document.getElementById('custom-wrap').classList.remove('show');
-    state.tipPct = parseInt(t);
+/* ── Toast ── */
+var _toastTimer = null;
+function showToast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2200);
+}
+
+/* ── Coins ── */
+function updateCoinDisplay() {
+  document.getElementById('coins-display').textContent = _coins;
+}
+function earnCoins(n, msg) {
+  _coins += n; _stats.coinsEarned += n;
+  save(); updateCoinDisplay();
+  if (msg) showToast(msg);
+}
+
+/* ── Tabs ── */
+function switchTab(tab) {
+  _currentTab = tab;
+  document.querySelectorAll('.tab').forEach(function(el, i) {
+    var tabs = ['calc','custom','history','shop'];
+    el.classList.toggle('active', tabs[i] === tab);
+  });
+  render();
+}
+
+function render() {
+  if (_currentTab === 'calc') renderCalc();
+  else if (_currentTab === 'custom') renderCustom();
+  else if (_currentTab === 'history') renderHistory();
+  else if (_currentTab === 'shop') renderShop();
+}
+
+/* ── Calculator tab ── */
+var _bill = 0, _numPeople = 2;
+function renderCalc() {
+  var el = document.getElementById('scroll');
+  var tipButtons = [10, 15, 18, 20, 25].map(function(t) {
+    return '<button class="tip-btn'+(t===_tipPct?' active':'')+'" onclick="setTip('+t+')">'+t+'%</button>';
+  }).join('') + '<button class="tip-btn"'+(_tipPct > 0 && [10,15,18,20,25].indexOf(_tipPct)<0?' active':'')+' onclick="setTip(\'custom\')">Custom</button>';
+
+  var tipAmt = _bill * _tipPct / 100;
+  var total = _bill + tipAmt;
+  var perPP = _numPeople > 0 ? _bill / _numPeople : 0;
+  var perPPTip = _numPeople > 0 ? total / _numPeople : 0;
+
+  el.innerHTML = '<div class="card">' +
+    '<div class="card-title">Bill Details</div>' +
+    '<div class="field"><label>Total Bill ($)</label>' +
+    '<input type="number" id="inp-bill" placeholder="0.00" min="0" step="0.01" value="'+((_bill||''))+'"></div>' +
+    '<div class="field"><label>Number of People</label>' +
+    '<input type="number" id="inp-people" placeholder="2" min="1" step="1" value="'+_numPeople+'"></div>' +
+    '<div class="field"><label>Tip Percentage</label>' +
+    '<div class="tip-row">'+tipButtons+'</div>' +
+    '<div class="custom-wrap'+([10,15,18,20,25].indexOf(_tipPct)<0?' show':'')+'"><label>Custom Tip %</label>' +
+    '<input type="number" id="inp-custom-tip" min="0" step="1" value="'+(_tipPct)+'" oninput="setCustomTip(this.value)"></div>' +
+    '</div>' +
+  '</div>' +
+  '<div class="card">' +
+    '<div class="card-title">Results</div>' +
+    '<div class="result-grid">' +
+      ri('Tip Amount', fmt(tipAmt)) +
+      ri('Total with Tip', fmt(total)) +
+      ri('Per Person (no tip)', fmt(perPP)) +
+      '<div class="res-item big"><div class="res-label">Per Person with Tip</div><div class="res-value">'+fmt(perPPTip)+'</div></div>' +
+    '</div>' +
+    '<button class="action-btn" onclick="saveSplit()">Save Split</button>' +
+  '</div>';
+
+  document.getElementById('inp-bill').addEventListener('input', function(){
+    _bill = parseFloat(this.value) || 0;
+    updateResults();
+  });
+  document.getElementById('inp-people').addEventListener('input', function(){
+    _numPeople = Math.max(1, parseInt(this.value) || 1);
+    updateResults();
+  });
+  var ct = document.getElementById('inp-custom-tip');
+  if (ct) ct.addEventListener('input', function(){ setCustomTip(this.value); });
+}
+
+function ri(label, val) {
+  return '<div class="res-item"><div class="res-label">'+label+'</div><div class="res-value">'+val+'</div></div>';
+}
+function fmt(n) { return '$' + (n||0).toFixed(2); }
+
+function setTip(t) {
+  if (t === 'custom') {
+    // just show the custom row; keep existing _tipPct
+    _currentTab = 'calc';
+    render();
+    return;
   }
-  calc();
-  maybeInterstitial();
-});
+  _tipPct = t;
+  _useCount++;
+  if (!_removeAds && _useCount % 8 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
+  }
+  render();
+}
 
-document.getElementById('custom-tip').addEventListener('input', function(){
-  state.tipPct = parseFloat(this.value)||0;
-  calc();
-});
+function setCustomTip(val) {
+  _tipPct = parseFloat(val) || 0;
+  updateResults();
+}
 
-document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
-function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
-function init(){if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex'; calc();}
-init();
+function updateResults() {
+  var tipAmt = _bill * _tipPct / 100;
+  var total = _bill + tipAmt;
+  var perPP = _numPeople > 0 ? _bill / _numPeople : 0;
+  var perPPTip = _numPeople > 0 ? total / _numPeople : 0;
+  var grid = document.querySelector('.result-grid');
+  if (!grid) return;
+  var items = grid.querySelectorAll('.res-value');
+  if (items[0]) items[0].textContent = fmt(tipAmt);
+  if (items[1]) items[1].textContent = fmt(total);
+  if (items[2]) items[2].textContent = fmt(perPP);
+  if (items[3]) items[3].textContent = fmt(perPPTip);
+  _stats.calcs++;
+  if (_stats.calcs % 5 === 0) { earnCoins(1); }
+  save();
+}
+
+function saveSplit() {
+  if (_bill <= 0) { showToast('Enter a bill amount first'); return; }
+  var tipAmt = _bill * _tipPct / 100;
+  var total = _bill + tipAmt;
+  var perPPTip = _numPeople > 0 ? total / _numPeople : 0;
+  _history.unshift({
+    date: new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}),
+    bill: _bill, tip: _tipPct, people: _numPeople,
+    perPerson: perPPTip, total: total, type: 'equal'
+  });
+  if (_history.length > 20) _history.pop();
+  _stats.historySaved++;
+  earnCoins(1, '+1 coin!');
+  save();
+  showToast('Split saved!');
+}
+
+/* ── Custom Split tab ── */
+function renderCustom() {
+  var el = document.getElementById('scroll');
+  var total = _people.reduce(function(s,p){ return s + (p.amt||0); }, 0);
+
+  var rows = _people.map(function(p) {
+    var pct = total > 0 ? ((p.amt / total) * 100).toFixed(1) : '0.0';
+    return '<div class="person-row">' +
+      '<div class="person-name">' + esc(p.name) + '</div>' +
+      '<div class="person-pct">' + pct + '%</div>' +
+      '<input type="number" style="width:70px;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:Inter,sans-serif;padding:5px 8px;border-radius:6px;outline:none;font-size:0.85rem;" ' +
+        'value="'+(p.amt||'')+'" placeholder="0" min="0" step="0.01" ' +
+        'oninput="updatePersonAmt('+p.id+',this.value)">' +
+      '<button class="remove-btn" onclick="removePerson('+p.id+')">&times;</button>' +
+    '</div>';
+  }).join('');
+
+  el.innerHTML = '<div class="card">' +
+    '<div class="card-title">People</div>' +
+    (rows || '<div style="color:var(--muted);font-size:0.85rem;margin-bottom:10px;">No people added yet.</div>') +
+    '<div style="margin-top:10px;" class="add-row">' +
+      '<input type="text" id="inp-new-name" placeholder="Name" maxlength="20">' +
+      '<button class="add-btn" onclick="addPerson()">Add</button>' +
+    '</div>' +
+  '</div>' +
+  '<div class="card">' +
+    '<div class="card-title">Summary</div>' +
+    '<div class="result-grid">' +
+      ri('Total', fmt(total)) +
+      ri('People', _people.length + '') +
+    '</div>' +
+    '<button class="action-btn" onclick="saveCustomSplit()">Save Split</button>' +
+  '</div>';
+
+  var ni = document.getElementById('inp-new-name');
+  if (ni) ni.addEventListener('keydown', function(e){ if (e.key === 'Enter') addPerson(); });
+}
+
+function addPerson() {
+  var ni = document.getElementById('inp-new-name');
+  if (!ni) return;
+  var name = ni.value.trim();
+  if (!name) { showToast('Enter a name'); return; }
+  _people.push({id: _nextPersonId++, name: name, amt: 0});
+  ni.value = '';
+  save(); renderCustom();
+}
+
+function removePerson(id) {
+  _people = _people.filter(function(p){ return p.id !== id; });
+  save(); renderCustom();
+}
+
+function updatePersonAmt(id, val) {
+  var p = _people.find(function(x){ return x.id === id; });
+  if (p) { p.amt = parseFloat(val) || 0; save(); }
+  // rerender summary only
+  var total = _people.reduce(function(s,p){ return s + (p.amt||0); }, 0);
+  var grid = document.querySelector('.result-grid');
+  if (grid) { var v = grid.querySelectorAll('.res-value'); if (v[0]) v[0].textContent = fmt(total); }
+}
+
+function saveCustomSplit() {
+  if (_people.length === 0) { showToast('Add people first'); return; }
+  var total = _people.reduce(function(s,p){ return s + (p.amt||0); }, 0);
+  if (total <= 0) { showToast('Enter amounts first'); return; }
+  _history.unshift({
+    date: new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}),
+    bill: total, tip: 0, people: _people.length,
+    perPerson: 0, total: total, type: 'custom',
+    names: _people.map(function(p){ return p.name + ': ' + fmt(p.amt); }).join(', ')
+  });
+  if (_history.length > 20) _history.pop();
+  _stats.historySaved++;
+  earnCoins(1, '+1 coin!');
+  save(); showToast('Saved!');
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ── History tab ── */
+function renderHistory() {
+  var el = document.getElementById('scroll');
+  if (!_history.length) {
+    el.innerHTML = '<div class="empty"><div style="font-size:2.5rem;">🧾</div><div style="margin-top:8px;">No saved splits yet</div><div style="font-size:0.8rem;margin-top:4px;">Use the Save Split button</div></div>';
+    return;
+  }
+  el.innerHTML = _history.map(function(h) {
+    var detail = h.type === 'custom' && h.names ? h.names :
+      h.people + ' people, ' + h.tip + '% tip, ' + fmt(h.bill) + ' bill';
+    var per = h.type === 'custom' ? '' : '<div class="hist-per">'+fmt(h.perPerson)+'/person</div>';
+    return '<div class="hist-item">' +
+      '<div class="hist-date">'+h.date+'</div>' +
+      '<div class="hist-summary">Total: '+fmt(h.total)+'</div>' +
+      '<div class="hist-detail">'+detail+'</div>' +
+      per +
+    '</div>';
+  }).join('');
+}
+
+/* ── Shop tab ── */
+function renderShop() {
+  var el = document.getElementById('scroll');
+  var themeHtml = '<div class="card-title">Themes</div><div class="theme-grid">';
+  THEMES.forEach(function(t) {
+    var owned = _owned.indexOf(t.id) >= 0;
+    var active = _activeTheme === t.id;
+    themeHtml += '<div class="theme-card'+(owned?' owned':'')+(active?' active':'')+'" onclick="selectTheme(\''+t.id+'\')">' +
+      '<div class="theme-preview" style="background:'+t.bg+';border:2px solid '+t.border+'"></div>' +
+      '<div class="theme-name">'+t.name+'</div>' +
+      '<div class="theme-price'+(t.price===0?' free':'')+'">'+(active?'Active':owned?'Owned':t.price+' coins')+'</div>' +
+    '</div>';
+  });
+  themeHtml += '</div>';
+
+  var statsHtml = '<div class="stat-grid">' +
+    sc('Calculations', _stats.calcs) +
+    sc('Splits Saved', _stats.historySaved) +
+    sc('Coins Earned', _stats.coinsEarned) +
+  '</div>';
+
+  var coinHtml = '<div class="card-title">Coin Packs</div><div class="coin-row">' +
+    '<button class="coin-btn" onclick="watchAd()">Watch Ad (+10 coins) — Free</button>' +
+    '<button class="coin-btn" onclick="buyCoins(\'coins_small\')">100 Coins — $0.99</button>' +
+    '<button class="coin-btn" onclick="buyCoins(\'coins_large\')">500 Coins — $2.99</button>' +
+  '</div>';
+
+  el.innerHTML = '<div class="card">'+themeHtml+'</div><div class="card">'+statsHtml+'</div><div class="card">'+coinHtml+'</div>';
+}
+function sc(label, val) {
+  return '<div class="stat-card"><div class="stat-label">'+label+'</div><div class="stat-val">'+val+'</div></div>';
+}
+
+function selectTheme(id) {
+  var t = THEMES.find(function(x){return x.id===id;});
+  if (!t) return;
+  if (_owned.indexOf(id) < 0) {
+    if (_coins < t.price) { showToast('Need '+t.price+' coins'); return; }
+    _coins -= t.price; _owned.push(id); updateCoinDisplay();
+  }
+  _activeTheme = id; applyTheme(); save(); renderShop(); showToast(t.name+' applied!');
+}
+
+function watchAd() {
+  if (window.Android) { try { Android.showRewarded('coins'); } catch(e) {} }
+  else earnCoins(10, '+10 coins!');
+}
+function buyCoins(id) {
+  if (window.Android) { try { Android.purchase(id); } catch(e) {} }
+}
+
+/* ── Native bridge ── */
+window.onPurchaseComplete = function(id) {
+  if (id === 'remove_ads') {
+    _removeAds = true;
+    document.getElementById('btn-remove-ads').style.display = 'none';
+    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+    save(); showToast('Ads removed!');
+  } else if (id === 'coins_small') {
+    earnCoins(100, '+100 coins!');
+  } else if (id === 'coins_large') {
+    earnCoins(500, '+500 coins!');
+  }
+};
+window.onAdReward = function(type) {
+  if (type === 'coins') earnCoins(10, '+10 coins!');
+};
+window.onNativeBridgeReady = function() {
+  if (_removeAds && window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+};
+
+/* ── Init ── */
+load();
+applyTheme();
+updateCoinDisplay();
+if (_removeAds) document.getElementById('btn-remove-ads').style.display = 'none';
+document.getElementById('btn-remove-ads').addEventListener('click', function(){
+  if (window.Android) { try { Android.purchase('remove_ads'); } catch(e) {} }
+});
+switchTab('calc');
 </script>
 </body>
 </html>
