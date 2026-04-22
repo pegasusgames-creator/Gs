@@ -5,183 +5,529 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Reaction Time</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-html,body { height:100%; background:#1a0a00; overflow:hidden; font-family:'Segoe UI',system-ui,sans-serif; color:#fff; }
-#app { display:flex; flex-direction:column; height:100%; }
-#tap-area {
-  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  transition:background 0.1s; cursor:pointer; user-select:none;
-  background:#1a1a1a;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#0a0a0a;--surface:#141414;--card:#1e1e1e;--accent:#ff5722;--accent2:#ff9800;--go:#00c853;--wait:#c62828;--fs:#7b1fa2;--text:#ffffff;--muted:#888;--border:#2a2a2a;--radius:14px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;flex-shrink:0;border-bottom:1px solid var(--border);}
+header h1{font-size:1.25rem;font-weight:800;letter-spacing:-0.5px;}
+header h1 span{color:var(--accent);}
+.hdr-right{display:flex;align-items:center;gap:8px;}
+.coins-pill{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:4px 10px;}
+.coins-dot{width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#ffd700,#ffaa00);display:flex;align-items:center;justify-content:center;font-size:0.5rem;font-weight:800;color:#7a4f00;}
+.coins-val{font-size:0.78rem;font-weight:700;color:#ffd700;}
+.hdr-btn{background:var(--card);border:1px solid var(--border);color:var(--text);font-size:0.68rem;font-family:Inter,sans-serif;padding:5px 10px;border-radius:20px;cursor:pointer;}
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.tab{flex:1;padding:9px;font-size:0.73rem;font-weight:600;text-align:center;cursor:pointer;color:var(--muted);border:none;background:none;font-family:Inter,sans-serif;transition:color 0.15s;}
+.tab.active{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent);}
+/* Play screen */
+#play-screen{flex:1;display:flex;flex-direction:column;}
+#tap-area{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;user-select:none;transition:background 0.08s;
+  background:var(--card);
 }
-#tap-area.waiting { background:#c0392b; }
-#tap-area.ready { background:#27ae60; }
-#tap-area.false-start { background:#8e44ad; }
-#main-text { font-size:2rem; font-weight:900; text-align:center; padding:20px; pointer-events:none; }
-#sub-text { font-size:1rem; color:rgba(255,255,255,0.7); text-align:center; pointer-events:none; }
-#results { background:#111; padding:20px; }
-.result-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #333; font-size:1rem; }
-.result-val { font-weight:700; color:#FF5722; }
-.trials { display:flex; gap:8px; justify-content:center; margin:10px 0; flex-wrap:wrap; }
-.trial-dot { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; }
-.trial-dot.pending { background:#333; }
-.trial-dot.ok { background:#27ae60; }
-.trial-dot.fs { background:#8e44ad; }
-#rating { text-align:center; font-size:1.4rem; font-weight:900; margin:10px 0; }
-#btn-restart { display:none; width:calc(100% - 32px); margin:8px 16px; background:#FF5722; border:none; border-radius:30px; color:#fff; font-size:1.1rem; font-weight:800; padding:14px; cursor:pointer; }
-#admob-banner { height:50px; background:#111; display:none; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+#tap-area.waiting{background:var(--wait);}
+#tap-area.ready{background:var(--go);}
+#tap-area.false-start{background:var(--fs);}
+#tap-area.show-result{background:#0d2a1a;}
+#main-text{font-size:2.4rem;font-weight:900;text-align:center;padding:20px;pointer-events:none;letter-spacing:-1px;}
+#sub-text{font-size:1rem;color:rgba(255,255,255,0.75);text-align:center;pointer-events:none;}
+#rt-display{font-size:4rem;font-weight:900;color:var(--go);pointer-events:none;letter-spacing:-2px;}
+/* Results bar */
+#results-bar{background:var(--surface);border-top:1px solid var(--border);padding:10px 16px;flex-shrink:0;}
+.trial-dots{display:flex;gap:6px;justify-content:center;margin-bottom:8px;}
+.tdot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.55rem;font-weight:700;background:var(--card);color:var(--muted);}
+.tdot.ok{background:#1a3a1a;color:var(--go);}
+.tdot.fs{background:#2a0a2a;color:var(--fs);}
+.stats-row{display:flex;justify-content:space-around;}
+.mini-stat{text-align:center;}
+.mini-label{font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.mini-val{font-size:1rem;font-weight:800;color:var(--accent);}
+/* Trials count selector */
+#trial-select{display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;}
+#trial-select span{font-size:0.72rem;color:var(--muted);}
+.tsel-btn{padding:5px 12px;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:Inter,sans-serif;font-size:0.78rem;font-weight:600;border-radius:20px;cursor:pointer;}
+.tsel-btn.active{background:var(--accent);border-color:var(--accent);}
+/* Scroll panel */
+#panel{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px;display:none;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;}
+.card-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;}
+.stat-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:4px;}
+.stat-val{font-size:1.4rem;font-weight:800;color:var(--accent);}
+.hist-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:8px;}
+.hist-date{font-size:0.68rem;color:var(--muted);margin-bottom:4px;}
+.hist-row{display:flex;justify-content:space-between;align-items:center;}
+.hist-avg{font-size:1.1rem;font-weight:800;color:var(--accent);}
+.hist-best{font-size:0.78rem;color:var(--go);}
+.hist-rating{font-size:0.75rem;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--card);}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.theme-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:10px;cursor:pointer;text-align:center;}
+.theme-card.owned{border-color:#00c853;}
+.theme-card.active{border-color:var(--accent);}
+.theme-preview{height:36px;border-radius:8px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;gap:4px;}
+.tp-dot{width:12px;height:12px;border-radius:50%;}
+.theme-name{font-size:0.78rem;font-weight:700;margin-bottom:2px;}
+.theme-price{font-size:0.7rem;color:var(--muted);}
+.theme-price.free{color:#00c853;}
+.rating-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:1rem;font-weight:800;margin:4px 0;}
+.coin-row{display:flex;flex-direction:column;gap:8px;}
+.coin-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:10px;font-size:0.82rem;font-family:Inter,sans-serif;cursor:pointer;text-align:left;}
+.empty{text-align:center;padding:40px 20px;color:var(--muted);}
+#toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:8px 16px;border-radius:20px;font-size:0.8rem;opacity:0;transition:all 0.3s;pointer-events:none;z-index:999;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 <div id="app">
-  <div id="tap-area">
-    <div id="main-text">Tap to Start</div>
-    <div id="sub-text">Tap as fast as possible when screen turns GREEN</div>
+  <header>
+    <h1>Reaction <span>Time</span></h1>
+    <div class="hdr-right">
+      <div class="coins-pill"><div class="coins-dot">C</div><span class="coins-val" id="coins-display">0</span></div>
+      <button class="hdr-btn" id="btn-remove-ads">Remove Ads</button>
+    </div>
+  </header>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('play')">Play</button>
+    <button class="tab" onclick="switchTab('history')">History</button>
+    <button class="tab" onclick="switchTab('stats')">Stats</button>
+    <button class="tab" onclick="switchTab('shop')">Shop</button>
   </div>
-  <div id="results">
-    <div class="trials" id="trials-row"></div>
-    <div id="rating"></div>
-    <div class="result-row"><span>Last</span><span class="result-val" id="r-last">—</span></div>
-    <div class="result-row"><span>Average</span><span class="result-val" id="r-avg">—</span></div>
-    <div class="result-row"><span>Best</span><span class="result-val" id="r-best">—</span></div>
+  <!-- Play screen -->
+  <div id="play-screen">
+    <div id="trial-select">
+      <span>Trials:</span>
+      <button class="tsel-btn active" onclick="setTrials(3)">3</button>
+      <button class="tsel-btn" onclick="setTrials(5)">5</button>
+      <button class="tsel-btn" onclick="setTrials(10)">10</button>
+    </div>
+    <div id="tap-area">
+      <div id="rt-display"></div>
+      <div id="main-text">Tap to Start</div>
+      <div id="sub-text">Tap when the screen turns green</div>
+    </div>
+    <div id="results-bar">
+      <div class="trial-dots" id="trial-dots"></div>
+      <div class="stats-row">
+        <div class="mini-stat"><div class="mini-label">Last</div><div class="mini-val" id="r-last">—</div></div>
+        <div class="mini-stat"><div class="mini-label">Average</div><div class="mini-val" id="r-avg">—</div></div>
+        <div class="mini-stat"><div class="mini-label">Session Best</div><div class="mini-val" id="r-best">—</div></div>
+        <div class="mini-stat"><div class="mini-label">All-Time</div><div class="mini-val" id="r-allbest">—</div></div>
+      </div>
+    </div>
   </div>
-  <button id="btn-restart">Play Again</button>
-  <div id="admob-banner">Advertisement</div>
+  <!-- Panel -->
+  <div id="panel"></div>
+  <div id="toast"></div>
 </div>
 <script>
 'use strict';
-var TRIALS=5;
-var state={
-  phase:'idle', // idle, waiting, ready, false-start, done
-  trialIndex:0, results:[], greenAt:0,
-  waitTimer:null, removeAds:false
-};
-var allBest=parseInt(localStorage.getItem('rt_best')||'99999');
-var tapArea=document.getElementById('tap-area');
-var mainText=document.getElementById('main-text');
-var subText=document.getElementById('sub-text');
-var trialsRow=document.getElementById('trials-row');
-var rLast=document.getElementById('r-last');
-var rAvg=document.getElementById('r-avg');
-var rBest=document.getElementById('r-best');
-var ratingEl=document.getElementById('rating');
-var btnRestart=document.getElementById('btn-restart');
 
-function renderTrials(){
-  trialsRow.innerHTML='';
-  for(var i=0;i<TRIALS;i++){
-    var dot=document.createElement('div');
-    dot.className='trial-dot';
-    if(i<state.results.length){
-      var r=state.results[i];
-      dot.className='trial-dot '+(r<0?'fs':'ok');
-      dot.textContent=r<0?'FS':r+'ms';
-      dot.style.fontSize=r<0?'0.6rem':'0.55rem';
+/* ── Themes ── */
+var THEMES = [
+  {id:'default', name:'Default', price:0,   accent:'#ff5722', go:'#00c853', wait:'#c62828', fs:'#7b1fa2'},
+  {id:'neon',    name:'Neon',    price:60,  accent:'#e040fb', go:'#00e5ff', wait:'#d500f9', fs:'#ff1744'},
+  {id:'ocean',   name:'Ocean',   price:60,  accent:'#29b6f6', go:'#00bcd4', wait:'#1565c0', fs:'#7c4dff'},
+  {id:'lime',    name:'Lime',    price:80,  accent:'#c6ff00', go:'#76ff03', wait:'#ff6d00', fs:'#d500f9'},
+  {id:'gold',    name:'Gold',    price:80,  accent:'#ffd700', go:'#aeea00', wait:'#e65100', fs:'#aa00ff'},
+  {id:'red',     name:'Crimson', price:100, accent:'#ff1744', go:'#ff6d00', wait:'#880e4f', fs:'#1565c0'},
+];
+
+/* ── State ── */
+var _coins = 0;
+var _removeAds = false;
+var _stats = {sessions:0, allBest:9999, totalTrials:0, sub200:0, coinsEarned:0};
+var _history = [];
+var _owned = ['default'];
+var _activeTheme = 'default';
+var _currentTab = 'play';
+var _numTrials = 3;
+var _phase = 'idle'; // idle, waiting, ready, false-start, show-result, done
+var _results = [];
+var _greenAt = 0;
+var _waitTimer = null;
+var _useCount = 0;
+
+/* ── Persist ── */
+function save() {
+  try {
+    localStorage.setItem('rt2_state', JSON.stringify({
+      coins:_coins, removeAds:_removeAds, stats:_stats,
+      history:_history, owned:_owned, theme:_activeTheme, trials:_numTrials
+    }));
+  } catch(e) {}
+}
+function load() {
+  try {
+    var s = JSON.parse(localStorage.getItem('rt2_state'));
+    if (!s) return;
+    if (typeof s.coins === 'number') _coins = s.coins;
+    if (s.removeAds) _removeAds = true;
+    if (s.stats) _stats = Object.assign(_stats, s.stats);
+    if (Array.isArray(s.history)) _history = s.history;
+    if (Array.isArray(s.owned)) _owned = s.owned;
+    if (s.theme) _activeTheme = s.theme;
+    if (s.trials) _numTrials = s.trials;
+  } catch(e) {}
+}
+
+/* ── Theme ── */
+function applyTheme() {
+  var t = THEMES.find(function(x){ return x.id === _activeTheme; }) || THEMES[0];
+  document.documentElement.style.setProperty('--accent', t.accent);
+  document.documentElement.style.setProperty('--go', t.go);
+  document.documentElement.style.setProperty('--wait', t.wait);
+  document.documentElement.style.setProperty('--fs', t.fs);
+  document.documentElement.style.setProperty('--accent2', t.accent);
+}
+
+/* ── Toast ── */
+var _toastTimer = null;
+function showToast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2200);
+}
+
+/* ── Coins ── */
+function updateCoinDisplay() {
+  document.getElementById('coins-display').textContent = _coins;
+}
+function earnCoins(n, msg) {
+  _coins += n; _stats.coinsEarned += n;
+  save(); updateCoinDisplay();
+  if (msg) showToast(msg);
+}
+
+/* ── Audio ── */
+var _audioCtx = null;
+function beep(freq, dur, vol) {
+  try {
+    if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (_audioCtx.state === 'suspended') _audioCtx.resume();
+    var o = _audioCtx.createOscillator(), g = _audioCtx.createGain();
+    o.connect(g); g.connect(_audioCtx.destination);
+    o.frequency.value = freq || 880;
+    g.gain.setValueAtTime(vol || 0.1, _audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, _audioCtx.currentTime + (dur || 0.15));
+    o.start(); o.stop(_audioCtx.currentTime + (dur || 0.15));
+  } catch(e) {}
+}
+
+/* ── Rating ── */
+function getRating(ms) {
+  if (ms < 180) return {text:'Lightning', color:'#ffd700'};
+  if (ms < 220) return {text:'Elite', color:'#00e5ff'};
+  if (ms < 280) return {text:'Fast', color:'#00c853'};
+  if (ms < 350) return {text:'Average', color:'#ff9800'};
+  if (ms < 450) return {text:'Slow', color:'#ff5722'};
+  return {text:'Keep Going', color:'#888'};
+}
+
+/* ── Game flow ── */
+function setTrials(n) {
+  _numTrials = n;
+  document.querySelectorAll('.tsel-btn').forEach(function(b, i) {
+    var vals = [3, 5, 10];
+    b.classList.toggle('active', vals[i] === n);
+  });
+  resetGame();
+  save();
+}
+
+function resetGame() {
+  _phase = 'idle';
+  _results = [];
+  if (_waitTimer) clearTimeout(_waitTimer);
+  var ta = document.getElementById('tap-area');
+  ta.className = '';
+  ta.style.background = '';
+  document.getElementById('rt-display').textContent = '';
+  document.getElementById('main-text').textContent = 'Tap to Start';
+  document.getElementById('sub-text').textContent = 'Tap when the screen turns green';
+  renderDots();
+  updateStatDisplay();
+}
+
+function renderDots() {
+  var el = document.getElementById('trial-dots');
+  var html = '';
+  for (var i = 0; i < _numTrials; i++) {
+    if (i < _results.length) {
+      var r = _results[i];
+      html += '<div class="tdot '+(r < 0 ? 'fs' : 'ok')+'">'+(r < 0 ? 'FS' : r+'ms')+'</div>';
     } else {
-      dot.className='trial-dot pending';
-      dot.textContent=(i+1);
+      html += '<div class="tdot">'+(i+1)+'</div>';
     }
-    trialsRow.appendChild(dot);
   }
+  el.innerHTML = html;
 }
 
-function updateStats(){
-  var valid=state.results.filter(function(r){return r>=0;});
-  if(valid.length===0)return;
-  var last=state.results[state.results.length-1];
-  rLast.textContent=last<0?'False Start':last+'ms';
-  var avg=Math.round(valid.reduce(function(a,b){return a+b;},0)/valid.length);
-  rAvg.textContent=avg+'ms';
-  var best=Math.min.apply(null,valid);
-  if(best<allBest){allBest=best;localStorage.setItem('rt_best',best);}
-  rBest.textContent=allBest+'ms';
-  if(state.phase==='done'){
-    var rating='';
-    if(avg<200)rating='⚡ Elite!';
-    else if(avg<250)rating='Pro';
-    else if(avg<350)rating='Average';
-    else rating='Keep practicing!';
-    ratingEl.textContent=rating;
+function updateStatDisplay() {
+  var valid = _results.filter(function(r){ return r >= 0; });
+  document.getElementById('r-last').textContent = _results.length ? (_results[_results.length-1] < 0 ? 'FS' : _results[_results.length-1]+'ms') : '—';
+  if (valid.length) {
+    var avg = Math.round(valid.reduce(function(a,b){return a+b;},0) / valid.length);
+    var best = Math.min.apply(null, valid);
+    document.getElementById('r-avg').textContent = avg + 'ms';
+    document.getElementById('r-best').textContent = best + 'ms';
+  } else {
+    document.getElementById('r-avg').textContent = '—';
+    document.getElementById('r-best').textContent = '—';
   }
+  document.getElementById('r-allbest').textContent = _stats.allBest < 9999 ? _stats.allBest + 'ms' : '—';
 }
 
-function startWaiting(){
-  state.phase='waiting';
-  tapArea.className='waiting';
-  mainText.textContent='Wait for green...';
-  subText.textContent='Don\'t tap yet!';
-  var delay=1000+Math.random()*4000;
-  state.waitTimer=setTimeout(function(){
-    if(state.phase==='waiting'){
-      state.phase='ready';
-      state.greenAt=performance.now();
-      tapArea.className='ready';
-      mainText.textContent='TAP NOW!';
-      subText.textContent='';
-    }
-  },delay);
+function startWaiting() {
+  _phase = 'waiting';
+  var ta = document.getElementById('tap-area');
+  ta.className = 'waiting';
+  document.getElementById('rt-display').textContent = '';
+  document.getElementById('main-text').textContent = 'Wait...';
+  document.getElementById('sub-text').textContent = 'Do not tap yet!';
+  var delay = 1000 + Math.random() * 4000;
+  _waitTimer = setTimeout(function() {
+    if (_phase !== 'waiting') return;
+    _phase = 'ready';
+    _greenAt = performance.now();
+    ta.className = 'ready';
+    document.getElementById('main-text').textContent = 'TAP NOW!';
+    document.getElementById('sub-text').textContent = '';
+    beep(1047, 0.1, 0.15);
+  }, delay);
 }
 
-function handleTap(){
-  if(state.phase==='idle'){
-    state.results=[];state.trialIndex=0;state.phase='waiting';
-    renderTrials();ratingEl.textContent='';
-    btnRestart.style.display='none';
+function handleTap() {
+  if (_currentTab !== 'play') return;
+  if (_phase === 'idle' || _phase === 'done') {
+    resetGame();
+    _phase = 'waiting';
+    document.getElementById('trial-dots');
     startWaiting();
     return;
   }
-  if(state.phase==='done'){return;}
-  if(state.phase==='waiting'){
-    // False start
-    clearTimeout(state.waitTimer);
-    state.results.push(-1);
-    state.trialIndex++;
-    state.phase='false-start';
-    tapArea.className='false-start';
-    mainText.textContent='False Start!';
-    subText.textContent='You tapped too early';
-    renderTrials();updateStats();
-    setTimeout(function(){nextTrial();},1200);
+  if (_phase === 'waiting') {
+    clearTimeout(_waitTimer);
+    _results.push(-1);
+    _phase = 'false-start';
+    var ta = document.getElementById('tap-area');
+    ta.className = 'false-start';
+    document.getElementById('main-text').textContent = 'Too Early!';
+    document.getElementById('sub-text').textContent = 'False start — wait for green';
+    beep(200, 0.3, 0.1);
+    renderDots(); updateStatDisplay();
+    setTimeout(nextTrial, 1400);
     return;
   }
-  if(state.phase==='ready'){
-    var rt=Math.round(performance.now()-state.greenAt);
-    state.results.push(rt);
-    state.trialIndex++;
-    mainText.textContent=rt+' ms';
-    subText.textContent=rt<200?'Incredible!':rt<280?'Fast!':rt<400?'Good':'Keep practicing';
-    tapArea.className='';tapArea.style.background='#1a3a2a';
-    renderTrials();updateStats();
-    setTimeout(function(){nextTrial();},1000);
+  if (_phase === 'ready') {
+    var rt = Math.round(performance.now() - _greenAt);
+    _results.push(rt);
+    _stats.totalTrials++;
+    if (rt < 200) _stats.sub200++;
+    _phase = 'show-result';
+    var ta = document.getElementById('tap-area');
+    ta.className = 'show-result';
+    document.getElementById('rt-display').textContent = rt + 'ms';
+    var label = rt < 180 ? 'Lightning fast!' : rt < 250 ? 'Very fast!' : rt < 330 ? 'Good!' : 'Keep training';
+    document.getElementById('main-text').textContent = label;
+    document.getElementById('sub-text').textContent = '';
+    beep(1320, 0.15, 0.12);
+    renderDots(); updateStatDisplay();
+    setTimeout(nextTrial, 1000);
     return;
   }
 }
 
-function nextTrial(){
-  if(state.trialIndex>=TRIALS){
-    state.phase='done';
-    tapArea.className='';tapArea.style.background='#111';
-    mainText.textContent='Session Complete!';
-    subText.textContent='';
-    renderTrials();updateStats();
-    btnRestart.style.display='block';
-    if(!state.removeAds&&window.Android)Android.showInterstitial();
+function nextTrial() {
+  if (_results.length >= _numTrials) {
+    finishSession();
     return;
   }
   startWaiting();
 }
 
-tapArea.addEventListener('touchstart',function(e){e.preventDefault();handleTap();},{passive:false});
-tapArea.addEventListener('mousedown',handleTap);
-btnRestart.addEventListener('click',function(){
-  state.phase='idle';tapArea.className='';tapArea.style.background='#1a1a1a';
-  mainText.textContent='Tap to Start';subText.textContent='Tap as fast as possible when screen turns GREEN';
-  ratingEl.textContent='';btnRestart.style.display='none';
-  renderTrials();
-});
+function finishSession() {
+  _phase = 'done';
+  var valid = _results.filter(function(r){ return r >= 0; });
+  var avg = valid.length ? Math.round(valid.reduce(function(a,b){return a+b;},0)/valid.length) : 9999;
+  var best = valid.length ? Math.min.apply(null, valid) : 9999;
 
-renderTrials();
-if(!state.removeAds&&!window.Android)document.getElementById('admob-banner').style.display='flex';
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';}};
+  if (best < _stats.allBest) { _stats.allBest = best; }
+  _stats.sessions++;
+
+  var rating = getRating(avg);
+  var ta = document.getElementById('tap-area');
+  ta.className = '';
+  ta.style.background = '#111';
+  document.getElementById('rt-display').textContent = '';
+  document.getElementById('main-text').innerHTML = '<span style="color:'+rating.color+'">'+rating.text+'</span>';
+  document.getElementById('sub-text').textContent = 'Avg: ' + (valid.length ? avg+'ms' : 'N/A') + ' — Tap to play again';
+
+  // History entry
+  _history.unshift({
+    date: new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}),
+    avg: avg, best: best, trials: _results.length, falsestarts: _results.filter(function(r){return r<0;}).length,
+    rating: rating.text
+  });
+  if (_history.length > 30) _history.pop();
+
+  // Coins: 1 per session + bonus for fast avg
+  var reward = 1;
+  if (avg < 250) reward = 2;
+  if (avg < 200) reward = 3;
+  earnCoins(reward, '+' + reward + ' coin' + (reward > 1 ? 's' : '') + '!');
+
+  _useCount++;
+  if (!_removeAds && _useCount % 3 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
+  }
+  updateStatDisplay();
+  save();
+}
+
+/* ── Tap area events ── */
+var tapArea = document.getElementById('tap-area');
+tapArea.addEventListener('touchstart', function(e) { e.preventDefault(); handleTap(); }, {passive:false});
+tapArea.addEventListener('mousedown', handleTap);
+
+/* ── Tabs ── */
+function switchTab(tab) {
+  _currentTab = tab;
+  document.querySelectorAll('.tab').forEach(function(el, i) {
+    var tabs = ['play','history','stats','shop'];
+    el.classList.toggle('active', tabs[i] === tab);
+  });
+  var playScreen = document.getElementById('play-screen');
+  var panel = document.getElementById('panel');
+  if (tab === 'play') {
+    playScreen.style.display = 'flex';
+    panel.style.display = 'none';
+  } else {
+    playScreen.style.display = 'none';
+    panel.style.display = 'block';
+    if (tab === 'history') renderHistory();
+    else if (tab === 'stats') renderStats();
+    else if (tab === 'shop') renderShop();
+  }
+}
+
+function renderHistory() {
+  var el = document.getElementById('panel');
+  if (!_history.length) {
+    el.innerHTML = '<div class="empty"><div style="font-size:2.5rem;">&#x26A1;</div><div style="margin-top:8px;">No sessions yet</div><div style="font-size:0.8rem;margin-top:4px;">Play a round to see your history</div></div>';
+    return;
+  }
+  el.innerHTML = _history.map(function(h) {
+    var rating = getRating(h.avg);
+    return '<div class="hist-item">' +
+      '<div class="hist-date">' + h.date + '</div>' +
+      '<div class="hist-row">' +
+        '<div><div class="hist-avg">' + (h.avg < 9999 ? h.avg+'ms avg' : 'N/A') + '</div>' +
+        '<div class="hist-best">Best: ' + (h.best < 9999 ? h.best+'ms' : 'N/A') + ' &nbsp;|&nbsp; ' + h.trials + ' trials</div></div>' +
+        '<div class="hist-rating" style="color:'+rating.color+'">'+h.rating+'</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderStats() {
+  var el = document.getElementById('panel');
+  el.innerHTML = '<div class="stat-grid">' +
+    sc('Sessions', _stats.sessions) +
+    sc('All-Time Best', _stats.allBest < 9999 ? _stats.allBest+'ms' : '—') +
+    sc('Total Trials', _stats.totalTrials) +
+    sc('Sub-200ms', _stats.sub200) +
+    sc('Coins Earned', _stats.coinsEarned) +
+  '</div>' +
+  '<div class="card"><div class="card-title">Earn More Coins</div>' +
+  '<div style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;">Watch an ad for 10 coins.</div>' +
+  '<button onclick="watchAd()" style="background:var(--accent);border:none;color:#fff;padding:8px 18px;border-radius:20px;font-size:0.8rem;font-family:Inter,sans-serif;cursor:pointer;">Watch Ad (+10)</button>' +
+  '</div>';
+}
+function sc(label, val) {
+  return '<div class="stat-card"><div class="stat-label">'+label+'</div><div class="stat-val">'+val+'</div></div>';
+}
+
+function renderShop() {
+  var el = document.getElementById('panel');
+  var themeHtml = '<div class="card"><div class="card-title">Themes</div><div class="theme-grid">';
+  THEMES.forEach(function(t) {
+    var owned = _owned.indexOf(t.id) >= 0;
+    var active = _activeTheme === t.id;
+    themeHtml += '<div class="theme-card'+(owned?' owned':'')+(active?' active':'')+'" onclick="selectTheme(\''+t.id+'\')">' +
+      '<div class="theme-preview" style="background:#111">' +
+        '<div class="tp-dot" style="background:'+t.wait+'"></div>' +
+        '<div class="tp-dot" style="background:'+t.go+'"></div>' +
+        '<div class="tp-dot" style="background:'+t.accent+'"></div>' +
+      '</div>' +
+      '<div class="theme-name">'+t.name+'</div>' +
+      '<div class="theme-price'+(t.price===0?' free':'')+'">'+(active?'Active':owned?'Owned':t.price+' coins')+'</div>' +
+    '</div>';
+  });
+  themeHtml += '</div></div>';
+
+  var coinHtml = '<div class="card"><div class="card-title">Coin Packs</div><div class="coin-row">' +
+    '<button class="coin-btn" onclick="buyCoins(\'coins_small\')">100 Coins — $0.99</button>' +
+    '<button class="coin-btn" onclick="buyCoins(\'coins_large\')">500 Coins — $2.99</button>' +
+  '</div></div>';
+
+  el.innerHTML = themeHtml + coinHtml;
+}
+
+function selectTheme(id) {
+  var t = THEMES.find(function(x){ return x.id===id; });
+  if (!t) return;
+  if (_owned.indexOf(id) < 0) {
+    if (_coins < t.price) { showToast('Need '+t.price+' coins'); return; }
+    _coins -= t.price; _owned.push(id); updateCoinDisplay();
+  }
+  _activeTheme = id; applyTheme(); save(); renderShop(); showToast(t.name+' theme!');
+}
+
+function watchAd() {
+  if (window.Android) { try { Android.showRewarded('coins'); } catch(e) {} }
+  else earnCoins(10, '+10 coins!');
+}
+function buyCoins(id) {
+  if (window.Android) { try { Android.purchase(id); } catch(e) {} }
+}
+
+/* ── Native bridge ── */
+window.onPurchaseComplete = function(id) {
+  if (id === 'remove_ads') {
+    _removeAds = true;
+    document.getElementById('btn-remove-ads').style.display = 'none';
+    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+    save(); showToast('Ads removed!');
+  } else if (id === 'coins_small') { earnCoins(100, '+100 coins!');
+  } else if (id === 'coins_large') { earnCoins(500, '+500 coins!'); }
+};
+window.onAdReward = function(type) { if (type === 'coins') earnCoins(10, '+10 coins!'); };
+window.onNativeBridgeReady = function() {
+  if (_removeAds && window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+};
+
+/* ── Init ── */
+load();
+applyTheme();
+updateCoinDisplay();
+updateStatDisplay();
+renderDots();
+if (_removeAds) document.getElementById('btn-remove-ads').style.display = 'none';
+document.getElementById('btn-remove-ads').addEventListener('click', function(){
+  if (window.Android) { try { Android.purchase('remove_ads'); } catch(e) {} }
+});
+// Restore trial count buttons
+document.querySelectorAll('.tsel-btn').forEach(function(b, i) {
+  var vals = [3,5,10];
+  b.classList.toggle('active', vals[i] === _numTrials);
+});
 </script>
 </body>
 </html>

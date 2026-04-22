@@ -1,0 +1,19 @@
+Reaction Time measures how quickly you can tap when the screen turns green. Sessions run 3, 5 or 10 trials. Each trial randomizes the wait time so you can't predict the signal — tapping too early counts as a false start.
+
+HOW TO PLAY
+Tap the screen to start. Wait for it to turn green, then tap as fast as you can. Your reaction time in milliseconds appears instantly. After all trials, you get a rating and session average.
+
+FEATURES
+• 3, 5 or 10 trial modes
+• Randomized 1–5 second wait to prevent guessing
+• False start detection (purple screen)
+• Millisecond precision using performance.now()
+• Session history with date, average, and rating
+• All-time record tracking
+• 6 colour themes for the play screen
+
+RATINGS
+Lightning (under 180ms), Elite (under 220ms), Fast (under 280ms), Average (under 350ms), Slow, Keep Going
+
+COIN REWARDS
+Earn coins each session. Faster averages earn more coins. Use coins to unlock colour themes.
