@@ -5,122 +5,493 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>World Clock</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#5C6BC0; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
-#app { display:flex; flex-direction:column; height:100%; padding:0; }
-header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px 10px; flex-shrink:0; }
-header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
-#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
-#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 12px 12px; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Share+Tech+Mono&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#0d1117;--surface:#161b22;--card:#1c2128;--accent:#58a6ff;--accent2:#3fb950;
+  --text:#e6edf3;--muted:#7d8590;--border:#30363d;--radius:14px;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100%;}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;flex-shrink:0;border-bottom:1px solid var(--border);}
+header h1{font-size:1.25rem;font-weight:800;letter-spacing:-0.5px;}
+header h1 span{color:var(--accent);}
+.hdr-btns{display:flex;gap:8px;}
+.hdr-btn{background:var(--card);border:1px solid var(--border);color:var(--text);font-size:0.7rem;font-family:'Inter',sans-serif;padding:5px 10px;border-radius:20px;cursor:pointer;}
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.tab{flex:1;padding:10px;font-size:0.75rem;font-weight:600;text-align:center;cursor:pointer;color:var(--muted);border:none;background:none;font-family:'Inter',sans-serif;transition:color 0.15s;}
+.tab.active{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent);}
+/* Scroll */
+#scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px;}
 /* Clock card */
-.tz-card { display:flex; align-items:center; justify-content:space-between; background:var(--surface); border-radius:12px; padding:12px 14px; margin-bottom:8px; gap:10px; }
-.tz-left { flex:1; min-width:0; }
-.tz-city { font-size:0.95rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.tz-region { font-size:0.7rem; color:var(--muted); margin-top:2px; }
-.tz-right { text-align:right; flex-shrink:0; }
-.tz-time { font-size:1.5rem; font-weight:700; font-variant-numeric:tabular-nums; color:var(--accent); letter-spacing:1px; }
-.tz-date { font-size:0.7rem; color:var(--muted); margin-top:2px; }
-.tz-ampm { font-size:0.75rem; color:var(--muted); margin-left:3px; }
-/* Toggle checkboxes */
-.tz-toggle { cursor:pointer; }
-.tz-toggle input { display:none; }
-.tz-chk { width:20px; height:20px; border-radius:6px; border:2px solid var(--muted); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.15s; }
-.tz-toggle input:checked ~ .tz-chk { background:var(--accent); border-color:var(--accent); }
-.tz-chk::after { content:'✓'; color:#fff; font-size:0.75rem; display:none; }
-.tz-toggle input:checked ~ .tz-chk::after { display:block; }
-/* Toggle section */
-.toggle-section { background:var(--surface); border-radius:12px; padding:12px 14px; margin-bottom:8px; }
-.toggle-section .card-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:8px; }
-.toggle-grid { display:flex; flex-wrap:wrap; gap:6px; }
-.tog-chip { padding:6px 12px; border:none; border-radius:20px; font-size:0.75rem; cursor:pointer; background:var(--card); color:var(--text); transition:all 0.15s; }
-.tog-chip.on { background:var(--accent); color:#fff; font-weight:700; }
-#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+.tz-card{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;gap:10px;position:relative;overflow:hidden;}
+.tz-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);opacity:0.5;}
+.tz-left{flex:1;min-width:0;}
+.tz-city{font-size:0.95rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tz-region{font-size:0.68rem;color:var(--muted);margin-top:2px;}
+.tz-offset{font-size:0.65rem;color:var(--accent);margin-top:3px;opacity:0.8;}
+.tz-right{text-align:right;flex-shrink:0;}
+.tz-time{font-size:1.6rem;font-weight:700;font-family:'Share Tech Mono','Courier New',monospace;color:var(--accent);letter-spacing:1px;}
+.tz-time.night{color:var(--muted);}
+.tz-date{font-size:0.68rem;color:var(--muted);margin-top:2px;}
+.tz-ampm{font-size:0.7rem;margin-left:3px;}
+.tz-status{font-size:0.65rem;margin-top:3px;}
+.tz-status.day{color:var(--accent2);}
+.tz-status.night{color:var(--muted);}
+.remove-btn{background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;padding:4px;line-height:1;}
+/* Add city panel */
+.add-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:8px;}
+.add-title{font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;}
+.city-grid{display:flex;flex-wrap:wrap;gap:6px;}
+.city-chip{padding:6px 12px;border:1px solid var(--border);border-radius:20px;font-size:0.73rem;cursor:pointer;background:var(--card);color:var(--text);font-family:'Inter',sans-serif;transition:all 0.15s;}
+.city-chip.added{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;}
+/* Stats */
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:8px;}
+.stat-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:4px;}
+.stat-value{font-size:1.6rem;font-weight:800;color:var(--accent);}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+/* Shop */
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.theme-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center;cursor:pointer;transition:all 0.2s;}
+.theme-card.owned{border-color:var(--accent2);}
+.theme-card.active{border-color:var(--accent);}
+.theme-preview{height:48px;border-radius:8px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:0.9rem;font-weight:700;}
+.theme-name{font-size:0.8rem;font-weight:700;margin-bottom:4px;}
+.theme-price{font-size:0.75rem;color:var(--muted);}
+.theme-price.free{color:var(--accent2);}
+/* Coins */
+.coins-bar{display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;}
+.coins-icon{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#ffd700,#ffaa00);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#7a4f00;}
+.coins-val{font-size:0.8rem;font-weight:700;color:#ffd700;}
+.coins-label{font-size:0.7rem;color:var(--muted);}
+.coins-earn{margin-left:auto;font-size:0.68rem;color:var(--accent2);}
+/* Toast */
+#toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:8px 16px;border-radius:20px;font-size:0.8rem;opacity:0;transition:all 0.3s;pointer-events:none;z-index:999;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* Empty */
+.empty{text-align:center;padding:40px 20px;color:var(--muted);}
+.empty .icon{font-size:2.5rem;margin-bottom:10px;}
 </style>
 </head>
 <body>
 <div id="app">
-  <header><h1>World <span>Clock</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
-  <div id="scroll">
-    <div id="clocks-list"></div>
-    <div class="toggle-section">
-      <div class="card-title">Toggle Cities</div>
-      <div class="toggle-grid" id="toggle-grid"></div>
+  <header>
+    <h1>World <span>Clock</span></h1>
+    <div class="hdr-btns">
+      <button class="hdr-btn" id="btn-remove-ads">Remove Ads</button>
     </div>
+  </header>
+  <div class="coins-bar">
+    <div class="coins-icon">C</div>
+    <span class="coins-val" id="coins-display">0</span>
+    <span class="coins-label">coins</span>
+    <span class="coins-earn" id="earn-hint">+1 per session</span>
   </div>
-  <div id="admob-banner">Advertisement</div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('clocks')">Clocks</button>
+    <button class="tab" onclick="switchTab('add')">Add City</button>
+    <button class="tab" onclick="switchTab('stats')">Stats</button>
+    <button class="tab" onclick="switchTab('shop')">Shop</button>
+  </div>
+  <div id="scroll"></div>
+  <div id="toast"></div>
 </div>
 <script>
 'use strict';
+
+/* ── Touch feedback ── */
 (function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
 
-var ZONES = [
-  {city:'New York',    region:'USA – Eastern',    tz:'America/New_York'},
-  {city:'Los Angeles', region:'USA – Pacific',    tz:'America/Los_Angeles'},
-  {city:'Chicago',     region:'USA – Central',    tz:'America/Chicago'},
-  {city:'São Paulo',   region:'Brazil',            tz:'America/Sao_Paulo'},
-  {city:'London',      region:'UK',                tz:'Europe/London'},
-  {city:'Paris',       region:'France',            tz:'Europe/Paris'},
-  {city:'Dubai',       region:'UAE',               tz:'Asia/Dubai'},
-  {city:'Singapore',   region:'Singapore',         tz:'Asia/Singapore'},
-  {city:'Tokyo',       region:'Japan',             tz:'Asia/Tokyo'},
-  {city:'Sydney',      region:'Australia',         tz:'Australia/Sydney'},
+/* ── All available cities ── */
+var ALL_ZONES = [
+  {city:'New York',     region:'USA',           tz:'America/New_York'},
+  {city:'Los Angeles',  region:'USA',           tz:'America/Los_Angeles'},
+  {city:'Chicago',      region:'USA',           tz:'America/Chicago'},
+  {city:'Denver',       region:'USA',           tz:'America/Denver'},
+  {city:'Toronto',      region:'Canada',        tz:'America/Toronto'},
+  {city:'Vancouver',    region:'Canada',        tz:'America/Vancouver'},
+  {city:'Mexico City',  region:'Mexico',        tz:'America/Mexico_City'},
+  {city:'São Paulo',    region:'Brazil',        tz:'America/Sao_Paulo'},
+  {city:'Buenos Aires', region:'Argentina',     tz:'America/Argentina/Buenos_Aires'},
+  {city:'Bogotá',       region:'Colombia',      tz:'America/Bogota'},
+  {city:'London',       region:'UK',            tz:'Europe/London'},
+  {city:'Paris',        region:'France',        tz:'Europe/Paris'},
+  {city:'Berlin',       region:'Germany',       tz:'Europe/Berlin'},
+  {city:'Madrid',       region:'Spain',         tz:'Europe/Madrid'},
+  {city:'Rome',         region:'Italy',         tz:'Europe/Rome'},
+  {city:'Amsterdam',    region:'Netherlands',   tz:'Europe/Amsterdam'},
+  {city:'Stockholm',    region:'Sweden',        tz:'Europe/Stockholm'},
+  {city:'Athens',       region:'Greece',        tz:'Europe/Athens'},
+  {city:'Moscow',       region:'Russia',        tz:'Europe/Moscow'},
+  {city:'Istanbul',     region:'Turkey',        tz:'Europe/Istanbul'},
+  {city:'Cairo',        region:'Egypt',         tz:'Africa/Cairo'},
+  {city:'Lagos',        region:'Nigeria',       tz:'Africa/Lagos'},
+  {city:'Nairobi',      region:'Kenya',         tz:'Africa/Nairobi'},
+  {city:'Johannesburg', region:'South Africa',  tz:'Africa/Johannesburg'},
+  {city:'Dubai',        region:'UAE',           tz:'Asia/Dubai'},
+  {city:'Riyadh',       region:'Saudi Arabia',  tz:'Asia/Riyadh'},
+  {city:'Tehran',       region:'Iran',          tz:'Asia/Tehran'},
+  {city:'Karachi',      region:'Pakistan',      tz:'Asia/Karachi'},
+  {city:'Mumbai',       region:'India',         tz:'Asia/Kolkata'},
+  {city:'Dhaka',        region:'Bangladesh',    tz:'Asia/Dhaka'},
+  {city:'Bangkok',      region:'Thailand',      tz:'Asia/Bangkok'},
+  {city:'Singapore',    region:'Singapore',     tz:'Asia/Singapore'},
+  {city:'Kuala Lumpur', region:'Malaysia',      tz:'Asia/Kuala_Lumpur'},
+  {city:'Jakarta',      region:'Indonesia',     tz:'Asia/Jakarta'},
+  {city:'Hong Kong',    region:'China',         tz:'Asia/Hong_Kong'},
+  {city:'Shanghai',     region:'China',         tz:'Asia/Shanghai'},
+  {city:'Seoul',        region:'South Korea',   tz:'Asia/Seoul'},
+  {city:'Tokyo',        region:'Japan',         tz:'Asia/Tokyo'},
+  {city:'Sydney',       region:'Australia',     tz:'Australia/Sydney'},
+  {city:'Melbourne',    region:'Australia',     tz:'Australia/Melbourne'},
+  {city:'Auckland',     region:'New Zealand',   tz:'Pacific/Auckland'},
+  {city:'Honolulu',     region:'Hawaii',        tz:'Pacific/Honolulu'},
+  {city:'Anchorage',    region:'Alaska',        tz:'America/Anchorage'},
 ];
 
-var state = { useCount:0, removeAds:false, shown: ZONES.map(function(){return true;}) };
-var STORE='wc_shown';
-try{var sv=JSON.parse(localStorage.getItem(STORE));if(sv&&sv.length===ZONES.length)state.shown=sv;}catch(e){}
+/* ── Default shown cities ── */
+var DEFAULT_SHOWN = ['New York','London','Tokyo','Dubai','Sydney'];
 
-function saveShown(){localStorage.setItem(STORE,JSON.stringify(state.shown));}
+/* ── Themes ── */
+var THEMES = [
+  {id:'ocean',  name:'Ocean',  price:0,   bg:'#0d1117', surface:'#161b22', card:'#1c2128', accent:'#58a6ff', accent2:'#3fb950', text:'#e6edf3', muted:'#7d8590', border:'#30363d'},
+  {id:'sunset', name:'Sunset', price:60,  bg:'#1a0a00', surface:'#2d1400', card:'#3d1f00', accent:'#ff7043', accent2:'#ffb74d', text:'#fff3e0', muted:'#a0826d', border:'#4a2c1a'},
+  {id:'forest', name:'Forest', price:60,  bg:'#0a1a0d', surface:'#0f2b14', card:'#143d1a', accent:'#66bb6a', accent2:'#aed581', text:'#e8f5e9', muted:'#81a784', border:'#1b5e20'},
+  {id:'neon',   name:'Neon',   price:100, bg:'#0a000f', surface:'#140020', card:'#1e0030', accent:'#e040fb', accent2:'#40c4ff', text:'#f3e5f5', muted:'#9c6fac', border:'#3a0050'},
+  {id:'gold',   name:'Gold',   price:100, bg:'#0f0c00', surface:'#1a1500', card:'#251e00', accent:'#ffd700', accent2:'#ffec6e', text:'#fff9c4', muted:'#a09040', border:'#3a3000'},
+  {id:'ice',    name:'Ice',    price:80,  bg:'#050d1a', surface:'#0a1929', card:'#0d2540', accent:'#81d4fa', accent2:'#b3e5fc', text:'#e1f5fe', muted:'#607d8b', border:'#102840'},
+];
 
-function toggleZone(i) {
-  state.shown[i]=!state.shown[i];
-  saveShown();
-  renderToggles();
-  renderClocks();
+/* ── State ── */
+var _coins = 0;
+var _removeAds = false;
+var _shownCities = DEFAULT_SHOWN.slice();
+var _stats = {opens:0, totalSessions:0, coinsEarned:0, citiesAdded:0};
+var _owned = ['ocean'];
+var _activeTheme = 'ocean';
+var _sessionCoins = 0;
+var _currentTab = 'clocks';
+var _useCount = 0;
+var _rafId = null;
+
+/* ── Persist ── */
+function save() {
+  try {
+    localStorage.setItem('wc2_state', JSON.stringify({
+      coins:_coins, removeAds:_removeAds, shown:_shownCities,
+      stats:_stats, owned:_owned, theme:_activeTheme
+    }));
+  } catch(e) {}
+}
+function load() {
+  try {
+    var s = JSON.parse(localStorage.getItem('wc2_state'));
+    if (!s) return;
+    if (typeof s.coins === 'number') _coins = s.coins;
+    if (s.removeAds) _removeAds = s.removeAds;
+    if (Array.isArray(s.shown) && s.shown.length) _shownCities = s.shown;
+    if (s.stats) _stats = Object.assign(_stats, s.stats);
+    if (Array.isArray(s.owned)) _owned = s.owned;
+    if (s.theme) _activeTheme = s.theme;
+  } catch(e) {}
 }
 
-function getTime(tz) {
+/* ── Theme ── */
+function applyTheme() {
+  var t = THEMES.find(function(x){return x.id===_activeTheme;}) || THEMES[0];
+  var r = document.documentElement.style;
+  r.setProperty('--bg', t.bg);
+  r.setProperty('--surface', t.surface);
+  r.setProperty('--card', t.card);
+  r.setProperty('--accent', t.accent);
+  r.setProperty('--accent2', t.accent2);
+  r.setProperty('--text', t.text);
+  r.setProperty('--muted', t.muted);
+  r.setProperty('--border', t.border);
+}
+
+/* ── Toast ── */
+var _toastTimer = null;
+function showToast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2200);
+}
+
+/* ── Coins ── */
+function updateCoinDisplay() {
+  document.getElementById('coins-display').textContent = _coins;
+}
+function earnCoins(n, msg) {
+  _coins += n;
+  _stats.coinsEarned += n;
+  _sessionCoins += n;
+  save();
+  updateCoinDisplay();
+  if (msg) showToast(msg);
+}
+
+/* ── Time helpers ── */
+function getTimeInfo(tz) {
   try {
-    var d=new Date();
-    var opts={timeZone:tz,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true};
-    var t=new Intl.DateTimeFormat('en-US',opts).format(d);
-    var dopts={timeZone:tz,weekday:'short',month:'short',day:'numeric'};
-    var dt=new Intl.DateTimeFormat('en-US',dopts).format(d);
-    return {time:t,date:dt};
-  } catch(e){return {time:'--:--',date:''};}
+    var d = new Date();
+    var t = new Intl.DateTimeFormat('en-US', {timeZone:tz, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true}).format(d);
+    var dt = new Intl.DateTimeFormat('en-US', {timeZone:tz, weekday:'short', month:'short', day:'numeric'}).format(d);
+    var hr = parseInt(new Intl.DateTimeFormat('en-US', {timeZone:tz, hour:'numeric', hour12:false}).format(d), 10);
+    var isDay = hr >= 7 && hr < 20;
+    var off = getOffset(tz);
+    return {time:t, date:dt, isDay:isDay, offset:off};
+  } catch(e) { return {time:'--:--:--', date:'', isDay:true, offset:''}; }
+}
+function getOffset(tz) {
+  try {
+    var d = new Date();
+    var s = new Intl.DateTimeFormat('en-US', {timeZone:tz, timeZoneName:'short'}).format(d);
+    var m = s.match(/GMT([+-]\d+(?::\d+)?)/i);
+    return m ? 'UTC'+m[1] : 'UTC';
+  } catch(e) { return ''; }
+}
+
+/* ── Tabs ── */
+function switchTab(tab) {
+  _currentTab = tab;
+  document.querySelectorAll('.tab').forEach(function(el, i){
+    var tabs = ['clocks','add','stats','shop'];
+    el.classList.toggle('active', tabs[i] === tab);
+  });
+  if (_rafId) { cancelAnimationFrame(_rafId); _rafId = null; }
+  render();
+  if (tab === 'clocks') startLoop();
+  // session coin reward on stats/shop visit
+  if ((tab === 'stats' || tab === 'shop') && _sessionCoins === 0) {
+    earnCoins(1);
+    _stats.totalSessions++;
+    save();
+  }
+}
+
+/* ── Clock loop ── */
+function startLoop() {
+  if (_rafId) cancelAnimationFrame(_rafId);
+  function tick() {
+    if (_currentTab === 'clocks') {
+      renderClocksOnly();
+      _rafId = requestAnimationFrame(tick);
+    }
+  }
+  _rafId = requestAnimationFrame(tick);
+}
+
+/* ── Render ── */
+function render() {
+  if (_currentTab === 'clocks') renderClocks();
+  else if (_currentTab === 'add') renderAdd();
+  else if (_currentTab === 'stats') renderStats();
+  else if (_currentTab === 'shop') renderShop();
+}
+
+function renderClocksOnly() {
+  var el = document.getElementById('scroll');
+  if (_currentTab !== 'clocks') return;
+  var cards = el.querySelectorAll('.tz-card');
+  var shown = ALL_ZONES.filter(function(z){ return _shownCities.indexOf(z.city) >= 0; });
+  shown.forEach(function(z, i) {
+    if (!cards[i]) return;
+    var info = getTimeInfo(z.tz);
+    var parts = info.time.match(/^(\d+:\d+:\d+)\s*(AM|PM)?$/i) || [];
+    var tstr = parts[1] || info.time, ampm = parts[2] || '';
+    var timeEl = cards[i].querySelector('.tz-time');
+    if (timeEl) timeEl.innerHTML = tstr + '<span class="tz-ampm">' + ampm + '</span>';
+  });
 }
 
 function renderClocks() {
-  var el=document.getElementById('clocks-list');
-  el.innerHTML=ZONES.map(function(z,i){
-    if(!state.shown[i])return '';
-    var r=getTime(z.tz);
-    // split time and AM/PM
-    var parts=r.time.match(/^(\d+:\d+:\d+)\s*(AM|PM)?$/i)||[];
-    var tstr=parts[1]||r.time, ampm=parts[2]||'';
-    return '<div class="tz-card">'+
-      '<div class="tz-left"><div class="tz-city">'+z.city+'</div><div class="tz-region">'+z.region+'</div></div>'+
-      '<div class="tz-right"><div class="tz-time">'+tstr+'<span class="tz-ampm">'+ampm+'</span></div><div class="tz-date">'+r.date+'</div></div>'+
-      '</div>';
+  var el = document.getElementById('scroll');
+  var shown = ALL_ZONES.filter(function(z){ return _shownCities.indexOf(z.city) >= 0; });
+  if (!shown.length) {
+    el.innerHTML = '<div class="empty"><div class="icon">&#x1F30D;</div><div>No cities selected</div><div style="margin-top:8px;font-size:0.8rem;">Go to Add City tab</div></div>';
+    return;
+  }
+  el.innerHTML = shown.map(function(z) {
+    var info = getTimeInfo(z.tz);
+    var parts = info.time.match(/^(\d+:\d+:\d+)\s*(AM|PM)?$/i) || [];
+    var tstr = parts[1] || info.time, ampm = parts[2] || '';
+    return '<div class="tz-card">' +
+      '<div class="tz-left">' +
+        '<div class="tz-city">' + z.city + '</div>' +
+        '<div class="tz-region">' + z.region + '</div>' +
+        '<div class="tz-offset">' + info.offset + '</div>' +
+      '</div>' +
+      '<div class="tz-right">' +
+        '<div class="tz-time' + (info.isDay ? '' : ' night') + '">' + tstr + '<span class="tz-ampm">' + ampm + '</span></div>' +
+        '<div class="tz-date">' + info.date + '</div>' +
+        '<div class="tz-status ' + (info.isDay ? 'day' : 'night') + '">' + (info.isDay ? 'Daytime' : 'Night') + '</div>' +
+      '</div>' +
+      '<button class="remove-btn" onclick="removeCity(\'' + z.city.replace(/'/g,"\\'") + '\')" title="Remove">&times;</button>' +
+    '</div>';
   }).join('');
 }
 
-function renderToggles() {
-  var el=document.getElementById('toggle-grid');
-  el.innerHTML=ZONES.map(function(z,i){
-    return '<button class="tog-chip'+(state.shown[i]?' on':'')+'" onclick="toggleZone('+i+')">'+z.city+'</button>';
-  }).join('');
+function renderAdd() {
+  var el = document.getElementById('scroll');
+  var regions = {};
+  ALL_ZONES.forEach(function(z) {
+    if (!regions[z.region]) regions[z.region] = [];
+    regions[z.region].push(z);
+  });
+  var html = '<div style="margin-bottom:10px;font-size:0.75rem;color:var(--muted);">Tap a city to add or remove it from your clock list.</div>';
+  Object.keys(regions).forEach(function(reg) {
+    html += '<div class="add-section"><div class="add-title">' + reg + '</div><div class="city-grid">';
+    regions[reg].forEach(function(z) {
+      var added = _shownCities.indexOf(z.city) >= 0;
+      html += '<button class="city-chip' + (added ? ' added' : '') + '" onclick="toggleCity(\'' + z.city.replace(/'/g,"\\'") + '\')">' + z.city + '</button>';
+    });
+    html += '</div></div>';
+  });
+  el.innerHTML = html;
 }
 
-renderToggles();
-renderClocks();
-setInterval(renderClocks,1000);
+function renderStats() {
+  var el = document.getElementById('scroll');
+  var totalH = Math.floor(_stats.totalSessions * 0.5); // rough estimate
+  el.innerHTML = '<div class="stat-grid">' +
+    statCard('App Opens', _stats.opens) +
+    statCard('Sessions', _stats.totalSessions) +
+    statCard('Coins Earned', _stats.coinsEarned) +
+    statCard('Cities Added', _stats.citiesAdded) +
+  '</div>' +
+  '<div class="stat-card" style="margin-bottom:8px;">' +
+    '<div class="stat-label">Currently Watching</div>' +
+    '<div style="font-size:1rem;font-weight:700;color:var(--accent);margin-top:4px;">' + _shownCities.length + ' cit' + (_shownCities.length===1?'y':'ies') + '</div>' +
+  '</div>' +
+  '<div class="stat-card">' +
+    '<div class="stat-label">Tip</div>' +
+    '<div style="font-size:0.82rem;color:var(--muted);margin-top:4px;line-height:1.5;">Watch a rewarded ad to earn 10 coins instantly.</div>' +
+    '<button onclick="watchAd()" style="margin-top:10px;background:var(--accent);border:none;color:#fff;padding:8px 18px;border-radius:20px;font-size:0.8rem;font-family:Inter,sans-serif;cursor:pointer;">Watch Ad (+10 coins)</button>' +
+  '</div>';
+}
+function statCard(label, val) {
+  return '<div class="stat-card"><div class="stat-label">' + label + '</div><div class="stat-value">' + val + '</div></div>';
+}
 
-document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
-function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCount%8===0&&window.Android)Android.showInterstitial();}
-if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
+function renderShop() {
+  var el = document.getElementById('scroll');
+  var html = '<div class="shop-grid">';
+  THEMES.forEach(function(t) {
+    var owned = _owned.indexOf(t.id) >= 0;
+    var active = _activeTheme === t.id;
+    html += '<div class="theme-card' + (owned?' owned':'') + (active?' active':'') + '" onclick="selectTheme(\'' + t.id + '\')">' +
+      '<div class="theme-preview" style="background:' + t.bg + ';color:' + t.accent + ';border:2px solid ' + t.border + '">12:34</div>' +
+      '<div class="theme-name">' + t.name + '</div>' +
+      '<div class="theme-price' + (t.price===0?' free':'') + '">' + (active ? 'Active' : owned ? 'Owned' : t.price + ' coins') + '</div>' +
+    '</div>';
+  });
+  html += '</div>';
+  html += '<div class="stat-card"><div class="stat-label">Coin Packs</div>' +
+    '<div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">' +
+    coinBtn('100 Coins — $0.99', 'coins_small') +
+    coinBtn('500 Coins — $2.99', 'coins_large') +
+    '</div></div>';
+  el.innerHTML = html;
+}
+function coinBtn(label, id) {
+  return '<button onclick="buyCoins(\'' + id + '\')" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;font-size:0.82rem;font-family:Inter,sans-serif;cursor:pointer;text-align:left;">' + label + '</button>';
+}
+
+/* ── Actions ── */
+function removeCity(city) {
+  var i = _shownCities.indexOf(city);
+  if (i >= 0) _shownCities.splice(i, 1);
+  save();
+  renderClocks();
+}
+
+function toggleCity(city) {
+  var i = _shownCities.indexOf(city);
+  if (i >= 0) {
+    _shownCities.splice(i, 1);
+  } else {
+    _shownCities.push(city);
+    _stats.citiesAdded++;
+    earnCoins(1);
+  }
+  save();
+  renderAdd();
+}
+
+function selectTheme(id) {
+  var t = THEMES.find(function(x){return x.id===id;});
+  if (!t) return;
+  var owned = _owned.indexOf(id) >= 0;
+  if (!owned) {
+    if (_coins < t.price) { showToast('Need ' + t.price + ' coins'); return; }
+    _coins -= t.price;
+    _owned.push(id);
+    updateCoinDisplay();
+  }
+  _activeTheme = id;
+  applyTheme();
+  save();
+  renderShop();
+  showToast(t.name + ' theme applied!');
+}
+
+function watchAd() {
+  if (window.Android) Android.showRewarded('coins');
+  else { earnCoins(10, '+10 coins!'); }
+}
+
+function buyCoins(id) {
+  if (window.Android) Android.purchase(id);
+}
+
+/* ── Interstitial ── */
+function maybeInterstitial() {
+  _useCount++;
+  if (!_removeAds && _useCount % 6 === 0 && window.Android) Android.showInterstitial();
+}
+
+/* ── Native bridge ── */
+window.onPurchaseComplete = function(id) {
+  if (id === 'remove_ads') {
+    _removeAds = true;
+    document.getElementById('btn-remove-ads').style.display = 'none';
+    if (window.Android) Android.hideBannerAd();
+    save();
+    showToast('Ads removed! Thank you.');
+  } else if (id === 'coins_small') {
+    earnCoins(100, '+100 coins!');
+  } else if (id === 'coins_large') {
+    earnCoins(500, '+500 coins!');
+  }
+};
+
+window.onAdReward = function(type) {
+  if (type === 'coins') earnCoins(10, '+10 coins!');
+};
+
+window.onNativeBridgeReady = function() {
+  if (_removeAds && window.Android) Android.hideBannerAd();
+};
+
+/* ── Init ── */
+load();
+applyTheme();
+updateCoinDisplay();
+_stats.opens++;
+save();
+switchTab('clocks');
+
+document.getElementById('btn-remove-ads').addEventListener('click', function(){
+  if (window.Android) Android.purchase('remove_ads');
+});
+if (_removeAds) document.getElementById('btn-remove-ads').style.display = 'none';
+
+// Interstitial on idle
+setInterval(maybeInterstitial, 30000);
 </script>
 </body>
 </html>
