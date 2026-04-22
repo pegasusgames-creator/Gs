@@ -3,208 +3,528 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SatisfyingSlime</title>
+<title>Satisfying Slime</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-:root{--bg:#0a1a1f;--accent:#B2EBF2;--text:#eaeaea;--muted:#446677;--radius:12px;}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;}
+:root{--bg:#0a0f14;--surface:#111820;--card:#1a2430;--accent:#00bcd4;--text:#e0f7fa;--muted:#446677;--border:#1e3040;--radius:14px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;overflow:hidden;}
 #app{display:flex;flex-direction:column;height:100%;}
-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;flex-shrink:0;}
-header h1{font-size:1.2rem;font-weight:700;}header h1 span{color:var(--accent);}
-#canvas{display:block;width:100%;flex:1;touch-action:none;}
-#controls{display:flex;gap:8px;padding:8px 12px;flex-shrink:0;flex-wrap:wrap;justify-content:center;}
-.color-btn{width:36px;height:36px;border-radius:50%;border:3px solid transparent;cursor:pointer;touch-action:manipulation;}
-.color-btn.active{border-color:#fff;transform:scale(1.15);}
-.color-btn.btn-pressed{transform:scale(0.85);}
-#banner{height:50px;background:#111;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.75rem;flex-shrink:0;}
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 8px;flex-shrink:0;}
+header h1{font-size:1.2rem;font-weight:800;letter-spacing:-0.5px;}
+header h1 span{color:var(--accent);}
+.hdr-right{display:flex;align-items:center;gap:8px;}
+.coins-pill{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:4px 10px;}
+.coins-dot{width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#ffd700,#ffaa00);display:flex;align-items:center;justify-content:center;font-size:0.5rem;font-weight:800;color:#7a4f00;}
+.coins-val{font-size:0.78rem;font-weight:700;color:#ffd700;}
+.hdr-btn{background:var(--card);border:1px solid var(--border);color:var(--text);font-size:0.68rem;font-family:Inter,sans-serif;padding:5px 10px;border-radius:20px;cursor:pointer;}
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.tab{flex:1;padding:9px;font-size:0.73rem;font-weight:600;text-align:center;cursor:pointer;color:var(--muted);border:none;background:none;font-family:Inter,sans-serif;transition:color 0.15s;}
+.tab.active{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent);}
+/* Play */
+#play-screen{flex:1;display:flex;flex-direction:column;}
+#canvas{display:block;width:100%;flex:1;touch-action:none;cursor:pointer;}
+#color-bar{display:flex;gap:8px;padding:10px 14px;flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);align-items:center;overflow-x:auto;}
+.color-swatch{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer;flex-shrink:0;transition:transform 0.15s;}
+.color-swatch.active{border-color:#fff;transform:scale(1.2);}
+.color-swatch.locked{opacity:0.4;position:relative;}
+.color-sep{width:1px;height:28px;background:var(--border);flex-shrink:0;}
+#effect-label{font-size:0.7rem;color:var(--muted);flex-shrink:0;}
+/* Panel */
+#panel{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px;display:none;}
+.section-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;}
+.slime-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.slime-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:8px;cursor:pointer;text-align:center;transition:all 0.2s;}
+.slime-card.owned{border-color:#00c853;}
+.slime-card.active{border-color:var(--accent);}
+.slime-preview{width:40px;height:40px;border-radius:50%;margin:0 auto 4px;position:relative;overflow:hidden;}
+.slime-name{font-size:0.72rem;font-weight:700;margin-bottom:2px;}
+.slime-price{font-size:0.65rem;color:var(--muted);}
+.slime-price.free{color:#00c853;}
+.effect-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.effect-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:10px;cursor:pointer;text-align:center;}
+.effect-card.owned{border-color:#00c853;}
+.effect-card.active{border-color:var(--accent);}
+.effect-icon{font-size:1.8rem;margin-bottom:4px;}
+.effect-name{font-size:0.78rem;font-weight:700;margin-bottom:2px;}
+.effect-price{font-size:0.7rem;color:var(--muted);}
+.effect-price.free{color:#00c853;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;}
+.stat-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:4px;}
+.stat-val{font-size:1.4rem;font-weight:800;color:var(--accent);}
+.coin-row{display:flex;flex-direction:column;gap:8px;}
+.coin-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:10px;font-size:0.82rem;font-family:Inter,sans-serif;cursor:pointer;text-align:left;}
+#toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:8px 16px;border-radius:20px;font-size:0.8rem;opacity:0;transition:all 0.3s;pointer-events:none;z-index:999;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
-<button id="btn-remove-ads" onclick="if(window.Android)Android.purchase('remove_ads')" style="position:fixed;top:8px;right:8px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:0.65rem;font-weight:700;padding:5px 10px;border-radius:20px;cursor:pointer;z-index:9999;letter-spacing:0.5px">Remove Ads</button>
 <div id="app">
-  <header><h1>Satisfying<span>Slime</span></h1><span style="font-size:0.8rem;color:var(--muted)">Touch to play!</span></header>
-  <canvas id="canvas"></canvas>
-  <div id="controls" id="color-row"></div>
-  <div id="banner">Ad Banner</div>
+  <header>
+    <h1>Satisfying<span>Slime</span></h1>
+    <div class="hdr-right">
+      <div class="coins-pill"><div class="coins-dot">C</div><span class="coins-val" id="coins-display">0</span></div>
+      <button class="hdr-btn" id="btn-remove-ads">Remove Ads</button>
+    </div>
+  </header>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('play')">Play</button>
+    <button class="tab" onclick="switchTab('colors')">Colors</button>
+    <button class="tab" onclick="switchTab('stats')">Stats</button>
+    <button class="tab" onclick="switchTab('shop')">Shop</button>
+  </div>
+  <div id="play-screen">
+    <canvas id="canvas"></canvas>
+    <div id="color-bar"></div>
+  </div>
+  <div id="panel"></div>
+  <div id="toast"></div>
 </div>
 <script>
-const canvas=document.getElementById('canvas');
-const ctx=canvas.getContext('2d');
+'use strict';
 
-const SLIME_COLORS=[
-  {name:'Aqua',base:'#00BCD4',light:'#B2EBF2'},
-  {name:'Lavender',base:'#9C27B0',light:'#E1BEE7'},
-  {name:'Mint',base:'#4CAF50',light:'#C8E6C9'},
-  {name:'Peach',base:'#FF5722',light:'#FFCCBC'},
-  {name:'Pink',base:'#E91E63',light:'#FCE4EC'},
-  {name:'Gold',base:'#FFC107',light:'#FFF9C4'},
+/* ── Slime colors ── */
+var SLIMES = [
+  {id:'aqua',    name:'Aqua',     price:0,   base:'#00BCD4', light:'#B2EBF2', glow:'#00e5ff'},
+  {id:'lavender',name:'Lavender', price:0,   base:'#9C27B0', light:'#E1BEE7', glow:'#e040fb'},
+  {id:'mint',    name:'Mint',     price:0,   base:'#4CAF50', light:'#C8E6C9', glow:'#69f0ae'},
+  {id:'peach',   name:'Peach',    price:40,  base:'#FF7043', light:'#FFCCBC', glow:'#ff6e40'},
+  {id:'pink',    name:'Pink',     price:40,  base:'#E91E63', light:'#FCE4EC', glow:'#ff4081'},
+  {id:'gold',    name:'Gold',     price:60,  base:'#FFC107', light:'#FFF9C4', glow:'#ffd740'},
+  {id:'cobalt',  name:'Cobalt',   price:60,  base:'#1565C0', light:'#BBDEFB', glow:'#448aff'},
+  {id:'coral',   name:'Coral',    price:80,  base:'#FF6584', light:'#ffdde1', glow:'#ff80ab'},
+  {id:'silver',  name:'Silver',   price:80,  base:'#90A4AE', light:'#ECEFF1', glow:'#cfd8dc'},
+  {id:'rainbow', name:'Rainbow',  price:120, base:null,      light:null,      glow:'#fff'},
 ];
 
-let slimeColor=SLIME_COLORS[0];
-let mouseX=null,mouseY=null,touching=false;
+/* ── Effects ── */
+var EFFECTS = [
+  {id:'normal',  name:'Normal',  icon:'&#x1F7E2;', price:0},
+  {id:'glitter', name:'Glitter', icon:'&#x2728;',  price:60},
+  {id:'bubble',  name:'Bubble',  icon:'&#x1F7E0;', price:60},
+  {id:'gooey',   name:'Gooey',   icon:'&#x1F7E3;', price:80},
+];
 
-function resize(){
-  canvas.width=canvas.offsetWidth;
-  canvas.height=canvas.offsetHeight;
+/* ── State ── */
+var _coins = 0;
+var _removeAds = false;
+var _ownedSlimes = ['aqua', 'lavender', 'mint'];
+var _ownedEffects = ['normal'];
+var _activeSlime = 'aqua';
+var _activeEffect = 'normal';
+var _stats = {touches:0, sessions:0, coinsEarned:0, timeMs:0};
+var _currentTab = 'play';
+var _useCount = 0;
+var _sessionStart = Date.now();
+var _sessionTouches = 0;
+
+/* ── Persist ── */
+function save() {
+  try {
+    localStorage.setItem('ss2_state', JSON.stringify({
+      coins:_coins, removeAds:_removeAds,
+      ownedSlimes:_ownedSlimes, ownedEffects:_ownedEffects,
+      activeSlime:_activeSlime, activeEffect:_activeEffect, stats:_stats
+    }));
+  } catch(e) {}
+}
+function load() {
+  try {
+    var s = JSON.parse(localStorage.getItem('ss2_state'));
+    if (!s) return;
+    if (typeof s.coins === 'number') _coins = s.coins;
+    if (s.removeAds) _removeAds = true;
+    if (Array.isArray(s.ownedSlimes)) _ownedSlimes = s.ownedSlimes;
+    if (Array.isArray(s.ownedEffects)) _ownedEffects = s.ownedEffects;
+    if (s.activeSlime) _activeSlime = s.activeSlime;
+    if (s.activeEffect) _activeEffect = s.activeEffect;
+    if (s.stats) _stats = Object.assign(_stats, s.stats);
+  } catch(e) {}
+}
+
+/* ── Toast / coins ── */
+var _toastTimer = null;
+function showToast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2000);
+}
+function updateCoinDisplay() { document.getElementById('coins-display').textContent = _coins; }
+function earnCoins(n, msg) {
+  _coins += n; _stats.coinsEarned += n; save(); updateCoinDisplay();
+  if (msg) showToast(msg);
+}
+
+/* ── Canvas ── */
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var NUM_PARTICLES = 150;
+var particles = [];
+var mouseX = null, mouseY = null, touching = false;
+var _rainbowHue = 0;
+
+function getSlimeColor() {
+  var s = SLIMES.find(function(x){ return x.id === _activeSlime; }) || SLIMES[0];
+  if (_activeSlime === 'rainbow') {
+    var hue = _rainbowHue;
+    return {
+      base: 'hsl(' + hue + ',80%,55%)',
+      light: 'hsl(' + ((hue+40)%360) + ',90%,85%)',
+      glow: 'hsl(' + hue + ',100%,65%)'
+    };
+  }
+  return s;
+}
+
+function resize() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
   initParticles();
 }
 
-const NUM_PARTICLES=120;
-let particles=[];
-
-function initParticles(){
-  particles=[];
-  const w=canvas.width,h=canvas.height;
-  for(let i=0;i<NUM_PARTICLES;i++){
+function initParticles() {
+  particles = [];
+  var w = canvas.width, h = canvas.height;
+  for (var i = 0; i < NUM_PARTICLES; i++) {
     particles.push({
-      x:w/2+(Math.random()-0.5)*200,
-      y:h/2+(Math.random()-0.5)*200,
-      vx:(Math.random()-0.5)*0.5,
-      vy:(Math.random()-0.5)*0.5,
-      r:8+Math.random()*12,
-      phase:Math.random()*Math.PI*2,
+      x: w/2 + (Math.random()-0.5)*180,
+      y: h/2 + (Math.random()-0.5)*180,
+      vx: (Math.random()-0.5)*0.4,
+      vy: (Math.random()-0.5)*0.4,
+      r: 9 + Math.random() * 10,
+      phase: Math.random() * Math.PI * 2,
     });
   }
 }
 
-function animate(){
-  requestAnimationFrame(animate);
-  const w=canvas.width,h=canvas.height;
-  ctx.clearRect(0,0,w,h);
-
-  const t=Date.now()*0.001;
-
-  // Update particles
-  particles.forEach(p=>{
-    p.phase+=0.02;
-    // Ambient drift
-    p.vx+=(Math.random()-0.5)*0.1+Math.sin(p.phase)*0.05;
-    p.vy+=(Math.random()-0.5)*0.1+Math.cos(p.phase)*0.05;
-
-    if(touching&&mouseX!==null){
-      const dx=mouseX-p.x,dy=mouseY-p.y;
-      const dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<120){
-        const force=0.8*(1-dist/120);
-        p.vx+=dx/dist*force;
-        p.vy+=dy/dist*force;
-      }
-    }else{
-      // Cohesion: attract to center of mass
-      const cx=particles.reduce((s,q)=>s+q.x,0)/NUM_PARTICLES;
-      const cy=particles.reduce((s,q)=>s+q.y,0)/NUM_PARTICLES;
-      p.vx+=(cx-p.x)*0.002;
-      p.vy+=(cy-p.y)*0.002;
-    }
-
-    // Damping
-    p.vx*=0.92;p.vy*=0.92;
-    p.x+=p.vx;p.y+=p.vy;
-
-    // Bounds
-    if(p.x<p.r){p.x=p.r;p.vx*=-0.6;}
-    if(p.x>w-p.r){p.x=w-p.r;p.vx*=-0.6;}
-    if(p.y<p.r){p.y=p.r;p.vy*=-0.6;}
-    if(p.y>h-p.r){p.y=h-p.r;p.vy*=-0.6;}
-  });
-
-  // Draw blobs using radial gradients
-  ctx.globalCompositeOperation='source-over';
-  particles.forEach(p=>{
-    const grad=ctx.createRadialGradient(p.x-p.r*0.3,p.y-p.r*0.3,p.r*0.1,p.x,p.y,p.r*1.2);
-    grad.addColorStop(0,slimeColor.light+'ee');
-    grad.addColorStop(0.5,slimeColor.base+'cc');
-    grad.addColorStop(1,slimeColor.base+'00');
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r*1.4,0,Math.PI*2);
-    ctx.fillStyle=grad;
-    ctx.fill();
-  });
-
-  // Glossy highlight
-  if(touching&&mouseX!==null){
-    const hgrad=ctx.createRadialGradient(mouseX,mouseY,0,mouseX,mouseY,60);
-    hgrad.addColorStop(0,'rgba(255,255,255,0.3)');
-    hgrad.addColorStop(1,'rgba(255,255,255,0)');
-    ctx.beginPath();ctx.arc(mouseX,mouseY,60,0,Math.PI*2);
-    ctx.fillStyle=hgrad;ctx.fill();
+/* ── Glitter particles ── */
+var glitters = [];
+function spawnGlitter(x, y, color) {
+  for (var i = 0; i < 8; i++) {
+    var angle = Math.random() * Math.PI * 2;
+    var speed = 1 + Math.random() * 3;
+    glitters.push({
+      x:x, y:y,
+      vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed,
+      r: 1 + Math.random() * 2,
+      a: 1, color: color
+    });
   }
 }
 
-// Controls
-const controls=document.getElementById('controls');
-SLIME_COLORS.forEach((c,i)=>{
-  const b=document.createElement('div');
-  b.className='color-btn'+(i===0?' active':'');
-  b.style.background=c.base;
-  b.addEventListener('touchstart',function(e){
-    e.preventDefault();
-    this.classList.add('btn-pressed');setTimeout(()=>this.classList.remove('btn-pressed'),120);
-    slimeColor=c;
-    document.querySelectorAll('.color-btn').forEach(x=>x.classList.remove('active'));
-    this.classList.add('active');
-  },{passive:false});
-  b.addEventListener('click',()=>{
-    slimeColor=c;
-    document.querySelectorAll('.color-btn').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');
-  });
-  controls.appendChild(b);
-});
+/* ── Animate ── */
+function animate() {
+  requestAnimationFrame(animate);
+  if (_currentTab !== 'play') return;
+  var w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
 
-canvas.addEventListener('touchstart',e=>{
-  e.preventDefault();touching=true;
-  const r=canvas.getBoundingClientRect();
-  mouseX=e.touches[0].clientX-r.left;
-  mouseY=e.touches[0].clientY-r.top;
-},{passive:false});
-canvas.addEventListener('touchmove',e=>{
-  e.preventDefault();
-  const r=canvas.getBoundingClientRect();
-  mouseX=e.touches[0].clientX-r.left;
-  mouseY=e.touches[0].clientY-r.top;
-},{passive:false});
-canvas.addEventListener('touchend',()=>{touching=false;mouseX=null;mouseY=null;});
-canvas.addEventListener('mousemove',e=>{
-  const r=canvas.getBoundingClientRect();
-  mouseX=e.clientX-r.left;mouseY=e.clientY-r.top;touching=true;
-});
-canvas.addEventListener('mouseleave',()=>{touching=false;mouseX=null;mouseY=null;});
+  // Background
+  ctx.fillStyle = '#0a0f14';
+  ctx.fillRect(0, 0, w, h);
 
-window.addEventListener('resize',resize);
-resize();
-animate();
+  if (_activeSlime === 'rainbow') _rainbowHue = (_rainbowHue + 0.4) % 360;
+  var sc = getSlimeColor();
 
-// ── AppLovin MAX / IAP bridge ──────────────────────────────────────────
-var _adsRemoved = false;
-var _interstitialCount = 0;
+  var cx = 0, cy = 0;
+  for (var i = 0; i < particles.length; i++) { cx += particles[i].x; cy += particles[i].y; }
+  cx /= particles.length; cy /= particles.length;
 
-function _showInterstitial() {
-  if (_adsRemoved) return;
-  _interstitialCount++;
-  if (_interstitialCount % 3 === 0 && window.Android) {
+  for (var i = 0; i < particles.length; i++) {
+    var p = particles[i];
+    p.phase += 0.018;
+    p.vx += (Math.random()-0.5)*0.08 + Math.sin(p.phase)*0.04;
+    p.vy += (Math.random()-0.5)*0.08 + Math.cos(p.phase)*0.04;
+
+    if (touching && mouseX !== null) {
+      var dx = mouseX - p.x, dy = mouseY - p.y;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 140 && dist > 0) {
+        var force = 0.9 * (1 - dist/140);
+        p.vx += (dx/dist) * force;
+        p.vy += (dy/dist) * force;
+      }
+    } else {
+      p.vx += (cx - p.x) * 0.0018;
+      p.vy += (cy - p.y) * 0.0018;
+    }
+
+    // Effect-specific physics
+    if (_activeEffect === 'gooey') {
+      p.vx *= 0.88; p.vy *= 0.88;
+    } else if (_activeEffect === 'bubble') {
+      p.vy -= 0.02;
+      p.vx *= 0.94; p.vy *= 0.94;
+    } else {
+      p.vx *= 0.92; p.vy *= 0.92;
+    }
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < p.r) { p.x = p.r; p.vx *= -0.5; }
+    if (p.x > w - p.r) { p.x = w - p.r; p.vx *= -0.5; }
+    if (p.y < p.r) { p.y = p.r; p.vy *= -0.5; }
+    if (p.y > h - p.r) { p.y = h - p.r; p.vy *= -0.5; }
+  }
+
+  // Draw blobs
+  for (var i = 0; i < particles.length; i++) {
+    var p = particles[i];
+    var pr = p.r * (_activeEffect === 'bubble' ? 1.5 : 1.4);
+    var c = _activeSlime === 'rainbow'
+      ? getSlimeColor()
+      : sc;
+
+    if (_activeEffect === 'bubble') {
+      // Hollow bubble look
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, pr, 0, Math.PI*2);
+      ctx.strokeStyle = c.light + 'aa';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      var g = ctx.createRadialGradient(p.x - pr*0.3, p.y - pr*0.3, pr*0.1, p.x, p.y, pr);
+      g.addColorStop(0, c.light + '33');
+      g.addColorStop(1, c.base + '22');
+      ctx.fillStyle = g;
+      ctx.fill();
+    } else {
+      var g = ctx.createRadialGradient(p.x - pr*0.3, p.y - pr*0.3, pr*0.1, p.x, p.y, pr*1.2);
+      g.addColorStop(0, c.light + 'ee');
+      g.addColorStop(0.5, c.base + 'cc');
+      g.addColorStop(1, c.base + '00');
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, pr, 0, Math.PI*2);
+      ctx.fillStyle = g;
+      ctx.fill();
+    }
+  }
+
+  // Glitter effect
+  if (_activeEffect === 'glitter') {
+    for (var i = glitters.length - 1; i >= 0; i--) {
+      var g = glitters[i];
+      g.x += g.vx; g.y += g.vy; g.vy += 0.05; g.a -= 0.025;
+      ctx.globalAlpha = Math.max(0, g.a);
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(g.x, g.y, g.r, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    glitters = glitters.filter(function(g){ return g.a > 0; });
+
+    if (touching && mouseX !== null && Math.random() < 0.3) {
+      spawnGlitter(mouseX + (Math.random()-0.5)*20, mouseY + (Math.random()-0.5)*20, sc.light);
+    }
+  }
+
+  // Touch highlight
+  if (touching && mouseX !== null) {
+    var hg = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 70);
+    hg.addColorStop(0, 'rgba(255,255,255,0.25)');
+    hg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.beginPath();
+    ctx.arc(mouseX, mouseY, 70, 0, Math.PI*2);
+    ctx.fillStyle = hg;
+    ctx.fill();
+  }
+}
+
+/* ── Input ── */
+function setTouch(x, y) {
+  touching = true; mouseX = x; mouseY = y;
+  _stats.touches++;
+  _sessionTouches++;
+  if (_sessionTouches % 50 === 0) earnCoins(1);
+  _useCount++;
+  if (!_removeAds && _useCount % 30 === 0 && window.Android) {
     try { Android.showInterstitial(); } catch(e) {}
   }
 }
 
-window.onPurchaseComplete = function(sku) {
-  if (sku === 'remove_ads') {
-    _adsRemoved = true;
-    var btn = document.getElementById('btn-remove-ads');
-    if (btn) btn.style.display = 'none';
-    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
-  }
-};
+canvas.addEventListener('touchstart', function(e) {
+  e.preventDefault();
+  var r = canvas.getBoundingClientRect();
+  setTouch(e.touches[0].clientX - r.left, e.touches[0].clientY - r.top);
+}, {passive:false});
+canvas.addEventListener('touchmove', function(e) {
+  e.preventDefault();
+  var r = canvas.getBoundingClientRect();
+  mouseX = e.touches[0].clientX - r.left;
+  mouseY = e.touches[0].clientY - r.top;
+}, {passive:false});
+canvas.addEventListener('touchend', function() { touching = false; mouseX = null; mouseY = null; });
+canvas.addEventListener('mousemove', function(e) {
+  var r = canvas.getBoundingClientRect();
+  mouseX = e.clientX - r.left; mouseY = e.clientY - r.top; touching = true;
+});
+canvas.addEventListener('mouseleave', function() { touching = false; mouseX = null; mouseY = null; });
 
-// Restore remove-ads state on load
-if (window.Android) {
-  try { if (Android.isPurchased && Android.isPurchased('remove_ads')) {
-    _adsRemoved = true;
-    var btn = document.getElementById('btn-remove-ads');
-    if (btn) btn.style.display = 'none';
-  }} catch(e) {}
+/* ── Color bar ── */
+function renderColorBar() {
+  var el = document.getElementById('color-bar');
+  var html = SLIMES.map(function(s, i) {
+    if (i > 5) return ''; // show first 6 in bar
+    var owned = _ownedSlimes.indexOf(s.id) >= 0;
+    var active = _activeSlime === s.id;
+    var bg = s.base || 'linear-gradient(135deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f)';
+    return '<div class="color-swatch'+(active?' active':'')+(owned?'':' locked')+'" ' +
+      'style="background:'+bg+'" onclick="pickSlime(\''+s.id+'\')"></div>';
+  }).join('') +
+  '<div class="color-sep"></div>' +
+  '<span id="effect-label" style="font-size:0.7rem;color:var(--muted);">' + EFFECTS.find(function(e){return e.id===_activeEffect;}).name + '</span>';
+  el.innerHTML = html;
 }
 
+function pickSlime(id) {
+  var s = SLIMES.find(function(x){ return x.id === id; });
+  if (!s) return;
+  if (_ownedSlimes.indexOf(id) < 0) { showToast('Unlock in Colors tab'); return; }
+  _activeSlime = id; save(); renderColorBar();
+}
+
+/* ── Tabs ── */
+function switchTab(tab) {
+  _currentTab = tab;
+  document.querySelectorAll('.tab').forEach(function(el, i) {
+    var tabs = ['play','colors','stats','shop'];
+    el.classList.toggle('active', tabs[i] === tab);
+  });
+  var playScreen = document.getElementById('play-screen');
+  var panel = document.getElementById('panel');
+  if (tab === 'play') {
+    playScreen.style.display = 'flex';
+    panel.style.display = 'none';
+  } else {
+    playScreen.style.display = 'none';
+    panel.style.display = 'block';
+    if (tab === 'colors') renderColors();
+    else if (tab === 'stats') renderStats();
+    else if (tab === 'shop') renderShop();
+  }
+  if (tab !== 'play') {
+    _stats.sessions++;
+    earnCoins(1);
+    save();
+  }
+}
+
+function renderColors() {
+  var el = document.getElementById('panel');
+  var slimeHtml = '<div class="section-title">Slime Colors</div><div class="slime-grid">';
+  SLIMES.forEach(function(s) {
+    var owned = _ownedSlimes.indexOf(s.id) >= 0;
+    var active = _activeSlime === s.id;
+    var bg = s.base || 'conic-gradient(#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)';
+    slimeHtml += '<div class="slime-card'+(owned?' owned':'')+(active?' active':'')+'" onclick="selectSlime(\''+s.id+'\')">' +
+      '<div class="slime-preview" style="background:'+bg+'"></div>' +
+      '<div class="slime-name">'+s.name+'</div>' +
+      '<div class="slime-price'+(s.price===0?' free':'')+'">'+(active?'Active':owned?'Owned':s.price+' coins')+'</div>' +
+    '</div>';
+  });
+  slimeHtml += '</div>';
+
+  var effectHtml = '<div class="section-title">Effects</div><div class="effect-grid">';
+  EFFECTS.forEach(function(e) {
+    var owned = _ownedEffects.indexOf(e.id) >= 0;
+    var active = _activeEffect === e.id;
+    effectHtml += '<div class="effect-card'+(owned?' owned':'')+(active?' active':'')+'" onclick="selectEffect(\''+e.id+'\')">' +
+      '<div class="effect-icon">'+e.icon+'</div>' +
+      '<div class="effect-name">'+e.name+'</div>' +
+      '<div class="effect-price'+(e.price===0?' free':'')+'">'+(active?'Active':owned?'Owned':e.price+' coins')+'</div>' +
+    '</div>';
+  });
+  effectHtml += '</div>';
+
+  el.innerHTML = slimeHtml + effectHtml;
+}
+
+function selectSlime(id) {
+  var s = SLIMES.find(function(x){ return x.id===id; });
+  if (!s) return;
+  if (_ownedSlimes.indexOf(id) < 0) {
+    if (_coins < s.price) { showToast('Need '+s.price+' coins'); return; }
+    _coins -= s.price; _ownedSlimes.push(id); updateCoinDisplay();
+  }
+  _activeSlime = id; save(); renderColors(); renderColorBar(); showToast(s.name+'!');
+}
+
+function selectEffect(id) {
+  var e = EFFECTS.find(function(x){ return x.id===id; });
+  if (!e) return;
+  if (_ownedEffects.indexOf(id) < 0) {
+    if (_coins < e.price) { showToast('Need '+e.price+' coins'); return; }
+    _coins -= e.price; _ownedEffects.push(id); updateCoinDisplay();
+  }
+  _activeEffect = id; save(); renderColors(); renderColorBar(); showToast(e.name+' effect!');
+}
+
+function renderStats() {
+  var el = document.getElementById('panel');
+  var totalSec = Math.round(_stats.timeMs / 1000);
+  el.innerHTML = '<div class="stat-grid">' +
+    sc('Total Touches', _stats.touches.toLocaleString()) +
+    sc('Sessions', _stats.sessions) +
+    sc('Coins Earned', _stats.coinsEarned) +
+    sc('Colors Owned', _ownedSlimes.length + '/' + SLIMES.length) +
+  '</div>' +
+  '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:8px;">' +
+  '<div class="stat-label">Earn More Coins</div>' +
+  '<div style="font-size:0.82rem;color:var(--muted);margin:6px 0 10px;">Watch an ad for 10 coins, or keep playing — earn 1 coin every 50 touches.</div>' +
+  '<button onclick="watchAd()" style="background:var(--accent);border:none;color:#fff;padding:8px 18px;border-radius:20px;font-size:0.8rem;font-family:Inter,sans-serif;cursor:pointer;">Watch Ad (+10)</button>' +
+  '</div>';
+}
+function sc(label, val) {
+  return '<div class="stat-card"><div class="stat-label">'+label+'</div><div class="stat-val">'+val+'</div></div>';
+}
+
+function renderShop() {
+  var el = document.getElementById('panel');
+  el.innerHTML = '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;">' +
+    '<div class="section-title">Coin Packs</div>' +
+    '<div class="coin-row">' +
+      '<button class="coin-btn" onclick="watchAd()">Watch Ad (+10 coins) — Free</button>' +
+      '<button class="coin-btn" onclick="buyCoins(\'coins_small\')">100 Coins — $0.99</button>' +
+      '<button class="coin-btn" onclick="buyCoins(\'coins_large\')">500 Coins — $2.99</button>' +
+    '</div>' +
+  '</div>';
+}
+
+function watchAd() {
+  if (window.Android) { try { Android.showRewarded('coins'); } catch(e) {} }
+  else earnCoins(10, '+10 coins!');
+}
+function buyCoins(id) {
+  if (window.Android) { try { Android.purchase(id); } catch(e) {} }
+}
+
+/* ── Native bridge ── */
+window.onPurchaseComplete = function(id) {
+  if (id === 'remove_ads') {
+    _removeAds = true;
+    document.getElementById('btn-remove-ads').style.display = 'none';
+    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+    save(); showToast('Ads removed!');
+  } else if (id === 'coins_small') { earnCoins(100, '+100 coins!');
+  } else if (id === 'coins_large') { earnCoins(500, '+500 coins!'); }
+};
+window.onAdReward = function(type) { if (type === 'coins') earnCoins(10, '+10 coins!'); };
+window.onNativeBridgeReady = function() {
+  if (_removeAds && window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+};
+
+/* ── Init ── */
+load();
+updateCoinDisplay();
+if (_removeAds) document.getElementById('btn-remove-ads').style.display = 'none';
+document.getElementById('btn-remove-ads').addEventListener('click', function(){
+  if (window.Android) { try { Android.purchase('remove_ads'); } catch(e) {} }
+});
+renderColorBar();
+window.addEventListener('resize', resize);
+resize();
+animate();
 </script>
 </body>
 </html>
