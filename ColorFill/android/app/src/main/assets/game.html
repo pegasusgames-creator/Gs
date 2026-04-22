@@ -2,170 +2,465 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Color Fill</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #121212; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-#banner { width:100%; height:50px; background:#1e1e1e; display:flex; align-items:center; justify-content:center; color:#555; font-size:12px; border-bottom:1px solid #333; }
-#header { width:100%; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; background:#1a1a1a; }
-h1 { font-size:20px; color:#E91E63; font-weight:700; }
-#info { font-size:13px; color:#aaa; }
-#controls { display:flex; gap:8px; padding:8px 16px; flex-wrap:wrap; justify-content:center; }
-button { background:#1e1e1e; color:#E91E63; border:1.5px solid #E91E63; border-radius:8px; padding:8px 16px; font-size:14px; cursor:pointer; touch-action:manipulation; }
-button:active { background:#E91E63; color:#000; }
-#msg { padding:6px 16px; text-align:center; font-size:15px; min-height:32px; color:#E91E63; }
-#grid { display:inline-grid; gap:2px; padding:2px; background:#1a1a1a; border-radius:6px; border:2px solid #E91E63; margin:8px auto; }
-.cell { width:36px; height:36px; border-radius:3px; cursor:pointer; transition:opacity 0.1s; touch-action:manipulation; }
-#level-select { display:none; flex-wrap:wrap; gap:6px; padding:8px 16px; justify-content:center; max-width:360px; }
-.lvl-btn { padding:6px 12px; font-size:13px; min-width:38px; }
-.lvl-btn.done { background:#E91E63; color:#000; border-color:#E91E63; }
+:root{
+  --bg:#0f0f1a;--surface:#181828;--card:#242438;
+  --accent:#e91e63;--accent2:#ff5722;
+  --text:#f0f0ff;--muted:#7070a0;--border:#30304888;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{width:100%;height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;display:flex;flex-direction:column;height:100vh}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.topbar-left{display:flex;flex-direction:column;gap:1px}
+.level-label{font-size:1.05rem;font-weight:800;color:var(--accent)}
+.moves-label{font-size:0.72rem;color:var(--muted)}
+.topbar-right{display:flex;gap:8px;align-items:center}
+.coins-badge{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:4px 10px;font-size:0.82rem;font-weight:700;color:var(--accent)}
+.icon-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:10px;font-size:0.72rem;font-weight:700;cursor:pointer}
+
+/* SCREENS */
+.screen{flex:1;overflow-y:auto;display:none;min-height:0}
+.screen.active{display:flex;flex-direction:column}
+
+/* GAME SCREEN */
+#gameScreen{align-items:center;justify-content:space-between;padding:10px 14px}
+.grid-wrap{flex:1;display:flex;align-items:center;justify-content:center;width:100%;min-height:0}
+#grid{display:inline-grid;gap:2px;padding:3px;background:var(--card);border-radius:10px;border:2px solid var(--border)}
+.cell{border-radius:3px;cursor:pointer;transition:transform .1s}
+.cell:active{transform:scale(.9)}
+
+.palette-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:8px 0 2px}
+.color-btn{width:48px;height:48px;border-radius:12px;border:3px solid transparent;cursor:pointer;transition:transform .15s,border-color .15s;flex-shrink:0}
+.color-btn.selected{border-color:white;transform:scale(1.15)}
+.color-btn:active{transform:scale(.9)}
+
+.game-controls{display:flex;gap:8px;padding:6px 0 4px}
+.ctrl-btn{flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;font-size:0.78rem;font-weight:700;cursor:pointer;transition:transform .1s}
+.ctrl-btn:active{transform:scale(.95)}
+.ctrl-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.msg-bar{text-align:center;font-size:0.82rem;color:var(--muted);padding:4px 0;min-height:22px;flex-shrink:0}
+
+/* LEVEL SELECT */
+#levelsScreen{padding:12px 14px}
+.levels-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.lv-btn{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 4px;text-align:center;font-size:0.85rem;font-weight:700;cursor:pointer}
+.lv-btn.done{background:var(--accent);border-color:var(--accent);color:#fff}
+.lv-btn.locked{opacity:.4}
+
+/* STATS */
+#statsScreen{padding:12px 14px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center}
+.stat-val{font-size:2rem;font-weight:800;color:var(--accent)}
+.stat-label{font-size:0.7rem;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
+
+/* SHOP */
+#shopScreen{padding:12px 14px}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.theme-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;text-align:center;cursor:pointer}
+.theme-card.owned{border-color:var(--accent)}
+.theme-preview{height:44px;border-radius:8px;margin-bottom:6px;display:grid;grid-template-columns:repeat(6,1fr);gap:2px;overflow:hidden}
+.theme-swatch{border-radius:2px}
+.theme-name{font-size:0.78rem;font-weight:700}
+.theme-price{font-size:0.68rem;color:var(--muted);margin-top:2px}
+
+/* NAV */
+.nav{display:flex;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0}
+.nav-btn{flex:1;padding:10px 4px;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:none;border:none;cursor:pointer}
+.nav-btn.active{color:var(--accent);border-top:2px solid var(--accent)}
+
+/* PARTICLES */
+.particle{position:fixed;pointer-events:none;border-radius:50%;z-index:99;animation:float-up .8s forwards}
+@keyframes float-up{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(0)}}
+
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(12px);background:#222;color:#fff;padding:8px 18px;border-radius:16px;font-size:0.82rem;opacity:0;pointer-events:none;transition:all .3s;z-index:99;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
-<div id="banner">Advertisement</div>
-<div id="header">
-  <h1>Color Fill</h1>
-  <span id="info">Level 1 | Moves: 0/20</span>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="level-label" id="levelLabel">Level 1</div>
+    <div class="moves-label" id="movesLabel">Moves: 0 / 20</div>
+  </div>
+  <div class="topbar-right">
+    <button class="icon-btn" onclick="undoMove()">Undo</button>
+    <div class="coins-badge">🪙 <span id="coinCount">0</span></div>
+  </div>
 </div>
-<div id="controls">
-  <button onclick="resetLevel()">Reset</button>
-  <button onclick="toggleLevelSelect()">Levels</button>
-  <button onclick="removeAds()">No Ads</button>
+
+<!-- GAME SCREEN -->
+<div class="screen active" id="gameScreen">
+  <div class="msg-bar" id="msgBar">Fill the entire grid with one colour</div>
+  <div class="grid-wrap">
+    <div id="grid"></div>
+  </div>
+  <div class="palette-row" id="paletteRow"></div>
+  <div class="game-controls">
+    <button class="ctrl-btn" onclick="resetLevel()">Reset</button>
+    <button class="ctrl-btn primary" onclick="switchTab('levels')">Levels</button>
+  </div>
 </div>
-<div id="msg">Flood-fill from top-left to cover all squares!</div>
-<div id="grid"></div>
-<div id="level-select"></div>
+
+<!-- LEVELS SCREEN -->
+<div class="screen" id="levelsScreen">
+  <div style="font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px">Select Level</div>
+  <div class="levels-grid" id="levelsGrid"></div>
+</div>
+
+<!-- STATS SCREEN -->
+<div class="screen" id="statsScreen">
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="stat-cleared">0</div><div class="stat-label">Levels Cleared</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-coins">0</div><div class="stat-label">Coins Earned</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-perfect">0</div><div class="stat-label">Perfect Clears</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-streak">0</div><div class="stat-label">Current Streak</div></div>
+  </div>
+  <button style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--muted);padding:10px;border-radius:10px;font-size:0.75rem;cursor:pointer" onclick="doPurchase('remove_ads')">Remove Ads — $2.99</button>
+</div>
+
+<!-- SHOP SCREEN -->
+<div class="screen" id="shopScreen">
+  <div style="font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px">Colour Themes</div>
+  <div class="theme-grid" id="themeGrid"></div>
+  <button style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;font-size:0.8rem;cursor:pointer;margin-bottom:6px" onclick="doPurchase('coins_small')">Buy 100 Coins — $0.99</button>
+  <button style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;font-size:0.8rem;cursor:pointer" onclick="doPurchase('coins_large')">Buy 500 Coins — $2.99</button>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="switchTab('game')">Play</button>
+  <button class="nav-btn" onclick="switchTab('levels')">Levels</button>
+  <button class="nav-btn" onclick="switchTab('stats')">Stats</button>
+  <button class="nav-btn" onclick="switchTab('shop')">Shop</button>
+</div>
+
+<div id="toast"></div>
 
 <script>
-// Colors palette
-const PALETTE = ['#E91E63','#1E88E5','#43A047','#FF9800','#9C27B0','#00BCD4'];
-const C = PALETTE.length;
-// 8x8 grid, each cell is color index 0-5
-// 40 levels - hardcoded starting grids and move limits
+const COLOR_THEMES = {
+  vivid:  ['#E91E63','#2196F3','#4CAF50','#FF9800','#9C27B0','#00BCD4'],
+  warm:   ['#F44336','#FF9800','#FFC107','#E91E63','#9C27B0','#FF5722'],
+  cool:   ['#2196F3','#00BCD4','#009688','#4CAF50','#3F51B5','#00E5FF'],
+  pastel: ['#F48FB1','#90CAF9','#A5D6A7','#FFE082','#CE93D8','#80DEEA'],
+  neon:   ['#FF1744','#00E5FF','#76FF03','#FFEA00','#D500F9','#FF6D00'],
+  earth:  ['#795548','#FF7043','#FFA726','#8D6E63','#A1887F','#BCAAA4'],
+};
+
+const THEMES_META = [
+  {id:'vivid',  name:'Vivid',  price:0},
+  {id:'warm',   name:'Warm',   price:60},
+  {id:'cool',   name:'Cool',   price:60},
+  {id:'pastel', name:'Pastel', price:100},
+  {id:'neon',   name:'Neon',   price:120},
+  {id:'earth',  name:'Earth',  price:120},
+];
 
 function rnd(seed) {
   let x = seed;
-  return () => { x = (x*1664525+1013904223)&0xffffffff; return (x>>>0)/0xffffffff; };
+  return () => { x = (x * 1664525 + 1013904223) & 0xffffffff; return (x >>> 0) / 0x100000000; };
 }
 
-function genLevel(seed, maxMoves) {
+function genLevel(seed, maxMoves, size) {
   const r = rnd(seed);
   const grid = [];
-  for (let i = 0; i < 64; i++) grid.push(Math.floor(r() * C));
-  return { grid, maxMoves };
+  for (let i = 0; i < size * size; i++) grid.push(Math.floor(r() * 6));
+  return {grid: [...grid], maxMoves, size};
 }
 
-// 40 levels: varied seeds and move limits
-const levels = [
-  genLevel(1,22), genLevel(2,20), genLevel(3,22), genLevel(4,21), genLevel(5,23),
-  genLevel(6,20), genLevel(7,21), genLevel(8,22), genLevel(9,19), genLevel(10,22),
-  genLevel(11,23), genLevel(12,21), genLevel(13,20), genLevel(14,22), genLevel(15,21),
-  genLevel(16,20), genLevel(17,23), genLevel(18,22), genLevel(19,21), genLevel(20,20),
-  genLevel(21,19), genLevel(22,23), genLevel(23,22), genLevel(24,21), genLevel(25,20),
-  genLevel(26,22), genLevel(27,21), genLevel(28,20), genLevel(29,23), genLevel(30,22),
-  genLevel(31,21), genLevel(32,20), genLevel(33,22), genLevel(34,21), genLevel(35,23),
-  genLevel(36,20), genLevel(37,22), genLevel(38,21), genLevel(39,20), genLevel(40,22),
-];
+// 100 levels: sizes 6x6 (1-30), 8x8 (31-70), 10x10 (71-100)
+const LEVELS = [];
+for (let i = 0; i < 30; i++) LEVELS.push(genLevel(i + 1, 15 + (i % 5), 6));
+for (let i = 0; i < 40; i++) LEVELS.push(genLevel(i + 31, 20 + (i % 5), 8));
+for (let i = 0; i < 30; i++) LEVELS.push(genLevel(i + 71, 25 + (i % 6), 10));
 
-const state = { level: 1, moves: 0, removeAds: false, completed: new Set(), board: [] };
+let _coins = 0, _adsRemoved = false;
+let _unlockedThemes = ['vivid'];
+let _activeTheme = 'vivid';
+let _completed = {};
+let _stats = {cleared: 0, coinsEarned: 0, perfect: 0, streak: 0};
+let _level = 0;
+let _board = [];
+let _moves = 0;
+let _selectedColor = 0;
+let _history = [];
 
+function save() {
+  localStorage.setItem('cf_coins', _coins);
+  localStorage.setItem('cf_ads', _adsRemoved);
+  localStorage.setItem('cf_themes', JSON.stringify(_unlockedThemes));
+  localStorage.setItem('cf_theme', _activeTheme);
+  localStorage.setItem('cf_completed', JSON.stringify(_completed));
+  localStorage.setItem('cf_stats', JSON.stringify(_stats));
+  localStorage.setItem('cf_level', _level);
+}
+function load() {
+  _coins = +localStorage.getItem('cf_coins') || 0;
+  _adsRemoved = localStorage.getItem('cf_ads') === 'true';
+  try { _unlockedThemes = JSON.parse(localStorage.getItem('cf_themes')) || ['vivid']; } catch(e){}
+  _activeTheme = localStorage.getItem('cf_theme') || 'vivid';
+  try { _completed = JSON.parse(localStorage.getItem('cf_completed')) || {}; } catch(e){}
+  try { _stats = {..._stats, ...JSON.parse(localStorage.getItem('cf_stats'))}; } catch(e){}
+  _level = +localStorage.getItem('cf_level') || 0;
+}
+
+function palette() { return COLOR_THEMES[_activeTheme] || COLOR_THEMES.vivid; }
+
+function updateCoinDisplay() {
+  document.getElementById('coinCount').textContent = _coins;
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const map = ['game','levels','stats','shop'];
+  document.getElementById(name + 'Screen').classList.add('active');
+  const idx = map.indexOf(name);
+  if (idx >= 0) document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  if (name === 'stats') renderStats();
+  if (name === 'shop') renderShop();
+  if (name === 'levels') renderLevels();
+}
+
+// ---- GAME ----
 function loadLevel(n) {
-  state.level = n;
-  state.moves = 0;
-  const lv = levels[(n-1) % levels.length];
-  state.board = [...lv.grid];
-  document.getElementById('msg').textContent = 'Flood-fill from top-left to cover all squares!';
-  updateInfo();
+  _level = n;
+  const lv = LEVELS[n];
+  _board = [...lv.grid];
+  _moves = 0;
+  _history = [];
+  _selectedColor = _board[0];
+  setMsg('Fill the entire grid with one colour');
+  updateTopbar();
   renderGrid();
+  renderPalette();
+  save();
 }
 
-function updateInfo() {
-  const lv = levels[(state.level-1) % levels.length];
-  document.getElementById('info').textContent = 'Level ' + state.level + ' | Moves: ' + state.moves + '/' + lv.maxMoves;
+function updateTopbar() {
+  const lv = LEVELS[_level];
+  document.getElementById('levelLabel').textContent = 'Level ' + (_level + 1);
+  document.getElementById('movesLabel').textContent = 'Moves: ' + _moves + ' / ' + lv.maxMoves;
 }
 
 function renderGrid() {
-  const g = document.getElementById('grid');
-  g.style.gridTemplateColumns = 'repeat(8, 36px)';
-  g.innerHTML = '';
-  state.board.forEach((c, i) => {
+  const lv = LEVELS[_level];
+  const size = lv.size;
+  const grid = document.getElementById('grid');
+  const wrap = document.querySelector('.grid-wrap');
+  const maxPx = Math.min(wrap.clientWidth - 20, wrap.clientHeight - 20, 440);
+  const cellPx = Math.floor((maxPx - size * 2) / size);
+  grid.style.gridTemplateColumns = 'repeat(' + size + ', ' + cellPx + 'px)';
+  grid.innerHTML = '';
+  const pal = palette();
+  _board.forEach((c, i) => {
     const cell = document.createElement('div');
     cell.className = 'cell';
-    cell.style.background = PALETTE[c];
-    cell.addEventListener('click', () => floodFill(c));
-    g.appendChild(cell);
+    cell.style.width = cellPx + 'px';
+    cell.style.height = cellPx + 'px';
+    cell.style.background = pal[c];
+    cell.addEventListener('click', () => pickColor(c));
+    grid.appendChild(cell);
   });
+}
+
+function renderPalette() {
+  const pal = palette();
+  const row = document.getElementById('paletteRow');
+  row.innerHTML = '';
+  pal.forEach((color, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'color-btn' + (i === _selectedColor ? ' selected' : '');
+    btn.style.background = color;
+    btn.addEventListener('click', () => pickColor(i));
+    row.appendChild(btn);
+  });
+}
+
+function pickColor(colorIdx) {
+  const lv = LEVELS[_level];
+  const currentColor = _board[0];
+  if (colorIdx === currentColor) return;
+  if (_moves >= lv.maxMoves) return;
+  _history.push({board: [..._board], moves: _moves});
+  if (_history.length > 10) _history.shift();
+  floodFill(colorIdx);
+  _selectedColor = _board[0];
+  _moves++;
+  updateTopbar();
+  renderGrid();
+  renderPalette();
+  if (_board.every(v => v === colorIdx)) {
+    onWin(colorIdx);
+  } else if (_moves >= lv.maxMoves) {
+    setMsg('Out of moves! Reset or undo.');
+  }
 }
 
 function floodFill(newColor) {
-  const lv = levels[(state.level-1) % levels.length];
-  const currentColor = state.board[0];
-  if (newColor === currentColor) return;
-  if (state.moves >= lv.maxMoves) return;
-  // BFS flood fill from (0,0)
-  const visited = new Array(64).fill(false);
+  const lv = LEVELS[_level];
+  const size = lv.size;
+  const total = size * size;
+  const currentColor = _board[0];
+  const visited = new Uint8Array(total);
   const queue = [0];
-  visited[0] = true;
+  visited[0] = 1;
   while (queue.length) {
     const idx = queue.shift();
-    if (state.board[idx] === currentColor) {
-      state.board[idx] = newColor;
-      const r = Math.floor(idx/8), c = idx%8;
-      if (r>0 && !visited[idx-8]) { visited[idx-8]=true; queue.push(idx-8); }
-      if (r<7 && !visited[idx+8]) { visited[idx+8]=true; queue.push(idx+8); }
-      if (c>0 && !visited[idx-1]) { visited[idx-1]=true; queue.push(idx-1); }
-      if (c<7 && !visited[idx+1]) { visited[idx+1]=true; queue.push(idx+1); }
-    }
+    if (_board[idx] !== currentColor) continue;
+    _board[idx] = newColor;
+    const row = Math.floor(idx / size), col = idx % size;
+    if (row > 0 && !visited[idx - size]) { visited[idx - size] = 1; queue.push(idx - size); }
+    if (row < size - 1 && !visited[idx + size]) { visited[idx + size] = 1; queue.push(idx + size); }
+    if (col > 0 && !visited[idx - 1]) { visited[idx - 1] = 1; queue.push(idx - 1); }
+    if (col < size - 1 && !visited[idx + 1]) { visited[idx + 1] = 1; queue.push(idx + 1); }
   }
-  state.moves++;
-  updateInfo();
+}
+
+function undoMove() {
+  if (_history.length === 0) { showToast('Nothing to undo'); return; }
+  const prev = _history.pop();
+  _board = prev.board;
+  _moves = prev.moves;
+  _selectedColor = _board[0];
+  updateTopbar();
   renderGrid();
-  // Check win
-  if (state.board.every(v => v === newColor)) {
-    winLevel();
-  } else if (state.moves >= lv.maxMoves && !state.board.every(v => v === state.board[0])) {
-    document.getElementById('msg').textContent = 'Out of moves! Try again.';
+  renderPalette();
+}
+
+function resetLevel() {
+  loadLevel(_level);
+}
+
+function onWin(color) {
+  const lv = LEVELS[_level];
+  const isPerfect = _moves <= Math.ceil(lv.maxMoves * 0.6);
+  const reward = isPerfect ? 10 : 5;
+  _coins += reward;
+  _stats.cleared++;
+  _stats.coinsEarned += reward;
+  _stats.streak++;
+  if (isPerfect) _stats.perfect++;
+  _completed[_level] = true;
+  save();
+  updateCoinDisplay();
+  spawnParticles();
+  setMsg(isPerfect ? 'Perfect! +' + reward + ' coins' : 'Level Complete! +' + reward + ' coins');
+  if (!_adsRemoved && typeof Android !== 'undefined') {
+    try { Android.showInterstitial(); } catch(e){}
+  }
+  setTimeout(() => {
+    if (_level + 1 < LEVELS.length) loadLevel(_level + 1);
+  }, 1600);
+}
+
+function setMsg(msg) {
+  document.getElementById('msgBar').textContent = msg;
+}
+
+function spawnParticles() {
+  const pal = palette();
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = 'width:8px;height:8px;background:' + pal[Math.floor(Math.random() * 6)] +
+      ';left:' + (20 + Math.random() * 60) + '%;top:' + (20 + Math.random() * 40) + '%;' +
+      'animation-delay:' + (Math.random() * 0.4) + 's';
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1200);
   }
 }
 
-function resetLevel() { loadLevel(state.level); }
-
-function winLevel() {
-  state.completed.add(state.level);
-  document.getElementById('msg').textContent = '🎉 Level Complete!';
-  buildLevelSelect();
-  setTimeout(() => {
-    const next = state.level + 1;
-    if (!state.removeAds && next % 3 === 0 && window.Android) Android.showInterstitial();
-    if (next <= levels.length) loadLevel(next);
-  }, 1400);
-}
-
-function toggleLevelSelect() {
-  const ls = document.getElementById('level-select');
-  ls.style.display = ls.style.display === 'flex' ? 'none' : 'flex';
-}
-
-function buildLevelSelect() {
-  const ls = document.getElementById('level-select');
-  ls.innerHTML = '';
-  levels.forEach((_, i) => {
-    const b = document.createElement('button');
-    b.className = 'lvl-btn' + (state.completed.has(i+1) ? ' done' : '');
-    b.textContent = i+1;
-    b.onclick = () => { loadLevel(i+1); ls.style.display='none'; };
-    ls.appendChild(b);
+// ---- LEVELS ----
+function renderLevels() {
+  const grid = document.getElementById('levelsGrid');
+  grid.innerHTML = '';
+  LEVELS.forEach((lv, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'lv-btn' + (_completed[i] ? ' done' : '');
+    btn.textContent = i + 1;
+    if (i <= 6 + Math.max(...Object.keys(_completed).map(Number), -1)) {
+      btn.addEventListener('click', () => { loadLevel(i); switchTab('game'); });
+    } else {
+      btn.classList.add('locked');
+    }
+    grid.appendChild(btn);
   });
 }
 
-function removeAds() {
-  if (window.Android) Android.purchase('remove_ads');
-  else { state.removeAds = true; document.getElementById('msg').textContent = 'Ads removed!'; }
+// ---- STATS ----
+function renderStats() {
+  document.getElementById('stat-cleared').textContent = _stats.cleared;
+  document.getElementById('stat-coins').textContent = _stats.coinsEarned;
+  document.getElementById('stat-perfect').textContent = _stats.perfect;
+  document.getElementById('stat-streak').textContent = _stats.streak;
 }
-window.onPurchaseComplete = function(sku) { state.removeAds = true; };
-loadLevel(1);
-buildLevelSelect();
+
+// ---- SHOP ----
+function renderShop() {
+  const grid = document.getElementById('themeGrid');
+  grid.innerHTML = '';
+  THEMES_META.forEach(th => {
+    const owned = _unlockedThemes.includes(th.id);
+    const pal = COLOR_THEMES[th.id];
+    const div = document.createElement('div');
+    div.className = 'theme-card' + (owned ? ' owned' : '');
+    const swatches = pal.map(c => `<div class="theme-swatch" style="background:${c}"></div>`).join('');
+    div.innerHTML = `<div class="theme-preview">${swatches}</div><div class="theme-name">${th.name}</div><div class="theme-price">${owned?(_activeTheme===th.id?'Active':'Owned'):(th.price===0?'Free':th.price+' coins')}</div>`;
+    div.addEventListener('click', () => selectTheme(th));
+    grid.appendChild(div);
+  });
+}
+
+function selectTheme(th) {
+  if (!_unlockedThemes.includes(th.id)) {
+    if (th.price === 0) { _unlockedThemes.push(th.id); save(); }
+    else if (_coins >= th.price) { _coins -= th.price; _unlockedThemes.push(th.id); save(); updateCoinDisplay(); }
+    else { showToast('Need ' + th.price + ' coins'); return; }
+  }
+  _activeTheme = th.id;
+  save();
+  renderShop();
+  renderGrid();
+  renderPalette();
+  showToast(th.name + ' theme applied');
+}
+
+// ---- IAP ----
+function doPurchase(id) {
+  if (typeof Android !== 'undefined') try { Android.purchase(id); } catch(e){}
+  else showToast('Purchases not available here');
+}
+
+window.onPurchaseComplete = function(id) {
+  if (id === 'remove_ads') {
+    _adsRemoved = true;
+    if (typeof Android !== 'undefined') try { Android.hideBannerAd(); } catch(e){}
+    showToast('Ads removed. Thank you!');
+  } else if (id === 'coins_small') { _coins += 100; showToast('+100 coins!'); }
+  else if (id === 'coins_large') { _coins += 500; showToast('+500 coins!'); }
+  save(); updateCoinDisplay();
+};
+
+let _toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+// ---- INIT ----
+load();
+updateCoinDisplay();
+loadLevel(_level);
+
+if (!_adsRemoved && typeof Android !== 'undefined') try { Android.showBannerAd(); } catch(e){}
 </script>
 </body>
 </html>
