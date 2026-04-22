@@ -2,142 +2,405 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Stopwatch</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#26C6DA; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
-#app { display:flex; flex-direction:column; height:100%; padding:0; }
-header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px 10px; flex-shrink:0; }
-header h1 { font-size:1.3rem; font-weight:700; } header h1 span { color:var(--accent); }
-#btn-remove-ads { background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:0.7rem; padding:5px 10px; border-radius:20px; cursor:pointer; }
-/* Big display */
-#display-area { text-align:center; padding:22px 16px 16px; flex-shrink:0; background:var(--surface); }
-#main-time { font-size:4rem; font-weight:700; color:var(--accent); font-variant-numeric:tabular-nums; letter-spacing:2px; line-height:1; }
-#sub-time { font-size:1rem; color:var(--muted); margin-top:4px; font-variant-numeric:tabular-nums; }
-/* Buttons */
-#btn-area { display:flex; gap:12px; padding:14px 16px; flex-shrink:0; }
-.sw-btn { flex:1; padding:14px; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; }
-#btn-start { background:#2E7D32; color:#fff; }
-#btn-start.running { background:#c62828; }
-#btn-lap { background:var(--card); color:var(--text); }
-#btn-reset { background:var(--surface); color:var(--muted); border:1px solid var(--card); }
-/* Laps */
-#laps-area { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 14px 12px; }
-.lap-header { display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--card); margin-bottom:6px; font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); }
-.lap-row { display:flex; align-items:center; justify-content:space-between; padding:9px 12px; background:var(--surface); border-radius:9px; margin-bottom:5px; }
-.lap-row.best { background:#0D3321; border:1px solid #2E7D32; }
-.lap-row.worst { background:#3D1111; border:1px solid #c62828; }
-.lap-num { font-size:0.8rem; color:var(--muted); width:44px; }
-.lap-time { font-size:1rem; font-variant-numeric:tabular-nums; font-weight:600; color:var(--accent); flex:1; text-align:center; }
-.lap-row.best .lap-time { color:#66BB6A; }
-.lap-row.worst .lap-time { color:#EF5350; }
-.lap-total { font-size:0.82rem; font-variant-numeric:tabular-nums; color:var(--muted); width:70px; text-align:right; }
-.no-laps { text-align:center; color:var(--muted); padding:24px 0; font-size:0.9rem; }
-#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+:root{
+  --bg:#1a1a2e;--surface:#16213e;--card:#0f3460;
+  --accent:#26c6da;--accent2:#00e5ff;
+  --text:#eaeaea;--muted:#8888aa;--border:#1a3a6088;
+  --best:#2e7d32;--worst:#c62828;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{width:100%;height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;display:flex;flex-direction:column;height:100vh}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.app-title{font-size:1.1rem;font-weight:800;color:var(--accent)}
+.coins-badge{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:4px 10px;font-size:0.82rem;font-weight:700;color:var(--accent)}
+
+.nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.nav-btn{flex:1;padding:10px 4px;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:none;border:none;cursor:pointer}
+.nav-btn.active{color:var(--accent);border-bottom:2px solid var(--accent)}
+
+.screen{flex:1;overflow-y:auto;display:none;min-height:0;flex-direction:column}
+.screen.active{display:flex}
+
+/* STOPWATCH */
+#swScreen{padding:0;align-items:stretch}
+.display-area{text-align:center;padding:20px 16px 12px;background:var(--surface);flex-shrink:0}
+.main-time{font-size:4rem;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:2px;line-height:1;text-shadow:0 0 30px var(--accent)33}
+.sub-time{font-size:1.1rem;color:var(--muted);margin-top:2px;font-variant-numeric:tabular-nums;font-weight:600}
+.current-lap-label{font-size:0.72rem;color:var(--muted);margin-top:4px}
+
+.btn-area{display:flex;gap:10px;padding:12px 14px;flex-shrink:0}
+.sw-btn{flex:1;padding:14px;border:none;border-radius:14px;font-size:1rem;font-weight:800;cursor:pointer;transition:transform .1s}
+.sw-btn:active{transform:scale(.95)}
+.btn-start{background:linear-gradient(135deg,#2e7d32,#4caf50);color:#fff}
+.btn-start.running{background:linear-gradient(135deg,#c62828,#ef5350);color:#fff}
+.btn-lap{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.btn-reset{background:var(--surface);color:var(--muted);border:1px solid var(--border)}
+
+.laps-header{display:flex;justify-content:space-between;padding:4px 14px 4px;font-size:0.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);flex-shrink:0}
+.laps-list{flex:1;overflow-y:auto;padding:0 14px 12px}
+.lap-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--surface);border-radius:10px;margin-bottom:5px;border:1px solid var(--border)}
+.lap-row.best{background:#0d3321;border-color:var(--best)}
+.lap-row.worst{background:#3d1111;border-color:var(--worst)}
+.lap-num{font-size:0.78rem;color:var(--muted);width:48px}
+.lap-time{font-size:1rem;font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent);flex:1;text-align:center}
+.lap-row.best .lap-time{color:#66bb6a}
+.lap-row.worst .lap-time{color:#ef5350}
+.lap-total{font-size:0.8rem;font-variant-numeric:tabular-nums;color:var(--muted);width:72px;text-align:right}
+.no-laps{text-align:center;color:var(--muted);padding:28px 0;font-size:0.88rem}
+
+/* HISTORY */
+#historyScreen{padding:12px 14px}
+.hist-empty{text-align:center;color:var(--muted);padding:40px 0;font-size:0.88rem}
+.hist-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px}
+.hist-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.hist-time{font-size:1.2rem;font-weight:800;font-variant-numeric:tabular-nums;color:var(--accent)}
+.hist-date{font-size:0.68rem;color:var(--muted)}
+.hist-laps{font-size:0.72rem;color:var(--muted)}
+
+/* STATS */
+#statsScreen{padding:12px 14px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center}
+.stat-val{font-size:2rem;font-weight:800;color:var(--accent)}
+.stat-label{font-size:0.7rem;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
+
+/* SHOP */
+#shopScreen{padding:12px 14px}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.theme-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;text-align:center;cursor:pointer}
+.theme-card.owned{border-color:var(--accent)}
+.theme-preview{height:40px;border-radius:8px;margin-bottom:6px}
+.theme-name{font-size:0.78rem;font-weight:700}
+.theme-price{font-size:0.68rem;color:var(--muted);margin-top:2px}
+
+#toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(12px);background:#222;color:#fff;padding:8px 18px;border-radius:16px;font-size:0.82rem;opacity:0;pointer-events:none;transition:all .3s;z-index:99;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
-<div id="app">
-  <header><h1>Stop<span>watch</span></h1><button id="btn-remove-ads">Remove Ads</button></header>
-  <div id="display-area">
-    <div id="main-time">00:00</div>
-    <div id="sub-time">.00</div>
+
+<div class="topbar">
+  <div class="app-title">Stopwatch</div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button style="background:var(--card);border:1px solid var(--border);color:var(--accent);padding:5px 10px;border-radius:12px;font-size:0.7rem;font-weight:700;cursor:pointer" onclick="switchTab('shop')">Themes</button>
+    <div class="coins-badge">🪙 <span id="coinCount">0</span></div>
   </div>
-  <div id="btn-area">
-    <button class="sw-btn" id="btn-start" onclick="toggleStart()">Start</button>
-    <button class="sw-btn" id="btn-lap" onclick="recordLap()">Lap</button>
-    <button class="sw-btn" id="btn-reset" onclick="resetSW()">Reset</button>
-  </div>
-  <div id="laps-area">
-    <div id="laps-list"></div>
-  </div>
-  <div id="admob-banner">Advertisement</div>
 </div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="switchTab('sw')">Timer</button>
+  <button class="nav-btn" onclick="switchTab('history')">History</button>
+  <button class="nav-btn" onclick="switchTab('stats')">Stats</button>
+  <button class="nav-btn" onclick="switchTab('shop')">Shop</button>
+</div>
+
+<!-- STOPWATCH -->
+<div class="screen active" id="swScreen">
+  <div class="display-area">
+    <div class="main-time" id="mainTime">00:00</div>
+    <div class="sub-time" id="subTime">.00</div>
+    <div class="current-lap-label" id="lapLabel">Lap 1</div>
+  </div>
+  <div class="btn-area">
+    <button class="sw-btn btn-start" id="startBtn" onclick="toggleStart()">Start</button>
+    <button class="sw-btn btn-lap" onclick="recordLap()">Lap</button>
+    <button class="sw-btn btn-reset" onclick="resetSW()">Reset</button>
+  </div>
+  <div class="laps-header" id="lapsHeader" style="display:none">
+    <span>Lap</span><span style="flex:1;text-align:center">Lap Time</span><span>Total</span>
+  </div>
+  <div class="laps-list" id="lapsList">
+    <div class="no-laps">Start the stopwatch, then tap Lap to record split times.</div>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div class="screen" id="historyScreen">
+  <div id="historyList"></div>
+</div>
+
+<!-- STATS -->
+<div class="screen" id="statsScreen">
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="stat-sessions">0</div><div class="stat-label">Sessions</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-laps">0</div><div class="stat-label">Total Laps</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-time">0m</div><div class="stat-label">Time Tracked</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-coins">0</div><div class="stat-label">Coins Earned</div></div>
+  </div>
+  <button style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--muted);padding:10px;border-radius:10px;font-size:0.75rem;cursor:pointer" onclick="doPurchase('remove_ads')">Remove Ads — $2.99</button>
+</div>
+
+<!-- SHOP -->
+<div class="screen" id="shopScreen">
+  <div style="font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px">Colour Themes</div>
+  <div class="theme-grid" id="themeGrid"></div>
+  <button style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;font-size:0.8rem;cursor:pointer;margin-bottom:6px" onclick="doPurchase('coins_small')">Buy 100 Coins — $0.99</button>
+  <button style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;font-size:0.8rem;cursor:pointer" onclick="doPurchase('coins_large')">Buy 500 Coins — $2.99</button>
+</div>
+
+<div id="toast"></div>
+
 <script>
-'use strict';
-(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+const THEMES = [
+  {id:'cyan',   name:'Cyan',   price:0,   bg:'#1a1a2e', surface:'#16213e', card:'#0f3460', accent:'#26c6da', muted:'#8888aa', border:'#1a3a6088'},
+  {id:'lime',   name:'Lime',   price:60,  bg:'#0a1a0a', surface:'#0e200e', card:'#142814', accent:'#76ff03', muted:'#508050', border:'#20401088'},
+  {id:'coral',  name:'Coral',  price:60,  bg:'#1a0c0c', surface:'#221010', card:'#301616', accent:'#ff7043', muted:'#886060', border:'#602018aa'},
+  {id:'violet', name:'Violet', price:100, bg:'#110a1a', surface:'#180e22', card:'#201230', accent:'#e040fb', muted:'#806090', border:'#40106088'},
+  {id:'gold',   name:'Gold',   price:100, bg:'#1a1500', surface:'#221c00', card:'#302400', accent:'#ffd600', muted:'#806020', border:'#60480088'},
+  {id:'ice',    name:'Ice',    price:140, bg:'#0a1214', surface:'#0e1a1e', card:'#122228', accent:'#80deea', muted:'#507080', border:'#20404888'},
+];
 
-var S = { useCount:0, removeAds:false, elapsed:0, lapStart:0, running:false, last:0, iv:null, laps:[] };
+let _coins = 0, _adsRemoved = false;
+let _unlockedThemes = ['cyan'];
+let _activeTheme = 'cyan';
+let _history = [];
+let _stats = {sessions: 0, laps: 0, totalMs: 0, coinsEarned: 0};
 
-function p2(n){return String(n).padStart(2,'0');}
-function fmtMs(ms,showCenti) {
-  ms=Math.max(0,ms);
-  var cs=Math.floor((ms%1000)/10);
-  var tot=Math.floor(ms/1000);
-  var m=Math.floor(tot/60),s=tot%60;
-  if(showCenti===false) return p2(m)+':'+p2(s);
-  return p2(m)+':'+p2(s)+'.'+p2(cs);
+let _elapsed = 0, _lapStart = 0, _running = false, _last = 0, _rafId = null;
+let _laps = [];
+
+function save() {
+  localStorage.setItem('sw_coins', _coins);
+  localStorage.setItem('sw_ads', _adsRemoved);
+  localStorage.setItem('sw_themes', JSON.stringify(_unlockedThemes));
+  localStorage.setItem('sw_theme', _activeTheme);
+  localStorage.setItem('sw_history', JSON.stringify(_history.slice(0, 20)));
+  localStorage.setItem('sw_stats', JSON.stringify(_stats));
+}
+function load() {
+  _coins = +localStorage.getItem('sw_coins') || 0;
+  _adsRemoved = localStorage.getItem('sw_ads') === 'true';
+  try { _unlockedThemes = JSON.parse(localStorage.getItem('sw_themes')) || ['cyan']; } catch(e){}
+  _activeTheme = localStorage.getItem('sw_theme') || 'cyan';
+  try { _history = JSON.parse(localStorage.getItem('sw_history')) || []; } catch(e){}
+  try { _stats = {..._stats, ...JSON.parse(localStorage.getItem('sw_stats'))}; } catch(e){}
+}
+
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const r = document.documentElement.style;
+  r.setProperty('--bg', t.bg);
+  r.setProperty('--surface', t.surface);
+  r.setProperty('--card', t.card);
+  r.setProperty('--accent', t.accent);
+  r.setProperty('--muted', t.muted);
+  r.setProperty('--border', t.border);
+  document.body.style.background = t.bg;
+}
+
+function updateCoinDisplay() { document.getElementById('coinCount').textContent = _coins; }
+
+function switchTab(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(name + 'Screen').classList.add('active');
+  const idx = ['sw','history','stats','shop'].indexOf(name);
+  if (idx >= 0) document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  if (name === 'history') renderHistory();
+  if (name === 'stats') renderStats();
+  if (name === 'shop') renderShop();
+}
+
+function p2(n) { return String(n).padStart(2, '0'); }
+function fmtMs(ms) {
+  ms = Math.max(0, ms);
+  const cs = Math.floor((ms % 1000) / 10);
+  const tot = Math.floor(ms / 1000);
+  return p2(Math.floor(tot / 60)) + ':' + p2(tot % 60) + '.' + p2(cs);
+}
+function fmtMsShort(ms) {
+  const tot = Math.floor(ms / 1000);
+  return p2(Math.floor(tot / 60)) + ':' + p2(tot % 60);
 }
 
 function toggleStart() {
-  if(S.running){
-    S.running=false;clearInterval(S.iv);S.iv=null;
+  if (_running) {
+    _running = false;
+    cancelAnimationFrame(_rafId); _rafId = null;
   } else {
-    S.running=true;S.last=Date.now();
-    S.iv=setInterval(tick,33);
+    _running = true;
+    _last = performance.now();
+    loop();
   }
-  render();
+  renderDisplay();
+}
+
+function loop() {
+  const now = performance.now();
+  _elapsed += now - _last;
+  _last = now;
+  renderDisplay();
+  if (_running) _rafId = requestAnimationFrame(loop);
 }
 
 function recordLap() {
-  if(!S.running&&S.elapsed===0)return;
-  var lapMs=S.elapsed-S.lapStart;
-  S.laps.unshift({num:S.laps.length+1,lap:lapMs,total:S.elapsed});
-  S.lapStart=S.elapsed;
-  render();
-  maybeInterstitial();
+  if (!_running && _elapsed === 0) return;
+  const lapMs = _elapsed - _lapStart;
+  _laps.unshift({num: _laps.length + 1, lap: lapMs, total: _elapsed});
+  _lapStart = _elapsed;
+  _stats.laps++;
+  // coin every 5 laps
+  if (_stats.laps % 5 === 0) {
+    _coins++;
+    _stats.coinsEarned++;
+    save();
+    updateCoinDisplay();
+    showToast('+1 coin');
+  }
+  renderLaps();
+  document.getElementById('lapLabel').textContent = 'Lap ' + (_laps.length + 1);
+  if (!_adsRemoved && typeof Android !== 'undefined' && _stats.laps % 8 === 0) {
+    try { Android.showInterstitial(); } catch(e){}
+  }
 }
 
 function resetSW() {
-  S.running=false;clearInterval(S.iv);S.iv=null;
-  S.elapsed=0;S.lapStart=0;S.laps=[];
-  render();
-}
-
-function tick() {
-  var now=Date.now(), d=now-S.last; S.last=now;
-  S.elapsed+=d;
-  render();
-}
-
-function render() {
-  var ms=S.elapsed;
-  var cs=Math.floor((ms%1000)/10);
-  var tot=Math.floor(ms/1000);
-  var m=Math.floor(tot/60), s=tot%60;
-  document.getElementById('main-time').textContent=p2(m)+':'+p2(s);
-  document.getElementById('sub-time').textContent='.'+p2(cs);
-  var bs=document.getElementById('btn-start');
-  bs.textContent=S.running?'Stop':'Start';
-  bs.className='sw-btn'+(S.running?' running':'');
+  if (_elapsed > 5000) {
+    saveToHistory();
+  }
+  _running = false;
+  cancelAnimationFrame(_rafId); _rafId = null;
+  _elapsed = 0; _lapStart = 0; _laps = [];
+  renderDisplay();
   renderLaps();
+  document.getElementById('lapLabel').textContent = 'Lap 1';
+  document.getElementById('lapsHeader').style.display = 'none';
+}
+
+function saveToHistory() {
+  const reward = Math.ceil(_laps.length / 2);
+  _coins += reward;
+  _stats.sessions++;
+  _stats.totalMs += _elapsed;
+  _stats.coinsEarned += reward;
+  _history.unshift({
+    elapsed: _elapsed,
+    laps: _laps.length,
+    date: new Date().toLocaleDateString(),
+    time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
+  });
+  save();
+  updateCoinDisplay();
+  showToast('Session saved! +' + reward + ' coins');
+}
+
+function renderDisplay() {
+  const ms = _elapsed;
+  const cs = Math.floor((ms % 1000) / 10);
+  const tot = Math.floor(ms / 1000);
+  document.getElementById('mainTime').textContent = p2(Math.floor(tot / 60)) + ':' + p2(tot % 60);
+  document.getElementById('subTime').textContent = '.' + p2(cs);
+  const sb = document.getElementById('startBtn');
+  sb.textContent = _running ? 'Stop' : 'Start';
+  sb.className = 'sw-btn btn-start' + (_running ? ' running' : '');
 }
 
 function renderLaps() {
-  var el=document.getElementById('laps-list');
-  if(!S.laps.length){el.innerHTML='<div class="no-laps">No laps recorded.</div>';return;}
-  // find best/worst
-  var times=S.laps.map(function(l){return l.lap;});
-  var best=Math.min.apply(null,times), worst=Math.max.apply(null,times);
-  var multi=S.laps.length>1;
-  var html='<div class="lap-header"><span>Lap</span><span>Lap Time</span><span>Total</span></div>';
-  html+=S.laps.map(function(l){
-    var cls='lap-row';
-    if(multi&&l.lap===best)cls+=' best';
-    else if(multi&&l.lap===worst)cls+=' worst';
-    return '<div class="'+cls+'"><span class="lap-num">Lap '+l.num+'</span><span class="lap-time">'+fmtMs(l.lap)+'</span><span class="lap-total">'+fmtMs(l.total)+'</span></div>';
+  const el = document.getElementById('lapsList');
+  const hdr = document.getElementById('lapsHeader');
+  if (!_laps.length) {
+    el.innerHTML = '<div class="no-laps">Start the stopwatch, then tap Lap to record split times.</div>';
+    hdr.style.display = 'none';
+    return;
+  }
+  hdr.style.display = 'flex';
+  const times = _laps.map(l => l.lap);
+  const best = Math.min(...times), worst = Math.max(...times);
+  const multi = _laps.length > 1;
+  el.innerHTML = _laps.map(l => {
+    let cls = 'lap-row';
+    if (multi && l.lap === best) cls += ' best';
+    else if (multi && l.lap === worst) cls += ' worst';
+    return `<div class="${cls}"><span class="lap-num">Lap ${l.num}</span><span class="lap-time">${fmtMs(l.lap)}</span><span class="lap-total">${fmtMs(l.total)}</span></div>`;
   }).join('');
-  el.innerHTML=html;
 }
 
-render();
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  if (!_history.length) {
+    list.innerHTML = '<div class="hist-empty">No sessions saved yet.<br>Use Reset after a session to save it.</div>';
+    return;
+  }
+  list.innerHTML = _history.slice(0, 20).map(h =>
+    `<div class="hist-card">
+      <div class="hist-header">
+        <div class="hist-time">${fmtMsShort(h.elapsed)}</div>
+        <div class="hist-date">${h.date} ${h.time}</div>
+      </div>
+      <div class="hist-laps">${h.laps} lap${h.laps !== 1 ? 's' : ''}</div>
+    </div>`
+  ).join('');
+}
 
-document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){S.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
-function maybeInterstitial(){S.useCount++;if(!S.removeAds&&S.useCount%8===0&&window.Android)Android.showInterstitial();}
-if(!window.Android&&!S.removeAds)document.getElementById('admob-banner').style.display='flex';
+function renderStats() {
+  const m = Math.floor(_stats.totalMs / 60000);
+  document.getElementById('stat-sessions').textContent = _stats.sessions;
+  document.getElementById('stat-laps').textContent = _stats.laps;
+  document.getElementById('stat-time').textContent = m >= 60 ? Math.floor(m/60) + 'h' : m + 'm';
+  document.getElementById('stat-coins').textContent = _stats.coinsEarned;
+}
+
+function renderShop() {
+  const grid = document.getElementById('themeGrid');
+  grid.innerHTML = '';
+  THEMES.forEach(th => {
+    const owned = _unlockedThemes.includes(th.id);
+    const div = document.createElement('div');
+    div.className = 'theme-card' + (owned ? ' owned' : '');
+    div.innerHTML = `<div class="theme-preview" style="background:linear-gradient(135deg,${th.bg},${th.surface});border:2px solid ${th.accent}"></div><div class="theme-name" style="color:${th.accent}">${th.name}</div><div class="theme-price">${owned?(_activeTheme===th.id?'Active':'Owned'):(th.price===0?'Free':th.price+' coins')}</div>`;
+    div.addEventListener('click', () => selectTheme(th));
+    grid.appendChild(div);
+  });
+}
+
+function selectTheme(th) {
+  if (!_unlockedThemes.includes(th.id)) {
+    if (th.price === 0) { _unlockedThemes.push(th.id); save(); }
+    else if (_coins >= th.price) { _coins -= th.price; _unlockedThemes.push(th.id); save(); updateCoinDisplay(); }
+    else { showToast('Need ' + th.price + ' coins'); return; }
+  }
+  _activeTheme = th.id;
+  applyTheme(th.id);
+  save();
+  renderShop();
+  showToast(th.name + ' theme applied');
+}
+
+function doPurchase(id) {
+  if (typeof Android !== 'undefined') try { Android.purchase(id); } catch(e){}
+  else showToast('Purchases not available here');
+}
+
+window.onPurchaseComplete = function(id) {
+  if (id === 'remove_ads') {
+    _adsRemoved = true;
+    if (typeof Android !== 'undefined') try { Android.hideBannerAd(); } catch(e){}
+    showToast('Ads removed. Thank you!');
+  } else if (id === 'coins_small') { _coins += 100; showToast('+100 coins!'); }
+  else if (id === 'coins_large') { _coins += 500; showToast('+500 coins!'); }
+  save(); updateCoinDisplay();
+};
+
+let _toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+load();
+applyTheme(_activeTheme);
+updateCoinDisplay();
+renderDisplay();
+renderLaps();
+
+if (!_adsRemoved && typeof Android !== 'undefined') try { Android.showBannerAd(); } catch(e){}
 </script>
 </body>
 </html>
