@@ -2,103 +2,568 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Age Calculator</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
-  body{background:#0a0d18;color:#c8d0ff;font-family:'Arial',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:16px}
-  h1{font-size:1.4rem;margin:10px 0 4px;color:#8090ff;letter-spacing:2px}
-  #subtitle{font-size:0.78rem;color:#8090ff55;margin-bottom:16px}
-  .card{background:#ffffff0a;border:1px solid #4060ff33;border-radius:16px;padding:16px 20px;width:310px;margin-bottom:12px}
-  .field-label{font-size:0.78rem;color:#8090ff88;letter-spacing:1px;margin-bottom:6px}
-  .field-input{background:#ffffff10;border:1px solid #4060ff44;color:#c8d0ff;border-radius:10px;padding:10px 14px;font-size:1rem;outline:none;width:100%;-webkit-appearance:none}
-  .calc-btn{background:linear-gradient(135deg,#2030a0,#4060ff);color:#c8d0ff;border:none;border-radius:50px;padding:13px;font-size:1rem;font-weight:bold;cursor:pointer;width:100%;margin-top:4px;transition:transform 0.1s}
-  .calc-btn:active{transform:scale(0.97)}
-  .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
-  .res-box{background:#4060ff15;border:1px solid #4060ff33;border-radius:10px;padding:12px;text-align:center}
-  .res-num{font-size:1.8rem;font-weight:bold;color:#8090ff;display:block}
-  .res-lbl{font-size:0.72rem;color:#8090ff77;margin-top:2px}
-  .res-box.wide{grid-column:1/3}
-  #next-birthday{font-size:0.85rem;color:#8090ffaa;text-align:center;margin-top:8px;min-height:1.2rem}
-  #remove-ads{position:fixed;top:8px;right:8px;background:#ffffff10;border:1px solid #4060ff33;color:#8090ff55;font-size:0.65rem;padding:4px 8px;border-radius:8px;cursor:pointer}
+:root {
+  --bg: #060c1a;
+  --surface: #0d1b35;
+  --surface2: #132244;
+  --accent: #4f8ef7;
+  --accent2: #7c3aed;
+  --gold: #f59e0b;
+  --success: #10b981;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --border: rgba(79,142,247,0.2);
+  --card: #0f1f3d;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; }
+html,body { width:100vw; height:100vh; overflow:hidden; background:var(--bg); color:var(--text); font-family:'Segoe UI',Arial,sans-serif; }
+body { padding-top:env(safe-area-inset-top,0px); }
+
+.screen { position:absolute; inset:0; display:none; flex-direction:column; overflow:hidden; }
+.screen.active { display:flex; }
+
+/* header */
+.hdr { display:flex; align-items:center; padding:14px 16px 10px; background:var(--surface); border-bottom:1px solid var(--border); gap:10px; flex-shrink:0; }
+.hdr h1 { flex:1; font-size:1.1rem; font-weight:800; color:var(--accent); }
+.icon-btn { background:rgba(255,255,255,0.07); border:1px solid var(--border); color:var(--text); border-radius:10px; padding:7px 12px; font-size:1rem; cursor:pointer; }
+.icon-btn:active { transform:scale(0.92); }
+
+/* scrollable content */
+.scroll { flex:1; overflow-y:auto; padding:14px; }
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-thumb { background:rgba(79,142,247,0.3); border-radius:3px; }
+
+/* date input card */
+.input-card { background:var(--card); border-radius:20px; border:1.5px solid var(--border); padding:20px; margin-bottom:14px; }
+.input-card h2 { font-size:0.85rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:14px; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:0.78rem; color:var(--muted); margin-bottom:6px; }
+.field input[type=date], .field input[type=text] {
+  width:100%; padding:12px 14px; background:var(--surface2); border:1.5px solid var(--border);
+  border-radius:12px; color:var(--text); font-size:0.95rem; outline:none;
+  -webkit-appearance:none; appearance:none;
+}
+.field input:focus { border-color:var(--accent); }
+.calc-btn { width:100%; padding:14px; background:linear-gradient(135deg,var(--accent),var(--accent2)); border:none; border-radius:14px; color:#fff; font-size:1rem; font-weight:800; cursor:pointer; letter-spacing:1px; }
+.calc-btn:active { transform:scale(0.97); }
+
+/* result sections */
+.section-title { font-size:0.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; margin:18px 0 10px; }
+
+.stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.stat-card { background:var(--card); border-radius:16px; border:1px solid var(--border); padding:14px 12px; text-align:center; }
+.stat-card.wide { grid-column:1/3; }
+.stat-val { font-size:1.8rem; font-weight:900; color:var(--accent); line-height:1; }
+.stat-val.sm { font-size:1.3rem; }
+.stat-val.xs { font-size:1rem; }
+.stat-lbl { font-size:0.72rem; color:var(--muted); margin-top:4px; }
+
+/* fun facts */
+.fact-card { background:var(--card); border-radius:16px; border:1px solid var(--border); padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; }
+.fact-icon { font-size:1.8rem; min-width:36px; text-align:center; }
+.fact-body .fact-val { font-size:1.05rem; font-weight:800; color:var(--accent); }
+.fact-body .fact-desc { font-size:0.78rem; color:var(--muted); margin-top:2px; }
+
+/* birthday card */
+.bday-card { background:linear-gradient(135deg, #1a1060, #0d1b35); border-radius:20px; border:1.5px solid rgba(124,58,237,0.4); padding:18px; margin-bottom:14px; text-align:center; }
+.bday-card .bday-label { font-size:0.8rem; color:var(--muted); margin-bottom:6px; }
+.bday-card .bday-count { font-size:3rem; font-weight:900; color:#a78bfa; line-height:1; }
+.bday-card .bday-sub { font-size:0.85rem; color:var(--muted); margin-top:4px; }
+.bday-card.today { background:linear-gradient(135deg, #065f46, #064e3b); border-color:rgba(16,185,129,0.5); }
+.bday-card.today .bday-count { color:var(--success); }
+
+/* zodiac */
+.zodiac-card { background:var(--card); border-radius:16px; border:1px solid var(--border); padding:16px; margin-bottom:10px; display:flex; align-items:center; gap:14px; }
+.zodiac-sign { font-size:3rem; }
+.zodiac-info .zodiac-name { font-size:1.1rem; font-weight:800; color:var(--accent2); }
+.zodiac-info .zodiac-dates { font-size:0.78rem; color:var(--muted); margin-top:2px; }
+.zodiac-info .zodiac-traits { font-size:0.8rem; color:var(--text); margin-top:6px; line-height:1.5; }
+
+/* profiles screen */
+#profileList { display:flex; flex-direction:column; gap:10px; }
+.profile-card { background:var(--card); border-radius:16px; border:1px solid var(--border); padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; }
+.profile-card:active { transform:scale(0.98); border-color:var(--accent); }
+.profile-emoji { font-size:2rem; min-width:40px; text-align:center; }
+.profile-info .profile-name { font-size:0.95rem; font-weight:700; }
+.profile-info .profile-age { font-size:0.8rem; color:var(--muted); margin-top:2px; }
+.profile-del { background:transparent; border:none; color:var(--muted); font-size:1.1rem; padding:6px; cursor:pointer; margin-left:auto; }
+
+.empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px 30px; text-align:center; gap:14px; color:var(--muted); }
+.empty-icon { font-size:4rem; opacity:0.4; }
+
+/* modal */
+.modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; align-items:center; justify-content:center; z-index:100; padding:24px; }
+.modal-bg.show { display:flex; }
+.modal { background:var(--surface); border-radius:20px; padding:26px 22px; width:100%; max-width:340px; border:1px solid var(--border); }
+.modal h2 { font-size:1.1rem; font-weight:800; color:var(--accent); margin-bottom:18px; }
+.modal input { width:100%; padding:11px 14px; background:var(--bg); border:1.5px solid var(--border); border-radius:12px; color:var(--text); font-size:0.9rem; margin-bottom:12px; outline:none; -webkit-appearance:none; }
+.modal input:focus { border-color:var(--accent); }
+.modal-row { display:flex; gap:10px; }
+.modal-row .btn { flex:1; padding:12px; border-radius:12px; font-size:0.9rem; font-weight:700; cursor:pointer; border:none; }
+.btn-cancel { background:var(--surface2); color:var(--muted); }
+.btn-confirm { background:var(--accent); color:#fff; }
+.modal-label { font-size:0.8rem; color:var(--muted); margin-bottom:5px; display:block; }
+.emoji-picker { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+.emoji-opt { font-size:1.4rem; padding:5px; border-radius:8px; cursor:pointer; background:transparent; border:2px solid transparent; }
+.emoji-opt.sel { border-color:var(--accent); background:rgba(79,142,247,0.15); }
+
+#toast { position:fixed; bottom:calc(24px + env(safe-area-inset-bottom,0px)); left:50%; transform:translateX(-50%) translateY(10px); background:var(--surface); border:1px solid var(--border); color:var(--text); padding:10px 22px; border-radius:24px; font-size:0.85rem; font-weight:600; opacity:0; pointer-events:none; transition:opacity 0.25s,transform 0.25s; z-index:200; white-space:nowrap; }
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+#remove-ads-btn { position:fixed; top:calc(env(safe-area-inset-top,0px)+6px); right:10px; background:rgba(79,142,247,0.12); border:1px solid rgba(79,142,247,0.3); color:rgba(150,180,250,0.6); font-size:0.65rem; padding:4px 9px; border-radius:10px; cursor:pointer; z-index:50; }
+
+/* tab bar */
+.tab-bar { display:flex; background:var(--surface); border-top:1px solid var(--border); padding-bottom:env(safe-area-inset-bottom,0px); flex-shrink:0; }
+.tab { flex:1; padding:10px 4px 8px; text-align:center; cursor:pointer; border:none; background:transparent; color:var(--muted); font-size:0.65rem; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+.tab span { display:block; font-size:1.3rem; margin-bottom:2px; }
+.tab.active { color:var(--accent); }
 </style>
 </head>
 <body>
-<button id="remove-ads" onclick="Android.purchase('remove_ads')">Remove Ads</button>
-<h1>🎂 Age Calculator</h1>
-<p id="subtitle">Find out your exact age</p>
-<div class="card">
-  <div class="field-label">DATE OF BIRTH</div>
-  <input class="field-input" type="date" id="dob" oninput="calculate()">
-  <div class="field-label" style="margin-top:12px">AS OF DATE (optional)</div>
-  <input class="field-input" type="date" id="asof" oninput="calculate()">
-  <button class="calc-btn" onclick="calculate()">CALCULATE AGE</button>
-</div>
-<div class="card" id="result-card" style="display:none">
-  <div class="result-grid">
-    <div class="res-box"><span class="res-num" id="r-years">0</span><div class="res-lbl">Years</div></div>
-    <div class="res-box"><span class="res-num" id="r-months">0</span><div class="res-lbl">Months</div></div>
-    <div class="res-box"><span class="res-num" id="r-days">0</span><div class="res-lbl">Days</div></div>
-    <div class="res-box"><span class="res-num" id="r-weeks">0</span><div class="res-lbl">Weeks</div></div>
-    <div class="res-box wide"><span class="res-num" id="r-total-days">0</span><div class="res-lbl">Total Days Lived</div></div>
+
+<button id="remove-ads-btn" onclick="_purchase('remove_ads')">✨ Remove Ads</button>
+
+<!-- CALCULATE SCREEN -->
+<div id="calcScreen" class="screen active">
+  <div class="hdr">
+    <h1>🎂 Age Calculator</h1>
+    <button class="icon-btn" onclick="_share()">↗</button>
   </div>
-  <div id="next-birthday"></div>
+  <div class="scroll" id="calcScroll">
+    <div class="input-card">
+      <h2>Date of Birth</h2>
+      <div class="field">
+        <label>Birthday</label>
+        <input type="date" id="dob" oninput="calculate()" max="">
+      </div>
+      <div class="field">
+        <label>Calculate age as of (leave blank for today)</label>
+        <input type="date" id="asof" oninput="calculate()">
+      </div>
+      <button class="calc-btn" onclick="calculate()">CALCULATE AGE</button>
+    </div>
+
+    <div id="resultSection" style="display:none">
+      <!-- main age -->
+      <div class="section-title">Your Age</div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="r-years">0</div><div class="stat-lbl">Years</div></div>
+        <div class="stat-card"><div class="stat-val" id="r-months">0</div><div class="stat-lbl">Months</div></div>
+        <div class="stat-card"><div class="stat-val" id="r-days">0</div><div class="stat-lbl">Days</div></div>
+        <div class="stat-card"><div class="stat-val" id="r-weeks">0</div><div class="stat-lbl">Weeks Total</div></div>
+        <div class="stat-card wide"><div class="stat-val sm" id="r-total-days">0</div><div class="stat-lbl">Total Days Lived</div></div>
+      </div>
+
+      <!-- birthday countdown -->
+      <div id="bday-section"></div>
+
+      <!-- detailed breakdown -->
+      <div class="section-title">Detailed Breakdown</div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val sm" id="r-hours">0</div><div class="stat-lbl">Hours</div></div>
+        <div class="stat-card"><div class="stat-val sm" id="r-minutes">0</div><div class="stat-lbl">Minutes</div></div>
+        <div class="stat-card"><div class="stat-val xs" id="r-seconds">0</div><div class="stat-lbl">Seconds</div></div>
+        <div class="stat-card"><div class="stat-val xs" id="r-fortnights">0</div><div class="stat-lbl">Fortnights</div></div>
+        <div class="stat-card wide"><div class="stat-val sm" id="r-weekday">—</div><div class="stat-lbl">Born on a</div></div>
+      </div>
+
+      <!-- fun facts -->
+      <div class="section-title">Fun Facts</div>
+      <div id="fun-facts"></div>
+
+      <!-- zodiac -->
+      <div class="section-title">Zodiac & Birthstone</div>
+      <div id="zodiac-section"></div>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('calcScreen',this)"><span>🎂</span>Age</button>
+    <button class="tab" onclick="switchTab('diffScreen',this)"><span>📅</span>Dates</button>
+    <button class="tab" onclick="switchTab('profilesScreen',this)"><span>👥</span>Profiles</button>
+  </div>
 </div>
+
+<!-- DATE DIFF SCREEN -->
+<div id="diffScreen" class="screen">
+  <div class="hdr"><h1>📅 Date Difference</h1></div>
+  <div class="scroll">
+    <div class="input-card">
+      <h2>Between Two Dates</h2>
+      <div class="field"><label>Start Date</label><input type="date" id="d1" oninput="calcDiff()"></div>
+      <div class="field"><label>End Date</label><input type="date" id="d2" oninput="calcDiff()"></div>
+      <button class="calc-btn" onclick="calcDiff()">CALCULATE DIFFERENCE</button>
+    </div>
+    <div id="diffResult" style="display:none">
+      <div class="section-title">Difference</div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="d-years">0</div><div class="stat-lbl">Years</div></div>
+        <div class="stat-card"><div class="stat-val" id="d-months">0</div><div class="stat-lbl">Months</div></div>
+        <div class="stat-card"><div class="stat-val" id="d-days">0</div><div class="stat-lbl">Days</div></div>
+        <div class="stat-card"><div class="stat-val" id="d-weeks">0</div><div class="stat-lbl">Weeks</div></div>
+        <div class="stat-card wide"><div class="stat-val sm" id="d-total">0</div><div class="stat-lbl">Total Days</div></div>
+      </div>
+    </div>
+
+    <div class="input-card" style="margin-top:14px">
+      <h2>Add / Subtract Days</h2>
+      <div class="field"><label>Start Date</label><input type="date" id="add-date" oninput="calcAdd()"></div>
+      <div class="field"><label>Days to add (use − for subtract)</label><input type="number" id="add-days" placeholder="e.g. 100 or -30" oninput="calcAdd()" style="-webkit-appearance:none"></div>
+    </div>
+    <div id="addResult" style="display:none">
+      <div class="stat-grid">
+        <div class="stat-card wide"><div class="stat-val sm" id="add-result-date">—</div><div class="stat-lbl">Result Date</div></div>
+        <div class="stat-card wide"><div class="stat-val xs" id="add-result-day">—</div><div class="stat-lbl">Day of Week</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab" onclick="switchTab('calcScreen',this)"><span>🎂</span>Age</button>
+    <button class="tab active" onclick="switchTab('diffScreen',this)"><span>📅</span>Dates</button>
+    <button class="tab" onclick="switchTab('profilesScreen',this)"><span>👥</span>Profiles</button>
+  </div>
+</div>
+
+<!-- PROFILES SCREEN -->
+<div id="profilesScreen" class="screen">
+  <div class="hdr">
+    <h1>👥 Profiles</h1>
+    <button class="icon-btn" onclick="openAddProfile()">＋</button>
+  </div>
+  <div class="scroll">
+    <div id="profileList"></div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab" onclick="switchTab('calcScreen',this)"><span>🎂</span>Age</button>
+    <button class="tab" onclick="switchTab('diffScreen',this)"><span>📅</span>Dates</button>
+    <button class="tab active" onclick="switchTab('profilesScreen',this)"><span>👥</span>Profiles</button>
+  </div>
+</div>
+
+<!-- ADD PROFILE MODAL -->
+<div id="addProfileModal" class="modal-bg">
+  <div class="modal">
+    <h2>Add Person</h2>
+    <span class="modal-label">Name</span>
+    <input id="p-name" type="text" placeholder="e.g. Alice, Mom…" maxlength="20">
+    <span class="modal-label">Date of Birth</span>
+    <input id="p-dob" type="date">
+    <span class="modal-label">Emoji</span>
+    <div class="emoji-picker" id="profileEmojiPicker"></div>
+    <div class="modal-row">
+      <button class="btn btn-cancel" onclick="closeModal('addProfileModal')">Cancel</button>
+      <button class="btn btn-confirm" onclick="saveProfile()">Add</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
 
 <script>
-function calculate(){
-  _showInterstitial();
-  const dobVal=document.getElementById('dob').value;
-  if(!dobVal)return;
-  const dob=new Date(dobVal);
-  const asofVal=document.getElementById('asof').value;
-  const asof=asofVal?new Date(asofVal):new Date();
-  if(dob>asof)return;
+var _adsRemoved = localStorage.getItem('ac_adsRemoved') === '1';
+var _profiles = JSON.parse(localStorage.getItem('ac_profiles') || '[]');
+var _selectedEmoji = '🎂';
+var _interstitialCount = 0;
+var _lastCalc = null;
 
-  let years=asof.getFullYear()-dob.getFullYear();
-  let months=asof.getMonth()-dob.getMonth();
-  let days=asof.getDate()-dob.getDate();
+var EMOJIS = ['🎂','👶','🧒','👦','👧','🧑','👨','👩','🧓','👴','👵','🐣','🌟','❤️','🦁','🐱','🐶','🦊','🌈','⭐'];
+var WEEKDAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+var MONTHS_LONG = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-  if(days<0){
-    months--;
-    const prevMonth=new Date(asof.getFullYear(),asof.getMonth(),0);
-    days+=prevMonth.getDate();
-  }
-  if(months<0){years--;months+=12;}
+var ZODIAC = [
+  {sign:'Capricorn',emoji:'♑',dates:'Dec 22 – Jan 19',traits:'Disciplined, responsible, ambitious, practical'},
+  {sign:'Aquarius',emoji:'♒',dates:'Jan 20 – Feb 18',traits:'Innovative, humanitarian, independent, intellectual'},
+  {sign:'Pisces',emoji:'♓',dates:'Feb 19 – Mar 20',traits:'Compassionate, artistic, intuitive, gentle'},
+  {sign:'Aries',emoji:'♈',dates:'Mar 21 – Apr 19',traits:'Courageous, energetic, determined, confident'},
+  {sign:'Taurus',emoji:'♉',dates:'Apr 20 – May 20',traits:'Reliable, patient, practical, devoted'},
+  {sign:'Gemini',emoji:'♊',dates:'May 21 – Jun 20',traits:'Versatile, curious, affectionate, witty'},
+  {sign:'Cancer',emoji:'♋',dates:'Jun 21 – Jul 22',traits:'Tenacious, intuitive, loyal, empathetic'},
+  {sign:'Leo',emoji:'♌',dates:'Jul 23 – Aug 22',traits:'Creative, passionate, generous, warm-hearted'},
+  {sign:'Virgo',emoji:'♍',dates:'Aug 23 – Sep 22',traits:'Analytical, kind, hardworking, practical'},
+  {sign:'Libra',emoji:'♎',dates:'Sep 23 – Oct 22',traits:'Cooperative, diplomatic, gracious, fair-minded'},
+  {sign:'Scorpio',emoji:'♏',dates:'Oct 23 – Nov 21',traits:'Resourceful, brave, passionate, loyal'},
+  {sign:'Sagittarius',emoji:'♐',dates:'Nov 22 – Dec 21',traits:'Generous, idealistic, humorous, adventurous'},
+];
 
-  const totalMs=asof-dob;
-  const totalDays=Math.floor(totalMs/86400000);
-  const totalWeeks=Math.floor(totalDays/7);
+var BIRTHSTONES = ['Garnet','Amethyst','Aquamarine','Diamond','Emerald','Pearl','Ruby','Peridot','Sapphire','Opal','Topaz','Turquoise'];
+var BIRTHSTONE_EMOJI = ['💎','💜','🔵','💎','💚','⚪','❤️','💚','🔷','🟠','💛','🔵'];
 
-  document.getElementById('r-years').textContent=years;
-  document.getElementById('r-months').textContent=months;
-  document.getElementById('r-days').textContent=days;
-  document.getElementById('r-weeks').textContent=totalWeeks.toLocaleString();
-  document.getElementById('r-total-days').textContent=totalDays.toLocaleString();
+if (_adsRemoved) document.getElementById('remove-ads-btn').style.display = 'none';
 
-  const nextBday=new Date(asof.getFullYear(),dob.getMonth(),dob.getDate());
-  if(nextBday<=asof)nextBday.setFullYear(nextBday.getFullYear()+1);
-  const daysLeft=Math.ceil((nextBday-asof)/86400000);
-  document.getElementById('next-birthday').textContent=daysLeft===0?'🎉 Happy Birthday!':'🎂 Next birthday in '+daysLeft+' days';
+// set default dates
+var today = new Date();
+document.getElementById('dob').max = today.toISOString().split('T')[0];
+document.getElementById('asof').value = today.toISOString().split('T')[0];
+document.getElementById('d2').value = today.toISOString().split('T')[0];
+document.getElementById('add-date').value = today.toISOString().split('T')[0];
 
-  document.getElementById('result-card').style.display='';
+// ── tab switching ──
+function switchTab(screenId, btn) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById(screenId).classList.add('active');
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){
+    if (t.onclick && t.onclick.toString().indexOf(screenId) >= 0) t.classList.add('active');
+  });
+  if (screenId === 'profilesScreen') renderProfiles();
 }
 
-// Set today as default asof
-document.getElementById('asof').value=new Date().toISOString().split('T')[0];
+// ── age calculation ──
+function calculate() {
+  var dobVal = document.getElementById('dob').value;
+  if (!dobVal) return;
+  var dob = new Date(dobVal + 'T00:00:00');
+  var asofVal = document.getElementById('asof').value;
+  var asof = asofVal ? new Date(asofVal + 'T00:00:00') : new Date();
+  asof.setHours(0,0,0,0);
+  if (dob > asof) return;
 
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){document.getElementById('remove-ads').style.display='none';if(window.Android)Android.hideBannerAd();}};
+  var yrs = asof.getFullYear() - dob.getFullYear();
+  var mos = asof.getMonth() - dob.getMonth();
+  var dys = asof.getDate() - dob.getDate();
+  if (dys < 0) { mos--; var prev = new Date(asof.getFullYear(), asof.getMonth(), 0); dys += prev.getDate(); }
+  if (mos < 0) { yrs--; mos += 12; }
 
-// Interstitial ad helper
-var _interstitialCount = 0;
-var _adsRemoved = false;
-function _showInterstitial() {
-  if (_adsRemoved) return;
+  var totalMs = asof - dob;
+  var totalDays = Math.floor(totalMs / 86400000);
+  var totalWeeks = Math.floor(totalDays / 7);
+  var totalHours = totalDays * 24;
+  var totalMinutes = totalHours * 60;
+  var totalSeconds = totalMinutes * 60;
+  var fortnights = Math.floor(totalDays / 14);
+
+  document.getElementById('r-years').textContent = yrs;
+  document.getElementById('r-months').textContent = mos;
+  document.getElementById('r-days').textContent = dys;
+  document.getElementById('r-weeks').textContent = totalWeeks.toLocaleString();
+  document.getElementById('r-total-days').textContent = totalDays.toLocaleString();
+  document.getElementById('r-hours').textContent = totalHours.toLocaleString();
+  document.getElementById('r-minutes').textContent = totalMinutes.toLocaleString();
+  document.getElementById('r-seconds').textContent = totalSeconds.toLocaleString();
+  document.getElementById('r-fortnights').textContent = fortnights.toLocaleString();
+  document.getElementById('r-weekday').textContent = WEEKDAYS[dob.getDay()];
+
+  // birthday countdown
+  var bdaySection = document.getElementById('bday-section');
+  var nextBday = new Date(asof.getFullYear(), dob.getMonth(), dob.getDate());
+  if (nextBday < asof) nextBday.setFullYear(nextBday.getFullYear() + 1);
+  var daysLeft = Math.round((nextBday - asof) / 86400000);
+  if (daysLeft === 0) {
+    bdaySection.innerHTML = '<div class="bday-card today"><div class="bday-label">🎉 Today is your birthday!</div><div class="bday-count">' + yrs + '</div><div class="bday-sub">years old</div></div>';
+  } else {
+    bdaySection.innerHTML = '<div class="bday-card"><div class="bday-label">Next birthday in</div><div class="bday-count">' + daysLeft + '</div><div class="bday-sub">days · ' + (nextBday.getDate()) + ' ' + MONTHS_LONG[nextBday.getMonth()] + '</div></div>';
+  }
+
+  // fun facts
+  var facts = [
+    {icon:'❤️', val: (totalDays * 100000).toLocaleString(), desc:'Estimated heartbeats'},
+    {icon:'😴', val: Math.round(totalDays * 8).toLocaleString(), desc:'Hours slept (est. 8h/day)'},
+    {icon:'🍽️', val: Math.round(totalDays * 3).toLocaleString(), desc:'Meals eaten (est. 3/day)'},
+    {icon:'🌙', val: totalDays.toLocaleString(), desc:'Nights you have slept'},
+    {icon:'🌍', val: (yrs * 584).toLocaleString() + ' M km', desc:'Distance Earth has travelled around the Sun'},
+    {icon:'🌱', val: yrs + '', desc:'Springs you have seen'},
+    {icon:'📆', val: Math.round(totalDays / 7).toLocaleString(), desc:'Weekends you\'ve had'},
+  ];
+  var ff = document.getElementById('fun-facts');
+  ff.innerHTML = '';
+  facts.forEach(function(f) {
+    var div = document.createElement('div');
+    div.className = 'fact-card';
+    div.innerHTML = '<div class="fact-icon">' + f.icon + '</div><div class="fact-body"><div class="fact-val">' + f.val + '</div><div class="fact-desc">' + f.desc + '</div></div>';
+    ff.appendChild(div);
+  });
+
+  // zodiac
+  var m = dob.getMonth() + 1;
+  var d = dob.getDate();
+  var zIdx = getZodiacIndex(m, d);
+  var z = ZODIAC[zIdx];
+  var bsIdx = dob.getMonth();
+  var zSection = document.getElementById('zodiac-section');
+  zSection.innerHTML =
+    '<div class="zodiac-card"><div class="zodiac-sign">' + z.emoji + '</div><div class="zodiac-info"><div class="zodiac-name">' + z.sign + '</div><div class="zodiac-dates">' + z.dates + '</div><div class="zodiac-traits">' + z.traits + '</div></div></div>' +
+    '<div class="fact-card"><div class="fact-icon">' + BIRTHSTONE_EMOJI[bsIdx] + '</div><div class="fact-body"><div class="fact-val">' + BIRTHSTONES[bsIdx] + '</div><div class="fact-desc">Your birthstone · ' + MONTHS_LONG[bsIdx] + '</div></div></div>';
+
+  document.getElementById('resultSection').style.display = '';
+  _lastCalc = {yrs, mos, dys, totalDays, sign: z.sign, birthstone: BIRTHSTONES[bsIdx]};
+
   _interstitialCount++;
-  if (_interstitialCount % 3 === 0 && window.Android) {
+  if (!_adsRemoved && _interstitialCount % 4 === 0 && window.Android) {
     try { Android.showInterstitial(); } catch(e) {}
   }
 }
+
+function getZodiacIndex(m, d) {
+  if ((m===12&&d>=22)||(m===1&&d<=19)) return 0;
+  if ((m===1&&d>=20)||(m===2&&d<=18)) return 1;
+  if ((m===2&&d>=19)||(m===3&&d<=20)) return 2;
+  if ((m===3&&d>=21)||(m===4&&d<=19)) return 3;
+  if ((m===4&&d>=20)||(m===5&&d<=20)) return 4;
+  if ((m===5&&d>=21)||(m===6&&d<=20)) return 5;
+  if ((m===6&&d>=21)||(m===7&&d<=22)) return 6;
+  if ((m===7&&d>=23)||(m===8&&d<=22)) return 7;
+  if ((m===8&&d>=23)||(m===9&&d<=22)) return 8;
+  if ((m===9&&d>=23)||(m===10&&d<=22)) return 9;
+  if ((m===10&&d>=23)||(m===11&&d<=21)) return 10;
+  return 11;
+}
+
+// ── date diff ──
+function calcDiff() {
+  var v1 = document.getElementById('d1').value;
+  var v2 = document.getElementById('d2').value;
+  if (!v1 || !v2) return;
+  var d1 = new Date(v1 + 'T00:00:00');
+  var d2 = new Date(v2 + 'T00:00:00');
+  var start = d1 < d2 ? d1 : d2;
+  var end   = d1 < d2 ? d2 : d1;
+
+  var yrs = end.getFullYear() - start.getFullYear();
+  var mos = end.getMonth() - start.getMonth();
+  var dys = end.getDate() - start.getDate();
+  if (dys < 0) { mos--; var prev = new Date(end.getFullYear(), end.getMonth(), 0); dys += prev.getDate(); }
+  if (mos < 0) { yrs--; mos += 12; }
+  var total = Math.round(Math.abs(d2 - d1) / 86400000);
+
+  document.getElementById('d-years').textContent = yrs;
+  document.getElementById('d-months').textContent = mos;
+  document.getElementById('d-days').textContent = dys;
+  document.getElementById('d-weeks').textContent = Math.floor(total / 7).toLocaleString();
+  document.getElementById('d-total').textContent = total.toLocaleString();
+  document.getElementById('diffResult').style.display = '';
+}
+
+function calcAdd() {
+  var v = document.getElementById('add-date').value;
+  var n = parseInt(document.getElementById('add-days').value);
+  if (!v || isNaN(n)) return;
+  var d = new Date(v + 'T00:00:00');
+  d.setDate(d.getDate() + n);
+  document.getElementById('add-result-date').textContent = d.getDate() + ' ' + MONTHS_LONG[d.getMonth()] + ' ' + d.getFullYear();
+  document.getElementById('add-result-day').textContent = WEEKDAYS[d.getDay()];
+  document.getElementById('addResult').style.display = '';
+}
+
+// ── profiles ──
+function renderProfiles() {
+  var list = document.getElementById('profileList');
+  if (_profiles.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div><p>No profiles yet.<br>Add family and friends to track their ages.</p></div>';
+    return;
+  }
+  var today = new Date(); today.setHours(0,0,0,0);
+  list.innerHTML = '';
+  _profiles.forEach(function(p, i) {
+    var dob = new Date(p.dob + 'T00:00:00');
+    var yrs = today.getFullYear() - dob.getFullYear();
+    var m = today.getMonth() - dob.getMonth();
+    var dy = today.getDate() - dob.getDate();
+    if (dy < 0) m--;
+    if (m < 0) { yrs--; m += 12; }
+    var nextBday = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
+    if (nextBday < today) nextBday.setFullYear(nextBday.getFullYear() + 1);
+    var daysLeft = Math.round((nextBday - today) / 86400000);
+    var bdayText = daysLeft === 0 ? '🎉 Birthday today!' : daysLeft + ' days to birthday';
+    var div = document.createElement('div');
+    div.className = 'profile-card';
+    div.innerHTML =
+      '<div class="profile-emoji">' + (p.emoji||'🎂') + '</div>' +
+      '<div class="profile-info"><div class="profile-name">' + esc(p.name) + '</div><div class="profile-age">' + yrs + ' years old · ' + bdayText + '</div></div>' +
+      '<button class="profile-del" onclick="deleteProfile(event,' + i + ')">✕</button>';
+    div.onclick = function(e) {
+      if (e.target.classList.contains('profile-del')) return;
+      document.getElementById('dob').value = p.dob;
+      document.getElementById('asof').value = today.toISOString().split('T')[0];
+      switchTab('calcScreen', null);
+      calculate();
+    };
+    list.appendChild(div);
+  });
+}
+
+function openAddProfile() {
+  _selectedEmoji = '🎂';
+  document.getElementById('p-name').value = '';
+  document.getElementById('p-dob').value = '';
+  buildProfileEmojiPicker();
+  document.getElementById('addProfileModal').classList.add('show');
+}
+
+function buildProfileEmojiPicker() {
+  var picker = document.getElementById('profileEmojiPicker');
+  picker.innerHTML = '';
+  EMOJIS.forEach(function(em) {
+    var btn = document.createElement('button');
+    btn.className = 'emoji-opt' + (em === _selectedEmoji ? ' sel' : '');
+    btn.textContent = em;
+    btn.onclick = function() {
+      _selectedEmoji = em;
+      document.querySelectorAll('#profileEmojiPicker .emoji-opt').forEach(function(b){ b.classList.remove('sel'); });
+      btn.classList.add('sel');
+    };
+    picker.appendChild(btn);
+  });
+}
+
+function saveProfile() {
+  var name = document.getElementById('p-name').value.trim();
+  var dob = document.getElementById('p-dob').value;
+  if (!name || !dob) { showToast('Fill in name and date of birth'); return; }
+  _profiles.push({name:name, dob:dob, emoji:_selectedEmoji});
+  localStorage.setItem('ac_profiles', JSON.stringify(_profiles));
+  closeModal('addProfileModal');
+  renderProfiles();
+  showToast(name + ' added!');
+}
+
+function deleteProfile(e, i) {
+  e.stopPropagation();
+  _profiles.splice(i, 1);
+  localStorage.setItem('ac_profiles', JSON.stringify(_profiles));
+  renderProfiles();
+}
+
+// ── share ──
+function _share() {
+  if (!_lastCalc) { showToast('Calculate an age first'); return; }
+  var text = '🎂 Age: ' + _lastCalc.yrs + ' years, ' + _lastCalc.mos + ' months, ' + _lastCalc.dys + ' days\n📅 ' + _lastCalc.totalDays.toLocaleString() + ' days total\n♑ ' + _lastCalc.sign + ' · ' + _lastCalc.birthstone;
+  if (window.Android && Android.shareText) Android.shareText(text);
+  else showToast('Age: ' + _lastCalc.yrs + ' years');
+}
+
+// ── Android bridge ──
+function _purchase(id) { if (window.Android) Android.purchase(id); else showToast('IAP: ' + id); }
+window.onPurchaseComplete = function(id) {
+  if (id === 'remove_ads') {
+    _adsRemoved = true;
+    localStorage.setItem('ac_adsRemoved','1');
+    document.getElementById('remove-ads-btn').style.display = 'none';
+    if (window.Android) Android.hideBannerAd();
+    showToast('Ads removed!');
+  }
+};
+
+// ── modal helpers ──
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal-bg').forEach(function(bg){
+  bg.addEventListener('click', function(e){ if(e.target===bg) bg.classList.remove('show'); });
+});
+
+// ── toast ──
+var _toastTimer = null;
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+if (window.Android && !_adsRemoved) Android.showBannerAd();
 </script>
 </body>
 </html>
