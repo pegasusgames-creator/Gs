@@ -2,268 +2,323 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roller</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Word Scramble</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#e94560; --accent2:#533483; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
-#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
-header h1 { font-size:1.3rem; font-weight:700; }
-header h1 span { color:var(--accent); }
-#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
-#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
-.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
-
-/* Dice display area */
-#dice-area { display:flex; flex-wrap:wrap; justify-content:center; gap:14px; min-height:120px; align-items:center; padding:10px 0; }
-.die {
-  width:84px; height:84px;
-  background:var(--card);
-  border-radius:16px;
-  border:2px solid rgba(233,69,96,0.4);
-  display:flex; align-items:center; justify-content:center;
-  font-size:2.4rem; font-weight:900;
-  color:var(--accent);
-  cursor:pointer;
-  user-select:none;
-  transition:transform 0.08s;
-  position:relative;
-  overflow:hidden;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+:root {
+  --bg: #0a0f1e;
+  --surface: #121a2f;
+  --accent: #f59e0b;
+  --accent2: #1b2744;
+  --text: #ecf1fa;
+  --muted: #8892a4;
+  --green: #43c759;
+  --yellow: #fbbf24;
 }
-.die.rolling {
-  animation:shake 0.4s ease-out;
-}
-@keyframes shake {
-  0%  { transform:rotate(-8deg) scale(1.05); }
-  20% { transform:rotate(8deg)  scale(1.08); }
-  40% { transform:rotate(-6deg) scale(1.06); }
-  60% { transform:rotate(6deg)  scale(1.07); }
-  80% { transform:rotate(-3deg) scale(1.03); }
-  100%{ transform:rotate(0deg)  scale(1); }
-}
-.die.btn-pressed { transform:scale(0.9); }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: var(--bg); color: var(--text); font-family: 'Poppins', system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; letter-spacing: -0.01em; }
+body.ss #btn-remove-ads{display:none;}
 
-/* Die type selector */
-.die-types { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
-.dtype-btn { background:var(--card); border:2px solid transparent; border-radius:8px; color:var(--muted); font-size:0.8rem; font-weight:700; padding:6px 10px; cursor:pointer; }
-.dtype-btn.active { border-color:var(--accent); color:var(--accent); }
-.dtype-btn.btn-pressed { transform:scale(0.9); }
+#header { background: var(--surface); width: 100%; padding: 36px 14px 10px; border-bottom: 1px solid #2a3a5e; text-align: center; }
+#header h1 { font-size: 1.2rem; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; }
 
-/* Count row */
-.count-row { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
-.count-label { font-size:0.9rem; color:var(--muted); }
-.count-ctrl { display:flex; align-items:center; gap:12px; }
-.count-btn { width:34px; height:34px; border-radius:50%; background:var(--card); border:2px solid var(--accent); color:var(--accent); font-size:1.3rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.count-btn.btn-pressed { transform:scale(0.88); }
-#dice-count-disp { font-size:1.2rem; font-weight:700; min-width:24px; text-align:center; }
+#top-stats { display: flex; gap: 16px; padding: 10px 14px; justify-content: center; font-size: 0.82rem; color: var(--muted); }
+.stat { text-align: center; }
+.stat-v { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
 
-/* Roll button */
-#btn-roll {
-  width:100%;
-  background:linear-gradient(135deg,var(--accent),#c0392b);
-  border:none; border-radius:var(--radius);
-  color:#fff; font-size:1.3rem; font-weight:800;
-  padding:18px; cursor:pointer;
-  margin-bottom:12px;
-  box-shadow:0 6px 20px rgba(233,69,96,0.45);
-}
-#btn-roll.btn-pressed { transform:scale(0.97); }
+#cat-row { display: flex; gap: 6px; padding: 4px 12px 8px; overflow-x: auto; scrollbar-width: none; width: 100%; }
+#cat-row::-webkit-scrollbar { display: none; }
+.cat-btn { white-space: nowrap; padding: 6px 14px; border-radius: 18px; border: 1.5px solid #2a3a5e; background: transparent; color: var(--muted); font-size: 0.78rem; cursor: pointer; flex-shrink: 0; }
+.cat-btn.sel { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
 
-/* Stats */
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-.stat-box { background:var(--card); border-radius:10px; padding:10px; text-align:center; }
-.stat-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:3px; }
-.stat-val { font-size:1.2rem; font-weight:700; }
+#hint-box { background: var(--surface); border: 1px solid #2a3a5e; border-radius: 12px; padding: 12px 16px; margin: 10px 12px 0; width: 95%; max-width: 400px; }
+#hint-label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+#hint-text { font-size: 0.9rem; color: var(--text); font-style: italic; }
 
-/* History */
-#history-list { display:flex; flex-direction:column; gap:6px; }
-.history-item { background:var(--card); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; font-size:0.85rem; }
-.history-dice { color:var(--muted); }
-.history-sum { color:var(--accent); font-weight:700; }
+#timer-bar { width: 95%; max-width: 400px; height: 6px; background: #2a3a5e; border-radius: 3px; margin: 10px 0 4px; overflow: hidden; }
+#timer-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 1s linear; }
 
-#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+#answer-row { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin: 10px 12px; min-height: 52px; width: 95%; max-width: 400px; }
+.ans-tile { width: 44px; height: 48px; background: var(--accent2); border: 2px solid var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 700; color: #fff; cursor: pointer; transition: transform 0.12s; }
+.ans-tile:active { transform: scale(0.9); }
+.ans-tile.correct { background: rgba(46,204,113,0.2); border-color: var(--green); }
+.ans-tile.wrong { background: rgba(233,69,96,0.2); animation: shake 0.3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)} }
+
+#scramble-row { display: flex; gap: 7px; justify-content: center; flex-wrap: wrap; margin: 6px 12px 12px; width: 95%; max-width: 400px; }
+.scr-tile { width: 44px; height: 48px; background: var(--surface); border: 2px solid #3a4a6e; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 700; color: #fff; cursor: pointer; transition: all 0.12s; }
+.scr-tile:active { transform: scale(0.9); }
+.scr-tile.used { opacity: 0.25; pointer-events: none; }
+
+#action-row { display: flex; gap: 10px; margin: 0 0 10px; }
+.action-btn { padding: 10px 20px; border-radius: 22px; border: 1.5px solid #2a3a5e; background: transparent; color: var(--text); font-size: 0.82rem; cursor: pointer; }
+.action-btn:active { background: var(--accent2); }
+#submit-btn { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+
+#feedback { font-size: 1.1rem; font-weight: 700; min-height: 1.6em; text-align: center; letter-spacing: 1px; }
+#combo-display { font-size: 0.82rem; color: var(--yellow); min-height: 1.3em; text-align: center; }
+#level-display { font-size: 0.75rem; color: var(--muted); text-align: center; margin-bottom: 6px; }
 </style>
 </head>
 <body>
-<div id="app">
-  <header>
-    <h1>Dice <span>Roller</span></h1>
-    <button id="btn-remove-ads">Remove Ads</button>
-  </header>
-  <div id="scroll">
+<button id="btn-remove-ads" onclick="if(window.Android)Android.purchase('remove_ads')" style="position:fixed;top:8px;right:8px;z-index:9999;background:#533483;border:none;color:#fff;font-size:0.7rem;font-weight:600;padding:5px 10px;border-radius:20px;cursor:pointer;">Remove Ads</button>
 
-    <!-- Dice display -->
-    <div class="card">
-      <div class="card-title">Your Roll</div>
-      <div id="dice-area"></div>
-    </div>
+<div id="header"><h1>Word Scramble</h1></div>
 
-    <!-- Settings -->
-    <div class="card">
-      <div class="card-title">Die Type</div>
-      <div class="die-types" id="die-types"></div>
-      <div class="count-row">
-        <span class="count-label">Number of dice</span>
-        <div class="count-ctrl">
-          <button class="count-btn" id="btn-minus">−</button>
-          <span id="dice-count-disp">2</span>
-          <button class="count-btn" id="btn-plus">+</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Roll button -->
-    <button id="btn-roll">🎲 Roll!</button>
-
-    <!-- Stats -->
-    <div class="card">
-      <div class="card-title">Last Roll</div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-label">Sum</div><div class="stat-val" id="stat-sum">—</div></div>
-        <div class="stat-box"><div class="stat-label">Min</div><div class="stat-val" id="stat-min">—</div></div>
-        <div class="stat-box"><div class="stat-label">Max</div><div class="stat-val" id="stat-max">—</div></div>
-      </div>
-    </div>
-
-    <!-- History -->
-    <div class="card">
-      <div class="card-title">History</div>
-      <div id="history-list"><div style="color:var(--muted);font-size:0.85rem">No rolls yet</div></div>
-    </div>
-
-  </div>
-  <div id="admob-banner">Advertisement</div>
+<div id="top-stats">
+  <div class="stat"><div class="stat-v" id="score-v">0</div><div>Score</div></div>
+  <div class="stat"><div class="stat-v" id="streak-v">0</div><div>Streak</div></div>
+  <div class="stat"><div class="stat-v" id="lvl-v">1</div><div>Level</div></div>
 </div>
 
+<div id="cat-row">
+  <button class="cat-btn sel" data-cat="all">All</button>
+  <button class="cat-btn" data-cat="animals">Animals</button>
+  <button class="cat-btn" data-cat="food">Food</button>
+  <button class="cat-btn" data-cat="sports">Sports</button>
+  <button class="cat-btn" data-cat="countries">Countries</button>
+  <button class="cat-btn" data-cat="tech">Tech</button>
+</div>
+
+<div id="hint-box">
+  <div id="hint-label">Category / Hint</div>
+  <div id="hint-text">—</div>
+</div>
+
+<div id="timer-bar"><div id="timer-fill" style="width:100%"></div></div>
+
+<div id="answer-row"></div>
+<div id="scramble-row"></div>
+
+<div id="action-row">
+  <button class="action-btn" id="hint-btn">💡 Hint</button>
+  <button class="action-btn" id="clear-btn">⌫ Clear</button>
+  <button class="action-btn" id="skip-btn">Skip</button>
+  <button class="action-btn" id="submit-btn">Check ✓</button>
+</div>
+
+<div id="feedback"></div>
+<div id="combo-display"></div>
+<div id="level-display"></div>
+
 <script>
-'use strict';
-(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button,.die,.dtype-btn,.count-btn');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var _adsRemoved = false;
+var _interstitialCount = 0;
+function _showInterstitial() {
+  if (_adsRemoved) return;
+  _interstitialCount++;
+  if (_interstitialCount % 3 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
+  }
+}
+window.onPurchaseComplete = function(sku) {
+  if (sku === 'remove_ads') {
+    _adsRemoved = true;
+    var btn = document.getElementById('btn-remove-ads');
+    if (btn) btn.style.display = 'none';
+    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+  }
+};
 
-var DIE_TYPES=[4,6,8,10,12,20,100];
-var state={sides:6,count:2,useCount:0,removeAds:false};
-var history=[];
+var WORDS = {
+  animals:  [{w:'ELEPHANT',h:'Largest land animal'},{w:'DOLPHIN',h:'Intelligent marine mammal'},{w:'PENGUIN',h:'Bird that cannot fly'},{w:'GIRAFFE',h:'Tallest animal'},{w:'LEOPARD',h:'Big spotted cat'},{w:'HAMSTER',h:'Popular small pet'},{w:'CHEETAH',h:'Fastest land animal'},{w:'GORILLA',h:'Largest primate'},{w:'OCTOPUS',h:'8-armed sea creature'},{w:'PEACOCK',h:'Famous for its feathers'},{w:'PANTHER',h:'Black big cat'},{w:'BUFFALO',h:'Large bovine'},{w:'VULTURE',h:'Scavenging bird'},{w:'LOBSTER',h:'Clawed crustacean'},{w:'SPARROW',h:'Common small bird'}],
+  food:     [{w:'AVOCADO',h:'Green creamy fruit'},{w:'BROCCOLI',h:'Green tree-like veggie'},{w:'PANCAKE',h:'Flat breakfast food'},{w:'SAUSAGE',h:'Meat in a casing'},{w:'MUFFIN',h:'Small baked cake'},{w:'LASAGNA',h:'Layered pasta dish'},{w:'BURRITO',h:'Wrapped Mexican food'},{w:'POPCORN',h:'Cinema snack'},{w:'CUSTARD',h:'Sweet eggy sauce'},{w:'PRETZEL',h:'Twisted salty snack'},{w:'NOODLE',h:'Long pasta strand'},{w:'YOGURT',h:'Fermented dairy'},{w:'WAFFLE',h:'Grid-pattern breakfast'},{w:'SALMON',h:'Pink fish'},{w:'CASHEW',h:'Curved nut'}],
+  sports:   [{w:'TENNIS',h:'Played with a racket'},{w:'HOCKEY',h:'Puck on ice'},{w:'BOXING',h:'Gloved fist fight'},{w:'RUGBY',h:'Oval ball game'},{w:'SKIING',h:'Snow sliding sport'},{w:'CRICKET',h:'Bat and wicket sport'},{w:'CYCLING',h:'Pedal-powered racing'},{w:'SURFING',h:'Riding ocean waves'},{w:'ARCHERY',h:'Bow and arrow'},{w:'FENCING',h:'Sword sport'},{w:'ROWING',h:'Boat racing with oars'},{w:'DIVING',h:'Jump into water'},{w:'KARATE',h:'Japanese martial art'},{w:'POLO',h:'On horseback sport'},{w:'SQUASH',h:'Racket in a box court'}],
+  countries:[{w:'BRAZIL',h:'South American giant'},{w:'FRANCE',h:'Eiffel Tower country'},{w:'JAPAN',h:'Land of the rising sun'},{w:'CANADA',h:'Maple leaf nation'},{w:'INDIA',h:'1.4 billion people'},{w:'MEXICO',h:'North America, south'},{w:'SPAIN',h:'Flamenco country'},{w:'EGYPT',h:'Land of pyramids'},{w:'KENYA',h:'Safari destination'},{w:'NORWAY',h:'Northern Lights country'},{w:'TURKEY',h:'Transcontinental country'},{w:'SWEDEN',h:'ABBA\'s homeland'},{w:'POLAND',h:'Central European nation'},{w:'CHILE',h:'Long thin country'},{w:'GHANA',h:'West African nation'}],
+  tech:     [{w:'KEYBOARD',h:'Type with this'},{w:'BROWSER',h:'Surf the web'},{w:'LAPTOP',h:'Portable computer'},{w:'ROUTER',h:'Network device'},{w:'SERVER',h:'Hosts websites'},{w:'PIXEL',h:'Smallest screen unit'},{w:'CURSOR',h:'Mouse pointer'},{w:'WIDGET',h:'App component'},{w:'PLUGIN',h:'Software add-on'},{w:'SCRIPT',h:'Code sequence'},{w:'MODEM',h:'Internet connection box'},{w:'CACHE',h:'Stored data for speed'},{w:'FIREWALL',h:'Network security'},{w:'CODEC',h:'Compress/decode media'},{w:'SANDBOX',h:'Isolated test environment'}],
+};
 
-var diceArea=document.getElementById('dice-area');
-var dieTypesEl=document.getElementById('die-types');
-var diceCountDisp=document.getElementById('dice-count-disp');
+var selCat = 'all', score = 0, streak = 0, level = 1, combo = 1;
+var currentWord = '', scrambled = [], answerArr = [], usedIdx = [];
+var timerVal = 30, timerID = null, hintUsed = false;
+var wordQueue = [];
 
-// Build die type buttons
-DIE_TYPES.forEach(function(s){
-  var btn=document.createElement('button');
-  btn.className='dtype-btn'+(s===6?' active':'');
-  btn.textContent='D'+s;
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.dtype-btn').forEach(function(b){b.classList.remove('active');});
-    btn.classList.add('active');
-    state.sides=s;
-    renderDice();
+function getAllWords() {
+  var all = [];
+  Object.keys(WORDS).forEach(function(k) { WORDS[k].forEach(function(w){all.push({cat:k,w:w.w,h:w.h});});});
+  return all;
+}
+
+function getPool() {
+  var pool;
+  if (selCat === 'all') pool = getAllWords();
+  else pool = (WORDS[selCat]||[]).map(function(w){return {cat:selCat,w:w.w,h:w.h};});
+  pool.sort(function(){return Math.random()-0.5;});
+  // filter by level difficulty
+  return pool.filter(function(p){ return p.w.length >= Math.min(4+Math.floor(level/3), 8); }).concat(pool);
+}
+
+function pickWord() {
+  if (wordQueue.length === 0) wordQueue = getPool();
+  var item = wordQueue.shift();
+  return item;
+}
+
+function scrambleWord(w) {
+  var arr = w.split('');
+  do { arr.sort(function(){return Math.random()-0.5;}); } while (arr.join('') === w && w.length > 1);
+  return arr;
+}
+
+function loadWord() {
+  var item = pickWord();
+  currentWord = item.w;
+  hintUsed = false;
+  scrambled = scrambleWord(currentWord);
+  answerArr = [];
+  usedIdx = [];
+  document.getElementById('hint-text').textContent = item.cat.charAt(0).toUpperCase()+item.cat.slice(1) + ' — ' + item.h;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('combo-display').textContent = '';
+  document.getElementById('level-display').textContent = 'Level ' + level + '  •  Word length: ' + currentWord.length;
+  renderScramble();
+  renderAnswer();
+  startTimer();
+}
+
+function renderScramble() {
+  var row = document.getElementById('scramble-row');
+  row.innerHTML = '';
+  scrambled.forEach(function(ch, i) {
+    var tile = document.createElement('div');
+    tile.className = 'scr-tile' + (usedIdx.indexOf(i) !== -1 ? ' used' : '');
+    tile.textContent = ch;
+    tile.dataset.i = i;
+    tile.onclick = function() {
+      var idx = parseInt(this.dataset.i);
+      if (usedIdx.indexOf(idx) !== -1) return;
+      answerArr.push({ch: scrambled[idx], idx: idx});
+      usedIdx.push(idx);
+      renderAnswer();
+      renderScramble();
+    };
+    row.appendChild(tile);
   });
-  dieTypesEl.appendChild(btn);
-});
+}
 
-function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
-
-function renderDice(values){
-  diceArea.innerHTML='';
-  for(var i=0;i<state.count;i++){
-    var die=document.createElement('div');
-    die.className='die';
-    die.textContent=values?values[i]:'?';
-    (function(idx){
-      die.addEventListener('click',function(){rollSingle(idx);});
-    })(i);
-    diceArea.appendChild(die);
+function renderAnswer() {
+  var row = document.getElementById('answer-row');
+  row.innerHTML = '';
+  for (var i = 0; i < currentWord.length; i++) {
+    var tile = document.createElement('div');
+    tile.className = 'ans-tile';
+    tile.textContent = answerArr[i] ? answerArr[i].ch : '';
+    tile.dataset.ai = i;
+    if (answerArr[i]) {
+      tile.onclick = (function(ai){return function(){
+        var removed = answerArr.splice(ai, 1)[0];
+        usedIdx.splice(usedIdx.indexOf(removed.idx), 1);
+        renderAnswer(); renderScramble();
+      };})(i);
+    }
+    row.appendChild(tile);
   }
 }
 
-function rollAll(){
-  var vals=[];
-  for(var i=0;i<state.count;i++) vals.push(randInt(1,state.sides));
-  animateRoll(vals);
-  updateStats(vals);
-  addHistory(vals);
-  state.useCount++;
-  if(!state.removeAds&&state.useCount%7===0&&window.Android) Android.showInterstitial();
+function startTimer() {
+  if (timerID) clearInterval(timerID);
+  timerVal = 30;
+  document.getElementById('timer-fill').style.width = '100%';
+  timerID = setInterval(function() {
+    timerVal--;
+    document.getElementById('timer-fill').style.width = (timerVal/30*100) + '%';
+    document.getElementById('timer-fill').style.background = timerVal < 10 ? '#e74c3c' : 'var(--accent)';
+    if (timerVal <= 0) {
+      clearInterval(timerID);
+      onTimeUp();
+    }
+  }, 1000);
 }
 
-function rollSingle(idx){
-  var dies=diceArea.querySelectorAll('.die');
-  var val=randInt(1,state.sides);
-  dies[idx].textContent=val;
-  dies[idx].classList.remove('rolling');
-  void dies[idx].offsetWidth;
-  dies[idx].classList.add('rolling');
-  setTimeout(function(){dies[idx].classList.remove('rolling');},420);
+function onTimeUp() {
+  streak = 0; combo = 1;
+  document.getElementById('streak-v').textContent = streak;
+  var fb = document.getElementById('feedback');
+  fb.textContent = '⏰ Time! Answer: ' + currentWord;
+  fb.style.color = 'var(--red, #e74c3c)';
+  setTimeout(loadWord, 1800);
 }
 
-function animateRoll(finalVals){
-  var dies=diceArea.querySelectorAll('.die');
-  dies.forEach(function(d){
-    d.classList.remove('rolling');
-    void d.offsetWidth;
-    d.classList.add('rolling');
-  });
-  // Quick flicker then show final
-  var steps=6, interval=50;
-  for(var s=0;s<steps;s++){
-    (function(step){
-      setTimeout(function(){
-        dies.forEach(function(d){d.textContent=randInt(1,state.sides);});
-        if(step===steps-1){
-          setTimeout(function(){
-            finalVals.forEach(function(v,i){dies[i].textContent=v;});
-            dies.forEach(function(d){d.classList.remove('rolling');});
-          },80);
-        }
-      },step*interval);
-    })(s);
+function checkAnswer() {
+  if (answerArr.length !== currentWord.length) return;
+  var guess = answerArr.map(function(x){return x.ch;}).join('');
+  var fb = document.getElementById('feedback');
+  if (guess === currentWord) {
+    clearInterval(timerID);
+    var timeBonus = timerVal;
+    var pts = (10 + timeBonus) * combo;
+    score += pts; streak++;
+    combo = Math.min(5, Math.floor(streak/3) + 1);
+    if (streak % 5 === 0) level = Math.min(10, level + 1);
+    document.getElementById('score-v').textContent = score;
+    document.getElementById('streak-v').textContent = streak;
+    document.getElementById('lvl-v').textContent = level;
+    fb.textContent = '✓ Correct! +' + pts;
+    fb.style.color = 'var(--green)';
+    if (combo > 1) document.getElementById('combo-display').textContent = '🔥 x' + combo + ' Combo!';
+    document.querySelectorAll('.ans-tile').forEach(function(t){t.classList.add('correct');});
+    _showInterstitial();
+    setTimeout(loadWord, 900);
+  } else {
+    fb.textContent = '✗ Try again';
+    fb.style.color = 'var(--accent)';
+    document.querySelectorAll('.ans-tile').forEach(function(t){t.classList.add('wrong');});
+    setTimeout(function(){document.querySelectorAll('.ans-tile').forEach(function(t){t.classList.remove('wrong');});}, 400);
   }
 }
 
-function updateStats(vals){
-  document.getElementById('stat-sum').textContent=vals.reduce(function(a,b){return a+b;},0);
-  document.getElementById('stat-min').textContent=Math.min.apply(null,vals);
-  document.getElementById('stat-max').textContent=Math.max.apply(null,vals);
-}
+document.getElementById('submit-btn').onclick = checkAnswer;
+document.getElementById('clear-btn').onclick = function() {
+  answerArr = []; usedIdx = [];
+  renderAnswer(); renderScramble();
+};
+document.getElementById('skip-btn').onclick = function() {
+  clearInterval(timerID);
+  streak = 0; combo = 1;
+  document.getElementById('streak-v').textContent = 0;
+  document.getElementById('feedback').textContent = 'Skipped: ' + currentWord;
+  document.getElementById('feedback').style.color = 'var(--muted)';
+  setTimeout(loadWord, 1200);
+};
+document.getElementById('hint-btn').onclick = function() {
+  if (hintUsed) return;
+  hintUsed = true;
+  // Reveal first unanswered correct letter
+  for (var i = answerArr.length; i < currentWord.length; i++) {
+    var correct = currentWord[i];
+    // find this letter in scrambled & not used
+    for (var j = 0; j < scrambled.length; j++) {
+      if (scrambled[j] === correct && usedIdx.indexOf(j) === -1) {
+        answerArr.push({ch: correct, idx: j});
+        usedIdx.push(j);
+        break;
+      }
+    }
+    break;
+  }
+  renderAnswer(); renderScramble();
+};
 
-function addHistory(vals){
-  history.unshift({sides:state.sides,vals:vals.slice(),sum:vals.reduce(function(a,b){return a+b;},0)});
-  if(history.length>10) history.pop();
-  var el=document.getElementById('history-list');
-  el.innerHTML='';
-  history.forEach(function(h){
-    var item=document.createElement('div');
-    item.className='history-item';
-    item.innerHTML='<span class="history-dice">'+h.count+'×D'+h.sides+': ['+h.vals.join(', ')+']</span><span class="history-sum">'+h.sum+'</span>';
-    // patch count
-    item.querySelector('.history-dice').textContent=h.vals.length+'×D'+h.sides+': ['+h.vals.join(', ')+']';
-    el.appendChild(item);
-  });
-}
-
-document.getElementById('btn-roll').addEventListener('click',function(){
-  renderDice();
-  setTimeout(rollAll,10);
+document.querySelectorAll('.cat-btn').forEach(function(b) {
+  b.onclick = function() {
+    document.querySelectorAll('.cat-btn').forEach(function(x){x.classList.remove('sel');});
+    this.classList.add('sel'); selCat = this.dataset.cat;
+    wordQueue = [];
+    loadWord();
+  };
 });
 
-document.getElementById('btn-minus').addEventListener('click',function(){
-  if(state.count>1){state.count--;diceCountDisp.textContent=state.count;renderDice();}
-});
-document.getElementById('btn-plus').addEventListener('click',function(){
-  if(state.count<8){state.count++;diceCountDisp.textContent=state.count;renderDice();}
-});
+loadWord();
 
-document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';}};
-
-function init(){
-  if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
-  renderDice();
+if(/screenshot=/.test(location.hash)){
+  document.body.classList.add('ss');
+  setTimeout(function(){
+    document.getElementById('score-v').textContent='2480';
+    document.getElementById('streak-v').textContent='17';
+    document.getElementById('lvl-v').textContent='12';
+  },80);
 }
-init();
 </script>
 </body>
 </html>
