@@ -62,14 +62,21 @@ import java.util.Set;
 public class MainActivity extends Activity {
 
     // ── AppLovin MAX ──────────────────────────────────────────────────────────
-    // Get SDK Key: dash.applovin.com → Account → Keys → SDK Key
-    // Get Ad Unit IDs: dash.applovin.com → Monetize → Ad Units
-    private static final String MAX_SDK_KEY              = "ENTER_YOUR_APPLOVIN_SDK_KEY_HERE";
-    private static final String MAX_BANNER_UNIT_ID       = "ENTER_YOUR_MAX_BANNER_UNIT_ID";
-    private static final String MAX_INTERSTITIAL_UNIT_ID = "ENTER_YOUR_MAX_INTER_UNIT_ID";
-    private static final String MAX_REWARDED_UNIT_ID     = "ENTER_YOUR_MAX_REWARDED_UNIT_ID";
-    // Auto-switch: uses AppLovin when SDK key is real, AdMob otherwise
-    private static final boolean USE_APPLOVIN = !MAX_SDK_KEY.startsWith("ENTER_");
+    // Disabled until this developer is approved on AppLovin. The app ships
+    // AdMob-only for now. To re-enable when the SDK key is provided:
+    //   1. Paste the real SDK key and unit IDs below
+    //   2. Flip USE_APPLOVIN to true (or revert to the !startsWith("ENTER_") check)
+    //   3. The "if (false /* MAX_ENABLED */)" blocks below will then short-circuit
+    //      to the MAX paths again
+    // Paste real values here and flip USE_APPLOVIN to true when the AppLovin
+    // developer account is approved.
+    private static final String MAX_SDK_KEY              = ""; // TODO: paste SDK key
+    private static final String MAX_BANNER_UNIT_ID       = ""; // TODO: paste banner unit id
+    private static final String MAX_INTERSTITIAL_UNIT_ID = ""; // TODO: paste interstitial unit id
+    private static final String MAX_REWARDED_UNIT_ID     = ""; // TODO: paste rewarded unit id
+    // MAX_ENABLED — AppLovin disabled; app uses AdMob only. Flip to true once
+    // the SDK key above is real.
+    private static final boolean USE_APPLOVIN = false;
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     // Get from: apps.admob.com → Your App → Ad Units
