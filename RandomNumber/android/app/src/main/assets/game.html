@@ -2,268 +2,416 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roller</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Random Number</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#e94560; --accent2:#533483; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
-#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
-header h1 { font-size:1.3rem; font-weight:700; }
-header h1 span { color:var(--accent); }
-#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
-#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
-.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
-
-/* Dice display area */
-#dice-area { display:flex; flex-wrap:wrap; justify-content:center; gap:14px; min-height:120px; align-items:center; padding:10px 0; }
-.die {
-  width:84px; height:84px;
-  background:var(--card);
-  border-radius:16px;
-  border:2px solid rgba(233,69,96,0.4);
-  display:flex; align-items:center; justify-content:center;
-  font-size:2.4rem; font-weight:900;
-  color:var(--accent);
-  cursor:pointer;
-  user-select:none;
-  transition:transform 0.08s;
-  position:relative;
-  overflow:hidden;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#0c0e1c;--surface:#131732;--card:#1a2046;--accent:#74b9ff;--accent-soft:#a4cfff;
+  --accent2:#a29bfe;--text:#eaeefb;--muted:#8892b6;--border:#22295a;--ok:#43c759;
+  --radius:14px;--safeb:env(safe-area-inset-bottom);
 }
-.die.rolling {
-  animation:shake 0.4s ease-out;
-}
-@keyframes shake {
-  0%  { transform:rotate(-8deg) scale(1.05); }
-  20% { transform:rotate(8deg)  scale(1.08); }
-  40% { transform:rotate(-6deg) scale(1.06); }
-  60% { transform:rotate(6deg)  scale(1.07); }
-  80% { transform:rotate(-3deg) scale(1.03); }
-  100%{ transform:rotate(0deg)  scale(1); }
-}
-.die.btn-pressed { transform:scale(0.9); }
-
-/* Die type selector */
-.die-types { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
-.dtype-btn { background:var(--card); border:2px solid transparent; border-radius:8px; color:var(--muted); font-size:0.8rem; font-weight:700; padding:6px 10px; cursor:pointer; }
-.dtype-btn.active { border-color:var(--accent); color:var(--accent); }
-.dtype-btn.btn-pressed { transform:scale(0.9); }
-
-/* Count row */
-.count-row { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
-.count-label { font-size:0.9rem; color:var(--muted); }
-.count-ctrl { display:flex; align-items:center; gap:12px; }
-.count-btn { width:34px; height:34px; border-radius:50%; background:var(--card); border:2px solid var(--accent); color:var(--accent); font-size:1.3rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.count-btn.btn-pressed { transform:scale(0.88); }
-#dice-count-disp { font-size:1.2rem; font-weight:700; min-width:24px; text-align:center; }
-
-/* Roll button */
-#btn-roll {
-  width:100%;
-  background:linear-gradient(135deg,var(--accent),#c0392b);
-  border:none; border-radius:var(--radius);
-  color:#fff; font-size:1.3rem; font-weight:800;
-  padding:18px; cursor:pointer;
-  margin-bottom:12px;
-  box-shadow:0 6px 20px rgba(233,69,96,0.45);
-}
-#btn-roll.btn-pressed { transform:scale(0.97); }
-
-/* Stats */
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-.stat-box { background:var(--card); border-radius:10px; padding:10px; text-align:center; }
-.stat-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:3px; }
-.stat-val { font-size:1.2rem; font-weight:700; }
-
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Poppins',system-ui,sans-serif;overflow:hidden;letter-spacing:-0.01em;}
+#app{display:flex;flex-direction:column;height:100%;padding-bottom:var(--safeb);}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;flex-shrink:0;border-bottom:1px solid var(--border);}
+header h1{font-size:1.2rem;font-weight:800;letter-spacing:-0.5px;}
+header h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hdr-btn{background:var(--card);border:1px solid var(--border);color:var(--text);font-size:0.7rem;font-weight:600;padding:6px 11px;border-radius:20px;cursor:pointer;font-family:inherit;}
+.coins-bar{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;}
+.coins-icon{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#ffd700,#ffaa00);display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:#7a4f00;}
+.coins-val{font-size:0.85rem;font-weight:800;color:#ffd166;}
+.coins-label{font-size:0.7rem;color:var(--muted);}
+.coins-earn{margin-left:auto;font-size:0.66rem;color:var(--accent2);}
+.tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.tab{flex:1;padding:11px 4px;font-size:0.74rem;font-weight:700;text-align:center;cursor:pointer;color:var(--muted);border:none;background:none;font-family:inherit;}
+.tab.active{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent);}
+#scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 22px;}
+.page{display:none;}
+.page.active{display:block;}
+/* Hero */
+.hero{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px 16px;margin-bottom:12px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.big-number{font-size:4.5rem;font-weight:900;line-height:1.1;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;min-height:84px;display:flex;align-items:center;justify-content:center;letter-spacing:-2px;}
+.big-number.animate{animation:pop 0.32s ease;}
+@keyframes pop{0%{transform:scale(0.75);opacity:0.4}55%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+.range-sub{font-size:0.8rem;color:var(--muted);margin-top:4px;}
+.act-row{display:flex;gap:8px;margin-top:14px;}
+.btn{flex:1;padding:13px;border:none;border-radius:12px;font-size:0.92rem;font-weight:800;cursor:pointer;font-family:inherit;transition:transform 0.1s;}
+.btn:active{transform:scale(0.96);}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#09122a;}
+.btn-second{background:var(--card);color:var(--text);border:1px solid var(--border);}
+/* Panels */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;}
+.panel-title{font-size:0.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.8px;margin-bottom:10px;font-weight:700;}
+.range-row{display:flex;gap:10px;align-items:center;}
+.range-col{flex:1;}
+.range-col label{font-size:0.72rem;color:var(--muted);display:block;margin-bottom:4px;}
+.range-col input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--text);font-size:1.1rem;font-weight:800;text-align:center;outline:none;font-family:'JetBrains Mono',monospace;}
+.range-col input:focus{border-color:var(--accent);}
+.arrow{font-size:1.3rem;color:var(--muted);padding-top:18px;}
+.opts-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px;}
+.opt-pill{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:9px 10px;font-size:0.76rem;font-weight:700;color:var(--muted);cursor:pointer;text-align:center;font-family:inherit;display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.opt-pill.on{background:var(--accent);border-color:var(--accent);color:#09122a;}
+.opt-count{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 10px;display:flex;align-items:center;gap:8px;justify-content:center;}
+.opt-count button{background:var(--card);border:1px solid var(--border);color:var(--text);width:26px;height:26px;border-radius:50%;cursor:pointer;font-weight:800;font-family:inherit;}
+.opt-count button:active{background:var(--accent);border-color:var(--accent);color:#09122a;}
+.opt-count .opt-v{font-weight:800;color:var(--accent);min-width:18px;text-align:center;font-variant-numeric:tabular-nums;}
 /* History */
-#history-list { display:flex; flex-direction:column; gap:6px; }
-.history-item { background:var(--card); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; font-size:0.85rem; }
-.history-dice { color:var(--muted); }
-.history-sum { color:var(--accent); font-weight:700; }
-
-#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+.history-list{display:flex;flex-wrap:wrap;gap:7px;}
+.history-chip{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:0.86rem;font-weight:700;color:var(--accent);cursor:pointer;}
+.history-chip:active{transform:scale(0.95);}
+.empty-state{color:var(--muted);font-size:0.82rem;text-align:center;padding:14px 0;}
+/* Dice */
+.dice-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px;margin-bottom:10px;}
+.dice-btn{background:var(--card);border:1.5px solid var(--border);border-radius:11px;padding:10px 2px;font-weight:800;font-size:0.9rem;color:var(--text);cursor:pointer;font-family:inherit;}
+.dice-btn.sel{background:var(--accent);color:#09122a;border-color:var(--accent);}
+.dice-btn:active{transform:scale(0.95);}
+.dice-result{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0;min-height:70px;align-items:center;}
+.die{width:56px;height:56px;background:linear-gradient(135deg,var(--card),var(--surface));border:2px solid var(--accent);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.7rem;font-weight:800;color:var(--accent);font-family:'JetBrains Mono',monospace;box-shadow:0 0 14px rgba(116,185,255,0.25);}
+.die.animate{animation:pop 0.3s ease;}
+.dice-total{font-size:1rem;color:var(--muted);margin-top:4px;}
+.dice-total b{color:var(--accent);font-size:1.3rem;font-family:'JetBrains Mono',monospace;}
+/* Coin */
+.coin-wrap{display:flex;flex-direction:column;align-items:center;padding:6px 0;}
+.coin{width:140px;height:140px;border-radius:50%;background:linear-gradient(135deg,#ffd700,#ffaa00);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:900;color:#6b4200;box-shadow:0 6px 22px rgba(255,170,0,0.4);margin-bottom:14px;transform-style:preserve-3d;}
+.coin.heads{background:linear-gradient(135deg,#ffd700,#ffaa00);color:#6b4200;}
+.coin.tails{background:linear-gradient(135deg,#c4c4c4,#8a8a8a);color:#2a2a2a;}
+.coin.animate{animation:flip 0.6s ease;}
+@keyframes flip{0%{transform:rotateY(0)}50%{transform:rotateY(540deg) scale(1.1)}100%{transform:rotateY(1080deg)}}
+.coin-label{font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:2px;}
+.coin-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;width:100%;}
+/* Stats */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 8px;text-align:center;}
+.stat-label{font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:3px;}
+.stat-value{font-size:1.3rem;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;font-family:'JetBrains Mono',monospace;}
+/* Shop */
+.ads-card{background:linear-gradient(135deg,#6a2fbe,#c33ce0);border-radius:14px;padding:14px;margin-bottom:10px;color:#fff;}
+.ads-title{font-size:1rem;font-weight:800;margin-bottom:4px;}
+.ads-desc{font-size:0.75rem;opacity:0.9;margin-bottom:9px;}
+.ads-btn{background:#fff;color:#6a2fbe;border:none;font-size:0.82rem;font-weight:800;padding:9px 22px;border-radius:22px;cursor:pointer;font-family:inherit;}
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.theme-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:10px;text-align:center;cursor:pointer;font-family:inherit;}
+.theme-card.owned{border-color:var(--ok);}
+.theme-card.active{border-color:var(--accent);}
+.theme-preview{height:54px;border-radius:9px;margin-bottom:7px;position:relative;overflow:hidden;}
+.theme-name{font-size:0.82rem;font-weight:800;margin-bottom:2px;}
+.theme-price{font-size:0.72rem;color:var(--muted);}
+.theme-price.free{color:var(--ok);}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(18px);background:#0b0f24;border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:22px;font-size:0.82rem;font-weight:600;opacity:0;transition:all 0.25s;pointer-events:none;z-index:9999;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+body.ss #btn-remove-ads{display:none;}
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <h1>Dice <span>Roller</span></h1>
-    <button id="btn-remove-ads">Remove Ads</button>
+    <h1>Random<span>Number</span></h1>
+    <button class="hdr-btn" id="btn-remove-ads">Remove Ads</button>
   </header>
+  <div class="coins-bar">
+    <div class="coins-icon">C</div>
+    <span class="coins-val" id="coins-display">0</span>
+    <span class="coins-label">coins</span>
+    <span class="coins-earn">+1 per 10 rolls</span>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-tab="num">Number</button>
+    <button class="tab" data-tab="dice">Dice</button>
+    <button class="tab" data-tab="coin">Coin</button>
+    <button class="tab" data-tab="shop">Shop</button>
+  </div>
   <div id="scroll">
-
-    <!-- Dice display -->
-    <div class="card">
-      <div class="card-title">Your Roll</div>
-      <div id="dice-area"></div>
-    </div>
-
-    <!-- Settings -->
-    <div class="card">
-      <div class="card-title">Die Type</div>
-      <div class="die-types" id="die-types"></div>
-      <div class="count-row">
-        <span class="count-label">Number of dice</span>
-        <div class="count-ctrl">
-          <button class="count-btn" id="btn-minus">−</button>
-          <span id="dice-count-disp">2</span>
-          <button class="count-btn" id="btn-plus">+</button>
+    <div class="page active" id="page-num">
+      <div class="hero">
+        <div class="big-number" id="num-result">?</div>
+        <div class="range-sub" id="range-label">1 – 100 · unique</div>
+        <div class="act-row">
+          <button class="btn btn-primary" id="gen-btn">Generate</button>
+          <button class="btn btn-second" id="copy-btn">Copy</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Range</div>
+        <div class="range-row">
+          <div class="range-col"><label>Minimum</label><input type="number" id="min-val" value="1" inputmode="numeric"></div>
+          <div class="arrow">→</div>
+          <div class="range-col"><label>Maximum</label><input type="number" id="max-val" value="100" inputmode="numeric"></div>
+        </div>
+        <div class="opts-row">
+          <div class="opt-pill" id="opt-unique">Unique Only</div>
+          <div class="opt-count"><button id="cnt-dn">−</button><span class="opt-v" id="cnt-v">1</span><span style="color:var(--muted);font-size:0.72rem;">numbers</span><button id="cnt-up">+</button></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title" style="display:flex;justify-content:space-between;">Recent <button id="clr-hist" style="background:none;border:none;color:var(--accent2);font-size:0.72rem;font-weight:700;cursor:pointer;font-family:inherit;">Clear</button></div>
+        <div class="history-list" id="hist-list"><div class="empty-state">No numbers yet — tap Generate</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Session Stats</div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-label">Min</div><div class="stat-value" id="st-min">—</div></div>
+          <div class="stat-card"><div class="stat-label">Avg</div><div class="stat-value" id="st-avg">—</div></div>
+          <div class="stat-card"><div class="stat-label">Max</div><div class="stat-value" id="st-max">—</div></div>
         </div>
       </div>
     </div>
-
-    <!-- Roll button -->
-    <button id="btn-roll">🎲 Roll!</button>
-
-    <!-- Stats -->
-    <div class="card">
-      <div class="card-title">Last Roll</div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-label">Sum</div><div class="stat-val" id="stat-sum">—</div></div>
-        <div class="stat-box"><div class="stat-label">Min</div><div class="stat-val" id="stat-min">—</div></div>
-        <div class="stat-box"><div class="stat-label">Max</div><div class="stat-val" id="stat-max">—</div></div>
+    <div class="page" id="page-dice">
+      <div class="hero">
+        <div class="dice-result" id="dice-out"><div class="die">?</div></div>
+        <div class="dice-total" id="dice-total">Tap Roll</div>
+        <div class="act-row">
+          <button class="btn btn-primary" id="roll-btn">Roll</button>
+          <button class="btn btn-second" id="roll-copy">Copy</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Die Type</div>
+        <div class="dice-grid" id="dice-types"></div>
+        <div class="opt-count" style="margin-top:4px;"><button id="dc-dn">−</button><span class="opt-v" id="dc-v">2</span><span style="color:var(--muted);font-size:0.72rem;">dice</span><button id="dc-up">+</button></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Roll History</div>
+        <div class="history-list" id="dice-hist"><div class="empty-state">No rolls yet</div></div>
       </div>
     </div>
-
-    <!-- History -->
-    <div class="card">
-      <div class="card-title">History</div>
-      <div id="history-list"><div style="color:var(--muted);font-size:0.85rem">No rolls yet</div></div>
+    <div class="page" id="page-coin">
+      <div class="hero">
+        <div class="coin-wrap">
+          <div class="coin heads" id="coin-el">?</div>
+          <div class="coin-label" id="coin-label">Tap flip</div>
+        </div>
+        <div class="act-row">
+          <button class="btn btn-primary" id="flip-btn">Flip</button>
+          <button class="btn btn-second" id="flip10-btn">Flip 10</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Session Tally</div>
+        <div class="coin-stats">
+          <div class="stat-card"><div class="stat-label">Heads</div><div class="stat-value" id="c-heads">0</div></div>
+          <div class="stat-card"><div class="stat-label">Tails</div><div class="stat-value" id="c-tails">0</div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Last 20 Flips</div>
+        <div class="history-list" id="coin-hist"><div class="empty-state">No flips yet</div></div>
+      </div>
     </div>
-
+    <div class="page" id="page-shop">
+      <div class="ads-card">
+        <div class="ads-title">Remove Ads</div>
+        <div class="ads-desc">Fewer distractions, faster rolling.</div>
+        <button class="ads-btn" id="buy-ads">Unlock for $2.99</button>
+      </div>
+      <div class="panel-title">Themes</div>
+      <div class="shop-grid" id="theme-grid"></div>
+    </div>
   </div>
-  <div id="admob-banner">Advertisement</div>
 </div>
-
+<div id="toast"></div>
 <script>
+(function(){
 'use strict';
-(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button,.die,.dtype-btn,.count-btn');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var SS=/screenshot=/.test(location.hash);if(SS)document.body.classList.add('ss');
+var SSTATE=SS?(location.hash.match(/screenshot=([a-z]+)/)||[])[1]:'';
 
-var DIE_TYPES=[4,6,8,10,12,20,100];
-var state={sides:6,count:2,useCount:0,removeAds:false};
-var history=[];
+var K='randomnum_v2';
+function load(){try{var s=localStorage.getItem(K);if(s)return JSON.parse(s);}catch(e){}return null;}
+function save(){try{localStorage.setItem(K,JSON.stringify(S));}catch(e){}}
+var S=load()||{coins:20,adsRemoved:false,theme:'cosmic',ownedThemes:['cosmic'],
+  num:{min:1,max:100,unique:true,count:1,hist:[]},
+  dice:{sides:6,count:2,hist:[]},
+  coin:{heads:0,tails:0,hist:[]},
+  stats:{generated:0}};
+if(SS){S.coins=1120;S.ownedThemes=['cosmic','ocean','sunset'];
+  S.num.hist=[47,82,13,91,56,24,3,78,62,18];
+  S.dice.hist=[[4,6],[5,3],[6,2],[2,5],[4,4]];
+  S.coin.heads=14;S.coin.tails=11;S.coin.hist=[1,0,1,1,0,1,0,1,1,1,0,0,1,1,0,1,0,1,1,0];
+  S.stats.generated=287;}
 
-var diceArea=document.getElementById('dice-area');
-var dieTypesEl=document.getElementById('die-types');
-var diceCountDisp=document.getElementById('dice-count-disp');
+var nativeA=window.Android||null;
+window.onPurchaseComplete=function(sku){if(sku==='remove_ads'){S.adsRemoved=true;save();
+  document.getElementById('btn-remove-ads').style.display='none';
+  var b=document.getElementById('buy-ads');if(b){b.textContent='Owned ✓';b.disabled=true;}
+  if(nativeA){try{nativeA.hideBannerAd();}catch(e){}}toast('Ads removed');}};
+document.getElementById('btn-remove-ads').onclick=function(){if(nativeA)try{nativeA.purchase('remove_ads');}catch(e){}};
+document.getElementById('buy-ads').onclick=function(){if(!S.adsRemoved&&nativeA)try{nativeA.purchase('remove_ads');}catch(e){}};
+function vibrate(p){if(navigator.vibrate)try{navigator.vibrate(p);}catch(e){}}
+var toastTO;function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastTO);toastTO=setTimeout(function(){t.classList.remove('show');},1500);}
 
-// Build die type buttons
-DIE_TYPES.forEach(function(s){
-  var btn=document.createElement('button');
-  btn.className='dtype-btn'+(s===6?' active':'');
-  btn.textContent='D'+s;
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.dtype-btn').forEach(function(b){b.classList.remove('active');});
-    btn.classList.add('active');
-    state.sides=s;
-    renderDice();
-  });
-  dieTypesEl.appendChild(btn);
-});
+var THEMES=[
+  {id:'cosmic',name:'Cosmic',bg:'#0c0e1c',surface:'#131732',card:'#1a2046',accent:'#74b9ff',softer:'#a4cfff',accent2:'#a29bfe',border:'#22295a',text:'#eaeefb',muted:'#8892b6',price:0},
+  {id:'ocean',name:'Ocean',bg:'#061722',surface:'#0a2536',card:'#0f3246',accent:'#00d4ff',softer:'#5ae3ff',accent2:'#41ead4',border:'#164457',text:'#e8f3f8',muted:'#7a96a4',price:180},
+  {id:'sunset',name:'Sunset',bg:'#1d0d07',surface:'#2a150c',card:'#381d10',accent:'#ff8844',softer:'#ffb07a',accent2:'#ffd166',border:'#472a17',text:'#fff1e6',muted:'#a0867a',price:280},
+  {id:'matrix',name:'Matrix',bg:'#020a04',surface:'#071509',card:'#0d1f11',accent:'#00ff88',softer:'#5fffad',accent2:'#a7f432',border:'#133019',text:'#e4f8ea',muted:'#7a9080',price:420},
+  {id:'rose',name:'Rose',bg:'#1a0712',surface:'#260c1c',card:'#321327',accent:'#f472b6',softer:'#f9a8d4',accent2:'#fb7185',border:'#43213a',text:'#fbeaf2',muted:'#b3899a',price:580},
+  {id:'void',name:'Void',bg:'#050505',surface:'#0d0d0d',card:'#171717',accent:'#eaeaea',softer:'#ffffff',accent2:'#9ca3af',border:'#232323',text:'#f5f5f5',muted:'#8a8a8a',price:700}
+];
+function applyTheme(id){var t=THEMES.find(function(x){return x.id===id;})||THEMES[0];
+  var r=document.documentElement.style;['bg','surface','card','accent','border','text','muted'].forEach(function(k){r.setProperty('--'+k,t[k]);});
+  r.setProperty('--accent-soft',t.softer);r.setProperty('--accent2',t.accent2);}
+applyTheme(S.theme);
 
-function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function setTab(t){document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('active',x.dataset.tab===t);});
+  document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('active',p.id==='page-'+t);});
+  if(t==='shop')renderShop();if(t==='num')renderNumHist();if(t==='dice')renderDiceHist();if(t==='coin')renderCoinHist();}
+document.querySelectorAll('.tab').forEach(function(t){t.onclick=function(){vibrate(8);setTab(t.dataset.tab);};});
 
-function renderDice(values){
-  diceArea.innerHTML='';
-  for(var i=0;i<state.count;i++){
-    var die=document.createElement('div');
-    die.className='die';
-    die.textContent=values?values[i]:'?';
-    (function(idx){
-      die.addEventListener('click',function(){rollSingle(idx);});
-    })(i);
-    diceArea.appendChild(die);
+function updCoinsUI(){document.getElementById('coins-display').textContent=S.coins;}
+
+// ---- Number tab
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function genNumbers(){
+  var mn=parseInt(document.getElementById('min-val').value);if(isNaN(mn))mn=0;
+  var mx=parseInt(document.getElementById('max-val').value);if(isNaN(mx))mx=100;
+  if(mn>mx){var t=mn;mn=mx;mx=t;}
+  S.num.min=mn;S.num.max=mx;save();
+  var cnt=S.num.count,set=[],pool=null;
+  if(S.num.unique && mx-mn+1<cnt){cnt=mx-mn+1;}
+  if(S.num.unique){
+    pool=[];for(var i=mn;i<=mx;i++)pool.push(i);
+    for(var j=0;j<cnt&&pool.length;j++){var k=Math.floor(Math.random()*pool.length);set.push(pool.splice(k,1)[0]);}
+  }else{
+    for(var j=0;j<cnt;j++)set.push(rnd(mn,mx));
   }
+  var el=document.getElementById('num-result');
+  el.textContent=set.join(cnt<=4?'  ·  ':',');
+  el.classList.remove('animate');void el.offsetWidth;el.classList.add('animate');
+  document.getElementById('range-label').textContent=mn+' – '+mx+(S.num.unique?' · unique':'')+(cnt>1?' · '+cnt+' numbers':'');
+  set.forEach(function(n){ S.num.hist.unshift(n); });
+  while(S.num.hist.length>24) S.num.hist.pop();
+  S.stats.generated += set.length;
+  if(S.stats.generated%10===0){ S.coins++; updCoinsUI(); }
+  save();renderNumHist();renderStats();vibrate(10);
 }
-
-function rollAll(){
-  var vals=[];
-  for(var i=0;i<state.count;i++) vals.push(randInt(1,state.sides));
-  animateRoll(vals);
-  updateStats(vals);
-  addHistory(vals);
-  state.useCount++;
-  if(!state.removeAds&&state.useCount%7===0&&window.Android) Android.showInterstitial();
+function renderNumHist(){
+  var el=document.getElementById('hist-list');
+  if(!S.num.hist.length){el.innerHTML='<div class="empty-state">No numbers yet — tap Generate</div>';return;}
+  el.innerHTML=S.num.hist.slice(0,24).map(function(n){return '<span class="history-chip">'+n+'</span>';}).join('');
+  el.querySelectorAll('.history-chip').forEach(function(c){c.onclick=function(){copyTxt(c.textContent);};});
 }
-
-function rollSingle(idx){
-  var dies=diceArea.querySelectorAll('.die');
-  var val=randInt(1,state.sides);
-  dies[idx].textContent=val;
-  dies[idx].classList.remove('rolling');
-  void dies[idx].offsetWidth;
-  dies[idx].classList.add('rolling');
-  setTimeout(function(){dies[idx].classList.remove('rolling');},420);
+function renderStats(){
+  if(!S.num.hist.length){['st-min','st-avg','st-max'].forEach(function(i){document.getElementById(i).textContent='—';});return;}
+  var mn=Math.min.apply(null,S.num.hist),mx=Math.max.apply(null,S.num.hist);
+  var avg=(S.num.hist.reduce(function(a,b){return a+b;},0)/S.num.hist.length).toFixed(1);
+  document.getElementById('st-min').textContent=mn;
+  document.getElementById('st-avg').textContent=avg;
+  document.getElementById('st-max').textContent=mx;
 }
+document.getElementById('gen-btn').onclick=genNumbers;
+document.getElementById('copy-btn').onclick=function(){var t=document.getElementById('num-result').textContent;if(t&&t!=='?')copyTxt(t);};
+document.getElementById('clr-hist').onclick=function(){S.num.hist=[];save();renderNumHist();renderStats();toast('Cleared');};
+document.getElementById('opt-unique').onclick=function(){S.num.unique=!S.num.unique;this.classList.toggle('on',S.num.unique);save();};
+document.getElementById('cnt-up').onclick=function(){S.num.count=Math.min(10,S.num.count+1);document.getElementById('cnt-v').textContent=S.num.count;save();vibrate(6);};
+document.getElementById('cnt-dn').onclick=function(){S.num.count=Math.max(1,S.num.count-1);document.getElementById('cnt-v').textContent=S.num.count;save();vibrate(6);};
+document.getElementById('min-val').value=S.num.min;
+document.getElementById('max-val').value=S.num.max;
+document.getElementById('cnt-v').textContent=S.num.count;
+document.getElementById('opt-unique').classList.toggle('on',S.num.unique);
 
-function animateRoll(finalVals){
-  var dies=diceArea.querySelectorAll('.die');
-  dies.forEach(function(d){
-    d.classList.remove('rolling');
-    void d.offsetWidth;
-    d.classList.add('rolling');
+// ---- Dice tab
+var DICE_SIDES=[4,6,8,10,12,20,100];
+(function(){
+  var g=document.getElementById('dice-types');
+  DICE_SIDES.forEach(function(s){
+    var b=document.createElement('button');b.className='dice-btn'+(s===S.dice.sides?' sel':'');
+    b.textContent='d'+s;b.onclick=function(){S.dice.sides=s;save();
+      document.querySelectorAll('.dice-btn').forEach(function(x){x.classList.remove('sel');});b.classList.add('sel');};
+    g.appendChild(b);
   });
-  // Quick flicker then show final
-  var steps=6, interval=50;
-  for(var s=0;s<steps;s++){
-    (function(step){
-      setTimeout(function(){
-        dies.forEach(function(d){d.textContent=randInt(1,state.sides);});
-        if(step===steps-1){
-          setTimeout(function(){
-            finalVals.forEach(function(v,i){dies[i].textContent=v;});
-            dies.forEach(function(d){d.classList.remove('rolling');});
-          },80);
-        }
-      },step*interval);
-    })(s);
-  }
+})();
+function rollDice(){
+  var set=[];for(var i=0;i<S.dice.count;i++)set.push(rnd(1,S.dice.sides));
+  var sum=set.reduce(function(a,b){return a+b;},0);
+  var out=document.getElementById('dice-out');out.innerHTML='';
+  set.forEach(function(v){var d=document.createElement('div');d.className='die animate';d.textContent=v;out.appendChild(d);});
+  document.getElementById('dice-total').innerHTML=S.dice.count>1?('Total: <b>'+sum+'</b>'):('Rolled a <b>'+set[0]+'</b>');
+  S.dice.hist.unshift(set);if(S.dice.hist.length>12)S.dice.hist.pop();
+  S.stats.generated++;save();renderDiceHist();vibrate(12);
+}
+function renderDiceHist(){
+  var el=document.getElementById('dice-hist');
+  if(!S.dice.hist.length){el.innerHTML='<div class="empty-state">No rolls yet</div>';return;}
+  el.innerHTML=S.dice.hist.map(function(r){return '<span class="history-chip">'+r.join(' + ')+'</span>';}).join('');
+}
+document.getElementById('roll-btn').onclick=rollDice;
+document.getElementById('roll-copy').onclick=function(){if(S.dice.hist.length)copyTxt(S.dice.hist[0].join(','));};
+document.getElementById('dc-up').onclick=function(){S.dice.count=Math.min(8,S.dice.count+1);document.getElementById('dc-v').textContent=S.dice.count;save();vibrate(6);};
+document.getElementById('dc-dn').onclick=function(){S.dice.count=Math.max(1,S.dice.count-1);document.getElementById('dc-v').textContent=S.dice.count;save();vibrate(6);};
+document.getElementById('dc-v').textContent=S.dice.count;
+
+// ---- Coin tab
+function flipCoin(){
+  var h=Math.random()<0.5;
+  var el=document.getElementById('coin-el');
+  el.classList.remove('animate','heads','tails');void el.offsetWidth;
+  el.classList.add(h?'heads':'tails','animate');
+  el.textContent=h?'H':'T';
+  document.getElementById('coin-label').textContent=h?'HEADS':'TAILS';
+  if(h)S.coin.heads++;else S.coin.tails++;
+  S.coin.hist.unshift(h?1:0);if(S.coin.hist.length>20)S.coin.hist.pop();
+  S.stats.generated++;save();renderCoinHist();vibrate(12);
+}
+function flip10(){
+  for(var i=0;i<10;i++){var h=Math.random()<0.5;if(h)S.coin.heads++;else S.coin.tails++;S.coin.hist.unshift(h?1:0);}
+  while(S.coin.hist.length>20)S.coin.hist.pop();
+  S.stats.generated+=10;save();renderCoinHist();toast('Flipped 10');vibrate(16);
+  var last=S.coin.hist[0]===1;var el=document.getElementById('coin-el');el.classList.remove('animate','heads','tails');void el.offsetWidth;el.classList.add(last?'heads':'tails','animate');el.textContent=last?'H':'T';
+  document.getElementById('coin-label').textContent=last?'HEADS':'TAILS';
+}
+function renderCoinHist(){
+  document.getElementById('c-heads').textContent=S.coin.heads;
+  document.getElementById('c-tails').textContent=S.coin.tails;
+  var el=document.getElementById('coin-hist');
+  if(!S.coin.hist.length){el.innerHTML='<div class="empty-state">No flips yet</div>';return;}
+  el.innerHTML=S.coin.hist.map(function(f){return '<span class="history-chip" style="color:'+(f?'#ffd700':'var(--muted)')+';">'+(f?'H':'T')+'</span>';}).join('');
+}
+document.getElementById('flip-btn').onclick=flipCoin;
+document.getElementById('flip10-btn').onclick=flip10;
+
+// ---- Shop
+function renderShop(){
+  var g=document.getElementById('theme-grid');g.innerHTML='';
+  THEMES.forEach(function(t){var owned=S.ownedThemes.indexOf(t.id)>=0,active=S.theme===t.id;
+    var c=document.createElement('button');c.className='theme-card'+(owned?' owned':'')+(active?' active':'');
+    c.innerHTML='<div class="theme-preview" style="background:linear-gradient(135deg,'+t.bg+','+t.card+');">'+
+      '<div style="width:16px;height:16px;border-radius:50%;background:'+t.accent+';position:absolute;top:50%;left:42%;transform:translate(-50%,-50%);box-shadow:0 0 10px '+t.accent+';"></div>'+
+      '<div style="width:12px;height:12px;border-radius:50%;background:'+t.accent2+';position:absolute;top:50%;left:60%;transform:translate(-50%,-50%);"></div></div>'+
+      '<div class="theme-name" style="color:'+(active?t.accent:'var(--text)')+';">'+t.name+'</div>'+
+      '<div class="theme-price'+(owned?' free':'')+'">'+(active?'Equipped':owned?'Tap to use':t.price+' ◎')+'</div>';
+    c.onclick=function(){if(active)return;
+      if(owned){S.theme=t.id;applyTheme(t.id);save();renderShop();toast(t.name+' equipped');vibrate(12);return;}
+      if(S.coins<t.price){toast('Need '+(t.price-S.coins)+' more coins');vibrate([20,30,20]);return;}
+      S.coins-=t.price;S.ownedThemes.push(t.id);S.theme=t.id;applyTheme(t.id);
+      save();updCoinsUI();renderShop();toast(t.name+' unlocked!');vibrate([20,20,40]);};
+    g.appendChild(c);});
+  if(S.adsRemoved){var b=document.getElementById('buy-ads');b.textContent='Owned ✓';b.disabled=true;}}
+
+function copyTxt(t){if(navigator.clipboard)try{navigator.clipboard.writeText(t);}catch(e){}
+  else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
+  toast('Copied: '+t);vibrate(10);}
+
+// Init
+updCoinsUI();renderNumHist();renderStats();
+if(S.adsRemoved)document.getElementById('btn-remove-ads').style.display='none';
+if(SS){
+  if(SSTATE==='dice')setTab('dice');
+  else if(SSTATE==='coin')setTab('coin');
+  else if(SSTATE==='shop')setTab('shop');
+  // pre-populate displays
+  document.getElementById('num-result').textContent='47';
+  document.getElementById('range-label').textContent='1 – 100 · unique';
+  document.getElementById('dice-out').innerHTML='<div class="die">4</div><div class="die">6</div>';
+  document.getElementById('dice-total').innerHTML='Total: <b>10</b>';
+  var cel=document.getElementById('coin-el');cel.classList.add('heads');cel.textContent='H';
+  document.getElementById('coin-label').textContent='HEADS';
+  renderDiceHist();renderCoinHist();
 }
 
-function updateStats(vals){
-  document.getElementById('stat-sum').textContent=vals.reduce(function(a,b){return a+b;},0);
-  document.getElementById('stat-min').textContent=Math.min.apply(null,vals);
-  document.getElementById('stat-max').textContent=Math.max.apply(null,vals);
-}
-
-function addHistory(vals){
-  history.unshift({sides:state.sides,vals:vals.slice(),sum:vals.reduce(function(a,b){return a+b;},0)});
-  if(history.length>10) history.pop();
-  var el=document.getElementById('history-list');
-  el.innerHTML='';
-  history.forEach(function(h){
-    var item=document.createElement('div');
-    item.className='history-item';
-    item.innerHTML='<span class="history-dice">'+h.count+'×D'+h.sides+': ['+h.vals.join(', ')+']</span><span class="history-sum">'+h.sum+'</span>';
-    // patch count
-    item.querySelector('.history-dice').textContent=h.vals.length+'×D'+h.sides+': ['+h.vals.join(', ')+']';
-    el.appendChild(item);
-  });
-}
-
-document.getElementById('btn-roll').addEventListener('click',function(){
-  renderDice();
-  setTimeout(rollAll,10);
-});
-
-document.getElementById('btn-minus').addEventListener('click',function(){
-  if(state.count>1){state.count--;diceCountDisp.textContent=state.count;renderDice();}
-});
-document.getElementById('btn-plus').addEventListener('click',function(){
-  if(state.count<8){state.count++;diceCountDisp.textContent=state.count;renderDice();}
-});
-
-document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';}};
-
-function init(){
-  if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
-  renderDice();
-}
-init();
+window.handleBack=function(){var c=document.querySelector('.tab.active');if(c&&c.dataset.tab!=='num'){setTab('num');return true;}return false;};
+})();
 </script>
 </body>
 </html>
