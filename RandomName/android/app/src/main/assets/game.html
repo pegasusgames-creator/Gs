@@ -2,268 +2,328 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roller</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Random Name</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#e94560; --accent2:#533483; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
-#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
-header h1 { font-size:1.3rem; font-weight:700; }
-header h1 span { color:var(--accent); }
-#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
-#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
-.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
-
-/* Dice display area */
-#dice-area { display:flex; flex-wrap:wrap; justify-content:center; gap:14px; min-height:120px; align-items:center; padding:10px 0; }
-.die {
-  width:84px; height:84px;
-  background:var(--card);
-  border-radius:16px;
-  border:2px solid rgba(233,69,96,0.4);
-  display:flex; align-items:center; justify-content:center;
-  font-size:2.4rem; font-weight:900;
-  color:var(--accent);
-  cursor:pointer;
-  user-select:none;
-  transition:transform 0.08s;
-  position:relative;
-  overflow:hidden;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#140b1d;--surface:#1e112d;--card:#2a1840;--accent:#f472b6;--accent-soft:#f9a8d4;
+  --accent2:#a78bfa;--text:#f7eff8;--muted:#9d8aa7;--border:#3d234f;--ok:#34d399;
+  --radius:14px;--safeb:env(safe-area-inset-bottom);
 }
-.die.rolling {
-  animation:shake 0.4s ease-out;
-}
-@keyframes shake {
-  0%  { transform:rotate(-8deg) scale(1.05); }
-  20% { transform:rotate(8deg)  scale(1.08); }
-  40% { transform:rotate(-6deg) scale(1.06); }
-  60% { transform:rotate(6deg)  scale(1.07); }
-  80% { transform:rotate(-3deg) scale(1.03); }
-  100%{ transform:rotate(0deg)  scale(1); }
-}
-.die.btn-pressed { transform:scale(0.9); }
-
-/* Die type selector */
-.die-types { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
-.dtype-btn { background:var(--card); border:2px solid transparent; border-radius:8px; color:var(--muted); font-size:0.8rem; font-weight:700; padding:6px 10px; cursor:pointer; }
-.dtype-btn.active { border-color:var(--accent); color:var(--accent); }
-.dtype-btn.btn-pressed { transform:scale(0.9); }
-
-/* Count row */
-.count-row { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
-.count-label { font-size:0.9rem; color:var(--muted); }
-.count-ctrl { display:flex; align-items:center; gap:12px; }
-.count-btn { width:34px; height:34px; border-radius:50%; background:var(--card); border:2px solid var(--accent); color:var(--accent); font-size:1.3rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.count-btn.btn-pressed { transform:scale(0.88); }
-#dice-count-disp { font-size:1.2rem; font-weight:700; min-width:24px; text-align:center; }
-
-/* Roll button */
-#btn-roll {
-  width:100%;
-  background:linear-gradient(135deg,var(--accent),#c0392b);
-  border:none; border-radius:var(--radius);
-  color:#fff; font-size:1.3rem; font-weight:800;
-  padding:18px; cursor:pointer;
-  margin-bottom:12px;
-  box-shadow:0 6px 20px rgba(233,69,96,0.45);
-}
-#btn-roll.btn-pressed { transform:scale(0.97); }
-
-/* Stats */
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-.stat-box { background:var(--card); border-radius:10px; padding:10px; text-align:center; }
-.stat-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:3px; }
-.stat-val { font-size:1.2rem; font-weight:700; }
-
-/* History */
-#history-list { display:flex; flex-direction:column; gap:6px; }
-.history-item { background:var(--card); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; font-size:0.85rem; }
-.history-dice { color:var(--muted); }
-.history-sum { color:var(--accent); font-weight:700; }
-
-#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Poppins',system-ui,sans-serif;overflow:hidden;letter-spacing:-0.01em;}
+#app{display:flex;flex-direction:column;height:100%;padding-bottom:var(--safeb);}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;flex-shrink:0;border-bottom:1px solid var(--border);}
+header h1{font-size:1.2rem;font-weight:800;letter-spacing:-0.5px;}
+header h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hdr-btn{background:var(--card);border:1px solid var(--border);color:var(--text);font-size:0.7rem;font-weight:600;padding:6px 11px;border-radius:20px;cursor:pointer;font-family:inherit;}
+.coins-bar{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;}
+.coins-icon{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#ffd700,#ffaa00);display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:#7a4f00;}
+.coins-val{font-size:0.85rem;font-weight:800;color:#ffd166;}
+.coins-label{font-size:0.7rem;color:var(--muted);}
+.coins-earn{margin-left:auto;font-size:0.66rem;color:var(--accent2);}
+.tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.tab{flex:1;padding:11px 4px;font-size:0.74rem;font-weight:700;text-align:center;cursor:pointer;color:var(--muted);border:none;background:none;font-family:inherit;}
+.tab.active{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent);}
+#scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 22px;}
+.page{display:none;}
+.page.active{display:block;}
+.hero{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:10px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;}
+.panel-title{font-size:0.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.8px;margin-bottom:10px;font-weight:700;}
+.scroll-pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.scroll-pills::-webkit-scrollbar{display:none;}
+.pill{flex-shrink:0;padding:8px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:0.78rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.15s;white-space:nowrap;}
+.pill.sel{background:var(--accent);border-color:var(--accent);color:#27102a;}
+.pill:active{transform:scale(0.96);}
+.opt-count{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:8px 14px;display:flex;align-items:center;gap:10px;justify-content:center;margin-top:8px;}
+.opt-count button{background:var(--card);border:1px solid var(--border);color:var(--text);width:28px;height:28px;border-radius:50%;cursor:pointer;font-weight:800;font-family:inherit;}
+.opt-count button:active{background:var(--accent);border-color:var(--accent);color:#27102a;}
+.opt-v{font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;min-width:18px;text-align:center;}
+.name-list{display:flex;flex-direction:column;gap:7px;margin:4px 0 0;}
+.name-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;animation:slide 0.25s ease;}
+@keyframes slide{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+.name-text{flex:1;font-size:1.05rem;font-weight:700;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.name-meta{font-size:0.64rem;color:var(--muted);font-weight:600;}
+.icon-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);width:34px;height:34px;border-radius:50%;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;flex-shrink:0;}
+.icon-btn.fav.on{background:var(--accent);border-color:var(--accent);color:#27102a;}
+.icon-btn:active{transform:scale(0.92);}
+.btn{padding:13px;border:none;border-radius:12px;font-size:0.92rem;font-weight:800;cursor:pointer;font-family:inherit;width:100%;transition:transform 0.1s;}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#27102a;}
+.empty-state{color:var(--muted);font-size:0.85rem;text-align:center;padding:28px 12px;}
+.empty-state .big{font-size:2rem;opacity:0.4;margin-bottom:6px;}
+.fav-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:10px;}
+.fav-text{flex:1;font-size:1rem;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;}
+.fav-del{background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;padding:4px 8px;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;}
+.stat-label{font-size:0.64rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:3px;}
+.stat-value{font-size:1.55rem;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;}
+.stat-sub{font-size:0.66rem;color:var(--muted);margin-top:2px;}
+.ads-card{background:linear-gradient(135deg,#6a2fbe,#c33ce0);border-radius:14px;padding:14px;margin-bottom:10px;color:#fff;}
+.ads-title{font-size:1rem;font-weight:800;margin-bottom:4px;}
+.ads-desc{font-size:0.75rem;opacity:0.9;margin-bottom:9px;}
+.ads-btn{background:#fff;color:#6a2fbe;border:none;font-size:0.82rem;font-weight:800;padding:9px 22px;border-radius:22px;cursor:pointer;font-family:inherit;}
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.theme-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:10px;text-align:center;cursor:pointer;font-family:inherit;}
+.theme-card.owned{border-color:var(--ok);}
+.theme-card.active{border-color:var(--accent);}
+.theme-preview{height:54px;border-radius:9px;margin-bottom:7px;position:relative;overflow:hidden;}
+.theme-name{font-size:0.82rem;font-weight:800;margin-bottom:2px;}
+.theme-price{font-size:0.72rem;color:var(--muted);}
+.theme-price.free{color:var(--ok);}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(18px);background:#150a1e;border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:22px;font-size:0.82rem;font-weight:600;opacity:0;transition:all 0.25s;pointer-events:none;z-index:9999;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+body.ss #btn-remove-ads{display:none;}
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <h1>Dice <span>Roller</span></h1>
-    <button id="btn-remove-ads">Remove Ads</button>
+    <h1>Random<span>Name</span></h1>
+    <button class="hdr-btn" id="btn-remove-ads">Remove Ads</button>
   </header>
-  <div id="scroll">
-
-    <!-- Dice display -->
-    <div class="card">
-      <div class="card-title">Your Roll</div>
-      <div id="dice-area"></div>
-    </div>
-
-    <!-- Settings -->
-    <div class="card">
-      <div class="card-title">Die Type</div>
-      <div class="die-types" id="die-types"></div>
-      <div class="count-row">
-        <span class="count-label">Number of dice</span>
-        <div class="count-ctrl">
-          <button class="count-btn" id="btn-minus">−</button>
-          <span id="dice-count-disp">2</span>
-          <button class="count-btn" id="btn-plus">+</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Roll button -->
-    <button id="btn-roll">🎲 Roll!</button>
-
-    <!-- Stats -->
-    <div class="card">
-      <div class="card-title">Last Roll</div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-label">Sum</div><div class="stat-val" id="stat-sum">—</div></div>
-        <div class="stat-box"><div class="stat-label">Min</div><div class="stat-val" id="stat-min">—</div></div>
-        <div class="stat-box"><div class="stat-label">Max</div><div class="stat-val" id="stat-max">—</div></div>
-      </div>
-    </div>
-
-    <!-- History -->
-    <div class="card">
-      <div class="card-title">History</div>
-      <div id="history-list"><div style="color:var(--muted);font-size:0.85rem">No rolls yet</div></div>
-    </div>
-
+  <div class="coins-bar">
+    <div class="coins-icon">C</div>
+    <span class="coins-val" id="coins-display">0</span>
+    <span class="coins-label">coins</span>
+    <span class="coins-earn">+1 per favorite saved</span>
   </div>
-  <div id="admob-banner">Advertisement</div>
+  <div class="tabs">
+    <button class="tab active" data-tab="gen">Generate</button>
+    <button class="tab" data-tab="fav">Favorites</button>
+    <button class="tab" data-tab="stats">Stats</button>
+    <button class="tab" data-tab="shop">Shop</button>
+  </div>
+  <div id="scroll">
+    <div class="page active" id="page-gen">
+      <div class="hero">
+        <div class="panel-title">Style</div>
+        <div class="scroll-pills" id="style-pills">
+          <button class="pill sel" data-v="any">Any</button>
+          <button class="pill" data-v="boy">Male</button>
+          <button class="pill" data-v="girl">Female</button>
+          <button class="pill" data-v="unisex">Unisex</button>
+        </div>
+        <div class="panel-title" style="margin-top:14px;">Format</div>
+        <div class="scroll-pills" id="fmt-pills">
+          <button class="pill sel" data-v="fl">First + Last</button>
+          <button class="pill" data-v="f">First only</button>
+          <button class="pill" data-v="fml">First + Middle + Last</button>
+          <button class="pill" data-v="fantasy">Fantasy</button>
+        </div>
+        <div class="opt-count"><button id="cnt-dn">−</button><span class="opt-v" id="cnt-v">5</span><span style="color:var(--muted);font-size:0.74rem;">names at once</span><button id="cnt-up">+</button></div>
+        <button class="btn btn-primary" id="gen-btn" style="margin-top:12px;">Generate Names</button>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Results</div>
+        <div class="name-list" id="name-list"><div class="empty-state"><div class="big">✦</div>Tap Generate to see names</div></div>
+      </div>
+    </div>
+    <div class="page" id="page-fav">
+      <div class="panel-title">Saved Favorites (<span id="fav-count">0</span>)</div>
+      <div id="fav-list"><div class="empty-state"><div class="big">♡</div>Star a name to save it here</div></div>
+    </div>
+    <div class="page" id="page-stats">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Generated</div><div class="stat-value" id="st-gen">0</div><div class="stat-sub">names total</div></div>
+        <div class="stat-card"><div class="stat-label">Favorites</div><div class="stat-value" id="st-fav">0</div><div class="stat-sub">saved names</div></div>
+        <div class="stat-card"><div class="stat-label">Most Used</div><div class="stat-value" id="st-top">—</div><div class="stat-sub">category</div></div>
+        <div class="stat-card"><div class="stat-label">Sessions</div><div class="stat-value" id="st-sess">0</div><div class="stat-sub">app opens</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">How We Pick</div>
+        <div style="font-size:0.82rem;color:var(--muted);line-height:1.55;">Names are drawn at random from a curated list of popular and classic given and family names. Fantasy names mix fantasy-style syllables to build unique names ideal for storytelling, games, and character creation.</div>
+      </div>
+    </div>
+    <div class="page" id="page-shop">
+      <div class="ads-card">
+        <div class="ads-title">Remove Ads</div>
+        <div class="ads-desc">One-time purchase. Names without distractions.</div>
+        <button class="ads-btn" id="buy-ads">Unlock for $2.99</button>
+      </div>
+      <div class="panel-title">Themes</div>
+      <div class="shop-grid" id="theme-grid"></div>
+    </div>
+  </div>
 </div>
-
+<div id="toast"></div>
 <script>
+(function(){
 'use strict';
-(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button,.die,.dtype-btn,.count-btn');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var SS=/screenshot=/.test(location.hash);if(SS)document.body.classList.add('ss');
+var SSTATE=SS?(location.hash.match(/screenshot=([a-z]+)/)||[])[1]:'';
 
-var DIE_TYPES=[4,6,8,10,12,20,100];
-var state={sides:6,count:2,useCount:0,removeAds:false};
-var history=[];
+var K='randomname_v2';
+function load(){try{var s=localStorage.getItem(K);if(s)return JSON.parse(s);}catch(e){}return null;}
+function save(){try{localStorage.setItem(K,JSON.stringify(S));}catch(e){}}
+var S=load()||{coins:20,adsRemoved:false,theme:'blossom',ownedThemes:['blossom'],
+  style:'any',fmt:'fl',count:5,
+  favs:[],stats:{gen:0,sessions:1,catCount:{any:0,boy:0,girl:0,unisex:0}}};
+S.stats.sessions=(S.stats.sessions||0)+1;save();
 
-var diceArea=document.getElementById('dice-area');
-var dieTypesEl=document.getElementById('die-types');
-var diceCountDisp=document.getElementById('dice-count-disp');
+if(SS){S.coins=865;S.ownedThemes=['blossom','dusk','aurora'];
+  S.favs=['Aria Mitchell','Leo Carter','Nora Bennett','Felix Santos','Ivy Reynolds'];
+  S.stats={gen:274,sessions:17,catCount:{any:80,boy:64,girl:102,unisex:28}};}
 
-// Build die type buttons
-DIE_TYPES.forEach(function(s){
-  var btn=document.createElement('button');
-  btn.className='dtype-btn'+(s===6?' active':'');
-  btn.textContent='D'+s;
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.dtype-btn').forEach(function(b){b.classList.remove('active');});
-    btn.classList.add('active');
-    state.sides=s;
-    renderDice();
-  });
-  dieTypesEl.appendChild(btn);
-});
+var nativeA=window.Android||null;
+window.onPurchaseComplete=function(sku){if(sku==='remove_ads'){S.adsRemoved=true;save();
+  document.getElementById('btn-remove-ads').style.display='none';
+  var b=document.getElementById('buy-ads');if(b){b.textContent='Owned ✓';b.disabled=true;}
+  if(nativeA){try{nativeA.hideBannerAd();}catch(e){}}toast('Ads removed');}};
+document.getElementById('btn-remove-ads').onclick=function(){if(nativeA)try{nativeA.purchase('remove_ads');}catch(e){}};
+document.getElementById('buy-ads').onclick=function(){if(!S.adsRemoved&&nativeA)try{nativeA.purchase('remove_ads');}catch(e){}};
+function vibrate(p){if(navigator.vibrate)try{navigator.vibrate(p);}catch(e){}}
+var toastTO;function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastTO);toastTO=setTimeout(function(){t.classList.remove('show');},1500);}
 
-function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+var THEMES=[
+  {id:'blossom',name:'Blossom',bg:'#140b1d',surface:'#1e112d',card:'#2a1840',accent:'#f472b6',softer:'#f9a8d4',accent2:'#a78bfa',border:'#3d234f',text:'#f7eff8',muted:'#9d8aa7',price:0},
+  {id:'dusk',name:'Dusk',bg:'#09121c',surface:'#0f1c2c',card:'#16283c',accent:'#60a5fa',softer:'#93c5fd',accent2:'#c084fc',border:'#213652',text:'#e8f0fb',muted:'#819ab3',price:200},
+  {id:'aurora',name:'Aurora',bg:'#04140d',surface:'#072217',card:'#0d3224',accent:'#34d399',softer:'#6ee7b7',accent2:'#fbbf24',border:'#124233',text:'#e6f7ef',muted:'#7da695',price:320},
+  {id:'citrus',name:'Citrus',bg:'#161205',surface:'#201a08',card:'#2b2310',accent:'#facc15',softer:'#fde047',accent2:'#f97316',border:'#3a2f18',text:'#fbf5e6',muted:'#a9997b',price:450},
+  {id:'cyber',name:'Cyber',bg:'#0c0417',surface:'#17082a',card:'#221040',accent:'#d946ef',softer:'#f0abfc',accent2:'#22d3ee',border:'#2e1451',text:'#f5ecf9',muted:'#998ab3',price:600},
+  {id:'mono',name:'Mono',bg:'#050505',surface:'#101010',card:'#191919',accent:'#f5f5f5',softer:'#ffffff',accent2:'#a1a1aa',border:'#262626',text:'#f5f5f5',muted:'#8a8a8a',price:750}
+];
+function applyTheme(id){var t=THEMES.find(function(x){return x.id===id;})||THEMES[0];
+  var r=document.documentElement.style;['bg','surface','card','accent','border','text','muted'].forEach(function(k){r.setProperty('--'+k,t[k]);});
+  r.setProperty('--accent-soft',t.softer);r.setProperty('--accent2',t.accent2);}
+applyTheme(S.theme);
 
-function renderDice(values){
-  diceArea.innerHTML='';
-  for(var i=0;i<state.count;i++){
-    var die=document.createElement('div');
-    die.className='die';
-    die.textContent=values?values[i]:'?';
-    (function(idx){
-      die.addEventListener('click',function(){rollSingle(idx);});
-    })(i);
-    diceArea.appendChild(die);
-  }
+function setTab(t){document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('active',x.dataset.tab===t);});
+  document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('active',p.id==='page-'+t);});
+  if(t==='shop')renderShop();if(t==='fav')renderFavs();if(t==='stats')renderStats();}
+document.querySelectorAll('.tab').forEach(function(t){t.onclick=function(){vibrate(8);setTab(t.dataset.tab);};});
+
+var BOY=['Liam','Noah','Oliver','Elijah','James','William','Benjamin','Lucas','Henry','Theodore','Jack','Levi','Alexander','Jackson','Mateo','Daniel','Michael','Mason','Sebastian','Ethan','Logan','Owen','Samuel','Leo','Jacob','Wyatt','Julian','David','Luca','Gabriel','Joseph','Carter','John','Anthony','Dylan','Luke','Andrew','Isaac','Grayson','Felix','Matthew','Ezra','Lincoln','Thomas','Isaiah','Charles','Christopher','Josiah','Hudson','Nathan','Caleb','Cameron','Eli','Asher','Miles','Ryan','Adrian','Connor','Austin','Jaxon','Colton','Zion','Cooper','Parker','Miguel','Santiago','Diego','Leonardo','Bryson','Jason','Declan','Ronan','Ian','Xavier','Kai','Tyler','Elias','Silas','Angel','Kayden','Zachary','Jordan','Kaleb','Omar','Rafael','Roman','Everett','Damian','Jose','Timothy','Hunter','Wesley','Dominic','Tristan','Blake','Landon','Vincent','Brandon','Ricardo','Enzo','Malachi','Emiliano','Adam','Colt','Graham','Beau','Bennett','Alex','Milo','Emmett','Arlo','Ezekiel','Atlas','Ellis','August'];
+var GIRL=['Olivia','Emma','Charlotte','Amelia','Sophia','Isabella','Ava','Mia','Evelyn','Luna','Harper','Sofia','Camila','Eleanor','Elizabeth','Violet','Scarlett','Emily','Hazel','Lily','Gianna','Aurora','Penelope','Aria','Nora','Chloe','Ellie','Mila','Avery','Layla','Abigail','Ella','Isla','Eliana','Nova','Madison','Zoe','Ivy','Grace','Willow','Emilia','Riley','Stella','Zoey','Victoria','Hannah','Lucy','Elena','Lainey','Maya','Paisley','Everly','Anna','Delilah','Bella','Leilani','Natalie','Naomi','Kinsley','Sarah','Claire','Josephine','Valentina','Skylar','Lila','Aaliyah','Madelyn','Savannah','Audrey','Caroline','Leah','Cora','Sadie','Quinn','Genesis','Eva','Brooklyn','Iris','Kennedy','Ruby','Natalia','Athena','Alice','Aubrey','Eden','Maria','Adeline','Hailey','Nevaeh','Autumn','Piper','Juniper','Ada','Sloane','Margaret','Thea','Rose','Faith','Clara','Vivian','Raelynn','Melody','June','Juliana','Presley','Daisy','Melanie','Elise','Norah','Alana','Mabel','Lucia','Julia','Bailey','Mary','Liliana','Kylie','Iris','Maeve','Sage','Seraphina'];
+var LAST=['Smith','Johnson','Williams','Brown','Jones','Garcia','Miller','Davis','Rodriguez','Martinez','Hernandez','Lopez','Gonzalez','Wilson','Anderson','Thomas','Taylor','Moore','Jackson','Martin','Lee','Perez','Thompson','White','Harris','Sanchez','Clark','Ramirez','Lewis','Robinson','Walker','Young','Allen','King','Wright','Scott','Torres','Nguyen','Hill','Flores','Green','Adams','Nelson','Baker','Hall','Rivera','Campbell','Mitchell','Carter','Roberts','Reed','Bennett','Powell','Long','Patterson','Hughes','Morris','Murphy','Bailey','Rivera','Cooper','Richardson','Cox','Howard','Ward','Brooks','Kelly','Bell','Morgan','Murray','Graham','Sullivan','Porter','Hunter','Palmer','Wagner','West','Grant','Hayes','Stone','Reeves','Reynolds','Duncan','Burke','Vance','Holt','Chase','Maddox','Montgomery','Santos','Mitchell','Freeman','Barker'];
+var FMID=['Rose','Grace','James','Rae','Lee','Mae','Jo','Lynn','Kate','Jade','Finn','Reed','Rose','Jean','Sky','Lou','Marie','Ann','Ruth','Joy'];
+var FANT=['Ael','Bry','Cor','Dae','Elen','Fyr','Gwyn','Hale','Iva','Jyn','Kael','Loth','Myr','Nor','Orin','Pryn','Qel','Rav','Syl','Thae','Ur','Val','Wyn','Xar','Yel','Zor'];
+var FANT2=['don','ara','eth','oria','ion','ynne','ior','anor','ius','en','eir','un','is','ara','iel','or','un','ul'];
+
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function genOne(){
+  if(S.fmt==='fantasy'){var a=pick(FANT),b=pick(FANT2),c=pick(FANT);return a+b+' '+c+pick(['iel','or','un','is','arion','ovar']);}
+  var first;
+  if(S.style==='boy') first=pick(BOY);
+  else if(S.style==='girl') first=pick(GIRL);
+  else if(S.style==='unisex') first=pick(['Avery','Riley','Quinn','Jordan','Morgan','Cameron','Alex','Casey','Finley','Rowan','Taylor','Hayden','Sage','Elliot','Dakota','Skyler']);
+  else first=pick(Math.random()<0.5?BOY:GIRL);
+  if(S.fmt==='f') return first;
+  var last=pick(LAST);
+  if(S.fmt==='fml'){ var mid=pick(FMID); return first+' '+mid+' '+last; }
+  return first+' '+last;
 }
 
-function rollAll(){
-  var vals=[];
-  for(var i=0;i<state.count;i++) vals.push(randInt(1,state.sides));
-  animateRoll(vals);
-  updateStats(vals);
-  addHistory(vals);
-  state.useCount++;
-  if(!state.removeAds&&state.useCount%7===0&&window.Android) Android.showInterstitial();
+var currentList=[];
+function genNames(){
+  currentList=[];
+  for(var i=0;i<S.count;i++) currentList.push(genOne());
+  renderResults();
+  S.stats.gen+=S.count;
+  S.stats.catCount[S.style]=(S.stats.catCount[S.style]||0)+S.count;
+  save();vibrate(12);
 }
-
-function rollSingle(idx){
-  var dies=diceArea.querySelectorAll('.die');
-  var val=randInt(1,state.sides);
-  dies[idx].textContent=val;
-  dies[idx].classList.remove('rolling');
-  void dies[idx].offsetWidth;
-  dies[idx].classList.add('rolling');
-  setTimeout(function(){dies[idx].classList.remove('rolling');},420);
-}
-
-function animateRoll(finalVals){
-  var dies=diceArea.querySelectorAll('.die');
-  dies.forEach(function(d){
-    d.classList.remove('rolling');
-    void d.offsetWidth;
-    d.classList.add('rolling');
-  });
-  // Quick flicker then show final
-  var steps=6, interval=50;
-  for(var s=0;s<steps;s++){
-    (function(step){
-      setTimeout(function(){
-        dies.forEach(function(d){d.textContent=randInt(1,state.sides);});
-        if(step===steps-1){
-          setTimeout(function(){
-            finalVals.forEach(function(v,i){dies[i].textContent=v;});
-            dies.forEach(function(d){d.classList.remove('rolling');});
-          },80);
-        }
-      },step*interval);
-    })(s);
-  }
-}
-
-function updateStats(vals){
-  document.getElementById('stat-sum').textContent=vals.reduce(function(a,b){return a+b;},0);
-  document.getElementById('stat-min').textContent=Math.min.apply(null,vals);
-  document.getElementById('stat-max').textContent=Math.max.apply(null,vals);
-}
-
-function addHistory(vals){
-  history.unshift({sides:state.sides,vals:vals.slice(),sum:vals.reduce(function(a,b){return a+b;},0)});
-  if(history.length>10) history.pop();
-  var el=document.getElementById('history-list');
+function renderResults(){
+  var el=document.getElementById('name-list');
+  if(!currentList.length){el.innerHTML='<div class="empty-state"><div class="big">✦</div>Tap Generate to see names</div>';return;}
   el.innerHTML='';
-  history.forEach(function(h){
-    var item=document.createElement('div');
-    item.className='history-item';
-    item.innerHTML='<span class="history-dice">'+h.count+'×D'+h.sides+': ['+h.vals.join(', ')+']</span><span class="history-sum">'+h.sum+'</span>';
-    // patch count
-    item.querySelector('.history-dice').textContent=h.vals.length+'×D'+h.sides+': ['+h.vals.join(', ')+']';
-    el.appendChild(item);
+  currentList.forEach(function(name,idx){
+    var isF=S.favs.indexOf(name)>=0;
+    var c=document.createElement('div');c.className='name-card';
+    c.innerHTML='<div style="flex:1;min-width:0;"><div class="name-text">'+escH(name)+'</div><div class="name-meta">'+S.style.toUpperCase()+' · '+S.fmt.toUpperCase()+'</div></div>'+
+      '<button class="icon-btn fav'+(isF?' on':'')+'" data-n="'+idx+'" title="Favorite">♡</button>'+
+      '<button class="icon-btn" data-c="'+idx+'" title="Copy">⧉</button>';
+    el.appendChild(c);
   });
+  el.querySelectorAll('.icon-btn.fav').forEach(function(b){b.onclick=function(){
+    var n=currentList[+this.dataset.n], i=S.favs.indexOf(n);
+    if(i<0){S.favs.push(n);S.coins++;toast('★ Saved: '+n+' (+1 coin)');}
+    else{S.favs.splice(i,1);toast('Removed '+n);}
+    save();updCoinsUI();renderResults();vibrate(14);
+  };});
+  el.querySelectorAll('.icon-btn[data-c]').forEach(function(b){b.onclick=function(){
+    var n=currentList[+this.dataset.c];copyTxt(n);
+  };});
+}
+function escH(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function copyTxt(t){if(navigator.clipboard)try{navigator.clipboard.writeText(t);}catch(e){}
+  else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
+  toast('Copied: '+t);vibrate(10);}
+function updCoinsUI(){document.getElementById('coins-display').textContent=S.coins;}
+
+document.getElementById('gen-btn').onclick=genNames;
+document.getElementById('cnt-up').onclick=function(){S.count=Math.min(10,S.count+1);document.getElementById('cnt-v').textContent=S.count;save();vibrate(6);};
+document.getElementById('cnt-dn').onclick=function(){S.count=Math.max(1,S.count-1);document.getElementById('cnt-v').textContent=S.count;save();vibrate(6);};
+document.querySelectorAll('#style-pills .pill').forEach(function(p){p.onclick=function(){
+  document.querySelectorAll('#style-pills .pill').forEach(function(x){x.classList.remove('sel');});
+  this.classList.add('sel');S.style=this.dataset.v;save();};});
+document.querySelectorAll('#fmt-pills .pill').forEach(function(p){p.onclick=function(){
+  document.querySelectorAll('#fmt-pills .pill').forEach(function(x){x.classList.remove('sel');});
+  this.classList.add('sel');S.fmt=this.dataset.v;save();};});
+
+function renderFavs(){
+  var el=document.getElementById('fav-list');
+  document.getElementById('fav-count').textContent=S.favs.length;
+  if(!S.favs.length){el.innerHTML='<div class="empty-state"><div class="big">♡</div>Star a name to save it here</div>';return;}
+  el.innerHTML='';
+  S.favs.slice().reverse().forEach(function(n,idx){
+    var c=document.createElement('div');c.className='fav-card';
+    c.innerHTML='<div class="fav-text">'+escH(n)+'</div>'+
+      '<button class="icon-btn" data-c="'+idx+'">⧉</button>'+
+      '<button class="fav-del" data-d="'+idx+'">×</button>';
+    el.appendChild(c);
+  });
+  el.querySelectorAll('.icon-btn').forEach(function(b){b.onclick=function(){
+    var list=S.favs.slice().reverse();copyTxt(list[+this.dataset.c]);};});
+  el.querySelectorAll('.fav-del').forEach(function(b){b.onclick=function(){
+    var list=S.favs.slice().reverse();var n=list[+this.dataset.d];var i=S.favs.indexOf(n);if(i>=0)S.favs.splice(i,1);save();renderFavs();vibrate(8);};});
+}
+function renderStats(){
+  document.getElementById('st-gen').textContent=S.stats.gen;
+  document.getElementById('st-fav').textContent=S.favs.length;
+  document.getElementById('st-sess').textContent=S.stats.sessions;
+  var top='—', topN=0;
+  for(var k in S.stats.catCount){if(S.stats.catCount[k]>topN){top=k;topN=S.stats.catCount[k];}}
+  document.getElementById('st-top').textContent=top.charAt(0).toUpperCase()+top.slice(1);
 }
 
-document.getElementById('btn-roll').addEventListener('click',function(){
-  renderDice();
-  setTimeout(rollAll,10);
-});
+function renderShop(){
+  var g=document.getElementById('theme-grid');g.innerHTML='';
+  THEMES.forEach(function(t){var owned=S.ownedThemes.indexOf(t.id)>=0,active=S.theme===t.id;
+    var c=document.createElement('button');c.className='theme-card'+(owned?' owned':'')+(active?' active':'');
+    c.innerHTML='<div class="theme-preview" style="background:linear-gradient(135deg,'+t.bg+','+t.card+');">'+
+      '<div style="width:16px;height:16px;border-radius:50%;background:'+t.accent+';position:absolute;top:50%;left:42%;transform:translate(-50%,-50%);box-shadow:0 0 10px '+t.accent+';"></div>'+
+      '<div style="width:12px;height:12px;border-radius:50%;background:'+t.accent2+';position:absolute;top:50%;left:60%;transform:translate(-50%,-50%);"></div></div>'+
+      '<div class="theme-name" style="color:'+(active?t.accent:'var(--text)')+';">'+t.name+'</div>'+
+      '<div class="theme-price'+(owned?' free':'')+'">'+(active?'Equipped':owned?'Tap to use':t.price+' ◎')+'</div>';
+    c.onclick=function(){if(active)return;
+      if(owned){S.theme=t.id;applyTheme(t.id);save();renderShop();toast(t.name+' equipped');vibrate(12);return;}
+      if(S.coins<t.price){toast('Need '+(t.price-S.coins)+' more coins');vibrate([20,30,20]);return;}
+      S.coins-=t.price;S.ownedThemes.push(t.id);S.theme=t.id;applyTheme(t.id);
+      save();updCoinsUI();renderShop();toast(t.name+' unlocked!');vibrate([20,20,40]);};
+    g.appendChild(c);});
+  if(S.adsRemoved){var b=document.getElementById('buy-ads');b.textContent='Owned ✓';b.disabled=true;}}
 
-document.getElementById('btn-minus').addEventListener('click',function(){
-  if(state.count>1){state.count--;diceCountDisp.textContent=state.count;renderDice();}
-});
-document.getElementById('btn-plus').addEventListener('click',function(){
-  if(state.count<8){state.count++;diceCountDisp.textContent=state.count;renderDice();}
-});
+// Init
+updCoinsUI();
+document.getElementById('cnt-v').textContent=S.count;
+document.querySelectorAll('#style-pills .pill').forEach(function(p){p.classList.toggle('sel',p.dataset.v===S.style);});
+document.querySelectorAll('#fmt-pills .pill').forEach(function(p){p.classList.toggle('sel',p.dataset.v===S.fmt);});
+if(S.adsRemoved)document.getElementById('btn-remove-ads').style.display='none';
 
-document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';}};
-
-function init(){
-  if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
-  renderDice();
+if(SS){
+  if(SSTATE==='fav')setTab('fav');
+  else if(SSTATE==='stats')setTab('stats');
+  else if(SSTATE==='shop')setTab('shop');
+  else{ S.style='girl'; currentList=['Aria Mitchell','Leo Carter','Nora Bennett','Felix Santos','Ivy Reynolds']; renderResults(); }
 }
-init();
+
+window.handleBack=function(){var c=document.querySelector('.tab.active');if(c&&c.dataset.tab!=='gen'){setTab('gen');return true;}return false;};
+})();
 </script>
 </body>
 </html>
