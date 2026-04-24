@@ -2,268 +2,317 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roller</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Random Recipe</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#e94560; --accent2:#533483; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
-#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
-header h1 { font-size:1.3rem; font-weight:700; }
-header h1 span { color:var(--accent); }
-#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
-#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
-.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
-
-/* Dice display area */
-#dice-area { display:flex; flex-wrap:wrap; justify-content:center; gap:14px; min-height:120px; align-items:center; padding:10px 0; }
-.die {
-  width:84px; height:84px;
-  background:var(--card);
-  border-radius:16px;
-  border:2px solid rgba(233,69,96,0.4);
-  display:flex; align-items:center; justify-content:center;
-  font-size:2.4rem; font-weight:900;
-  color:var(--accent);
-  cursor:pointer;
-  user-select:none;
-  transition:transform 0.08s;
-  position:relative;
-  overflow:hidden;
-}
-.die.rolling {
-  animation:shake 0.4s ease-out;
-}
-@keyframes shake {
-  0%  { transform:rotate(-8deg) scale(1.05); }
-  20% { transform:rotate(8deg)  scale(1.08); }
-  40% { transform:rotate(-6deg) scale(1.06); }
-  60% { transform:rotate(6deg)  scale(1.07); }
-  80% { transform:rotate(-3deg) scale(1.03); }
-  100%{ transform:rotate(0deg)  scale(1); }
-}
-.die.btn-pressed { transform:scale(0.9); }
-
-/* Die type selector */
-.die-types { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
-.dtype-btn { background:var(--card); border:2px solid transparent; border-radius:8px; color:var(--muted); font-size:0.8rem; font-weight:700; padding:6px 10px; cursor:pointer; }
-.dtype-btn.active { border-color:var(--accent); color:var(--accent); }
-.dtype-btn.btn-pressed { transform:scale(0.9); }
-
-/* Count row */
-.count-row { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
-.count-label { font-size:0.9rem; color:var(--muted); }
-.count-ctrl { display:flex; align-items:center; gap:12px; }
-.count-btn { width:34px; height:34px; border-radius:50%; background:var(--card); border:2px solid var(--accent); color:var(--accent); font-size:1.3rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.count-btn.btn-pressed { transform:scale(0.88); }
-#dice-count-disp { font-size:1.2rem; font-weight:700; min-width:24px; text-align:center; }
-
-/* Roll button */
-#btn-roll {
-  width:100%;
-  background:linear-gradient(135deg,var(--accent),#c0392b);
-  border:none; border-radius:var(--radius);
-  color:#fff; font-size:1.3rem; font-weight:800;
-  padding:18px; cursor:pointer;
-  margin-bottom:12px;
-  box-shadow:0 6px 20px rgba(233,69,96,0.45);
-}
-#btn-roll.btn-pressed { transform:scale(0.97); }
-
-/* Stats */
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-.stat-box { background:var(--card); border-radius:10px; padding:10px; text-align:center; }
-.stat-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:3px; }
-.stat-val { font-size:1.2rem; font-weight:700; }
-
-/* History */
-#history-list { display:flex; flex-direction:column; gap:6px; }
-.history-item { background:var(--card); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; font-size:0.85rem; }
-.history-dice { color:var(--muted); }
-.history-sum { color:var(--accent); font-weight:700; }
-
-#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+  :root {
+    --bg: #1a1008; --surface: #241510; --accent: #e17055;
+    --accent2: #3a1f13; --text: #fbf1e8; --text2: #a8947e; --radius: 16px;
+    --green: #43c759; --yellow: #ffd166; --orange: #ff8844;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Poppins', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; letter-spacing: -0.01em; }
+  body.ss #btn-remove-ads { display: none; }
+  .coins-bar { position: fixed; top: 10px; left: 14px; z-index: 999; background: var(--surface); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 5px 11px; font-size: 0.72rem; font-weight: 800; color: var(--yellow); display: flex; align-items: center; gap: 5px; }
+  .coins-bar::before { content: '◎'; font-size: 0.9rem; color: #ffd700; }
+  .header { width: 100%; max-width: 480px; padding: 54px 20px 10px; text-align: center; }
+  .header h1 { font-size: 1.7rem; font-weight: 800; background: linear-gradient(135deg, #fdcb6e, #e17055); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header p { font-size: 0.85rem; color: var(--text2); margin-top: 4px; }
+  .content { width: 100%; max-width: 480px; flex: 1; padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; }
+  .panel { background: var(--surface); border-radius: var(--radius); padding: 16px; }
+  .panel-title { font-size: 0.75rem; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .scroll-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  .scroll-row::-webkit-scrollbar { display: none; }
+  .pill { flex-shrink: 0; background: var(--accent2); border: 2px solid transparent; border-radius: 30px; padding: 7px 16px; font-size: 0.78rem; font-weight: 700; color: var(--text); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .pill.active { border-color: var(--orange); background: rgba(225,112,85,0.15); color: var(--orange); }
+  .pill:active { transform: scale(0.95); }
+  .tag { display: inline-block; border-radius: 20px; padding: 3px 10px; font-size: 0.72rem; font-weight: 700; margin-right: 4px; margin-bottom: 4px; }
+  .tag-v { background: rgba(0,184,148,0.15); color: var(--green); border: 1px solid var(--green); }
+  .tag-q { background: rgba(253,203,110,0.15); color: var(--yellow); border: 1px solid var(--yellow); }
+  .tag-vegan { background: rgba(85,239,196,0.15); color: #55efc4; border: 1px solid #55efc4; }
+  .recipe-card { background: var(--surface); border-radius: var(--radius); overflow: hidden; }
+  .recipe-banner { padding: 24px 20px 16px; text-align: center; }
+  .recipe-emoji { font-size: 4rem; display: block; margin-bottom: 10px; }
+  .recipe-name { font-size: 1.5rem; font-weight: 900; }
+  .recipe-meta { display: flex; justify-content: center; gap: 16px; margin-top: 8px; font-size: 0.8rem; color: var(--text2); }
+  .recipe-meta span { display: flex; align-items: center; gap: 4px; }
+  .recipe-tags { margin-top: 10px; }
+  .recipe-section { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .recipe-section h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); margin-bottom: 10px; }
+  .ingredients-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .ingredients-list li { display: flex; align-items: flex-start; gap: 8px; font-size: 0.9rem; }
+  .ingredients-list li::before { content: '•'; color: var(--orange); font-weight: 900; flex-shrink: 0; }
+  .steps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .step-item { display: flex; gap: 12px; }
+  .step-num { background: var(--orange); color: #fff; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 800; flex-shrink: 0; }
+  .step-text { font-size: 0.88rem; color: var(--text2); line-height: 1.5; padding-top: 3px; }
+  .btn-row { display: flex; gap: 10px; }
+  .btn { flex: 1; padding: 14px; border: none; border-radius: var(--radius); font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .btn:active { transform: scale(0.96); }
+  .btn-primary { background: var(--orange); color: #fff; }
+  .btn-secondary { background: var(--accent2); color: var(--text); }
+  .btn-fav { background: rgba(253,203,110,0.15); border: 2px solid var(--yellow); color: var(--yellow); }
+  .fav-list { display: flex; flex-direction: column; gap: 8px; }
+  .fav-item { background: var(--accent2); border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .fav-item-name { font-size: 0.9rem; font-weight: 700; }
+  .fav-remove { color: var(--accent); cursor: pointer; font-weight: 700; font-size: 1rem; }
+  .empty-text { color: var(--text2); font-size: 0.85rem; }
+  .no-recipe { text-align: center; padding: 40px 20px; color: var(--text2); }
+  .no-recipe-emoji { font-size: 3rem; display: block; margin-bottom: 12px; }
 </style>
 </head>
 <body>
-<div id="app">
-  <header>
-    <h1>Dice <span>Roller</span></h1>
-    <button id="btn-remove-ads">Remove Ads</button>
-  </header>
-  <div id="scroll">
+<button id="btn-remove-ads" onclick="if(window.Android)Android.purchase('remove_ads')" style="position:fixed;top:8px;right:8px;z-index:9999;background:#533483;border:none;color:#fff;font-size:0.7rem;font-weight:600;padding:5px 10px;border-radius:20px;cursor:pointer;">Remove Ads</button>
 
-    <!-- Dice display -->
-    <div class="card">
-      <div class="card-title">Your Roll</div>
-      <div id="dice-area"></div>
+<div class="coins-bar"><span id="coins-display">0</span></div>
+<div class="header">
+  <h1>Random Recipe</h1>
+  <p>Discover your next delicious meal</p>
+</div>
+
+<div class="content">
+  <div class="panel">
+    <div class="panel-title">Meal Type</div>
+    <div class="scroll-row" id="mealRow">
+      <div class="pill active" onclick="setFilter('meal','all',this)">🍽 All</div>
+      <div class="pill" onclick="setFilter('meal','breakfast',this)">☀️ Breakfast</div>
+      <div class="pill" onclick="setFilter('meal','lunch',this)">🥗 Lunch</div>
+      <div class="pill" onclick="setFilter('meal','dinner',this)">🌙 Dinner</div>
+      <div class="pill" onclick="setFilter('meal','dessert',this)">🍰 Dessert</div>
+      <div class="pill" onclick="setFilter('meal','snack',this)">🥨 Snack</div>
+      <div class="pill" onclick="setFilter('meal','drink',this)">🥤 Drinks</div>
     </div>
-
-    <!-- Settings -->
-    <div class="card">
-      <div class="card-title">Die Type</div>
-      <div class="die-types" id="die-types"></div>
-      <div class="count-row">
-        <span class="count-label">Number of dice</span>
-        <div class="count-ctrl">
-          <button class="count-btn" id="btn-minus">−</button>
-          <span id="dice-count-disp">2</span>
-          <button class="count-btn" id="btn-plus">+</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Roll button -->
-    <button id="btn-roll">🎲 Roll!</button>
-
-    <!-- Stats -->
-    <div class="card">
-      <div class="card-title">Last Roll</div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-label">Sum</div><div class="stat-val" id="stat-sum">—</div></div>
-        <div class="stat-box"><div class="stat-label">Min</div><div class="stat-val" id="stat-min">—</div></div>
-        <div class="stat-box"><div class="stat-label">Max</div><div class="stat-val" id="stat-max">—</div></div>
-      </div>
-    </div>
-
-    <!-- History -->
-    <div class="card">
-      <div class="card-title">History</div>
-      <div id="history-list"><div style="color:var(--muted);font-size:0.85rem">No rolls yet</div></div>
-    </div>
-
   </div>
-  <div id="admob-banner">Advertisement</div>
+
+  <div class="panel">
+    <div class="panel-title">Cuisine</div>
+    <div class="scroll-row" id="cuisineRow">
+      <div class="pill active" onclick="setFilter('cuisine','all',this)">🌍 All</div>
+      <div class="pill" onclick="setFilter('cuisine','italian',this)">🇮🇹 Italian</div>
+      <div class="pill" onclick="setFilter('cuisine','asian',this)">🥢 Asian</div>
+      <div class="pill" onclick="setFilter('cuisine','mexican',this)">🌮 Mexican</div>
+      <div class="pill" onclick="setFilter('cuisine','american',this)">🇺🇸 American</div>
+      <div class="pill" onclick="setFilter('cuisine','mediterranean',this)">🫒 Mediterranean</div>
+      <div class="pill" onclick="setFilter('cuisine','indian',this)">🇮🇳 Indian</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Dietary</div>
+    <div class="scroll-row" id="dietRow">
+      <div class="pill active" onclick="setFilter('diet','all',this)">✅ All</div>
+      <div class="pill" onclick="setFilter('diet','vegetarian',this)">🥦 Vegetarian</div>
+      <div class="pill" onclick="setFilter('diet','vegan',this)">🌱 Vegan</div>
+      <div class="pill" onclick="setFilter('diet','quick',this)">⚡ Quick (&lt;30min)</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="surpriseMe()">🎲 Surprise Me!</button>
+    <button class="btn btn-fav" onclick="showFavorites()" id="favToggleBtn">❤️ Saved</button>
+  </div>
+
+  <div id="recipeContainer">
+    <div class="no-recipe">
+      <span class="no-recipe-emoji">🍳</span>
+      <div>Tap "Surprise Me!" to discover a recipe</div>
+    </div>
+  </div>
+
+  <div id="favSection" style="display:none;">
+    <div class="panel">
+      <div class="panel-title" style="display:flex;justify-content:space-between;">
+        <span>Saved Recipes ❤️</span>
+        <span style="cursor:pointer;color:var(--accent);font-size:0.75rem;" onclick="clearFavs()">Clear all</span>
+      </div>
+      <div id="favList" class="fav-list">
+        <div class="empty-text">No saved recipes yet</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-'use strict';
-(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button,.die,.dtype-btn,.count-btn');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var _adsRemoved = false;
+var _interstitialCount = 0;
+function _showInterstitial() {
+  if (_adsRemoved) return;
+  _interstitialCount++;
+  if (_interstitialCount % 3 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
+  }
+}
+window.onPurchaseComplete = function(sku) {
+  if (sku === 'remove_ads') {
+    _adsRemoved = true;
+    var btn = document.getElementById('btn-remove-ads');
+    if (btn) btn.style.display = 'none';
+    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+  }
+};
 
-var DIE_TYPES=[4,6,8,10,12,20,100];
-var state={sides:6,count:2,useCount:0,removeAds:false};
-var history=[];
+var RECIPES = [
+  { name:'Spaghetti Carbonara', emoji:'🍝', meal:'dinner', cuisine:'italian', diet:[], time:20, servings:2, tags:['Classic'], ingredients:['200g spaghetti','100g pancetta or bacon','2 large eggs','50g Parmesan, grated','2 garlic cloves','Salt and black pepper'], steps:['Boil spaghetti in salted water until al dente.','Fry pancetta in a dry pan until crispy. Add garlic for 1 min.','Whisk eggs and Parmesan together in a bowl.','Drain pasta (keep 1 cup pasta water). Add hot pasta to the pan.','Off the heat, add egg mixture and toss quickly, adding a splash of pasta water to create a creamy sauce.','Season with black pepper and serve immediately.'] },
+  { name:'Avocado Toast', emoji:'🥑', meal:'breakfast', cuisine:'american', diet:['vegetarian','vegan','quick'], time:10, servings:1, tags:['Quick','Vegan'], ingredients:['2 slices sourdough bread','1 ripe avocado','Lemon juice','Red pepper flakes','Salt and pepper','Optional: poached egg'], steps:['Toast bread until golden and crisp.','Halve avocado and mash with a fork with lemon juice, salt and pepper.','Spread mashed avocado generously over toast.','Top with red pepper flakes and optionally a poached egg.'] },
+  { name:'Chicken Tacos', emoji:'🌮', meal:'dinner', cuisine:'mexican', diet:['quick'], time:25, servings:4, tags:['Quick'], ingredients:['500g chicken breast','Taco seasoning (cumin, paprika, garlic powder, chili powder)','8 small corn tortillas','1 cup shredded cabbage','1 avocado, sliced','Lime juice','Sour cream','Salsa'], steps:['Season chicken with taco spices and pan-fry until cooked through, about 6–8 min per side.','Rest and slice or shred the chicken.','Warm tortillas in a dry pan for 30 seconds each side.','Fill tortillas with chicken, cabbage, avocado.','Top with salsa, sour cream and a squeeze of lime.'] },
+  { name:'Margherita Pizza', emoji:'🍕', meal:'dinner', cuisine:'italian', diet:['vegetarian'], time:30, servings:2, tags:['Vegetarian'], ingredients:['Pizza dough (store-bought or homemade)','1/2 cup tomato sauce','150g fresh mozzarella','Fresh basil leaves','Olive oil','Salt'], steps:['Preheat oven to 250°C (480°F) with a baking tray inside.','Roll dough thin on a floured surface.','Spread tomato sauce, leaving 2cm border.','Tear mozzarella and scatter over sauce.','Slide onto hot tray and bake 8–10 min until crust is blistered.','Top with fresh basil and drizzle of olive oil.'] },
+  { name:'Miso Soup', emoji:'🍜', meal:'lunch', cuisine:'asian', diet:['vegetarian','vegan','quick'], time:10, servings:2, tags:['Quick','Vegan'], ingredients:['3 cups dashi stock or water','3 tbsp white miso paste','100g silken tofu, cubed','2 tbsp dried wakame seaweed','2 spring onions, sliced'], steps:['Heat dashi stock until just below a simmer.','Place miso in a small bowl and whisk with a few spoonfuls of hot stock until smooth.','Add tofu, rehydrated wakame to the pot.','Stir in dissolved miso — do not boil after adding.','Garnish with spring onions and serve.'] },
+  { name:'Chocolate Chip Cookies', emoji:'🍪', meal:'dessert', cuisine:'american', diet:['vegetarian'], time:25, servings:24, tags:['Dessert'], ingredients:['225g butter, softened','200g white sugar','160g brown sugar','2 eggs','1 tsp vanilla','300g all-purpose flour','1 tsp baking soda','1 tsp salt','340g chocolate chips'], steps:['Preheat oven to 190°C (375°F).','Beat butter and both sugars until creamy.','Add eggs and vanilla and beat well.','Mix in flour, baking soda and salt gradually.','Stir in chocolate chips.','Drop rounded spoonfuls onto baking sheet. Bake 9–11 min until golden.','Cool on baking sheet for 2 min before transferring.'] },
+  { name:'Greek Salad', emoji:'🥗', meal:'lunch', cuisine:'mediterranean', diet:['vegetarian','vegan','quick'], time:10, servings:2, tags:['Quick','Vegetarian'], ingredients:['2 tomatoes, chopped','1 cucumber, chopped','1/2 red onion, sliced','100g Kalamata olives','150g feta cheese','3 tbsp olive oil','1 tbsp red wine vinegar','Oregano, salt, pepper'], steps:['Combine tomatoes, cucumber, onion and olives in a bowl.','Drizzle with olive oil and red wine vinegar.','Season with salt, pepper and dried oregano.','Top with crumbled feta cheese and serve.'] },
+  { name:'Butter Chicken', emoji:'🍛', meal:'dinner', cuisine:'indian', diet:[], time:40, servings:4, tags:['Popular'], ingredients:['600g chicken thighs','1 cup yoghurt','2 tbsp butter','1 onion, finely chopped','3 garlic cloves, minced','1 tsp grated ginger','400g crushed tomatoes','1 cup heavy cream','Garam masala, cumin, turmeric, chili powder','Fresh coriander'], steps:['Marinate chicken in yoghurt and spices for 30 min.','Sear chicken in butter until browned. Set aside.','Sauté onion, garlic and ginger until soft.','Add tomatoes and spices; simmer 15 min.','Blend sauce until smooth, return to pan.','Add chicken and cream; simmer 10 min.','Garnish with coriander, serve with rice.'] },
+  { name:'Banana Smoothie', emoji:'🥤', meal:'drink', cuisine:'american', diet:['vegetarian','vegan','quick'], time:5, servings:1, tags:['Quick','Vegan'], ingredients:['2 ripe bananas','1 cup almond milk or oat milk','1 tbsp peanut butter','1 tbsp honey or maple syrup','Pinch of cinnamon','Ice cubes'], steps:['Add all ingredients to a blender.','Blend on high until smooth and creamy.','Taste and adjust sweetness.','Pour into a glass and enjoy immediately.'] },
+  { name:'Shakshuka', emoji:'🍳', meal:'breakfast', cuisine:'mediterranean', diet:['vegetarian','quick'], time:25, servings:2, tags:['Vegetarian'], ingredients:['4 eggs','400g crushed tomatoes','1 onion, diced','1 red pepper, diced','3 garlic cloves','1 tsp cumin','1 tsp paprika','1/2 tsp chili flakes','Olive oil','Fresh parsley or feta to serve'], steps:['Heat olive oil in a skillet. Sauté onion and pepper until soft.','Add garlic, cumin, paprika and chili flakes; cook 1 min.','Pour in crushed tomatoes; simmer 10 min until thickened.','Make 4 wells in the sauce and crack an egg into each.','Cover and cook until egg whites are set but yolks still runny, 5–8 min.','Garnish with parsley or crumbled feta. Serve with crusty bread.'] },
+  { name:'Pad Thai', emoji:'🍜', meal:'dinner', cuisine:'asian', diet:['quick'], time:20, servings:2, tags:['Quick'], ingredients:['200g rice noodles','200g prawns or chicken','2 eggs','3 tbsp fish sauce','2 tbsp tamarind paste','1 tbsp sugar','2 tbsp vegetable oil','Bean sprouts','Spring onions','Crushed peanuts','Lime wedges'], steps:['Soak noodles in warm water for 15 min, drain.','Stir-fry protein in hot oil until cooked; push to side.','Scramble eggs in same pan.','Add noodles, fish sauce, tamarind and sugar; toss 2–3 min.','Add bean sprouts and spring onions; toss briefly.','Serve topped with crushed peanuts and lime.'] },
+  { name:'Caprese Salad', emoji:'🍅', meal:'lunch', cuisine:'italian', diet:['vegetarian','vegan','quick'], time:5, servings:2, tags:['Quick','Vegetarian'], ingredients:['3 large ripe tomatoes, sliced','200g fresh mozzarella, sliced','Fresh basil leaves','3 tbsp extra-virgin olive oil','Balsamic glaze','Salt and black pepper'], steps:['Alternate tomato and mozzarella slices on a plate.','Tuck basil leaves between slices.','Drizzle generously with olive oil and balsamic glaze.','Season with salt and coarsely ground black pepper.','Serve immediately.'] },
+  { name:'Lentil Soup', emoji:'🫘', meal:'lunch', cuisine:'mediterranean', diet:['vegetarian','vegan'], time:35, servings:4, tags:['Vegan'], ingredients:['300g red lentils, rinsed','1 onion, diced','3 garlic cloves','2 carrots, diced','400g crushed tomatoes','1 tsp cumin','1 tsp turmeric','1 litre vegetable stock','Lemon juice, fresh coriander'], steps:['Sauté onion, garlic and carrots in olive oil until soft.','Add spices and cook 1 min.','Add lentils, tomatoes and stock; bring to boil.','Reduce heat and simmer 20 min until lentils are very soft.','Blend partially for a creamy texture if desired.','Finish with lemon juice and fresh coriander.'] },
+  { name:'Waffles', emoji:'🧇', meal:'breakfast', cuisine:'american', diet:['vegetarian'], time:20, servings:4, tags:['Vegetarian'], ingredients:['2 cups all-purpose flour','2 tsp baking powder','1/2 tsp salt','1 tbsp sugar','2 eggs, separated','1.5 cups milk','1/3 cup melted butter','1 tsp vanilla'], steps:['Mix dry ingredients in a large bowl.','Whisk egg yolks, milk, butter and vanilla together.','Combine wet and dry ingredients until just mixed.','Beat egg whites to stiff peaks; fold into batter gently.','Cook in preheated waffle iron until golden, about 4 min.','Serve with maple syrup and fresh berries.'] },
+  { name:'Veggie Stir Fry', emoji:'🥦', meal:'dinner', cuisine:'asian', diet:['vegetarian','vegan','quick'], time:15, servings:2, tags:['Quick','Vegan'], ingredients:['2 cups broccoli florets','1 red pepper, sliced','1 carrot, julienned','1 cup snap peas','3 garlic cloves','2 tbsp soy sauce','1 tbsp sesame oil','1 tbsp oyster sauce or hoisin','1 tsp cornstarch','Sesame seeds'], steps:['Mix soy sauce, sesame oil, hoisin and cornstarch in a bowl.','Heat wok until very hot. Add a splash of oil.','Stir-fry hardest vegetables (carrot, broccoli) for 2 min.','Add pepper and snap peas; stir-fry 2 min more.','Add garlic; fry 30 seconds.','Pour in sauce and toss until everything is coated.','Garnish with sesame seeds and serve over rice.'] },
+  { name:'Tiramisu', emoji:'🎂', meal:'dessert', cuisine:'italian', diet:['vegetarian'], time:30, servings:8, tags:['Dessert'], ingredients:['500g mascarpone','4 eggs, separated','100g caster sugar','200ml strong espresso, cooled','3 tbsp rum or marsala','24 ladyfinger biscuits','Cocoa powder for dusting'], steps:['Whisk egg yolks with sugar until pale and thick.','Beat in mascarpone until smooth.','Beat egg whites to stiff peaks; fold into mascarpone mixture.','Mix coffee with rum in a shallow bowl.','Quickly dip each ladyfinger in coffee mixture; layer in dish.','Spread half the cream over ladyfingers, repeat layers.','Refrigerate at least 4 hours or overnight.','Dust generously with cocoa powder before serving.'] },
+  { name:'Bean Burrito', emoji:'🌯', meal:'lunch', cuisine:'mexican', diet:['vegetarian','vegan','quick'], time:15, servings:2, tags:['Quick','Vegan'], ingredients:['2 large flour tortillas','400g canned black beans, drained','1 cup cooked rice','1 avocado, mashed','Salsa','1 lime','Cumin, chili powder, garlic powder','Optional: sour cream, cheese'], steps:['Heat beans in a pan with cumin, chili, garlic and a squeeze of lime.','Warm tortillas in a dry pan or microwave.','Layer rice, beans, mashed avocado and salsa down the center.','Fold in sides and roll up burrito tightly.','Optionally toast in a pan for a crispy exterior.'] },
+  { name:'Mushroom Risotto', emoji:'🍄', meal:'dinner', cuisine:'italian', diet:['vegetarian'], time:35, servings:2, tags:['Vegetarian'], ingredients:['300g arborio rice','250g mixed mushrooms, sliced','1 onion, finely chopped','2 garlic cloves','150ml white wine','1 litre hot vegetable stock','50g Parmesan, grated','3 tbsp butter','Fresh thyme','Salt and pepper'], steps:['Sauté mushrooms in 1 tbsp butter until golden. Set aside.','In same pan, cook onion and garlic in butter until soft.','Add rice; stir for 2 min until coated and slightly translucent.','Add wine; stir until absorbed.','Add stock one ladleful at a time, stirring constantly until each is absorbed, about 20 min total.','Stir in mushrooms, Parmesan and remaining butter.','Season and serve immediately.'] },
+  { name:'Overnight Oats', emoji:'🌾', meal:'breakfast', cuisine:'american', diet:['vegetarian','vegan','quick'], time:5, servings:1, tags:['Quick','Vegan'], ingredients:['1/2 cup rolled oats','1/2 cup oat milk or almond milk','1 tbsp chia seeds','1 tbsp maple syrup','1/2 tsp vanilla','Toppings: berries, banana, nuts, granola'], steps:['Combine oats, milk, chia seeds, maple syrup and vanilla in a jar.','Stir well to combine everything evenly.','Seal and refrigerate overnight (minimum 4 hours).','In the morning, stir and add a splash more milk if too thick.','Top with fresh berries, sliced banana and a sprinkle of granola.'] },
+  { name:'Mango Lassi', emoji:'🥭', meal:'drink', cuisine:'indian', diet:['vegetarian','quick'], time:5, servings:2, tags:['Quick','Vegetarian'], ingredients:['2 ripe mangoes or 400g frozen mango','1 cup yoghurt (plain)','1/2 cup milk','2 tbsp sugar or honey','Pinch of cardamom','Ice cubes'], steps:['Peel and dice mango (or use frozen).','Add all ingredients to a blender.','Blend until smooth and creamy.','Taste and adjust sweetness.','Pour over ice and serve immediately.'] },
+  { name:'French Toast', emoji:'🍞', meal:'breakfast', cuisine:'american', diet:['vegetarian','quick'], time:15, servings:2, tags:['Quick','Vegetarian'], ingredients:['4 thick slices brioche or sourdough','2 eggs','1/4 cup milk','1 tsp vanilla','1/2 tsp cinnamon','Pinch of nutmeg','Butter for cooking','Maple syrup, powdered sugar, fresh berries to serve'], steps:['Whisk eggs, milk, vanilla, cinnamon and nutmeg together.','Dip each bread slice in egg mixture, coating both sides.','Melt butter in a non-stick pan over medium heat.','Cook each slice 2–3 min per side until golden brown.','Serve with maple syrup, powdered sugar and fresh berries.'] },
+  { name:'Chicken Caesar Salad', emoji:'🥗', meal:'lunch', cuisine:'american', diet:['quick'], time:20, servings:2, tags:['Quick'], ingredients:['2 chicken breasts','1 large romaine lettuce, chopped','50g Parmesan, shaved','Caesar dressing (store-bought or homemade)','Croutons'], steps:['Season chicken with salt and pepper; grill or pan-fry 6 min per side until cooked.','Let rest 5 min then slice.','Toss lettuce with Caesar dressing in a large bowl.','Divide between plates; top with chicken, Parmesan and croutons.'] },
+  { name:'Banana Bread', emoji:'🍌', meal:'snack', cuisine:'american', diet:['vegetarian'], time:60, servings:8, tags:['Vegetarian'], ingredients:['3 very ripe bananas','75g melted butter','150g sugar','1 egg, beaten','1 tsp vanilla','1 tsp baking soda','Pinch of salt','190g all-purpose flour'], steps:['Preheat oven to 175°C (350°F). Grease a 9x5 loaf pan.','Mash bananas well in a large bowl.','Mix in melted butter.','Stir in sugar, egg and vanilla.','Mix in baking soda and salt.','Add flour and stir until just combined.','Pour into loaf pan and bake 55–65 min until a skewer comes out clean.','Cool in pan 10 min before turning out.'] },
+  { name:'Vegetable Curry', emoji:'🍛', meal:'dinner', cuisine:'indian', diet:['vegetarian','vegan'], time:35, servings:4, tags:['Vegan'], ingredients:['2 cups mixed vegetables (potato, peas, carrots, cauliflower)','400g coconut milk','400g crushed tomatoes','1 onion, diced','3 garlic cloves','1 tsp grated ginger','2 tbsp curry powder','1 tsp turmeric','Vegetable oil, salt'], steps:['Sauté onion, garlic and ginger in oil until soft.','Add curry powder and turmeric; cook 1 min.','Add vegetables, tomatoes and coconut milk; stir well.','Bring to boil, reduce heat, simmer 20 min until vegetables are tender.','Season with salt. Serve over basmati rice with naan.'] },
+  { name:'Nachos', emoji:'🫓', meal:'snack', cuisine:'mexican', diet:['vegetarian','quick'], time:15, servings:4, tags:['Quick','Vegetarian'], ingredients:['200g tortilla chips','150g shredded cheddar','1 jalapeño, sliced','400g refried beans or black beans','Sour cream','Guacamole','Salsa','Spring onions'], steps:['Preheat oven to 200°C (400°F).','Spread chips on a baking tray.','Dollop beans over chips, scatter cheese and jalapeño.','Bake 8–10 min until cheese is melted and bubbly.','Top with sour cream, guacamole, salsa and spring onions.','Serve immediately.'] }
+];
 
-var diceArea=document.getElementById('dice-area');
-var dieTypesEl=document.getElementById('die-types');
-var diceCountDisp=document.getElementById('dice-count-disp');
+var filters = { meal:'all', cuisine:'all', diet:'all' };
+var favorites = [];
+var currentRecipe = null;
+var favVisible = false;
 
-// Build die type buttons
-DIE_TYPES.forEach(function(s){
-  var btn=document.createElement('button');
-  btn.className='dtype-btn'+(s===6?' active':'');
-  btn.textContent='D'+s;
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.dtype-btn').forEach(function(b){b.classList.remove('active');});
-    btn.classList.add('active');
-    state.sides=s;
-    renderDice();
+function setFilter(type, value, el) {
+  filters[type] = value;
+  var row = document.getElementById(type+'Row') || document.getElementById(type==='meal'?'mealRow':type==='cuisine'?'cuisineRow':'dietRow');
+  var rows = {'meal':'mealRow','cuisine':'cuisineRow','diet':'dietRow'};
+  document.querySelectorAll('#'+rows[type]+' .pill').forEach(function(p){p.classList.remove('active');});
+  el.classList.add('active');
+}
+
+function getFiltered() {
+  return RECIPES.filter(function(r) {
+    if (filters.meal !== 'all' && r.meal !== filters.meal) return false;
+    if (filters.cuisine !== 'all' && r.cuisine !== filters.cuisine) return false;
+    if (filters.diet !== 'all' && r.diet.indexOf(filters.diet) < 0) return false;
+    return true;
   });
-  dieTypesEl.appendChild(btn);
-});
+}
 
-function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function surpriseMe() {
+  var pool = getFiltered();
+  if (pool.length === 0) { alert('No recipes match your filters. Try adjusting them!'); return; }
+  currentRecipe = pool[Math.floor(Math.random()*pool.length)];
+  renderRecipe(currentRecipe);
+  document.getElementById('favSection').style.display = 'none';
+  favVisible = false;
+  _showInterstitial();
+}
 
-function renderDice(values){
-  diceArea.innerHTML='';
-  for(var i=0;i<state.count;i++){
-    var die=document.createElement('div');
-    die.className='die';
-    die.textContent=values?values[i]:'?';
-    (function(idx){
-      die.addEventListener('click',function(){rollSingle(idx);});
-    })(i);
-    diceArea.appendChild(die);
+function renderRecipe(r) {
+  var isFav = favorites.some(function(f){return f.name===r.name;});
+  var tags = r.tags.concat(r.diet.map(function(d){return d.charAt(0).toUpperCase()+d.slice(1);}));
+  var tagsHtml = tags.map(function(t){
+    var cls = t==='Vegan'?'tag-vegan':t==='Vegetarian'?'tag-v':'tag-q';
+    return '<span class="tag '+cls+'">'+escHtml(t)+'</span>';
+  }).join('');
+  var ingHtml = r.ingredients.map(function(i){return '<li>'+escHtml(i)+'</li>';}).join('');
+  var stepsHtml = r.steps.map(function(s,i){return '<div class="step-item"><div class="step-num">'+(i+1)+'</div><div class="step-text">'+escHtml(s)+'</div></div>';}).join('');
+  document.getElementById('recipeContainer').innerHTML =
+    '<div class="recipe-card">'+
+    '<div class="recipe-banner">'+
+    '<span class="recipe-emoji">'+r.emoji+'</span>'+
+    '<div class="recipe-name">'+escHtml(r.name)+'</div>'+
+    '<div class="recipe-meta"><span>⏱ '+r.time+' min</span><span>🍽 Serves '+r.servings+'</span></div>'+
+    '<div class="recipe-tags" style="margin-top:8px;">'+tagsHtml+'</div>'+
+    '</div>'+
+    '<div class="recipe-section"><h3>Ingredients</h3><ul class="ingredients-list">'+ingHtml+'</ul></div>'+
+    '<div class="recipe-section"><h3>Steps</h3><div class="steps-list">'+stepsHtml+'</div></div>'+
+    '<div class="recipe-section">'+
+    '<button class="btn '+(isFav?'btn-secondary':'btn-fav')+'" style="width:100%;" onclick="toggleFav()">'+
+    (isFav ? '✅ Saved to Favorites' : '❤️ Save Recipe')+
+    '</button></div>'+
+    '</div>';
+}
+
+function toggleFav() {
+  if (!currentRecipe) return;
+  var idx = favorites.findIndex ? favorites.findIndex(function(f){return f.name===currentRecipe.name;}) : -1;
+  if (idx < 0) { favorites.push(currentRecipe); } else { favorites.splice(idx,1); }
+  renderRecipe(currentRecipe);
+  renderFavList();
+}
+
+function showFavorites() {
+  favVisible = !favVisible;
+  document.getElementById('favSection').style.display = favVisible ? 'block' : 'none';
+  renderFavList();
+}
+
+function renderFavList() {
+  var el = document.getElementById('favList');
+  if (favorites.length === 0) { el.innerHTML = '<div class="empty-text">No saved recipes yet</div>'; return; }
+  el.innerHTML = favorites.map(function(r,i) {
+    return '<div class="fav-item" onclick="loadFav('+i+')"><span class="fav-item-name">'+r.emoji+' '+escHtml(r.name)+'</span><span class="fav-remove" onclick="removeFav(event,'+i+')">✕</span></div>';
+  }).join('');
+}
+
+function loadFav(i) { currentRecipe = favorites[i]; renderRecipe(currentRecipe); }
+function removeFav(e, i) { e.stopPropagation(); favorites.splice(i,1); renderFavList(); if(currentRecipe) renderRecipe(currentRecipe); }
+function clearFavs() { favorites=[]; renderFavList(); if(currentRecipe) renderRecipe(currentRecipe); }
+
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// --- persistence + coins + screenshot mode (flagship upgrade)
+var K = 'randomrecipe_v2';
+try {
+  var saved = localStorage.getItem(K);
+  if (saved) {
+    var s = JSON.parse(saved);
+    if (s.favs) favorites = s.favs;
+    if (typeof s.coins === 'number') window._coins = s.coins;
+  }
+} catch(e) {}
+window._coins = window._coins || 0;
+
+function _save(){ try{ localStorage.setItem(K, JSON.stringify({favs:favorites,coins:window._coins})); }catch(e){} }
+function _updCoins(){ var el=document.getElementById('coins-display'); if(el) el.textContent = window._coins; }
+_updCoins();
+
+// Wrap toggleFav / removeFav / clearFavs / surpriseMe to persist
+var _origToggleFav = toggleFav;
+toggleFav = function(){ _origToggleFav(); if(favorites.length>0) { window._coins += 2; _updCoins(); } _save(); };
+var _origSurprise = surpriseMe;
+surpriseMe = function(){ _origSurprise(); window._coins++; _updCoins(); _save(); };
+var _origClearFavs = clearFavs;
+clearFavs = function(){ _origClearFavs(); _save(); };
+
+// Screenshot mode
+var SS = /screenshot=/.test(location.hash);
+if (SS) {
+  document.body.classList.add('ss');
+  window._coins = 620;
+  _updCoins();
+  var ST = (location.hash.match(/screenshot=([a-z]+)/)||[])[1];
+  if (ST === 'fav') {
+    favorites = [RECIPES[0], RECIPES[3], RECIPES[7], RECIPES[5], RECIPES[15]];
+    showFavorites();
+    renderFavList();
+  } else {
+    // Default: show a popular recipe
+    currentRecipe = RECIPES[3];
+    renderRecipe(currentRecipe);
   }
 }
 
-function rollAll(){
-  var vals=[];
-  for(var i=0;i<state.count;i++) vals.push(randInt(1,state.sides));
-  animateRoll(vals);
-  updateStats(vals);
-  addHistory(vals);
-  state.useCount++;
-  if(!state.removeAds&&state.useCount%7===0&&window.Android) Android.showInterstitial();
-}
-
-function rollSingle(idx){
-  var dies=diceArea.querySelectorAll('.die');
-  var val=randInt(1,state.sides);
-  dies[idx].textContent=val;
-  dies[idx].classList.remove('rolling');
-  void dies[idx].offsetWidth;
-  dies[idx].classList.add('rolling');
-  setTimeout(function(){dies[idx].classList.remove('rolling');},420);
-}
-
-function animateRoll(finalVals){
-  var dies=diceArea.querySelectorAll('.die');
-  dies.forEach(function(d){
-    d.classList.remove('rolling');
-    void d.offsetWidth;
-    d.classList.add('rolling');
-  });
-  // Quick flicker then show final
-  var steps=6, interval=50;
-  for(var s=0;s<steps;s++){
-    (function(step){
-      setTimeout(function(){
-        dies.forEach(function(d){d.textContent=randInt(1,state.sides);});
-        if(step===steps-1){
-          setTimeout(function(){
-            finalVals.forEach(function(v,i){dies[i].textContent=v;});
-            dies.forEach(function(d){d.classList.remove('rolling');});
-          },80);
-        }
-      },step*interval);
-    })(s);
-  }
-}
-
-function updateStats(vals){
-  document.getElementById('stat-sum').textContent=vals.reduce(function(a,b){return a+b;},0);
-  document.getElementById('stat-min').textContent=Math.min.apply(null,vals);
-  document.getElementById('stat-max').textContent=Math.max.apply(null,vals);
-}
-
-function addHistory(vals){
-  history.unshift({sides:state.sides,vals:vals.slice(),sum:vals.reduce(function(a,b){return a+b;},0)});
-  if(history.length>10) history.pop();
-  var el=document.getElementById('history-list');
-  el.innerHTML='';
-  history.forEach(function(h){
-    var item=document.createElement('div');
-    item.className='history-item';
-    item.innerHTML='<span class="history-dice">'+h.count+'×D'+h.sides+': ['+h.vals.join(', ')+']</span><span class="history-sum">'+h.sum+'</span>';
-    // patch count
-    item.querySelector('.history-dice').textContent=h.vals.length+'×D'+h.sides+': ['+h.vals.join(', ')+']';
-    el.appendChild(item);
-  });
-}
-
-document.getElementById('btn-roll').addEventListener('click',function(){
-  renderDice();
-  setTimeout(rollAll,10);
-});
-
-document.getElementById('btn-minus').addEventListener('click',function(){
-  if(state.count>1){state.count--;diceCountDisp.textContent=state.count;renderDice();}
-});
-document.getElementById('btn-plus').addEventListener('click',function(){
-  if(state.count<8){state.count++;diceCountDisp.textContent=state.count;renderDice();}
-});
-
-document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';}};
-
-function init(){
-  if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
-  renderDice();
-}
-init();
+window.handleBack = function(){
+  if (favVisible){ showFavorites(); return true; }
+  if (currentRecipe){ currentRecipe=null; document.getElementById('recipeContainer').innerHTML='<div class="no-recipe"><span class="no-recipe-emoji">🍳</span><div>Tap "Surprise Me!" to discover a recipe</div></div>'; return true; }
+  return false;
+};
 </script>
 </body>
 </html>
