@@ -493,7 +493,7 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void scheduleDailyReminder(int hourOfDay, int minute) {
-            cancelNotification(REQ_DAILY_REMINDER);
+            cancelScheduledAlarm(REQ_DAILY_REMINDER);
             if (!getSharedPreferences("game", MODE_PRIVATE)
                     .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
 
@@ -516,7 +516,7 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void scheduleStreakAtRisk(int streakDays) {
-            cancelNotification(REQ_STREAK_AT_RISK);
+            cancelScheduledAlarm(REQ_STREAK_AT_RISK);
             if (streakDays < 3) return; // §11.2: only for streaks >= 3
             if (!getSharedPreferences("game", MODE_PRIVATE)
                     .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
@@ -541,7 +541,7 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void scheduleLivesRefilled(long whenMillis) {
-            cancelNotification(REQ_LIVES_REFILLED);
+            cancelScheduledAlarm(REQ_LIVES_REFILLED);
             if (!getSharedPreferences("game", MODE_PRIVATE)
                     .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
             if (whenMillis <= System.currentTimeMillis()) return;
@@ -557,10 +557,10 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void cancelAllNotifications() {
-            cancelNotification(REQ_DAILY_REMINDER);
-            cancelNotification(REQ_STREAK_AT_RISK);
-            cancelNotification(REQ_LIVES_REFILLED);
-            cancelNotification(REQ_RETURN_AFTER_ABSENCE);
+            cancelScheduledAlarm(REQ_DAILY_REMINDER);
+            cancelScheduledAlarm(REQ_STREAK_AT_RISK);
+            cancelScheduledAlarm(REQ_LIVES_REFILLED);
+            cancelScheduledAlarm(REQ_RETURN_AFTER_ABSENCE);
         }
 
         @JavascriptInterface
@@ -585,7 +585,7 @@ public class MainActivity extends Activity {
                 .putLong(PREF_LAST_PLAYED, System.currentTimeMillis())
                 .apply();
             // If played today, skip today's daily reminder
-            cancelNotification(REQ_DAILY_REMINDER);
+            cancelScheduledAlarm(REQ_DAILY_REMINDER);
         }
 
         @JavascriptInterface
@@ -699,7 +699,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void cancelNotification(int requestCode) {
+    private void cancelScheduledAlarm(int requestCode) {
         Intent intent = new Intent(this, NotificationReceiver.class);
         int flags = PendingIntent.FLAG_NO_CREATE;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
