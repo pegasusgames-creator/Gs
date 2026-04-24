@@ -2,268 +2,261 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roller</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Word Search</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#e94560; --accent2:#533483; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
-#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
-header h1 { font-size:1.3rem; font-weight:700; }
-header h1 span { color:var(--accent); }
-#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
-#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
-.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
-
-/* Dice display area */
-#dice-area { display:flex; flex-wrap:wrap; justify-content:center; gap:14px; min-height:120px; align-items:center; padding:10px 0; }
-.die {
-  width:84px; height:84px;
-  background:var(--card);
-  border-radius:16px;
-  border:2px solid rgba(233,69,96,0.4);
-  display:flex; align-items:center; justify-content:center;
-  font-size:2.4rem; font-weight:900;
-  color:var(--accent);
-  cursor:pointer;
-  user-select:none;
-  transition:transform 0.08s;
-  position:relative;
-  overflow:hidden;
-}
-.die.rolling {
-  animation:shake 0.4s ease-out;
-}
-@keyframes shake {
-  0%  { transform:rotate(-8deg) scale(1.05); }
-  20% { transform:rotate(8deg)  scale(1.08); }
-  40% { transform:rotate(-6deg) scale(1.06); }
-  60% { transform:rotate(6deg)  scale(1.07); }
-  80% { transform:rotate(-3deg) scale(1.03); }
-  100%{ transform:rotate(0deg)  scale(1); }
-}
-.die.btn-pressed { transform:scale(0.9); }
-
-/* Die type selector */
-.die-types { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
-.dtype-btn { background:var(--card); border:2px solid transparent; border-radius:8px; color:var(--muted); font-size:0.8rem; font-weight:700; padding:6px 10px; cursor:pointer; }
-.dtype-btn.active { border-color:var(--accent); color:var(--accent); }
-.dtype-btn.btn-pressed { transform:scale(0.9); }
-
-/* Count row */
-.count-row { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
-.count-label { font-size:0.9rem; color:var(--muted); }
-.count-ctrl { display:flex; align-items:center; gap:12px; }
-.count-btn { width:34px; height:34px; border-radius:50%; background:var(--card); border:2px solid var(--accent); color:var(--accent); font-size:1.3rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.count-btn.btn-pressed { transform:scale(0.88); }
-#dice-count-disp { font-size:1.2rem; font-weight:700; min-width:24px; text-align:center; }
-
-/* Roll button */
-#btn-roll {
-  width:100%;
-  background:linear-gradient(135deg,var(--accent),#c0392b);
-  border:none; border-radius:var(--radius);
-  color:#fff; font-size:1.3rem; font-weight:800;
-  padding:18px; cursor:pointer;
-  margin-bottom:12px;
-  box-shadow:0 6px 20px rgba(233,69,96,0.45);
-}
-#btn-roll.btn-pressed { transform:scale(0.97); }
-
-/* Stats */
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-.stat-box { background:var(--card); border-radius:10px; padding:10px; text-align:center; }
-.stat-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:3px; }
-.stat-val { font-size:1.2rem; font-weight:700; }
-
-/* History */
-#history-list { display:flex; flex-direction:column; gap:6px; }
-.history-item { background:var(--card); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; font-size:0.85rem; }
-.history-dice { color:var(--muted); }
-.history-sum { color:var(--accent); font-weight:700; }
-
-#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+:root { --bg:#0b1020; --surface:#141b33; --accent:#3b82f6; --accent2:#1a2447; --text:#ecf1fa; --found:#43c759; }
+* { box-sizing:border-box; margin:0; padding:0; touch-action:manipulation; }
+body { background:var(--bg); color:var(--text); font-family:'Poppins',system-ui,sans-serif; min-height:100vh; overflow-x:hidden; letter-spacing:-0.01em; }
+body.ss #btn-remove-ads{display:none;}
+.screen { display:none; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:16px; }
+.screen.active { display:flex; }
+h1 { font-size:2.2rem; color:var(--accent); margin-bottom:8px; text-shadow:0 0 20px rgba(233,69,96,0.5); }
+.subtitle { color:#aaa; margin-bottom:24px; font-size:0.95rem; }
+.btn { background:var(--accent); color:#fff; border:none; padding:14px 28px; border-radius:30px; font-size:1rem; font-weight:700; cursor:pointer; margin:6px; transition:transform 0.1s; }
+.btn:active { transform:scale(0.95); }
+.btn-secondary { background:var(--accent2); }
+.btn-sm { padding:8px 16px; font-size:0.85rem; }
+.category-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; max-width:360px; margin-bottom:16px; }
+.cat-btn { background:var(--surface); border:2px solid var(--accent2); color:var(--text); border-radius:12px; padding:14px 8px; font-size:0.9rem; cursor:pointer; text-align:center; transition:border-color 0.2s; }
+.cat-btn.selected { border-color:var(--accent); background:rgba(233,69,96,0.1); }
+.cat-icon { font-size:1.8rem; display:block; margin-bottom:4px; }
+#game-header { display:flex; justify-content:space-between; align-items:center; width:100%; max-width:420px; margin-bottom:8px; font-size:0.95rem; }
+#timer { font-weight:700; color:var(--found); }
+#score-disp { color:#ccc; }
+#puzzle-theme { color:var(--accent); font-weight:700; }
+canvas { display:block; border-radius:10px; background:var(--surface); touch-action:none; }
+#word-list { display:flex; flex-wrap:wrap; justify-content:center; gap:5px; max-width:420px; margin:8px 0; }
+.word-item { padding:4px 10px; border-radius:20px; background:var(--surface); font-size:0.78rem; border:1px solid #333; transition:all 0.3s; }
+.word-item.found { background:var(--found); color:#000; text-decoration:line-through; font-weight:700; }
+#controls { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:6px; }
+.stars { font-size:2rem; margin:8px 0; }
+#win-msg { font-size:1.5rem; color:var(--found); margin-bottom:8px; }
+#win-info { color:#ccc; margin-bottom:6px; }
+#best-disp { color:#aaa; font-size:0.9rem; margin-bottom:20px; }
 </style>
 </head>
 <body>
-<div id="app">
-  <header>
-    <h1>Dice <span>Roller</span></h1>
-    <button id="btn-remove-ads">Remove Ads</button>
-  </header>
-  <div id="scroll">
+<button id="btn-remove-ads" onclick="if(window.Android)Android.purchase('remove_ads')" style="position:fixed;top:8px;right:8px;z-index:9999;background:#533483;border:none;color:#fff;font-size:0.7rem;font-weight:600;padding:5px 10px;border-radius:20px;cursor:pointer;">Remove Ads</button>
 
-    <!-- Dice display -->
-    <div class="card">
-      <div class="card-title">Your Roll</div>
-      <div id="dice-area"></div>
-    </div>
-
-    <!-- Settings -->
-    <div class="card">
-      <div class="card-title">Die Type</div>
-      <div class="die-types" id="die-types"></div>
-      <div class="count-row">
-        <span class="count-label">Number of dice</span>
-        <div class="count-ctrl">
-          <button class="count-btn" id="btn-minus">−</button>
-          <span id="dice-count-disp">2</span>
-          <button class="count-btn" id="btn-plus">+</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Roll button -->
-    <button id="btn-roll">🎲 Roll!</button>
-
-    <!-- Stats -->
-    <div class="card">
-      <div class="card-title">Last Roll</div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-label">Sum</div><div class="stat-val" id="stat-sum">—</div></div>
-        <div class="stat-box"><div class="stat-label">Min</div><div class="stat-val" id="stat-min">—</div></div>
-        <div class="stat-box"><div class="stat-label">Max</div><div class="stat-val" id="stat-max">—</div></div>
-      </div>
-    </div>
-
-    <!-- History -->
-    <div class="card">
-      <div class="card-title">History</div>
-      <div id="history-list"><div style="color:var(--muted);font-size:0.85rem">No rolls yet</div></div>
-    </div>
-
+<div id="screen-menu" class="screen active">
+  <h1>Word Search</h1>
+  <p class="subtitle">Find all hidden words!</p>
+  <div class="category-grid">
+    <div class="cat-btn selected" onclick="selectCat(this,'Animals')"><span class="cat-icon">🐾</span>Animals</div>
+    <div class="cat-btn" onclick="selectCat(this,'Foods')"><span class="cat-icon">🍕</span>Foods</div>
+    <div class="cat-btn" onclick="selectCat(this,'Countries')"><span class="cat-icon">🌍</span>Countries</div>
+    <div class="cat-btn" onclick="selectCat(this,'Sports')"><span class="cat-icon">⚽</span>Sports</div>
+    <div class="cat-btn" onclick="selectCat(this,'Tech')"><span class="cat-icon">💻</span>Tech</div>
+    <div class="cat-btn" onclick="selectCat(this,'Nature')"><span class="cat-icon">🌿</span>Nature</div>
   </div>
-  <div id="admob-banner">Advertisement</div>
+  <button class="btn" onclick="startGame()">Play</button>
+  <p style="color:#777;font-size:0.8rem;margin-top:12px">Best: <span id="menu-best">0</span></p>
+</div>
+
+<div id="screen-game" class="screen">
+  <div id="game-header">
+    <div id="puzzle-theme">Animals</div>
+    <div id="timer">⏱ 0:00</div>
+    <div id="score-disp">0 pts</div>
+  </div>
+  <canvas id="grid-canvas"></canvas>
+  <div id="word-list"></div>
+  <div id="controls">
+    <button class="btn btn-sm btn-secondary" onclick="useHint()">💡 Hint</button>
+    <button class="btn btn-sm btn-secondary" onclick="newPuzzle()">🔄 New</button>
+    <button class="btn btn-sm btn-secondary" onclick="goMenu()">🏠 Menu</button>
+  </div>
+</div>
+
+<div id="screen-win" class="screen">
+  <div class="stars" id="win-stars">⭐⭐⭐</div>
+  <div id="win-msg">Puzzle Complete!</div>
+  <div id="win-info"></div>
+  <div id="best-disp"></div>
+  <button class="btn" onclick="newPuzzle()">Next Puzzle</button>
+  <button class="btn btn-secondary" onclick="goMenu()">Menu</button>
 </div>
 
 <script>
-'use strict';
-(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button,.die,.dtype-btn,.count-btn');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+const CATS = {
+  Animals:   ['ELEPHANT','DOLPHIN','PENGUIN','GIRAFFE','LEOPARD','CHEETAH','GORILLA','HAMSTER','PANTHER','VULTURE','PYTHON','JAGUAR'],
+  Foods:     ['PIZZA','BURGER','SUSHI','TACOS','PASTA','RAMEN','WAFFLE','MANGO','SALMON','DONUT','LEMON','BACON'],
+  Countries: ['FRANCE','BRAZIL','JAPAN','EGYPT','INDIA','KENYA','CHILE','SPAIN','ITALY','CHINA','CANADA','MEXICO'],
+  Sports:    ['TENNIS','SOCCER','BOXING','RUGBY','HOCKEY','GOLF','CYCLING','SKIING','ROWING','DIVING','KARATE','POLO'],
+  Tech:      ['LAPTOP','SERVER','ROUTER','PYTHON','PIXEL','KOTLIN','DOCKER','GITHUB','WIDGET','SOCKET','LINUX','ARRAY'],
+  Nature:    ['FOREST','DESERT','OCEAN','GLACIER','VOLCANO','CANYON','MEADOW','TUNDRA','SWAMP','CORAL','DELTA','PLAIN']
+};
+const GRID_N = 10;
+let grid=[], placed=[], words=[], foundWords=[];
+let selectedCat='Animals', cellPx=34;
+let isDragging=false, startCell=null, curCell=null;
+let hintWord=null, hintTimer=null;
+let tickInterval=null, elapsed=0, score=0;
+let bestScore=+localStorage.getItem('ws_best')||0;
+const canvas=document.getElementById('grid-canvas');
+const ctx=canvas.getContext('2d');
 
-var DIE_TYPES=[4,6,8,10,12,20,100];
-var state={sides:6,count:2,useCount:0,removeAds:false};
-var history=[];
+function selectCat(el,cat){
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected'); selectedCat=cat;
+}
+function goMenu(){ clearInterval(tickInterval); document.getElementById('menu-best').textContent=bestScore; setScreen('menu'); }
+function setScreen(n){ document.querySelectorAll('.screen').forEach(s=>{ s.classList.remove('active'); s.style.display='none'; }); const el=document.getElementById('screen-'+n); el.style.display='flex'; el.classList.add('active'); }
+function startGame(){ setScreen('game'); newPuzzle(); }
 
-var diceArea=document.getElementById('dice-area');
-var dieTypesEl=document.getElementById('die-types');
-var diceCountDisp=document.getElementById('dice-count-disp');
+function newPuzzle(){
+  clearInterval(tickInterval); clearTimeout(hintTimer);
+  elapsed=0; score=0; foundWords=[]; hintWord=null;
+  document.getElementById('puzzle-theme').textContent=selectedCat;
+  document.getElementById('score-disp').textContent='0 pts';
+  updateTimer();
+  const pool=[...CATS[selectedCat]]; shuffle(pool); words=pool.slice(0,10);
+  buildGrid(); renderWords(); resizeCvs(); draw();
+  tickInterval=setInterval(()=>{ elapsed++; updateTimer(); },1000);
+}
+function updateTimer(){ const m=Math.floor(elapsed/60),s=elapsed%60; document.getElementById('timer').textContent=`⏱ ${m}:${s.toString().padStart(2,'0')}`; }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=~~(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]; } }
 
-// Build die type buttons
-DIE_TYPES.forEach(function(s){
-  var btn=document.createElement('button');
-  btn.className='dtype-btn'+(s===6?' active':'');
-  btn.textContent='D'+s;
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.dtype-btn').forEach(function(b){b.classList.remove('active');});
-    btn.classList.add('active');
-    state.sides=s;
-    renderDice();
-  });
-  dieTypesEl.appendChild(btn);
-});
+function buildGrid(){
+  grid=Array.from({length:GRID_N},()=>Array(GRID_N).fill(''));
+  placed=[];
+  const DIRS=[[0,1],[1,0],[0,-1],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+  for(const word of words){
+    let ok=false;
+    for(let t=0;t<300&&!ok;t++){
+      const [dr,dc]=DIRS[~~(Math.random()*8)];
+      const len=word.length;
+      let r0=~~(Math.random()*GRID_N), c0=~~(Math.random()*GRID_N);
+      const cells=[]; let valid=true;
+      for(let i=0;i<len;i++){
+        const r=r0+dr*i, c=c0+dc*i;
+        if(r<0||r>=GRID_N||c<0||c>=GRID_N||( grid[r][c]!==''&&grid[r][c]!==word[i])){ valid=false; break; }
+        cells.push([r,c]);
+      }
+      if(valid){ cells.forEach(([r,c],i)=>grid[r][c]=word[i]); placed.push({word,cells}); ok=true; }
+    }
+  }
+  const L='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for(let r=0;r<GRID_N;r++) for(let c=0;c<GRID_N;c++) if(!grid[r][c]) grid[r][c]=L[~~(Math.random()*26)];
+}
 
-function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function resizeCvs(){
+  const a=Math.min(window.innerWidth-32,400); cellPx=Math.floor(a/GRID_N);
+  const s=cellPx*GRID_N; canvas.width=s; canvas.height=s;
+}
 
-function renderDice(values){
-  diceArea.innerHTML='';
-  for(var i=0;i<state.count;i++){
-    var die=document.createElement('div');
-    die.className='die';
-    die.textContent=values?values[i]:'?';
-    (function(idx){
-      die.addEventListener('click',function(){rollSingle(idx);});
-    })(i);
-    diceArea.appendChild(die);
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#16213e'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  // found highlights
+  for(const fw of foundWords){ const p=placed.find(x=>x.word===fw); if(p) hilite(p.cells,'#4ecca3',0.35); }
+  // hint
+  if(hintWord){ const p=placed.find(x=>x.word===hintWord); if(p) hilite(p.cells,'#f9ca24',0.55); }
+  // drag selection
+  if(isDragging&&startCell&&curCell){ const cells=lineCells(startCell,curCell); hilite(cells,'#e94560',0.45); }
+  // letters
+  ctx.font=`bold ${Math.round(cellPx*0.5)}px monospace`; ctx.textAlign='center'; ctx.textBaseline='middle';
+  for(let r=0;r<GRID_N;r++) for(let c=0;c<GRID_N;c++){
+    const isFound=foundWords.some(fw=>{ const p=placed.find(x=>x.word===fw); return p&&p.cells.some(([pr,pc])=>pr===r&&pc===c); });
+    ctx.fillStyle=isFound?'#4ecca3':'#eaeaea';
+    ctx.fillText(grid[r][c], c*cellPx+cellPx/2, r*cellPx+cellPx/2);
   }
 }
 
-function rollAll(){
-  var vals=[];
-  for(var i=0;i<state.count;i++) vals.push(randInt(1,state.sides));
-  animateRoll(vals);
-  updateStats(vals);
-  addHistory(vals);
-  state.useCount++;
-  if(!state.removeAds&&state.useCount%7===0&&window.Android) Android.showInterstitial();
+function hilite(cells,color,alpha){
+  ctx.save(); ctx.globalAlpha=alpha; ctx.fillStyle=color;
+  cells.forEach(([r,c])=>{ ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(c*cellPx+2,r*cellPx+2,cellPx-4,cellPx-4,5); else ctx.rect(c*cellPx+2,r*cellPx+2,cellPx-4,cellPx-4); ctx.fill(); }); ctx.restore();
 }
 
-function rollSingle(idx){
-  var dies=diceArea.querySelectorAll('.die');
-  var val=randInt(1,state.sides);
-  dies[idx].textContent=val;
-  dies[idx].classList.remove('rolling');
-  void dies[idx].offsetWidth;
-  dies[idx].classList.add('rolling');
-  setTimeout(function(){dies[idx].classList.remove('rolling');},420);
+function lineCells(a,b){
+  const dr=Math.sign(b[0]-a[0]), dc=Math.sign(b[1]-a[1]);
+  const dist=Math.max(Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1]));
+  return Array.from({length:dist+1},(_,i)=>[a[0]+dr*i,a[1]+dc*i]);
 }
 
-function animateRoll(finalVals){
-  var dies=diceArea.querySelectorAll('.die');
-  dies.forEach(function(d){
-    d.classList.remove('rolling');
-    void d.offsetWidth;
-    d.classList.add('rolling');
-  });
-  // Quick flicker then show final
-  var steps=6, interval=50;
-  for(var s=0;s<steps;s++){
-    (function(step){
-      setTimeout(function(){
-        dies.forEach(function(d){d.textContent=randInt(1,state.sides);});
-        if(step===steps-1){
-          setTimeout(function(){
-            finalVals.forEach(function(v,i){dies[i].textContent=v;});
-            dies.forEach(function(d){d.classList.remove('rolling');});
-          },80);
-        }
-      },step*interval);
-    })(s);
+function cellAt(e){
+  const rect=canvas.getBoundingClientRect();
+  const x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left;
+  const y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top;
+  const c=Math.floor(x/cellPx), r=Math.floor(y/cellPx);
+  return (r>=0&&r<GRID_N&&c>=0&&c<GRID_N)?[r,c]:null;
+}
+
+canvas.addEventListener('mousedown',e=>{ startCell=cellAt(e); curCell=startCell; isDragging=true; draw(); });
+canvas.addEventListener('mousemove',e=>{ if(!isDragging)return; curCell=cellAt(e); draw(); });
+canvas.addEventListener('mouseup',()=>{ isDragging=false; checkSel(); draw(); });
+canvas.addEventListener('touchstart',e=>{ e.preventDefault(); startCell=cellAt(e); curCell=startCell; isDragging=true; draw(); },{passive:false});
+canvas.addEventListener('touchmove',e=>{ e.preventDefault(); if(!isDragging)return; curCell=cellAt(e); draw(); },{passive:false});
+canvas.addEventListener('touchend',e=>{ e.preventDefault(); isDragging=false; checkSel(); draw(); },{passive:false});
+
+function checkSel(){
+  if(!startCell||!curCell)return;
+  const cells=lineCells(startCell,curCell);
+  const word=cells.map(([r,c])=>grid[r][c]).join('');
+  const wordR=word.split('').reverse().join('');
+  for(const p of placed){
+    if(foundWords.includes(p.word))continue;
+    const pw=p.cells.map(([r,c])=>grid[r][c]).join('');
+    if(word===pw||wordR===pw){
+      foundWords.push(p.word);
+      const pts=Math.max(50,200-elapsed); score+=pts;
+      document.getElementById('score-disp').textContent=score+' pts';
+      renderWords();
+      if(foundWords.length===words.length) setTimeout(winGame,500);
+      break;
+    }
   }
+  startCell=null; curCell=null;
 }
 
-function updateStats(vals){
-  document.getElementById('stat-sum').textContent=vals.reduce(function(a,b){return a+b;},0);
-  document.getElementById('stat-min').textContent=Math.min.apply(null,vals);
-  document.getElementById('stat-max').textContent=Math.max.apply(null,vals);
+function renderWords(){
+  document.getElementById('word-list').innerHTML=words.map(w=>`<span class="word-item${foundWords.includes(w)?' found':''}">${w}</span>`).join('');
 }
 
-function addHistory(vals){
-  history.unshift({sides:state.sides,vals:vals.slice(),sum:vals.reduce(function(a,b){return a+b;},0)});
-  if(history.length>10) history.pop();
-  var el=document.getElementById('history-list');
-  el.innerHTML='';
-  history.forEach(function(h){
-    var item=document.createElement('div');
-    item.className='history-item';
-    item.innerHTML='<span class="history-dice">'+h.count+'×D'+h.sides+': ['+h.vals.join(', ')+']</span><span class="history-sum">'+h.sum+'</span>';
-    // patch count
-    item.querySelector('.history-dice').textContent=h.vals.length+'×D'+h.sides+': ['+h.vals.join(', ')+']';
-    el.appendChild(item);
-  });
+function useHint(){
+  const rem=words.filter(w=>!foundWords.includes(w)); if(!rem.length)return;
+  hintWord=rem[~~(Math.random()*rem.length)]; score=Math.max(0,score-25);
+  document.getElementById('score-disp').textContent=score+' pts';
+  clearTimeout(hintTimer); draw();
+  hintTimer=setTimeout(()=>{ hintWord=null; draw(); },3000);
 }
 
-document.getElementById('btn-roll').addEventListener('click',function(){
-  renderDice();
-  setTimeout(rollAll,10);
-});
-
-document.getElementById('btn-minus').addEventListener('click',function(){
-  if(state.count>1){state.count--;diceCountDisp.textContent=state.count;renderDice();}
-});
-document.getElementById('btn-plus').addEventListener('click',function(){
-  if(state.count<8){state.count++;diceCountDisp.textContent=state.count;renderDice();}
-});
-
-document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';}};
-
-function init(){
-  if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
-  renderDice();
+function winGame(){
+  clearInterval(tickInterval); _showInterstitial();
+  if(score>bestScore){ bestScore=score; localStorage.setItem('ws_best',bestScore); }
+  const stars=elapsed<60?'⭐⭐⭐':elapsed<120?'⭐⭐':'⭐';
+  document.getElementById('win-stars').textContent=stars;
+  document.getElementById('win-info').textContent=`Score: ${score} pts — ${Math.floor(elapsed/60)}:${(elapsed%60).toString().padStart(2,'0')}`;
+  document.getElementById('best-disp').textContent=`Best: ${bestScore} pts`;
+  setScreen('win');
 }
-init();
+
+window.addEventListener('resize',()=>{ if(document.getElementById('screen-game').classList.contains('active')){ resizeCvs(); draw(); } });
+
+var _adsRemoved=false, _interstitialCount=0;
+function _showInterstitial(){
+  if(_adsRemoved)return; _interstitialCount++;
+  if(_interstitialCount%3===0&&window.Android){ try{Android.showInterstitial();}catch(e){} }
+}
+window.onPurchaseComplete=function(sku){
+  if(sku==='remove_ads'){
+    _adsRemoved=true;
+    var btn=document.getElementById('btn-remove-ads');
+    if(btn)btn.style.display='none';
+    if(window.Android){try{Android.hideBannerAd();}catch(e){}}
+  }
+};
+
+if(/screenshot=/.test(location.hash)){
+  document.body.classList.add('ss');
+  var ss=(location.hash.match(/screenshot=([a-z]+)/)||[])[1];
+  setTimeout(function(){
+    if(ss==='game' && typeof startGame==='function'){ startGame(); }
+    var mb=document.getElementById('menu-best'); if(mb) mb.textContent='4820';
+  },80);
+}
 </script>
 </body>
 </html>
