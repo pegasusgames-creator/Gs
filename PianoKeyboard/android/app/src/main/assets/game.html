@@ -2,268 +2,369 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roller</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Piano Keyboard</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#e94560; --accent2:#533483; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
-#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
-header h1 { font-size:1.3rem; font-weight:700; }
-header h1 span { color:var(--accent); }
-#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
-#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
-.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
-
-/* Dice display area */
-#dice-area { display:flex; flex-wrap:wrap; justify-content:center; gap:14px; min-height:120px; align-items:center; padding:10px 0; }
-.die {
-  width:84px; height:84px;
-  background:var(--card);
-  border-radius:16px;
-  border:2px solid rgba(233,69,96,0.4);
-  display:flex; align-items:center; justify-content:center;
-  font-size:2.4rem; font-weight:900;
-  color:var(--accent);
-  cursor:pointer;
-  user-select:none;
-  transition:transform 0.08s;
-  position:relative;
-  overflow:hidden;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+:root {
+  --bg: #0b0e1b;
+  --surface: #151a2e;
+  --accent: #ff5b7f;
+  --accent2: #1c2240;
+  --text: #ecf1fa;
+  --muted: #8892a4;
 }
-.die.rolling {
-  animation:shake 0.4s ease-out;
-}
-@keyframes shake {
-  0%  { transform:rotate(-8deg) scale(1.05); }
-  20% { transform:rotate(8deg)  scale(1.08); }
-  40% { transform:rotate(-6deg) scale(1.06); }
-  60% { transform:rotate(6deg)  scale(1.07); }
-  80% { transform:rotate(-3deg) scale(1.03); }
-  100%{ transform:rotate(0deg)  scale(1); }
-}
-.die.btn-pressed { transform:scale(0.9); }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: var(--bg); color: var(--text); font-family: 'Poppins', system-ui, sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; user-select: none; letter-spacing: -0.01em; }
+body.ss #btn-remove-ads{display:none;}
 
-/* Die type selector */
-.die-types { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
-.dtype-btn { background:var(--card); border:2px solid transparent; border-radius:8px; color:var(--muted); font-size:0.8rem; font-weight:700; padding:6px 10px; cursor:pointer; }
-.dtype-btn.active { border-color:var(--accent); color:var(--accent); }
-.dtype-btn.btn-pressed { transform:scale(0.9); }
+#top-bar { background: var(--surface); padding: 36px 12px 10px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #2a3a5e; flex-shrink: 0; }
+#top-bar h1 { font-size: 1rem; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; }
 
-/* Count row */
-.count-row { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
-.count-label { font-size:0.9rem; color:var(--muted); }
-.count-ctrl { display:flex; align-items:center; gap:12px; }
-.count-btn { width:34px; height:34px; border-radius:50%; background:var(--card); border:2px solid var(--accent); color:var(--accent); font-size:1.3rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.count-btn.btn-pressed { transform:scale(0.88); }
-#dice-count-disp { font-size:1.2rem; font-weight:700; min-width:24px; text-align:center; }
+#controls { display: flex; gap: 6px; flex-shrink: 0; background: var(--surface); padding: 8px 10px; border-bottom: 1px solid #2a3a5e; align-items: center; flex-wrap: wrap; }
+.ctrl-group { display: flex; align-items: center; gap: 4px; }
+.ctrl-lbl { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; }
+.sm-btn { padding: 5px 10px; border-radius: 14px; border: 1.5px solid #2a3a5e; background: transparent; color: var(--text); font-size: 0.75rem; cursor: pointer; }
+.sm-btn.sel { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+.sm-btn:active { opacity: 0.7; }
+#oct-display { font-size: 0.9rem; color: var(--accent); font-weight: 700; min-width: 30px; text-align: center; }
+input[type=range]#vol-range { -webkit-appearance: none; width: 80px; height: 5px; border-radius: 3px; background: var(--accent2); outline: none; }
+input[type=range]#vol-range::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; }
 
-/* Roll button */
-#btn-roll {
-  width:100%;
-  background:linear-gradient(135deg,var(--accent),#c0392b);
-  border:none; border-radius:var(--radius);
-  color:#fff; font-size:1.3rem; font-weight:800;
-  padding:18px; cursor:pointer;
-  margin-bottom:12px;
-  box-shadow:0 6px 20px rgba(233,69,96,0.45);
-}
-#btn-roll.btn-pressed { transform:scale(0.97); }
+#note-display { background: var(--accent2); text-align: center; padding: 6px; font-size: 1.1rem; font-weight: 700; color: var(--accent); flex-shrink: 0; min-height: 36px; letter-spacing: 2px; }
 
-/* Stats */
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-.stat-box { background:var(--card); border-radius:10px; padding:10px; text-align:center; }
-.stat-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:3px; }
-.stat-val { font-size:1.2rem; font-weight:700; }
+#record-bar { display: flex; gap: 8px; padding: 7px 10px; align-items: center; background: var(--surface); flex-shrink: 0; }
+#rec-btn { padding: 6px 14px; border-radius: 16px; border: none; background: #c0392b; color: #fff; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+#rec-btn.active { background: #e74c3c; box-shadow: 0 0 8px #e74c3c; animation: pulse 1s infinite; }
+#play-btn { padding: 6px 14px; border-radius: 16px; border: none; background: #27ae60; color: #fff; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+#clear-btn { padding: 6px 14px; border-radius: 16px; border: 1.5px solid #2a3a5e; background: transparent; color: var(--muted); font-size: 0.75rem; cursor: pointer; }
+#rec-info { font-size: 0.7rem; color: var(--muted); }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.5} }
 
-/* History */
-#history-list { display:flex; flex-direction:column; gap:6px; }
-.history-item { background:var(--card); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; font-size:0.85rem; }
-.history-dice { color:var(--muted); }
-.history-sum { color:var(--accent); font-weight:700; }
-
-#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+#keyboard-scroll { flex: 1; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+#keyboard-scroll::-webkit-scrollbar { display: none; }
+#keyboard { position: relative; height: 100%; }
+.wkey { position: absolute; background: #f0f0e8; border: 1px solid #aaa; border-radius: 0 0 6px 6px; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; transition: background 0.05s; }
+.wkey.active { background: #ffe8e0; }
+.wkey .kl { font-size: 0.6rem; color: #666; pointer-events: none; }
+.bkey { position: absolute; background: #1a1a1a; border-radius: 0 0 4px 4px; cursor: pointer; z-index: 2; transition: background 0.05s; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 3px; }
+.bkey.active { background: #4a0a18; }
+.bkey .kl { font-size: 0.5rem; color: #888; pointer-events: none; }
 </style>
 </head>
 <body>
-<div id="app">
-  <header>
-    <h1>Dice <span>Roller</span></h1>
-    <button id="btn-remove-ads">Remove Ads</button>
-  </header>
-  <div id="scroll">
+<button id="btn-remove-ads" onclick="if(window.Android)Android.purchase('remove_ads')" style="position:fixed;top:8px;right:8px;z-index:9999;background:#533483;border:none;color:#fff;font-size:0.7rem;font-weight:600;padding:5px 10px;border-radius:20px;cursor:pointer;">Remove Ads</button>
 
-    <!-- Dice display -->
-    <div class="card">
-      <div class="card-title">Your Roll</div>
-      <div id="dice-area"></div>
-    </div>
+<div id="top-bar">
+  <h1>Piano Keyboard</h1>
+</div>
 
-    <!-- Settings -->
-    <div class="card">
-      <div class="card-title">Die Type</div>
-      <div class="die-types" id="die-types"></div>
-      <div class="count-row">
-        <span class="count-label">Number of dice</span>
-        <div class="count-ctrl">
-          <button class="count-btn" id="btn-minus">−</button>
-          <span id="dice-count-disp">2</span>
-          <button class="count-btn" id="btn-plus">+</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Roll button -->
-    <button id="btn-roll">🎲 Roll!</button>
-
-    <!-- Stats -->
-    <div class="card">
-      <div class="card-title">Last Roll</div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-label">Sum</div><div class="stat-val" id="stat-sum">—</div></div>
-        <div class="stat-box"><div class="stat-label">Min</div><div class="stat-val" id="stat-min">—</div></div>
-        <div class="stat-box"><div class="stat-label">Max</div><div class="stat-val" id="stat-max">—</div></div>
-      </div>
-    </div>
-
-    <!-- History -->
-    <div class="card">
-      <div class="card-title">History</div>
-      <div id="history-list"><div style="color:var(--muted);font-size:0.85rem">No rolls yet</div></div>
-    </div>
-
+<div id="controls">
+  <div class="ctrl-group">
+    <span class="ctrl-lbl">Sound</span>
+    <button class="sm-btn sel" data-inst="piano">Piano</button>
+    <button class="sm-btn" data-inst="organ">Organ</button>
+    <button class="sm-btn" data-inst="vibes">Vibes</button>
   </div>
-  <div id="admob-banner">Advertisement</div>
+  <div class="ctrl-group">
+    <span class="ctrl-lbl">Oct</span>
+    <button class="sm-btn" id="oct-dn">−</button>
+    <span id="oct-display">4</span>
+    <button class="sm-btn" id="oct-up">+</button>
+  </div>
+  <div class="ctrl-group">
+    <span class="ctrl-lbl">Vol</span>
+    <input type="range" id="vol-range" min="0" max="100" value="80">
+  </div>
+</div>
+
+<div id="note-display">—</div>
+
+<div id="record-bar">
+  <button id="rec-btn">⏺ REC</button>
+  <button id="play-btn">▶ PLAY</button>
+  <button id="clear-btn">✕ CLEAR</button>
+  <span id="rec-info">0 notes</span>
+</div>
+
+<div id="keyboard-scroll">
+  <div id="keyboard"></div>
 </div>
 
 <script>
-'use strict';
-(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button,.die,.dtype-btn,.count-btn');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var _adsRemoved = false;
+var _interstitialCount = 0;
+function _showInterstitial() {
+  if (_adsRemoved) return;
+  _interstitialCount++;
+  if (_interstitialCount % 3 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
+  }
+}
+window.onPurchaseComplete = function(sku) {
+  if (sku === 'remove_ads') {
+    _adsRemoved = true;
+    var btn = document.getElementById('btn-remove-ads');
+    if (btn) btn.style.display = 'none';
+    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+  }
+};
 
-var DIE_TYPES=[4,6,8,10,12,20,100];
-var state={sides:6,count:2,useCount:0,removeAds:false};
-var history=[];
+var audioCtx = null;
+var instrument = 'piano';
+var octaveShift = 0;
+var volume = 0.8;
+var recording = false;
+var recordedNotes = [];
+var recStartTime = 0;
+var playTimer = null;
 
-var diceArea=document.getElementById('dice-area');
-var dieTypesEl=document.getElementById('die-types');
-var diceCountDisp=document.getElementById('dice-count-disp');
+var NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+var WHITE_NOTES = [0,2,4,5,7,9,11];
+var BLACK_NOTES = [1,3,null,6,8,10,null];
 
-// Build die type buttons
-DIE_TYPES.forEach(function(s){
-  var btn=document.createElement('button');
-  btn.className='dtype-btn'+(s===6?' active':'');
-  btn.textContent='D'+s;
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.dtype-btn').forEach(function(b){b.classList.remove('active');});
-    btn.classList.add('active');
-    state.sides=s;
-    renderDice();
-  });
-  dieTypesEl.appendChild(btn);
-});
+function initAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
 
-function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function noteFreq(midi) {
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
 
-function renderDice(values){
-  diceArea.innerHTML='';
-  for(var i=0;i<state.count;i++){
-    var die=document.createElement('div');
-    die.className='die';
-    die.textContent=values?values[i]:'?';
-    (function(idx){
-      die.addEventListener('click',function(){rollSingle(idx);});
-    })(i);
-    diceArea.appendChild(die);
+function playNote(midi) {
+  initAudio();
+  var freq = noteFreq(midi);
+  var now = audioCtx.currentTime;
+  var gainNode = audioCtx.createGain();
+  gainNode.connect(audioCtx.destination);
+
+  if (instrument === 'piano') {
+    var oscs = [];
+    [[1,1],[2,0.4],[3,0.2],[4,0.1]].forEach(function(h) {
+      var o = audioCtx.createOscillator();
+      o.type = 'sine';
+      o.frequency.value = freq * h[0];
+      var g2 = audioCtx.createGain();
+      g2.gain.value = h[1];
+      o.connect(g2); g2.connect(gainNode);
+      o.start(now); o.stop(now + 2.5);
+      oscs.push(o);
+    });
+    gainNode.gain.setValueAtTime(volume * 0.7, now);
+    gainNode.gain.exponentialRampToValueAtTime(volume * 0.3, now + 0.1);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 2.5);
+  } else if (instrument === 'organ') {
+    var o = audioCtx.createOscillator();
+    o.type = 'sine';
+    o.frequency.value = freq;
+    var o2 = audioCtx.createOscillator();
+    o2.type = 'sine'; o2.frequency.value = freq * 2;
+    var g2 = audioCtx.createGain(); g2.gain.value = 0.4;
+    o.connect(gainNode); o2.connect(g2); g2.connect(gainNode);
+    gainNode.gain.setValueAtTime(volume * 0.6, now);
+    gainNode.gain.linearRampToValueAtTime(0.001, now + 1.8);
+    o.start(now); o.stop(now + 1.8);
+    o2.start(now); o2.stop(now + 1.8);
+  } else {
+    var o = audioCtx.createOscillator();
+    o.type = 'sine';
+    o.frequency.value = freq;
+    gainNode.gain.setValueAtTime(volume * 0.8, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+    o.start(now); o.stop(now + 1.2);
   }
 }
 
-function rollAll(){
-  var vals=[];
-  for(var i=0;i<state.count;i++) vals.push(randInt(1,state.sides));
-  animateRoll(vals);
-  updateStats(vals);
-  addHistory(vals);
-  state.useCount++;
-  if(!state.removeAds&&state.useCount%7===0&&window.Android) Android.showInterstitial();
-}
-
-function rollSingle(idx){
-  var dies=diceArea.querySelectorAll('.die');
-  var val=randInt(1,state.sides);
-  dies[idx].textContent=val;
-  dies[idx].classList.remove('rolling');
-  void dies[idx].offsetWidth;
-  dies[idx].classList.add('rolling');
-  setTimeout(function(){dies[idx].classList.remove('rolling');},420);
-}
-
-function animateRoll(finalVals){
-  var dies=diceArea.querySelectorAll('.die');
-  dies.forEach(function(d){
-    d.classList.remove('rolling');
-    void d.offsetWidth;
-    d.classList.add('rolling');
-  });
-  // Quick flicker then show final
-  var steps=6, interval=50;
-  for(var s=0;s<steps;s++){
-    (function(step){
-      setTimeout(function(){
-        dies.forEach(function(d){d.textContent=randInt(1,state.sides);});
-        if(step===steps-1){
-          setTimeout(function(){
-            finalVals.forEach(function(v,i){dies[i].textContent=v;});
-            dies.forEach(function(d){d.classList.remove('rolling');});
-          },80);
-        }
-      },step*interval);
-    })(s);
+function onKeyPress(midi, noteName) {
+  playNote(midi);
+  document.getElementById('note-display').textContent = noteName;
+  if (recording) {
+    var elapsed = Date.now() - recStartTime;
+    recordedNotes.push({midi: midi, time: elapsed, name: noteName});
+    if (recordedNotes.length >= 32) {
+      recording = false;
+      document.getElementById('rec-btn').classList.remove('active');
+      document.getElementById('rec-btn').textContent = '⏺ REC';
+    }
+    document.getElementById('rec-info').textContent = recordedNotes.length + ' notes';
   }
+  _showInterstitial();
 }
 
-function updateStats(vals){
-  document.getElementById('stat-sum').textContent=vals.reduce(function(a,b){return a+b;},0);
-  document.getElementById('stat-min').textContent=Math.min.apply(null,vals);
-  document.getElementById('stat-max').textContent=Math.max.apply(null,vals);
-}
+// Build keyboard: C3 to C6 (3 octaves + 1 note = 37 keys, midi 48-84)
+var startMidi = 48; // C3
+var endMidi = 84;   // C6
 
-function addHistory(vals){
-  history.unshift({sides:state.sides,vals:vals.slice(),sum:vals.reduce(function(a,b){return a+b;},0)});
-  if(history.length>10) history.pop();
-  var el=document.getElementById('history-list');
-  el.innerHTML='';
-  history.forEach(function(h){
-    var item=document.createElement('div');
-    item.className='history-item';
-    item.innerHTML='<span class="history-dice">'+h.count+'×D'+h.sides+': ['+h.vals.join(', ')+']</span><span class="history-sum">'+h.sum+'</span>';
-    // patch count
-    item.querySelector('.history-dice').textContent=h.vals.length+'×D'+h.sides+': ['+h.vals.join(', ')+']';
-    el.appendChild(item);
+var WW = 42, WH, BW, BH;
+
+function buildKeyboard() {
+  var scroll = document.getElementById('keyboard-scroll');
+  var kh = scroll.clientHeight || 200;
+  WH = kh;
+  BW = Math.round(WW * 0.62);
+  BH = Math.round(WH * 0.62);
+
+  var kb = document.getElementById('keyboard');
+  kb.innerHTML = '';
+
+  var whites = [];
+  for (var m = startMidi; m <= endMidi; m++) {
+    var n = m % 12;
+    if (WHITE_NOTES.indexOf(n) !== -1) whites.push(m);
+  }
+
+  var totalW = whites.length * WW;
+  kb.style.width = totalW + 'px';
+  kb.style.height = WH + 'px';
+  kb.style.position = 'relative';
+
+  // White keys
+  whites.forEach(function(m, i) {
+    var n = m % 12;
+    var oct = Math.floor(m / 12) - 1;
+    var name = NOTE_NAMES[n] + oct;
+    var div = document.createElement('div');
+    div.className = 'wkey';
+    div.style.left = (i * WW) + 'px';
+    div.style.top = '0';
+    div.style.width = (WW - 1) + 'px';
+    div.style.height = WH + 'px';
+    if (n === 0) {
+      var lbl = document.createElement('span');
+      lbl.className = 'kl';
+      lbl.textContent = name;
+      div.appendChild(lbl);
+    }
+    div.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      this.classList.add('active');
+      onKeyPress(m + octaveShift * 12, name);
+    }, {passive:false});
+    div.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      this.classList.remove('active');
+    }, {passive:false});
+    div.addEventListener('mousedown', function(e) {
+      this.classList.add('active');
+      onKeyPress(m + octaveShift * 12, name);
+    });
+    div.addEventListener('mouseup', function() { this.classList.remove('active'); });
+    kb.appendChild(div);
   });
+
+  // Black keys
+  whites.forEach(function(m, i) {
+    var n = m % 12;
+    var wIdx = WHITE_NOTES.indexOf(n);
+    if (wIdx < 6 && BLACK_NOTES[wIdx] !== null) {
+      var bm = m + 1;
+      var bn = bm % 12;
+      var oct = Math.floor(bm / 12) - 1;
+      var name = NOTE_NAMES[bn] + oct;
+      var div = document.createElement('div');
+      div.className = 'bkey';
+      div.style.left = (i * WW + WW - BW/2) + 'px';
+      div.style.top = '0';
+      div.style.width = BW + 'px';
+      div.style.height = BH + 'px';
+      div.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        this.classList.add('active');
+        onKeyPress(bm + octaveShift * 12, name);
+      }, {passive:false});
+      div.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        this.classList.remove('active');
+      }, {passive:false});
+      div.addEventListener('mousedown', function(e) {
+        e.stopPropagation();
+        this.classList.add('active');
+        onKeyPress(bm + octaveShift * 12, name);
+      });
+      div.addEventListener('mouseup', function() { this.classList.remove('active'); });
+      kb.appendChild(div);
+    }
+  });
+
+  // Scroll to C4
+  var c4idx = 0;
+  whites.forEach(function(m, i) { if (m === 60) c4idx = i; });
+  scroll.scrollLeft = Math.max(0, c4idx * WW - scroll.clientWidth / 2);
 }
 
-document.getElementById('btn-roll').addEventListener('click',function(){
-  renderDice();
-  setTimeout(rollAll,10);
+document.querySelectorAll('[data-inst]').forEach(function(b) {
+  b.onclick = function() {
+    document.querySelectorAll('[data-inst]').forEach(function(x){x.classList.remove('sel');});
+    this.classList.add('sel');
+    instrument = this.dataset.inst;
+  };
 });
 
-document.getElementById('btn-minus').addEventListener('click',function(){
-  if(state.count>1){state.count--;diceCountDisp.textContent=state.count;renderDice();}
-});
-document.getElementById('btn-plus').addEventListener('click',function(){
-  if(state.count<8){state.count++;diceCountDisp.textContent=state.count;renderDice();}
-});
+var octave = 4;
+document.getElementById('oct-up').onclick = function() {
+  if (octaveShift < 2) { octaveShift++; octave = 4 + octaveShift; document.getElementById('oct-display').textContent = octave; }
+};
+document.getElementById('oct-dn').onclick = function() {
+  if (octaveShift > -2) { octaveShift--; octave = 4 + octaveShift; document.getElementById('oct-display').textContent = octave; }
+};
 
-document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';}};
+document.getElementById('vol-range').oninput = function() {
+  volume = parseInt(this.value) / 100;
+};
 
-function init(){
-  if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
-  renderDice();
+// Recording
+document.getElementById('rec-btn').onclick = function() {
+  initAudio();
+  if (!recording) {
+    recording = true;
+    recordedNotes = [];
+    recStartTime = Date.now();
+    this.classList.add('active');
+    this.textContent = '⏹ STOP';
+    document.getElementById('rec-info').textContent = '0 notes';
+  } else {
+    recording = false;
+    this.classList.remove('active');
+    this.textContent = '⏺ REC';
+  }
+};
+
+document.getElementById('play-btn').onclick = function() {
+  if (recordedNotes.length === 0) return;
+  initAudio();
+  if (playTimer) { clearTimeout(playTimer); playTimer = null; }
+  var startT = Date.now();
+  recordedNotes.forEach(function(note) {
+    var t = setTimeout(function() {
+      playNote(note.midi);
+      document.getElementById('note-display').textContent = note.name;
+    }, note.time);
+  });
+};
+
+document.getElementById('clear-btn').onclick = function() {
+  recordedNotes = [];
+  document.getElementById('rec-info').textContent = '0 notes';
+  document.getElementById('note-display').textContent = '—';
+};
+
+window.addEventListener('resize', buildKeyboard);
+buildKeyboard();
+
+if(/screenshot=/.test(location.hash)){
+  document.body.classList.add('ss');
+  setTimeout(function(){
+    var nd=document.getElementById('note-display');
+    if(nd) nd.textContent='C — D — E — G (recording)';
+    var info=document.getElementById('rec-info');
+    if(info) info.textContent='14 notes recorded';
+    // highlight a couple keys
+    var keys=document.querySelectorAll('.wkey');
+    if(keys[7]) keys[7].classList.add('active');
+    if(keys[9]) keys[9].classList.add('active');
+  },80);
 }
-init();
 </script>
 </body>
 </html>
