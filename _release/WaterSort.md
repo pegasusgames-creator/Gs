@@ -1,9 +1,13 @@
 # Water Sort Puzzle — Release Guide
 
 Package: com.pegasusgames.watersortpuzzle
-AdMob App ID: ca-app-pub-2759523698880843~9324626831
-Current version: 7 / 1.5 → bump to 8 / 1.6
-Status: UPDATE or NEW (check Play Console)
+AdMob App ID: ca-app-pub-5695494884863768~4951744270
+AdMob Banner:       ca-app-pub-5695494884863768/6958960514
+AdMob Interstitial: ca-app-pub-5695494884863768/4267242200
+AdMob Rewarded:     ca-app-pub-5695494884863768/6124390997
+Current version: 10 / 1.6.2 (v1.6.2 adds local notifications — see NOTIFICATIONS_IMPL.md)
+Status: UPDATE
+AppLovin: disabled until developer approved (see MainActivity USE_APPLOVIN flag)
 
 ---
 
@@ -46,7 +50,7 @@ Note: unlimited_lives_1h is referenced in game code — include it even if not p
 
 ```
 cd /home/pgs/Documents/Gs/WaterSort/android
-# Edit app/build.gradle: versionCode 8, versionName "1.6"
+# build.gradle is already at versionCode 10, versionName "1.6.2"
 ./gradlew bundleRelease
 ```
 
@@ -68,8 +72,12 @@ If UPDATE:
 
 ### Release Notes
 
-EN:
-Major update! New flask themes (6 color schemes), weekly challenges, missions, stats screen, streak bonuses, Season Pass (2× coins), come-back banner, tutorial, and cross-game rewards. Now with 500 levels!
+EN (v1.6.2):
+• Daily reminder notifications for your streak and daily challenge
+• New setting: toggle reminders on/off from Settings
+• Minor bug fixes and stability improvements
+
+(See `metadata/en-US/release_notes.txt` for the shipping copy.)
 
 ---
 

@@ -324,6 +324,16 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
         </label>
       </div>
       <div class="setting-row">
+        <span class="setting-label" style="display:flex;flex-direction:column;gap:2px">
+          <span>🔔 Daily Reminders</span>
+          <span style="font-size:12px;color:rgba(255,255,255,0.55);font-weight:400">Streak alerts &amp; daily challenge</span>
+        </span>
+        <label class="toggle">
+          <input type="checkbox" id="notifToggle" onchange="Notifications.setEnabled(this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="setting-row">
         <span class="setting-label">🎨 Flask Theme</span>
         <button onclick="Game.showScreen('themeScreen')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:7px 16px;color:white;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;cursor:pointer" id="themeBtn">Classic</button>
       </div>
@@ -1412,6 +1422,7 @@ function showLevelComplete() {
   // Haptics: base pulse on complete, celebratory pattern for 3-star (playbook §4.1)
   haptic(stars === 3 ? [30, 20, 30] : 50);
   updateCoinDisplays();
+  try { Notifications.onLevelComplete(State.currentLevel); } catch(e) {}
 
   // Show interstitial every 3 levels
   if (State.currentLevel % 3 === 0) showInterstitial();
@@ -1668,6 +1679,10 @@ const Game = {
     if (!State.hasUnlimitedLives() && State.lives <= 0) {
       document.getElementById('noLivesOverlay').classList.add('active');
       this.showScreen('gameScreen');
+      try {
+        const refillAt = (State.lastLifeTime || Date.now()) + 30 * 60 * 1000;
+        Notifications.onLivesDepleted(refillAt);
+      } catch(e) {}
       return;
     }
     State.currentLevel = idx;
@@ -1867,6 +1882,10 @@ resizeCanvas();
     if (!State.hasUnlimitedLives() && State.lives <= 0) {
       document.getElementById('noLivesOverlay').classList.add('active');
       this.showScreen('gameScreen');
+      try {
+        const refillAt = (State.lastLifeTime || Date.now()) + 30 * 60 * 1000;
+        Notifications.onLivesDepleted(refillAt);
+      } catch(e) {}
       return;
     }
     dailyChallengeMode = true;
@@ -1914,6 +1933,10 @@ resizeCanvas();
     document.getElementById('soundToggle').checked = State.soundEnabled;
     document.getElementById('musicToggle').checked = State.musicEnabled;
     document.getElementById('hapticsToggle').checked = State.hapticsEnabled;
+    try {
+      const nt = document.getElementById('notifToggle');
+      if (nt) nt.checked = Notifications.isEnabled();
+    } catch(e) {}
   },
 
   confirmReset() {
@@ -2142,10 +2165,125 @@ function init() {
 }
 
 
+// ============================================================
+// NOTIFICATIONS CONTROLLER (NOTIFICATIONS_IMPL.md §JS.2)
+// ============================================================
+const Notifications = (() => {
+  const LS_PROMPT_SHOWN_AT  = 'notif_prompt_shown_at';
+  const LS_PROMPT_DISMISSED = 'notif_prompt_dismissed_count';
+  const PROMPT_COOLDOWN_MS  = 7 * 24 * 60 * 60 * 1000;
+
+  function bridge() {
+    return window.NativeBridge || window.Android || null;
+  }
+
+  function shouldShowPrompt() {
+    const b = bridge();
+    if (!b || typeof b.hasNotificationPermission !== 'function') return false;
+    if (b.hasNotificationPermission()) return false;
+
+    const lastShown = parseInt(localStorage.getItem(LS_PROMPT_SHOWN_AT) || '0', 10);
+    const dismissedCount = parseInt(localStorage.getItem(LS_PROMPT_DISMISSED) || '0', 10);
+    if (dismissedCount >= 2) return false;
+    if (Date.now() - lastShown < PROMPT_COOLDOWN_MS) return false;
+    return true;
+  }
+
+  function showPrompt() {
+    if (!shouldShowPrompt()) return;
+    localStorage.setItem(LS_PROMPT_SHOWN_AT, Date.now().toString());
+    const el = document.getElementById('notifPrePrompt');
+    if (el) el.style.display = 'flex';
+  }
+
+  function onEnable() {
+    const el = document.getElementById('notifPrePrompt');
+    if (el) el.style.display = 'none';
+    const b = bridge();
+    if (b && b.requestNotificationPermission) b.requestNotificationPermission();
+    // onNotificationPermissionResult is called by Java once the user decides.
+  }
+
+  function onMaybeLater() {
+    const el = document.getElementById('notifPrePrompt');
+    if (el) el.style.display = 'none';
+    const n = parseInt(localStorage.getItem(LS_PROMPT_DISMISSED) || '0', 10);
+    localStorage.setItem(LS_PROMPT_DISMISSED, (n + 1).toString());
+  }
+
+  function scheduleAll() {
+    const b = bridge();
+    if (!b || !b.hasNotificationPermission || !b.hasNotificationPermission()) return;
+    if (!b.getNotificationsEnabled || !b.getNotificationsEnabled()) return;
+
+    // Daily reminder at 19:00 local
+    if (b.scheduleDailyReminder) b.scheduleDailyReminder(19, 0);
+
+    // Streak-at-risk: WaterSort tracks a daily-login streak at
+    // State.dailyChallengeStreak (closest integer streak we have).
+    const streak = (window.State && State.dailyChallengeStreak) || 0;
+    if (b.scheduleStreakAtRisk) b.scheduleStreakAtRisk(streak);
+  }
+
+  function onAppOpen() {
+    const b = bridge();
+    if (b && b.recordLastPlayed) b.recordLastPlayed();
+    scheduleAll();
+  }
+
+  function onLevelComplete(levelIndex) {
+    // §11.1: soft-ask for permission after the first positive milestone.
+    if (levelIndex === 0) {
+      setTimeout(showPrompt, 2000); // after the celebration overlay plays
+    }
+    // Streak may have advanced — re-schedule.
+    scheduleAll();
+  }
+
+  function onLivesDepleted(refillAtMs) {
+    const b = bridge();
+    if (!b || !b.hasNotificationPermission || !b.hasNotificationPermission()) return;
+    if (!b.getNotificationsEnabled || !b.getNotificationsEnabled()) return;
+    if (b.scheduleLivesRefilled) b.scheduleLivesRefilled(refillAtMs);
+  }
+
+  function setEnabled(enabled) {
+    const b = bridge();
+    if (b && b.setNotificationsEnabled) b.setNotificationsEnabled(enabled);
+    if (enabled) scheduleAll();
+  }
+
+  function isEnabled() {
+    const b = bridge();
+    if (!b) return false;
+    const perm = b.hasNotificationPermission ? b.hasNotificationPermission() : false;
+    const pref = b.getNotificationsEnabled ? b.getNotificationsEnabled() : true;
+    return perm && pref;
+  }
+
+  return {
+    onAppOpen, onLevelComplete, onLivesDepleted,
+    onEnable, onMaybeLater,
+    setEnabled, isEnabled, showPrompt,
+  };
+})();
+
+// Called back from Java after the system permission dialog resolves.
+window.onNotificationPermissionResult = function(granted) {
+  if (granted) Notifications.setEnabled(true);
+  // Keep settings toggle in sync if user is on the Settings screen.
+  try {
+    const nt = document.getElementById('notifToggle');
+    if (nt) nt.checked = Notifications.isEnabled();
+  } catch(e) {}
+};
+
 init();
+try { Notifications.onAppOpen(); } catch(e) {}
 
 document.addEventListener('visibilitychange', function() {
   if (document.hidden) { try { State.save(); } catch(e) {} }
+  else { try { Notifications.onAppOpen(); } catch(e) {} }
 });
 
 window.Game = Game;
@@ -4129,6 +4267,64 @@ window.addEventListener('load',function(){
 
 })();
 </script>
+
+<!-- Notifications permission pre-prompt (NOTIFICATIONS_IMPL.md §JS.1) -->
+<style>
+  #notifPrePrompt {
+    position: fixed; inset: 0; background: rgba(10, 22, 40, 0.86);
+    display: none; align-items: center; justify-content: center;
+    z-index: 10000; padding: 20px; backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  #notifPrePrompt .np-card {
+    background: linear-gradient(160deg, #0d2137 0%, #0a3050 100%);
+    border: 1px solid rgba(79, 195, 247, 0.35);
+    border-radius: 22px; padding: 26px 22px 22px; max-width: 340px; width: 100%;
+    text-align: center; color: #fff; font-family: 'Poppins', sans-serif;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  }
+  #notifPrePrompt .np-icon {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, #4fc3f7, #0288d1);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+  }
+  #notifPrePrompt .np-icon svg { width: 30px; height: 30px; fill: #fff; }
+  #notifPrePrompt h2 {
+    font-size: 20px; font-weight: 800; margin-bottom: 8px; color: #fff;
+  }
+  #notifPrePrompt p {
+    font-size: 14px; line-height: 1.5; color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 18px;
+  }
+  #notifPrePrompt .np-btn {
+    display: block; width: 100%; padding: 13px; border: none;
+    border-radius: 14px; font-family: 'Poppins', sans-serif;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    margin-bottom: 8px; transition: transform 0.12s;
+  }
+  #notifPrePrompt .np-btn:active { transform: scale(0.97); }
+  #notifPrePrompt .np-btn-primary {
+    background: linear-gradient(135deg, #4fc3f7, #0288d1);
+    color: #fff; box-shadow: 0 6px 18px rgba(79, 195, 247, 0.35);
+  }
+  #notifPrePrompt .np-btn-secondary {
+    background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.75);
+  }
+</style>
+<div id="notifPrePrompt" role="dialog" aria-modal="true" aria-labelledby="npTitle">
+  <div class="np-card">
+    <div class="np-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 22a2.5 2.5 0 0 0 2.5-2.5h-5A2.5 2.5 0 0 0 12 22Zm7-6v-5a7 7 0 1 0-14 0v5l-2 2v1h18v-1Z"/>
+      </svg>
+    </div>
+    <h2 id="npTitle">Stay on your streak</h2>
+    <p>Want a gentle reminder for your daily challenge and streak? You can change this anytime in Settings.</p>
+    <button class="np-btn np-btn-primary" onclick="Notifications.onEnable()">Enable Reminders</button>
+    <button class="np-btn np-btn-secondary" onclick="Notifications.onMaybeLater()">Maybe Later</button>
+  </div>
+</div>
 
 </body>
 </html>

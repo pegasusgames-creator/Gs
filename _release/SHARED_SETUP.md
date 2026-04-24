@@ -9,7 +9,7 @@
 | Pipe Connect | com.pegasusgames.pipeconnect | ca-app-pub-2759523698880843~3090390974 |
 | 2048 Puzzle | com.pegasusgames.puzzle2048 | ca-app-pub-2759523698880843~3659701763 |
 | Unblock Puzzle | com.pegasusgames.unblockpuzzle | ca-app-pub-2759523698880843~3555759989 |
-| Water Sort Puzzle | com.pegasusgames.watersortpuzzle | ca-app-pub-2759523698880843~9324626831 |
+| Water Sort Puzzle | com.pegasusgames.watersortpuzzle | ca-app-pub-5695494884863768~4951744270 |
 
 ---
 

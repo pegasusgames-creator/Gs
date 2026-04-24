@@ -31,7 +31,11 @@ Interstitial: ca-app-pub-2759523698880843/1085509317
 Rewarded:     ca-app-pub-2759523698880843/7959574272
 
 ## Water Sort Puzzle (com.pegasusgames.watersortpuzzle)
-App ID: ca-app-pub-2759523698880843~9324626831
-Banner:       ca-app-pub-2759523698880843/6405284609
-Interstitial: ca-app-pub-2759523698880843/5193810130
-Rewarded:     ca-app-pub-2759523698880843/8582390808
+App ID: ca-app-pub-5695494884863768~4951744270
+Banner:       ca-app-pub-5695494884863768/6958960514
+Interstitial: ca-app-pub-5695494884863768/4267242200
+Rewarded:     ca-app-pub-5695494884863768/6124390997
+
+> Note: other apps above still reference the pub-2759523698880843 account
+> IDs; those apps are not yet re-registered. Update each section when the
+> new-account ad units are provisioned.

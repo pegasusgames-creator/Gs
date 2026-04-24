@@ -13,6 +13,17 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+// Notifications (NOTIFICATIONS_IMPL.md §1)
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import java.util.Calendar;
+
 // AppLovin MAX SDK
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdListener;
@@ -96,6 +107,15 @@ public class MainActivity extends Activity {
 
     private static final int WEBVIEW_BG_COLOR = 0xFF0d1b2a;
 
+    // ── Notification scheduling (NOTIFICATIONS_IMPL.md §1) ────────────────────
+    private static final int REQ_DAILY_REMINDER       = 1001;
+    private static final int REQ_STREAK_AT_RISK       = 1002;
+    private static final int REQ_LIVES_REFILLED       = 1003;
+    private static final int REQ_RETURN_AFTER_ABSENCE = 1004;
+    private static final String PREF_NOTIFS_ENABLED   = "notifications_enabled";
+    private static final String PREF_LAST_PLAYED      = "last_played_ts";
+    private static final int POST_NOTIFS_REQUEST_CODE = 9001;
+
     // AppLovin MAX objects
     private MaxAdView         bannerAd;
     private MaxInterstitialAd interstitialAd;
@@ -164,14 +184,12 @@ public class MainActivity extends Activity {
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        // Notification channel + runtime permission (API 33+)
+        // Create the legacy notification channel for back-compat with older
+        // code paths; NotificationReceiver creates its own channels lazily.
         NotificationHelper.createChannel(this);
-        if (Build.VERSION.SDK_INT >= 33) {
-            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-                    != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1001);
-            }
-        }
+        // NOTE: Per QUALITY_PLAYBOOK §11.1, we do NOT request POST_NOTIFICATIONS
+        // on first launch. The request is triggered by the JS pre-prompt
+        // overlay after the first positive milestone (first level complete).
 
         if (USE_APPLOVIN) initAppLovin(); else initAdMob();
         setupBilling();
@@ -451,14 +469,123 @@ public class MainActivity extends Activity {
             NotificationHelper.cancel(MainActivity.this);
         }
 
+        // ── Notifications bridge (NOTIFICATIONS_IMPL.md §2) ───────────────────
+        @JavascriptInterface
+        public boolean hasNotificationPermission() {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true;
+            return ContextCompat.checkSelfPermission(
+                MainActivity.this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED;
+        }
+
         @JavascriptInterface
         public void requestNotificationPermission() {
-            if (Build.VERSION.SDK_INT >= 33) {
-                if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1001);
-                }
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return;
+            runOnUiThread(() -> {
+                ActivityCompat.requestPermissions(
+                    MainActivity.this,
+                    new String[]{ Manifest.permission.POST_NOTIFICATIONS },
+                    POST_NOTIFS_REQUEST_CODE
+                );
+            });
+        }
+
+        @JavascriptInterface
+        public void scheduleDailyReminder(int hourOfDay, int minute) {
+            cancelNotification(REQ_DAILY_REMINDER);
+            if (!getSharedPreferences("game", MODE_PRIVATE)
+                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
+
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            cal.set(Calendar.MINUTE, minute);
+            cal.set(Calendar.SECOND, 0);
+            if (cal.getTimeInMillis() <= System.currentTimeMillis()) {
+                cal.add(Calendar.DAY_OF_YEAR, 1);
             }
+
+            scheduleAlarm(
+                REQ_DAILY_REMINDER,
+                cal.getTimeInMillis(),
+                "daily_reminder",
+                getDailyReminderTitle(),
+                getDailyReminderBody()
+            );
+        }
+
+        @JavascriptInterface
+        public void scheduleStreakAtRisk(int streakDays) {
+            cancelNotification(REQ_STREAK_AT_RISK);
+            if (streakDays < 3) return; // §11.2: only for streaks >= 3
+            if (!getSharedPreferences("game", MODE_PRIVATE)
+                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
+
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 20);
+            cal.set(Calendar.MINUTE, 30);
+            cal.set(Calendar.SECOND, 0);
+            if (cal.getTimeInMillis() <= System.currentTimeMillis()) {
+                cal.add(Calendar.DAY_OF_YEAR, 1);
+            }
+
+            String body = "Your " + streakDays + "-day streak ends in 4 hours — keep it alive! 🔥";
+            scheduleAlarm(
+                REQ_STREAK_AT_RISK,
+                cal.getTimeInMillis(),
+                "streak_at_risk",
+                "Don't break your streak!",
+                body
+            );
+        }
+
+        @JavascriptInterface
+        public void scheduleLivesRefilled(long whenMillis) {
+            cancelNotification(REQ_LIVES_REFILLED);
+            if (!getSharedPreferences("game", MODE_PRIVATE)
+                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
+            if (whenMillis <= System.currentTimeMillis()) return;
+
+            scheduleAlarm(
+                REQ_LIVES_REFILLED,
+                whenMillis,
+                "lives_refilled",
+                "Your lives are back!",
+                "Ready for another round? ❤️"
+            );
+        }
+
+        @JavascriptInterface
+        public void cancelAllNotifications() {
+            cancelNotification(REQ_DAILY_REMINDER);
+            cancelNotification(REQ_STREAK_AT_RISK);
+            cancelNotification(REQ_LIVES_REFILLED);
+            cancelNotification(REQ_RETURN_AFTER_ABSENCE);
+        }
+
+        @JavascriptInterface
+        public void setNotificationsEnabled(boolean enabled) {
+            getSharedPreferences("game", MODE_PRIVATE)
+                .edit()
+                .putBoolean(PREF_NOTIFS_ENABLED, enabled)
+                .apply();
+            if (!enabled) cancelAllNotifications();
+        }
+
+        @JavascriptInterface
+        public boolean getNotificationsEnabled() {
+            return getSharedPreferences("game", MODE_PRIVATE)
+                .getBoolean(PREF_NOTIFS_ENABLED, true);
+        }
+
+        @JavascriptInterface
+        public void recordLastPlayed() {
+            getSharedPreferences("game", MODE_PRIVATE)
+                .edit()
+                .putLong(PREF_LAST_PLAYED, System.currentTimeMillis())
+                .apply();
+            // If played today, skip today's daily reminder
+            cancelNotification(REQ_DAILY_REMINDER);
         }
 
         @JavascriptInterface
@@ -546,5 +673,67 @@ public class MainActivity extends Activity {
 
     private int dpToPx(int dp) {
         return (int) (dp * getResources().getDisplayMetrics().density);
+    }
+
+    // ── Notifications helpers (NOTIFICATIONS_IMPL.md §3) ──────────────────────
+    private void scheduleAlarm(int requestCode, long triggerAtMillis,
+                                String type, String title, String body) {
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra("type", type);
+        intent.putExtra("title", title);
+        intent.putExtra("body", body);
+        intent.putExtra("requestCode", requestCode);
+
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+        PendingIntent pi = PendingIntent.getBroadcast(this, requestCode, intent, flags);
+
+        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+        if (am == null) return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pi);
+        } else {
+            am.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pi);
+        }
+    }
+
+    private void cancelNotification(int requestCode) {
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        int flags = PendingIntent.FLAG_NO_CREATE;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+        PendingIntent pi = PendingIntent.getBroadcast(this, requestCode, intent, flags);
+        if (pi != null) {
+            AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+            if (am != null) am.cancel(pi);
+            pi.cancel();
+        }
+    }
+
+    private String getDailyReminderTitle() {
+        return "Water Sort Puzzle";
+    }
+
+    private String getDailyReminderBody() {
+        return "Your daily Water Sort challenge is ready!";
+    }
+
+    // ── Permission result callback (NOTIFICATIONS_IMPL.md §4) ─────────────────
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                            int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == POST_NOTIFS_REQUEST_CODE) {
+            boolean granted = grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+            webView.evaluateJavascript(
+                "window.onNotificationPermissionResult && "
+                + "window.onNotificationPermissionResult(" + granted + ");",
+                null
+            );
+        }
     }
 }
