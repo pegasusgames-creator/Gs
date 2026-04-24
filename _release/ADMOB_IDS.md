@@ -30,7 +30,7 @@ Banner:       ca-app-pub-2759523698880843/7169236785
 Interstitial: ca-app-pub-2759523698880843/1085509317
 Rewarded:     ca-app-pub-2759523698880843/7959574272
 
-## Water Sort Puzzle (com.pegasusgames.watersort)
+## Water Sort Puzzle (com.pegasusgames.watersortpuzzle)
 App ID: ca-app-pub-2759523698880843~9324626831
 Banner:       ca-app-pub-2759523698880843/6405284609
 Interstitial: ca-app-pub-2759523698880843/5193810130

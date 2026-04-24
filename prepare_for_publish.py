@@ -22,7 +22,7 @@ GAMES = {
         "update_java": False,  # already has dual AdMob+AppLovin; only add notif bridge
     },
     "WaterSort": {
-        "pkg":        "com.pegasusgames.watersort",
+        "pkg":        "com.pegasusgames.watersortpuzzle",
         "bg":         "0xFF0d1b2a",
         "notif_title": "Water Sort Puzzle",
         "notif_text":  "Mix the colors today! Your daily flask puzzle is ready 💧",

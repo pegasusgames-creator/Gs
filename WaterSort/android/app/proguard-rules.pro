@@ -1,5 +1,5 @@
 # Keep JavaScript interface methods (registered as both "Android" and "NativeBridge")
--keepclassmembers class com.pegasusgames.watersort.MainActivity$NativeBridge {
+-keepclassmembers class com.pegasusgames.watersortpuzzle.MainActivity$NativeBridge {
     public *;
 }
 

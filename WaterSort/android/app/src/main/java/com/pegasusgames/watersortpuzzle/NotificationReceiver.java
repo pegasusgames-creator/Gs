@@ -1,4 +1,4 @@
-package com.pegasusgames.watersort;
+package com.pegasusgames.watersortpuzzle;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;

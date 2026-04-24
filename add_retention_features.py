@@ -20,7 +20,7 @@ GAMES = ["BallSortPuzzle", "WaterSort", "Nonogram", "PipeConnect", "Puzzle2048",
 
 JAVA_PACKAGES = {
     "BallSortPuzzle": "com.pegasusgames.ballsort",
-    "WaterSort":      "com.pegasusgames.watersort",
+    "WaterSort":      "com.pegasusgames.watersortpuzzle",
     "Nonogram":       "com.pegasusgames.nonogram",
     "PipeConnect":    "com.pegasusgames.pipeconnect",
     "Puzzle2048":     "com.pegasusgames.puzzle2048",

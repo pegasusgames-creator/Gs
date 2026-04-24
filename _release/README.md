@@ -8,7 +8,7 @@ Then open the individual file for each app you're releasing.
 
 - SHARED_SETUP.md — AdMob, common IAPs, build steps, Play Console new app checklist, post-launch
 - BallSortPuzzle.md — com.pegasusgames.ballsort — v14→15
-- WaterSort.md — com.pegasusgames.watersort — v7→8
+- WaterSort.md — com.pegasusgames.watersortpuzzle — v7→8
 - Nonogram.md — com.pegasusgames.nonogram — v7→8
 - PipeConnect.md — com.pegasusgames.pipeconnect — v7→8
 - Puzzle2048.md — com.pegasusgames.puzzle2048 — v7→8

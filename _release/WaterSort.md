@@ -1,6 +1,6 @@
 # Water Sort Puzzle — Release Guide
 
-Package: com.pegasusgames.watersort
+Package: com.pegasusgames.watersortpuzzle
 AdMob App ID: ca-app-pub-2759523698880843~9324626831
 Current version: 7 / 1.5 → bump to 8 / 1.6
 Status: UPDATE or NEW (check Play Console)
