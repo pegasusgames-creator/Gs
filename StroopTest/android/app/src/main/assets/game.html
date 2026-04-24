@@ -5,155 +5,495 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Stroop Test</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-html,body { height:100%; background:#120012; overflow:hidden; font-family:'Segoe UI',system-ui,sans-serif; color:#fff; }
-#app { display:flex; flex-direction:column; height:100%; }
-#hud { display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:rgba(0,0,0,0.5); flex-shrink:0; }
-.hud-val { font-size:1.3rem; font-weight:900; color:#9C27B0; }
-.hud-lbl { font-size:0.6rem; text-transform:uppercase; letter-spacing:1px; color:#777; }
-#timer-bar-wrap { height:8px; background:#222; flex-shrink:0; }
-#timer-bar { height:8px; background:#9C27B0; transition:width 0.1s linear; }
-#word-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; }
-#word-display { font-size:3rem; font-weight:900; letter-spacing:4px; text-shadow:0 0 20px currentColor; }
-#question { font-size:0.9rem; color:#aaa; }
-#feedback { font-size:1.2rem; font-weight:700; min-height:30px; }
-#buttons { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:16px; flex-shrink:0; }
-.color-btn {
-  padding:18px 10px; border:none; border-radius:14px; color:#fff;
-  font-size:1.1rem; font-weight:900; cursor:pointer; letter-spacing:1px;
-  box-shadow:0 4px 15px rgba(0,0,0,0.4);
-}
-.color-btn:active { transform:scale(0.95); }
-#overlay { position:absolute; inset:0; background:rgba(0,0,0,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:20; gap:14px; }
-#overlay h2 { font-size:2rem; font-weight:900; color:#9C27B0; }
-#overlay .sub { color:#aaa; font-size:0.9rem; text-align:center; max-width:280px; }
-#overlay .big { font-size:1.2rem; font-weight:800; text-align:center; }
-#btn-play { background:#9C27B0; border:none; border-radius:30px; color:#fff; font-size:1.2rem; font-weight:800; padding:14px 48px; cursor:pointer; }
-#admob-banner { height:50px; background:#111; display:none; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#120012;--surface:#1c001c;--card:#2a0030;--accent:#ce93d8;--go:#ab47bc;--text:#fff;--muted:#886699;--border:#3a0040;--radius:14px;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;overflow:hidden;}
+body.ss #btn-remove-ads{display:none !important;}
+#app{display:flex;flex-direction:column;height:100%;}
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 8px;flex-shrink:0;}
+header h1{font-size:1.2rem;font-weight:800;letter-spacing:-0.5px;}
+header h1 span{color:var(--accent);}
+.hdr-right{display:flex;align-items:center;gap:8px;}
+.coins-pill{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:4px 10px;}
+.coins-dot{width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#ffd700,#ffaa00);display:flex;align-items:center;justify-content:center;font-size:0.5rem;font-weight:800;color:#7a4f00;}
+.coins-val{font-size:0.78rem;font-weight:700;color:#ffd700;}
+.hdr-btn{background:var(--card);border:1px solid var(--border);color:var(--text);font-size:0.68rem;font-family:Inter,sans-serif;padding:5px 10px;border-radius:20px;cursor:pointer;}
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.tab{flex:1;padding:9px;font-size:0.73rem;font-weight:600;text-align:center;cursor:pointer;color:var(--muted);border:none;background:none;font-family:Inter,sans-serif;transition:color 0.15s;}
+.tab.active{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent);}
+/* Game screen */
+#game-screen{flex:1;display:flex;flex-direction:column;}
+#hud{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:var(--surface);flex-shrink:0;}
+.hud-block{text-align:center;}
+.hud-lbl{font-size:0.58rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+.hud-val{font-size:1.2rem;font-weight:900;color:var(--accent);}
+#timer-bar-wrap{height:6px;background:var(--card);flex-shrink:0;}
+#timer-bar{height:6px;background:var(--go);transition:width 0.1s linear;}
+#word-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;}
+#word-display{font-size:3.2rem;font-weight:900;letter-spacing:4px;text-shadow:0 0 30px currentColor;text-align:center;}
+#question{font-size:0.85rem;color:var(--muted);}
+#feedback{font-size:1.1rem;font-weight:700;min-height:28px;text-align:center;}
+#mode-row{display:flex;gap:8px;justify-content:center;padding:8px 14px;flex-shrink:0;}
+.mode-btn{padding:6px 14px;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:Inter,sans-serif;font-size:0.78rem;font-weight:600;border-radius:20px;cursor:pointer;transition:all 0.15s;}
+.mode-btn.active{background:var(--go);border-color:var(--go);}
+#buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 14px;flex-shrink:0;}
+.color-btn{padding:18px 10px;border:none;border-radius:var(--radius);color:#fff;font-size:1.1rem;font-weight:900;font-family:Inter,sans-serif;cursor:pointer;letter-spacing:1px;transition:transform 0.1s;box-shadow:0 4px 15px rgba(0,0,0,0.4);}
+.color-btn:active{transform:scale(0.94);}
+/* Overlay */
+#overlay{position:absolute;inset:0;background:rgba(0,0,0,0.9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;gap:14px;padding:24px;}
+#overlay h2{font-size:1.8rem;font-weight:900;color:var(--accent);}
+.ov-sub{color:var(--muted);font-size:0.88rem;text-align:center;max-width:300px;line-height:1.5;}
+.ov-result{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;}
+.ov-stat{background:var(--card);border-radius:10px;padding:10px;text-align:center;}
+.ov-stat-lbl{font-size:0.62rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+.ov-stat-val{font-size:1.2rem;font-weight:900;color:var(--accent);}
+.ov-rating{font-size:1.3rem;font-weight:900;color:var(--accent);}
+#btn-play{background:var(--go);border:none;border-radius:30px;color:#fff;font-size:1.1rem;font-family:Inter,sans-serif;font-weight:800;padding:14px 48px;cursor:pointer;}
+/* Panel */
+#panel{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px;display:none;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;}
+.card-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;}
+.stat-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:4px;}
+.stat-val{font-size:1.4rem;font-weight:800;color:var(--accent);}
+.hist-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:8px;}
+.hist-date{font-size:0.68rem;color:var(--muted);margin-bottom:4px;}
+.hist-row{display:flex;justify-content:space-between;align-items:center;}
+.hist-score{font-size:1rem;font-weight:800;color:var(--accent);}
+.hist-detail{font-size:0.75rem;color:var(--muted);}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.theme-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:10px;cursor:pointer;text-align:center;}
+.theme-card.owned{border-color:#2ecc71;}
+.theme-card.active{border-color:var(--accent);}
+.theme-preview{height:36px;border-radius:8px;margin-bottom:6px;}
+.theme-name{font-size:0.78rem;font-weight:700;margin-bottom:2px;}
+.theme-price{font-size:0.7rem;color:var(--muted);}
+.theme-price.free{color:#2ecc71;}
+.coin-row{display:flex;flex-direction:column;gap:8px;}
+.coin-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:10px;font-size:0.82rem;font-family:Inter,sans-serif;cursor:pointer;text-align:left;}
+.empty{text-align:center;padding:40px 20px;color:var(--muted);}
+#toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:8px 16px;border-radius:20px;font-size:0.8rem;opacity:0;transition:all 0.3s;pointer-events:none;z-index:999;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 <div id="app">
-  <div id="hud">
-    <div><div class="hud-lbl">Score</div><div class="hud-val" id="score-disp">0</div></div>
-    <div style="text-align:center"><div class="hud-lbl">Time</div><div class="hud-val" id="time-disp">30</div></div>
-    <div style="text-align:right"><div class="hud-lbl">Accuracy</div><div class="hud-val" id="acc-disp">—</div></div>
+  <header>
+    <h1>Stroop <span>Test</span></h1>
+    <div class="hdr-right">
+      <div class="coins-pill"><div class="coins-dot">C</div><span class="coins-val" id="coins-display">0</span></div>
+      <button class="hdr-btn" id="btn-remove-ads">Remove Ads</button>
+    </div>
+  </header>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('play')">Play</button>
+    <button class="tab" onclick="switchTab('history')">History</button>
+    <button class="tab" onclick="switchTab('stats')">Stats</button>
+    <button class="tab" onclick="switchTab('shop')">Shop</button>
   </div>
-  <div id="timer-bar-wrap"><div id="timer-bar" style="width:100%"></div></div>
-  <div id="word-area">
-    <div id="word-display">STROOP</div>
-    <div id="question">Tap the COLOR of the ink (not the word)</div>
-    <div id="feedback"></div>
+  <div id="game-screen">
+    <div id="mode-row">
+      <button class="mode-btn active" onclick="setMode(30)">30s</button>
+      <button class="mode-btn" onclick="setMode(60)">60s</button>
+      <button class="mode-btn" onclick="setMode(0)">100 Q</button>
+    </div>
+    <div id="hud">
+      <div class="hud-block"><div class="hud-lbl">Score</div><div class="hud-val" id="score-disp">0</div></div>
+      <div class="hud-block"><div class="hud-lbl" id="time-lbl">Time</div><div class="hud-val" id="time-disp">30</div></div>
+      <div class="hud-block"><div class="hud-lbl">Accuracy</div><div class="hud-val" id="acc-disp">—</div></div>
+    </div>
+    <div id="timer-bar-wrap"><div id="timer-bar" style="width:100%"></div></div>
+    <div id="word-area">
+      <div id="word-display" style="color:var(--accent)">STROOP</div>
+      <div id="question">Tap the COLOR of the ink (not the word)</div>
+      <div id="feedback"></div>
+    </div>
+    <div id="buttons">
+      <button class="color-btn" style="background:#e74c3c" data-color="red">RED</button>
+      <button class="color-btn" style="background:#3498db" data-color="blue">BLUE</button>
+      <button class="color-btn" style="background:#2ecc71" data-color="green">GREEN</button>
+      <button class="color-btn" style="background:#f39c12;color:#111" data-color="yellow">YELLOW</button>
+    </div>
   </div>
-  <div id="buttons">
-    <button class="color-btn" style="background:#e74c3c" data-color="red">RED</button>
-    <button class="color-btn" style="background:#3498db" data-color="blue">BLUE</button>
-    <button class="color-btn" style="background:#2ecc71" data-color="green">GREEN</button>
-    <button class="color-btn" style="background:#f1c40f;color:#111" data-color="yellow">YELLOW</button>
-  </div>
-  <div id="admob-banner">Advertisement</div>
+  <div id="panel"></div>
+  <div id="toast"></div>
 </div>
 <div id="overlay">
   <h2>Stroop Test</h2>
-  <div class="sub">The word shows a color name but is written in a DIFFERENT color.<br>Tap the color of the INK!</div>
-  <div class="big" id="final-msg"></div>
+  <div class="ov-sub">The word names a color, but is written in a DIFFERENT ink color. Tap the color of the INK — not what the word says!</div>
+  <div class="ov-result" id="ov-result" style="display:none"></div>
+  <div class="ov-rating" id="ov-rating"></div>
   <button id="btn-play">Start!</button>
 </div>
 <script>
 'use strict';
-var COLORS=['red','blue','green','yellow'];
-var COLORHEX={red:'#e74c3c',blue:'#3498db',green:'#2ecc71',yellow:'#f1c40f'};
-var DURATION=30;
-var best=parseInt(localStorage.getItem('st_best')||'0');
 
-var state={running:false,removeAds:false,
-  score:0,correct:0,total:0,
-  timeLeft:DURATION,timer:null,
-  currentWord:'',currentInk:'',
-  tapTimes:[],lastTap:0};
+/* ── Themes ── */
+var THEMES = [
+  {id:'violet', name:'Violet', price:0,   bg:'#120012', surface:'#1c001c', card:'#2a0030', accent:'#ce93d8', go:'#ab47bc', border:'#3a0040'},
+  {id:'dark',   name:'Dark',   price:60,  bg:'#0a0a0a', surface:'#141414', card:'#1e1e1e', accent:'#ff5722', go:'#ff7043', border:'#2a2a2a'},
+  {id:'ocean',  name:'Ocean',  price:60,  bg:'#051929', surface:'#071e33', card:'#0a2a44', accent:'#29b6f6', go:'#0288d1', border:'#0d3b5e'},
+  {id:'forest', name:'Forest', price:80,  bg:'#0d1f0f', surface:'#122214', card:'#1a3320', accent:'#81c784', go:'#4caf50', border:'#2a4a2e'},
+  {id:'ruby',   name:'Ruby',   price:80,  bg:'#1a0000', surface:'#2d0000', card:'#3d0000', accent:'#ef9a9a', go:'#f44336', border:'#4a0000'},
+  {id:'gold',   name:'Gold',   price:100, bg:'#0f0c00', surface:'#1c1800', card:'#272200', accent:'#ffd700', go:'#ffc107', border:'#3a3000'},
+];
 
-function nextWord(){
-  // Word and ink must be different (incongruent)
-  var word=COLORS[Math.floor(Math.random()*COLORS.length)];
-  var inkOptions=COLORS.filter(function(c){return c!==word;});
-  var ink=inkOptions[Math.floor(Math.random()*inkOptions.length)];
-  state.currentWord=word;state.currentInk=ink;
-  var wd=document.getElementById('word-display');
-  wd.textContent=word.toUpperCase();
-  wd.style.color=COLORHEX[ink];
-  state.lastTap=performance.now();
+/* ── State ── */
+var _coins = 0;
+var _removeAds = false;
+var _stats = {sessions:0, allBestScore:0, totalCorrect:0, totalAnswered:0, coinsEarned:0};
+var _history = [];
+var _owned = ['violet'];
+var _activeTheme = 'violet';
+var _currentTab = 'play';
+var _gameMode = 30; // 30s, 60s, 0=100Q
+var _useCount = 0;
+
+/* ── Persist ── */
+function save() {
+  try {
+    localStorage.setItem('st2_state', JSON.stringify({
+      coins:_coins, removeAds:_removeAds, stats:_stats,
+      history:_history, owned:_owned, theme:_activeTheme, mode:_gameMode
+    }));
+  } catch(e) {}
+}
+function load() {
+  try {
+    var s = JSON.parse(localStorage.getItem('st2_state'));
+    if (!s) return;
+    if (typeof s.coins === 'number') _coins = s.coins;
+    if (s.removeAds) _removeAds = true;
+    if (s.stats) _stats = Object.assign(_stats, s.stats);
+    if (Array.isArray(s.history)) _history = s.history;
+    if (Array.isArray(s.owned)) _owned = s.owned;
+    if (s.theme) _activeTheme = s.theme;
+    if (typeof s.mode === 'number') _gameMode = s.mode;
+  } catch(e) {}
 }
 
-function startGame(){
-  state.score=0;state.correct=0;state.total=0;state.timeLeft=DURATION;
-  state.tapTimes=[];
-  document.getElementById('score-disp').textContent='0';
-  document.getElementById('acc-disp').textContent='—';
-  document.getElementById('feedback').textContent='';
-  document.getElementById('timer-bar').style.width='100%';
-  document.getElementById('overlay').style.display='none';
-  state.running=true;
+/* ── Theme ── */
+function applyTheme() {
+  var t = THEMES.find(function(x){ return x.id===_activeTheme; }) || THEMES[0];
+  var r = document.documentElement.style;
+  r.setProperty('--bg', t.bg);
+  r.setProperty('--surface', t.surface);
+  r.setProperty('--card', t.card);
+  r.setProperty('--accent', t.accent);
+  r.setProperty('--go', t.go);
+  r.setProperty('--border', t.border);
+}
+
+/* ── Toast / coins ── */
+var _toastTimer = null;
+function showToast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2000);
+}
+function updateCoinDisplay() { document.getElementById('coins-display').textContent = _coins; }
+function earnCoins(n, msg) {
+  _coins += n; _stats.coinsEarned += n; save(); updateCoinDisplay();
+  if (msg) showToast(msg);
+}
+
+/* ── Game ── */
+var COLORS = ['red','blue','green','yellow'];
+var COLORHEX = {red:'#e74c3c', blue:'#3498db', green:'#2ecc71', yellow:'#f39c12'};
+var _running = false;
+var _score = 0, _correct = 0, _total = 0;
+var _timeLeft = 30;
+var _gameTimer = null;
+var _currentInk = '';
+var _tapTimes = [], _lastTap = 0;
+var _questionsLeft = 0;
+
+function setMode(mode) {
+  _gameMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(function(b, i){
+    var modes = [30, 60, 0];
+    b.classList.toggle('active', modes[i] === mode);
+  });
+  var timeLbl = document.getElementById('time-lbl');
+  var timeDisp = document.getElementById('time-disp');
+  if (mode === 0) {
+    timeLbl.textContent = 'Left';
+    timeDisp.textContent = '100';
+    document.getElementById('timer-bar').style.width = '100%';
+  } else {
+    timeLbl.textContent = 'Time';
+    timeDisp.textContent = mode;
+    document.getElementById('timer-bar').style.width = '100%';
+  }
+  save();
+}
+
+function nextWord() {
+  var word = COLORS[Math.floor(Math.random() * COLORS.length)];
+  var inkOptions = COLORS.filter(function(c){ return c !== word; });
+  var ink = inkOptions[Math.floor(Math.random() * inkOptions.length)];
+  _currentInk = ink;
+  var wd = document.getElementById('word-display');
+  wd.textContent = word.toUpperCase();
+  wd.style.color = COLORHEX[ink];
+  _lastTap = performance.now();
+}
+
+function startGame() {
+  _score = 0; _correct = 0; _total = 0;
+  _tapTimes = [];
+  _running = true;
+  _questionsLeft = 100;
+  if (_gameTimer) clearInterval(_gameTimer);
+  _timeLeft = _gameMode === 0 ? 999 : _gameMode;
+
+  document.getElementById('score-disp').textContent = '0';
+  document.getElementById('acc-disp').textContent = '—';
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('timer-bar').style.width = '100%';
+  if (_gameMode === 0) {
+    document.getElementById('time-disp').textContent = '100';
+  } else {
+    document.getElementById('time-disp').textContent = _timeLeft;
+  }
+  document.getElementById('overlay').style.display = 'none';
   nextWord();
-  if(state.timer)clearInterval(state.timer);
-  state.timer=setInterval(function(){
-    state.timeLeft--;
-    document.getElementById('time-disp').textContent=state.timeLeft;
-    document.getElementById('timer-bar').style.width=(state.timeLeft/DURATION*100)+'%';
-    if(state.timeLeft<=0){
-      clearInterval(state.timer);
-      endGame();
-    }
-  },1000);
-}
-document.getElementById('btn-play').addEventListener('click',startGame);
 
-document.querySelectorAll('.color-btn').forEach(function(btn){
-  btn.addEventListener('touchstart',function(e){
-    e.preventDefault();
-    handleAnswer(btn.dataset.color);
-  },{passive:false});
-  btn.addEventListener('mousedown',function(){handleAnswer(btn.dataset.color);});
+  if (_gameMode !== 0) {
+    _gameTimer = setInterval(function(){
+      _timeLeft--;
+      document.getElementById('time-disp').textContent = _timeLeft;
+      document.getElementById('timer-bar').style.width = (_timeLeft / _gameMode * 100) + '%';
+      if (_timeLeft <= 0) { clearInterval(_gameTimer); endGame(); }
+    }, 1000);
+  }
+}
+document.getElementById('btn-play').addEventListener('click', startGame);
+
+document.querySelectorAll('.color-btn').forEach(function(btn) {
+  btn.addEventListener('touchstart', function(e) { e.preventDefault(); handleAnswer(btn.dataset.color); }, {passive:false});
+  btn.addEventListener('mousedown', function(){ handleAnswer(btn.dataset.color); });
 });
 
-function handleAnswer(color){
-  if(!state.running)return;
-  var rt=Math.round(performance.now()-state.lastTap);
-  state.tapTimes.push(rt);
-  state.total++;
-  var fb=document.getElementById('feedback');
-  if(color===state.currentInk){
-    state.correct++;state.score++;
-    fb.textContent='✓ Correct! '+rt+'ms';
-    fb.style.color='#2ecc71';
+function handleAnswer(color) {
+  if (!_running) return;
+  var rt = Math.round(performance.now() - _lastTap);
+  _tapTimes.push(rt);
+  _total++; _stats.totalAnswered++;
+  var fb = document.getElementById('feedback');
+  if (color === _currentInk) {
+    _correct++; _stats.totalCorrect++;
+    _score++;
+    fb.textContent = rt + 'ms';
+    fb.style.color = '#2ecc71';
   } else {
-    state.score=Math.max(0,state.score-0.5);
-    fb.textContent='✗ Wrong!';
-    fb.style.color='#e74c3c';
+    _score = Math.max(0, _score - 0.5);
+    fb.textContent = 'Wrong!';
+    fb.style.color = '#e74c3c';
   }
-  document.getElementById('score-disp').textContent=Math.round(state.score);
-  document.getElementById('acc-disp').textContent=Math.round(state.correct/state.total*100)+'%';
-  nextWord();
+  document.getElementById('score-disp').textContent = Math.round(_score);
+  document.getElementById('acc-disp').textContent = Math.round(_correct/_total*100) + '%';
+
+  if (_gameMode === 0) {
+    _questionsLeft--;
+    document.getElementById('time-disp').textContent = _questionsLeft;
+    document.getElementById('timer-bar').style.width = (_questionsLeft) + '%';
+    if (_questionsLeft <= 0) endGame();
+    else nextWord();
+  } else {
+    nextWord();
+  }
 }
 
-function endGame(){
-  state.running=false;
-  var avg=state.tapTimes.length?Math.round(state.tapTimes.reduce(function(a,b){return a+b;},0)/state.tapTimes.length):0;
-  var acc=state.total?Math.round(state.correct/state.total*100):0;
-  var sc=Math.round(state.score);
-  if(sc>best){best=sc;localStorage.setItem('st_best',best);}
-  var rating='';
-  if(acc>=95&&avg<400)rating='Excellent!';
-  else if(acc>=85)rating='Good';
-  else rating='Average';
-  document.getElementById('final-msg').textContent=
-    'Score: '+sc+' | Accuracy: '+acc+'%\nAvg RT: '+avg+'ms | '+rating+'\nBest: '+best;
-  document.getElementById('btn-play').textContent='Play Again';
-  document.getElementById('overlay').style.display='flex';
-  if(!state.removeAds&&window.Android)Android.showInterstitial();
+function endGame() {
+  _running = false;
+  if (_gameTimer) clearInterval(_gameTimer);
+  var avg = _tapTimes.length ? Math.round(_tapTimes.reduce(function(a,b){return a+b;},0)/_tapTimes.length) : 0;
+  var acc = _total ? Math.round(_correct/_total*100) : 0;
+  var sc = Math.round(_score);
+
+  if (sc > _stats.allBestScore) _stats.allBestScore = sc;
+  _stats.sessions++;
+
+  var rating = '';
+  if (acc >= 95 && avg < 400) rating = 'Brilliant';
+  else if (acc >= 90 && avg < 500) rating = 'Excellent';
+  else if (acc >= 80) rating = 'Good';
+  else rating = 'Keep Training';
+
+  // History
+  _history.unshift({
+    date: new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}),
+    score: sc, acc: acc, avg: avg, total: _total, rating: rating,
+    mode: _gameMode === 0 ? '100Q' : _gameMode + 's'
+  });
+  if (_history.length > 30) _history.pop();
+
+  // Coins: 1-3 based on score
+  var reward = sc >= 30 ? 3 : sc >= 15 ? 2 : 1;
+  earnCoins(reward, '+' + reward + ' coin' + (reward > 1 ? 's' : '') + '!');
+
+  _useCount++;
+  if (!_removeAds && _useCount % 3 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
+  }
+  save();
+
+  // Show overlay
+  var res = document.getElementById('ov-result');
+  res.style.display = 'grid';
+  res.innerHTML =
+    os('Score', sc) + os('Accuracy', acc + '%') +
+    os('Avg RT', avg + 'ms') + os('Mode', _gameMode === 0 ? '100 Q' : _gameMode + 's');
+  document.getElementById('ov-rating').textContent = rating;
+  document.getElementById('btn-play').textContent = 'Play Again';
+  document.getElementById('overlay').style.display = 'flex';
+}
+function os(lbl, val) {
+  return '<div class="ov-stat"><div class="ov-stat-lbl">'+lbl+'</div><div class="ov-stat-val">'+val+'</div></div>';
 }
 
-if(!state.removeAds&&!window.Android)document.getElementById('admob-banner').style.display='flex';
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';}};
+/* ── Tabs ── */
+function switchTab(tab) {
+  _currentTab = tab;
+  if (_running) { if (_gameTimer) clearInterval(_gameTimer); _running = false; }
+  document.querySelectorAll('.tab').forEach(function(el, i) {
+    var tabs = ['play','history','stats','shop'];
+    el.classList.toggle('active', tabs[i] === tab);
+  });
+  var gs = document.getElementById('game-screen');
+  var panel = document.getElementById('panel');
+  if (tab === 'play') {
+    gs.style.display = 'flex'; panel.style.display = 'none';
+    document.getElementById('overlay').style.display = 'flex';
+  } else {
+    gs.style.display = 'none'; panel.style.display = 'block';
+    document.getElementById('overlay').style.display = 'none';
+    if (tab === 'history') renderHistory();
+    else if (tab === 'stats') renderStats();
+    else if (tab === 'shop') renderShop();
+  }
+}
+
+function renderHistory() {
+  var el = document.getElementById('panel');
+  if (!_history.length) {
+    el.innerHTML = '<div class="empty"><div style="font-size:2.5rem;">&#x1F9E0;</div><div style="margin-top:8px;">No sessions yet</div></div>';
+    return;
+  }
+  el.innerHTML = _history.map(function(h) {
+    return '<div class="hist-item">' +
+      '<div class="hist-date">' + h.date + ' · ' + h.mode + '</div>' +
+      '<div class="hist-row">' +
+        '<div><div class="hist-score">' + h.score + ' pts</div>' +
+        '<div class="hist-detail">Acc: ' + h.acc + '% · Avg RT: ' + h.avg + 'ms · ' + h.total + ' Q</div></div>' +
+        '<div style="font-size:0.78rem;font-weight:700;color:var(--accent)">' + h.rating + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderStats() {
+  var el = document.getElementById('panel');
+  var overallAcc = _stats.totalAnswered ? Math.round(_stats.totalCorrect/_stats.totalAnswered*100) : 0;
+  el.innerHTML = '<div class="stat-grid">' +
+    sc('Sessions', _stats.sessions) +
+    sc('Record', _stats.allBestScore + ' pts') +
+    sc('Total Answered', _stats.totalAnswered) +
+    sc('Overall Acc', overallAcc + '%') +
+    sc('Coins Earned', _stats.coinsEarned) +
+  '</div>' +
+  '<div class="card"><div class="card-title">Earn More Coins</div>' +
+  '<div style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;">Watch an ad for 10 coins.</div>' +
+  '<button onclick="watchAd()" style="background:var(--go);border:none;color:#fff;padding:8px 18px;border-radius:20px;font-size:0.8rem;font-family:Inter,sans-serif;cursor:pointer;">Watch Ad (+10)</button>' +
+  '</div>';
+}
+function sc(label, val) {
+  return '<div class="stat-card"><div class="stat-label">'+label+'</div><div class="stat-val">'+val+'</div></div>';
+}
+
+function renderShop() {
+  var el = document.getElementById('panel');
+  var themeHtml = '<div class="card"><div class="card-title">Themes</div><div class="theme-grid">';
+  THEMES.forEach(function(t) {
+    var owned = _owned.indexOf(t.id) >= 0;
+    var active = _activeTheme === t.id;
+    themeHtml += '<div class="theme-card'+(owned?' owned':'')+(active?' active':'')+'" onclick="selectTheme(\''+t.id+'\')">' +
+      '<div class="theme-preview" style="background:'+t.bg+';border:2px solid '+t.border+'"></div>' +
+      '<div class="theme-name">'+t.name+'</div>' +
+      '<div class="theme-price'+(t.price===0?' free':'')+'">'+(active?'Active':owned?'Owned':t.price+' coins')+'</div>' +
+    '</div>';
+  });
+  themeHtml += '</div></div>';
+  var coinHtml = '<div class="card"><div class="card-title">Coin Packs</div><div class="coin-row">' +
+    '<button class="coin-btn" onclick="buyCoins(\'coins_small\')">100 Coins — $0.99</button>' +
+    '<button class="coin-btn" onclick="buyCoins(\'coins_large\')">500 Coins — $2.99</button>' +
+  '</div></div>';
+  el.innerHTML = themeHtml + coinHtml;
+}
+
+function selectTheme(id) {
+  var t = THEMES.find(function(x){ return x.id===id; });
+  if (!t) return;
+  if (_owned.indexOf(id) < 0) {
+    if (_coins < t.price) { showToast('Need '+t.price+' coins'); return; }
+    _coins -= t.price; _owned.push(id); updateCoinDisplay();
+  }
+  _activeTheme = id; applyTheme(); save(); renderShop(); showToast(t.name+' theme!');
+}
+
+function watchAd() {
+  if (window.Android) { try { Android.showRewarded('coins'); } catch(e) {} }
+  else earnCoins(10, '+10 coins!');
+}
+function buyCoins(id) {
+  if (window.Android) { try { Android.purchase(id); } catch(e) {} }
+}
+
+/* ── Native bridge ── */
+window.onPurchaseComplete = function(id) {
+  if (id === 'remove_ads') {
+    _removeAds = true;
+    document.getElementById('btn-remove-ads').style.display = 'none';
+    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+    save(); showToast('Ads removed!');
+  } else if (id === 'coins_small') { earnCoins(100, '+100 coins!');
+  } else if (id === 'coins_large') { earnCoins(500, '+500 coins!'); }
+};
+window.onAdReward = function(type) { if (type === 'coins') earnCoins(10, '+10 coins!'); };
+window.onNativeBridgeReady = function() {
+  if (_removeAds && window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+};
+
+/* ── Init ── */
+load();
+applyTheme();
+updateCoinDisplay();
+setMode(_gameMode);
+if (_removeAds) document.getElementById('btn-remove-ads').style.display = 'none';
+document.getElementById('btn-remove-ads').addEventListener('click', function(){
+  if (window.Android) { try { Android.purchase('remove_ads'); } catch(e) {} }
+});
+
+/* ── Screenshot mode ── */
+if (/screenshot=/.test(location.hash)) {
+  document.body.classList.add('ss');
+  var ssState = (location.hash.match(/screenshot=([a-z]+)/)||[])[1];
+  _coins = 920;
+  _bestStreak = 28;
+  _gamesPlayed = 47;
+  _bestAccuracy = 94;
+  _bestTime = 22.4;
+  updateCoinDisplay();
+  setTimeout(function(){
+    if (ssState === 'stats' && typeof showTab==='function') showTab('stats');
+    else if (ssState === 'shop' && typeof showTab==='function') showTab('shop');
+  },80);
+}
 </script>
 </body>
 </html>
