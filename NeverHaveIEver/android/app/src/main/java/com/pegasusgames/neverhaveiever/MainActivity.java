@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
     // -------------------------------------------------------
     private static final String PRODUCT_REMOVE_ADS = "remove_ads";
     private static final Set<String> VALID_PRODUCTS =
-        new HashSet<>(Arrays.asList("remove_ads"));
+        new HashSet<>(Arrays.asList("remove_ads", "coins_small", "coins_large", "starter_pack"));
 
     private WebView           webView;
     private MaxAdView         bannerAd;

@@ -1,0 +1,9 @@
+{
+  "one_time_products": [
+    {"id": "remove_ads",  "title": "Remove Ads",  "price_usd": 1.99},
+    {"id": "coins_small", "title": "100 Coins",   "price_usd": 0.99},
+    {"id": "coins_large", "title": "500 Coins",   "price_usd": 2.99},
+    {"id": "starter_pack","title": "Starter Pack","price_usd": 0.99}
+  ],
+  "subscriptions": []
+}
