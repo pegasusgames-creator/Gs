@@ -2,268 +2,574 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roller</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Password Generator</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#e94560; --accent2:#533483; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
-#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
-header h1 { font-size:1.3rem; font-weight:700; }
-header h1 span { color:var(--accent); }
-#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
-#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
-.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
-
-/* Dice display area */
-#dice-area { display:flex; flex-wrap:wrap; justify-content:center; gap:14px; min-height:120px; align-items:center; padding:10px 0; }
-.die {
-  width:84px; height:84px;
-  background:var(--card);
-  border-radius:16px;
-  border:2px solid rgba(233,69,96,0.4);
-  display:flex; align-items:center; justify-content:center;
-  font-size:2.4rem; font-weight:900;
-  color:var(--accent);
-  cursor:pointer;
-  user-select:none;
-  transition:transform 0.08s;
-  position:relative;
-  overflow:hidden;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#0b1424;--surface:#121e33;--card:#182a45;--accent:#43c759;--accent-soft:#7bea8e;
+  --accent2:#00e5ff;--warn:#ffb020;--danger:#ff4d4f;--text:#eaf3ec;--muted:#8da0a7;
+  --border:#1e3250;--radius:14px;--safeb:env(safe-area-inset-bottom);
 }
-.die.rolling {
-  animation:shake 0.4s ease-out;
-}
-@keyframes shake {
-  0%  { transform:rotate(-8deg) scale(1.05); }
-  20% { transform:rotate(8deg)  scale(1.08); }
-  40% { transform:rotate(-6deg) scale(1.06); }
-  60% { transform:rotate(6deg)  scale(1.07); }
-  80% { transform:rotate(-3deg) scale(1.03); }
-  100%{ transform:rotate(0deg)  scale(1); }
-}
-.die.btn-pressed { transform:scale(0.9); }
-
-/* Die type selector */
-.die-types { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
-.dtype-btn { background:var(--card); border:2px solid transparent; border-radius:8px; color:var(--muted); font-size:0.8rem; font-weight:700; padding:6px 10px; cursor:pointer; }
-.dtype-btn.active { border-color:var(--accent); color:var(--accent); }
-.dtype-btn.btn-pressed { transform:scale(0.9); }
-
-/* Count row */
-.count-row { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
-.count-label { font-size:0.9rem; color:var(--muted); }
-.count-ctrl { display:flex; align-items:center; gap:12px; }
-.count-btn { width:34px; height:34px; border-radius:50%; background:var(--card); border:2px solid var(--accent); color:var(--accent); font-size:1.3rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.count-btn.btn-pressed { transform:scale(0.88); }
-#dice-count-disp { font-size:1.2rem; font-weight:700; min-width:24px; text-align:center; }
-
-/* Roll button */
-#btn-roll {
-  width:100%;
-  background:linear-gradient(135deg,var(--accent),#c0392b);
-  border:none; border-radius:var(--radius);
-  color:#fff; font-size:1.3rem; font-weight:800;
-  padding:18px; cursor:pointer;
-  margin-bottom:12px;
-  box-shadow:0 6px 20px rgba(233,69,96,0.45);
-}
-#btn-roll.btn-pressed { transform:scale(0.97); }
-
-/* Stats */
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-.stat-box { background:var(--card); border-radius:10px; padding:10px; text-align:center; }
-.stat-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:3px; }
-.stat-val { font-size:1.2rem; font-weight:700; }
-
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Poppins',system-ui,sans-serif;overflow:hidden;letter-spacing:-0.01em;}
+#app{display:flex;flex-direction:column;height:100%;padding-bottom:var(--safeb);}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;flex-shrink:0;border-bottom:1px solid var(--border);}
+header h1{font-size:1.2rem;font-weight:800;letter-spacing:-0.5px;}
+header h1 span{color:var(--accent);}
+.hdr-btn{background:var(--card);border:1px solid var(--border);color:var(--text);font-size:0.7rem;font-weight:600;padding:6px 11px;border-radius:20px;cursor:pointer;font-family:inherit;}
+.hdr-btn:active{transform:scale(0.96);}
+.coins-bar{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;}
+.coins-icon{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#ffd700,#ffaa00);display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:#7a4f00;}
+.coins-val{font-size:0.85rem;font-weight:800;color:#ffd166;}
+.coins-label{font-size:0.7rem;color:var(--muted);}
+.coins-earn{margin-left:auto;font-size:0.66rem;color:var(--accent);}
+.tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.tab{flex:1;padding:11px 4px;font-size:0.74rem;font-weight:700;text-align:center;cursor:pointer;color:var(--muted);border:none;background:none;font-family:inherit;}
+.tab.active{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent);}
+.tab:active{transform:scale(0.96);}
+#scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 22px;}
+.page{display:none;}
+.page.active{display:block;}
+/* Password hero */
+.pw-hero{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden;}
+.pw-hero::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.pw-display{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 16px;font-family:'JetBrains Mono','Courier New',monospace;font-size:1.2rem;font-weight:700;color:var(--accent);word-break:break-all;min-height:70px;display:flex;align-items:center;letter-spacing:0.02em;line-height:1.35;}
+.strength-wrap{margin:10px 0 4px;}
+.strength-bar{height:7px;background:var(--card);border-radius:4px;overflow:hidden;}
+.strength-fill{height:100%;border-radius:4px;transition:width 0.35s,background 0.35s;}
+.strength-meta{display:flex;justify-content:space-between;align-items:center;font-size:0.74rem;margin-top:5px;}
+.strength-label{font-weight:800;}
+.strength-ent{color:var(--muted);font-variant-numeric:tabular-nums;}
+.action-row{display:flex;gap:8px;margin-top:10px;}
+.btn{flex:1;padding:13px 10px;border:none;border-radius:12px;font-size:0.88rem;font-weight:800;cursor:pointer;font-family:inherit;letter-spacing:0.3px;transition:transform 0.1s;}
+.btn:active{transform:scale(0.96);}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-soft));color:#07210e;}
+.btn-second{background:var(--card);color:var(--text);border:1px solid var(--border);}
+.btn-copy{background:var(--accent2);color:#01303a;}
+/* Panels */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;}
+.panel-title{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.8px;margin-bottom:10px;font-weight:700;}
+/* Slider */
+.slider-row{display:flex;justify-content:space-between;align-items:center;font-size:0.88rem;margin-bottom:6px;}
+.slider-val{color:var(--accent);font-weight:800;font-size:1.2rem;font-variant-numeric:tabular-nums;}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;background:var(--border);outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--text);}
+.slider-minmax{display:flex;justify-content:space-between;font-size:0.66rem;color:var(--muted);margin-top:4px;}
+/* Toggles */
+.toggle-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:10px 12px;cursor:pointer;}
+.toggle-row:active{transform:scale(0.98);}
+.toggle-info{flex:1;min-width:0;}
+.toggle-label{font-size:0.82rem;color:var(--text);font-weight:700;}
+.toggle-sub{font-size:0.66rem;color:var(--muted);margin-top:1px;}
+.sw{position:relative;width:38px;height:22px;flex-shrink:0;margin-left:8px;}
+.sw input{opacity:0;width:0;height:0;}
+.sw-knob{position:absolute;inset:0;background:#2d3f5a;border-radius:22px;transition:0.25s;}
+.sw-knob::before{position:absolute;content:'';height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:0.25s;}
+input:checked+.sw-knob{background:var(--accent);}
+input:checked+.sw-knob::before{transform:translateX(16px);}
+.toggle-row.wide{grid-column:span 2;}
 /* History */
-#history-list { display:flex; flex-direction:column; gap:6px; }
-.history-item { background:var(--card); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; font-size:0.85rem; }
-.history-dice { color:var(--muted); }
-.history-sum { color:var(--accent); font-weight:700; }
-
-#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+.history-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.clear-btn{background:none;border:none;color:var(--danger);font-size:0.74rem;font-weight:700;cursor:pointer;font-family:inherit;}
+.hist-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--text);display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:7px;gap:10px;}
+.hist-item:active{border-color:var(--accent);}
+.hist-text{flex:1;word-break:break-all;min-width:0;overflow:hidden;}
+.hist-meta{font-size:0.64rem;color:var(--muted);flex-shrink:0;font-family:'Poppins';text-align:right;}
+.hist-strength{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:4px;}
+.hist-empty{color:var(--muted);font-size:0.82rem;text-align:center;padding:18px 0;}
+/* Passphrase */
+.pass-display{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 14px;font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:700;color:var(--accent2);min-height:66px;display:flex;align-items:center;line-height:1.35;word-break:break-all;}
+.pass-info{font-size:0.74rem;color:var(--muted);margin-top:8px;display:flex;justify-content:space-between;}
+/* Stats */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;}
+.stat-card.wide{grid-column:span 2;}
+.stat-label{font-size:0.64rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:3px;}
+.stat-value{font-size:1.6rem;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;}
+.stat-sub{font-size:0.66rem;color:var(--muted);margin-top:2px;}
+.tips-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;border-left:3px solid var(--accent2);padding:14px;margin-top:6px;}
+.tip-title{font-size:0.7rem;color:var(--accent2);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.tip-body{font-size:0.78rem;color:var(--muted);line-height:1.45;}
+/* Shop */
+.ads-card{background:linear-gradient(135deg,#6a2fbe,#c33ce0);border-radius:14px;padding:14px;margin-bottom:10px;color:#fff;}
+.ads-title{font-size:1rem;font-weight:800;margin-bottom:4px;}
+.ads-desc{font-size:0.75rem;opacity:0.9;margin-bottom:9px;}
+.ads-btn{background:#fff;color:#6a2fbe;border:none;font-size:0.82rem;font-weight:800;padding:9px 22px;border-radius:22px;cursor:pointer;font-family:inherit;}
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.theme-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:10px;text-align:center;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.theme-card.owned{border-color:#ffb020;}
+.theme-card.active{border-color:var(--accent);box-shadow:0 0 12px rgba(67,199,89,0.35);}
+.theme-preview{height:54px;border-radius:9px;margin-bottom:7px;position:relative;overflow:hidden;}
+.theme-name{font-size:0.82rem;font-weight:800;margin-bottom:2px;}
+.theme-price{font-size:0.72rem;color:var(--muted);}
+.theme-price.free{color:var(--accent);}
+/* Toast */
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(18px);background:#0a1220;border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:22px;font-size:0.82rem;font-weight:600;opacity:0;transition:all 0.25s;pointer-events:none;z-index:9999;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* Starter pack */
+#starter-modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px;}
+#starter-modal.show{display:flex;}
+.starter-card{background:var(--surface);border:2px solid var(--accent);border-radius:20px;padding:22px 18px;max-width:340px;text-align:center;position:relative;}
+.starter-close{position:absolute;top:8px;right:12px;background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;}
+.starter-badge{display:inline-block;background:#ffb020;color:#3a2200;font-size:0.68rem;font-weight:800;padding:4px 10px;border-radius:12px;letter-spacing:1px;margin-bottom:8px;}
+.starter-title{font-size:1.3rem;font-weight:800;margin-bottom:4px;}
+.starter-desc{font-size:0.86rem;color:var(--muted);margin-bottom:10px;}
+.starter-list{text-align:left;font-size:0.84rem;margin:10px 0;background:var(--card);border-radius:10px;padding:10px 14px;}
+.starter-list div{padding:3px 0;display:flex;gap:8px;}
+.starter-list .c{color:var(--accent);font-weight:800;}
+.starter-timer{font-size:0.78rem;color:var(--accent);margin:6px 0;font-weight:700;}
+.starter-buy{background:linear-gradient(135deg,var(--accent),var(--accent-soft));border:none;color:#07210e;font-size:0.95rem;font-weight:800;padding:12px 28px;border-radius:24px;cursor:pointer;width:100%;font-family:inherit;}
+/* Landscape warn */
+#rotate-warn{display:none;position:fixed;inset:0;background:var(--bg);z-index:99999;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:30px;}
+#rotate-warn .r{font-size:3rem;margin-bottom:10px;}
+#rotate-warn .t{font-size:1rem;color:var(--muted);}
+@media (orientation:landscape) and (max-height:500px){#rotate-warn{display:flex;}}
+body.ss #btn-remove-ads{display:none;}
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <h1>Dice <span>Roller</span></h1>
-    <button id="btn-remove-ads">Remove Ads</button>
+    <h1>Pass<span>Gen</span></h1>
+    <div style="display:flex;gap:8px;"><button class="hdr-btn" id="btn-remove-ads">Remove Ads</button></div>
   </header>
+  <div class="coins-bar">
+    <div class="coins-icon">C</div>
+    <span class="coins-val" id="coins-display">0</span>
+    <span class="coins-label">coins</span>
+    <span class="coins-earn" id="earn-hint">+1 per strong password</span>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-tab="pw">Password</button>
+    <button class="tab" data-tab="pass">Passphrase</button>
+    <button class="tab" data-tab="stats">Stats</button>
+    <button class="tab" data-tab="shop">Shop</button>
+  </div>
   <div id="scroll">
-
-    <!-- Dice display -->
-    <div class="card">
-      <div class="card-title">Your Roll</div>
-      <div id="dice-area"></div>
+    <div class="page active" id="page-pw">
+      <div class="pw-hero">
+        <div class="panel-title">Generated Password</div>
+        <div class="pw-display" id="pw-display">Tap Generate</div>
+        <div class="strength-wrap">
+          <div class="strength-bar"><div class="strength-fill" id="str-fill" style="width:0%"></div></div>
+          <div class="strength-meta"><span class="strength-label" id="str-label" style="color:var(--muted)">—</span><span class="strength-ent" id="str-ent">0 bits</span></div>
+        </div>
+        <div class="action-row">
+          <button class="btn btn-primary" id="gen-btn">Generate</button>
+          <button class="btn btn-copy" id="copy-btn">Copy</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="slider-row"><span>Length</span><span class="slider-val" id="len-val">16</span></div>
+        <input type="range" id="len-slider" min="4" max="64" value="16">
+        <div class="slider-minmax"><span>4</span><span>64</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Character Types</div>
+        <div class="toggle-grid">
+          <label class="toggle-row"><div class="toggle-info"><div class="toggle-label">Uppercase</div><div class="toggle-sub">A – Z</div></div><div class="sw"><input type="checkbox" id="chk-upper" checked><span class="sw-knob"></span></div></label>
+          <label class="toggle-row"><div class="toggle-info"><div class="toggle-label">Lowercase</div><div class="toggle-sub">a – z</div></div><div class="sw"><input type="checkbox" id="chk-lower" checked><span class="sw-knob"></span></div></label>
+          <label class="toggle-row"><div class="toggle-info"><div class="toggle-label">Numbers</div><div class="toggle-sub">0 – 9</div></div><div class="sw"><input type="checkbox" id="chk-num" checked><span class="sw-knob"></span></div></label>
+          <label class="toggle-row"><div class="toggle-info"><div class="toggle-label">Symbols</div><div class="toggle-sub">!@#$%&*</div></div><div class="sw"><input type="checkbox" id="chk-sym" checked><span class="sw-knob"></span></div></label>
+          <label class="toggle-row wide"><div class="toggle-info"><div class="toggle-label">No Similar Chars</div><div class="toggle-sub">Skip l, I, 1, O, 0</div></div><div class="sw"><input type="checkbox" id="chk-exc"><span class="sw-knob"></span></div></label>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="history-title-row"><div class="panel-title" style="margin:0;">Recent (this session)</div><button class="clear-btn" id="clr-hist">Clear</button></div>
+        <div id="hist-list"></div>
+      </div>
     </div>
-
-    <!-- Settings -->
-    <div class="card">
-      <div class="card-title">Die Type</div>
-      <div class="die-types" id="die-types"></div>
-      <div class="count-row">
-        <span class="count-label">Number of dice</span>
-        <div class="count-ctrl">
-          <button class="count-btn" id="btn-minus">−</button>
-          <span id="dice-count-disp">2</span>
-          <button class="count-btn" id="btn-plus">+</button>
+    <div class="page" id="page-pass">
+      <div class="pw-hero">
+        <div class="panel-title">Passphrase</div>
+        <div class="pass-display" id="pass-display">Tap Generate</div>
+        <div class="pass-info"><span id="pass-strength">—</span><span id="pass-ent">0 bits</span></div>
+        <div class="action-row">
+          <button class="btn btn-primary" id="pass-gen">Generate</button>
+          <button class="btn btn-copy" id="pass-copy">Copy</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="slider-row"><span>Words</span><span class="slider-val" id="wc-val">4</span></div>
+        <input type="range" id="wc-slider" min="3" max="8" value="4">
+        <div class="slider-minmax"><span>3</span><span>8</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Style</div>
+        <div class="toggle-grid">
+          <label class="toggle-row"><div class="toggle-info"><div class="toggle-label">Capitalize</div><div class="toggle-sub">Title-Case</div></div><div class="sw"><input type="checkbox" id="chk-cap" checked><span class="sw-knob"></span></div></label>
+          <label class="toggle-row"><div class="toggle-info"><div class="toggle-label">Add Number</div><div class="toggle-sub">2-digit suffix</div></div><div class="sw"><input type="checkbox" id="chk-numsuf" checked><span class="sw-knob"></span></div></label>
+          <label class="toggle-row wide"><div class="toggle-info"><div class="toggle-label">Separator</div><div class="toggle-sub" id="sep-sub">Dash ( - )</div></div><div style="display:flex;gap:4px;" id="sep-pills">
+            <button data-s="-" class="sep-pill act">-</button>
+            <button data-s="." class="sep-pill">.</button>
+            <button data-s="_" class="sep-pill">_</button>
+            <button data-s=" " class="sep-pill">␣</button>
+          </div></label>
+        </div>
+      </div>
+      <div class="tips-card">
+        <div class="tip-title">Why Passphrases</div>
+        <div class="tip-body">Four random common words give about 51 bits of entropy — strong enough for most accounts and far easier to remember than a jumble of symbols.</div>
+      </div>
+    </div>
+    <div class="page" id="page-stats">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Generated</div><div class="stat-value" id="st-gen">0</div><div class="stat-sub">passwords total</div></div>
+        <div class="stat-card"><div class="stat-label">Strongest</div><div class="stat-value" id="st-str">0</div><div class="stat-sub">bits of entropy</div></div>
+        <div class="stat-card"><div class="stat-label">Copied</div><div class="stat-value" id="st-cp">0</div><div class="stat-sub">to clipboard</div></div>
+        <div class="stat-card"><div class="stat-label">Avg Length</div><div class="stat-value" id="st-avg">0</div><div class="stat-sub">characters</div></div>
+      </div>
+      <div class="tips-card">
+        <div class="tip-title">Stay Safe</div>
+        <div class="tip-body">A unique password per account is the single biggest win. Use a password manager to store them — this app doesn't save your generated passwords beyond a session.</div>
+      </div>
+      <div class="tips-card" style="margin-top:8px;">
+        <div class="tip-title">Strength Levels</div>
+        <div class="tip-body" style="line-height:1.7;">
+          <div style="color:var(--danger);">● Weak · under 40 bits</div>
+          <div style="color:var(--warn);">● Fair · 40–60 bits</div>
+          <div style="color:var(--accent2);">● Strong · 60–80 bits</div>
+          <div style="color:var(--accent);">● Very Strong · 80+ bits</div>
         </div>
       </div>
     </div>
-
-    <!-- Roll button -->
-    <button id="btn-roll">🎲 Roll!</button>
-
-    <!-- Stats -->
-    <div class="card">
-      <div class="card-title">Last Roll</div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-label">Sum</div><div class="stat-val" id="stat-sum">—</div></div>
-        <div class="stat-box"><div class="stat-label">Min</div><div class="stat-val" id="stat-min">—</div></div>
-        <div class="stat-box"><div class="stat-label">Max</div><div class="stat-val" id="stat-max">—</div></div>
+    <div class="page" id="page-shop">
+      <div class="ads-card">
+        <div class="ads-title">Remove Ads</div>
+        <div class="ads-desc">Focus on what matters. No banners, no interstitials.</div>
+        <button class="ads-btn" id="buy-ads">Unlock for $2.99</button>
       </div>
+      <div class="panel-title">Themes</div>
+      <div class="shop-grid" id="theme-grid"></div>
     </div>
-
-    <!-- History -->
-    <div class="card">
-      <div class="card-title">History</div>
-      <div id="history-list"><div style="color:var(--muted);font-size:0.85rem">No rolls yet</div></div>
-    </div>
-
   </div>
-  <div id="admob-banner">Advertisement</div>
 </div>
-
+<div id="toast">Copied</div>
+<div id="starter-modal">
+  <div class="starter-card">
+    <button class="starter-close" id="starter-x">×</button>
+    <div class="starter-badge">STARTER PACK</div>
+    <div class="starter-title">Go Premium for 99¢</div>
+    <div class="starter-desc">One-time offer. Expires in 24 hours.</div>
+    <div class="starter-list">
+      <div><span class="c">✓</span> Remove all ads forever</div>
+      <div><span class="c">✓</span> 500 bonus coins</div>
+      <div><span class="c">✓</span> Unlock 2 premium themes</div>
+    </div>
+    <div class="starter-timer" id="starter-timer">Offer ends in 23:59:59</div>
+    <button class="starter-buy" id="starter-buy">Get Starter Pack — $0.99</button>
+  </div>
+</div>
+<div id="rotate-warn"><div class="r">↻</div><div class="t">Please rotate to portrait</div></div>
 <script>
+(function(){
 'use strict';
-(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button,.die,.dtype-btn,.count-btn');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
+var SS = /screenshot=/.test(location.hash);
+if(SS) document.body.classList.add('ss');
+var SSTATE = SS ? (location.hash.match(/screenshot=([a-z]+)/)||[])[1] : '';
 
-var DIE_TYPES=[4,6,8,10,12,20,100];
-var state={sides:6,count:2,useCount:0,removeAds:false};
-var history=[];
+var K='passgen_v2';
+function loadState(){ try{var s=localStorage.getItem(K);if(s)return JSON.parse(s);}catch(e){} return null; }
+function saveState(){ try{localStorage.setItem(K,JSON.stringify(S));}catch(e){} }
+var S = loadState() || {
+  coins:40,adsRemoved:false,
+  theme:'aurora',ownedThemes:['aurora'],
+  cfg:{len:16,upper:true,lower:true,num:true,sym:true,exc:false},
+  passCfg:{wc:4,cap:true,numSuf:true,sep:'-'},
+  stats:{gen:0,strBest:0,cp:0,avgLen:0,lenSum:0},
+  session:[],
+  starterSeen:false,launches:0
+};
+S.launches=(S.launches||0)+1;
 
-var diceArea=document.getElementById('dice-area');
-var dieTypesEl=document.getElementById('die-types');
-var diceCountDisp=document.getElementById('dice-count-disp');
+if(SS){
+  S.coins=845;
+  S.ownedThemes=['aurora','midnight','sunset'];
+  S.stats={gen:138,strBest:96,cp:42,avgLen:18,lenSum:2484};
+  S.session=[
+    {p:'Tr#7$bK!mWq9@xYn',s:'Very Strong',c:'#43c759',b:96},
+    {p:'Gh2&pQx8Lr4!eKvM',s:'Very Strong',c:'#43c759',b:96},
+    {p:'Mb5#wR3qZp9^tNk',s:'Strong',c:'#00e5ff',b:78},
+    {p:'Bt@H7vNq4Lm',s:'Strong',c:'#00e5ff',b:72},
+    {p:'ax42pnlXeZ',s:'Fair',c:'#ffb020',b:56}
+  ];
+}
 
-// Build die type buttons
-DIE_TYPES.forEach(function(s){
-  var btn=document.createElement('button');
-  btn.className='dtype-btn'+(s===6?' active':'');
-  btn.textContent='D'+s;
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.dtype-btn').forEach(function(b){b.classList.remove('active');});
-    btn.classList.add('active');
-    state.sides=s;
-    renderDice();
-  });
-  dieTypesEl.appendChild(btn);
-});
-
-function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
-
-function renderDice(values){
-  diceArea.innerHTML='';
-  for(var i=0;i<state.count;i++){
-    var die=document.createElement('div');
-    die.className='die';
-    die.textContent=values?values[i]:'?';
-    (function(idx){
-      die.addEventListener('click',function(){rollSingle(idx);});
-    })(i);
-    diceArea.appendChild(die);
+var nativeA = window.Android || null;
+window.onPurchaseComplete=function(sku){
+  if(sku==='remove_ads'){
+    S.adsRemoved=true; saveState();
+    document.getElementById('btn-remove-ads').style.display='none';
+    var b=document.getElementById('buy-ads'); if(b){b.textContent='Owned ✓';b.disabled=true;}
+    if(nativeA){try{nativeA.hideBannerAd();}catch(e){}}
+    toast('Ads removed — thank you!');
   }
-}
+};
+document.getElementById('btn-remove-ads').onclick=function(){ if(nativeA) try{nativeA.purchase('remove_ads');}catch(e){} };
+document.getElementById('buy-ads').onclick=function(){ if(!S.adsRemoved&&nativeA) try{nativeA.purchase('remove_ads');}catch(e){} };
+function vibrate(p){ if(navigator.vibrate) try{navigator.vibrate(p);}catch(e){} }
 
-function rollAll(){
-  var vals=[];
-  for(var i=0;i<state.count;i++) vals.push(randInt(1,state.sides));
-  animateRoll(vals);
-  updateStats(vals);
-  addHistory(vals);
-  state.useCount++;
-  if(!state.removeAds&&state.useCount%7===0&&window.Android) Android.showInterstitial();
-}
+var toastTO;
+function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTO);toastTO=setTimeout(function(){t.classList.remove('show');},1600);}
 
-function rollSingle(idx){
-  var dies=diceArea.querySelectorAll('.die');
-  var val=randInt(1,state.sides);
-  dies[idx].textContent=val;
-  dies[idx].classList.remove('rolling');
-  void dies[idx].offsetWidth;
-  dies[idx].classList.add('rolling');
-  setTimeout(function(){dies[idx].classList.remove('rolling');},420);
+function setTab(tab){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===tab);});
+  document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('active',p.id==='page-'+tab);});
+  if(tab==='stats') renderStats();
+  if(tab==='shop') renderShop();
+  if(tab==='pw') renderHist();
 }
+document.querySelectorAll('.tab').forEach(function(t){t.onclick=function(){vibrate(8);setTab(t.dataset.tab);};});
 
-function animateRoll(finalVals){
-  var dies=diceArea.querySelectorAll('.die');
-  dies.forEach(function(d){
-    d.classList.remove('rolling');
-    void d.offsetWidth;
-    d.classList.add('rolling');
-  });
-  // Quick flicker then show final
-  var steps=6, interval=50;
-  for(var s=0;s<steps;s++){
-    (function(step){
-      setTimeout(function(){
-        dies.forEach(function(d){d.textContent=randInt(1,state.sides);});
-        if(step===steps-1){
-          setTimeout(function(){
-            finalVals.forEach(function(v,i){dies[i].textContent=v;});
-            dies.forEach(function(d){d.classList.remove('rolling');});
-          },80);
-        }
-      },step*interval);
-    })(s);
+var THEMES=[
+  {id:'aurora',name:'Aurora',bg:'#0b1424',surface:'#121e33',card:'#182a45',accent:'#43c759',softer:'#7bea8e',accent2:'#00e5ff',border:'#1e3250',text:'#eaf3ec',muted:'#8da0a7',price:0},
+  {id:'midnight',name:'Midnight',bg:'#08101c',surface:'#0f1a2e',card:'#14233d',accent:'#6b8afd',softer:'#9db0ff',accent2:'#ffd700',border:'#1b2a47',text:'#e8ecf5',muted:'#7d8aa3',price:200},
+  {id:'sunset',name:'Sunset',bg:'#190b05',surface:'#251109',card:'#31190f',accent:'#ff6f00',softer:'#ffad54',accent2:'#ffeb3b',border:'#3a2617',text:'#fff3e8',muted:'#a08b78',price:300},
+  {id:'mint',name:'Mint',bg:'#041812',surface:'#072420',card:'#0b322c',accent:'#00bfa5',softer:'#5de8ce',accent2:'#ffeb3b',border:'#11443c',text:'#e0f4ef',muted:'#7ea69b',price:450},
+  {id:'rose',name:'Rose',bg:'#17060f',surface:'#210a16',card:'#2d0f1e',accent:'#ff4081',softer:'#ff80ab',accent2:'#ffcc80',border:'#3d1b2c',text:'#faeaf0',muted:'#b38d9e',price:600},
+  {id:'graphite',name:'Graphite',bg:'#0a0a0a',surface:'#141414',card:'#1c1c1c',accent:'#ff3b30',softer:'#ff7a70',accent2:'#f5f5f5',border:'#262626',text:'#f5f5f5',muted:'#8a8a8a',price:750}
+];
+function applyTheme(id){
+  var t=THEMES.find(function(x){return x.id===id;})||THEMES[0];
+  var r=document.documentElement.style;
+  r.setProperty('--bg',t.bg);r.setProperty('--surface',t.surface);r.setProperty('--card',t.card);
+  r.setProperty('--accent',t.accent);r.setProperty('--accent-soft',t.softer);r.setProperty('--accent2',t.accent2);
+  r.setProperty('--border',t.border);r.setProperty('--text',t.text);r.setProperty('--muted',t.muted);
+}
+applyTheme(S.theme);
+
+// ---- char pools
+var UPPER='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var LOWER='abcdefghijklmnopqrstuvwxyz';
+var NUMS='0123456789';
+var SYMS='!@#$%^&*()-_=+[]{}|;:,.<>?';
+var SIMILAR='lI1O0o';
+
+function crRand(){ // crypto-secure 0..1
+  if(window.crypto&&crypto.getRandomValues){
+    var a=new Uint32Array(1); crypto.getRandomValues(a); return a[0]/4294967296;
   }
+  return Math.random();
 }
+function pick(s){ return s[Math.floor(crRand()*s.length)]; }
 
-function updateStats(vals){
-  document.getElementById('stat-sum').textContent=vals.reduce(function(a,b){return a+b;},0);
-  document.getElementById('stat-min').textContent=Math.min.apply(null,vals);
-  document.getElementById('stat-max').textContent=Math.max.apply(null,vals);
+function gen(){
+  var c=S.cfg; var pool='';
+  if(c.upper) pool+=UPPER;
+  if(c.lower) pool+=LOWER;
+  if(c.num) pool+=NUMS;
+  if(c.sym) pool+=SYMS;
+  if(!pool) pool=LOWER+NUMS;
+  if(c.exc){ pool=pool.split('').filter(function(ch){return SIMILAR.indexOf(ch)<0;}).join(''); }
+  // Guarantee at least one of each selected class
+  var req=[];
+  if(c.upper) req.push(pick(c.exc?UPPER.replace(/[IO]/g,''):UPPER));
+  if(c.lower) req.push(pick(c.exc?LOWER.replace(/[lo]/g,''):LOWER));
+  if(c.num) req.push(pick(c.exc?NUMS.replace(/[10]/g,''):NUMS));
+  if(c.sym) req.push(pick(SYMS));
+  var pw='';
+  while(pw.length + req.length < c.len) pw+=pick(pool);
+  pw = (pw+req.join('')).split('').sort(function(){return crRand()-0.5;}).join('').substring(0,c.len);
+  return pw;
 }
+function entropy(pw){
+  var pool=0;
+  if(/[A-Z]/.test(pw)) pool+=26;
+  if(/[a-z]/.test(pw)) pool+=26;
+  if(/[0-9]/.test(pw)) pool+=10;
+  if(/[^A-Za-z0-9]/.test(pw)) pool+=26;
+  return Math.round(pw.length * Math.log2(Math.max(pool,1)));
+}
+function strengthInfo(bits){
+  if(bits<40) return {label:'Weak',color:'#ff4d4f',pct:25};
+  if(bits<60) return {label:'Fair',color:'#ffb020',pct:50};
+  if(bits<80) return {label:'Strong',color:'#00e5ff',pct:75};
+  return {label:'Very Strong',color:'#43c759',pct:100};
+}
+function showPw(pw){
+  document.getElementById('pw-display').textContent=pw;
+  var bits=entropy(pw), si=strengthInfo(bits);
+  document.getElementById('str-fill').style.width=si.pct+'%';
+  document.getElementById('str-fill').style.background=si.color;
+  document.getElementById('str-label').textContent=si.label;
+  document.getElementById('str-label').style.color=si.color;
+  document.getElementById('str-ent').textContent=bits+' bits';
+  S.session.unshift({p:pw,s:si.label,c:si.color,b:bits});
+  if(S.session.length>5) S.session.pop();
+  S.stats.gen++;
+  if(bits>S.stats.strBest) S.stats.strBest=bits;
+  S.stats.lenSum+=pw.length;
+  S.stats.avgLen=Math.round(S.stats.lenSum/Math.max(1,S.stats.gen));
+  if(bits>=60){ S.coins++; updCoins(); }
+  saveState();
+  renderHist();
+}
+function updCoins(){ document.getElementById('coins-display').textContent=S.coins; }
 
-function addHistory(vals){
-  history.unshift({sides:state.sides,vals:vals.slice(),sum:vals.reduce(function(a,b){return a+b;},0)});
-  if(history.length>10) history.pop();
-  var el=document.getElementById('history-list');
-  el.innerHTML='';
-  history.forEach(function(h){
-    var item=document.createElement('div');
-    item.className='history-item';
-    item.innerHTML='<span class="history-dice">'+h.count+'×D'+h.sides+': ['+h.vals.join(', ')+']</span><span class="history-sum">'+h.sum+'</span>';
-    // patch count
-    item.querySelector('.history-dice').textContent=h.vals.length+'×D'+h.sides+': ['+h.vals.join(', ')+']';
-    el.appendChild(item);
+document.getElementById('gen-btn').onclick=function(){ var pw=gen(); showPw(pw); vibrate(12); maybeStarter(); };
+function copyTxt(t){
+  if(navigator.clipboard) try{navigator.clipboard.writeText(t);}catch(e){}
+  else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
+  S.stats.cp++; saveState(); toast('Copied to clipboard'); vibrate(14);
+}
+document.getElementById('copy-btn').onclick=function(){
+  var pw=document.getElementById('pw-display').textContent;
+  if(pw&&pw!=='Tap Generate') copyTxt(pw);
+};
+document.getElementById('len-slider').oninput=function(){S.cfg.len=+this.value;document.getElementById('len-val').textContent=S.cfg.len;saveState();};
+['upper','lower','num','sym','exc'].forEach(function(k){
+  var el=document.getElementById('chk-'+k);
+  el.checked = S.cfg[k];
+  el.onchange=function(){ S.cfg[k]=el.checked; saveState(); };
+});
+document.getElementById('clr-hist').onclick=function(){ S.session=[]; saveState(); renderHist(); toast('Cleared'); };
+
+function renderHist(){
+  var host=document.getElementById('hist-list');
+  if(!S.session.length){ host.innerHTML='<div class="hist-empty">No passwords yet.</div>'; return; }
+  host.innerHTML='';
+  S.session.forEach(function(it){
+    var div=document.createElement('div'); div.className='hist-item';
+    div.innerHTML='<span class="hist-text">'+escapeH(it.p)+'</span><span class="hist-meta">'+it.b+' bits<span class="hist-strength" style="background:'+it.c+'"></span></span>';
+    div.onclick=function(){copyTxt(it.p);};
+    host.appendChild(div);
   });
 }
+function escapeH(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 
-document.getElementById('btn-roll').addEventListener('click',function(){
-  renderDice();
-  setTimeout(rollAll,10);
-});
+// ---- passphrase (EFF-short-style seed list; truncated for size)
+var WORDS = ('acid,acorn,actor,adage,admit,adobe,adore,adult,affair,agile,agree,alarm,album,alert,algae,alibi,alien,alike,alive,allow,alloy,alone,angel,anger,angle,ankle,apart,apple,April,arbor,arena,armor,aroma,arrow,arson,artist,asset,atlas,attic,audio,autumn,awake,award,badge,bagel,baker,balcony,bamboo,banana,barber,basic,basin,basket,beach,beacon,beaker,bean,beard,beast,beauty,beaver,beetle,belief,berry,better,billow,birch,birth,bison,black,blade,blame,blank,blast,blaze,bleach,blend,bless,blimp,blind,blink,block,bloom,blossom,blue,board,boat,body,bolt,bonus,book,boost,border,boss,boxer,brace,braid,brain,brake,branch,brass,brave,bread,break,breath,breeze,brick,bridge,brief,bright,brisk,broil,brook,broom,brown,brush,buddy,buffet,bundle,bunny,burst,bushel,butler,buyer,cable,cactus,camel,camp,canal,candle,canoe,canvas,canyon,cape,captain,cargo,carpet,carrot,cart,carve,cashew,castle,catch,cedar,celery,cello,census,center,cereal,chain,chair,chalk,charge,charm,chart,chasm,chat,chef,cherry,chess,chest,chief,chili,chime,chips,choice,chord,chorus,chrome,cider,cinder,circle,city,civic,clamp,clan,clap,clash,class,classy,clay,clean,clear,clever,cliff,climb,cling,clip,clone,close,cloud,clover,clue,coach,coast,cobra,cocoa,coin,cola,cold,comb,comet,comma,common,comply,conch,cone,cook,corner,costume,cotton,couch,cougar,county,court,cove,coyote,crab,crafty,cramp,crane,crate,crave,crayon,crazy,cream,credit,creek,crepe,crew,crib,crisp,crop,cross,crow,crown,crunch,crush,crust,crypt,cube,cumin,cup,cupcake,curb,cure,curl,curry,cycle,cyclone,dagger,daily,dance,dare,dart,dawn,deal,dean,debate,debit,debris,debut,decade,decay,decide,decor,deepen,deer,defer,defy,delay,delta,demand,denim,depot,desert,detail,device,dew,dial,diced,dilate,dime,diner,dingo,diode,diplomat,direct,dirt,ditch,dizzy,dock,dodge,domain,donate,donkey,donor,donut,doodle,door,dose,dough,dowel,dozen,drag,drama,draw,dream,dress,drift,drill,drink,drip,drive,drone,drool,droop,drop,drum,dryer,duck,duet,dust,duvet,dwarf,eager,eagle,early,earth,easel,east,eaten,echo,eclipse,eddy,edgy,eel,effort,egghead,eighth,eject,elder,elf,elite,elm,elope,elude,elves,ember,empire,empty,enact,endive,energy,engine,ensemble,enter,entire,entry,envoy,equal,equip,erase,errand,error,escape,esteem,ethos,evade,evenly,evict,evolve,exact,exam,excel,excess,excise,exit,exotic,expel,expert,expire,extol,extra,eyebrow,eyelid,fable,fabric,face,faction,fact,fade,fainter,fairly,faith,fake,falcon,family,famine,famous,fancy,fang,fanny,farm,fast,fatal,father,faucet,favor,fawn,feast,feeble,felt,fence,fender,fennel,fence,festive,fiber,fiddle,field,fierce,fifteen,fifth,fig,file,filter,final,finch,finder,finer,finish,fire,firm,first,fish,fit,fixture,fixture,fizz,flag,flame,flaming,flask,flat,flax,fleet,flex,flight,flint,flip,float,flock,floor,flora,floral,flour,flow,flown,fluffy,flush,flyer,foam,fog,foil,fond,fondue,food,fool,forbid,force,forest,forgot,fork,form,forum,found,foyer,frame,fray,fresh,fried,friend,fringe,frog,front,frost,frosting,froth,frown,frozen,fruit,full,fume,fund,funnel,funny,fuse,gable,gag,gala,game,gap,garb,garden,gash,gasp,gator,gauge,gave,gear,gecko,geek,gem,gender,gene,genie,genius,gentle,gently,ghetto,ghost,giant,gift,giggle,gilded,ginger,given,glad,glass,glazed,glee,glide,global,gloom,glory,gloss,glove,glow,goal,goat,goblet,goldfish,golf,goner,good,goofy,gopher,gore,gorged,gossip,gourd,gown,grab,grace,grader,graft,grain,gram,grand,grapes,graph,grasp,grass,grater,grave,gravy,gray,grazing,grease,great,green,grew,grid,grief,grill,grimy,grin,grip,grit,groggy,groom,grope,grout,grove,grown,grub,guess,guest,guide,guilt,guitar,gush,gusto,gut,gym,habit,hack,hair,half,hallway,halo,ham,hammer,hand,handle,handy,hang,happy,harbor,hard,harm,harp,hash,hasty,hatbox,hatch,haven,havoc,hazel,hazy,heap,heat,heave,heavy,hedge,heed,heel,helm,helpless,herald,herbs,herd,hernia,hero,hexagon,hidden,high,hijack,hiker,hillside,hint,hippie,hippo,history,hitch,hive,hoax,hobbit,hockey,hoist,hold,hole,hollow,holly,homage,home,honesty,honey,hoof,hook,hoot,hope,horde,horn,horse,hose,host,hotel,hot,hour,house,hover,howling,huddle,huff,huge,hula,hulk,human,humid,hunk,hunter,hurdle,hurried,hurry,hush,husky,hyper,ice,icing,icon,icy,igloo,ill,imagine,improve,impulse,inbred,incense,inch,income,indeed,indicate,indoor,infect,infield,inflame,inhale,initial,injury,inland,inmate,inning,input,insect,inside,install,insult,insure,intent,intern,intro,invent,invest,invite,iris,iron,island,itch,itinerary,ivory,ivy,jab,jam,jaws,jay,jelly,jersey,jester,jet,jiffy,job,jock,jockey,jog,join,joint,joke,jolly,jostle,jovial,joyful,joyride,joyride,judge,juggle,juice,juicy,jumbo,jump,junior,junk,jury,justice,kangaroo,karate,kayak,keep,kelp,kept,ketchup,kettle,key,kick,kiln,king,kinship,kissing,kiwi,kneel,knack,knee,knelt,knife,knight,knoll,knowing,knuckle,koala,kung,labor,lace,ladder,ladle,lady,lagoon,lair,lake,lance,land,lane,lankiness,lantern,lapel,large,larva,laser,lash,lasso,last,latch,later,latter,lattice,launch,lava,lawful,laxative,layer,lazy,lecture,ledge,leech,left,legal,legend,legged,leggings,legible,legion,lemon,lens,leopard,lesser,letter,level,lever,liable,liar,lick,lid,life,lift,light,like,lilac,lily,limb,limes,limit,limping,line,link,lint,lion,lip,list,lively,living,lizard,llama,load,loaf,lobster,local,locust,lodge,loft,logbook,loincloth,lollipop,lonely,long,loophole,loot,lopsided,lord,losing,loss,lotion,lotto,lotus,loudly,lounge,lousiness,love,low,loyal,loyalty,lucidity,luckiness,lucky,luggage,lukewarm,lullaby,lumber,luminance,luncheon,lung,lurch,lure,lurid,luscious,lush,luster,luxury,lyric,macaron,macaw,machine,mace,macro,magazine,magnet,maiden,mail,major,makeover,maker,malformed,mallard,mammal,manager,mango,manliness,manor,mantis,manual,maple,marathon,marbled,march,mardi,marigold,marine,marked,market,marlin,marmalade,marriage,marry,marsh,martyr,marvel,mascot,mashed,mask,mastiff,matador,matchbook,matriarch,maximum,maze,meadow,meal,meant,measure,meat,mecca,medal,media,medicine,meeting,meltdown,memoir,memo,mended,merchant,mercy,merge,merit,mermaid,merrily,mesh,message,mesquite,metallic,meteor,metric,midair,midway,midweek,midwife,mighty,mime,mimic,mince,minder,mindful,mink,minnow,minor,mint,minus,mirage,mirror,mirth,miserable,mislaid,missile,mist,mitten,mixer,mixing,moat,mobile,mobility,mobilize,moccasin,mocker,mockup,modify,moisten,molar,molasses,mold,mole,molten,moment,monastery,money,monitor,monk,monopoly,monorail,monsoon,monument,moody,moon,mop,morale,moral,morning,morsel,mosaic,moss,moth,mother,motion,motor,mouse,mousy,mouth,move,movie,mower,mucus,muddle,mudflow,muffin,mug,mulch,mule,mullet,multiple,mummy,munchkin,mundane,mural,murkiness,muscle,museum,music,muskiness,muster,mutation,mutilate,mutter,mutual,muzzle,myriad,myself,myth,nacho,nag,nail,name,nanny,nape,napkin,napped,narrow,nastily,nation,native,nautical,navigate,navy,nearby,nectar,needed,needy,nephew,nerve,nest,net,network,neuter,neutral,never,newborn,newsprint,nextdoor,nibble,nicely,niche,nickel,niece,nightcap,nimble,ninth,nitrogen,nobody,nodding,noisily,noted,novel,novice,nowhere,nuance,nucleus,nudge,nugget,number,numbly,nursery,nursing,nurture,nutrient,nutshell,nylon,oak,oasis,oat,oath,obedient,obey,object,oblivious,oboe,obscure,observer,obstacle,obtain,obvious,occult,ocean,ogre,ointment,okay,olive,omega,omelet,omission,onboard,ongoing,onion,online,onset,onslaught,opera,opinion,opossum,opponent,opt,opulent,orange,orbit,orca,ordain,oregano,organ,oriole,ornament,orphan,oscillate,osmosis,osprey,otter,ouch,outback,outbreak,outburst,outcast,outcome,outdated,outfield,outing,outlaw,outline,outlook,outpost,output,outrage,outsize,outskirts,outsmart,oval,oven,overact,overalls,overarch,overbid,overbill,overbite,overbook,overcast,overcoat,overcome,overcook,overdone,overdraft,overdress,overdrive,overdue,overeat,overfed,overfill,overflow,overgrown,overhand,overhang,overhaul,overhead,overhear,overheat,overjoyed,overkill,overlabor,overlaid,overlap,overlay,overload,overlook,overlord,overlying,overnight,overpass,overpay,overplant,overplay,overpower,overprice,overrate,override,overripe,overrule,overrun,oversaw,oversee,overshoot,oversight,oversized,oversleep,oversold,overstaff,overstep,overstock,overstuff,overtake,overthrow,overtime,overtly,overtone,overture,overturn,overuse,overvalue,overview,overwrite,owl,owner,oxygen,oyster,ozone,paced,pacifier,pacifism,pacify,packer,pact,padded,paddle,padlock,pageant,pager,paging,pajamas,palace,palm,paltry,pampered,pamphlet,panama,pancake,pancreas,pandemic,panhandle,panic,panning,panorama,pantry,pants,papaya,paperbill,paperboy,paprika,parcel,parched,parchment,pardon,paring,parish,parka,parkway,parlor,parole,parrot,parsley,parsnip,party,passable,passably,passbook,passenger,passer,passion,passive,passkey,passport,password,pasta,pasted,pastiche,pastor,pastrami,pasture,pasty,patchwork,paternal,pathogen,pathway,patience,patient,patio,patriarch,patriot,patrol,patron,pauper,pavement,paver,pavestone,pavilion,paving,pawing,paycheck,payday,payee,payer,paying,payment,payphone,payroll,peace,peach,peacock,peanut,pear,pebble,pecan,peck,pedal,pediatric,pedigree,pedometer,peephole,pellet,pelt,penalize,penalty,pencil,pendant,pending,penholder,penknife,pennant,penniless,penny,penpal,pension,peppered,peptic,perched,perfected,perfume,perimeter,periodic,perish,perjurer,perjury,perkiness,permanent,permission,permit,perplex,persecute,persevere,persuade,pesky,peso,pessimism,pester,pesticide,petal,petite,petrified,petroleum,petticoat,petty,petunia,pewter,pharmacy,phased,pheasant,philosopher,phoenix,phonebook,phoneme,phonics,phoney,phosphate,phrase,physician,physics,piano,picasso,picket,picnic,pierce,piety,pig,piggyback,pigment,pigpen,pigskin,pigsty,pigtail,pillar,pillow,pilot,pimple,pinata,pincer,pinch,pineapple,pinewood,pink,pint,pinwheel,pioneer,pious,pipeline,piper,piracy,pirate,pistachio,pitcher,pitfall,pitiful,pivot,placate,placebo,placement,placid,plagiarism,plague,plainly,plaintiff,planner,plantain,plaque,plaster,plastics,platform,platinum,platter,playback,playbook,playfully,playful,playgroup,playhouse,playmaker,playmate,playoff,playpen,playroom,playset,plaything,plaza,pleading,pleat,pledge,plenty,pliable,pliers,plight,plod,plop,plot,plow,plug,plum,plume,plummet,plump,plunder,plunge,plural,plywood,poach,pod,poem,poet,pogo,pointed,pointer,pointing,pointless,pointy,poise,poison,poker,poking,polar,policy,polio,polish,politely,polka,polo,polygon,polymer,ponder,pony,pooch,pop,popcorn,poplar,poppy,popsicle,popular,populate,porch,porcupine,pork,porous,portable,portal,portion,portly,portside,poser,posh,position,possible,possum,postage,postal,postcard,posted,poster,posting,postnasal,posture,postwar,potbelly,potholder,pothole,potion,potted,potter,pottery,pouch,poultry,pounce,pouncing,pound,pouring,pouty,powdery,power,pram,prance,pranker,prankish,pranks,prayer,preacher,preaching,precinct,precise,preclude,precook,precut,predator,predefine,predict,preface,prefix,preflight,preform,pregame,prelaunch,prelude,premiere,premier,premise,premium,prenatal,preoccupy,preorder,prepaid,prepay,preplan,preppy,preschool,prescribe,preseason,preset,preshow,president,presoak,prestige,presume,preteen,pretended,pretender,pretense,pretext,pretty,pretzel,prevail,prevent,preview,previous,prewar,prewashed,prideful,pried,primal,primarily,primary,primate,primer,primp,princess,print,prior,prism,prison,prissy,pristine,privacy,private,privatize,proactive,probable,probably,probation,probe,probing,probiotic,problem,procedure,process,proclaim,procreate,procurer,prodigal,prodigy,produce,product,profane,profanity,professed,professor,profile,profound,profusely,progeny,prognosis,program,progress,projector,prologue,prolonged,promenade,prominent,promoter,promotion,prompter,prompting,promptly,pronounce,pronto,proofing,proofread,proofs,propeller,properly,property,proponent,proposal,propose,props,prorate,protector,protegee,proton,prototype,protozoan,protractor,protrude,proud,provable,proved,proven,provided,provider,providing,province,proving,provoke,provoking,provolone,prowess,prowler,prowling,proximity,proxy,prozac,prude,prudishly,prune,pruning,pry,psychiatry,psychic,psychology,publisher,pucker,pueblo,pug,pull,pulmonary,pulp,pulsate,pulse,pulverize,puma,pumice,pummel,pumpkins,punch,punctual,punctuate,punctured,pungent,punisher,punk,pupil,puppet,puppy,purchase,pureblood,purebred,purely,pureness,purgatory,purge,purging,purifier,purify,purist,puritan,purity,purple,purplish,purposely,purr,purse,pursuable,pursuant,pursuit,purveyor,pushcart,pushchair,pusher,pushiness,pushing,pushover,pushpin,pushup,pushy,putdown,putt,puzzle,puzzling,pyramid,pyromania,python,quack,quadrant,quail,quaintly,quake,quaking,qualified,qualifier,qualify,quality,qualm,quantum,quarrel,quarry,quartered,quarterly,quarters,quartet,quartz,queasily,queen,query,quicken,quickly,quickness,quicksand,quickstep,quiet,quill,quilt,quintet,quintuple,quirk,quit,quiver,quizzes,quizzical,quorum,quota,quotable,quote,quoting,rabbet,rabbi,rabbit,rabble,rabid,rabies,raccoon,racecar,racehorse,racer,racetrack,racial,racing,racism,racist,racket,racoon,radar,radial,radiance,radiantly,radiated,radiation,radiator,radio,radish,raffle,raft,rafter,rafting,ragdoll,ragged,raging,ragweed,raider,railcar,railing,railroad,railway,raisin,rake,raking,rally,ramble,rambling,ramp,ramrod,ranch,rancidity,random,ranged,ranger,ranging,ranked,ranking,ransack,ranting,rants,rarity,rascal,rash,rasping,ravage,raven,ravine,raving,ravioli,ravishing,reabsorb,reach,reacquire,reaction,reactive,reactor,readable,reader,readjust,readout,ready,reaffirm,reagent,realism,realist,reality,realize,reallocate,reanalyze,reappear,reapply,reappoint,reapprove,rearrange,rearview,reason,reassembly,reassign,reassure,reattach,reawake,rebalance,rebate,rebel,rebirth,reborn,rebound,rebuff,rebuild,rebuilder,rebuke,rebuttal,recall,recant,recapture,recast,recede,receiver,recent,recess,recharger,recipient,reciting,reckless,reclaim,recliner,reclining,recluse,reclusive,recognize,recoil,recollect,recolor,reconcile,reconfigure,reconnect,reconvert,recopy,record,recount,recoup,recovery,recreate,rectal,rectangle,rectangular,rectified,rectify,recycled,recycler,recycling,reemerge,reenactor,reenter,reentry,reevaluate,reexamine,referable,referee,reference,refill,refinance,refinery,refining,refinish,reflected,reflector,reflex,reflux,refocus,reformat,reformed,reformer,reformism,refract,refrain,refreeze,refresh,refried,refueling,refund,refurbish,refurnish,refusal,refuse,refusing,refutable,refute,regain,regalia,regally,reggae,regime,region,register,registrar,registry,regress,regretful,regroup,regular,regulate,regulator,rehab,reheat,rehire,rehydrate,reimburse,reissue,reiterate,rejoice,rejoicing,rejoin,rekindle,relapse,relapsing,relatable,related,relation,relative,relax,relay,relearn,release,relenting,reliable,reliably,reliance,reliant,relic,relieve,relieving,relight,relish,relive,reload,relocate,relock,reluctant,rely,remake,remark,remarry,rematch,remedy,remember,reminder,remindful,remission,remix,remnant,remodeler,remold,remorse,remote,remove,remover,renaming,render,rendering,rendition,renegade,renewable,renewably,renewal,renewed,renounce,renovate,renovator,rentable,rental,renter,renting,reoccupy,reoccur,reopen,reorder,repackage,repacking,repaint,repair,repave,repaying,repayment,repeal,repeated,repeater,repent,rephrase,replace,replay,replica,reply,reporter,repose,repossess,reposting,repressed,reprieve,reprint,reprise,reproach,reprocess,reproduce,reprogram,reps,reptile,reptilian,repugnant,repulsive,reputably,request,require,requisite,reroute,rerun,resale,resample,rescuer,reseal,research,reselect,reseller,resemble,resend,resent,reset,reshape,reshoot,reshuffle,residence,residency,residual,residue,resigned,resilient,resistant,resisting,resize,resolute,resolved,resonant,resonate,resort,resource,respect,resubmit,result,resume,resupply,resurface,resurrect,retail,retainer,retaining,retake,retaliate,retention,rethink,retinal,retired,retiree,retiring,retold,retool,retorted,retouch,retrace,retract,retrain,retread,retreat,retrial,retrieval,retriever,retry,return,retying,retype,reunion,reunite,reusable,reuse,reveal,reveler,revenge,revenue,reverb,revered,reverence,reverend,reversal,reverse,reversing,reversion,revert,revisable,revise,revision,revisit,revivable,revival,reviver,reviving,revocable,revoke,revolt,revolver,revolving,reward,rewash,reweave,rewind,rewire,reword,rework,rewrap,rewrite,rhubarb,rhyme,ribbon,ribcage,rice,riches,richly,richness,rickety,rickshaw,riddance,ridden,ride,riding,rifling,rift,rigging,righteous,rightful,rigidity,rigidly,rigor,rimless,rimmed,rind,rink,rinse,rinsing,riot,ripcord,ripeness,ripening,ripping,ripple,rippling,riptide,rise,rising,risotto,ritual,riverbank,riverbed,riverboat,riverside,riveter,riveting,roamer,roaming,roast,robbing,robe,robin,robotics,robust,rockband,rocker,rocket,rockfish,rockiness,rocking,rocklike,rockslide,rockstar,rocky,rogue,roman,romp,rope,roping,roster,rosy,rotten,rotting,rotunda,roulette,rounding,roundish,roundness,roundup,roundworm,routine,routing,rover,roving,royal,rubbed,rubber,rubbing,rubble,rubdown,ruby,ruckus,rudder,rug,ruined,rule,rumble,rumbling,rummage,rumor,runaround,rundown,runner,running,runny,runt,runway,rupture,rural,ruse,rush,rust,rut,sabbath,sabotage,sacrament,sacred,sacrifice,sadden,saddlebag,saddled,saddling,sadly,sadness,safari,safeguard,safehouse,safely,safeness,saffron,saga,sage,sagging,saggy,said,saint,sake,salad,salami,salaried,salary,saline,salon,saloon,salsa,salt,salutary,salute,salvage,salvaging,salvation,same,sample,sampling,sanction,sanctity,sanctuary,sandal,sandbag,sandbank,sandbar,sandblast,sandbox,sanded,sandfish,sanding,sandlot,sandpaper,sandpit,sandstone,sandstorm,sandworm,sandy,sappiness,sappy,sapling,sappy,sarcasm,sarcastic,sardine,sash,sassy,satchel,satiable,satin,satirical,satisfied,satisfy,saturate,saturday,sauciness,saucy,sauna,savage,savanna,saved,savings,savior,savor,saw,scabbed,scabby,scalded,scalding,scale,scaling,scallion,scallop,scalping,scam,scandal,scanner,scanning,scant,scapegoat,scarce,scarcity,scarecrow,scared,scarf,scarily,scariness,scaring,scarlet,scarring,scary,scatter,scavenger,scenic,schedule,schematic,scheme,scheming,schilling,schnapps,scholar,science,scientist,scion,scoff,scolding,scone,scoop,scooter,scope,scorch,scorebook,scorecard,scored,scoreless,scorer,scoring,scorn,scorpion,scotch,scour,scouting,scouts,scowling,scrabble,scraggly,scrambled,scrambler,scrap,scratch,scrawny,screen,scribble,scribe,scribing,scrimmage,script,scroll,scrooge,scrounger,scrubbed,scrubber,scruffy,scrunch,scrutiny,scuba,scuff,sculptor,sculpture,scurvy,scuttle,secretary,secretive,secretly,secrets,sectional,sector,secular,securely,security,sedan,sedate,sedation,sedative,sediment,seduce,seducing,segment,seismic,seizing,seldom,selected,selection,selective,selector,self,seller,selves,semantic,semester,semicolon,semifinal,seminar,semisoft,semisweet,senate,senator,send,senior,senora,sensation,sensitive,sensitize,sensually,sensuous,sepia,september,septic,septum,sequel,sequence,sequester,series,sermon,serotonin,serpent,serrated,serve,service,serving,sesame,sessions,setback,setting,settle,settling,setup,sevenfold,seventeen,seventh,seventy,severity,shabby,shack,shaded,shadily,shadiness,shading,shadow,shady,shaft,shakable,shakily,shakiness,shaking,shaky,shale,shallot,shallow,shame,shampoo,shamrock,shank,shanty,shape,shaping,share,sharpener,sharper,sharpie,sharply,sharpness,shawl,sheath,shed,sheep,sheet,shelf,shell,shelter,shelve,shelving,sherry,shield,shifter,shifting,shiftless,shifty,shimmer,shimmy,shindig,shine,shingle,shininess,shining,shiny,ship,shirt,shivering,shock,shone,shoplift,shopper,shopping,shoptalk,shore,shortage,shortcake,shortcut,shorten,shorter,shortfall,shorthand,shortlist,shortly,shortness,shorts,shortwave,shorty,shout,shove,showbiz,showcase,showdown,shower,showgirl,showing,showman,shown,showoff,showpiece,showplace,showroom,showy,shrank,shrapnel,shredder,shredding,shrewdly,shriek,shrill,shrimp,shrine,shrink,shrivel,shrouded,shrubby,shrub,shrug,shrunk,shucking,shudder,shuffle,shuffling,shun,shush,shut,shy,siamese,siberian,sibling,siding,sierra,siesta,sift,sighing,silenced,silencer,silent,silica,silicon,silk,silliness,silly,silo,silt,silver,similarly,simile,simmering,simple,simplify,simply,sincere,sincerity,singer,singing,single,singular,sinister,sinless,sinner,sinuous,sip,siren,sister,sitcom,sitter,sitting,situated,situation,sixfold,sixteen,sixth,sixties,sixtieth,sixtyfold,sizable,sizably,size,sizing,sizzle,sizzling,skater,skating,skedaddle,skeletal,skeleton,skeptic,sketch,skewed,skewer,skid,skied,skier,skies,skiing,skilled,skillet,skillful,skimmed,skimmer,skimming,skimpily,skincare,skinhead,skinless,skinning,skinny,skintight,skipper,skipping,skirmish,skirt,skittle,skydiver,skylight,skyline,skype,skyrocket,skyward,slab,slacked,slacker,slacking,slackness,slacks,slain,slam,slander,slang,slapping,slapstick,slashed,slashing,slate,slather,slaw,sled,sleek,sleep,sleet,sleeve,slept,slew,slice,slicked,slicker,slickly,slickness,sliceable,sliced,slicing,slid,slider,slideshow,sliding,slighted,slightly,slimness,slimy,slinging,slingshot,slinky,slip,slit,sliver,slobbery,slogan,sloped,sloping,sloppily,sloppy,slot,slouching,slouchy,sludge,slug,slum,slurp,slush,sly,smacking,small,smartly,smartness,smasher,smashing,smashup,smell,smelting,smile,smilingly,smirk,smite,smith,smitten,smock,smog,smoked,smokeless,smokiness,smoking,smoky,smolder,smooth,smother,smudge,smudgy,smuggler,smuggling,smugly,smugness,snack,snagged,snaking,snap,snare,snarl,snazzy,sneak,sneer,sneeze,sneezing,snide,sniff,snippet,snipping,snitch,snobbery,snobbish,snobby,snorkel,snort,snout,snowbird,snowboard,snowbound,snowcap,snowdrift,snowdrop,snowfall,snowfield,snowflake,snowiness,snowless,snowlike,snowman,snowplow,snowshoe,snowstorm,snowsuit,snowy,snub,snuff,snuggle,snugly,snugness,speak,spearfish,spearhead,spearman,spearmint,species,specimen,specked,speckled,specks,spectacle,spectator,spectrum,speculate,speech,speed,spellbind,speller,spelling,spendy,spent,spew,sphere,spherical,sphinx,spider,spied,spiffy,spill,spilt,spinach,spinal,spindle,spinner,spinning,spinout,spinster,spiny,spiral,spirited,spiritism,spirits,spiritual,splashed,splashing,splashy,splatter,spleen,splendid,splendor,splice,splicing,splinter,splotchy,splurge,spoilage,spoiled,spoiler,spoiling,spoils,spoken,spokesman,sponge,spongy,sponsor,spoof,spookily,spooky,spool,spoon,spore,sporting,sports,sporty,spotless,spotlight,spotted,spotter,spotting,spotty,spousal,spouse,spout,sprain,sprang,sprawl,spray,spree,sprig,spring,sprinkled,sprinkler,sprint,sprite,sprout,spruce,sprung,spry,spud,spume,spunky,spur,spurious,spurned,spurt,sputter,spyglass,squabble,squad,squall,squander,squash,squatted,squatter,squatting,squeak,squealer,squealing,squeamish,squeegee,squeeze,squeezing,squid,squiggle,squiggly,squint,squire,squirt,squishier,squishy,stability,stabilize,stable,stack,stadium,staff,stage,staging,stagnant,stagnate,stainable,stained,staining,stainless,stalemate,staleness,stalling,stallion,stamina,stammer,stamp,stand,stank,staple,stapling,starboard,starch,stardom,stardust,starfish,stargazer,staring,stark,starless,starlet,starlight,starlit,starring,starry,starship,starter,starting,startle,startling,startup,starved,starving,stash,stated,stately,statement,stateroom,stating,static,statistic,statue,stature,status,statute,statutory,staunch,staving,staying,steadfast,steadier,steadily,steadying,steam,steed,steep,steerable,steering,steersman,stegosaur,stellar,stem,stench,stencil,step,stereo,sterile,sterility,sterilize,sterling,sternness,sternum,stew,stick,stiffen,stiffly,stiffness,stifle,stifling,stillborn,stiller,stilling,stillness,stilt,stimulant,stimulate,stimuli,stimulus,stinger,stingily,stinging,stingray,stingy,stinking,stinky,stipend,stipulate,stir,stitch,stock,stoic,stoke,stole,stomp,stonewall,stoneware,stonework,stoning,stony,stood,stooge,stool,stoop,stoplight,stoppable,stoppage,stopped,stopper,stopping,stopwatch,storable,storage,storeroom,storewide,storm,stout,stove,stowaway,stowing,straddle,straggler,strained,strainer,straining,strangely,stranger,strangle,strategic,strategy,stratus,straw,stray,streak,stream,street,strength,strenuous,strep,stress,stretch,strewn,stricken,strict,stride,strife,strike,striking,strive,striving,strobe,strode,stroller,strongbox,strongly,strongman,struck,structure,strudel,struggle,strum,strung,strut,stubbed,stubble,stubbly,stubborn,stucco,stuck,student,studied,studio,study,stuffed,stuffing,stuffy,stumble,stumbling,stump,stung,stunned,stunner,stunning,stunt,stupor,sturdily,sturdy,styling,stylishly,stylist,stylized,stylus,suave,subarctic,subatomic,subdivide,subdued,subduing,subfloor,subgroup,subheader,subject,sublease,sublet,sublevel,sublime,submarine,submerge,submersed,submitter,subpanel,subpar,subplot,subprime,subscribe,subscript,subsector,subside,subsiding,subsidize,subsidy,subsisted,subsoil,subsonic,substance,subsystem,subtext,subtitle,subtly,subtotal,subtract,subtype,suburb,subway,subwoofer,subzero,succulent,suction,sudden,sudoku,suds,sufferer,suffering,suffice,suffix,suffocate,suffrage,sugar,suggest,suing,suitable,suitably,suitcase,suitor,sulfate,sulfide,sulfite,sulfur,sulk,sullen,sulphate,sulphuric,sultry,superbowl,superglue,superhero,superior,superjet,superman,supermom,supernova,supervise,supper,supplier,supply,support,supremacy,supreme,surcharge,surely,sureness,surface,surfacing,surfboard,surfer,surgery,surgical,surging,surly,surmise,surmount,surpass,surplus,surprise,surreal,surrender,surrogate,surround,survey,survival,survive,surviving,survivor,sushi,suspect,suspend,suspense,sustained,sustainer,swab,swaddling,swagger,swampland,swan,swapping,swarm,sway,swear,sweat,sweep,swell,swept,swerve,swifter,swiftly,swiftness,swimmable,swimmer,swimming,swimsuit,swimwear,swinger,swinging,swipe,swirl,switch,swivel,swizzle,swooned,swoop,swoosh,swore,sworn,swung,sycamore,sympathy,symphonic,symphony,symptom,synapse,syndrome,synergy,synopses,synopsis,synthesis,synthetic,syrup,system,tabasco,tabby,tableful,tables,tablet,tableware,tabloid,tackiness,tacking,tackle,tackling,tacky,taco,tactful,tactical,tactics,tactile,tactless,tadpole,taekwondo,tag,tainted,takable,take,taking,talcum,talisman,tall,talon,tamale,tameness,tamer,tamper,tank,tanned,tannery,tanning,tantrum,tapeless,tapered,tapering,tapestry,tapioca,tapping,taps,tarantula,target,tarmac,tarnish,tarot,tartar,tartly,tartness,task,tassel,taste,tastiness,tasting,tasty,tattered,tattle,tattling,tattoo,taunting,tawny,taxable,taxation,taxicab,taxing,taxpayer,taxpaying,teabag,teacher,teaching,teacup,teakwood,tealights,teammate,teamwork,teapot,tearful,tearjerker,tearless,tearoom,teased,teasing,teaspoon,teatime,teenager,teepee,telecast,telecom,telegram,telegraph,telemetry,telepathy,telephone,telephony,telescope,televise,telethon,teleworker,telltale,tem,tempo,tenacious,tenacity,tenant,tendering,tendon,tendril,tenement,tenfold,tennis,tenor,tense,tensity,tension,tensity,tentacle,tenth,tepee,tepid,tequila,terminal,terminate,termite,ternary,terrain,terribly,terrier,terrific,terrify,terror,terrorism,testable,testament,tested,testicle,testifier,testify,testimony,testing,testy,tether,textbook,textile,texture,thank,that,thaw,theater,theatrics,thee,theft,theme,theology,theorize,thermal,thermos,thesaurus,these,thesis,thespian,thicken,thicket,thickness,thieving,thievish,thigh,thimble,thing,think,thinly,thinner,thinness,thinning,thirstily,thirsting,thirsty,thirteen,thirty,thong,thorn,those,thousand,thrash,thread,threaten,threefold,thrift,thrill,thriving,throat,throbbing,throng,throttle,throwaway,throwback,thrower,throwing,thud,thumb,thumping,thursday,thus,thwarting,thyself,tiara,tibia,tidal,tidbit,tidiness,tidings,tidy,tiger,tighten,tightly,tightness,tightrope,tightwad,tigress,tile,tiling,till,tilt,timid,timing,timothy,tinderbox,tinfoil,tingle,tingling,tingly,tinker,tinkling,tinsel,tinsmith,tint,tinwork,tiny,tipoff,tipped,tipper,tipping,tiptoeing,tiptop,tiring,tissue,trace,tracing,track,tractor,trade,trading,tradition,traffic,tragedy,trailing,trailside,train,traitor,trance,tranquil,transfer,transform,translate,transpire,transport,transpose,trapdoor,trapeze,trapezoid,trapped,trapper,trapping,traps,trash,travel,traverse,travesty,tray,treachery,treading,treadmill,treason,treat,treble,tree,trekker,tremble,trembling,tremor,trench,trend,trespass,triage,trial,triangle,tribesman,tribunal,tribune,tributary,tribute,triceps,trickery,trickily,tricking,trickle,trickster,tricky,tricolor,tricycle,trident,tried,trifle,trifocals,trillion,trilogy,trimester,trimmer,trimming,trimness,trinity,trio,tripod,tripping,triumph,trivial,trodden,trolling,trombone,trophy,tropical,tropics,trouble,troubling,trough,trousers,trout,trowel,truce,truck,truffle,trump,trunks,trustable,trustfully,trusting,trustless,truth,try,tubby,tubeless,tubular,tucked,tucking,tuesday,tug,tuition,tulip,tumble,tumbling,tummy,turban,turbine,turbofan,turbojet,turboprop,turbulent,turf,turkey,turmoil,turret,turtle,tusk,tutor,tutu,tux,tweak,tweed,tweet,tweezers,twelve,twentieth,twenty,twerp,twice,twiddle,twiddling,twig,twilight,twine,twins,twirl,twisted,twister,twisting,twisty,twitch,twitter,tycoon,tying,tyke,udder,ultimate,ultimatum,ultra,umbilical,umbrella,umpire,unabashed,unable,unadorned,unadvised,unafraid,unaired,unaligned,unaltered,unarmored,unashamed,unaudited,unawake,unaware,unbaked,unbalance,unbeaten,unbend,unbent,unbiased,unbitten,unblended,unblessed,unblock,unbolted,unbooked,unbounded,unbox,unbraided,unbridle,unbroken,unbuckled,unbundle,unburned,unbutton,uncanny,uncapped,uncaring,uncertain,unchain,unchanged,uncharted,uncheck,uncivil,unclad,unclaimed,unclamped,unclasp,uncle,unclip,uncloak,unclog,unclothed,uncoated,uncoiled,uncolored,uncombed,uncommon,uncooked,uncork,uncorrupt,uncounted,uncouple,uncouth,uncover,uncross,uncrown,uncrushed,uncured,uncurious,uncurled,uncut,undamaged,undated,undaunted,undead,undecided,undefined,underage,underarm,undercoat,undercook,undercut,underdog,underdone,underfed,underfeed,underfoot,undergo,undergrad,underhand,underline,underling,undermine,undermost,underpaid,underpass,underpay,underrate,undertake,undertone,undertook,undertow,underuse,underwear,underwent,underwire,undesired,undiluted,undivided,undocked,undoing,undone,undrafted,undress,undrilled,undusted,undying,unearned,unearth,unease,uneaten,uneducated,unelected,unending,unengaged,unenvied,unequal,unethical,uneven,unexpired,unexposed,unfailing,unfair,unfasten,unfazed,unfeeling,unfiled,unfilled,unfitted,unfitting,unfixable,unfixed,unflawed,unfocused,unfold,unfounded,unframed,unfreeze,unfrosted,unfrozen,unfunded,unglazed,ungloved,unglue,ungodly,ungraded,ungreased,unguarded,unguided,unhandy,unhappily,unhappy,unharmed,unhealthy,unheard,unhearing,unheated,unhelpful,unhidden,unhinge,unhitched,unholy,unhook,unicorn,unicycle,unified,unifier,uniformed,uniformly,unify,unimpeded,uninjured,uninstall,uninsured,uninvited,union,uniquely,unisexual,unison,unissued,unit,universal,universe,unjustly,unkempt,unkind,unknotted,unknowing,unknown,unlaced,unlatch,unlawful,unleaded,unlearned,unleash,unless,unleveled,unlighted,unlikable,unlimited,unlined,unlinked,unlisted,unlit,unlivable,unloaded,unloader,unlocked,unlocking,unlovable,unloved,unlovely,unloving,unluckily,unlucky,unmade,unmanaged,unmanned,unmapped,unmarked,unmasked,unmasking,unmatched,unmindful,unmixable,unmixed,unmolded,unmoral,unmovable,unmoved,unmoving,unnamable,unnamed,unneeded,unnerve,unnerving,unnoticed,unopened,unopposed,unpack,unpadded,unpainted,unpaired,unpaved,unpeeled,unpicked,unpiloted,unpinned,unplanned,unplanted,unpleased,unpledged,unplowed,unplug,unpopular,unproven,unquenched,unquestioned,unquoted,unranked,unrated,unraveled,unreached,unread,unreal,unreeling,unrefined,unrelated,unrented,unravel,unrigged,unripe,unrivaled,unroasted,unrobed,unroll,unruffled,unruly,unrushed,unsaddle,unsafe,unsaid,unsalted,unsaved,unsavory,unscathed,unscented,unscrew,unsealed,unseated,unsecured,unseeing,unseemly,unseen,unselect,unselfish,unsent,unsettled,unshackle,unshaken,unshaved,unshaven,unsheathe,unshipped,unsightly,unsigned,unskilled,unsliced,unsmooth,unsnap,unsocial,unsoiled,unsold,unsolved,unsorted,unspoiled,unspoken,unstable,unstaffed,unstamped,unsteady,unsterile,unstirred,unstitch,unstopped,unstuck,unstuffed,unstylish,unsubtle,unsubtly,unsuited,unsure,unsworn,untagged,untainted,untaken,untamed,untangled,untapped,untaxed,unthawed,unthread,untidy,untie,until,untimed,untimely,untitled,untoasted,untold,untouched,untracked,untrained,untreated,untried,untrimmed,untrue,untruth,unturned,untwist,untying,unusable,unused,unusual,unvalued,unvaried,unveil,unveiled,unveiling,unvented,unviable,unviewed,unvisited,unvocal,unwanted,unwarlike,unwary,unwashed,unwatched,unweave,unwed,unwelcome,unwell,unwieldy,unwilling,unwind,unwired,unwitting,unwomanly,unworldly,unworn,unworried,unworthy,unwound,unwoven,unwrapped,unwritten,unzip,upbeat,upchuck,upcoming,upcountry,update,upfront,upgrade,upheaval,upheld,uphill,uphold,uplifted,uplifting,upload,upon,upper,upright,uprising,upriver,uproar,uproot,upscale,upside,upstage,upstairs,upstart,upstate,upstream,upstroke,upswing,uptake,uptight,uptown,upturned,upward,upwind,uranium,urban,urchin,urethane,urgency,urgent,urging,urologist,urology,usable,usage,useable,used,uselessly,user,usher,usual,usurper,usury,utensil,utility,utilize,utmost,utopia,utter,vacancy,vacant,vacate,vacation,vagabond,vagrancy,vagrantly,vaguely,vagueness,valiant,valid,valium,valley,valuables,value,vanilla,vanish,vanity,vanquish,vantage,vaporizer,variable,variably,varied,variety,various,varmint,varnish,varsity,varying,vascular,vaseline,vastly,vastness,veal,vegan,veggie,vehicular,velcro,velocity,velvet,vendetta,vending,vendor,veneering,vengeful,venomous,ventricle,venture,venue,venus,verbalize,verbally,verbose,verdict,verify,verse,version,versus,vertebrae,vertical,vertigo,very,vessel,vest,veteran,veto,vexingly,viability,viable,vibes,vice,vicinity,victory,video,viewable,viewer,viewing,viewless,viewpoint,vigorous,village,villain,vindicate,vineyard,vintage,violate,violation,violator,violet,violin,viper,viral,virtual,virtuous,virus,visa,viscosity,viscous,viselike,visible,visibly,vision,visiting,visitor,visor,vista,vitality,vitalize,vitally,vitamins,vivacious,vividly,vividness,vixen,vocalist,vocalize,vocally,vocation,voice,voicing,void,volatile,volley,voltage,volumes,voter,voting,voucher,vowed,vowel,voyage,wackiness,wad,wafer,waffle,waged,wager,wages,waggle,wagon,wake,waking,walk,walmart,walnut,walrus,waltz,wand,wannabe,wanted,wanting,wasabi,washable,washbasin,washboard,washbowl,washcloth,washday,washed,washer,washhouse,washing,washout,washroom,washstand,washtub,wasp,wasting,watch,water,waviness,waving,wavy,whacking,whacky,wham,wharf,wheat,whenever,whiff,whimsical,whinny,whiny,whisking,whoever,whole,whomever,whoopee,whooping,whoops,why,wick,widely,widen,widget,widow,width,wieldable,wielder,wife,wifi,wikipedia,wildcard,wildcat,wilder,wildfire,wildfowl,wildland,wildlife,wildly,wildness,willed,willfully,willing,willow,willpower,wilt,wimp,wince,wincing,wind,wing,winking,winner,winnings,winter,wipe,wired,wireless,wiring,wiry,wisdom,wise,wish,wisplike,wispy,wistful,wizard,wobble,wobbling,wobbly,wok,wolf,wolverine,womanhood,womankind,womanless,womanlike,womanly,womb,woof,wooing,wool,woozy,word,work,worried,worrier,worrisome,worry,worsening,worshiper,worst,wound,woven,wow,wrangle,wrath,wreath,wreckage,wrecker,wrecking,wrench,wriggle,wriggly,wrinkle,wrinkly,wrist,writing,written,wrongdoer,wronged,wrongful,wrongly,wrongness,wrought,xbox,xerox,yahoo,yam,yanking,yapping,yard,yarn,yeah,yearbook,yearling,yearly,yearning,yeast,yelling,yelp,yen,yesterday,yiddish,yield,yin,yippee,yo-yo,yodel,yoga,yogurt,yonder,yoyo,yummy,zap,zealous,zebra,zen,zeppelin,zero,zestfully,zesty,zigzagged,zipfile,zipping,zippy,zips,zit,zodiac,zombie,zone,zoning,zookeeper,zoologist,zoology,zoom').split(',');
 
-document.getElementById('btn-minus').addEventListener('click',function(){
-  if(state.count>1){state.count--;diceCountDisp.textContent=state.count;renderDice();}
-});
-document.getElementById('btn-plus').addEventListener('click',function(){
-  if(state.count<8){state.count++;diceCountDisp.textContent=state.count;renderDice();}
-});
-
-document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';}};
-
-function init(){
-  if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
-  renderDice();
+function genPass(){
+  var c=S.passCfg, w=[];
+  for(var i=0;i<c.wc;i++){
+    var word = WORDS[Math.floor(crRand()*WORDS.length)];
+    if(c.cap) word = word.charAt(0).toUpperCase()+word.slice(1);
+    w.push(word);
+  }
+  var s = w.join(c.sep);
+  if(c.numSuf) s += c.sep + Math.floor(crRand()*90+10);
+  return s;
 }
-init();
+function passEntropy(p){
+  var sep = S.passCfg.sep;
+  var words = p.split(sep).length;
+  var bits = Math.round(Math.log2(WORDS.length) * S.passCfg.wc);
+  if(S.passCfg.numSuf) bits += 7;
+  return bits;
+}
+document.getElementById('pass-gen').onclick=function(){
+  var p=genPass(); document.getElementById('pass-display').textContent=p;
+  var bits=passEntropy(p), si=strengthInfo(bits);
+  document.getElementById('pass-strength').textContent=si.label;
+  document.getElementById('pass-strength').style.color=si.color;
+  document.getElementById('pass-ent').textContent=bits+' bits';
+  vibrate(10);
+};
+document.getElementById('pass-copy').onclick=function(){
+  var p=document.getElementById('pass-display').textContent;
+  if(p&&p!=='Tap Generate') copyTxt(p);
+};
+document.getElementById('wc-slider').oninput=function(){S.passCfg.wc=+this.value;document.getElementById('wc-val').textContent=S.passCfg.wc;saveState();};
+document.getElementById('chk-cap').checked=S.passCfg.cap;
+document.getElementById('chk-numsuf').checked=S.passCfg.numSuf;
+document.getElementById('chk-cap').onchange=function(){S.passCfg.cap=this.checked;saveState();};
+document.getElementById('chk-numsuf').onchange=function(){S.passCfg.numSuf=this.checked;saveState();};
+
+// Separator pills
+document.querySelectorAll('#sep-pills .sep-pill').forEach(function(b){
+  if(b.dataset.s===S.passCfg.sep) b.classList.add('act');
+  b.onclick=function(){
+    document.querySelectorAll('#sep-pills .sep-pill').forEach(function(x){x.classList.remove('act');});
+    this.classList.add('act'); S.passCfg.sep=this.dataset.s; saveState();
+    var lbl={'-':'Dash ( - )','.':'Dot ( . )','_':'Underscore','_':'Underscore',' ':'Space'}[this.dataset.s];
+    document.getElementById('sep-sub').textContent=lbl||'-';
+  };
+});
+
+// Separator pill styles
+var css=document.createElement('style');
+css.textContent='.sep-pill{background:var(--card);border:1px solid var(--border);color:var(--muted);width:28px;height:28px;border-radius:8px;font-family:inherit;cursor:pointer;font-weight:800;}.sep-pill.act{background:var(--accent);color:#07210e;border-color:var(--accent);}';
+document.head.appendChild(css);
+
+// ---- stats
+function renderStats(){
+  document.getElementById('st-gen').textContent=S.stats.gen;
+  document.getElementById('st-str').textContent=S.stats.strBest;
+  document.getElementById('st-cp').textContent=S.stats.cp;
+  document.getElementById('st-avg').textContent=S.stats.avgLen;
+}
+
+// ---- shop
+function renderShop(){
+  var g=document.getElementById('theme-grid'); g.innerHTML='';
+  THEMES.forEach(function(t){
+    var owned=S.ownedThemes.indexOf(t.id)>=0;
+    var active=S.theme===t.id;
+    var card=document.createElement('button');
+    card.className='theme-card'+(owned?' owned':'')+(active?' active':'');
+    card.innerHTML=
+      '<div class="theme-preview" style="background:linear-gradient(135deg,'+t.bg+','+t.card+');">'+
+      '<div style="width:18px;height:18px;border-radius:50%;background:'+t.accent+';position:absolute;top:50%;left:40%;transform:translate(-50%,-50%);box-shadow:0 0 10px '+t.accent+';"></div>'+
+      '<div style="width:12px;height:12px;border-radius:50%;background:'+t.accent2+';position:absolute;top:50%;left:62%;transform:translate(-50%,-50%);"></div></div>'+
+      '<div class="theme-name" style="color:'+(active?t.accent:'var(--text)')+';">'+t.name+'</div>'+
+      '<div class="theme-price '+(owned?'free':'')+'">'+(active?'Equipped':owned?'Tap to use':t.price+' ◎')+'</div>';
+    card.onclick=function(){
+      if(active) return;
+      if(owned){S.theme=t.id;applyTheme(t.id);saveState();renderShop();toast(t.name+' equipped');vibrate(12);return;}
+      if(S.coins<t.price){toast('Need '+(t.price-S.coins)+' more coins');vibrate([20,30,20]);return;}
+      S.coins-=t.price;S.ownedThemes.push(t.id);S.theme=t.id;applyTheme(t.id);
+      saveState();updCoins();renderShop();toast(t.name+' unlocked!');vibrate([20,20,40]);
+    };
+    g.appendChild(card);
+  });
+  if(S.adsRemoved){var b=document.getElementById('buy-ads');b.textContent='Owned ✓';b.disabled=true;}
+}
+
+// ---- starter pack
+function maybeStarter(){
+  if(S.starterSeen||S.adsRemoved||S.stats.gen<5) return;
+  S.starterSeen=true; saveState();
+  document.getElementById('starter-modal').classList.add('show');
+  var end=Date.now()+24*3600*1000;
+  (function tick(){
+    var r=Math.max(0,end-Date.now()), h=Math.floor(r/3600000),
+        m=Math.floor((r%3600000)/60000), s=Math.floor((r%60000)/1000);
+    document.getElementById('starter-timer').textContent='Offer ends in '+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    if(document.getElementById('starter-modal').classList.contains('show')) setTimeout(tick,1000);
+  })();
+}
+document.getElementById('starter-x').onclick=function(){document.getElementById('starter-modal').classList.remove('show');};
+document.getElementById('starter-buy').onclick=function(){if(nativeA)try{nativeA.purchase('remove_ads');}catch(e){}document.getElementById('starter-modal').classList.remove('show');};
+
+// ---- init
+document.getElementById('len-val').textContent=S.cfg.len;
+document.getElementById('len-slider').value=S.cfg.len;
+document.getElementById('wc-val').textContent=S.passCfg.wc;
+document.getElementById('wc-slider').value=S.passCfg.wc;
+updCoins(); renderHist();
+if(S.adsRemoved) document.getElementById('btn-remove-ads').style.display='none';
+if(SS){
+  if(SSTATE==='pass') setTab('pass');
+  else if(SSTATE==='stats') setTab('stats');
+  else if(SSTATE==='shop') setTab('shop');
+  // pre-fill displays
+  var pw='Tr#7$bK!mWq9@xYn';
+  showPw(pw); S.stats.gen=138;S.stats.strBest=96;S.stats.cp=42;S.stats.avgLen=18;
+  document.getElementById('pass-display').textContent='Silver-Oregano-Voyage-Crimson-47';
+  document.getElementById('pass-strength').textContent='Very Strong';
+  document.getElementById('pass-strength').style.color='#43c759';
+  document.getElementById('pass-ent').textContent='82 bits';
+}
+
+window.handleBack = function(){
+  var cur=document.querySelector('.tab.active');
+  if(cur && cur.dataset.tab!=='pw'){ setTab('pw'); return true; }
+  return false;
+};
+})();
 </script>
 </body>
 </html>
