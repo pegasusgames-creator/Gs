@@ -5,20 +5,48 @@ Before doing anything in here, read this file end to end.
 
 ## Companion files
 
-- **`QUALITY_PLAYBOOK.md`** — Design, UX, gameplay, and monetization guidance
-  for every app. **Read this whenever working on any app's visuals, gameplay,
-  menu, onboarding, or monetization.** It covers color palettes, fonts, first-60-seconds
-  onboarding, menu hierarchy, progression systems, ad placement rules, time-limited
-  starter packs, store listing patterns, notifications, and per-app-type rules
-  (games vs. tools vs. trackers vs. kids apps). Applies to all ~200 apps in the portfolio.
-- **`NOTIFICATIONS_IMPL.md`** — Reference Java + JS code for local-notification
-  implementation per `QUALITY_PLAYBOOK.md` §11. Read when adding or modifying
-  notifications on any app. Covers MainActivity bridge methods, NotificationReceiver,
-  AndroidManifest entries, and game.html integration (permission pre-prompt,
-  scheduler calls, settings toggle).
-- **`pre_publish_check.py`** — Run this before every release. Enforces the
-  structural rules in this file.
-- **`init_app_metadata.py`** — Scaffolds the metadata/store folders for an app.
+- **`docs/SHIP_GAME.md`** — **MASTER RELEASE WORKFLOW.** When the user says
+  "ship X" / "release X" / "prepare X for release" / equivalent in any
+  language, **read this file end to end and execute it without asking
+  clarifying questions** unless a hard blocker is hit (see
+  `docs/SHIP_GAME.md` "Hard blockers"). Defines all 8 phases from initial
+  game logic through signed AAB output and per-app `RELEASE_HANDOFF.md`
+  generation. Authoritative spec for what "ready for release" means.
+- **`docs/QUALITY_PLAYBOOK.md`** — Design, UX, gameplay, and monetization
+  guidance for every app. **Read this whenever working on any app's
+  visuals, gameplay, menu, onboarding, or monetization.** It covers
+  color palettes, fonts, first-60-seconds onboarding, menu hierarchy,
+  progression systems, ad placement rules, time-limited starter packs,
+  store listing patterns, notifications, and per-app-type rules (games
+  vs. tools vs. trackers vs. kids apps). Applies to all ~200 apps.
+- **`docs/NOTIFICATIONS_IMPL.md`** — Reference Java + JS code for
+  local-notification implementation per `docs/QUALITY_PLAYBOOK.md` §11.
+  Read when adding or modifying notifications on any app.
+- **`docs/LEVEL_DESIGN.md`** — **MANDATORY for any app with procedural
+  levels.** Pure random shuffles do NOT produce solvable puzzles
+  (WaterSort v1.6.2 shipped with 295 / 500 unsolvable levels). Use
+  reverse-construction from the solved state and verify with a BFS
+  solver before every release. Per-puzzle-type guidance for ball-sort,
+  sliding-tile, sokoban, unblock, pipe-connect, nonogram.
+- **`scripts/verify_watersort_levels.py`** — Reference solvability verifier
+  for ball-sort-style puzzles. Run before every WaterSort release;
+  copy and adapt for other puzzle apps (replicate the JS RNG, mirror
+  the win/move rules, run BFS).
+- **`docs/IAP_CATALOG.md`** — **MANDATORY for any Play Console IAP
+  submission.** Single source of truth for IAP titles, descriptions,
+  prices, types (Consumable/Non-consumable), Play Console form fields,
+  and per-app product subsets. Every flagship app's IAPs come from
+  this catalog. Avoids re-deriving 200-char descriptions every release.
+- **`scripts/pre_publish_check.py`** — Pre-build verification script (run
+  automatically by `scripts/build_release.py`).
+- **`scripts/build_release.py`** — Automates Phase 5/7/8 of `docs/SHIP_GAME.md`:
+  pre-publish checks → `gradlew bundleRelease` → AAB verification.
+  Use: `python3 scripts/build_release.py <AppName>`.
+- **`scripts/gen_handoff.py`** — Generates per-app `RELEASE_HANDOFF.md` (the
+  20–30 min checklist for AdMob/Play Console/IAP setup that the human
+  follows). Use: `python3 scripts/gen_handoff.py <AppName>`.
+- **`scripts/init_app_metadata.py`** — Scaffolds the metadata/store folders for
+  a new app.
 
 ---
 
@@ -52,7 +80,7 @@ App Store Connect listing. **Do not invent per-app URLs or contact emails.**
   apps under the general policy.
 
 **Per-app `store/privacy-policy.html` files SHOULD NOT exist.** The shared
-URL on GitHub Pages is the single source of truth. If `init_app_metadata.py`
+URL on GitHub Pages is the single source of truth. If `scripts/init_app_metadata.py`
 or any past script created a per-app HTML privacy policy, delete it. Stale
 per-app copies create mismatches with what's declared in Play Console — a
 real legal liability if the two disagree, and a Data Safety policy violation
@@ -86,7 +114,7 @@ The wrapper is intentionally shared across all apps. It handles:
 ## Per-app required folder structure
 
 Every app must have this exact structure before it can be published. The
-`pre_publish_check.py` script enforces it.
+`scripts/pre_publish_check.py` script enforces it.
 
 ```
 <AppName>/
@@ -133,8 +161,8 @@ Every app must have this exact structure before it can be published. The
   "contains_ads": true,
   "contains_iap": true,
   "target_audience_min_age": 13,
-  "support_url": "https://pegasusgames-creator.github.io/",
-  "marketing_url": "https://pegasusgames-creator.github.io/",
+  "support_url": "https://pegasusgames.example/support",
+  "marketing_url": "https://pegasusgames.example/ballsortpuzzle",
   "copyright": "© 2026 Pegasus Games"
 }
 ```
@@ -142,7 +170,7 @@ Every app must have this exact structure before it can be published. The
 **`privacy.json`:**
 ```json
 {
-  "privacy_policy_url": "https://pegasusgames-creator.github.io/privacy.html",
+  "privacy_policy_url": "https://pegasusgames.example/privacy/ballsortpuzzle",
   "google_data_safety": {
     "data_collected": ["device_ids", "app_interactions", "crash_logs"],
     "data_shared": ["advertising_id"],
@@ -271,7 +299,7 @@ the portfolio.
 
 1. **Never let two apps have byte-identical `game.html` files.**
    If you are copying a template to start a new app, the very next step is to
-   replace its gameplay logic so the hash differs. Run `pre_publish_check.py`
+   replace its gameplay logic so the hash differs. Run `scripts/pre_publish_check.py`
    before every commit that touches `game.html`.
 
 2. **Never let an app's folder name disagree with its `<title>` tag.**
@@ -287,20 +315,40 @@ the portfolio.
 4. **Never reuse AdMob unit IDs, AdMob app IDs, IAP product IDs, or package names across apps.**
    Every app has its own AdMob app + ad units and its own IAP catalog.
 
-5. **Never batch-publish many apps at once.**
-   Phase releases: the 6 flagship games first, then 3–6 months of clean
-   operation, then at most 2–4 new apps per month. If the user asks to
-   "publish all of them this week," push back and explain why.
+5. **Never batch-publish many apps in a short window.**
+   Sustained 2–3 unique apps per week is the realistic ceiling for this
+   portfolio (org account, Claude-Code-assisted production). Spiking from
+   silence to 5+ apps in a single week — especially in months 1–3 — trips
+   Google's velocity-spike heuristics. Steady, predictable cadence is safer
+   than bursts. See **"Shipping cadence"** section below for the actual
+   schedule and why it works. NOTE: organization accounts on Google Play
+   are exempt from the 12-testers / 14-day closed-testing requirement that
+   applies to personal accounts created after Nov 2023, so apps can be
+   promoted directly to production.
 
-6. **Never remove the shared wrapper code claiming it is duplicate.**
-   The identical 543-line `MainActivity.java` across the 6 flagship games is
+6. **Never let two apps in the same publish window have visually
+   indistinguishable store assets.**
+   Beyond `game.html` byte-identity (red line #1), Google's image
+   classifier compares icons, feature graphics, and screenshot composition
+   across the developer account. Risk patterns to avoid:
+   - Two apps shipping with the same icon focal element (e.g. "vibrant
+     flask icon" — that's WaterSort's, no other app gets it).
+   - Multiple apps with feature graphics whose layout is byte-identical
+     (same gradient direction, same text position, same flask/tile
+     arrangement).
+   - Screenshot frames identical across apps with only the inner
+     gameplay swapped. Frames CAN be consistent (it's brand identity),
+     but the inner gameplay screenshot must be visually distinct per app
+     — different colors, different layout, different content density.
+   The `scripts/pre_publish_check.py` `check_cross_app_asset_similarity` and
+   `check_screenshot_template_reuse` rules detect this.
+
+7. **Never remove the shared wrapper code claiming it is duplicate.**
+   The identical 543-line `MainActivity.java` across the flagship games is
    shared SDK infrastructure — same pattern used by Voodoo, SayGames, King.
-   Do not "de-duplicate" it.
-
-7. **Never use a single screenshot set across multiple apps.**
-   Each app's `store/screenshots/phone/*.png` must show *that specific app*.
-   Reusing a template screenshot set across apps with the title swapped is
-   one of the clearest spam-detector signals.
+   Do not "de-duplicate" it. Google's spam classifier penalizes
+   *content* similarity (game.html, listings, assets), not *wrapper*
+   similarity.
 
 8. **Never commit secrets** (`keystore.properties` with real passwords,
    `google-services.json` if it contains sensitive keys). These belong in
@@ -308,28 +356,130 @@ the portfolio.
 
 9. **Never send push notifications to Kids apps.** Apps under the Google Play
    Families program are forbidden from sending notifications to children. See
-   `QUALITY_PLAYBOOK.md` §11.8. For general-audience apps, follow the
-   notification rules in `QUALITY_PLAYBOOK.md` §11 (no morning sends, no more
+   `docs/QUALITY_PLAYBOOK.md` §11.8. For general-audience apps, follow the
+   notification rules in `docs/QUALITY_PLAYBOOK.md` §11 (no morning sends, no more
    than 1/day, no emotional manipulation, permission requested only after
    positive first-session moment).
+
+10. **Never publish any of the 33 placeholder Dice Roller clones** (see
+    "State of the apps → Placeholder clones" below) without first replacing
+    their `game.html` with genuinely distinct gameplay logic. Their byte-
+    identical `game.html` is the highest-risk single thing in this repo —
+    publishing even 2 of them would cause cascading suspension across the
+    portfolio. The `check_duplicate_game_html` rule blocks this, but rule
+    bypasses or `--allow` flags must never be used to override it.
+
+---
+
+## Shipping cadence
+
+Publishing pace matters. Wrong pace = suspension. Right pace = sustained
+revenue growth. The reasoning below is empirical (based on observed
+publisher patterns), not from official Google policy — Google's published
+rules on this are deliberately vague.
+
+### Target cadence by phase
+
+| Phase | Window | Rate | Why |
+|---|---|---|---|
+| Phase 1 — Establishing reputation | Months 1–2 (now through end of June) | 1 unique app / week | New org account. Each new app is reviewed strictly. Gives time to QA each one and react to any flags. |
+| Phase 2 — Sustained production | Months 3–4 (July, August) | 2 unique apps / week | Account has track record. Asset pipeline is automated (icon gen, screenshot wrap). Quality is sustainable. |
+| Phase 3 — Steady state | Months 5+ (September onward) | 2–3 unique apps / week | Ceiling. Beyond this, quality of icons/screenshots/listings starts dropping and becomes the actual constraint. |
+
+### What "unique" means in this context
+
+Google's automated review compares apps within a single developer account
+on multiple dimensions. An app counts as "unique" only if all of these
+hold true compared to every other app in the portfolio:
+
+1. **`game.html` content is genuinely different** — not a find-and-replace
+   variant. Different mechanic, different state model, different
+   level/content generation. Catches: `check_duplicate_game_html`.
+2. **Icon focal element is different** — a different primary visual subject
+   (flasks vs. blocks vs. tiles vs. ropes). Same artistic style across the
+   portfolio is fine; same subject is not.
+3. **Feature graphic composition is different** — different layout, not
+   just different inner content in the same template.
+4. **Screenshot inner content is different** — even if the marketing
+   wrapper template is shared (which is fine, it's brand consistency),
+   the screenshots inside the frames must show genuinely different
+   gameplay.
+5. **Store listing copy is hand-written, not template-substituted** —
+   each app's `title.txt`, `short_description.txt`, `subtitle.txt`,
+   `full_description.txt` must mention features specific to THAT app.
+
+If any of those 5 dimensions are duplicated across two apps, those two
+apps don't count as "two unique apps" for cadence purposes — they count
+as one app shipped twice, which is what the spam classifier flags.
+
+### Cadence rules of thumb
+
+- **Don't ship multiple apps in the same calendar day.** Even if both are
+  unique, same-day spike is a velocity signal. Spread releases over the
+  week.
+- **Don't ship 2+ apps from the same genre cluster within 7 days.** E.g.,
+  don't release two ball-sort variants in the same week. Diversify across
+  genres within each week.
+- **Don't suddenly accelerate.** Going from 1/week to 5/week in week 6 is
+  riskier than going 1, 1, 2, 2, 2, 2 over the same period. The
+  classifier looks at velocity *delta*, not just absolute rate.
+- **Don't ship anything until WaterSort has been live and crash-free for
+  at least 7 days.** Account-level reputation is built one clean release
+  at a time. Speed comes after stability is proven.
+
+### What's NOT capacity-limited
+
+- **Wrapper code identity across apps is fine.** All Pegasus Games apps
+  share the same `MainActivity.java`. This is normal for publishers and
+  not penalized.
+- **Same monetization stack across apps is fine.** Same AdMob + IAP +
+  Firebase setup is the industry norm.
+- **Same brand colors / fonts / footer text across screenshots is fine.**
+  Brand consistency is desirable. The thing that's NOT fine is the inner
+  gameplay being identical.
+
+### Why this is not "be paranoid, ship slowly"
+
+You CAN ship 2/week sustained from week 5 onward. The corrected pace is
+not "go slow." It's "go fast on the things that should be fast (writing
+genuinely different game.html, generating distinct icons) and don't
+shortcut the things that need to stay distinct."
+
+The mistake-pattern that gets accounts suspended is not "shipping at 2 /
+week." It's "shipping 2 / week where each new app's `game.html` is
+80% identical to the previous one, with a swapped color theme and
+renamed functions." Claude Code can produce that kind of output if the
+prompt is lazy. Always feed Claude Code a fresh design intent for each
+app, not "make another puzzle game like the last one."
 
 ---
 
 ## Required checks before any publish
 
-Before suggesting `./gradlew bundleRelease` for any app, all blocking checks
-in `pre_publish_check.py` must pass. The script covers:
+Before suggesting `./gradlew bundleRelease` for any app — and before
+suggesting upload to Play Console — Claude Code MUST first run
+`pre_publish_check.py <app>` and confirm zero blocking issues. Do not
+build or upload if any blocking check fails. The script covers:
 
 - [ ] No duplicate `game.html` hashes across the portfolio
+- [ ] App is not on the BLOCKED_APPS placeholder-clones list (or its
+      `game.html` has been rewritten and no longer matches Dice Roller)
 - [ ] Folder name matches `<title>` and `android:label`
 - [ ] Unique package name, AdMob app ID, AdMob unit IDs, IAP product IDs
-- [ ] `store/icon_512_playstore.png` exists (512×512, unique)
-- [ ] `store/feature_graphic_1024x500.png` exists (1024×500, unique)
-- [ ] `store/icon_1024_appstore.png` exists (1024×1024, unique)
-- [ ] `store/screenshots/phone/` contains ≥2 PNG files (unique across apps)
-- [ ] `metadata/en-US/title.txt` exists, ≤30 chars, unique
+- [ ] Icons are not byte-identical AND not visually near-identical
+      (perceptual aHash distance > 6) across apps
+- [ ] Feature graphic and app-store icon are unique across apps
+- [ ] Phone screenshots are unique across apps (not just shared wrapper
+      template — the gameplay shown inside must differ)
+- [ ] Listing copy (title, short_description, subtitle, full_description)
+      is unique per app — never template-substituted
+- [ ] `store/icon_512_playstore.png` exists (512×512)
+- [ ] `store/feature_graphic_1024x500.png` exists (1024×500)
+- [ ] `store/icon_1024_appstore.png` exists (1024×1024)
+- [ ] `store/screenshots/phone/` contains ≥2 PNG files
+- [ ] `metadata/en-US/title.txt` exists, ≤30 chars
 - [ ] `metadata/en-US/short_description.txt` exists, ≤80 chars
-- [ ] `metadata/en-US/full_description.txt` exists, ≤4000 chars, unique
+- [ ] `metadata/en-US/full_description.txt` exists, ≤4000 chars
 - [ ] `metadata/en-US/subtitle.txt` exists, ≤30 chars
 - [ ] `metadata/en-US/keywords.txt` exists, ≤100 chars
 - [ ] `metadata/en-US/release_notes.txt` exists, ≤500 chars
@@ -338,13 +488,22 @@ in `pre_publish_check.py` must pass. The script covers:
 - [ ] `metadata/content_rating.json` valid
 - [ ] `metadata/iaps.json` valid (IAP IDs match what's in `MainActivity.java`)
 - [ ] `metadata/review_notes.json` valid
-- [ ] `versionCode` was bumped
-- [ ] `keystore.properties` has real values (not placeholders)
-- [ ] No unreplaced `ENTER_*` placeholders anywhere
-- [ ] Full description and screenshots don't contain prohibited language (#1, Best, Download now, etc.)
+- [ ] Canonical privacy/support URLs match the values in this file
+- [ ] No stale per-app `store/privacy-policy.html` (canonical lives at the
+      shared GitHub Pages URL)
+- [ ] No stale placeholder URLs (`pegasusgames.example`, old `@outlook.com`)
+- [ ] No unreplaced `ENTER_*` placeholders anywhere in code or manifests
+- [ ] Full description and screenshots don't contain prohibited language
+      (#1, Best, Top Rated, Download Now, Install Now, % Off, etc.)
 - [ ] `AndroidManifest.xml` AdMob App ID matches `MainActivity.java`
 
-If any blocking check fails, stop and report. Do not proceed with the build.
+If any blocking check fails, stop and report. Do not proceed with the
+build, do not suggest uploading, and do not advance to the next app.
+
+The first three blocking checks above are the ones that matter most for
+avoiding Repetitive Content suspension. The placeholder-clones blocklist
+is enforced even if the developer says "just ship it" — the block lifts
+automatically once the app's `game.html` is genuinely rewritten.
 
 ---
 
@@ -380,25 +539,25 @@ Blocked from any release pipeline until their `game.html` is real.
 
 ### Finishing a placeholder or thin app
 
-**Before writing any code: read `QUALITY_PLAYBOOK.md`.** It defines the bar
+**Before writing any code: read `docs/QUALITY_PLAYBOOK.md`.** It defines the bar
 every app in the portfolio must hit (vivid color palette, custom font, no
 emoji as UI icons, animated tutorial, rewarded-video options on every helpful
 moment, time-limited starter pack, "More Games" cross-promotion, etc.). A
-"finished" app is one that passes the §12 per-app review checklist in the
+"finished" app is one that passes the §13 per-app review checklist in the
 playbook — not just one whose core mechanic works.
 
-1. Read `QUALITY_PLAYBOOK.md` in full (if not already done in this session)
+1. Read `docs/QUALITY_PLAYBOOK.md` in full (if not already done in this session)
 2. Read `_template/game.html` for the current base pattern
 3. Read a nearby finished game (e.g., `BallSortPuzzle`) for the progression/IAP integration pattern
 4. Write the full game logic in `<APP>/android/app/src/main/assets/game.html` — new code, not copy-paste
 5. Match the app's folder name to the `<title>` tag
 6. Use a distinct color palette (vivid/saturated per playbook §1.1, not pastel)
-7. Populate the full `metadata/` and `store/` folders per the structure above (use `init_app_metadata.py` to scaffold, then fill in)
+7. Populate the full `metadata/` and `store/` folders per the structure above (use `scripts/init_app_metadata.py` to scaffold, then fill in)
 8. Create AdMob app + ad units in the AdMob console; update unit IDs in `MainActivity.java` and the AdMob app ID in `AndroidManifest.xml`
 9. Create IAP products in Play Console (must be Active)
 10. Bump `versionCode` in `android/app/build.gradle`
-11. Walk through the per-app review checklist in `QUALITY_PLAYBOOK.md` §12
-12. Run `pre_publish_check.py` — must pass all blocking checks
+11. Walk through the per-app review checklist in `docs/QUALITY_PLAYBOOK.md` §13
+12. Run `scripts/pre_publish_check.py` — must pass all blocking checks
 
 ### Writing store listing copy for a new app
 
@@ -421,27 +580,46 @@ playbook — not just one whose core mechanic works.
 ### Modifying the shared wrapper (MainActivity.java, NotificationHelper, etc.)
 
 1. Write the change in one app first and test
-2. Write a migration script (pattern: `fix_*.py` files) that applies to all apps
+2. Write a migration script (pattern: `scripts/fix_*.py` files) that applies to all apps
 3. Preserve per-app values: package name, AdMob IDs, IAP IDs, colors
 4. Dry-run with diff output before writing
 5. Bump `versionCode` of all affected apps
 
 ### Adding a brand new game/app
 
-**Before writing any code: read `QUALITY_PLAYBOOK.md`.** Same standards apply
+**Before writing any code: read `docs/QUALITY_PLAYBOOK.md`.** Same standards apply
 to brand new apps as to polishing existing ones.
+
+**Anti-clone rule for new apps**: do NOT start a new app by saying
+"make another game like X". The result will be 80% identical to X with
+swapped colors — exactly the pattern Google's spam classifier flags.
+Instead, start each new app from the *mechanic* (sudoku constraint
+solving, tile-pair matching, line-clearing, jigsaw piece snapping —
+genuinely different state models and input patterns), then design
+visuals to fit that mechanic. The wrapper code is shared; the
+`game.html` must not be a variant of an existing one.
 
 1. Copy `_template/` to a new `<NewApp>/` folder
 2. Rename the package path under `android/app/src/main/java/com/pegasusgames/<newapp>/`
 3. Update `applicationId` in `android/app/build.gradle`
 4. Update `android:label` in `AndroidManifest.xml`
-5. Write real `game.html` following the playbook — vivid palette, proper font, no emoji icons, animated tutorial, etc.
+5. Write real `game.html` following the playbook — vivid palette, proper
+   font, no emoji icons, animated tutorial, etc. Confirm the new game's
+   mechanic is genuinely different from every other published app in the
+   portfolio (different state model, different player input pattern, not
+   just a reskin).
 6. Run `init_app_metadata.py <NewApp>` to scaffold the metadata/ and store/ folders
-7. Fill in all the metadata files
+7. Fill in all the metadata files **with hand-written copy specific to
+   THIS app** — never template-substitute another app's listing
 8. Create AdMob + IAP products in the respective consoles
-9. Create the actual screenshot and icon files (don't leave placeholder PNGs) following playbook §7
-10. Walk through the per-app review checklist in `QUALITY_PLAYBOOK.md` §12
-11. Run `pre_publish_check.py <NewApp>` — must pass
+9. Create the actual screenshot and icon files (don't leave placeholder
+   PNGs) following playbook §7. The icon's focal element must differ from
+   every other Pegasus Games app's icon focal element.
+10. Walk through the per-app review checklist in `docs/QUALITY_PLAYBOOK.md` §13
+11. Run `pre_publish_check.py <NewApp>` — must pass, including the new
+    `cross-app asset similarity` and `listing copy uniqueness` checks
+12. Confirm the cadence rules in **"Shipping cadence"** above allow
+    publishing this app this week given what else has shipped recently
 
 ### Making mass changes
 
@@ -451,7 +629,7 @@ Always write a Python script that:
 - Iterates only over actual app directories (skip `_template`, `_release`, `__pycache__`, hidden dirs)
 - Preserves per-app unique values (`applicationId`, AdMob IDs, IAP IDs, package statements, `WEBVIEW_BG_COLOR`, icons, store assets, metadata text files)
 - Prints what it's about to do before doing it; add a `--dry-run` flag for non-trivial scripts
-- Follows the existing `fix_all_apps.py` / `prepare_for_publish.py` conventions
+- Follows the existing `scripts/fix_all_apps.py` / `scripts/prepare_for_publish.py` conventions
 
 ---
 
@@ -460,8 +638,12 @@ Always write a Python script that:
 If you see any of these while working, stop and bring them up:
 
 - An app whose `game.html` duplicates another app's
+- An app on the BLOCKED_APPS placeholder-clones list whose `game.html`
+  hasn't been rewritten yet
 - An app whose folder name doesn't match its `<title>`
 - An app with a shared AdMob unit ID or AdMob app ID with another app
+- An icon that's visually near-identical to another app's icon (same
+  focal element with swapped colors counts as the same icon, not a new one)
 - A request to publish more than 2–3 apps in the same week
 - A request to auto-generate Play Console listings from a template (string substitution across apps)
 - An app with `game.html` under ~8KB planned for publishing
@@ -472,24 +654,27 @@ If you see any of these while working, stop and bring them up:
 - A privacy policy URL or support URL that doesn't match the canonical values in this file
 - An app whose `iaps.json` doesn't match the product IDs declared in its `MainActivity.java`
 - A `content_rating.json` with `gambling_mechanics` set for a game targeted at children (automatic rejection)
+- A user request to "just ship the placeholder app, I'll fix it later" — say
+  no. Placeholder clones violate Google's Repetitive Content policy and one
+  publish is enough to risk the whole account.
 
 ---
 
 ## Useful existing scripts
 
-- `fix_all_apps.py` — Android fixes (billing v8, ProGuard, manifest cleanup) + iOS scaffolding
-- `prepare_for_publish.py` — AppLovin MAX upgrade, notification infrastructure, versionCode bumps (scoped to the 6 flagship games)
-- `gen_store_assets.py` — generates store assets
-- `add_retention_features.py` — adds retention hooks
-- `add_translations.py` — i18n strings
-- `pre_publish_check.py` — the guard script; run before every release
-- `init_app_metadata.py` — scaffolds the metadata/ and store/ folder structure for an app (use when starting work on a new app)
+- `scripts/fix_all_apps.py` — Android fixes (billing v8, ProGuard, manifest cleanup) + iOS scaffolding
+- `scripts/prepare_for_publish.py` — AppLovin MAX upgrade, notification infrastructure, versionCode bumps (scoped to the 6 flagship games)
+- `scripts/gen_store_assets.py` — generates store assets
+- `scripts/add_retention_features.py` — adds retention hooks
+- `scripts/add_translations.py` — i18n strings
+- `scripts/pre_publish_check.py` — the guard script; run before every release
+- `scripts/init_app_metadata.py` — scaffolds the metadata/ and store/ folder structure for an app (use when starting work on a new app)
 
 ---
 
 ## House style for generated code
 
-- **Python**: stdlib only unless user asks otherwise; docstring header; `BASE` constant; match patterns in `fix_all_apps.py`.
+- **Python**: stdlib only unless user asks otherwise; docstring header; `BASE` constant; match patterns in `scripts/fix_all_apps.py`.
 - **Java**: match existing `MainActivity.java` formatting (4-space indent, grouped imports with section comments).
 - **HTML/CSS/JS in `game.html`**: single file; inline `<style>` and `<script>`; CSS custom properties for theme at the top (`:root { --bg: ...; }`); no external CDN dependencies (WebView loads from local assets).
 - **JSON metadata**: 2-space indent, trailing newline, UTF-8, no comments (valid JSON).

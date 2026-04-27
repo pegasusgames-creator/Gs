@@ -2,268 +2,264 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roller</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Fruit Merge</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#e94560; --accent2:#533483; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
-#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
-header h1 { font-size:1.3rem; font-weight:700; }
-header h1 span { color:var(--accent); }
-#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
-#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
-.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
-
-/* Dice display area */
-#dice-area { display:flex; flex-wrap:wrap; justify-content:center; gap:14px; min-height:120px; align-items:center; padding:10px 0; }
-.die {
-  width:84px; height:84px;
-  background:var(--card);
-  border-radius:16px;
-  border:2px solid rgba(233,69,96,0.4);
-  display:flex; align-items:center; justify-content:center;
-  font-size:2.4rem; font-weight:900;
-  color:var(--accent);
-  cursor:pointer;
-  user-select:none;
-  transition:transform 0.08s;
-  position:relative;
-  overflow:hidden;
-}
-.die.rolling {
-  animation:shake 0.4s ease-out;
-}
-@keyframes shake {
-  0%  { transform:rotate(-8deg) scale(1.05); }
-  20% { transform:rotate(8deg)  scale(1.08); }
-  40% { transform:rotate(-6deg) scale(1.06); }
-  60% { transform:rotate(6deg)  scale(1.07); }
-  80% { transform:rotate(-3deg) scale(1.03); }
-  100%{ transform:rotate(0deg)  scale(1); }
-}
-.die.btn-pressed { transform:scale(0.9); }
-
-/* Die type selector */
-.die-types { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
-.dtype-btn { background:var(--card); border:2px solid transparent; border-radius:8px; color:var(--muted); font-size:0.8rem; font-weight:700; padding:6px 10px; cursor:pointer; }
-.dtype-btn.active { border-color:var(--accent); color:var(--accent); }
-.dtype-btn.btn-pressed { transform:scale(0.9); }
-
-/* Count row */
-.count-row { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
-.count-label { font-size:0.9rem; color:var(--muted); }
-.count-ctrl { display:flex; align-items:center; gap:12px; }
-.count-btn { width:34px; height:34px; border-radius:50%; background:var(--card); border:2px solid var(--accent); color:var(--accent); font-size:1.3rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.count-btn.btn-pressed { transform:scale(0.88); }
-#dice-count-disp { font-size:1.2rem; font-weight:700; min-width:24px; text-align:center; }
-
-/* Roll button */
-#btn-roll {
-  width:100%;
-  background:linear-gradient(135deg,var(--accent),#c0392b);
-  border:none; border-radius:var(--radius);
-  color:#fff; font-size:1.3rem; font-weight:800;
-  padding:18px; cursor:pointer;
-  margin-bottom:12px;
-  box-shadow:0 6px 20px rgba(233,69,96,0.45);
-}
-#btn-roll.btn-pressed { transform:scale(0.97); }
-
-/* Stats */
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-.stat-box { background:var(--card); border-radius:10px; padding:10px; text-align:center; }
-.stat-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:3px; }
-.stat-val { font-size:1.2rem; font-weight:700; }
-
-/* History */
-#history-list { display:flex; flex-direction:column; gap:6px; }
-.history-item { background:var(--card); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; font-size:0.85rem; }
-.history-dice { color:var(--muted); }
-.history-sum { color:var(--accent); font-weight:700; }
-
-#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+:root { --bg:#1b1b2f; --surface:#2a2a4a; --accent:#ff6b6b; --text:#f0f0f0; }
+* { box-sizing:border-box; margin:0; padding:0; touch-action:manipulation; }
+body { background:var(--bg); color:var(--text); font-family:'Segoe UI',sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:100vh; overflow:hidden; }
+#hdr { display:flex; justify-content:space-between; align-items:center; width:100%; max-width:400px; padding:48px 16px 8px; }
+#score-box { text-align:center; }
+#score-label { font-size:0.7rem; color:#aaa; text-transform:uppercase; letter-spacing:1px; }
+#score-val { font-size:1.6rem; font-weight:700; color:var(--accent); }
+#best-box { text-align:center; }
+#best-label { font-size:0.7rem; color:#aaa; }
+#best-val { font-size:1.1rem; font-weight:700; color:#f9ca24; }
+#next-box { text-align:center; }
+#next-label { font-size:0.7rem; color:#aaa; margin-bottom:4px; }
+#next-canvas { display:block; margin:0 auto; }
+#game-area { position:relative; }
+#main-canvas { display:block; border-left:3px solid #4a4a8a; border-right:3px solid #4a4a8a; border-bottom:3px solid #4a4a8a; border-radius:0 0 10px 10px; touch-action:none; cursor:crosshair; }
+#drop-line { position:absolute; top:0; left:0; width:100%; height:3px; background:rgba(255,107,107,0.4); pointer-events:none; }
+#overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:100; }
+#overlay.show { display:flex; }
+#overlay h2 { font-size:2rem; color:var(--accent); margin-bottom:8px; }
+#overlay p { color:#ccc; margin-bottom:20px; font-size:1.1rem; }
+.btn { background:var(--accent); color:#fff; border:none; padding:14px 32px; border-radius:30px; font-size:1rem; font-weight:700; cursor:pointer; margin:6px; }
+.btn:active { opacity:0.85; }
+.btn-sec { background:#4a4a8a; }
 </style>
 </head>
 <body>
-<div id="app">
-  <header>
-    <h1>Dice <span>Roller</span></h1>
-    <button id="btn-remove-ads">Remove Ads</button>
-  </header>
-  <div id="scroll">
+<button id="btn-remove-ads" onclick="if(window.Android)Android.purchase('remove_ads')" style="position:fixed;top:8px;right:8px;z-index:9999;background:#533483;border:none;color:#fff;font-size:0.7rem;font-weight:600;padding:5px 10px;border-radius:20px;cursor:pointer;">Remove Ads</button>
 
-    <!-- Dice display -->
-    <div class="card">
-      <div class="card-title">Your Roll</div>
-      <div id="dice-area"></div>
-    </div>
+<div id="hdr">
+  <div id="score-box"><div id="score-label">Score</div><div id="score-val">0</div></div>
+  <div id="next-box"><div id="next-label">Next</div><canvas id="next-canvas" width="50" height="50"></canvas></div>
+  <div id="best-box"><div id="best-label">Best</div><div id="best-val">0</div></div>
+</div>
 
-    <!-- Settings -->
-    <div class="card">
-      <div class="card-title">Die Type</div>
-      <div class="die-types" id="die-types"></div>
-      <div class="count-row">
-        <span class="count-label">Number of dice</span>
-        <div class="count-ctrl">
-          <button class="count-btn" id="btn-minus">−</button>
-          <span id="dice-count-disp">2</span>
-          <button class="count-btn" id="btn-plus">+</button>
-        </div>
-      </div>
-    </div>
+<div id="game-area">
+  <div id="drop-line"></div>
+  <canvas id="main-canvas"></canvas>
+</div>
 
-    <!-- Roll button -->
-    <button id="btn-roll">🎲 Roll!</button>
-
-    <!-- Stats -->
-    <div class="card">
-      <div class="card-title">Last Roll</div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-label">Sum</div><div class="stat-val" id="stat-sum">—</div></div>
-        <div class="stat-box"><div class="stat-label">Min</div><div class="stat-val" id="stat-min">—</div></div>
-        <div class="stat-box"><div class="stat-label">Max</div><div class="stat-val" id="stat-max">—</div></div>
-      </div>
-    </div>
-
-    <!-- History -->
-    <div class="card">
-      <div class="card-title">History</div>
-      <div id="history-list"><div style="color:var(--muted);font-size:0.85rem">No rolls yet</div></div>
-    </div>
-
-  </div>
-  <div id="admob-banner">Advertisement</div>
+<div id="overlay">
+  <h2>Game Over!</h2>
+  <p id="over-score">Score: 0</p>
+  <button class="btn" onclick="initGame()">Play Again</button>
 </div>
 
 <script>
-'use strict';
-(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button,.die,.dtype-btn,.count-btn');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
-
-var DIE_TYPES=[4,6,8,10,12,20,100];
-var state={sides:6,count:2,useCount:0,removeAds:false};
-var history=[];
-
-var diceArea=document.getElementById('dice-area');
-var dieTypesEl=document.getElementById('die-types');
-var diceCountDisp=document.getElementById('dice-count-disp');
-
-// Build die type buttons
-DIE_TYPES.forEach(function(s){
-  var btn=document.createElement('button');
-  btn.className='dtype-btn'+(s===6?' active':'');
-  btn.textContent='D'+s;
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.dtype-btn').forEach(function(b){b.classList.remove('active');});
-    btn.classList.add('active');
-    state.sides=s;
-    renderDice();
-  });
-  dieTypesEl.appendChild(btn);
-});
-
-function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
-
-function renderDice(values){
-  diceArea.innerHTML='';
-  for(var i=0;i<state.count;i++){
-    var die=document.createElement('div');
-    die.className='die';
-    die.textContent=values?values[i]:'?';
-    (function(idx){
-      die.addEventListener('click',function(){rollSingle(idx);});
-    })(i);
-    diceArea.appendChild(die);
-  }
-}
-
-function rollAll(){
-  var vals=[];
-  for(var i=0;i<state.count;i++) vals.push(randInt(1,state.sides));
-  animateRoll(vals);
-  updateStats(vals);
-  addHistory(vals);
-  state.useCount++;
-  if(!state.removeAds&&state.useCount%7===0&&window.Android) Android.showInterstitial();
-}
-
-function rollSingle(idx){
-  var dies=diceArea.querySelectorAll('.die');
-  var val=randInt(1,state.sides);
-  dies[idx].textContent=val;
-  dies[idx].classList.remove('rolling');
-  void dies[idx].offsetWidth;
-  dies[idx].classList.add('rolling');
-  setTimeout(function(){dies[idx].classList.remove('rolling');},420);
-}
-
-function animateRoll(finalVals){
-  var dies=diceArea.querySelectorAll('.die');
-  dies.forEach(function(d){
-    d.classList.remove('rolling');
-    void d.offsetWidth;
-    d.classList.add('rolling');
-  });
-  // Quick flicker then show final
-  var steps=6, interval=50;
-  for(var s=0;s<steps;s++){
-    (function(step){
-      setTimeout(function(){
-        dies.forEach(function(d){d.textContent=randInt(1,state.sides);});
-        if(step===steps-1){
-          setTimeout(function(){
-            finalVals.forEach(function(v,i){dies[i].textContent=v;});
-            dies.forEach(function(d){d.classList.remove('rolling');});
-          },80);
-        }
-      },step*interval);
-    })(s);
-  }
-}
-
-function updateStats(vals){
-  document.getElementById('stat-sum').textContent=vals.reduce(function(a,b){return a+b;},0);
-  document.getElementById('stat-min').textContent=Math.min.apply(null,vals);
-  document.getElementById('stat-max').textContent=Math.max.apply(null,vals);
-}
-
-function addHistory(vals){
-  history.unshift({sides:state.sides,vals:vals.slice(),sum:vals.reduce(function(a,b){return a+b;},0)});
-  if(history.length>10) history.pop();
-  var el=document.getElementById('history-list');
-  el.innerHTML='';
-  history.forEach(function(h){
-    var item=document.createElement('div');
-    item.className='history-item';
-    item.innerHTML='<span class="history-dice">'+h.count+'×D'+h.sides+': ['+h.vals.join(', ')+']</span><span class="history-sum">'+h.sum+'</span>';
-    // patch count
-    item.querySelector('.history-dice').textContent=h.vals.length+'×D'+h.sides+': ['+h.vals.join(', ')+']';
-    el.appendChild(item);
-  });
-}
-
-document.getElementById('btn-roll').addEventListener('click',function(){
-  renderDice();
-  setTimeout(rollAll,10);
-});
-
-document.getElementById('btn-minus').addEventListener('click',function(){
-  if(state.count>1){state.count--;diceCountDisp.textContent=state.count;renderDice();}
-});
-document.getElementById('btn-plus').addEventListener('click',function(){
-  if(state.count<8){state.count++;diceCountDisp.textContent=state.count;renderDice();}
-});
-
-document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';}};
+const FRUITS=[
+  {name:'Cherry',   r:14, color:'#c0392b', emoji:'🍒'},
+  {name:'Strawberry',r:18,color:'#e74c3c', emoji:'🍓'},
+  {name:'Grape',    r:22, color:'#8e44ad', emoji:'🍇'},
+  {name:'Dekopon',  r:27, color:'#e67e22', emoji:'🍊'},
+  {name:'Persimmon',r:32, color:'#d35400', emoji:'🍅'},
+  {name:'Apple',    r:38, color:'#27ae60', emoji:'🍎'},
+  {name:'Pear',     r:44, color:'#f1c40f', emoji:'🍐'},
+  {name:'Peach',    r:50, color:'#ff9ff3', emoji:'🍑'},
+  {name:'Pineapple',r:56, color:'#f9ca24', emoji:'🍍'},
+  {name:'Melon',    r:64, color:'#6ab04c', emoji:'🍈'},
+  {name:'Watermelon',r:72,color:'#ff4757',emoji:'🍉'}
+];
+const SCORES=[1,3,6,10,15,21,28,36,45,55,66];
+const COLS=7;
+let CW=350, CH=480, CELL=50;
+let canvas, ctx, nextCvs, nextCtx;
+let grid=[], score=0, best=+localStorage.getItem('fm_best')||0, nextType=0;
+let dropX=CW/2, gameOver=false, dropping=false;
+// Falling animation
+let fallingFruit=null, dropY=0;
 
 function init(){
-  if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
-  renderDice();
+  canvas=document.getElementById('main-canvas');
+  ctx=canvas.getContext('2d');
+  nextCvs=document.getElementById('next-canvas');
+  nextCtx=nextCvs.getContext('2d');
+  const avail=Math.min(window.innerWidth-6,400);
+  CW=avail; CELL=Math.floor(CW/COLS); CH=Math.floor(CELL*9.5);
+  canvas.width=CW; canvas.height=CH;
+  document.getElementById('game-area').style.width=CW+'px';
+  document.getElementById('best-val').textContent=best;
+  initGame();
 }
-init();
+
+function initGame(){
+  grid=Array.from({length:COLS},()=>[]);
+  score=0; gameOver=false; dropping=false; fallingFruit=null;
+  document.getElementById('score-val').textContent=0;
+  document.getElementById('overlay').classList.remove('show');
+  nextType=randType();
+  dropX=CW/2;
+  drawNext();
+  drawBoard();
+  requestAnimationFrame(loop);
+}
+
+function randType(){ return Math.floor(Math.random()*5); }
+
+function drawNext(){
+  nextCtx.clearRect(0,0,50,50);
+  const f=FRUITS[nextType];
+  nextCtx.fillStyle=f.color;
+  nextCtx.beginPath(); nextCtx.arc(25,25,f.r*0.7,0,Math.PI*2); nextCtx.fill();
+  nextCtx.font=`${Math.round(f.r*1.0)}px sans-serif`;
+  nextCtx.textAlign='center'; nextCtx.textBaseline='middle';
+  nextCtx.fillText(f.emoji,25,25);
+}
+
+function drawBoard(){
+  ctx.clearRect(0,0,CW,CH);
+  ctx.fillStyle='#1b1b2f'; ctx.fillRect(0,0,CW,CH);
+  // grid lines (columns)
+  ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
+  for(let c=0;c<COLS;c++){ ctx.beginPath(); ctx.moveTo(c*CELL,0); ctx.lineTo(c*CELL,CH); ctx.stroke(); }
+  // danger line
+  ctx.strokeStyle='rgba(255,100,100,0.35)'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(0,CELL*1.5); ctx.lineTo(CW,CELL*1.5); ctx.stroke();
+  ctx.setLineDash([]);
+  // draw stacked fruits
+  for(let c=0;c<COLS;c++){
+    grid[c].forEach((type,row)=>{
+      const f=FRUITS[type];
+      const x=(c+0.5)*CELL, y=CH-(row+0.5)*CELL;
+      drawFruitAt(ctx,f,x,y,CELL*0.42);
+    });
+  }
+  // draw falling fruit preview (drop indicator)
+  if(!dropping&&!gameOver){
+    const col=Math.min(Math.max(Math.floor(dropX/CELL),0),COLS-1);
+    const f=FRUITS[nextType];
+    const stackH=grid[col].length;
+    const gy=CH-(stackH+0.5)*CELL;
+    // guide line
+    ctx.strokeStyle='rgba(255,255,255,0.15)'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo((col+0.5)*CELL,CELL*1.3); ctx.lineTo((col+0.5)*CELL,gy-CELL*0.5); ctx.stroke();
+    ctx.setLineDash([]);
+    drawFruitAt(ctx,f,(col+0.5)*CELL,CELL*0.65,CELL*0.42);
+  }
+  // draw falling animation
+  if(fallingFruit){
+    const f=FRUITS[fallingFruit.type];
+    drawFruitAt(ctx,f,fallingFruit.x,fallingFruit.y,CELL*0.42);
+  }
+}
+
+function drawFruitAt(c,f,x,y,r){
+  c.save();
+  c.shadowColor=f.color; c.shadowBlur=8;
+  c.fillStyle=f.color; c.beginPath(); c.arc(x,y,r,0,Math.PI*2); c.fill();
+  c.restore();
+  c.font=`${Math.round(r*1.5)}px sans-serif`; c.textAlign='center'; c.textBaseline='middle';
+  c.fillText(f.emoji,x,y);
+}
+
+canvas.addEventListener('mousemove',e=>{ if(gameOver||dropping)return; const rect=canvas.getBoundingClientRect(); dropX=e.clientX-rect.left; drawBoard(); });
+canvas.addEventListener('click',e=>{ if(gameOver||dropping)return; const rect=canvas.getBoundingClientRect(); dropX=e.clientX-rect.left; doDropTouch(); });
+canvas.addEventListener('touchstart',e=>{ e.preventDefault(); if(gameOver||dropping)return; const rect=canvas.getBoundingClientRect(); dropX=e.touches[0].clientX-rect.left; drawBoard(); },{passive:false});
+canvas.addEventListener('touchmove',e=>{ e.preventDefault(); if(gameOver||dropping)return; const rect=canvas.getBoundingClientRect(); dropX=e.touches[0].clientX-rect.left; drawBoard(); },{passive:false});
+canvas.addEventListener('touchend',e=>{ e.preventDefault(); if(gameOver||dropping)return; doDropTouch(); },{passive:false});
+
+function doDropTouch(){
+  if(dropping||gameOver)return;
+  const col=Math.min(Math.max(Math.floor(dropX/CELL),0),COLS-1);
+  startDrop(col);
+}
+
+function startDrop(col){
+  dropping=true;
+  const stackH=grid[col].length;
+  const targetY=CH-(stackH+0.5)*CELL;
+  fallingFruit={type:nextType, x:(col+0.5)*CELL, y:CELL*0.65, col, targetY};
+}
+
+function loop(){
+  if(gameOver)return;
+  if(fallingFruit){
+    fallingFruit.y+=12;
+    if(fallingFruit.y>=fallingFruit.targetY){
+      landFruit(fallingFruit.col, fallingFruit.type);
+      fallingFruit=null; dropping=false;
+    }
+  }
+  drawBoard();
+  requestAnimationFrame(loop);
+}
+
+function landFruit(col, type){
+  grid[col].push(type);
+  mergeCheck(col);
+  // check game over
+  if(grid[col].length*CELL > CH-CELL*1.5){
+    endGame(); return;
+  }
+  nextType=randType(); drawNext(); dropX=CW/2;
+}
+
+function mergeCheck(col){
+  let changed=true;
+  while(changed){
+    changed=false;
+    for(let c=0;c<COLS;c++){
+      for(let r=0;r<grid[c].length-1;r++){
+        if(grid[c][r]===grid[c][r+1]&&grid[c][r]<FRUITS.length-1){
+          const newType=grid[c][r]+1;
+          grid[c].splice(r,2,newType);
+          addScore(SCORES[newType]);
+          changed=true; break;
+        }
+      }
+      if(changed)break;
+    }
+    // cross-column merges: check adjacent columns at same row height
+    if(!changed){
+      outer:
+      for(let c=0;c<COLS-1;c++){
+        const minLen=Math.min(grid[c].length,grid[c+1].length);
+        for(let r=0;r<minLen;r++){
+          if(grid[c][r]===grid[c+1][r]&&grid[c][r]<FRUITS.length-1){
+            const newType=grid[c][r]+1;
+            // place merged in left column at same height
+            grid[c].splice(r,1,newType);
+            grid[c+1].splice(r,1);
+            addScore(SCORES[newType]);
+            changed=true; break outer;
+          }
+        }
+      }
+    }
+  }
+}
+
+function addScore(pts){
+  score+=pts;
+  document.getElementById('score-val').textContent=score;
+  if(score>best){ best=score; localStorage.setItem('fm_best',best); document.getElementById('best-val').textContent=best; }
+}
+
+function endGame(){
+  gameOver=true; _showInterstitial();
+  document.getElementById('over-score').textContent='Score: '+score;
+  document.getElementById('overlay').classList.add('show');
+}
+
+window.addEventListener('load',init);
+
+var _adsRemoved=false, _interstitialCount=0;
+function _showInterstitial(){
+  if(_adsRemoved)return; _interstitialCount++;
+  if(_interstitialCount%3===0&&window.Android){try{Android.showInterstitial();}catch(e){}}
+}
+window.onPurchaseComplete=function(sku){
+  if(sku==='remove_ads'){
+    _adsRemoved=true;
+    var btn=document.getElementById('btn-remove-ads');
+    if(btn)btn.style.display='none';
+    if(window.Android){try{Android.hideBannerAd();}catch(e){}}
+  }
+};
 </script>
 </body>
 </html>

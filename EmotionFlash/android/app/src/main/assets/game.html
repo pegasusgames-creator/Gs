@@ -2,268 +2,289 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roller</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Emotion Flash Cards</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-:root { --bg:#1a1a2e; --surface:#16213e; --card:#0f3460; --accent:#e94560; --accent2:#533483; --text:#eaeaea; --muted:#8888aa; --radius:14px; }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; overflow:hidden; }
-#app { display:flex; flex-direction:column; height:100%; padding:16px 16px 0; }
-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
-header h1 { font-size:1.3rem; font-weight:700; }
-header h1 span { color:var(--accent); }
-#btn-remove-ads { background:var(--accent2); border:none; color:#fff; font-size:0.7rem; font-weight:600; padding:5px 10px; border-radius:20px; cursor:pointer; }
-#scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:12px; }
-.card { background:var(--surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-.card-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+  :root {
+    --bg: #1a1a2e; --surface: #16213e; --accent: #e94560;
+    --accent2: #0f3460; --text: #eaeaea; --text2: #a0a0b0; --radius: 20px;
+    --green: #00b894; --yellow: #fdcb6e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+  .header { width: 100%; max-width: 460px; padding: 54px 20px 10px; text-align: center; }
+  .header h1 { font-size: 1.7rem; font-weight: 800; background: linear-gradient(135deg, #fd79a8, #fdcb6e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header p { font-size: 0.85rem; color: var(--text2); margin-top: 4px; }
+  .content { width: 100%; max-width: 460px; flex: 1; padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; }
 
-/* Dice display area */
-#dice-area { display:flex; flex-wrap:wrap; justify-content:center; gap:14px; min-height:120px; align-items:center; padding:10px 0; }
-.die {
-  width:84px; height:84px;
-  background:var(--card);
-  border-radius:16px;
-  border:2px solid rgba(233,69,96,0.4);
-  display:flex; align-items:center; justify-content:center;
-  font-size:2.4rem; font-weight:900;
-  color:var(--accent);
-  cursor:pointer;
-  user-select:none;
-  transition:transform 0.08s;
-  position:relative;
-  overflow:hidden;
-}
-.die.rolling {
-  animation:shake 0.4s ease-out;
-}
-@keyframes shake {
-  0%  { transform:rotate(-8deg) scale(1.05); }
-  20% { transform:rotate(8deg)  scale(1.08); }
-  40% { transform:rotate(-6deg) scale(1.06); }
-  60% { transform:rotate(6deg)  scale(1.07); }
-  80% { transform:rotate(-3deg) scale(1.03); }
-  100%{ transform:rotate(0deg)  scale(1); }
-}
-.die.btn-pressed { transform:scale(0.9); }
+  /* Mode tabs */
+  .tabs { display: flex; gap: 8px; }
+  .tab { flex: 1; padding: 10px; background: var(--surface); border: 2px solid transparent; border-radius: 30px; font-size: 0.82rem; font-weight: 700; color: var(--text2); cursor: pointer; text-align: center; transition: all 0.2s; }
+  .tab.active { border-color: var(--accent); color: var(--accent); background: rgba(233,69,96,0.12); }
 
-/* Die type selector */
-.die-types { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
-.dtype-btn { background:var(--card); border:2px solid transparent; border-radius:8px; color:var(--muted); font-size:0.8rem; font-weight:700; padding:6px 10px; cursor:pointer; }
-.dtype-btn.active { border-color:var(--accent); color:var(--accent); }
-.dtype-btn.btn-pressed { transform:scale(0.9); }
+  /* Progress */
+  .progress-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; color: var(--text2); }
+  .progress-bar-bg { height: 6px; background: var(--accent2); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.4s; }
 
-/* Count row */
-.count-row { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
-.count-label { font-size:0.9rem; color:var(--muted); }
-.count-ctrl { display:flex; align-items:center; gap:12px; }
-.count-btn { width:34px; height:34px; border-radius:50%; background:var(--card); border:2px solid var(--accent); color:var(--accent); font-size:1.3rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.count-btn.btn-pressed { transform:scale(0.88); }
-#dice-count-disp { font-size:1.2rem; font-weight:700; min-width:24px; text-align:center; }
+  /* Flash card */
+  .card-area { perspective: 1000px; }
+  .card {
+    background: var(--surface); border-radius: var(--radius); padding: 28px 22px;
+    text-align: center; min-height: 300px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 14px;
+    cursor: pointer; user-select: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4); position: relative;
+    transition: transform 0.15s;
+  }
+  .card:active { transform: scale(0.98); }
+  .card.flip-out { animation: flipOut 0.2s ease forwards; }
+  .card.flip-in  { animation: flipIn  0.2s ease forwards; }
+  @keyframes flipOut { to { opacity:0; transform: rotateY(90deg) scale(0.95); } }
+  @keyframes flipIn  { from { opacity:0; transform: rotateY(-90deg) scale(0.95); } to { opacity:1; transform: rotateY(0) scale(1); } }
+  .emotion-emoji { font-size: 5rem; line-height: 1; }
+  .emotion-name { font-size: 2rem; font-weight: 900; letter-spacing: 1px; }
+  .emotion-color-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .emotion-desc { font-size: 0.92rem; color: var(--text2); line-height: 1.6; max-width: 340px; }
+  .recognize-section { background: var(--accent2); border-radius: 12px; padding: 12px 14px; text-align: left; width: 100%; }
+  .recognize-title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); margin-bottom: 6px; }
+  .recognize-text { font-size: 0.85rem; color: var(--text); line-height: 1.5; }
+  .swipe-hint { font-size: 0.75rem; color: var(--text2); text-align: center; margin-top: 4px; }
 
-/* Roll button */
-#btn-roll {
-  width:100%;
-  background:linear-gradient(135deg,var(--accent),#c0392b);
-  border:none; border-radius:var(--radius);
-  color:#fff; font-size:1.3rem; font-weight:800;
-  padding:18px; cursor:pointer;
-  margin-bottom:12px;
-  box-shadow:0 6px 20px rgba(233,69,96,0.45);
-}
-#btn-roll.btn-pressed { transform:scale(0.97); }
+  /* Nav buttons */
+  .nav-row { display: flex; gap: 12px; }
+  .nav-btn { flex: 1; padding: 14px; border: none; border-radius: var(--radius); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .nav-btn:active { transform: scale(0.96); }
+  .btn-prev { background: var(--accent2); color: var(--text); }
+  .btn-next { background: var(--accent); color: #fff; }
+  .btn-shuffle { background: var(--yellow); color: #1a1a2e; }
 
-/* Stats */
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-.stat-box { background:var(--card); border-radius:10px; padding:10px; text-align:center; }
-.stat-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:3px; }
-.stat-val { font-size:1.2rem; font-weight:700; }
-
-/* History */
-#history-list { display:flex; flex-direction:column; gap:6px; }
-.history-item { background:var(--card); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; font-size:0.85rem; }
-.history-dice { color:var(--muted); }
-.history-sum { color:var(--accent); font-weight:700; }
-
-#admob-banner { display:none; width:100%; height:50px; background:#000; align-items:center; justify-content:center; color:#555; font-size:0.7rem; flex-shrink:0; }
+  /* Quiz mode */
+  .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+  .quiz-opt {
+    background: var(--accent2); border: 2px solid transparent; border-radius: var(--radius);
+    padding: 14px 10px; font-size: 1rem; font-weight: 700; color: var(--text);
+    cursor: pointer; text-align: center; transition: all 0.2s;
+  }
+  .quiz-opt:active { transform: scale(0.97); }
+  .quiz-opt.correct { border-color: var(--green); background: rgba(0,184,148,0.2); color: var(--green); }
+  .quiz-opt.wrong   { border-color: var(--accent); background: rgba(233,69,96,0.15); color: var(--accent); }
+  .quiz-question { font-size: 4.5rem; text-align: center; padding: 20px 0; }
+  .quiz-score { font-size: 1.1rem; font-weight: 800; color: var(--yellow); }
+  .quiz-feedback { font-size: 1rem; font-weight: 700; text-align: center; min-height: 24px; }
 </style>
 </head>
 <body>
-<div id="app">
-  <header>
-    <h1>Dice <span>Roller</span></h1>
-    <button id="btn-remove-ads">Remove Ads</button>
-  </header>
-  <div id="scroll">
+<button id="btn-remove-ads" onclick="if(window.Android)Android.purchase('remove_ads')" style="position:fixed;top:8px;right:8px;z-index:9999;background:#533483;border:none;color:#fff;font-size:0.7rem;font-weight:600;padding:5px 10px;border-radius:20px;cursor:pointer;">Remove Ads</button>
 
-    <!-- Dice display -->
-    <div class="card">
-      <div class="card-title">Your Roll</div>
-      <div id="dice-area"></div>
-    </div>
+<div class="header">
+  <h1>😊 Emotion Flash Cards</h1>
+  <p>Learn to recognize and understand emotions</p>
+</div>
 
-    <!-- Settings -->
-    <div class="card">
-      <div class="card-title">Die Type</div>
-      <div class="die-types" id="die-types"></div>
-      <div class="count-row">
-        <span class="count-label">Number of dice</span>
-        <div class="count-ctrl">
-          <button class="count-btn" id="btn-minus">−</button>
-          <span id="dice-count-disp">2</span>
-          <button class="count-btn" id="btn-plus">+</button>
+<div class="content">
+  <div class="tabs">
+    <div class="tab active" onclick="setMode('flash')">📚 Flashcards</div>
+    <div class="tab" onclick="setMode('quiz')">🧠 Quiz</div>
+  </div>
+
+  <div class="progress-row">
+    <span id="progressText">Card 1 of 32</span>
+    <span id="quizScoreText" style="display:none;" class="quiz-score">Score: 0</span>
+  </div>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:3%"></div></div>
+
+  <!-- Flashcard mode -->
+  <div id="flashMode">
+    <div class="card-area">
+      <div class="card" id="flashCard" onclick="nextCard()">
+        <div class="emotion-emoji" id="cardEmoji">😊</div>
+        <div class="emotion-name" id="cardName">Happy</div>
+        <div class="emotion-desc" id="cardDesc">A feeling of joy, pleasure, and contentment. Happiness arises when things go well or when we experience something we enjoy.</div>
+        <div class="recognize-section">
+          <div class="recognize-title">How to recognize it in others</div>
+          <div class="recognize-text" id="cardRecognize">Smiling, relaxed body language, bright eyes, upbeat tone of voice, open posture.</div>
         </div>
       </div>
     </div>
-
-    <!-- Roll button -->
-    <button id="btn-roll">🎲 Roll!</button>
-
-    <!-- Stats -->
-    <div class="card">
-      <div class="card-title">Last Roll</div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-label">Sum</div><div class="stat-val" id="stat-sum">—</div></div>
-        <div class="stat-box"><div class="stat-label">Min</div><div class="stat-val" id="stat-min">—</div></div>
-        <div class="stat-box"><div class="stat-label">Max</div><div class="stat-val" id="stat-max">—</div></div>
-      </div>
+    <div class="swipe-hint">👆 Tap card or use buttons below</div>
+    <div class="nav-row" style="margin-top:10px;">
+      <button class="nav-btn btn-prev" onclick="prevCard()">← Back</button>
+      <button class="nav-btn btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <button class="nav-btn btn-next" onclick="nextCard()">Next →</button>
     </div>
-
-    <!-- History -->
-    <div class="card">
-      <div class="card-title">History</div>
-      <div id="history-list"><div style="color:var(--muted);font-size:0.85rem">No rolls yet</div></div>
-    </div>
-
   </div>
-  <div id="admob-banner">Advertisement</div>
+
+  <!-- Quiz mode -->
+  <div id="quizMode" style="display:none;">
+    <div class="card" style="cursor:default;">
+      <div class="quiz-question" id="quizEmoji">😊</div>
+      <div style="font-size:1rem;color:var(--text2);">What emotion is this?</div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+    </div>
+    <div class="quiz-options" id="quizOptions"></div>
+  </div>
 </div>
 
 <script>
-'use strict';
-(function(){var P='btn-pressed';document.addEventListener('touchstart',function(e){var el=e.target.closest('button,.die,.dtype-btn,.count-btn');if(el)el.classList.add(P);},{passive:true});function clr(){document.querySelectorAll('.'+P).forEach(function(e){e.classList.remove(P);});}document.addEventListener('touchend',clr,{passive:true});document.addEventListener('touchcancel',clr,{passive:true});})();
-
-var DIE_TYPES=[4,6,8,10,12,20,100];
-var state={sides:6,count:2,useCount:0,removeAds:false};
-var history=[];
-
-var diceArea=document.getElementById('dice-area');
-var dieTypesEl=document.getElementById('die-types');
-var diceCountDisp=document.getElementById('dice-count-disp');
-
-// Build die type buttons
-DIE_TYPES.forEach(function(s){
-  var btn=document.createElement('button');
-  btn.className='dtype-btn'+(s===6?' active':'');
-  btn.textContent='D'+s;
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.dtype-btn').forEach(function(b){b.classList.remove('active');});
-    btn.classList.add('active');
-    state.sides=s;
-    renderDice();
-  });
-  dieTypesEl.appendChild(btn);
-});
-
-function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
-
-function renderDice(values){
-  diceArea.innerHTML='';
-  for(var i=0;i<state.count;i++){
-    var die=document.createElement('div');
-    die.className='die';
-    die.textContent=values?values[i]:'?';
-    (function(idx){
-      die.addEventListener('click',function(){rollSingle(idx);});
-    })(i);
-    diceArea.appendChild(die);
+var _adsRemoved = false;
+var _interstitialCount = 0;
+function _showInterstitial() {
+  if (_adsRemoved) return;
+  _interstitialCount++;
+  if (_interstitialCount % 3 === 0 && window.Android) {
+    try { Android.showInterstitial(); } catch(e) {}
   }
 }
-
-function rollAll(){
-  var vals=[];
-  for(var i=0;i<state.count;i++) vals.push(randInt(1,state.sides));
-  animateRoll(vals);
-  updateStats(vals);
-  addHistory(vals);
-  state.useCount++;
-  if(!state.removeAds&&state.useCount%7===0&&window.Android) Android.showInterstitial();
-}
-
-function rollSingle(idx){
-  var dies=diceArea.querySelectorAll('.die');
-  var val=randInt(1,state.sides);
-  dies[idx].textContent=val;
-  dies[idx].classList.remove('rolling');
-  void dies[idx].offsetWidth;
-  dies[idx].classList.add('rolling');
-  setTimeout(function(){dies[idx].classList.remove('rolling');},420);
-}
-
-function animateRoll(finalVals){
-  var dies=diceArea.querySelectorAll('.die');
-  dies.forEach(function(d){
-    d.classList.remove('rolling');
-    void d.offsetWidth;
-    d.classList.add('rolling');
-  });
-  // Quick flicker then show final
-  var steps=6, interval=50;
-  for(var s=0;s<steps;s++){
-    (function(step){
-      setTimeout(function(){
-        dies.forEach(function(d){d.textContent=randInt(1,state.sides);});
-        if(step===steps-1){
-          setTimeout(function(){
-            finalVals.forEach(function(v,i){dies[i].textContent=v;});
-            dies.forEach(function(d){d.classList.remove('rolling');});
-          },80);
-        }
-      },step*interval);
-    })(s);
+window.onPurchaseComplete = function(sku) {
+  if (sku === 'remove_ads') {
+    _adsRemoved = true;
+    var btn = document.getElementById('btn-remove-ads');
+    if (btn) btn.style.display = 'none';
+    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
   }
+};
+
+var EMOTIONS = [
+  { name:'Happy', emoji:'😊', desc:'A feeling of joy, pleasure, and contentment. Happiness arises when things go well or when we experience something we enjoy.', recognize:'Smiling, bright eyes, relaxed face, upbeat voice, open and welcoming body posture.' },
+  { name:'Sad', emoji:'😢', desc:'A deep feeling of sorrow, loss, or disappointment. Sadness is a natural response to difficult life events or setbacks.', recognize:'Downturned mouth, drooping eyes, slumped shoulders, slow speech, tearful eyes.' },
+  { name:'Angry', emoji:'😠', desc:'A strong feeling of displeasure or hostility triggered by perceived injustice or frustration with obstacles.', recognize:'Tense jaw, furrowed brow, loud voice, flushed face, clenched fists, stiff posture.' },
+  { name:'Surprised', emoji:'😲', desc:'A brief emotional response to something unexpected or shocking — can be positive or negative depending on the situation.', recognize:'Raised eyebrows, wide eyes, open mouth, sharp intake of breath, momentary freeze.' },
+  { name:'Fearful', emoji:'😨', desc:'An emotion triggered by perceived threat or danger. Fear prepares the body for fight-or-flight response.', recognize:'Wide eyes, pale face, rapid breathing, tense body, looking around anxiously, frozen posture.' },
+  { name:'Disgusted', emoji:'🤢', desc:'A feeling of strong aversion or revulsion toward something offensive, unpleasant, or morally wrong.', recognize:'Wrinkling the nose, turning away, raising upper lip, narrowed eyes, turning the stomach.' },
+  { name:'Contempt', emoji:'😒', desc:'A feeling of scorn or disrespect for someone seen as inferior or unworthy. Often mixed with moral judgment.', recognize:'One-sided smirk, slightly raised lip corner, looking sideways or down, dismissive tone.' },
+  { name:'Anxious', emoji:'😰', desc:'A state of unease, worry, or nervousness about future events or uncertain outcomes.', recognize:'Fidgeting, checking phone/watch, shallow breathing, tense shoulders, avoidance of eye contact.' },
+  { name:'Excited', emoji:'🤩', desc:'A high-energy positive emotion involving anticipation and enthusiasm, often about upcoming events.', recognize:'Wide eyes, quick speech, animated gestures, jumping or bouncing, bright smile, rapid movement.' },
+  { name:'Bored', emoji:'😑', desc:'A feeling of weariness and lack of interest due to monotony or insufficient stimulation.', recognize:'Blank stare, slumped body, playing with objects, frequent yawning, checking the time repeatedly.' },
+  { name:'Confused', emoji:'😕', desc:'A state of mental uncertainty or inability to understand something. Often followed by problem-solving effort.', recognize:'Tilting head, furrowed brow, squinting, mouth slightly open, slow or hesitant speech.' },
+  { name:'Embarrassed', emoji:'😳', desc:'An uncomfortable self-conscious emotion arising when one violates a social norm or is noticed doing something awkward.', recognize:'Blushing, looking down, covering face, nervous laugh, avoiding eye contact, mumbling.' },
+  { name:'Proud', emoji:'😤', desc:'A positive emotion linked to personal achievement or the success of someone you care about.', recognize:'Standing tall, chin up, broad shoulders, wide smile, making eye contact, enthusiastic gestures.' },
+  { name:'Grateful', emoji:'🥹', desc:'A warm feeling of thankfulness toward others or life circumstances. Gratitude strengthens social bonds.', recognize:'Sincere smile, eye contact, hand on heart, leaning forward, warm and gentle tone of voice.' },
+  { name:'Jealous', emoji:'😤', desc:'A feeling of insecurity or fear of losing something valuable to a rival — distinct from envy which focuses on wanting what others have.', recognize:'Watching others closely, tense jaw, guarded body language, sulking, passive-aggressive behavior.' },
+  { name:'Envious', emoji:'😏', desc:'A desire to have what someone else possesses. Unlike jealousy it is focused on coveting another\'s advantage or possession.', recognize:'Watching the envied person, forced smiles, self-deprecating comments, quiet withdrawal.' },
+  { name:'Hopeful', emoji:'🤗', desc:'An optimistic emotion involving a belief that things will improve or that goals are achievable.', recognize:'Upright posture, forward lean, bright eyes, calm yet engaged expression, planning speech.' },
+  { name:'Lonely', emoji:'😔', desc:'A painful feeling of isolation or disconnection from others, even when physically surrounded by people.', recognize:'Withdrawn posture, little eye contact, quiet, minimal facial expression, seeming distant or absent.' },
+  { name:'Relieved', emoji:'😌', desc:'A feeling of relaxation after stress or worry is resolved. The tension drains away suddenly.', recognize:'Deep exhale, shoulders dropping, closing eyes briefly, soft smile, hands unclenching, sigh.' },
+  { name:'Frustrated', emoji:'😤', desc:'An emotion arising from feeling blocked or unable to achieve a goal. A mixture of anger and helplessness.', recognize:'Clenched jaw, sighing heavily, rubbing temples, pacing, exasperated tone, repeated attempts.' },
+  { name:'Content', emoji:'😌', desc:'A quiet, stable form of happiness — a sense that life is satisfactory and nothing is urgently needed.', recognize:'Relaxed face, soft smile, still and unhurried body, calm breathing, present-focused gaze.' },
+  { name:'Curious', emoji:'🤔', desc:'An eager desire to know or learn about something. Curiosity drives exploration and creative thought.', recognize:'Head tilting, leaning forward, raised eyebrows, sustained eye contact, asking many questions.' },
+  { name:'Nostalgic', emoji:'🥲', desc:'A bittersweet emotion triggered by fond memories of the past, tinged with a sense of longing.', recognize:'Distant look, slight smile tinged with sadness, reminiscing speech, touching old objects gently.' },
+  { name:'Overwhelmed', emoji:'😵', desc:'A feeling of being unable to cope due to too much stimulus, pressure, or emotional intensity at once.', recognize:'Hands on head, wide eyes, inability to focus, rapid speech or silence, inability to prioritize.' },
+  { name:'Determined', emoji:'💪', desc:'A firm resolve to achieve a goal despite obstacles. Determination combines confidence with persistence.', recognize:'Set jaw, focused gaze, upright posture, deliberate speech, leaning into tasks, ignoring distractions.' },
+  { name:'Ashamed', emoji:'😞', desc:'A painful feeling of having done something wrong or being fundamentally flawed in some way.', recognize:'Looking down, covering face, hunched posture, avoiding touch, speaking softly or not at all.' },
+  { name:'Playful', emoji:'😄', desc:'A light-hearted emotional state characterized by fun, humor, and a desire to enjoy the moment without serious purpose.', recognize:'Laughing easily, teasing, exaggerated gestures, dancing, quick movements, sparkling eyes.' },
+  { name:'Awe', emoji:'🤯', desc:'A profound emotion of wonder and reverence triggered by something vast, beautiful, or beyond comprehension.', recognize:'Mouth agape, stillness, goosebumps, wide eyes, hushed voice, slow deliberate movement.' },
+  { name:'Melancholic', emoji:'😔', desc:'A deep, pensive sadness often without a clear cause. Melancholy has a reflective, thoughtful quality.', recognize:'Quiet, introspective posture, slow movements, gentle sadness in eyes, preference for solitude.' },
+  { name:'Amused', emoji:'😂', desc:'A pleasurable emotional response to something funny or entertaining. Amusement is lighter than deep happiness.', recognize:'Smiling, chuckling, relaxed face, leaning back, shaking head, covering mouth when laughing.' },
+  { name:'Disgusted', emoji:'🤮', desc:'Intense physical revulsion toward something offensive. More physical than moral disgust.', recognize:'Gagging, turning away sharply, covering mouth or nose, stepping back, retching expression.' },
+  { name:'Skeptical', emoji:'🤨', desc:'A doubtful or questioning emotional stance toward a claim or situation. Skepticism guards against deception.', recognize:'Raised single eyebrow, head tilt, narrowed eyes, arms crossed, questioning tone, slow nod.' }
+];
+
+var currentMode = 'flash';
+var cardIndex = 0;
+var cardOrder = [];
+var quizScore = 0;
+var quizTotal = 0;
+var quizAnswered = false;
+
+function initOrder() {
+  cardOrder = EMOTIONS.map(function(_,i){return i;});
 }
 
-function updateStats(vals){
-  document.getElementById('stat-sum').textContent=vals.reduce(function(a,b){return a+b;},0);
-  document.getElementById('stat-min').textContent=Math.min.apply(null,vals);
-  document.getElementById('stat-max').textContent=Math.max.apply(null,vals);
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  event.target.classList.add('active');
+  document.getElementById('flashMode').style.display = (mode==='flash') ? 'block' : 'none';
+  document.getElementById('quizMode').style.display  = (mode==='quiz')  ? 'block' : 'none';
+  document.getElementById('quizScoreText').style.display = (mode==='quiz') ? 'inline' : 'none';
+  if (mode==='quiz') { quizScore=0; quizTotal=0; startQuiz(); }
+  else { updateCard(); }
 }
 
-function addHistory(vals){
-  history.unshift({sides:state.sides,vals:vals.slice(),sum:vals.reduce(function(a,b){return a+b;},0)});
-  if(history.length>10) history.pop();
-  var el=document.getElementById('history-list');
-  el.innerHTML='';
-  history.forEach(function(h){
-    var item=document.createElement('div');
-    item.className='history-item';
-    item.innerHTML='<span class="history-dice">'+h.count+'×D'+h.sides+': ['+h.vals.join(', ')+']</span><span class="history-sum">'+h.sum+'</span>';
-    // patch count
-    item.querySelector('.history-dice').textContent=h.vals.length+'×D'+h.sides+': ['+h.vals.join(', ')+']';
-    el.appendChild(item);
+function updateCard() {
+  var e = EMOTIONS[cardOrder[cardIndex]];
+  document.getElementById('cardEmoji').textContent    = e.emoji;
+  document.getElementById('cardName').textContent     = e.name;
+  document.getElementById('cardDesc').textContent     = e.desc;
+  document.getElementById('cardRecognize').textContent = e.recognize;
+  var pct = Math.round(((cardIndex+1)/EMOTIONS.length)*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressText').textContent = 'Card '+(cardIndex+1)+' of '+EMOTIONS.length;
+}
+
+function nextCard() {
+  var card = document.getElementById('flashCard');
+  card.classList.add('flip-out');
+  setTimeout(function(){
+    cardIndex = (cardIndex+1) % EMOTIONS.length;
+    updateCard();
+    card.classList.remove('flip-out'); card.classList.add('flip-in');
+    setTimeout(function(){ card.classList.remove('flip-in'); }, 200);
+  }, 180);
+  _showInterstitial();
+}
+
+function prevCard() {
+  cardIndex = (cardIndex - 1 + EMOTIONS.length) % EMOTIONS.length;
+  updateCard();
+}
+
+function shuffleCards() {
+  for (var i=cardOrder.length-1;i>0;i--) { var j=Math.floor(Math.random()*(i+1)); var t=cardOrder[i]; cardOrder[i]=cardOrder[j]; cardOrder[j]=t; }
+  cardIndex=0; updateCard();
+}
+
+function startQuiz() {
+  quizAnswered = false;
+  var e = EMOTIONS[Math.floor(Math.random()*EMOTIONS.length)];
+  document.getElementById('quizEmoji').textContent = e.emoji;
+  document.getElementById('quizFeedback').textContent = '';
+  document.getElementById('quizFeedback').style.color = '';
+
+  // Pick 3 wrong options
+  var opts = [e.name]; var used={};  used[e.name]=true;
+  while (opts.length < 4) {
+    var r = EMOTIONS[Math.floor(Math.random()*EMOTIONS.length)].name;
+    if (!used[r]) { used[r]=true; opts.push(r); }
+  }
+  opts.sort(function(){return Math.random()-0.5;});
+
+  var container = document.getElementById('quizOptions');
+  container.innerHTML = '';
+  opts.forEach(function(opt) {
+    var div = document.createElement('div');
+    div.className = 'quiz-opt';
+    div.textContent = opt;
+    div.onclick = function() { if (!quizAnswered) checkAnswer(opt, e.name, div, opts, container); };
+    container.appendChild(div);
   });
+  quizTotal++;
+  document.getElementById('progressText').textContent = 'Question ' + quizTotal;
+  document.getElementById('progressFill').style.width = Math.min(100, quizTotal*3)+'%';
 }
 
-document.getElementById('btn-roll').addEventListener('click',function(){
-  renderDice();
-  setTimeout(rollAll,10);
-});
-
-document.getElementById('btn-minus').addEventListener('click',function(){
-  if(state.count>1){state.count--;diceCountDisp.textContent=state.count;renderDice();}
-});
-document.getElementById('btn-plus').addEventListener('click',function(){
-  if(state.count<8){state.count++;diceCountDisp.textContent=state.count;renderDice();}
-});
-
-document.getElementById('btn-remove-ads').addEventListener('click',function(){if(window.Android)Android.purchase('remove_ads');});
-window.onPurchaseComplete=function(id){if(id==='remove_ads'){state.removeAds=true;document.getElementById('admob-banner').style.display='none';document.getElementById('btn-remove-ads').style.display='none';}};
-
-function init(){
-  if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
-  renderDice();
+function checkAnswer(selected, correct, clickedDiv, opts, container) {
+  quizAnswered = true;
+  var allBtns = container.querySelectorAll('.quiz-opt');
+  allBtns.forEach(function(btn) {
+    if (btn.textContent === correct) btn.classList.add('correct');
+    else if (btn.textContent === selected && selected !== correct) btn.classList.add('wrong');
+  });
+  if (selected === correct) {
+    quizScore++;
+    document.getElementById('quizFeedback').textContent = '✅ Correct!';
+    document.getElementById('quizFeedback').style.color = 'var(--green)';
+  } else {
+    document.getElementById('quizFeedback').textContent = '❌ It was: ' + correct;
+    document.getElementById('quizFeedback').style.color = 'var(--accent)';
+  }
+  document.getElementById('quizScoreText').textContent = 'Score: '+quizScore+'/'+quizTotal;
+  setTimeout(function(){ startQuiz(); }, 1200);
+  _showInterstitial();
 }
-init();
+
+initOrder(); updateCard();
 </script>
 </body>
 </html>

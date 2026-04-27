@@ -47,10 +47,10 @@ W, H = 1080, 1920
 CHROME = "google-chrome"
 
 
-def render_state(game_html: Path, hash_state: str, out_png: Path, wait_ms: int = 1400):
-    """Render game.html at 1080x1920 for a given #screenshot=STATE hash."""
+def render_state(game_html: Path, hash_state: str, out_png: Path, wait_ms: int = 1400,
+                 size=(W, H)):
+    """Render game.html at the given pixel size for a #screenshot=STATE hash."""
     url = f"file://{game_html}#screenshot={hash_state}"
-    # Use a unique user-data-dir so concurrent runs don't collide.
     with tempfile.TemporaryDirectory() as udd:
         subprocess.run(
             [
@@ -59,7 +59,7 @@ def render_state(game_html: Path, hash_state: str, out_png: Path, wait_ms: int =
                 "--no-sandbox",
                 "--hide-scrollbars",
                 "--force-device-scale-factor=1",
-                f"--window-size={W},{H}",
+                f"--window-size={size[0]},{size[1]}",
                 f"--virtual-time-budget={wait_ms}",
                 f"--user-data-dir={udd}",
                 f"--screenshot={out_png}",
@@ -68,10 +68,9 @@ def render_state(game_html: Path, hash_state: str, out_png: Path, wait_ms: int =
             check=True,
             capture_output=True,
         )
-    # Normalize to exact dimensions (Chrome sometimes adds 1px).
     im = Image.open(out_png).convert("RGB")
-    if im.size != (W, H):
-        im = im.resize((W, H), Image.LANCZOS)
+    if im.size != size:
+        im = im.resize(size, Image.LANCZOS)
         im.save(out_png)
 
 
@@ -158,13 +157,14 @@ def overlay_title(png_path: Path, title: str, accent_hex: str = "#FFD700",
     im.convert("RGB").save(png_path, "PNG", optimize=True)
 
 
-def gen_for_app(app_dir: Path, specs_file: Path = None, accent_hex: str = "#FFD700"):
+def gen_for_app(app_dir: Path, specs_file: Path = None, accent_hex: str = "#FFD700",
+                size=(W, H), subdir: str = "phone"):
     game_html = app_dir / "android/app/src/main/assets/game.html"
     if not game_html.exists():
         print(f"  [skip] no game.html in {app_dir.name}", file=sys.stderr)
         return
 
-    out_dir = app_dir / "store/screenshots/phone"
+    out_dir = app_dir / "store" / "screenshots" / subdir
     out_dir.mkdir(parents=True, exist_ok=True)
 
     if specs_file is None:
@@ -178,27 +178,49 @@ def gen_for_app(app_dir: Path, specs_file: Path = None, accent_hex: str = "#FFD7
     for spec in specs:
         out_png = out_dir / spec["out"]
         hash_state = spec.get("hash", "")
-        print(f"  [render] {app_dir.name} :: {spec['out']} (hash={hash_state!r})")
+        print(f"  [render] {app_dir.name}/{subdir} :: {spec['out']} "
+              f"(hash={hash_state!r}, size={size[0]}x{size[1]})")
         render_state(game_html, hash_state, out_png,
-                     wait_ms=spec.get("wait_ms", 1400))
+                     wait_ms=spec.get("wait_ms", 1400), size=size)
         if spec.get("title"):
             overlay_title(out_png, spec["title"],
                           accent_hex=spec.get("accent", accent_hex),
                           position=spec.get("position", "lower"))
 
-    # Delete legacy placeholder if present.
-    legacy = out_dir / "phone_1-main.png"
-    if legacy.exists():
-        legacy.unlink()
+    if subdir == "phone":
+        legacy = out_dir / "phone_1-main.png"
+        if legacy.exists():
+            legacy.unlink()
+
+
+SIZE_PRESETS = {
+    "phone":    (1080, 1920),   # Google Play phone
+    "tablet_7": (1200, 1920),   # 7" tablet
+    "tablet_10": (1800, 2560),  # 10" tablet
+}
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("app_dir", type=Path)
-    ap.add_argument("--specs", type=Path, default=None)
+    ap.add_argument("--specs", type=Path, default=None,
+                    help="Path to specs JSON (default: <app>/store/screenshot_specs.json)")
     ap.add_argument("--accent", default="#FFD700")
+    ap.add_argument("--size", default="phone",
+                    help="Preset (phone|tablet_7|tablet_10) or 'WxH'")
+    ap.add_argument("--subdir", default=None,
+                    help="Output subfolder under store/screenshots/ (defaults to --size name)")
     args = ap.parse_args()
-    gen_for_app(args.app_dir.resolve(), args.specs, args.accent)
+
+    if args.size in SIZE_PRESETS:
+        size = SIZE_PRESETS[args.size]
+        subdir = args.subdir or args.size
+    else:
+        w, h = args.size.lower().split("x")
+        size = (int(w), int(h))
+        subdir = args.subdir or "phone"
+
+    gen_for_app(args.app_dir.resolve(), args.specs, args.accent, size=size, subdir=subdir)
 
 
 if __name__ == "__main__":
