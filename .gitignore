@@ -2,6 +2,14 @@
 keystore.properties
 *.jks
 *.keystore
+*.pfx
+*.p12
+*Seed Phrase*
+*seed_phrase*
+*SEED_PHRASE*
+
+# Firebase per-app config — contains API keys, treat as sensitive
+**/google-services.json
 
 # Android build outputs — never commit
 **/build/
@@ -11,17 +19,20 @@ keystore.properties
 **/local.properties
 **/.cxx/
 
+# Release archives (generated locally, re-creatable)
+*.zip
+
 # IDE
 .idea/
 **/*.iml
 .DS_Store
 
 # Python scripts (internal tooling)
-gen_store_assets.py
-gen_store_listings_1.py
-fix_gamehtml_ads.py
-fix_duplicate_handlers.py
-fix_duplicate2.py
-add_login_streak.py
-add_retention_features.py
-add_translations.py
+scripts/gen_store_assets.py
+scripts/gen_store_listings_1.py
+scripts/fix_gamehtml_ads.py
+scripts/fix_duplicate_handlers.py
+scripts/fix_duplicate2.py
+scripts/add_login_streak.py
+scripts/add_retention_features.py
+scripts/add_translations.py
