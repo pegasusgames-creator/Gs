@@ -1,0 +1,465 @@
+================================================================================
+PEGASUS GAMES — APP FARM IDEAS
+Stack: HTML5 game.html + Android WebView wrapper (copy MainActivity.java)
+================================================================================
+
+DIFFICULTY KEY: [1] = Very Low  [2] = Low  [3] = Medium
+★ = Market-validated hit mechanic (top charts / high downloads in 2025-2026)
+
+================================================================================
+MARKET RESEARCH SUMMARY (April 2026)
+================================================================================
+Fastest growing Google Play categories (downloads YoY):
+  - Tools/Utilities     +58% (largest category: 19.83% of all downloads)
+  - Weather             +16%
+  - Finance             +14%
+  - House & Home        +14%
+  - Medical/Health      +12%
+  - Health & Fitness    86M+ US users
+
+Top grossing game genres 2025-2026:
+  - Hybrid-casual puzzle (Block Blast 300M+ downloads, #1 game of 2025)
+  - Screw/bolt puzzles (Screwdom $3.6M revenue in Q1 2025 alone)
+  - Sort puzzles (Yarn Sort, Color Sort trending April 2026)
+  - Match-3 with progression (Royal Match, Candy Crush)
+  - Merge games
+
+Key insight: Pure hyper-casual is dying — hybrid-casual wins.
+Simple mechanic + progression system + levels + IAP = current formula.
+
+================================================================================
+★ HOT RIGHT NOW — TOP PRIORITY (market-validated, trending April 2026)
+================================================================================
+[2] ★ Block Puzzle / Block Blast       - Fit Tetris-like blocks into grid, clear lines
+[2] ★ Screw & Bolt Puzzle              - Unscrew bolts in right order to free boards
+[2] ★ Pin Pull Puzzle                  - Pull pins to guide balls into cups by color
+[2] ★ Yarn / String Sort               - Untangle and sort colored yarn/string
+[2] ★ Color Block Jam                  - Slide color blocks out of a jammed board
+[1] ★ Ball Sort (more themes)          - Already have! Make: Fruit Sort, Star Sort
+[2] ★ Jigsaw Puzzle                    - Drag and snap pieces (landscape photos)
+[2] ★ Find the Difference              - Two similar images, spot N differences
+[2] ★ Hidden Object                    - Find listed items in busy scene
+[2] ★ Merge 3 / Triple Match           - Match 3 identical items to merge them
+[2] ★ Wood Block Puzzle                - Place wooden pieces on board, clear rows
+[2] ★ Emoji Sort / Object Sort         - Sort emojis/objects into correct categories
+[2] ★ Knot / Tangle Puzzle             - Untangle overlapping ropes by moving nodes
+[3] ★ Match-3 with levels              - Candy Crush style, swap adjacent tiles
+[3] ★ Merge Mansion style              - Merge items to unlock story/scenes
+
+--------------------------------------------------------------------------------
+PUZZLE GAMES
+--------------------------------------------------------------------------------
+[1] Sliding Tiles / 15-puzzle         - Slide numbers into order
+[1] Light Out                         - Toggle all lights off
+[1] Mastermind                        - Guess the color code
+[1] Kids Word Search                  - Simplified word search
+[2] Sudoku                            - Number grid constraint
+[2] Word Search                       - Find hidden words in grid
+[2] Mahjong Solitaire                 - Match tile pairs
+[2] Minesweeper                       - Flag mines on grid
+[2] Kakuro                            - Number crossword
+[2] Hitori                            - Blacken cells, no repeats in row/col
+[2] Bridges / Hashiwokakero           - Connect islands with bridges
+[2] Nurikabe                          - Shade cells into river shapes
+[2] Sokoban                           - Push boxes to target squares
+[2] Color Fill / Flood Fill           - Fill grid with one color
+[2] Number Link                       - Connect matching numbers with paths
+[2] Cryptogram                        - Decode letter substitution cipher
+[2] Skyscrapers                       - Building height logic puzzle
+[2] Futoshiki                         - Sudoku with inequality constraints
+[2] Shikaku                           - Divide grid into rectangles
+[2] Takuzu / Binairo                  - Binary 0-1 grid puzzle
+[2] Solitaire / Klondike              - Classic card solitaire
+[2] FreeCell Solitaire                - All cards visible solitaire variant
+[2] Spider Solitaire                  - 2-suit / 4-suit card stacking
+[2] Mah Jong Connect                  - Connect matching tiles with L-path
+[2] Tangram                           - Arrange geometric shapes into silhouette
+[2] Spot the Difference               - Two scenes, find all differences
+[2] Logic Grid Puzzle                 - Who owns the fish? style deductions
+[2] Einstein Riddle                   - Multi-variable constraint logic
+[2] Cut the Rope style                - Physics: cut rope to feed character
+[2] Maze Solver                       - Navigate ball through maze by tilting/tapping
+[2] Pipe Twist / Rotate Pipes         - Rotate pipe segments to connect flow
+[2] Fences / Slitherlink              - Draw loop along grid dots using clues
+[2] Picture Cross / Picross           - Nonogram variant (already have Nonogram!)
+[2] Sumplete                          - Delete numbers so rows/cols sum correctly
+[2] Connections (NYT style)           - Group 16 words into 4 hidden categories
+
+--------------------------------------------------------------------------------
+WORD GAMES
+--------------------------------------------------------------------------------
+[1] Hangman                           - Classic letter guessing
+[1] Word Chain                        - Each word starts with last letter
+[1] True or False Word Edition        - Correct definition or not
+[2] ★ Wordle Clone                    - Daily 5-letter guess (6 attempts)
+[2] ★ Cryptic Words / Cryptic Cross   - Code-based word puzzle (trending Apr 2026)
+[2] Word Scramble                     - Unscramble jumbled letters
+[2] Anagram Finder                    - Rearrange letters into valid words
+[2] Spelling Bee                      - Find words from 7 letters (honeycomb)
+[2] Typeshift                         - Rotate letter columns to form words
+[2] Word Connect                      - Connect letters to spell words
+[2] Word Search Pro                   - Timed, themed, large grid word search
+[2] Letterpress                       - Claim letters on board to spell words
+[2] Word Ladder                       - Change one letter at a time to reach target
+[2] Boggle Style                      - Find words in random 4x4 letter grid
+[2] Missing Vowels                    - Fill in vowels to complete words
+[2] Four Letters                      - Make a word from 4 given letters
+[2] Ghost Word Game                   - Add letters without completing a word
+[2] Word Snap                         - Flash a word, tap if it matches category
+[3] Crossword Puzzle                  - Fill grid with clues
+
+--------------------------------------------------------------------------------
+MATH / BRAIN TRAINING
+--------------------------------------------------------------------------------
+[1] Mental Math Quiz                  - Speed arithmetic (+−×÷)
+[1] Times Table Practice              - Multiplication drills
+[1] Pattern Sequence                  - What's the next number?
+[1] Memory Card Match                 - Flip and match pairs
+[1] Simon Says                        - Color/sound sequence memory
+[1] Reaction Time Test                - Tap as fast as possible on signal
+[1] Stroop Test                       - Color word mismatch challenge
+[1] True or False Quiz                - Binary quiz on any topic
+[1] Number Memory                     - See number, recall it after delay
+[1] Color Memory                      - Sequence of colors to repeat
+[1] Dual N-Back                       - Working memory training (position + audio)
+[2] Math Riddles                      - Equation and logic puzzles
+[2] IQ Test Style Puzzles             - Shape and pattern logic
+[2] Sequence Memory                   - Growing sequence to repeat exactly
+[2] Mental Rotation                   - Which shape matches after rotating?
+[2] Speed Counting                    - Count items before time runs out
+[2] Visual Search                     - Find target shape among distractors
+[2] Odd One Out                       - Which item doesn't belong?
+[3] Chess Puzzles                     - Checkmate in N moves
+
+--------------------------------------------------------------------------------
+CASUAL / HYPER-CASUAL GAMES
+--------------------------------------------------------------------------------
+[1] Merge Numbers / 2048 Variants     - Merge tiles to reach target
+[1] Dice Merge                        - Merge same-value dice
+[1] Whack-a-Mole                      - Tap appearing targets
+[1] Flappy Bird Clone                 - Tap to fly through gaps
+[1] Snake                             - Classic growing snake
+[1] Tap the Right Color               - Tap only matching colored circle
+[1] Don't Tap White Tile              - Speed tapping game
+[1] Number Tap                        - Tap numbers 1-25 in order as fast as possible
+[1] Balloon Pop                       - Tap balloons before they escape
+[2] Stack Tower                       - Drop and stack blocks
+[2] Color Switch                      - Pass ball through matching color
+[2] Dot Connect                       - Draw one line through all dots
+[2] Idle Clicker                      - Tap to earn, buy auto-upgrades
+[2] Brick Breaker / Breakout          - Paddle and bouncing ball
+[2] Tetris-Style                      - Falling block stacking
+[2] Space Invaders Style              - Shoot descending enemies
+[2] ★ Wood Block Puzzle               - Place wooden blocks to clear rows
+[2] ★ Block Puzzle Jewel              - Jewel-themed grid block placement
+[2] ★ Fruit Merge                     - Merge same fruits to evolve
+[2] ★ Animal Merge                    - Merge animals to evolve species
+[2] ★ Number Merge 2048               - Swipe merge variant
+[2] ★ Tile Hop                        - Ball bouncing on rhythm tiles
+[2] ★ Draw & Guess solo               - Drawing prompt challenges
+[2] Pong                              - Classic 2-player-style ball bounce
+[2] Asteroids Style                   - Rotate ship, shoot rocks
+[2] Moto Bike Jump                    - 2D bike ramp timing game
+[2] Gravity Ball                      - Flip gravity to dodge obstacles
+[2] Infinite Jumper                   - Platform jumper (Doodle Jump style)
+[3] Helix Jump                        - Ball falls through rotating helix
+[3] Bubble Shooter                    - Match 3 bubbles
+[3] ★ Rope Cut Physics                - Cut rope to drop ball on target
+[3] ★ Pin & Ball                      - Pull pins to guide ball to goal
+
+--------------------------------------------------------------------------------
+RELAXING / CREATIVE
+--------------------------------------------------------------------------------
+[1] Dot Art Maker                     - Place colored dots on grid
+[1] Fireworks                         - Tap to launch particle effects
+[1] Sand / Powder Toy                 - Falling particle simulation
+[1] Bubble Wrap Pop                   - Endless virtual bubble wrap
+[2] Mandala Coloring Book             - Color pre-drawn mandala patterns
+[2] Pixel Art Coloring                - Color by number pixel grid
+[2] Zen Garden                        - Rake sand patterns
+[2] Doodle / Draw App                 - Freehand drawing canvas
+[2] Kaleidoscope                      - Symmetry drawing toy
+[2] ★ Satisfying Slime                - Tap/poke slime with sound effects
+[2] ★ ASMR Tap & Sound               - Objects make satisfying sounds on tap
+[2] ★ Antistress Toys                 - Collection of mini stress-relief toys
+[2] Breathing Exercise                - Animated inhale/hold/exhale guide
+[2] Magic Reveal                      - Scratch card style, reveal image
+[2] Generative Art                    - Input parameters → procedural art
+[2] Symmetry Drawing                  - Mirror drawing with instant symmetry
+[3] Fluid Simulation                  - Touch-reactive liquid physics
+[3] Particle Galaxy                   - Interactive gravity particle sim
+
+--------------------------------------------------------------------------------
+HEALTH & FITNESS  ← 86M US users, 12-16% category growth
+--------------------------------------------------------------------------------
+[1] ★ Water Reminder                  - Hourly notifications + daily log
+[1] ★ Posture Reminder                - Timer alerts to sit up straight
+[1] ★ Eye Rest Timer                  - 20-20-20 rule eye strain reminders
+[1] ★ Fasting Timer                   - Intermittent fasting 16:8 / 24h tracker
+[1] ★ Step Counter (manual)           - Log daily steps + weekly chart
+[1] BMI Calculator                    - Already in utilities, fits here too
+[1] Calorie Estimator                 - Simple meal lookup, rough calorie count
+[1] Push-Up Counter                   - Rep timer + log workouts
+[2] ★ Blood Pressure Log              - Record readings over time, chart trends
+[2] ★ Blood Sugar Log                 - Diabetic glucose tracking + chart
+[2] ★ Medication Reminder             - Custom pill schedule + alerts
+[2] ★ Sleep Tracker                   - Log bedtime/wake, rate sleep quality
+[2] ★ Mood Journal / Tracker          - Daily emoji mood log + notes + graph
+[2] ★ Migraine / Headache Log         - Track triggers, duration, severity
+[2] ★ Symptom Diary                   - Log daily symptoms for doctor visits
+[2] Workout Log                       - Log sets/reps/weight, personal records
+[2] Stretching Routine                - Timed guided stretch sequences
+[2] Yoga Pose Guide                   - Static illustrated yoga sequence
+[2] 7-Minute Workout                  - Timed HIIT circuit with rest timers
+[2] Run Tracker (manual)              - Log distance/time, map-free
+[2] ★ Period & Ovulation Tracker      - Cycle calendar + predictions
+[2] ★ Pregnancy Week Tracker          - Week-by-week baby size + tips
+[2] ★ Baby Milestone Tracker          - Log first words, steps, teeth
+[2] Body Measurement Tracker          - Already listed — high demand confirmed
+[2] Quit Smoking Tracker              - Days smoke-free + money saved counter
+[2] Sobriety Counter                  - Days sober + motivational milestones
+[2] Water Intake Tracker              - Already listed — stays
+
+--------------------------------------------------------------------------------
+FINANCE & MONEY  ← 14% download growth, high RPM ads
+--------------------------------------------------------------------------------
+[1] ★ Tip Calculator                  - Bill + tip + split (already listed) ✓ DONE
+[1] ★ Currency Converter              - Live rates via free API or static
+[1] Loan / EMI Calculator             - Already listed
+[1] Percentage Calculator             - Already listed
+[1] ★ Savings Goal Tracker            - Set goal amount, log deposits, see progress
+[1] ★ Bill Split Calculator           - Split unevenly among people
+[1] ★ Salary / Hourly Calculator      - Gross to net, overtime, tax estimate
+[2] ★ Expense Tracker                 - Log daily spending by category + chart
+[2] ★ Budget Planner                  - Monthly income/expense budget
+[2] ★ Debt Payoff Planner             - Snowball/avalanche method calculator
+[2] ★ Net Worth Tracker               - Log assets and liabilities over time
+[2] Invoice Generator                 - Simple freelancer invoice maker + PDF
+[2] VAT Calculator                    - Price + VAT rate = total
+[2] Compound Interest Calculator      - Investment growth visualizer
+[2] Rent vs Buy Calculator            - Should I rent or buy? comparison
+
+--------------------------------------------------------------------------------
+UTILITY APPS  ← Tools = #1 Google Play category (19.83% of downloads)
+--------------------------------------------------------------------------------
+[1] Tip Calculator                    - Bill + tip + split between people ✓ DONE
+[1] Unit Converter                    - Length, weight, temp, volume ✓ DONE
+[1] BMI Calculator                    - Height + weight → BMI + category
+[1] Age Calculator                    - Exact age from birthdate
+[1] Countdown Timer                   - Set target date, see days remaining
+[1] Loan / EMI Calculator             - Monthly payment + total interest
+[1] Percentage Calculator             - Various % operations
+[1] GPA Calculator                    - Grade average calculator
+[1] Dice Roller                       - 1–6 dice + custom sides + history
+[1] Coin Flip                         - Animated flip, track results
+[1] Random Name Picker                - Enter list of names, pick random
+[1] Password Generator                - Custom length, chars, symbols
+[1] QR Code Generator                 - Text/URL → QR code (JS library)
+[1] Stopwatch + Lap Timer             - Multiple concurrent timers
+[1] Metronome                         - BPM tapper with audio click
+[1] White Noise Generator             - White/brown/pink noise player
+[1] Water Intake Tracker              - Log daily glasses, goal reminders
+[1] Grocery List                      - Add items, check off, categories
+[1] ★ Pomodoro Timer                  - 25-min work + 5-min break cycles
+[1] ★ Random Number Generator         - Custom range, multiple numbers
+[1] ★ Decision Maker                  - Spin wheel, yes/no, 8-ball
+[1] ★ Tally Counter                   - Count anything with big tap button
+[1] ★ Ruler / Measurement Tool        - On-screen ruler using screen size
+[1] ★ Compass                         - Magnetic compass (device sensor)
+[1] ★ Flashlight + SOS                - Flashlight with strobe/SOS mode
+[1] ★ Scientific Calculator           - Full function calculator
+[1] ★ Roman Numeral Converter         - Number ↔ Roman numeral
+[1] ★ Number Base Converter           - Decimal ↔ Binary ↔ Hex ↔ Octal
+[1] ★ Text Case Converter             - UPPER, lower, Title, CamelCase
+[1] ★ Aspect Ratio Calculator         - Video/photo resize calculator
+[1] ★ Timezone Converter              - What time is it in X city?
+[2] Sleep Sounds                      - Looping ambient audio (rain/fire)
+[2] Flashcard Maker                   - Create decks, flip to reveal
+[2] Habit Tracker                     - Daily checkbox + streak counter
+[2] Body Measurement Tracker          - Log waist/arms/weight over time
+[2] Period Tracker                    - Cycle calendar + predictions
+[2] ★ Noise Meter / Decibel Meter     - Mic-based sound level display
+[2] ★ Heart Rate Monitor              - Camera-based pulse reading
+[2] ★ Magnifier / Loupe               - Camera zoom for small text
+[2] ★ Document Scanner (basic)        - Camera → clean document image
+[2] ★ Color Picker                    - Camera → identify any color + hex
+[2] ★ Mirror App                      - Front camera as mirror
+[2] ★ Baby Sound Monitor              - Mic alerts above noise threshold
+[2] ★ Parking Spot Saver              - Drop a GPS pin + photo note
+[2] ★ Meeting Timer                   - Per-person speaking time tracker
+[2] ★ Trip Packing List               - Pre-built checklist by destination type
+[2] ★ Plant Watering Reminder         - Name your plant + watering schedule
+[2] ★ Chore Chart                     - Family chore assignment + check-off
+
+--------------------------------------------------------------------------------
+KIDS / EDUCATIONAL
+--------------------------------------------------------------------------------
+[1] ABC Learning                      - Alphabet + letter sounds
+[1] 123 Counting                      - Numbers 1–20 with visuals
+[1] Color Learning                    - Tap the correct color
+[1] Animal Sounds                     - Tap animal, hear its sound
+[1] Flag Quiz                         - Guess country from flag image
+[1] Capital Cities Quiz               - Country → capital city
+[1] Anatomy Quiz                      - Body parts labeling
+[1] ★ Kids Piano                      - Big colorful keys, plays notes
+[1] ★ Kids Drum Kit                   - Tap pads to play drum sounds
+[1] ★ Shapes & Colors for Toddlers    - Tap and name shapes + colors
+[1] ★ Simple Jigsaw for Kids          - 4-piece animal puzzles
+[1] ★ Baby Phone (toy)                - Big buttons make fun sounds
+[2] Shape Sorter                      - Drag shapes to matching holes
+[2] Dot-to-Dot                        - Connect numbered dots to reveal image
+[2] Kids Coloring Book                - Tap regions to color pictures
+[2] Basic Math for Kids               - +/− for ages 5–8, star rewards
+[2] ★ Spelling Practice               - See image, type the word
+[2] ★ Sight Words Flash Cards         - Common words for early readers
+[2] ★ Multiplication Table Game       - Times tables with game mechanics
+[2] ★ Solar System Explorer           - Tap planets to learn facts
+[2] ★ World Map Quiz for Kids         - Find countries on simplified map
+[2] ★ Dinosaur Explorer               - Tap dinos to learn names + facts
+[2] ★ Emotion Flashcards              - Faces showing emotions for toddlers
+[2] ★ Counting Bears                  - Drag bears to match counted number
+[2] ★ Pattern Completion              - What comes next in the pattern?
+[3] Alphabet Tracing                  - Draw letters on canvas
+
+--------------------------------------------------------------------------------
+TRIVIA / QUIZ APPS  ← one quiz engine, swap JSON data per topic
+--------------------------------------------------------------------------------
+[1] True or False                     - Simple binary trivia
+[1] Emoji Quiz                        - Guess word/phrase from emojis
+[1] ★ Would You Rather                - Two options, see % how others chose
+[1] ★ This or That                    - Fast swipe left/right preference game
+[2] General Knowledge Quiz            - Mixed topics, 4-choice
+[2] Science Quiz                      - Physics / biology / chemistry
+[2] History Quiz                      - World history events + dates
+[2] Geography Quiz                    - Countries, capitals, flags
+[2] Movie Trivia                      - Film quotes, actors, directors
+[2] Sports Quiz                       - Football, basketball, Olympics
+[2] Logo Quiz                         - Guess brand from partial logo
+[2] Picture Quiz                      - Guess object from blurry photo
+[2] ★ Music Quiz                      - Guess song from first 5 seconds (audio)
+[2] ★ Celebrity Quiz                  - Who is this famous person?
+[2] ★ Car Brand Quiz                  - Guess car model from photo
+[2] ★ Food Quiz                       - Guess dish or ingredient from photo
+[2] ★ Animal Quiz                     - Guess animal from close-up photo
+[2] ★ Bible / Quran Quiz              - Religious knowledge (niche, loyal users)
+[2] ★ Pub Quiz Night                  - Multiplayer-style offline quiz night host
+[2] ★ Harry Potter Trivia             - Fan knowledge quiz
+[2] ★ Football / Soccer Quiz          - Club badges, player names, scores
+[2] ★ NBA / Basketball Quiz           - Teams, players, championships
+
+--------------------------------------------------------------------------------
+SOCIAL / PARTY GAMES  ← high session time, word-of-mouth installs
+--------------------------------------------------------------------------------
+[1] ★ Truth or Dare                   - Questions for 2+ players passing phone
+[1] ★ Never Have I Ever               - Party drinking/social game
+[1] ★ Would You Rather (party)        - Debate mode for groups
+[1] ★ 20 Questions Game               - Yes/No animal/object/person game
+[1] ★ Ice Breaker Questions           - Conversation starter cards
+[1] ★ Spin the Bottle (spin wheel)    - Animated spinner for groups
+[2] ★ Charades                        - Act it out timer + word categories
+[2] ★ Pictionary Timer                - Drawing prompt + sand timer
+[2] ★ Trivia Night Host               - Full quiz night host with buzzers
+[2] ★ Two Truths and a Lie            - Vote which statement is the lie
+[2] ★ Icebreaker Bingo                - Get-to-know-you bingo card
+[2] ★ Heads Up! Clone                 - Hold phone to forehead, others describe
+
+--------------------------------------------------------------------------------
+MUSIC / AUDIO TOOLS
+--------------------------------------------------------------------------------
+[1] ★ Guitar Chord Finder             - Tap chord name → see finger positions
+[1] ★ Ukulele Chord Chart             - Same but ukulele
+[1] ★ Guitar Tuner                    - Mic-based chromatic tuner
+[1] ★ Drum Machine / Beat Pad         - 16-pad drum sequencer
+[1] ★ Piano / Keyboard                - Playable on-screen piano
+[1] ★ Sound Effects Board             - Customizable soundboard buttons
+[2] ★ Chord Progression Generator     - Random/smart chord suggestions
+[2] ★ BPM Tap Tempo                   - Tap to calculate BPM of any song
+[2] ★ Interval Ear Training           - Music theory interval recognition
+[2] ★ Music Theory Flashcards         - Note names, key signatures, chords
+
+--------------------------------------------------------------------------------
+SPORTS & OUTDOORS
+--------------------------------------------------------------------------------
+[1] ★ Sport Score Tracker             - Keep score for any casual sport
+[1] ★ Golf Scorecard                  - 18-hole scorecard + handicap
+[1] ★ Darts Scorer                    - 501/301 darts game scorer
+[1] ★ Pool / Billiards Shot Timer     - Shot clock for pool games
+[1] ★ Chess Clock                     - Dual countdown timer
+[1] ★ Coin Toss for Sports            - Fair coin + who goes first
+[2] ★ Fishing Log                     - Record catch: species, weight, location
+[2] ★ Hiking Log                      - Record trail name, distance, difficulty
+[2] ★ Workout Split Planner           - Plan push/pull/legs weekly schedule
+
+--------------------------------------------------------------------------------
+TRAVEL & LANGUAGE
+--------------------------------------------------------------------------------
+[1] ★ Currency Converter              - Most-searched travel utility
+[1] ★ World Clock / Timezone          - Current time in multiple cities
+[1] ★ Packing Checklist               - Pre-built lists by trip type
+[1] ★ Language Phrasebook             - Key phrases: Spanish/French/Japanese etc
+[2] ★ Language Flashcards             - Vocabulary drill in target language
+[2] ★ Morse Code Translator           - Text ↔ Morse + audio playback
+[2] ★ Sign Language Guide             - Illustrated ASL alphabet + common signs
+[2] ★ Phonetic Alphabet               - NATO phonetic alphabet reference
+
+--------------------------------------------------------------------------------
+FOOD & LIFESTYLE
+--------------------------------------------------------------------------------
+[1] ★ Recipe Converter                - Scale recipe up/down by servings
+[1] ★ Cooking Timer (multi)           - Multiple named timers at once
+[1] ★ Egg Timer                       - Soft/medium/hard boil countdown
+[1] ★ Drink Water Reminder            - Already listed — very high demand
+[2] ★ Meal Calorie Estimator          - Rough calorie count for common meals
+[2] ★ Random Recipe Picker            - Spin to pick what to cook tonight
+[2] ★ Coffee Brewing Guide            - Pour-over/espresso/French press ratios
+[2] ★ Cocktail Recipe Guide           - Search/browse classic cocktail recipes
+[2] ★ Wine Pairing Guide              - Food → suggested wine pairings
+
+================================================================================
+MONETIZATION MODEL
+================================================================================
+Each app:
+  - Banner ad (bottom, always visible)
+  - Interstitial ad (every 3 levels / sessions)
+  - Rewarded ad (get hint / extra life / unlock)
+  - Remove Ads IAP: $1.99
+  - Optional coin packs / premium content
+
+================================================================================
+IMPLEMENTATION TEMPLATE
+================================================================================
+1. Copy BallSortPuzzle Android project folder
+2. Change package name in:
+   - AndroidManifest.xml
+   - build.gradle (applicationId)
+   - MainActivity.java (package declaration)
+3. Register new app in:
+   - Google Play Console (new app)
+   - AdMob (new app → new ad unit IDs)
+   - Firebase (new project → google-services.json)
+4. Replace app/src/main/assets/game.html with new game
+5. Update ADMOB_APP_ID + ad unit constants in MainActivity.java
+6. Update product IDs in MainActivity.java + Play Console
+7. Build release APK, sign, upload
+
+================================================================================
+FASTEST WINS — START HERE (each < 1 day to build)
+================================================================================
+TIER 1 — Under 2 hours:
+  Tip Calculator, Coin Flip, Dice Roller, Tally Counter, Egg Timer,
+  Pomodoro Timer, Decision Maker (spin wheel), Roman Numeral Converter,
+  True or False Quiz, Would You Rather, Truth or Dare, Never Have I Ever
+
+TIER 2 — Half a day:
+  Currency Converter, Expense Tracker, Savings Goal Tracker,
+  Blood Pressure Log, Medication Reminder, Fasting Timer,
+  Wordle Clone, Emoji Quiz, Flag Quiz, Mental Math Quiz,
+  Memory Card Match, Guitar Chord Finder, Score Tracker
+
+TIER 3 — Full day:
+  Block Puzzle, Screw & Bolt Puzzle, Yarn Sort, Find the Difference,
+  Jigsaw Puzzle, Word Search Pro, Budget Planner, Mood Tracker
+
+================================================================================
+TOTAL IDEAS: 250+
+================================================================================

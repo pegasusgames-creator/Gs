@@ -1,0 +1,27 @@
+{
+  "privacy_policy_url": "https://pegasusgames.example/privacy/meetingtimer",
+  "google_data_safety": {
+    "data_collected": [
+      "device_ids",
+      "app_interactions",
+      "crash_logs"
+    ],
+    "data_shared": [
+      "advertising_id"
+    ],
+    "encrypted_in_transit": true,
+    "user_can_request_deletion": true
+  },
+  "apple_privacy_labels": {
+    "data_used_to_track_you": [
+      "device_id",
+      "advertising_data"
+    ],
+    "data_linked_to_you": [],
+    "data_not_linked_to_you": [
+      "crash_data",
+      "performance_data",
+      "product_interaction"
+    ]
+  }
+}

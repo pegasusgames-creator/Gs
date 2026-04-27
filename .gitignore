@@ -21,6 +21,17 @@ keystore.properties
 
 # Release archives (generated locally, re-creatable)
 *.zip
+_release/
+
+# Python build artifacts
+__pycache__/
+*.pyc
+
+# Sensitive personal/business documents (kept locally, never committed)
+docs/*.pdf
+*ЄДР*
+*Виписка*
+*Голодяєва*
 
 # IDE
 .idea/

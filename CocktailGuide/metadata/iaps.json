@@ -1,0 +1,53 @@
+{
+  "one_time_products": [
+    {
+      "id": "remove_ads",
+      "title": "Remove Ads",
+      "price_usd": 2.99
+    },
+    {
+      "id": "coins_small",
+      "title": "100 Coins",
+      "price_usd": 0.99
+    },
+    {
+      "id": "coins_large",
+      "title": "500 Coins",
+      "price_usd": 2.99
+    },
+    {
+      "id": "five_lives",
+      "title": "5 Lives",
+      "price_usd": 0.99
+    },
+    {
+      "id": "unlimited_lives_1h",
+      "title": "1hr Unlimited",
+      "price_usd": 0.99
+    },
+    {
+      "id": "unlimited_lives_forever",
+      "title": "Unlimited Lives",
+      "price_usd": 4.99
+    },
+    {
+      "id": "hint_pack",
+      "title": "Hint Pack",
+      "price_usd": 1.99
+    },
+    {
+      "id": "starter_pack",
+      "title": "Starter Pack",
+      "price_usd": 0.99
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "season_pass_monthly",
+      "title": "Season Pass",
+      "price_usd": 1.99,
+      "billing_period": "P1M",
+      "grace_period_days": 3
+    }
+  ]
+}

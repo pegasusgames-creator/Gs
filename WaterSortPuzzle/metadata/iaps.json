@@ -1,0 +1,109 @@
+{
+  "one_time_products": [
+    {
+      "id": "remove_ads",
+      "name": "Remove Ads",
+      "description": "Permanently removes all banner and interstitial ads. Rewarded ads remain available so you can still earn free coins and lives.",
+      "type": "non_consumable",
+      "price_usd": 2.99,
+      "offer_id": "base",
+      "tax_category": "digital_goods",
+      "regions": "all"
+    },
+    {
+      "id": "coins_small",
+      "name": "100 Coins",
+      "description": "Adds 100 coins to your wallet. Spend coins on hints, extra moves, and unlocking new themes.",
+      "type": "consumable",
+      "price_usd": 0.99,
+      "offer_id": "base",
+      "tax_category": "digital_goods",
+      "regions": "all"
+    },
+    {
+      "id": "coins_large",
+      "name": "500 Coins",
+      "description": "Adds 500 coins to your wallet. Best value coin pack — spend on hints, extra moves, and unlocking new themes.",
+      "type": "consumable",
+      "price_usd": 2.99,
+      "offer_id": "base",
+      "tax_category": "digital_goods",
+      "regions": "all"
+    },
+    {
+      "id": "five_lives",
+      "name": "5 Lives",
+      "description": "Instantly refills your hearts to the maximum so you can keep playing without waiting for them to recharge.",
+      "type": "consumable",
+      "price_usd": 0.99,
+      "offer_id": "base",
+      "tax_category": "digital_goods",
+      "regions": "all"
+    },
+    {
+      "id": "unlimited_lives_1h",
+      "name": "1 Hour Unlimited Lives",
+      "description": "Play with unlimited lives for one full hour. Perfect for a long puzzle session without any interruption.",
+      "type": "consumable",
+      "price_usd": 0.99,
+      "offer_id": "base",
+      "tax_category": "digital_goods",
+      "regions": "all"
+    },
+    {
+      "id": "unlimited_lives_forever",
+      "name": "Unlimited Lives Forever",
+      "description": "Never run out of lives again. Play as many levels as you want, whenever you want, with no waiting.",
+      "type": "non_consumable",
+      "price_usd": 4.99,
+      "offer_id": "base",
+      "tax_category": "digital_goods",
+      "regions": "all"
+    },
+    {
+      "id": "unlimited_undos",
+      "name": "Unlimited Undos",
+      "description": "Undo any move at any time, as many times as you want. No more restarting a level after one small mistake.",
+      "type": "non_consumable",
+      "price_usd": 3.99,
+      "offer_id": "base",
+      "tax_category": "digital_goods",
+      "regions": "all"
+    },
+    {
+      "id": "hint_pack",
+      "name": "Hint Pack",
+      "description": "Adds 10 hints to your account. Each hint reveals the next correct move on any level where you are stuck.",
+      "type": "consumable",
+      "price_usd": 1.99,
+      "offer_id": "base",
+      "tax_category": "digital_goods",
+      "regions": "all"
+    },
+    {
+      "id": "starter_pack",
+      "name": "Starter Pack",
+      "description": "Best value for new players: 100 coins, 5 hints, and 5 lives bundled together. One-time purchase.",
+      "type": "consumable",
+      "price_usd": 0.99,
+      "offer_id": "base",
+      "tax_category": "digital_goods",
+      "regions": "all"
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "season_pass_monthly",
+      "name": "Season Pass",
+      "description": "Monthly pass: ad-free play, +50 daily coins, exclusive themes, and unlimited hints. Cancel anytime in Google Play.",
+      "price_usd": 1.99,
+      "billing_period": "P1M",
+      "grace_period_days": 3,
+      "account_hold_days": 30,
+      "base_plan_id": "monthly-base",
+      "renewal_type": "auto_renewing",
+      "tax_category": "digital_goods",
+      "regions": "all"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+[
+  {"hash": "menu",            "out": "01_menu.png",           "title": "Pour, Sort & Relax",     "accent": "#4FC3F7", "wait_ms": 1400},
+  {"hash": "gameplay",        "out": "02_gameplay.png",       "title": "500 Handcrafted Levels", "accent": "#4FC3F7", "wait_ms": 1800},
+  {"hash": "gameplay_hard",   "out": "03_gameplay_hard.png",  "title": "Up to 8 Colors",         "accent": "#4FC3F7", "wait_ms": 1800},
+  {"hash": "level_select",    "out": "04_level_select.png",   "title": "Daily Challenges",       "accent": "#4FC3F7", "wait_ms": 1400},
+  {"hash": "level_complete",  "out": "05_level_complete.png", "title": "3-Star Every Level",     "accent": "#4FC3F7", "wait_ms": 1800}
+]
