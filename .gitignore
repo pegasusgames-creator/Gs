@@ -33,6 +33,12 @@ docs/*.pdf
 *Виписка*
 *Голодяєва*
 
+# GitHub Pages files staged here for convenience — canonical home is
+# the separate pegasusgames-creator.github.io repo, never commit here
+/index.html
+/privacy.html
+/google*.html
+
 # IDE
 .idea/
 **/*.iml
