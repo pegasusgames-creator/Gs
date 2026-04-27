@@ -62,22 +62,32 @@ import java.util.Set;
 public class MainActivity extends Activity {
 
     // ── AppLovin MAX ──────────────────────────────────────────────────────────
-    // Get SDK Key: dash.applovin.com → Account → Keys → SDK Key
-    // Get Ad Unit IDs: dash.applovin.com → Monetize → Ad Units
-    private static final String MAX_SDK_KEY              = "ENTER_YOUR_APPLOVIN_SDK_KEY_HERE";
-    private static final String MAX_BANNER_UNIT_ID       = "ENTER_YOUR_MAX_BANNER_UNIT_ID";
-    private static final String MAX_INTERSTITIAL_UNIT_ID = "ENTER_YOUR_MAX_INTER_UNIT_ID";
-    private static final String MAX_REWARDED_UNIT_ID     = "ENTER_YOUR_MAX_REWARDED_UNIT_ID";
-    // Auto-switch: uses AppLovin when SDK key is real, AdMob otherwise
-    private static final boolean USE_APPLOVIN = !MAX_SDK_KEY.startsWith("ENTER_");
+    // Disabled until this developer is approved on AppLovin. The app ships
+    // AdMob-only for now. To re-enable when the SDK key is provided:
+    //   1. Paste the real SDK key and unit IDs below
+    //   2. Flip USE_APPLOVIN to true
+    private static final String MAX_SDK_KEY              = ""; // TODO: paste SDK key
+    private static final String MAX_BANNER_UNIT_ID       = ""; // TODO: paste banner unit id
+    private static final String MAX_INTERSTITIAL_UNIT_ID = ""; // TODO: paste interstitial unit id
+    private static final String MAX_REWARDED_UNIT_ID     = ""; // TODO: paste rewarded unit id
+    private static final boolean USE_APPLOVIN = false;
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     // Get from: apps.admob.com → Your App → Ad Units
+    // NOTE: these are stale IDs from a prior account (publisher 2759523698880843).
+    // Replace with real IDs from the canonical Pegasus Games AdMob account
+    // (publisher 5695494884863768) per RELEASE_HANDOFF.md before shipping.
     private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-2759523698880843/7169236785";
     private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-2759523698880843/1085509317";
     private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-2759523698880843/7959574272";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
+    // Paste the app's base64 RSA public key from:
+    //   Play Console → Monetize setup → Licensing → "Base64-encoded RSA public key"
+    // While the placeholder remains, signature verification is SKIPPED.
+    // Replace before shipping (see RELEASE_HANDOFF.md).
+    private static final String LICENSE_PUBLIC_KEY = "PASTE_LICENSE_KEY_FROM_PLAY_CONSOLE_MONETIZE_LICENSING";
+
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
         "remove_ads", "coins_small", "coins_large", "hint_pack",
         "five_lives", "unlimited_lives_1h", "unlimited_lives_forever",
