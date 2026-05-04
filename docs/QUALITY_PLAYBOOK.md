@@ -173,6 +173,31 @@ buttons. The hierarchy is:
 2. **Secondary** (Daily Challenge, Missions): two medium buttons side by side, muted
 3. **Tertiary** (Shop, Stats, Themes, Settings): icon row at bottom or header
 
+**Total ≤ 6 tappable elements on the menu screen.** This is enforced as a
+blocking check by `pre_publish_check.py` (`check_menu_button_count`). A
+heuristic counts every `<button>` plus every non-button element with an
+`onclick` attribute inside the menu screen container. Elements outside the
+menu container don't count, so picker subscreens (e.g. category picker for
+a party game) are the right place for long lists of choices.
+
+**Layout rules for the three tiers:**
+
+- **Center every row.** The primary button, the secondary pair, and the
+  tertiary icon row must each be horizontally centered in the menu container.
+  Use `align-items: center` on the column flex parent and `justify-content:
+  center` (or matching widths) on each child row. Left-aligned rows under a
+  centered title read as "I broke the layout."
+- **Pair widths must match the primary's width.** If Play is 240px wide,
+  the secondary row and the icon row should both span 240px so the three
+  tiers stack as a clean visual column. Mismatched widths produce the
+  "rows are off-center from each other" effect.
+- **Tertiary icons are SVG, never emoji.** §1.3 forbids emoji as UI; this
+  matters most on the menu where the icon family is part of the brand. Use
+  thin line / filled / hand-drawn icons matched to the texture archetype
+  (T3 paper → pencil-line; T6 neon → glowing line; T8 brutalist → square
+  outlined) and **don't reuse identical Lucide icons across apps**
+  (APP_ARCHETYPES §5 anti-pattern #2).
+
 **Never make the Shop button visually dominant.** It signals "buy stuff before
 you play," which hurts both retention and Google's automated "manipulative
 design" review. Shop goes in the tertiary icon row, not the primary button
@@ -180,11 +205,21 @@ stack.
 
 ### 3.2 Progress cue on Play button [GAMES, P1]
 
-The Play button should show the player's current state as subtext:
+The Play button should show the player's current state as **a small italic
+subtitle inside the button itself**, centered below the "Play" word — never
+as a separate text row below the button:
 
-- Returning player: `▶ PLAY` / `Continue — Level 47`
-- New player: `▶ PLAY` / `Start your first level`
-- Completionist: `▶ PLAY` / `Level 47 — Top 25%`
+- Returning player: `Play / Level 47`
+- New player: `Play / Start your first level`
+- Completionist: `Play / Level 47 · Top 25%`
+
+Implementation: the button uses column flex (`flex-direction: column;
+align-items: center;`) with two children — a `<span>Play</span>` at the
+primary font size and a `<span class="play-sub">Level N</span>` at ~0.7rem
+italic with reduced opacity. A separate `<div>` below the button left-aligned
+to the menu container (the failure mode: "Play" button followed by a
+"Level 2" string at the left edge) breaks the centered visual axis and
+reads as a layout bug.
 
 This is a 30-minute change that noticeably improves D7 retention. Returning
 players see their investment; new players see clear direction.
@@ -197,6 +232,23 @@ buried menu buttons. After dismissing, they return to their regular menu spot.
 
 The pop-up should auto-dismiss in 3 seconds if untouched, to avoid being
 annoying for returning players who don't care.
+
+**Banner styling — match the texture archetype, never go dark.** A common
+mistake is reaching for a dark-to-accent gradient (`#3a1f00` → cream, navy →
+neon, etc.) that looks "premium" in isolation but clashes with a warm/light
+menu background — the banner reads as a foreign black bar pasted onto the
+page. Rules:
+
+- For T3 paper / T5 sketch / T7 storybook (warm-light backgrounds): use a
+  **light warm gradient** (e.g. `#fdf6e7` → `#f4e8c8`) with the accent color
+  applied to **text and border only**. Add a subtle inset highlight
+  (`inset 0 0 0 1px rgba(255,255,255,0.6)`) for paper warmth.
+- For T6 neon / dark backgrounds: a saturated accent gradient is fine, but
+  keep contrast with text legible (avoid dark-text-on-dark).
+- For T8 brutalist: solid block of accent color, square corners, no gradient.
+
+The pulse animation (`box-shadow` ring) should match the accent color at
+low opacity (0.18–0.30), not 0.4+ which feels aggressive on calm textures.
 
 ### 3.4 Kill redundant destinations [ALL, P2]
 
@@ -211,6 +263,116 @@ For tool apps, the home screen IS the primary tool, not a menu. Open directly
 to the calculator / tracker / converter. Menu / settings live behind an icon
 in the header. The user's goal is to use the tool — don't make them navigate
 to it.
+
+### 3.6 List and card hierarchy in modals/panels [GAMES, P0]
+
+Missions panels, daily-challenge lists, stats screens, achievement screens
+and shop pages should NEVER read as "8 identical cards stacked." That's
+the single most common signal of templated AI design.
+
+**The mistake:** every item gets the same width, the same background tint,
+the same internal layout (title + subtext + reward + progress). Eight of
+them stacked = one giant beige rectangle with text lines. The user's eye
+has nowhere to land.
+
+**The fix — intentional visual hierarchy:**
+
+1. **One featured item, top, larger.** The most important mission, today's
+   challenge, the active offer — gets ~1.5× the height of regular items,
+   a contrasting background tint, and possibly a glow or border. This is
+   the item the player should notice first.
+
+2. **Active items distinct from completed and locked.** Three states with
+   visually different treatments:
+   - **Active:** full color, progress bar visible, "Continue" or progress text
+   - **Completed:** dimmed (60% opacity), checkmark icon, "Claimed!" text
+   - **Locked:** grayscale, lock icon overlay, "Unlocks at level X"
+
+   Don't render all three the same and just change a number. The eye
+   should sort active vs completed vs locked in 0.3 seconds.
+
+3. **Progress bars must show real progress.** "0/5" everywhere reads
+   as broken. Capture screenshots from a state where some missions are
+   1/5, some 3/20, one is fully complete. Show the progress system working.
+
+4. **Variety in card density.** Not every card needs the same internal
+   layout. Daily streak might be a horizontal pill of 7 day-circles.
+   Coin reward might be a graphic of a chest. Trophy unlock might show
+   the trophy art. Mix card content types so the panel doesn't feel
+   like a database table.
+
+5. **Use whitespace as separation, not just dividers.** Two missions
+   stacked tight together with a 1px line between them blur into one
+   visual object. 16-24px of empty space between cards reads as "two
+   distinct items." For featured items, even more space above and below.
+
+6. **Empty states must look intentional.** If a panel ends with empty
+   space because there are no more items, fill that space with:
+   - A summary card ("All daily missions complete! Come back tomorrow.")
+   - A decorative element (mascot, illustration, abstract pattern)
+   - A call-to-action ("Want more? Try Daily Challenge mode")
+
+   Don't ship modals with 30% trailing empty cream/dark void.
+
+**Example: Missions panel done right vs wrong**
+
+Wrong (current Nonogram pattern, AI-ish):
+```
+[Season Pass — same width as missions, same card]
+[Solver — Complete 5 puzzles — 30 coins — 0/5]
+[Dedicated — Complete 20 puzzles — 80 coins — 0/20]
+[Nonogram Pro — Complete 50 puzzles — 200 coins — 0/50]
+[Streak Keeper — 3 daily challenges — 50 coins — 0/3]
+[Coin Hoarder — Collect 100 coins — 40 coins — 0/100]
+[Star Gazer — Earn 30 stars total — 60 coins — 0/30]
+[Perfectionist — Solve a puzzle without errors — 25 coins — 0/1]
+[No Hints — Solve 3 puzzles hint-free — 35 coins — 0/3]
+[empty cream void to bottom of screen]
+```
+
+Right (designed):
+```
+═══════════════════════════════════════════
+  TODAY'S CHALLENGE                  ★★★
+  Solve 3 puzzles in under 5 minutes
+  Reward: 100 coins + 1 free hint
+  Progress: ●●○ (2/3)
+═══════════════════════════════════════════
+
+DAILY MISSIONS
+─────────────
+[Solver           progress 3/5  →  +30c]
+[Dedicated        progress 12/20 →  +80c]
+[Streak Keeper    progress 1/3  →  +50c]
+
+WEEKLY MISSIONS  (refresh in 4d 2h)
+─────────────
+[Nonogram Pro     progress 17/50 → +200c]
+[No Hints         progress 1/3  →  +35c]
+
+✓ COMPLETED THIS WEEK
+─────────────
+[Perfectionist     ✓ claimed]
+[Coin Hoarder      ✓ claimed]
+
+─── Tomorrow brings new missions ───
+```
+
+The right version has: one featured today's-challenge with a distinct
+treatment, missions grouped by frequency (daily/weekly), completed
+section dimmed and pushed to bottom, footer message instead of empty
+void, progress bars showing real progress not zeros.
+
+**Check before shipping any modal/panel:**
+
+- [ ] At least one item is visually distinct (featured, sized larger, or differently styled)
+- [ ] Cards show real progress (NOT all 0/N)
+- [ ] Active/completed/locked states are visually different
+- [ ] No more than 5 visually-identical cards stacked
+- [ ] Trailing empty space is filled with summary, mascot, or message
+- [ ] Background tint of cards CONTRASTS with panel background (not "beige on beige")
+
+If any fail, the panel reads as artificial. Redesign before shipping.
 
 ---
 
@@ -431,6 +593,42 @@ and rate 1-star.
 
 ## 7. Store listing and screenshots
 
+### 7.0 Capture method: emulator only [ALL, P0]
+
+**Store screenshots are captured from the Android emulator. Never from
+Puppeteer / headless Chromium.** This is non-negotiable — see SHIP_GAME.md
+"Why emulator, not headless Chromium" for the full rationale.
+
+The canonical command:
+```
+python3 scripts/capture_screenshots.py <AppName>
+```
+
+It boots the user's first available AVD if none is running, installs the
+debug APK from `<App>/android/app/build/outputs/apk/debug/app-debug.apk`,
+sends adb tap sequences to navigate, and captures via `adb shell screencap`.
+
+**Why this is enforced as P0:**
+
+- Headless Chromium produces "browser tab" output: wrong font rendering,
+  no Android system insets, no real WebView init, desktop-style flexbox
+  quirks. The output reads as web on the Play Store grid even when wrapped
+  in a marketing frame.
+- Layout bugs in `game.html` that only manifest under headless Chromium
+  (e.g. canvas-wrap collapsing because of viewport-height differences) get
+  shipped to the store while passing local visual checks. This has burned
+  the portfolio — see the Nonogram "tiny board floating in cream void at
+  Level 15" incident.
+- The emulator path also gives the app organic mid-game state in
+  localStorage (level progress, coin balance, missions partially complete)
+  from prior testing — exactly what the §7.1.5 capture-quality rules need.
+
+**No fallbacks allowed.** If the dev environment doesn't have an emulator
+or AVD configured, that's a blocker — surface to the user, pause shipping,
+do not write a Puppeteer script "to keep moving." Existing Puppeteer
+capture scripts in `scripts/` (any `capture_*.js`) are deprecated; do not
+use, do not extend.
+
 ### 7.1 Screenshot order [ALL, P0]
 
 The Play Store shows the first 3 screenshots in search results. Those 3 have
@@ -446,6 +644,87 @@ to sell the game. Order:
 
 Never lead with the menu screenshot. Never lead with the shop screenshot
 (signals monetization-first).
+
+### 7.1.5 Capture quality — what to actually show inside the frame [ALL, P0]
+
+The marketing-frame wrapping (`wrap_screenshots.py`) gives you the gradient
+and headline, but the SCREENSHOT INSIDE the frame is what the user actually
+evaluates. Common capture failures that make screenshots look bad even
+inside a beautiful frame:
+
+**Empty / sparse boards.** Capturing level 1 or 2 of a puzzle when the
+board is mostly empty wastes screenshot real estate. The game looks shallow
+even if it's deep.
+
+**Fix:** capture mid-progression levels (level 15-30 for puzzles where
+boards grow with difficulty, or always-medium-density levels for fixed-
+size puzzles). The board should show ~60-80% filled state, not 10%.
+
+**Default first-install state ("0/0/0 everywhere").** Capturing the Stats
+or Missions screen on a fresh install shows "0 levels played, 0 coins, 0
+streak, 0/5, 0/20, 0/50". Reads as "developer forgot to populate sample
+data."
+
+**Fix:** before capturing screenshots, run a script that pre-populates
+realistic mid-game state in localStorage:
+```javascript
+localStorage.setItem('coins', '247');
+localStorage.setItem('currentLevel', '23');
+localStorage.setItem('streak', '7');
+localStorage.setItem('starsEarned', '34');
+localStorage.setItem('mission_solver_progress', '3'); // out of 5
+localStorage.setItem('mission_dedicated_progress', '12'); // out of 20
+// etc.
+```
+This is mandatory before the screenshot capture step in SHIP_GAME.md
+Phase 3.1. Without it, the screenshots tell users "this game is empty."
+
+**Tiny content in tall canvas.** Phone screenshots are 1080×2400 (9:20).
+A 5×5 puzzle grid centered in that canvas leaves 60% of the screenshot as
+dead space. The marketing-frame wrap doesn't fix this — the screenshot
+inside the frame is still mostly empty.
+
+**Fix:** the in-app gameplay layout must scale the playable area to fill
+tall phones (per §1.5 "Tall phone support"). For puzzle games, the board
+should occupy at least 50% of vertical space on a 9:20 screen. If your
+current layout doesn't, FIX IT before capturing screenshots — don't ship
+screenshots of a game that wastes screen space.
+
+**Modals over darkened backgrounds.** Capturing a modal (Daily Mission
+panel, Stats popup) shows a dark scrim over the menu behind. The result
+is muddy and low-contrast.
+
+**Fix:** for modals, capture them in a dedicated screenshot mode where
+the background is replaced with the app's solid theme color, not the
+darkened menu. Add a `?screenshot=modal_missions` query parameter that
+your `game.html` reads, and when set, render the modal on a clean
+background with no scrim.
+
+**Consequences of skipping these fixes:** Wrap script makes the OUTSIDE
+of the screenshot pretty, but conversion-killing dead space INSIDE
+remains. A user scrolling past sees "another sparse mobile game" and
+swipes on. Lift from the marketing wrap is wasted.
+
+### 7.1.6 Honesty in screenshot copy [ALL, P0]
+
+Headlines on the marketing frame must reflect what's actually in the
+shipped app. If the level generator only produces grids up to 10×10,
+the headline cannot say "25×25 GRIDS". This is false advertising and
+Google rejects on review.
+
+**Required check before each app ships:** run through `metadata/screenshot_headlines.json`
+and verify EACH headline is true given the actual game.html content:
+
+- "500 LEVELS" → the level generator must produce ≥500 unique solvable levels
+- "DAILY CHALLENGE" → the daily challenge mechanic must actually be implemented
+- "OFFLINE PLAY" → the app must work fully without network (test with airplane mode)
+- "25×25 GRIDS" → the largest level the generator produces must be ≥25×25
+- "NO ADS" → the app must have no AdMob integration (different setup; rare)
+
+If a headline overpromises, EITHER fix the game to match OR change the
+headline to match the game. Don't ship with the mismatch.
+
+This check is part of SHIP_GAME.md Phase 8 self-audit.
 
 ### 7.2 Screenshot text overlays [ALL, P0]
 
@@ -593,24 +872,141 @@ rotate to portrait" overlay.
 
 ## 9. Cross-promotion
 
-### 9.1 "More Games" bar [ALL, P0, after 2nd app ships]
+### 9.1 "More Games" bar [ALL, P0, from app #2 onward]
 
-Once two or more Pegasus Games apps are live, every app must have a "More
-Games" bar in the menu (icon in the tertiary row) that opens a panel showing
-the other Pegasus Games apps with deeplinks to the Play Store.
+Every app from the second one onward must have a "More Games" panel in
+the menu (icon in the tertiary row) that opens a list of other Pegasus
+Games apps with deeplinks to the Play Store.
 
-This is the single best monetization lever a portfolio publisher has that
-single-app devs don't. A user who plays one of your games and is about to
-churn can be converted into a user of another one of your games, at zero
-cost. Don't skip this.
+This is the single best monetization lever a portfolio publisher has
+that single-app devs don't. A user who plays one of your games and is
+about to churn can be converted into a user of another one, at zero
+cost.
 
-### 9.2 Organic rewards for installing other apps [ALL, P1]
+### 9.2 Dynamic cross-promo config [ALL, P0]
 
-Consider rewarding coins for installing another Pegasus Games app. The
-reward triggers only after the user opens the new app at least once (verify
-via Firebase Analytics event). Usually 200-500 coins per install is right.
+The list of "More Games" entries must NOT be hardcoded inside each
+app's `game.html`. If hardcoded, updating the list (e.g., adding a new
+app, promoting a hit, removing a deprecated app) requires rebuilding
+and re-uploading every shipped app — economically infeasible at 30+
+apps, and Google Play update reviews delay it by days each.
 
-This must be transparent ("Get 500 coins — install [X]"), not deceptive.
+Instead, fetch the cross-promo list from a remote JSON file at app
+launch:
+
+**URL**: `https://pegasusgames-creator.github.io/promo.json`
+
+**Format**:
+```json
+{
+  "version": 14,
+  "games": [
+    {
+      "id": "ballsort",
+      "packageId": "com.pegasusgames.ballsort",
+      "name": "Ball Sort Puzzle",
+      "desc": "Sort colorful balls into tubes!",
+      "icon": "https://pegasusgames-creator.github.io/icons/ballsort.png",
+      "featured": false,
+      "weight": 1.0
+    },
+    {
+      "id": "watersortpuzzle",
+      "packageId": "com.pegasusgames.watersortpuzzle",
+      "name": "Water Sort Puzzle",
+      "desc": "Pour and sort colored water!",
+      "icon": "https://pegasusgames-creator.github.io/icons/watersort.png",
+      "featured": true,
+      "weight": 2.0
+    }
+  ]
+}
+```
+
+**Fields:**
+- `id`, `packageId`, `name`, `desc`: standard cross-promo entry data
+- `icon`: small icon URL hosted on GitHub Pages (PNG, square, ≤256×256)
+- `featured`: if `true`, display this app in a hero slot at the top of
+  the More Games panel with a "FEATURED" badge — used to promote hit
+  apps across the portfolio
+- `weight`: relative ordering weight (higher = appears earlier in the
+  list); ties break by `id` alphabetical
+
+**Behavior in app:**
+- On app launch, fetch `promo.json` with a 3-second timeout
+- If fetch succeeds, cache to `localStorage` with key `promo_config_v1`
+- If fetch fails (offline, GitHub Pages outage, etc.), fall back to
+  the cached version, or to the baked-in list as last resort
+- Filter out the current app from the list (don't promote yourself)
+- Render in the More Games panel ordered by `weight` desc
+
+The baked-in fallback list is a snapshot of the JSON at the time the
+app was built. Update it when ad-hoc rebuilding, but the dynamic fetch
+is the source of truth.
+
+**Why this works for the "hit app promotes losers" strategy:**
+When one app starts converting well, you mark it `featured: true` and
+bump its `weight` to 5.0 in the GitHub Pages JSON. Within hours, every
+other app in the portfolio surfaces it as the hero promoted app. If
+the hit is doing 5,000+ daily new installs, even a 1% click-through
+on the hero slot drives 50+ daily installs per other app, free.
+
+Conversely: when a low-quality app needs to be hidden (you've shipped
+v1 but want to push v2 with better assets first), set its `weight` to
+0 in `promo.json`. It disappears from the panel without any code
+changes.
+
+### 9.3 Hit app — portfolio-wide upgrade workflow [ALL, P1]
+
+When one app starts performing meaningfully better than the rest
+(e.g., D7 retention 2x portfolio average, install velocity 10x, IAP
+conversion 3x), trigger a portfolio-wide upgrade pass:
+
+1. **Mark the hit app `featured: true`** in `promo.json` with `weight: 5.0`
+2. **Identify what's working** in the hit app — is it the icon? the
+   first-60-seconds flow? the screenshot order? a specific monetization
+   pattern? Read the analytics/AdMob data carefully.
+3. **Ship the working pattern across the portfolio.** Specifically:
+   - If the hit app's icon style is converting well, regenerate icons
+     for the worst-performing apps using the same style elements
+   - If the hit app's screenshot 1 is driving installs, update other
+     apps' screenshot 1s to match the composition (different content,
+     same composition pattern)
+   - If a specific listing copy structure is winning, apply it to
+     other listings (each one still hand-written to that app)
+4. **Re-upload the upgraded apps** at a sustainable pace (2-3 per week
+   per the cadence rules — don't dump 20 updates at once, that's a
+   different velocity-spike trigger).
+
+This is how the strategy works: the hit app pulls free traffic, the
+upgraded prior apps convert that traffic better, the portfolio
+compounds. Without this workflow, a hit just sits as one earner and
+the rest of the portfolio is dead weight.
+
+### 9.4 Organic rewards for installing other apps [ALL, P1]
+
+Consider rewarding coins for installing another Pegasus Games app.
+The reward triggers only after the user opens the new app at least
+once (verify via Firebase Analytics event). Usually 50-200 coins per
+install is right (don't go higher — Google's policy on "incentivized
+installs" is gray; transparent small rewards are accepted, large
+rewards approach manipulation).
+
+This must be transparent ("Earn 50 coins by installing X"), not
+deceptive.
+
+### 9.5 What NOT to do [ALL, P0]
+
+- Don't promote 10+ apps in the More Games panel. Cap at 6-8. Beyond
+  that, users skim past. Use `weight` and `featured` to curate.
+- Don't include apps with crash rate > 1% in the promo list. A user
+  going from your stable app to a crashy one churns from both.
+- Don't include suspended or unpublished apps. Filter at the JSON
+  level — never relying on each app's local cache to know.
+- Don't promote apps that violate Google's Families policy from a
+  general-audience app, or vice versa. If you ship Kids apps, they
+  need a separate `promo-kids.json` with only Kids-program-eligible
+  apps in it.
 
 ---
 
@@ -852,17 +1248,29 @@ Quick-reference list of things that will hurt the portfolio:
 - Don't ship a utility app under 8KB of game.html (flagged as min-functionality).
 - Don't use Lorem Ipsum, placeholder text, or obvious stub content anywhere.
 - Don't leave `TODO` comments in production code (ship with real implementations or cut the feature).
-- Don't reuse screenshots, icons, or listing copy across apps.
+- Don't reuse screenshots, icons, or listing copy across apps. Frame
+  templates and brand backgrounds CAN be reused — what cannot be reused is
+  the inner gameplay shown in screenshots, the icon's focal element, or
+  any of the listing text.
 - Don't skip the IAP plumbing even for a free-to-play app (you want the
   option to add IAPs later without shipping an update).
 - Don't A/B test by shipping different builds — use Play Console store
   listing experiments instead.
 - Don't ignore your crash rate. 1% ANR or 1% crash rate will get you
   delisted from search results. Check weekly in Play Console.
-- Don't add push notifications to a brand-new app in v1.0. Ship without
-  notifications, verify the app works in production, then add notifications
-  in the first update. This lets you measure whether notifications actually
-  lift retention vs. confounding it with other launch-day variables.
+- Don't ship multiple apps in a single calendar day, even if they're
+  genuinely distinct. Spread releases across the week. Same-day publish
+  spikes are a velocity signal even when content is fine.
+  See `CLAUDE.md` → "Shipping cadence".
+- Don't ship 2+ apps from the same genre cluster within 7 days (e.g. two
+  ball-sort variants in the same week). Diversify across genres weekly.
+- Don't accelerate cadence abruptly. 1, 2, 2, 2, 2, 3 across 6 weeks is
+  fine; 1, 1, 5 is a velocity-spike flag.
+- Don't add push notifications to a brand-new app in its v1.0 release.
+  Ship the v1.0 without notifications, verify production stability, then
+  add notifications in v1.1+. This lets you measure whether notifications
+  actually lift retention vs. confounding it with other launch-day
+  variables. See §11 for full notification rules.
 
 ---
 

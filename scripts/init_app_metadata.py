@@ -46,7 +46,7 @@ import os
 import re
 import sys
 
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE = os.path.dirname(os.path.abspath(__file__))
 SKIP_DIRS = {"_template", "_release", "__pycache__", ".git", ".idea", "node_modules"}
 
 

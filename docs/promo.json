@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-04-28",
+  "_doc": "Cross-promotion config for all Pegasus Games apps. Apps fetch this on launch and render their More Games panel from this list. See QUALITY_PLAYBOOK.md §9.2. To promote a hit app portfolio-wide, set featured=true and weight=5.0 on that entry.",
+  "games": [
+    {
+      "id": "watersortpuzzle",
+      "packageId": "com.pegasusgames.watersortpuzzle",
+      "name": "Water Sort Puzzle",
+      "desc": "Pour and sort colored water!",
+      "icon": "https://pegasusgames-creator.github.io/icons/watersortpuzzle.png",
+      "featured": false,
+      "weight": 1.0
+    }
+  ]
+}

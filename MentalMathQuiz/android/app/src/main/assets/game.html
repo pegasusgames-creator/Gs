@@ -22,17 +22,17 @@ header h1 { font-size:1.3rem; font-weight:800; color:#fff; }
 .menu-title { font-size:1.8rem; font-weight:900; color:var(--accent); }
 .hs-display { background:#fff; border-radius:12px; padding:10px 24px; font-size:0.9rem; color:var(--muted); font-weight:600; }
 .hs-display b { color:var(--accent); }
-.mode-row { display:flex; gap:10px; width:100%; max-width:340px; }
-.mode-btn { flex:1; padding:16px 8px; font-size:0.9rem; font-weight:800; border:none; border-radius:var(--radius); cursor:pointer; transition:transform 0.15s; }
-.mode-btn:active { transform:scale(0.96); }
-.mode-30 { background:#E0F2F1; color:#004D40; }
-.mode-60 { background:#B2DFDB; color:#004D40; }
-.mode-inf { background:var(--accent); color:#fff; box-shadow:0 4px 16px rgba(0,150,136,0.35); }
+/* §3.1 menu hierarchy: V3 narrator + T3 paper, hero "60s" Play, secondary 30s/Endless. */
+.mode-primary { width:100%; max-width:340px; padding:22px 18px; font-size:1.15rem; font-weight:900; border:none; border-radius:var(--radius); background:var(--accent); color:#fff; cursor:pointer; box-shadow:0 6px 20px rgba(0,150,136,0.32); transition:transform 0.12s; letter-spacing:0.4px; }
+.mode-primary:active { transform:scale(0.97); }
+.mode-pair-row { display:flex; gap:10px; width:100%; max-width:340px; margin-top:10px; }
+.mode-pair-btn { flex:1; padding:14px 10px; font-size:0.9rem; font-weight:800; border:2px solid #B2DFDB; border-radius:14px; background:#fff; color:#00695C; cursor:pointer; transition:transform 0.12s, border-color 0.12s; }
+.mode-pair-btn:active { transform:scale(0.97); border-color:var(--accent); }
 .ops-row { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; width:100%; max-width:340px; }
-.op-toggle { padding:10px 18px; font-size:1.1rem; font-weight:800; border:3px solid #B2DFDB; border-radius:12px; background:#fff; cursor:pointer; transition:all 0.15s; color:var(--muted); }
+.op-toggle { padding:10px 18px; font-size:1.1rem; font-weight:800; border:3px solid #B2DFDB; border-radius:12px; background:#fff; cursor:pointer; transition:all 0.15s; color:var(--muted); user-select:none; }
 .op-toggle.on { background:var(--accent); color:#fff; border-color:var(--accent); }
 .diff-row { display:flex; gap:8px; width:100%; max-width:340px; }
-.diff-btn2 { flex:1; padding:12px; font-size:0.85rem; font-weight:800; border:3px solid #B2DFDB; border-radius:12px; background:#fff; cursor:pointer; color:var(--muted); transition:all 0.15s; }
+.diff-btn2 { flex:1; padding:12px; font-size:0.85rem; font-weight:800; border:3px solid #B2DFDB; border-radius:12px; background:#fff; cursor:pointer; color:var(--muted); transition:all 0.15s; user-select:none; text-align:center; }
 .diff-btn2.on { background:var(--accent); color:#fff; border-color:var(--accent); }
 
 /* GAME */
@@ -79,23 +79,22 @@ header h1 { font-size:1.3rem; font-weight:800; color:#fff; }
     <div class="menu-title">Mental Math Quiz</div>
     <div class="hs-display">🏆 High Score: <b id="hsDisplay">0</b> correct/min</div>
     <div style="font-size:0.85rem;font-weight:700;color:var(--muted);">Operations:</div>
-    <div class="ops-row">
-      <button class="op-toggle on" id="op-plus" onclick="toggleOp('plus',this)">+</button>
-      <button class="op-toggle on" id="op-minus" onclick="toggleOp('minus',this)">−</button>
-      <button class="op-toggle on" id="op-times" onclick="toggleOp('times',this)">×</button>
-      <button class="op-toggle" id="op-div" onclick="toggleOp('div',this)">÷</button>
+    <div class="ops-row" id="opsRow">
+      <span class="op-toggle on" data-op="plus">+</span>
+      <span class="op-toggle on" data-op="minus">−</span>
+      <span class="op-toggle on" data-op="times">×</span>
+      <span class="op-toggle" data-op="div">÷</span>
     </div>
     <div style="font-size:0.85rem;font-weight:700;color:var(--muted);">Difficulty:</div>
-    <div class="diff-row">
-      <button class="diff-btn2 on" id="d-easy" onclick="setDiff('easy',this)">Easy</button>
-      <button class="diff-btn2" id="d-med" onclick="setDiff('medium',this)">Medium</button>
-      <button class="diff-btn2" id="d-hard" onclick="setDiff('hard',this)">Hard</button>
+    <div class="diff-row" id="diffRow">
+      <span class="diff-btn2 on" data-diff="easy">Easy</span>
+      <span class="diff-btn2" data-diff="medium">Medium</span>
+      <span class="diff-btn2" data-diff="hard">Hard</span>
     </div>
-    <div style="font-size:0.85rem;font-weight:700;color:var(--muted);">Time limit:</div>
-    <div class="mode-row">
-      <button class="mode-btn mode-30" onclick="startGame(30)">⏱ 30s</button>
-      <button class="mode-btn mode-60" onclick="startGame(60)">⏱ 60s</button>
-      <button class="mode-btn mode-inf" onclick="startGame(0)">∞ Endless</button>
+    <button class="mode-primary" id="startMain">Begin · 60s</button>
+    <div class="mode-pair-row">
+      <button class="mode-pair-btn" id="startSprint">⏱ Sprint 30s</button>
+      <button class="mode-pair-btn" id="startEndless">∞ Endless</button>
     </div>
   </div>
 
@@ -155,8 +154,19 @@ const hs = {30:+localStorage.getItem('mm_hs30')||0, 60:+localStorage.getItem('mm
 
 document.getElementById('hsDisplay').textContent = Math.max(...Object.values(hs));
 
-function toggleOp(op,btn){ ops[op]=!ops[op]; btn.classList.toggle('on',ops[op]); }
-function setDiff(d,btn){ difficulty=d; document.querySelectorAll('.diff-btn2').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); }
+function toggleOp(op,el){ ops[op]=!ops[op]; el.classList.toggle('on',ops[op]); }
+function setDiff(d,el){ difficulty=d; document.querySelectorAll('.diff-btn2').forEach(b=>b.classList.remove('on')); el.classList.add('on'); }
+document.getElementById('opsRow').addEventListener('click', e => {
+  const t = e.target.closest('.op-toggle'); if (!t) return;
+  toggleOp(t.dataset.op, t);
+});
+document.getElementById('diffRow').addEventListener('click', e => {
+  const t = e.target.closest('.diff-btn2'); if (!t) return;
+  setDiff(t.dataset.diff, t);
+});
+document.getElementById('startMain').addEventListener('click', () => startGame(60));
+document.getElementById('startSprint').addEventListener('click', () => startGame(30));
+document.getElementById('startEndless').addEventListener('click', () => startGame(0));
 
 function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
 

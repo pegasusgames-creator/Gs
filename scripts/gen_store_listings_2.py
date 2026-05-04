@@ -799,7 +799,7 @@ Download free and get the party started!""",
 },
 }
 
-skip = {'BallSortPuzzle','WaterSort','Nonogram','PipeConnect','Puzzle2048','UnblockPuzzle'}
+skip = {'WaterSort','WaterSortPuzzle','Nonogram','PipeConnect','Puzzle2048','UnblockPuzzle'}
 
 TEMPLATE = """========================================
 APP NAME

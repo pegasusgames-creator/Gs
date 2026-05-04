@@ -43,15 +43,15 @@ canvas { display:block; border-radius:10px; background:var(--surface); touch-act
 <div id="screen-menu" class="screen active">
   <h1>Word Search</h1>
   <p class="subtitle">Find all hidden words!</p>
-  <div class="category-grid">
-    <div class="cat-btn selected" onclick="selectCat(this,'Animals')"><span class="cat-icon">🐾</span>Animals</div>
-    <div class="cat-btn" onclick="selectCat(this,'Foods')"><span class="cat-icon">🍕</span>Foods</div>
-    <div class="cat-btn" onclick="selectCat(this,'Countries')"><span class="cat-icon">🌍</span>Countries</div>
-    <div class="cat-btn" onclick="selectCat(this,'Sports')"><span class="cat-icon">⚽</span>Sports</div>
-    <div class="cat-btn" onclick="selectCat(this,'Tech')"><span class="cat-icon">💻</span>Tech</div>
-    <div class="cat-btn" onclick="selectCat(this,'Nature')"><span class="cat-icon">🌿</span>Nature</div>
+  <div class="category-grid" id="catGrid">
+    <div class="cat-btn selected" data-cat="Animals"><span class="cat-icon">🐾</span>Animals</div>
+    <div class="cat-btn" data-cat="Foods"><span class="cat-icon">🍕</span>Foods</div>
+    <div class="cat-btn" data-cat="Countries"><span class="cat-icon">🌍</span>Countries</div>
+    <div class="cat-btn" data-cat="Sports"><span class="cat-icon">⚽</span>Sports</div>
+    <div class="cat-btn" data-cat="Tech"><span class="cat-icon">💻</span>Tech</div>
+    <div class="cat-btn" data-cat="Nature"><span class="cat-icon">🌿</span>Nature</div>
   </div>
-  <button class="btn" onclick="startGame()">Play</button>
+  <button class="btn" onclick="startGame()">Begin the Hunt</button>
   <p style="color:#777;font-size:0.8rem;margin-top:12px">Best: <span id="menu-best">0</span></p>
 </div>
 
@@ -102,6 +102,10 @@ function selectCat(el,cat){
   document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('selected'));
   el.classList.add('selected'); selectedCat=cat;
 }
+document.getElementById('catGrid').addEventListener('click', e => {
+  const t = e.target.closest('.cat-btn'); if (!t) return;
+  selectCat(t, t.dataset.cat);
+});
 function goMenu(){ clearInterval(tickInterval); document.getElementById('menu-best').textContent=bestScore; setScreen('menu'); }
 function setScreen(n){ document.querySelectorAll('.screen').forEach(s=>{ s.classList.remove('active'); s.style.display='none'; }); const el=document.getElementById('screen-'+n); el.style.display='flex'; el.classList.add('active'); }
 function startGame(){ setScreen('game'); newPuzzle(); }

@@ -18,6 +18,14 @@
   .categories-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 400px; }
   .cat-btn { background: #2a2a2a; border: 2px solid var(--accent); color: #fff; border-radius: 12px; padding: 18px 12px; font-size: 1rem; font-weight: bold; cursor: pointer; min-height: 60px; text-align: center; }
   .cat-btn.selected { background: var(--accent); }
+  /* §3.1 menu hierarchy: V3 playful narrator + T5 sketch — slightly imperfect borders. */
+  .menu-tagline { font-size: 0.95rem; color: #c8c0a8; margin-bottom: 22px; font-style: italic; max-width: 320px; text-align: center; }
+  .menu-pair-row { display: flex; gap: 10px; width: 100%; max-width: 360px; margin-top: 14px; }
+  .menu-pair-btn { flex: 1; background: #2a2a2a; color: #fff; border: 2px dashed rgba(255,87,34,0.7); border-radius: 14px; padding: 12px 10px; font-size: 0.92rem; font-weight: 600; cursor: pointer; min-height: 60px; line-height: 1.25; text-align: center; }
+  .menu-pair-btn:active { transform: scale(0.97); border-style: solid; }
+  .menu-pair-btn .pair-label { display: block; font-size: 0.72rem; letter-spacing: 0.6px; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .menu-pair-btn .pair-value { display: block; font-size: 1rem; font-weight: 700; }
+  .picker-back { background: #2a2a2a; color: #fff; border: 2px dashed rgba(255,87,34,0.7); border-radius: 12px; padding: 8px 18px; font-size: 0.95rem; font-weight: 600; cursor: pointer; margin-bottom: 14px; min-height: 44px; align-self: flex-start; }
   .setup-row { display: flex; align-items: center; gap: 12px; margin: 10px 0; width:100%; max-width:360px; }
   .setup-row label { font-size: 1rem; flex: 1; }
   .setup-row input[type=number] { background: #333; border: 1px solid #555; color: #fff; border-radius: 8px; padding: 8px 12px; width: 80px; font-size: 1rem; }
@@ -53,7 +61,33 @@
 
 <!-- HOME SCREEN -->
 <div class="screen" id="homeScreen">
-  <h2>Choose Category</h2>
+  <h2>Charades</h2>
+  <div class="menu-tagline">Pick a deck. Act it out. Score the laughs.</div>
+  <button class="big-btn" id="startBtn">Take the Stage</button>
+  <div class="menu-pair-row">
+    <button class="menu-pair-btn" id="openCatPickerBtn">
+      <span class="pair-label">Deck</span>
+      <span class="pair-value" id="selectedCatLabel">🎬 Movies</span>
+    </button>
+    <button class="menu-pair-btn" id="quickRoundBtn">
+      <span class="pair-label">Roll</span>
+      <span class="pair-value">Surprise Me</span>
+    </button>
+  </div>
+  <div class="setup-row" style="margin-top:18px">
+    <label>Team Mode</label>
+    <input type="checkbox" id="teamModeCheck" style="width:24px;height:24px;cursor:pointer">
+  </div>
+  <div class="setup-row">
+    <label>Round Time (sec)</label>
+    <input type="number" id="roundTime" value="60" min="15" max="120">
+  </div>
+</div>
+
+<!-- CATEGORY PICKER (separate screen so its buttons don't crowd the home menu) -->
+<div class="screen hidden" id="catPickerScreen">
+  <button class="picker-back" id="catPickerBack">← Back</button>
+  <h2>Choose a Deck</h2>
   <div class="categories-grid" id="catGrid">
     <button class="cat-btn selected" data-cat="Movies">🎬 Movies</button>
     <button class="cat-btn" data-cat="Animals">🐾 Animals</button>
@@ -63,16 +97,6 @@
     <button class="cat-btn" data-cat="TV Shows">📺 TV Shows</button>
     <button class="cat-btn" data-cat="All" style="grid-column:span 2;">🎲 All Categories</button>
   </div>
-  <div style="height:16px"></div>
-  <div class="setup-row">
-    <label>Team Mode</label>
-    <input type="checkbox" id="teamModeCheck" style="width:24px;height:24px;cursor:pointer">
-  </div>
-  <div class="setup-row">
-    <label>Round Time (sec)</label>
-    <input type="number" id="roundTime" value="60" min="15" max="120">
-  </div>
-  <button class="big-btn" id="startBtn">Start Game</button>
 </div>
 
 <!-- GAME SCREEN -->
@@ -139,6 +163,21 @@ function addTouchFeedback(btn) {
 }
 document.querySelectorAll('button').forEach(addTouchFeedback);
 
+function refreshCatLabel() {
+  const lbl = document.getElementById('selectedCatLabel');
+  if (!lbl) return;
+  const ICON = {
+    'Movies':'🎬','Animals':'🐾','Actions':'🏃','Famous People':'⭐',
+    'Objects':'📦','TV Shows':'📺','All':'🎲',
+  };
+  if (selectedCats.length === 1) {
+    const c = selectedCats[0];
+    lbl.textContent = (ICON[c] || '') + ' ' + (c === 'All' ? 'All Categories' : c);
+  } else {
+    lbl.textContent = '🎲 ' + selectedCats.length + ' decks';
+  }
+}
+
 document.querySelectorAll('.cat-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const cat = btn.dataset.cat;
@@ -152,7 +191,23 @@ document.querySelectorAll('.cat-btn').forEach(btn => {
       selectedCats = [...document.querySelectorAll('.cat-btn.selected')].map(b => b.dataset.cat).filter(c => c !== 'All');
       if (!selectedCats.length) { btn.classList.add('selected'); selectedCats = [cat]; }
     }
+    refreshCatLabel();
   });
+});
+
+document.getElementById('openCatPickerBtn').addEventListener('click', () => showScreen('catPickerScreen'));
+document.getElementById('catPickerBack').addEventListener('click', () => showScreen('homeScreen'));
+document.getElementById('quickRoundBtn').addEventListener('click', () => {
+  const allCats = Object.keys(PROMPTS);
+  const random = allCats[Math.floor(Math.random() * allCats.length)];
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.classList.toggle('selected', b.dataset.cat === random);
+  });
+  selectedCats = [random];
+  refreshCatLabel();
+  document.getElementById('roundTime').value = 60;
+  document.getElementById('teamModeCheck').checked = false;
+  startGame();
 });
 
 document.getElementById('startBtn').addEventListener('click', startGame);

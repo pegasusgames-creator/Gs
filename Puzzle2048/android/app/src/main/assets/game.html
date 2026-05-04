@@ -85,7 +85,7 @@ body {
 .score-box .label { color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 .score-box .value { color: white; font-size: 22px; font-weight: 800; }
 
-.menu-buttons { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 300px; padding: 0 20px; }
+.menu-buttons { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 300px; padding: 0 20px; align-items: center; }
 .btn { border: none; border-radius: 14px; padding: 14px 28px; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.15s; width: 100%; }
 .btn:active { transform: scale(0.96); }
 .btn.btn-pressed { transform: scale(0.96); }
@@ -95,6 +95,16 @@ body {
 .btn-daily { background: linear-gradient(135deg, #f67c5f, #f65e3b); color: white; box-shadow: 0 6px 20px rgba(246,94,59,0.35); }
 .btn-gold { background: linear-gradient(135deg, #ffd700, #f39c12); color: #1a1a18; box-shadow: 0 6px 20px rgba(255,215,0,0.3); }
 .btn-danger { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+/* §3.1 menu hierarchy: V6 ARCADE CAPS + T8 brutalist — sharp tiles, no rounded edges. */
+.menu-tile-primary { width: 280px; padding: 20px 0; border: 2px solid #edc22e; border-radius: 0; background: #edc22e; color: #1a1a18; font-family: 'Poppins', system-ui, sans-serif; font-size: 1.25rem; font-weight: 900; letter-spacing: 4px; cursor: pointer; box-shadow: 0 6px 0 #b88e0e; transition: transform 0.08s, box-shadow 0.08s; }
+.menu-tile-primary:active { transform: translateY(3px); box-shadow: 0 3px 0 #b88e0e; }
+.menu-tile-row { display: flex; gap: 10px; width: 280px; margin-top: 12px; }
+.menu-tile-pair { flex: 1; padding: 14px 0; border: 2px solid rgba(255,255,255,0.18); border-radius: 0; background: #1a1a18; color: #f3eecf; font-family: 'Poppins', system-ui, sans-serif; font-size: 0.92rem; font-weight: 800; letter-spacing: 2.5px; cursor: pointer; transition: border-color 0.1s, color 0.1s, transform 0.08s; }
+.menu-tile-pair:active { transform: scale(0.97); border-color: #edc22e; color: #edc22e; }
+.menu-icon-row { display: flex; gap: 14px; margin-top: 16px; }
+.menu-icon-btn { width: 48px; height: 48px; border-radius: 0; border: 2px solid rgba(255,255,255,0.18); background: #1a1a18; color: #f3eecf; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; transition: color 0.1s, border-color 0.1s, transform 0.08s; }
+.menu-icon-btn:hover, .menu-icon-btn:active { border-color: #edc22e; color: #edc22e; }
+.menu-icon-btn:active { transform: scale(0.94); }
 
 /* ===== GAME SCREEN ===== */
 #gameScreen { background: #1a1a18; justify-content: space-between; }
@@ -304,7 +314,6 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
     <div class="menu-header">
       <div class="coin-display"><span>🪙</span><span id="menuCoins">0</span></div>
       <div class="lives-display"><span>❤️</span><span id="menuLives">5</span></div>
-      <button class="settings-btn" onclick="Game.showScreen('settingsScreen')">⚙️</button>
     </div>
     <div class="game-title">
       <h1>2048</h1>
@@ -318,17 +327,22 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
       <div class="mini-grid" id="miniGrid"></div>
     </div>
     <div class="menu-buttons">
-      <button class="btn btn-primary" onclick="Game.startOrResumeGame()">▶ Play</button>
-      <button class="btn btn-daily" onclick="Game.startDailyChallenge()">📅 Daily Challenge</button>
-      <button class="btn btn-secondary" onclick="Game.showScreen('scoresScreen')">🏆 High Scores</button>
-      <button class="btn btn-gold" onclick="Game.showScreen('shopScreen')">🛒 Shop</button>
-      <button class="btn btn-secondary" onclick="Game.showScreen('moreGamesScreen')">🎮 More Games</button>
-      <button class="btn btn-secondary" onclick="Game.showScreen('missionsScreen')">🎯 Missions</button>
-      <button class="btn btn-secondary" onclick="Game.showScreen('statsScreen')">📊 Stats</button>
-    </div>
-    <div id="comebackBanner" style="display:none;margin-top:10px;width:100%;max-width:320px;background:rgba(237,194,46,0.1);border:1.5px solid rgba(237,194,46,0.35);border-radius:14px;padding:12px 18px;text-align:center;cursor:pointer" onclick="Game.resumeLastLevel()">
-      <div style="color:#edc22e;font-size:14px;font-weight:700">↩ Resume In-Progress Game</div>
-      <div id="comebackDetail" style="color:rgba(255,255,255,0.5);font-size:12px;margin-top:2px"></div>
+      <button class="menu-tile-primary" onclick="Game.startOrResumeGame()">PLAY</button>
+      <div class="menu-tile-row">
+        <button class="menu-tile-pair" onclick="Game.startDailyChallenge()">DAILY</button>
+        <button class="menu-tile-pair" onclick="Game.showScreen('scoresScreen')">BEST</button>
+      </div>
+      <div class="menu-icon-row">
+        <button class="menu-icon-btn" onclick="Game.showScreen('shopScreen')" aria-label="Shop">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M4 8h16l-1 11H5L4 8z"/><path d="M9 8V5h6v3"/></svg>
+        </button>
+        <button class="menu-icon-btn" onclick="Game.showScreen('settingsScreen')" aria-label="Settings">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="9" y="9" width="6" height="6"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2 2M16.4 16.4l2 2M5.6 18.4l2-2M16.4 7.6l2-2"/></svg>
+        </button>
+        <button class="menu-icon-btn" onclick="Game.showScreen('moreGamesScreen')" aria-label="More games">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1206,13 +1220,6 @@ let isDailyMode = false;
 // =====================================================================
 const PROMO_GAMES = [
   {
-    id: 'ballsort',
-    pkg: 'com.pegasusgames.ballsort',
-    icon: '🎱',
-    title: 'Ball Sort Puzzle',
-    desc: 'Sort colorful balls into tubes!',
-  },
-  {
     id: 'watersort',
     pkg: 'com.pegasusgames.watersort',
     icon: '💧',
@@ -1354,8 +1361,7 @@ const Game = {
     if (id === 'menuScreen') {
       renderMiniGrid();
       this.updateUI();
-      const cb = document.getElementById('comebackBanner');
-      if(cb){ if(State.lastLevelProgress&&State.grid&&hasValidMoves(State.grid)){ document.getElementById('comebackDetail').textContent='Score: '+State.score+' — keep merging!'; cb.style.display='block'; } else cb.style.display='none'; }
+      /* Comeback banner removed per §3.1; PLAY resumes lastLevelProgress. */
     }
     if (id === 'scoresScreen') this.updateUI();
     if (id === 'shopScreen') this.updateUI();
@@ -2910,15 +2916,13 @@ function injectWeeklyBanner(){
   if(document.getElementById('weeklyEventBanner')) return;
   var b=document.createElement('div');
   b.id='weeklyEventBanner';
-  // Try to place it after .menu-daily or .come-back banner or inside menu screen
+  // Place after the icon row inside the menu, or fall back to the menu container
   var anchors=[
-    document.querySelector('.menu-daily'),
-    document.getElementById('comebackBanner'),
-    document.querySelector('#comebackBanner'),
-    document.querySelector('#screen-menu .menu-buttons'),
+    document.querySelector('#menuScreen .menu-icon-row'),
+    document.querySelector('#menuScreen .menu-tile-row'),
     document.querySelector('#menuScreen .menu-buttons'),
-    document.querySelector('#screen-menu'),
-    document.querySelector('#menuScreen')
+    document.querySelector('#menuScreen'),
+    document.querySelector('#screen-menu')
   ].filter(Boolean);
   if(anchors.length){
     var a=anchors[0];

@@ -18,8 +18,8 @@
 ### 1. Create Xcode project (do this on Mac)
 ```
 File → New → Project → iOS → App
-Product Name: BallSortPuzzle  (or your game name)
-Bundle Identifier: com.pegasusgames.ballsort
+Product Name: <YourAppName>  (use the folder name)
+Bundle Identifier: com.pegasusgames.<yourapp>
 Language: Swift
 Interface: Storyboard (then delete storyboard — we use code-based UI)
 ```

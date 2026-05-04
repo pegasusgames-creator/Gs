@@ -3,24 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Nonogram Puzzles</title>
+<title>Nonogram</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface2: #21262d;
-    --border: #30363d;
-    --accent: #58a6ff;
-    --accent-dim: #1f4a7a;
-    --text: #e6edf3;
-    --text-muted: #8b949e;
-    --filled: #58a6ff;
-    --marked: #30363d;
-    --error: #f85149;
-    --success: #3fb950;
-    --coin: #d29922;
-    --heart: #f85149;
+    --bg: #f5f0e6;
+    --surface: #ebe4d3;
+    --surface2: #dcd3bd;
+    --border: #bdb091;
+    --accent: #c83838;
+    --accent-dim: #7a2828;
+    --text: #28231e;
+    --text-muted: #5a4f43;
+    --filled: #c83838;
+    --marked: #bdb091;
+    --error: #b8332b;
+    --success: #3a7a3e;
+    --coin: #8a6818;
+    --heart: #b8332b;
   }
   html, body {
     width: 100%; height: 100%;
@@ -49,24 +49,25 @@
   /* ===== MENU ===== */
   #screen-menu {
     justify-content: center;
-    background: radial-gradient(ellipse at center, #161b22 0%, #0d1117 100%);
+    background: radial-gradient(ellipse at center, #ebe4d3 0%, #f5f0e6 100%);
   }
   .menu-logo {
-    font-size: 2.8rem;
-    font-weight: 800;
-    letter-spacing: -1px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -1.5px;
     color: var(--accent);
-    margin-bottom: 0.4rem;
-    text-shadow: 0 0 30px rgba(88,166,255,0.4);
+    margin-bottom: 0.3rem;
   }
   .menu-tagline {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 1rem;
     margin-bottom: 2.5rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    letter-spacing: 0.2px;
   }
-  .menu-buttons { display: flex; flex-direction: column; gap: 0.8rem; width: 220px; }
+  .menu-buttons { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; width: 240px; }
   .btn {
     display: flex; align-items: center; justify-content: center;
     padding: 0.85rem 1.5rem;
@@ -85,8 +86,8 @@
 .level-bubble.btn-pressed { transform: scale(0.92); }
   .btn-primary {
     background: var(--accent);
-    color: #0d1117;
-    box-shadow: 0 4px 20px rgba(88,166,255,0.3);
+    color: #f5f0e6;
+    box-shadow: 0 4px 20px rgba(200, 56, 56,0.3);
   }
   .btn-secondary {
     background: var(--surface2);
@@ -95,18 +96,87 @@
   }
   .btn-secondary:hover { border-color: var(--accent); }
   .btn-icon { font-size: 1.1rem; margin-right: 0.5rem; }
-  .menu-daily {
-    margin-top: 1.5rem;
-    padding: 0.6rem 1.2rem;
-    background: linear-gradient(135deg, #1f4a7a, #0d1117);
-    border: 1px solid var(--accent);
-    border-radius: 20px;
-    color: var(--accent);
-    font-size: 0.85rem;
+  /* §3.1 menu hierarchy: 1 primary + 2 secondary + 3 tertiary icons. */
+  .btn-play {
+    width: 240px;
+    padding: 0.85rem 1.5rem 0.95rem;
+    font-size: 1.15rem;
+    letter-spacing: 0.6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.15;
+  }
+  .btn-play .play-sub {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    margin-top: 4px;
+    opacity: 0.85;
+    color: rgba(245, 240, 230, 0.85);
+  }
+  .menu-secondary-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 240px;
+    margin-top: 0.4rem;
+  }
+  .btn-pair {
+    flex: 1;
+    padding: 0.7rem 0.8rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
-    letter-spacing: 0.5px;
+    font-family: inherit;
+    transition: border-color 0.15s, transform 0.1s, color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    outline: none;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45), 0 1px 2px rgba(120,90,40,0.08);
   }
+  .btn-pair:active { transform: scale(0.97); }
+  .btn-pair:hover { border-color: var(--accent); color: var(--accent); }
+  .menu-streak {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.4px;
+  }
+  .menu-icon-row {
+    display: flex;
+    justify-content: center;
+    gap: 1.4rem;
+    width: 240px;
+    margin-top: 0.6rem;
+  }
+  .menu-icon-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.15s, border-color 0.15s, transform 0.1s;
+    outline: none;
+    padding: 0;
+  }
+  .menu-icon-btn:active { transform: scale(0.94); }
+  .menu-icon-btn:hover { color: var(--accent); border-color: var(--accent); }
 
   /* ===== GAME SCREEN ===== */
   #screen-game { justify-content: space-between; padding: 0; }
@@ -208,13 +278,13 @@
   .footer-btn .footer-icon { font-size: 1.1rem; }
   .footer-btn:hover { border-color: var(--accent); }
   .footer-btn:active { transform: scale(0.95); }
-  .footer-btn.check-btn { background: var(--accent); color: #0d1117; border-color: var(--accent); }
+  .footer-btn.check-btn { background: var(--accent); color: #f5f0e6; border-color: var(--accent); }
   .footer-btn.check-btn:hover { background: #79b8ff; }
 
   /* ===== OVERLAYS ===== */
   .overlay {
     position: absolute; inset: 0;
-    background: rgba(13,17,23,0.88);
+    background: rgba(245, 240, 230,0.88);
     display: none;
     flex-direction: column;
     align-items: center;
@@ -319,8 +389,8 @@
   .level-bubble:active { transform: scale(0.92); }
   .level-bubble.completed {
     background: #1a3a1a;
-    border-color: #3fb950;
-    color: #3fb950;
+    border-color: #3a7a3e;
+    color: #3a7a3e;
   }
   .level-bubble.stars-2 {
     background: var(--accent-dim);
@@ -330,7 +400,7 @@
   .level-bubble.stars-1 {
     background: #1e2a1e;
     border-color: #6e7681;
-    color: #8b949e;
+    color: #5a4f43;
   }
   .level-bubble.completed::after {
     content: '✓';
@@ -343,13 +413,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #0d1117;
+    color: #f5f0e6;
     font-weight: 900;
   }
   .level-bubble.current {
     border-color: var(--accent);
     color: var(--text);
-    box-shadow: 0 0 10px rgba(88,166,255,0.3);
+    box-shadow: 0 0 10px rgba(200, 56, 56,0.3);
   }
   .level-bubble.locked {
     opacity: 0.4;
@@ -392,7 +462,7 @@
   .shop-item-icon { font-size: 1.8rem; width: 44px; text-align: center; flex-shrink: 0; }
   .shop-item-price {
     background: var(--accent);
-    color: #0d1117;
+    color: #f5f0e6;
     border: none;
     border-radius: 10px;
     padding: 0.5rem 0.9rem;
@@ -557,37 +627,30 @@
 
 <!-- ========== MENU ========== -->
 <div id="screen-menu" class="screen active">
-  <div class="menu-logo">NONOGRAM</div>
-  <div class="menu-tagline">Paint by numbers</div>
+  <div class="menu-logo">Nonogram</div>
+  <div class="menu-tagline">Paint by numbers, today's puzzle</div>
   <div class="menu-buttons">
-    <button class="btn btn-primary" onclick="continuePlaying()">
-      <span class="btn-icon">▶</span> Play
+    <button class="btn btn-primary btn-play" onclick="continuePlaying()">
+      <span>Play</span>
+      <span id="menu-progress-subtext" class="play-sub">Level 1</span>
     </button>
-    <button class="btn btn-secondary" onclick="showScreen('levelselect')">
-      <span class="btn-icon">☰</span> Level Select
-    </button>
-    <button class="btn btn-secondary" onclick="showScreen('shop')">
-      <span class="btn-icon">🛒</span> Shop
-    </button>
-    <button class="btn btn-secondary" onclick="showScreen('settings')">
-      <span class="btn-icon">⚙</span> Settings
-    </button>
-    <button class="btn btn-secondary" onclick="showScreen('stats')">
-      <span class="btn-icon">📊</span> Stats
-    </button>
-    <button class="btn btn-secondary" onclick="showScreen('missions')">
-      <span class="btn-icon">🎯</span> Missions
-    </button>
-    <button class="btn btn-secondary" onclick="showScreen('moregames')">
-      <span class="btn-icon">🎮</span> More Games
-    </button>
-  </div>
-  <!-- Come-back banner -->
-  <div id="comebackBanner" style="display:none;margin-top:1rem;padding:0.7rem 1.2rem;background:linear-gradient(135deg,#1f4a7a,#0d1117);border:1px solid var(--accent);border-radius:16px;color:var(--accent);font-size:0.85rem;font-weight:600;cursor:pointer;text-align:center;width:220px;" onclick="resumeLastLevel()">
-    ↩ Continue Last Puzzle
-  </div>
-  <div class="menu-daily" onclick="startDailyChallenge()">
-    🗓 Daily Challenge <span id="menu-streak"></span>
+    <div class="menu-secondary-row">
+      <button class="btn-pair" onclick="startDailyChallenge()">
+        <span>Daily</span><span id="menu-streak" class="menu-streak"></span>
+      </button>
+      <button class="btn-pair" onclick="showScreen('levelselect')">Levels</button>
+    </div>
+    <div class="menu-icon-row">
+      <button class="menu-icon-btn" onclick="showScreen('stats')" aria-label="Stats">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M7 20V12"/><path d="M12 20V6"/><path d="M17 20V14"/></svg>
+      </button>
+      <button class="menu-icon-btn" onclick="showScreen('shop')" aria-label="Shop">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16l-1.4 9.5a2 2 0 0 1-2 1.5H7.4a2 2 0 0 1-2-1.5L4 9z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+      </button>
+      <button class="menu-icon-btn" onclick="showScreen('settings')" aria-label="Settings">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2M12 19v2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M3 12h2M19 12h2M5.6 18.4l1.4-1.4M17 7l1.4-1.4"/></svg>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -629,7 +692,7 @@
   <!-- Win Overlay -->
   <div class="overlay" id="overlay-win">
     <div class="overlay-card pop-in">
-      <div class="overlay-title">Puzzle Complete!</div>
+      <div class="overlay-title">Solved.</div>
       <div class="stars-row">⭐⭐⭐</div>
       <div class="overlay-coins" id="win-coins-text">+15 🪙</div>
       <div class="overlay-msg" id="win-time-text">Solved in 0:42</div>
@@ -666,7 +729,7 @@
   <!-- Daily Challenge Complete Overlay -->
   <div class="overlay" id="overlay-daily">
     <div class="overlay-card pop-in">
-      <div class="overlay-title">Daily Complete!</div>
+      <div class="overlay-title">Today's puzzle: solved.</div>
       <div class="stars-row">🗓⭐🗓</div>
       <div class="overlay-coins" id="daily-streak-text">Streak: 1 🔥</div>
       <div class="overlay-msg">+30 coins bonus for today's challenge!</div>
@@ -773,14 +836,6 @@
   </div>
   <div class="shop-scroll">
     <div class="moregames-intro">Try our other games and earn <strong>50 🪙</strong> for each one!</div>
-    <div class="shop-item">
-      <div class="shop-item-icon">🎱</div>
-      <div class="shop-item-info">
-        <div class="shop-item-name">Ball Sort Puzzle</div>
-        <div class="shop-item-desc">Sort colorful balls into tubes!</div>
-      </div>
-      <button class="shop-item-price promo-btn" id="promo-btn-ballsort" onclick="claimPromo('ballsort','com.pegasusgames.ballsort',this)">Download &amp; Get 50 🪙</button>
-    </div>
     <div class="shop-item">
       <div class="shop-item-icon">💧</div>
       <div class="shop-item-info">
@@ -920,7 +975,7 @@ function claimPromo(gameId, packageId, btn) {
 }
 
 function refreshPromoButtons() {
-  var games = ['ballsort','watersort','pipeconnect','puzzle2048','unblock'];
+  var games = ['watersort','pipeconnect','puzzle2048','unblock'];
   games.forEach(function(id) {
     var btn = document.getElementById('promo-btn-' + id);
     if (btn && localStorage.getItem('promo_claimed_' + id)) {
@@ -932,13 +987,13 @@ function refreshPromoButtons() {
 function safeShowRewarded(type) {
   if (window.Android) {
     window.Android.showRewarded(type);
-  }  }
+  }
 }
 function safeShowInterstitial() {
   if (state.removeAds) return;
   if (window.Android) {
     window.Android.showInterstitial();
-  }  }
+  }
 }
 
 window.onAdMobLoaded = function() {
@@ -1770,7 +1825,6 @@ let dragMode = null; // 'fill', 'unfill', 'mark', 'unmark'
 // SCREEN MANAGEMENT
 // ===================================================================
 function showScreen(name) {
-  if (window._navGuard) return;
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const el = document.getElementById('screen-' + name);
   if (el) el.classList.add('active');
@@ -1796,15 +1850,19 @@ function showScreen(name) {
   if (name === 'menu') {
     updateMenuUI();
     regenLives();
-    const banner = document.getElementById('comebackBanner');
-    if (banner) banner.style.display = state.lastLevelProgress ? 'block' : 'none';
   }
   updateUI();
 }
 
 function updateMenuUI() {
   const streak = state.dailyChallengeStreak;
-  document.getElementById('menu-streak').textContent = streak > 0 ? '🔥 ' + streak : '';
+  const streakEl = document.getElementById('menu-streak');
+  if (streakEl) streakEl.textContent = streak > 0 ? '· ' + streak : '';
+  const sub = document.getElementById('menu-progress-subtext');
+  if (sub) {
+    const lvl = state.currentLevel || 1;
+    sub.textContent = 'Level ' + lvl;
+  }
 }
 
 function updateUI() {
@@ -2216,12 +2274,17 @@ function resizeCanvas() {
   const availW = W * 0.98;
   const availH = H * 0.98;
 
-  // Cell size: fill available area
+  // Cell size: fill available area. The cap exists so cells don't go
+  // absurdly large on small grids on huge canvases (a 5×5 at 200px/cell
+  // would dominate); past that ceiling the playable area still fills the
+  // canvas because clueW + gridW grows together.
   const maxCellW = (availW * (1 - clueRatio)) / size;
   const maxCellH = (availH * (1 - clueRatio)) / size;
   let cellSize = Math.min(maxCellW, maxCellH);
   cellSize = Math.max(cellSize, 8);
-  cellSize = Math.min(cellSize, 48);
+  // Phone-friendly cap: small grids should still fill ~70% of the canvas
+  // width on a 1080-wide screen. 5×5 at 110px = 550 + 183 clue = 733 (~68% of 1080).
+  cellSize = Math.min(cellSize, 110);
 
   const clueW = cellSize * size * clueRatio / (1 - clueRatio);
   const clueH = clueW;
@@ -2254,17 +2317,17 @@ function drawCanvas(flashError) {
   ctx2d.clearRect(0, 0, W, H);
 
   // Background
-  ctx2d.fillStyle = '#0d1117';
+  ctx2d.fillStyle = '#f5f0e6';
   ctx2d.fillRect(0, 0, W, H);
 
   // Clue background
-  ctx2d.fillStyle = '#161b22';
+  ctx2d.fillStyle = '#ebe4d3';
   ctx2d.fillRect(0, 0, clueW, clueH); // corner
   ctx2d.fillRect(clueW, 0, W - clueW, clueH); // col clues
   ctx2d.fillRect(0, clueH, clueW, H - clueH); // row clues
 
   // Grid background
-  ctx2d.fillStyle = '#0d1117';
+  ctx2d.fillStyle = '#f5f0e6';
   ctx2d.fillRect(clueW, clueH, W - clueW, H - clueH);
 
   // Draw cells
@@ -2278,9 +2341,9 @@ function drawCanvas(flashError) {
       // Cell background
       if (val === 1) {
         if (flashError && sol !== 1) {
-          ctx2d.fillStyle = '#f85149';
+          ctx2d.fillStyle = '#b8332b';
         } else {
-          ctx2d.fillStyle = (window.NONO_FILL||'#58a6ff');
+          ctx2d.fillStyle = (window.NONO_FILL||'#c83838');
         }
         ctx2d.fillRect(x + 1, y + 1, cellSize - 2, cellSize - 2);
 
@@ -2289,11 +2352,11 @@ function drawCanvas(flashError) {
         ctx2d.fillRect(x + 1, y + 1, cellSize - 2, Math.min(4, cellSize * 0.2));
       } else if (val === 2) {
         // Marked-X
-        ctx2d.fillStyle = '#21262d';
+        ctx2d.fillStyle = '#dcd3bd';
         ctx2d.fillRect(x + 1, y + 1, cellSize - 2, cellSize - 2);
         // Draw dot or X
         if (cellSize > 14) {
-          ctx2d.strokeStyle = '#30363d';
+          ctx2d.strokeStyle = '#bdb091';
           ctx2d.lineWidth = 1.5;
           const pad = cellSize * 0.28;
           ctx2d.beginPath();
@@ -2303,7 +2366,7 @@ function drawCanvas(flashError) {
           ctx2d.lineTo(x + pad, y + cellSize - pad);
           ctx2d.stroke();
         } else {
-          ctx2d.fillStyle = '#30363d';
+          ctx2d.fillStyle = '#bdb091';
           ctx2d.beginPath();
           ctx2d.arc(x + cellSize/2, y + cellSize/2, 2, 0, Math.PI*2);
           ctx2d.fill();
@@ -2313,14 +2376,14 @@ function drawCanvas(flashError) {
   }
 
   // Grid lines
-  ctx2d.strokeStyle = '#21262d';
+  ctx2d.strokeStyle = '#dcd3bd';
   ctx2d.lineWidth = 0.5;
 
   for (let r = 0; r <= size; r++) {
     const y = clueH + r * cellSize;
     // Thicker every 5 cells
     ctx2d.lineWidth = (r % 5 === 0) ? 1.5 : 0.5;
-    ctx2d.strokeStyle = (r % 5 === 0) ? '#30363d' : '#21262d';
+    ctx2d.strokeStyle = (r % 5 === 0) ? '#bdb091' : '#dcd3bd';
     ctx2d.beginPath();
     ctx2d.moveTo(clueW, y); ctx2d.lineTo(W, y);
     ctx2d.stroke();
@@ -2328,14 +2391,14 @@ function drawCanvas(flashError) {
   for (let c = 0; c <= size; c++) {
     const x = clueW + c * cellSize;
     ctx2d.lineWidth = (c % 5 === 0) ? 1.5 : 0.5;
-    ctx2d.strokeStyle = (c % 5 === 0) ? '#30363d' : '#21262d';
+    ctx2d.strokeStyle = (c % 5 === 0) ? '#bdb091' : '#dcd3bd';
     ctx2d.beginPath();
     ctx2d.moveTo(x, clueH); ctx2d.lineTo(x, H);
     ctx2d.stroke();
   }
 
   // Row/Col clue separator
-  ctx2d.strokeStyle = '#30363d';
+  ctx2d.strokeStyle = '#bdb091';
   ctx2d.lineWidth = 1.5;
   ctx2d.beginPath();
   ctx2d.moveTo(clueW, 0); ctx2d.lineTo(clueW, H);
@@ -2356,14 +2419,14 @@ function drawCanvas(flashError) {
     const nums = clue.filter(n => n !== 0);
 
     if (nums.length === 0 || (nums.length === 1 && nums[0] === 0)) {
-      ctx2d.fillStyle = satisfied ? (window.NONO_FILL||'#58a6ff') : '#8b949e';
+      ctx2d.fillStyle = satisfied ? (window.NONO_FILL||'#c83838') : '#5a4f43';
       ctx2d.fillText('0', clueW / 2, cy);
     } else {
       const totalNums = nums.length;
       const spacing = Math.min(cellSize * 0.9, clueW / (totalNums + 0.5));
       const startX = clueW - spacing * totalNums + spacing / 2;
       nums.forEach((n, i) => {
-        ctx2d.fillStyle = satisfied ? (window.NONO_FILL||'#58a6ff') : '#8b949e';
+        ctx2d.fillStyle = satisfied ? (window.NONO_FILL||'#c83838') : '#5a4f43';
         ctx2d.fillText(String(n), startX + i * spacing, cy);
       });
     }
@@ -2377,14 +2440,14 @@ function drawCanvas(flashError) {
     const nums = clue.filter(n => n !== 0);
 
     if (nums.length === 0 || (nums.length === 1 && nums[0] === 0)) {
-      ctx2d.fillStyle = satisfied ? (window.NONO_FILL||'#58a6ff') : '#8b949e';
+      ctx2d.fillStyle = satisfied ? (window.NONO_FILL||'#c83838') : '#5a4f43';
       ctx2d.fillText('0', cx, clueH / 2);
     } else {
       const totalNums = nums.length;
       const spacing = Math.min(cellSize * 0.9, clueH / (totalNums + 0.5));
       const startY = clueH - spacing * totalNums + spacing / 2;
       nums.forEach((n, i) => {
-        ctx2d.fillStyle = satisfied ? (window.NONO_FILL||'#58a6ff') : '#8b949e';
+        ctx2d.fillStyle = satisfied ? (window.NONO_FILL||'#c83838') : '#5a4f43';
         ctx2d.fillText(String(n), cx, startY + i * spacing);
       });
     }
@@ -2631,52 +2694,71 @@ updateSettingsUI();
 if (state.musicEnabled) startMusic();
 showScreen('menu');
 
+// Screenshot-time helpers (used by capture_nonogram.js to render mid-game
+// boards without manual interaction). No-ops at runtime since users never
+// trigger them; safe to leave shipped.
+window.__nonoFillSolution = function(ratio) {
+  if (!currentLevelData || !currentLevelData.solution) return false;
+  const sol = currentLevelData.solution;
+  const target = Math.floor(sol.length * (ratio || 1));
+  let filled = 0;
+  for (let i = 0; i < sol.length; i++) {
+    if (filled >= target) { currentGrid[i] = 0; continue; }
+    if (sol[i] === 1) { currentGrid[i] = 1; filled++; }
+    else if (i % 11 === 0) { currentGrid[i] = 2; }
+    else { currentGrid[i] = 0; }
+  }
+  resizeCanvas();
+  return true;
+};
+
 </script>
 <style>
 /* ===== DAILY LOGIN STREAK ===== */
 @keyframes ls-fire { 0%,100%{transform:scale(1) rotate(-4deg)} 50%{transform:scale(1.18) rotate(4deg)} }
 @keyframes ls-card-in { from{transform:scale(0.85) translateY(30px);opacity:0} to{transform:none;opacity:1} }
 #ls-overlay {
-  position:fixed; inset:0; background:rgba(0,0,0,0.88);
+  position:fixed; inset:0; background:rgba(40,35,30,0.45);
   z-index:9999; display:none; align-items:center; justify-content:center;
-  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
 }
 #ls-card {
-  background:linear-gradient(145deg,#1e1b4b 0%,#1a1a2e 100%);
-  border:1px solid rgba(255,215,0,0.25); border-radius:26px;
+  background:#fffaf0;
+  border:1px solid #d4c2a0; border-radius:18px;
   padding:30px 24px; max-width:320px; width:88%; text-align:center;
-  box-shadow:0 24px 64px rgba(0,0,0,0.65); animation:ls-card-in 0.35s ease;
+  box-shadow:0 18px 44px rgba(40,35,30,0.25); animation:ls-card-in 0.35s ease;
 }
-.ls-fire-icon { font-size:58px; display:block; margin-bottom:6px; animation:ls-fire 1s ease-in-out infinite; }
-.ls-h1 { color:#fff; font-size:23px; font-weight:800; margin-bottom:3px; }
-.ls-sub { color:rgba(255,255,255,0.45); font-size:12px; margin-bottom:18px; }
+.ls-fire-icon { font-size:46px; display:block; margin-bottom:6px; animation:ls-fire 1s ease-in-out infinite; }
+.ls-h1 { color:#28231e; font-family:Georgia,"Times New Roman",serif; font-size:24px; font-weight:700; margin-bottom:4px; }
+.ls-sub { color:#7a6d5d; font-size:13px; margin-bottom:18px; font-style:italic; }
 .ls-days-row { display:flex; justify-content:center; gap:5px; margin-bottom:18px; }
 .ls-day-cell { display:flex; flex-direction:column; align-items:center; gap:3px; }
 .ls-day-dot {
   width:36px; height:36px; border-radius:50%;
   display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;
+  background:#ebe4d3; color:#5a4f43;
 }
-.ls-day-lbl { font-size:8px; color:rgba(255,255,255,0.35); }
+.ls-day-lbl { font-size:8px; color:#8a7d6b; }
 .ls-reward-box {
-  background:rgba(255,215,0,0.07); border:1px solid rgba(255,215,0,0.22);
-  border-radius:14px; padding:14px; margin-bottom:20px;
+  background:#fef5e7; border:1px solid #d4c2a0;
+  border-radius:10px; padding:14px; margin-bottom:20px;
 }
-.ls-reward-lbl { color:rgba(255,255,255,0.45); font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
-.ls-reward-amount { color:#ffd700; font-size:36px; font-weight:800; line-height:1; }
+.ls-reward-lbl { color:#7a6d5d; font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+.ls-reward-amount { color:#8a6818; font-size:36px; font-weight:700; line-height:1; }
 .ls-claim-btn {
-  width:100%; padding:15px; border:none; border-radius:15px;
-  background:linear-gradient(135deg,#ffd700,#f39c12);
-  color:#1a1a00; font-size:18px; font-weight:800; cursor:pointer;
+  width:100%; padding:14px; border:none; border-radius:10px;
+  background:#c83838; color:#fffaf0;
+  font-size:17px; font-weight:600; cursor:pointer;
   letter-spacing:0.3px; transition:transform 0.1s;
 }
 .ls-claim-btn:active { transform:scale(0.96); }
 /* Achievement pop */
 #ls-ach-toast {
   position:fixed; top:72px; left:50%; transform:translateX(-50%) translateY(-24px);
-  background:linear-gradient(135deg,#6c5ce7,#a29bfe); color:#fff;
-  padding:10px 22px; border-radius:50px; font-size:13px; font-weight:700;
+  background:#28231e; color:#fffaf0;
+  padding:10px 22px; border-radius:30px; font-size:13px; font-weight:600;
   opacity:0; transition:all 0.4s; z-index:10000;
-  pointer-events:none; white-space:nowrap; box-shadow:0 4px 20px rgba(108,92,231,0.5);
+  pointer-events:none; white-space:nowrap; box-shadow:0 4px 16px rgba(40,35,30,0.35);
 }
 #ls-ach-toast.ls-show { opacity:1; transform:translateX(-50%) translateY(0); }
 </style>
@@ -2822,7 +2904,7 @@ window.GAME_I18N = {
     settings:'Settings', dailyChallenge:'Daily Challenge', back:'Back',
     sound:'Sound', music:'Music', resetProgress:'Reset Progress',
     removeAds:'Remove Ads', language:'Language',
-    levelComplete:'Level Complete!', gameOver:'Game Over',
+    levelComplete:'Solved.', gameOver:'Game Over',
     hint:'Hint', undo:'Undo', skip:'Skip', quit:'Quit', menu:'Menu',
     noLives:'No Lives Left', watchAd:'Watch Ad for Life',
     lives:'Lives', coins:'Coins', buy:'Buy', owned:'Owned',
@@ -3338,7 +3420,7 @@ window.addEventListener('load', function() { window.i18n.init(); });
   background:var(--accent); color:#000; border-radius:8px; padding:1px 6px; margin-top:0.2rem;
 }
 .tut-overlay {
-  position:absolute; inset:0; background:rgba(13,17,23,0.82);
+  position:absolute; inset:0; background:rgba(245, 240, 230,0.82);
   display:flex; align-items:center; justify-content:center;
   z-index:200; padding:1.5rem; backdrop-filter:blur(4px);
 }
@@ -3393,7 +3475,7 @@ window._navGuard = false;
 <script>
 (function() {
   window._THEMES_META = [
-    { id:'default', name:'Classic',   unlock:0,   colors:['#58a6ff','#0d1117','#161b22','#30363d','#8b949e'] },
+    { id:'default', name:'Classic',   unlock:0,   colors:['#c83838','#f5f0e6','#ebe4d3','#bdb091','#5a4f43'] },
     { id:'neon',    name:'Neon',      unlock:50,  colors:['#00ff88','#0a0a0a','#111','#003322','#00aa55'] },
     { id:'pastel',  name:'Pastel',    unlock:100, colors:['#f4a7b9','#fdf6fb','#fce4ec','#e8d5e3','#c28fa0'] },
     { id:'ocean',   name:'Ocean',     unlock:200, colors:['#00c4cc','#071628','#0d2240','#0a3050','#4db8c0'] },
@@ -3401,13 +3483,13 @@ window._navGuard = false;
     { id:'galaxy',  name:'Galaxy',    unlock:500, colors:['#c084fc','#0a0014','#150025','#22003a','#8855cc'] }
   ];
 
-  var PALETTE_FILL = { default:'#58a6ff', neon:'#00ff88', pastel:'#f4a7b9', ocean:'#00c4cc', fire:'#ff6b35', galaxy:'#c084fc' };
+  var PALETTE_FILL = { default:'#c83838', neon:'#00ff88', pastel:'#f4a7b9', ocean:'#00c4cc', fire:'#ff6b35', galaxy:'#c084fc' };
   var PALETTE_ACCENT = PALETTE_FILL;
-  var PALETTE_BG   = { default:'#0d1117', neon:'#0a0a0a', pastel:'#fdf6fb', ocean:'#071628', fire:'#1a0800', galaxy:'#0a0014' };
-  var PALETTE_SURF = { default:'#161b22', neon:'#111',    pastel:'#fce4ec', ocean:'#0d2240', fire:'#2d1100', galaxy:'#150025' };
-  var PALETTE_SURF2= { default:'#21262d', neon:'#1a1a1a', pastel:'#f8d7e8', ocean:'#0a3050', fire:'#4a1500', galaxy:'#22003a' };
-  var PALETTE_BORD = { default:'#30363d', neon:'#003322', pastel:'#e8d5e3', ocean:'#0a3050', fire:'#4a1500', galaxy:'#220033' };
-  var PALETTE_TEXT = { default:'#e6edf3', neon:'#00ff88', pastel:'#5c2a3a', ocean:'#caf0f8', fire:'#ffd6b0', galaxy:'#f0d0ff' };
+  var PALETTE_BG   = { default:'#f5f0e6', neon:'#0a0a0a', pastel:'#fdf6fb', ocean:'#071628', fire:'#1a0800', galaxy:'#0a0014' };
+  var PALETTE_SURF = { default:'#ebe4d3', neon:'#111',    pastel:'#fce4ec', ocean:'#0d2240', fire:'#2d1100', galaxy:'#150025' };
+  var PALETTE_SURF2= { default:'#dcd3bd', neon:'#1a1a1a', pastel:'#f8d7e8', ocean:'#0a3050', fire:'#4a1500', galaxy:'#22003a' };
+  var PALETTE_BORD = { default:'#bdb091', neon:'#003322', pastel:'#e8d5e3', ocean:'#0a3050', fire:'#4a1500', galaxy:'#220033' };
+  var PALETTE_TEXT = { default:'#28231e', neon:'#00ff88', pastel:'#5c2a3a', ocean:'#caf0f8', fire:'#ffd6b0', galaxy:'#f0d0ff' };
 
   function applyTheme(id) {
     var r = document.documentElement.style;
@@ -3418,7 +3500,7 @@ window._navGuard = false;
     r.setProperty('--surface2',PALETTE_SURF2[id]||PALETTE_SURF2.default);
     r.setProperty('--border', PALETTE_BORD[id]||PALETTE_BORD.default);
     r.setProperty('--text',   PALETTE_TEXT[id]||PALETTE_TEXT.default);
-    window.NONO_FILL = PALETTE_FILL[id] || '#58a6ff';
+    window.NONO_FILL = PALETTE_FILL[id] || '#c83838';
     if (typeof drawCanvas === 'function') drawCanvas();
   }
 
@@ -3463,7 +3545,7 @@ window._navGuard = false;
     setTimeout(function() {
       var id = (typeof state !== 'undefined') ? (state.activeTheme || 'default') : 'default';
       if (id !== 'default') applyTheme(id);
-      window.NONO_FILL = PALETTE_FILL[id] || '#58a6ff';
+      window.NONO_FILL = PALETTE_FILL[id] || '#c83838';
     }, 500);
   });
 })();
@@ -3587,45 +3669,46 @@ window.renderNonoStats = function() {
 <!-- ===== MONETIZATION & RETENTION EXTRAS ===== -->
 <style>
 #starterPackModal {
-  position:fixed;inset:0;background:rgba(13,17,23,0.92);
+  position:fixed;inset:0;background:rgba(245, 240, 230,0.92);
   display:none;flex-direction:column;align-items:center;justify-content:center;
   z-index:9999;padding:1.5rem;backdrop-filter:blur(6px);
 }
 .starter-card {
-  background:linear-gradient(135deg,#1a3a5c,#0d1117);
-  border:2px solid #3fb950;border-radius:22px;
+  background:linear-gradient(135deg,#1a3a5c,#f5f0e6);
+  border:2px solid #3a7a3e;border-radius:22px;
   padding:1.8rem;width:100%;max-width:320px;
   display:flex;flex-direction:column;align-items:center;gap:0.9rem;
   text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.7);
 }
 .starter-badge { font-size:2.8rem; }
-.starter-title { font-size:1.4rem;font-weight:800;color:#3fb950; }
-.starter-subtitle { font-size:0.8rem;color:#8b949e;letter-spacing:1px;text-transform:uppercase; }
+.starter-title { font-size:1.4rem;font-weight:800;color:#3a7a3e; }
+.starter-subtitle { font-size:0.8rem;color:#5a4f43;letter-spacing:1px;text-transform:uppercase; }
 .starter-price-row { display:flex;align-items:center;gap:0.8rem; }
-.starter-old-price { font-size:1.1rem;color:#8b949e;text-decoration:line-through; }
-.starter-new-price { font-size:1.6rem;font-weight:800;color:#3fb950; }
-.starter-perks { font-size:0.85rem;color:#e6edf3;text-align:left;line-height:1.8;width:100%; }
+.starter-old-price { font-size:1.1rem;color:#5a4f43;text-decoration:line-through; }
+.starter-new-price { font-size:1.6rem;font-weight:800;color:#3a7a3e; }
+.starter-perks { font-size:0.85rem;color:#28231e;text-align:left;line-height:1.8;width:100%; }
 .starter-buy-btn {
-  background:linear-gradient(135deg,#3fb950,#2ea040);color:#000;border:none;
+  background:linear-gradient(135deg,#3a7a3e,#2ea040);color:#000;border:none;
   border-radius:12px;padding:0.8rem 2rem;font-size:1rem;font-weight:800;
   cursor:pointer;width:100%;box-shadow:0 4px 15px rgba(63,185,80,0.4);
 }
-.starter-skip { background:transparent;color:#8b949e;border:none;font-size:0.82rem;cursor:pointer; }
+.starter-skip { background:transparent;color:#5a4f43;border:none;font-size:0.82rem;cursor:pointer; }
 
 #weeklyEventBanner {
-  margin-top:0.7rem;padding:0.55rem 1rem;
-  background:linear-gradient(135deg,#3a1f00,#0d1117);
-  border:1px solid #ff6b35;border-radius:16px;
-  color:#ff6b35;font-size:0.78rem;font-weight:600;
+  margin-top:0.85rem;padding:0.6rem 1rem;
+  background:linear-gradient(135deg,#fdf6e7 0%,#f4e8c8 100%);
+  border:1px solid rgba(200,56,56,0.35);border-radius:14px;
+  color:#a83a18;font-size:0.78rem;font-weight:600;
   cursor:pointer;text-align:center;width:220px;max-width:90vw;
-  animation:xPulseOrange 2.5s infinite;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.6),0 1px 2px rgba(120,90,40,0.08);
+  animation:xPulseOrange 2.8s infinite;
 }
 @keyframes xPulseOrange {
-  0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,0.3);}
-  50%{box-shadow:0 0 0 7px rgba(255,107,53,0);}
+  0%,100%{box-shadow:inset 0 0 0 1px rgba(255,255,255,0.6),0 0 0 0 rgba(200,56,56,0.18);}
+  50%{box-shadow:inset 0 0 0 1px rgba(255,255,255,0.6),0 0 0 6px rgba(200,56,56,0);}
 }
 .x-season-active-badge {
-  display:inline-block;background:#d29922;color:#000;
+  display:inline-block;background:#8a6818;color:#000;
   font-size:0.65rem;font-weight:800;border-radius:8px;
   padding:2px 7px;margin-left:6px;vertical-align:middle;
 }
@@ -3783,8 +3866,8 @@ function injectContinueBtns(){
     div.className='x-continue-btns';
     div.style.cssText='display:flex;flex-direction:column;gap:8px;width:100%;margin-top:10px;';
     div.innerHTML=
-      '<button onclick="xContinueCoins()" style="background:#d29922;color:#000;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:0.88rem;cursor:pointer;width:100%">💰 Continue (30 🪙)</button>'+
-      '<button onclick="xContinueAd()" style="background:#3fb950;color:#000;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:0.88rem;cursor:pointer;width:100%">📺 Continue (Watch Ad)</button>';
+      '<button onclick="xContinueCoins()" style="background:#8a6818;color:#000;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:0.88rem;cursor:pointer;width:100%">💰 Continue (30 🪙)</button>'+
+      '<button onclick="xContinueAd()" style="background:#3a7a3e;color:#000;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:0.88rem;cursor:pointer;width:100%">📺 Continue (Watch Ad)</button>';
     var card=el.querySelector('.overlay-card,.overlay-inner');
     (card||el).appendChild(div);
   });
@@ -3828,13 +3911,11 @@ function injectWeeklyBanner(){
   if(document.getElementById('weeklyEventBanner')) return;
   var b=document.createElement('div');
   b.id='weeklyEventBanner';
-  // Try to place it after .menu-daily or .come-back banner or inside menu screen
+  // Place after the icon row inside the menu, or fall back to the menu container
   var anchors=[
-    document.querySelector('.menu-daily'),
-    document.getElementById('comebackBanner'),
-    document.querySelector('#comebackBanner'),
+    document.querySelector('#screen-menu .menu-icon-row'),
+    document.querySelector('#screen-menu .menu-secondary-row'),
     document.querySelector('#screen-menu .menu-buttons'),
-    document.querySelector('#menuScreen .menu-buttons'),
     document.querySelector('#screen-menu'),
     document.querySelector('#menuScreen')
   ].filter(Boolean);
@@ -3923,7 +4004,7 @@ function injectDragonTheme(){
             if(!owned){
               var lbl=document.createElement('div');
               lbl.className='x-coin-cost theme-unlock';
-              lbl.style.color='#d29922';
+              lbl.style.color='#8a6818';
               lbl.textContent='🪙 300 coins to unlock';
               card.appendChild(lbl);
             }

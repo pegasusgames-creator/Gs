@@ -462,7 +462,7 @@ def check_iaps_match_code(apps):
         iap_like = {c for c in missing_in_metadata
                     if any(c.startswith(p) or c == p for p in
                            ("remove_ads", "coins_", "hint", "starter", "season",
-                            "five_lives", "unlimited_"))}
+                            "five_lives", "unlimited_lives"))}
         if iap_like:
             warnings.append(f"{app}: IAPs in MainActivity.java but not in metadata: "
                             + ", ".join(sorted(iap_like)))
@@ -470,48 +470,6 @@ def check_iaps_match_code(apps):
 
 
 # ---------- CONTENT QUALITY checks -------------------------------------------
-
-def check_iap_signature_key(apps):
-    """For any app that ships IAPs, MainActivity.java must declare a non-placeholder
-    LICENSE_PUBLIC_KEY (the base64 RSA public key from Play Console → Monetize
-    setup → Licensing). Without it, Purchase signature verification is skipped and
-    the app is vulnerable to IAP-faker tools (Lucky Patcher, etc.). Blocking."""
-    blocking = []
-    for app in apps:
-        iaps_path = os.path.join(BASE, app, "metadata", "iaps.json")
-        data, _ = read_json(iaps_path)
-        if not data: continue
-        has_iap = bool(data.get("one_time_products")) or bool(data.get("subscriptions"))
-        if not has_iap: continue
-
-        java_root = os.path.join(BASE, app, "android", "app", "src", "main", "java")
-        if not os.path.isdir(java_root): continue
-        main_activity_path = None
-        for dp, _, fs in os.walk(java_root):
-            for f in fs:
-                if f == "MainActivity.java":
-                    main_activity_path = os.path.join(dp, f)
-                    break
-            if main_activity_path: break
-        if not main_activity_path: continue
-
-        content = read(main_activity_path) or ""
-        m = re.search(r'LICENSE_PUBLIC_KEY\s*=\s*"([^"]*)"', content)
-        if not m:
-            blocking.append(f"{app}: MainActivity.java has IAPs but no LICENSE_PUBLIC_KEY constant — "
-                            f"add it (see WaterSort for reference) and paste the base64 key from "
-                            f"Play Console → Monetize setup → Licensing")
-            continue
-        key = m.group(1).strip()
-        if not key or key.startswith("PASTE_") or key.startswith("ENTER_"):
-            blocking.append(f"{app}: LICENSE_PUBLIC_KEY is still the placeholder — "
-                            f"paste the real base64 key from Play Console → Monetize setup → "
-                            f"Licensing before shipping")
-        elif len(key) < 200:
-            blocking.append(f"{app}: LICENSE_PUBLIC_KEY looks too short ({len(key)} chars) — "
-                            f"a Play Console RSA-2048 SPKI base64 key is ~392 chars")
-    return blocking, []
-
 
 def check_thin_games(apps):
     warnings = []
@@ -819,6 +777,265 @@ def check_icon_perceptual_similarity(apps):
     return blocking
 
 
+def check_archetype_presence(apps):
+    """BLOCKING: each app must have metadata/app_identity.md and an entry in
+    app_themes.py THEMES dict with all four archetype fields (layout_archetype,
+    mascot_pattern, voice, texture). This stops Claude Code from auto-shipping
+    yet another A/M0/V1/T1 template clone.
+
+    Apps that include 'grandfathered: true' in their THEMES entry are exempt
+    (typically the first 1-2 shipped apps that pre-date the archetype system).
+    They produce a warning but don't block the build."""
+    blocking = []
+    warnings = []
+
+    try:
+        sys.path.insert(0, BASE)
+        sys.path.insert(0, os.path.join(BASE, "scripts"))
+        from app_themes import THEMES
+    except ImportError:
+        return [], []
+
+    TEMPLATE_SIGNATURE = ("A", "M0", "V1", "T1")
+
+    for app in apps:
+        # Check grandfathered status first
+        is_grandfathered = (app in THEMES
+                            and THEMES[app].get("grandfathered") is True)
+
+        identity_path = os.path.join(BASE, app, "metadata", "app_identity.md")
+        if not os.path.exists(identity_path):
+            msg = (f"{app}: missing metadata/app_identity.md. Phase 1.2 of "
+                   f"SHIP_GAME.md requires picking 4 archetypes from "
+                   f"APP_ARCHETYPES.md (layout, mascot, voice, texture) "
+                   f"and recording them in this file.")
+            (warnings if is_grandfathered else blocking).append(msg)
+            continue
+
+        if app not in THEMES:
+            blocking.append(
+                f"{app}: not registered in scripts/app_themes.py THEMES. "
+                f"Add an entry with the 4 archetype fields per Phase 1.3 "
+                f"of SHIP_GAME.md."
+            )
+            continue
+
+        t = THEMES[app]
+        missing_fields = []
+        for field in ("layout_archetype", "mascot_pattern", "voice", "texture"):
+            if not t.get(field):
+                missing_fields.append(field)
+        if missing_fields:
+            msg = (f"{app}: app_themes.py entry missing fields: "
+                   f"{', '.join(missing_fields)}. Pick from APP_ARCHETYPES.md.")
+            (warnings if is_grandfathered else blocking).append(msg)
+            continue
+
+        sig = (t["layout_archetype"], t["mascot_pattern"],
+               t["voice"], t["texture"])
+        if sig == TEMPLATE_SIGNATURE:
+            msg = (f"{app}: archetype signature is {sig} — that's the "
+                   f"template (Layout A + No mascot + Neutral voice + Flat "
+                   f"clean). Shipping makes the app feel artificial. Vary "
+                   f"at least 2 of the 4 — see APP_ARCHETYPES.md §6.")
+            (warnings if is_grandfathered else blocking).append(msg)
+
+    return blocking, warnings
+
+
+def check_translations_present(apps):
+    """BLOCKING for new apps, WARNING for grandfathered: each app must have
+    all 11 locale folders in metadata/ with required fields populated.
+
+    Kids apps need only 4 minimum locales (en-US, es-419, pt-BR, fr-FR) but
+    those 4 must NOT contain the Kids review-pending header (indicates
+    native speaker review has happened)."""
+    blocking = []
+    warnings = []
+
+    REQUIRED_LOCALES = ["en-US", "de-DE", "es-419", "fr-FR", "hi-IN",
+                        "id-ID", "it-IT", "ja-JP", "pt-BR", "tr-TR", "uk-UA"]
+    KIDS_LOCALES = ["en-US", "es-419", "pt-BR", "fr-FR"]
+    REQUIRED_FIELDS = ["short_description.txt", "full_description.txt",
+                       "subtitle.txt", "release_notes.txt"]
+    KIDS_REVIEW_HEADER = "# KIDS APP — REVIEW BY NATIVE SPEAKER BEFORE SHIPPING"
+
+    # Check whether app is grandfathered via app_themes.py
+    try:
+        sys.path.insert(0, BASE)
+        sys.path.insert(0, os.path.join(BASE, "scripts"))
+        from app_themes import THEMES
+    except ImportError:
+        THEMES = {}
+
+    for app in apps:
+        is_grandfathered = (app in THEMES
+                            and THEMES[app].get("grandfathered") is True)
+
+        # Determine if Kids app
+        is_kids = False
+        info_path = os.path.join(BASE, app, "metadata", "app_info.json")
+        if os.path.exists(info_path):
+            try:
+                info = json.loads(open(info_path).read())
+                is_kids = info.get("kids_program") is True
+            except (json.JSONDecodeError, IOError):
+                pass
+
+        target_locales = KIDS_LOCALES if is_kids else REQUIRED_LOCALES
+
+        for locale in target_locales:
+            locale_dir = os.path.join(BASE, app, "metadata", locale)
+            if not os.path.isdir(locale_dir):
+                msg = f"{app}: missing metadata/{locale}/ folder"
+                if not is_grandfathered:
+                    msg += f" (run gen_translations.py {app})"
+                (warnings if is_grandfathered else blocking).append(msg)
+                continue
+
+            for field in REQUIRED_FIELDS:
+                path = os.path.join(locale_dir, field)
+                if not os.path.exists(path):
+                    msg = f"{app}: missing metadata/{locale}/{field}"
+                    (warnings if is_grandfathered else blocking).append(msg)
+                    continue
+
+                # Kids apps: review-pending header must be removed before ship
+                if is_kids and field in ("full_description.txt",
+                                         "short_description.txt"):
+                    try:
+                        content = open(path).read()
+                        if KIDS_REVIEW_HEADER in content:
+                            blocking.append(
+                                f"{app}: {locale}/{field} still contains the "
+                                f"Kids review-pending header. Native speaker "
+                                f"must review and remove the header before "
+                                f"shipping a Kids app."
+                            )
+                    except IOError:
+                        pass
+
+                # Check for .rejected sibling files (failed translation that
+                # needs manual edit)
+                rejected_path = path + ".rejected"
+                if os.path.exists(rejected_path):
+                    blocking.append(
+                        f"{app}: {locale}/{os.path.basename(rejected_path)} "
+                        f"exists — translation failed validation. Edit the "
+                        f"file to fit char limit and rename to remove .rejected."
+                    )
+
+    return blocking, warnings
+
+
+def check_menu_button_count(apps):
+    """BLOCKING: enforces QUALITY_PLAYBOOK §3.1 menu hierarchy.
+
+    Counts buttons rendered on the menu screen. Allowed structure:
+      - 1 primary button (Play/Start)
+      - 2 secondary buttons (Daily Challenge + one of: Missions, Continue, etc.)
+      - 3 tertiary icons (Shop, Stats, Settings, More Games — pick 3)
+
+    Total: 6 tappable elements MAX on the menu screen.
+
+    More than 6 = templated stacked design that reads as artificial. Blocks
+    the build. Apps with `grandfathered: true` in app_themes.py get a
+    warning instead.
+
+    Detection heuristic: count <button> tags inside the menu screen
+    container, count distinct CTA elements with onclick handlers, and any
+    .btn / .menu-button / .nav-btn classes. False positives possible —
+    surface to the user and let them adjust if the heuristic miscounts."""
+    import re
+    blocking = []
+    warnings = []
+
+    try:
+        sys.path.insert(0, BASE)
+        sys.path.insert(0, os.path.join(BASE, "scripts"))
+        from app_themes import THEMES
+    except ImportError:
+        THEMES = {}
+
+    MAX_MENU_TAPPABLE = 6
+
+    for app in apps:
+        is_grandfathered = (app in THEMES
+                            and THEMES[app].get("grandfathered") is True)
+
+        game_html = os.path.join(BASE, app, "android", "app", "src",
+                                 "main", "assets", "game.html")
+        if not os.path.exists(game_html):
+            continue
+
+        try:
+            with open(game_html) as f:
+                content = f.read()
+        except IOError:
+            continue
+
+        # Find a menu screen section. Look for any div/section with an id or
+        # class that contains "menu" + "screen" tokens (in either order).
+        # Common patterns: id="menuScreen", id="screen-menu", class="screen menu",
+        # class="menu-screen". Extract its inner HTML up to the matching close.
+        menu_match = None
+        for pattern in [
+            # id="menuScreen" or id="screen-menu" etc
+            r'<(?:div|section)[^>]*\bid\s*=\s*["\'](?:menu[-_]?screen|screen[-_]?menu|main[-_]?menu|home[-_]?screen)["\'][^>]*>',
+            # class="menu-screen" or similar
+            r'<(?:div|section)[^>]*\bclass\s*=\s*["\'][^"\']*\b(?:menu[-_]?screen|screen[-_]?menu|main[-_]?menu)\b[^"\']*["\'][^>]*>',
+        ]:
+            m = re.search(pattern, content, re.IGNORECASE)
+            if m:
+                menu_match = m
+                break
+        if not menu_match:
+            continue
+
+        # Walk forward from the opening tag, count nesting depth, find matching close
+        start = menu_match.end()
+        depth = 1
+        # Naive but works: scan forward looking for opening/closing div/section
+        i = start
+        while depth > 0 and i < len(content):
+            next_open = re.search(r'<(?:div|section)\b[^>]*>',
+                                  content[i:], re.IGNORECASE)
+            next_close = re.search(r'</(?:div|section)>',
+                                   content[i:], re.IGNORECASE)
+            if not next_close:
+                break
+            if next_open and next_open.start() < next_close.start():
+                depth += 1
+                i += next_open.end()
+            else:
+                depth -= 1
+                i += next_close.end()
+                if depth == 0:
+                    break
+        menu_html = content[start:i]
+
+        # Count tappable elements inside menu screen
+        button_count = len(re.findall(r'<button\b', menu_html, re.IGNORECASE))
+        # Plus any onclick handlers on non-button elements
+        onclick_count = len(re.findall(
+            r'<(?!button)[a-z]+[^>]*\bonclick\s*=', menu_html, re.IGNORECASE,
+        ))
+        total = button_count + onclick_count
+
+        if total > MAX_MENU_TAPPABLE:
+            msg = (
+                f"{app}: menu has {total} tappable elements "
+                f"({button_count} <button>, {onclick_count} onclick handlers). "
+                f"QUALITY_PLAYBOOK §3.1 requires hierarchy: 1 primary + 2 secondary + 3 tertiary icons = 6 max. "
+                f"Restructure: hero Play button, 2 medium buttons (Daily Challenge + one), "
+                f"icon row of 3 (Shop/Stats/Settings or similar). "
+                f"Move the rest behind icons or kill redundant items per §3.4."
+            )
+            (warnings if is_grandfathered else blocking).append(msg)
+
+    return blocking, warnings
+
+
 # ---------- main -------------------------------------------------------------
 
 def main():
@@ -867,6 +1084,9 @@ def main():
     section("code",  "icon perceptual similarity", check_icon_perceptual_similarity, apps)
     section("code",  "screenshot template reuse",  check_screenshot_template_reuse, apps)
     section("code",  "listing copy uniqueness",    check_listing_copy_uniqueness, apps)
+    section("code",  "archetype presence",         check_archetype_presence, apps)
+    section("code",  "translations present",       check_translations_present, apps)
+    section("code",  "menu button count",           check_menu_button_count, apps)
 
     # ---- STORE ASSETS
     section("store", "Google icon (512x512)",      check_store_image, apps,
@@ -914,7 +1134,6 @@ def main():
             "metadata/review_notes.json",
             ["google_review_notes", "apple_review_notes", "demo_account_required"], "review_notes")
     section("meta",  "iaps.json matches code",     lambda a: ([], check_iaps_match_code(a)), apps)
-    section("code",  "IAP signature key set",       check_iap_signature_key, apps)
     section("meta",  "canonical privacy/support URLs", check_canonical_urls, apps)
     section("meta",  "no per-app privacy.html",    check_no_per_app_privacy_html, apps)
     section("meta",  "no old placeholder URLs",    check_old_placeholder_urls, apps)

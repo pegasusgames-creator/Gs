@@ -61,15 +61,11 @@ def phase_5_checks(app_name):
     if result.stderr:
         print(result.stderr)
 
-    # pre_publish_check.py exit codes: 0 = clean, 1 = blocking, 2 = warnings only
-    if result.returncode == 1:
+    # Heuristic: pre_publish_check.py exits non-zero when blocking issues exist
+    if result.returncode != 0:
         fail("blocking checks failed — fix the issues above and re-run")
-    if result.returncode == 2:
-        warn("pre-publish checks pass with warnings (see above) — continuing")
-    elif result.returncode != 0:
-        fail(f"pre_publish_check.py exited with unexpected code {result.returncode}")
-    else:
-        ok("pre-publish checks pass")
+
+    ok("pre-publish checks pass")
 
 
 # ---------- Phase 7: build the AAB ----------

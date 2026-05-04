@@ -13,7 +13,7 @@
         android:label="Bible Quiz"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BallSort"
+        android:theme="@style/Theme.PegasusGames"
         android:hardwareAccelerated="true"
         android:pageSizeCompat="enabled">
 

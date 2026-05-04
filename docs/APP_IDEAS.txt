@@ -428,7 +428,7 @@ Each app:
 ================================================================================
 IMPLEMENTATION TEMPLATE
 ================================================================================
-1. Copy BallSortPuzzle Android project folder
+1. Copy _template/ Android project folder (or another shipped app like WaterSortPuzzle)
 2. Change package name in:
    - AndroidManifest.xml
    - build.gradle (applicationId)

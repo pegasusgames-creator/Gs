@@ -112,7 +112,6 @@ must match what the app's `game.html` shop offers and what
 | App | One-time product IDs | Subscriptions |
 |---|---|---|
 | **WaterSort** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `unlimited_lives_forever`, `unlimited_undos`, `hint_pack`, `starter_pack` | `season_pass_monthly` |
-| **BallSortPuzzle** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `hint_pack`, `starter_pack` | `season_pass_monthly` |
 | **Nonogram** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `hint_pack`, `starter_pack` | `season_pass_monthly` |
 | **PipeConnect** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `hint_pack`, `starter_pack` | `season_pass_monthly` |
 | **Puzzle2048** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `hint_pack`, `starter_pack` | `season_pass_monthly` |

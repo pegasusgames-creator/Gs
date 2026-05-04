@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
 prepare_for_publish.py
-Prepares all 6 games for Google Play publishing:
-  - Upgrades 5 games' MainActivity to AppLovin MAX + AdMob dual-fallback (BallSort pattern)
+Prepares the 5 flagship games for Google Play publishing:
+  - Upgrades MainActivity to AppLovin MAX + AdMob dual-fallback
   - Adds daily notification infrastructure (NotificationHelper + NotificationReceiver)
-  - Adds notification permissions + receiver to all 6 manifests
-  - Increments versionCode on all 6 games
-  - Creates NotificationHelper.java and NotificationReceiver.java for all 6 games
+  - Adds notification permissions + receiver to all manifests
+  - Increments versionCode
+  - Creates NotificationHelper.java and NotificationReceiver.java for each game
 """
 
 import os, re
@@ -14,13 +14,6 @@ import os, re
 BASE = "/home/pgs/Documents/Gs"
 
 GAMES = {
-    "BallSortPuzzle": {
-        "pkg":        "com.pegasusgames.ballsort",
-        "bg":         "0xFF1a1a2e",
-        "notif_title": "Ball Sort Puzzle",
-        "notif_text":  "Your daily sorting challenge is waiting! 🎯",
-        "update_java": False,  # already has dual AdMob+AppLovin; only add notif bridge
-    },
     "WaterSort": {
         "pkg":        "com.pegasusgames.watersortpuzzle",
         "bg":         "0xFF0d1b2a",
@@ -665,45 +658,6 @@ public class MainActivity extends Activity {{
 }}
 """
 
-# ──────────────────────────────────────────────────────────────────────────────
-# NOTIFICATION METHODS TO INJECT INTO BALLSORT'S EXISTING MAINACTIVITY
-# ──────────────────────────────────────────────────────────────────────────────
-BALLSORT_NOTIF_BRIDGE = """\
-
-        @JavascriptInterface
-        public void scheduleNotification(int delayMinutes) {
-            NotificationHelper.schedule(MainActivity.this, delayMinutes);
-        }
-
-        @JavascriptInterface
-        public void cancelNotification() {
-            NotificationHelper.cancel(MainActivity.this);
-        }
-
-        @JavascriptInterface
-        public void requestNotificationPermission() {
-            if (android.os.Build.VERSION.SDK_INT >= 33) {
-                if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
-                        != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1001);
-                }
-            }
-        }
-"""
-
-BALLSORT_NOTIF_CHANNEL = """\
-        // Notification channel
-        NotificationHelper.createChannel(this);
-        if (android.os.Build.VERSION.SDK_INT >= 33) {
-            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
-                    != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1001);
-            }
-        }
-
-"""
-
-
 def java_dir(game):
     pkg = GAMES[game]["pkg"]
     pkg_path = pkg.replace(".", "/")
@@ -797,30 +751,6 @@ def process_game(game):
             os.path.join(d, "MainActivity.java"),
             MAIN_ACTIVITY.format(PKG=pkg, BG=cfg["bg"])
         )
-    else:
-        # BallSort: inject notification channel setup + bridge methods
-        ma_path = os.path.join(d, "MainActivity.java")
-        with open(ma_path) as f:
-            ma = f.read()
-
-        if "NotificationHelper" not in ma:
-            # Inject channel creation just before "if (USE_APPLOVIN)"
-            ma = ma.replace(
-                "        // --- Initialize ads: AppLovin MAX or AdMob fallback ---\n",
-                "        // --- Initialize ads: AppLovin MAX or AdMob fallback ---\n"
-                + BALLSORT_NOTIF_CHANNEL
-            )
-            # Inject bridge methods before the closing "}" of NativeBridge class
-            # Find the logEvent method end and inject after it
-            ma = ma.replace(
-                "        @JavascriptInterface\n        public void logEvent",
-                BALLSORT_NOTIF_BRIDGE + "\n        @JavascriptInterface\n        public void logEvent"
-            )
-            with open(ma_path, "w") as f:
-                f.write(ma)
-            print(f"  ✓ BallSort MainActivity.java — notifications injected")
-        else:
-            print(f"  ✓ BallSort MainActivity.java — already has notifications")
 
     # 4. AndroidManifest
     update_manifest(game)

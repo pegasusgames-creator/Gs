@@ -33,7 +33,7 @@ def detect_category(app):
                               'mahjong', 'jigsaw', 'sliding', 'pinpull', 'screw',
                               'binairo', 'connection', 'mastermind', 'numberlink',
                               'triple', 'sumplete', 'colorblock', 'colorfill',
-                              'ballsort', 'watersort', '2048', 'dotart', 'balloonpop',
+                              'watersort', '2048', 'dotart', 'balloonpop',
                               'blockpuzzle', 'fruitmerge', 'fruitsort', 'numbermerge',
                               'yarnsort', 'zengarden']):
         return ('GAME_PUZZLE', 'GAMES', 'PUZZLE')

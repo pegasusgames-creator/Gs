@@ -90,19 +90,72 @@ def main():
     tablet_10_count = (len([f for f in tablet_10.iterdir() if f.suffix == ".png"])
                        if tablet_10.is_dir() else 0)
 
-    # Build IAP table from metadata or fallback to defaults
+    # Build IAP table from metadata. The repo's iaps.json shape is:
+    #   {"one_time_products": [{"id":..,"title":..,"price_usd":..}, ...],
+    #    "subscriptions":     [{"id":.., ..., "billing_period":"P1M"}, ...]}
+    # IDs are UNPREFIXED in MainActivity.java; the handoff must match the
+    # code so Play Console product creation aligns with what the app
+    # queries at runtime (prefixing here would break IAPs in production).
+    def _fmt_price(usd):
+        try:
+            return f"${float(usd):.2f}"
+        except Exception:
+            return str(usd) if usd else ""
+
     iap_rows = []
-    if iaps_meta and isinstance(iaps_meta, list):
+    if isinstance(iaps_meta, dict) and (iaps_meta.get("one_time_products")
+                                          or iaps_meta.get("subscriptions")):
+        for entry in iaps_meta.get("one_time_products", []) or []:
+            iap_rows.append((
+                entry.get("id", ""),
+                "Managed",
+                entry.get("title", ""),
+                _fmt_price(entry.get("price_usd")),
+            ))
+        for entry in iaps_meta.get("subscriptions", []) or []:
+            period = entry.get("billing_period", "P1M")
+            suffix = "/mo" if period == "P1M" else f"/{period}"
+            iap_rows.append((
+                entry.get("id", ""),
+                "Subscription",
+                entry.get("title", ""),
+                _fmt_price(entry.get("price_usd")) + suffix,
+            ))
+    elif iaps_meta and isinstance(iaps_meta, list):
         for entry in iaps_meta:
             iap_rows.append((
-                f"{lowername}_{entry.get('id', '')}",
+                entry.get("id", ""),
                 entry.get("type", "Managed").capitalize(),
                 entry.get("name", ""),
                 entry.get("price", ""),
             ))
     else:
         for slug, type_, name, price in DEFAULT_IAPS:
-            iap_rows.append((f"{lowername}_{slug}", type_, name, price))
+            iap_rows.append((slug, type_, name, price))
+
+    # Detect whether AdMob is already set up so the handoff doesn't
+    # tell the user to "create the app entry" when the IDs are baked in.
+    manifest_path = (app_dir / "android/app/src/main/AndroidManifest.xml")
+    manifest_xml = read_text(manifest_path)
+    admob_already_set = (
+        manifest_xml
+        and "__ADMOB_APP_ID_PLACEHOLDER__" not in manifest_xml
+        and "ENTER_" not in manifest_xml
+        and "ca-app-pub-" in manifest_xml
+    )
+
+    if admob_already_set:
+        step1_intro = (
+            "## Step 1 — AdMob app entry (already done)\n\n"
+            f"This app's AdMob app ID and ad unit IDs are already baked into\n"
+            f"`{app_name}/android/app/src/main/AndroidManifest.xml` and\n"
+            f"`{app_name}/android/app/src/main/java/com/pegasusgames/{lowername}/MainActivity.java`.\n"
+            "**Skip directly to Step 2** unless you need to recreate the\n"
+            "AdMob entry from scratch (in which case follow the manual steps\n"
+            "in older handoff docs).\n"
+        )
+    else:
+        step1_intro = None
 
     # Build the document
     doc = f"""# Release Handoff — {title}
@@ -197,13 +250,15 @@ Play Console → {title} → **Grow → Main store listing**.
 ```
 {title}
 ```
+The app name is shared across ALL locales (English globally per Pegasus
+Games policy — see TRANSLATIONS.md §3).
 
-**Short description (80 chars):**
+**Short description (English baseline, 80 chars):**
 ```
 {short_desc}
 ```
 
-**Full description:**
+**Full description (English baseline):**
 Open `{app_name}/metadata/en-US/full_description.txt` and paste the
 entire contents.
 
@@ -221,6 +276,45 @@ open `{app_name}/wrap_tablet_screenshots.py`, uncomment the lines under
 **Categorization:**
 - App category: `{category}`
 - Tags: pull from `{app_name}/metadata/en-US/keywords.txt`
+
+### 4.1 — Add localizations (10 min, repetitive but mechanical)
+
+Pegasus Games ships in 11 locales. After saving the English baseline
+above, scroll up to **Manage translations → Add your own translations**.
+
+Add these 10 locales one at a time:
+
+| Locale | Source folder |
+|---|---|
+| German (Germany) | `{app_name}/metadata/de-DE/` |
+| Spanish (Latin America) | `{app_name}/metadata/es-419/` |
+| French (France) | `{app_name}/metadata/fr-FR/` |
+| Hindi (India) | `{app_name}/metadata/hi-IN/` |
+| Indonesian (Indonesia) | `{app_name}/metadata/id-ID/` |
+| Italian (Italy) | `{app_name}/metadata/it-IT/` |
+| Japanese (Japan) | `{app_name}/metadata/ja-JP/` |
+| Portuguese (Brazil) | `{app_name}/metadata/pt-BR/` |
+| Turkish (Turkey) | `{app_name}/metadata/tr-TR/` |
+| Ukrainian (Ukraine) | `{app_name}/metadata/uk-UA/` |
+
+For each locale:
+1. Click **Add language**, pick from the list above
+2. Paste the contents of `<locale>/short_description.txt` into "Short description"
+3. Paste `<locale>/full_description.txt` into "Full description"
+4. Leave the title field empty or paste the English title verbatim
+   (per TRANSLATIONS.md §3 — title stays English globally)
+5. Reuse the same icon, feature graphic, and screenshots — they're
+   not localized (English text in screenshots is fine; users in
+   non-English markets are accustomed to it on Play Store)
+6. Save
+
+If any locale's `*.rejected` file exists in metadata/, that means
+machine translation overflowed character limits. Edit the file down
+to fit, rename to remove `.rejected`, then upload.
+
+For Kids apps: only 4 locales required (en-US, es-419, pt-BR, fr-FR).
+Each MUST have been reviewed by a native speaker — verify no
+"# KIDS APP — REVIEW BY NATIVE SPEAKER" header remains in any file.
 
 ---
 
@@ -331,6 +425,14 @@ You're done. Game is in review.
   screenshot text uses banned phrases (#1, Best, Top Rated, Download
   Now, % Off, etc. — see QUALITY_PLAYBOOK.md §7.2).
 """
+
+    if step1_intro:
+        # Replace the "Step 1 — Create AdMob …" header + body with the
+        # already-done note up to the "## Step 2" boundary.
+        s = doc.find("## Step 1 — Create AdMob app entry (5 min)")
+        e = doc.find("## Step 2 ")
+        if s != -1 and e != -1:
+            doc = doc[:s] + step1_intro + "\n---\n\n" + doc[e:]
 
     out_path = app_dir / "RELEASE_HANDOFF.md"
     out_path.write_text(doc)

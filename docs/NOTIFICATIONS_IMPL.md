@@ -260,11 +260,9 @@ Add (if not present from wrapper):
 
 ```xml
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+<uses-permission android:name="android.permission.USE_EXACT_ALARM" />
 <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-<!-- Do NOT add SCHEDULE_EXACT_ALARM or USE_EXACT_ALARM. Google Play
-     restricts USE_EXACT_ALARM to calendar/alarm-clock apps only and will
-     reject games with it. Reminder notifications use the inexact API
-     (setAndAllowWhileIdle / set) — exact timing is not needed. -->
 
 <application>
     ...
