@@ -1,0 +1,16 @@
+{
+  "_comment": "Nonogram tablet_10 (1600x2560). Menu uses centered narrow column. Y-fractions shift down from phone because aspect ratio differs (phone 0.45 vs tablet_10 0.625).",
+  "_readiness_expr": "typeof startLevel === 'function' && typeof __nonoFillSolution === 'function' && typeof showScreen === 'function' && typeof startDailyChallenge === 'function'",
+
+  "_setup_taps": [
+    ["js", "(function(){var seed={currentLevel:348,completedLevels:Array.from({length:47},function(_,i){return i+1;}),levelStars:(function(){var s={};for(var i=1;i<=47;i++)s[i]=(i%4===0?3:(i%3===0?2:1));return s;})(),coins:247,lives:5,lastLifeTime:Date.now(),removeAds:false,hintPack:0,soundEnabled:true,musicEnabled:false,dailyChallengeDate:'',dailyChallengeStreak:7,unlimitedLivesUntil:0,unlimitedLivesForever:false,activeTheme:'default',lastLevelProgress:null};try{localStorage.setItem('nonogram_state',JSON.stringify(seed));localStorage.setItem('ls_v2',JSON.stringify({n:7,d:new Date().toISOString().slice(0,10),ach:[]}));localStorage.setItem('nono_missions_v1',JSON.stringify({progress_solver:3,progress_dedicated:12,progress_streak:1,claimed_perfectionist:true}));}catch(e){}Object.assign(state,seed);if(typeof updateUI==='function')updateUI();if(typeof updateMenuUI==='function')updateMenuUI();var ov=document.getElementById('ls-overlay');if(ov)ov.style.display='none';return 'seeded';})()", 400]
+  ],
+
+  "01_deep_gameplay":     [["tap", 0.50, 0.453, 1500]],
+  "02_early_gameplay":    [["tap", 0.404, 0.508, 1500]],
+  "03_level_complete":    [["tap", 0.594, 0.508, 1500]],
+  "04_missions_panel":    [["tap", 0.429, 0.586, 1200]],
+  "05_stats":             [["tap", 0.505, 0.586, 1200]],
+  "06_levels_grid":       [["tap", 0.586, 0.586, 1200]],
+  "07_menu":              []
+}

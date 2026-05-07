@@ -34,12 +34,12 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-# Import theme registry
-sys.path.insert(0, str(REPO_ROOT))
+# Import theme registry (lives next to this script in scripts/)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 try:
     from app_themes import get_theme
 except ImportError:
-    print("ERROR: app_themes.py not found in repo root. Cannot determine theme.")
+    print("ERROR: app_themes.py not found alongside this script. Cannot determine theme.")
     sys.exit(1)
 
 # ---------------------- output dimensions ----------------------
@@ -50,15 +50,13 @@ W = OUT_W * S
 H = OUT_H * S
 
 # ---------------------- font discovery ----------------------
-_HERE = os.path.dirname(os.path.abspath(__file__))
+_FONTS_DIR = str(Path(__file__).resolve().parent / 'fonts')
 FONT_CANDIDATES = {
-    'heavy':  [os.path.join(_HERE, 'fonts/Poppins-Bold.ttf'),
-               os.path.join(_HERE, '..', '_screenshot_tools/fonts/Poppins-ExtraBold.ttf'),
+    'heavy':  [_FONTS_DIR + '/Poppins-Bold.ttf',
                '/usr/share/fonts/truetype/google-fonts/Poppins-Bold.ttf',
                '/Library/Fonts/Poppins-Bold.ttf',
                'Poppins-Bold.ttf'],
-    'medium': [os.path.join(_HERE, 'fonts/Poppins-Medium.ttf'),
-               os.path.join(_HERE, '..', '_screenshot_tools/fonts/Poppins-Regular.ttf'),
+    'medium': [_FONTS_DIR + '/Poppins-Medium.ttf',
                '/usr/share/fonts/truetype/google-fonts/Poppins-Medium.ttf',
                '/Library/Fonts/Poppins-Medium.ttf',
                'Poppins-Medium.ttf'],
@@ -177,15 +175,10 @@ def draw_headline(img, line1, line2, subtitle, theme):
         heavy_size -= int(H * 0.003)
 
     line_font = pick_font('heavy', heavy_size)
-
-    sub_size = int(H * 0.022)
-    while sub_size > int(H * 0.014):
-        sf = pick_font('medium', sub_size)
-        sw = sf.getbbox(subtitle)[2] - sf.getbbox(subtitle)[0]
-        if sw <= max_width:
-            break
-        sub_size -= int(H * 0.001)
-    sub_font = pick_font('medium', sub_size)
+    # Subtitle bumped from H*0.022 → H*0.026 for legibility on light themes
+    # (Nonogram cream paper). Stays comfortably below the heavy headline
+    # so visual hierarchy is preserved.
+    sub_font  = pick_font('medium', int(H * 0.026))
 
     y = int(H * 0.045)
     shadow_offset = int(H * 0.004)
@@ -198,7 +191,7 @@ def draw_headline(img, line1, line2, subtitle, theme):
     draw.text((x1 + shadow_offset, y + shadow_offset), line1,
               font=line_font, fill=(0, 0, 0, 180))
     draw.text((x1, y), line1, font=line_font, fill=theme["text_accent"])
-    y += h1 + int(H * 0.002)
+    y += h1 + int(H * 0.005)
 
     # Line 2 — primary text color
     bbox2 = line_font.getbbox(line2)
@@ -208,13 +201,65 @@ def draw_headline(img, line1, line2, subtitle, theme):
     draw.text((x2 + shadow_offset, y + shadow_offset), line2,
               font=line_font, fill=(0, 0, 0, 180))
     draw.text((x2, y), line2, font=line_font, fill=theme["text_primary"])
-    y += h2 + int(H * 0.020)
+    # Wider gap between headline and subtitle (was H*0.020 — too cramped,
+    # subtitle visually merged with the headline on Nonogram's cream bg).
+    y += h2 + int(H * 0.040)
 
-    # Subtitle — subtle color
-    bbox3 = sub_font.getbbox(subtitle)
+    # Subtitle — subtle color, shrink-to-fit then 2-line wrap if still too wide.
+    # Bug fix (May 2026 audit): previous code rendered a single line with no
+    # bounds check, so subtitles wider than `max_width` got centered on a
+    # midpoint past the canvas edge — producing the "iving controls" /
+    # "rom easy 4-tube" / "[…]al tiles combine" both-ends-clipped pattern.
+    sub_text = subtitle
+    sub_size = sub_font.size
+
+    # Step 1: shrink font down to 75% of original before resorting to wrap
+    # (raised floor with the larger base size — keeps the subtitle readable
+    # even when the long copy forces a shrink)
+    min_size = max(int(sub_size * 0.75), 28)
+    while sub_size > min_size:
+        bbox3 = sub_font.getbbox(sub_text)
+        if bbox3[2] - bbox3[0] <= max_width:
+            break
+        sub_size -= 2
+        sub_font = pick_font('medium', sub_size)
+
+    # Step 2: if still too wide, wrap to 2 lines on word boundaries
+    bbox3 = sub_font.getbbox(sub_text)
+    if bbox3[2] - bbox3[0] > max_width:
+        words = sub_text.split()
+        # Find a split point near the middle that keeps both halves under max_width
+        best_split = None
+        for i in range(1, len(words)):
+            line_a = " ".join(words[:i])
+            line_b = " ".join(words[i:])
+            ba = sub_font.getbbox(line_a)
+            bb = sub_font.getbbox(line_b)
+            if (ba[2] - ba[0] <= max_width and
+                bb[2] - bb[0] <= max_width):
+                # Prefer splits closest to the middle
+                imbalance = abs(len(line_a) - len(line_b))
+                if best_split is None or imbalance < best_split[0]:
+                    best_split = (imbalance, line_a, line_b)
+        if best_split:
+            line_a, line_b = best_split[1], best_split[2]
+            for line in (line_a, line_b):
+                bb = sub_font.getbbox(line)
+                w = bb[2] - bb[0]
+                x = (W - w) // 2 - bb[0]
+                draw.text((x, y), line, font=sub_font,
+                          fill=theme["text_subtle"])
+                y += (bb[3] - bb[1]) + int(H * 0.005)
+            return y
+        # Fallback: even one word is too wide. Truncate with ellipsis.
+        while sub_text and sub_font.getbbox(sub_text + "…")[2] > max_width:
+            sub_text = sub_text[:-1]
+        sub_text += "…"
+
+    bbox3 = sub_font.getbbox(sub_text)
     w3 = bbox3[2] - bbox3[0]
     x3 = (W - w3) // 2 - bbox3[0]
-    draw.text((x3, y), subtitle, font=sub_font, fill=theme["text_subtle"])
+    draw.text((x3, y), sub_text, font=sub_font, fill=theme["text_subtle"])
     return y + (bbox3[3] - bbox3[1])
 
 

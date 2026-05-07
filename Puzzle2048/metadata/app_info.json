@@ -5,7 +5,10 @@
   "contains_ads": true,
   "contains_iap": true,
   "target_audience_min_age": 13,
-  "support_url": "https://pegasusgames.example/support",
-  "marketing_url": "",
-  "copyright": "© 2026 Pegasus Games"
+  "support_url": "https://pegasusgames-creator.github.io/",
+  "marketing_url": "https://pegasusgames-creator.github.io/",
+  "copyright": "© 2026 Pegasus Games",
+  "package_name": "com.pegasusgames.puzzle2048",
+  "upload_key_sha1": "97:71:24:82:8A:5B:72:D8:A0:26:B7:6D:6B:99:BC:CD:C1:35:E4:BD",
+  "first_upload_at": null
 }

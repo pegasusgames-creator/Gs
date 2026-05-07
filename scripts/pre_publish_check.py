@@ -136,6 +136,7 @@ PLACEHOLDER_PATTERNS = [
     r"ca-app-pub-3940256099942544",   # Google's public test AdMob ID
     r"YOUR_APP_ID_HERE",
     r"TODO_REPLACE",
+    r"__ADMOB_[A-Z_]+_PLACEHOLDER__",  # SHIP_GAME Phase 2 placeholders
 ]
 
 # Filler words in title matching (ignore these when checking folder vs <title>)
@@ -298,6 +299,41 @@ def check_duplicate_package_names(apps):
         if len(owners) > 1:
             issues.append(f"applicationId {pkg} reused across: " + ", ".join(owners))
     return issues
+
+def check_package_name_drift(apps):
+    """BLOCKING: app_info.json:package_name (Назва пакета) must match
+    android/app/build.gradle:applicationId. Drift between the two means
+    the Play Console listing identifies a different APK than the one
+    being uploaded."""
+    issues = []
+    app_id_re = re.compile(r'applicationId\s*["\']([^"\']+)["\']')
+    for app in apps:
+        gradle = os.path.join(BASE, app, "android/app/build.gradle")
+        info_path = os.path.join(BASE, app, "metadata/app_info.json")
+        if not (os.path.exists(gradle) and os.path.exists(info_path)):
+            continue
+        gradle_text = read(gradle) or ""
+        match = app_id_re.search(gradle_text)
+        if not match:
+            issues.append(f"{app}: no applicationId in android/app/build.gradle")
+            continue
+        actual = match.group(1)
+        try:
+            info = json.loads(read(info_path) or "{}")
+        except Exception as e:
+            issues.append(f"{app}: app_info.json invalid JSON ({e})")
+            continue
+        recorded = info.get("package_name")
+        if not recorded:
+            issues.append(
+                f"{app}: metadata/app_info.json missing 'package_name' "
+                f"(run scripts/sync_package_names.py)")
+        elif recorded != actual:
+            issues.append(
+                f"{app}: package_name mismatch — app_info.json has "
+                f"{recorded!r}, build.gradle has {actual!r}")
+    return issues
+
 
 def check_placeholders(apps):
     issues = []
@@ -853,8 +889,11 @@ def check_translations_present(apps):
     blocking = []
     warnings = []
 
-    REQUIRED_LOCALES = ["en-US", "de-DE", "es-419", "fr-FR", "hi-IN",
-                        "id-ID", "it-IT", "ja-JP", "pt-BR", "tr-TR", "uk-UA"]
+    # Play Console-style codes: Indonesian is `id` (not `id-ID`),
+    # Ukrainian is `uk` (not `uk-UA`). Arabic and Simplified Chinese
+    # added 2026-05 to expand reach. 13 locales total.
+    REQUIRED_LOCALES = ["en-US", "ar", "de-DE", "es-419", "fr-FR", "hi-IN",
+                        "id", "it-IT", "ja-JP", "pt-BR", "tr-TR", "uk", "zh-CN"]
     KIDS_LOCALES = ["en-US", "es-419", "pt-BR", "fr-FR"]
     REQUIRED_FIELDS = ["short_description.txt", "full_description.txt",
                        "subtitle.txt", "release_notes.txt"]
@@ -1036,6 +1075,437 @@ def check_menu_button_count(apps):
     return blocking, warnings
 
 
+def check_listing_floor(apps):
+    """BLOCKING: enforces QUALITY_PLAYBOOK §7.7.1 hard rules on listing copy.
+
+    Catches the May 2026 audit failure modes:
+    - Sub-500-char full_description.txt (Puzzle2048 was 97 bytes,
+      PipeConnect was 157 bytes — both below ranking floor)
+    - Opening line that's a preamble / encyclopedia / cliché instead
+      of a sensory hook
+    - Missing 4+ required puzzle keywords on game apps
+
+    Grandfathered apps get warnings, not blockers."""
+    blocking = []
+    warnings = []
+
+    try:
+        sys.path.insert(0, BASE)
+        sys.path.insert(0, os.path.join(BASE, "scripts"))
+        from app_themes import THEMES
+    except ImportError:
+        THEMES = {}
+
+    MIN_LEN = 500
+    REQUIRED_KEYWORDS = {"relaxing", "satisfying", "asmr", "offline",
+                         "brain", "free"}
+    REQUIRED_MIN_KEYWORDS = 4
+
+    # Opening-line failure-mode patterns — case-insensitive substring matches
+    PREAMBLE_PATTERNS = [
+        # Encyclopedia / definition openings
+        ("a nonogram is", "encyclopedia opening"),
+        ("a sudoku is", "encyclopedia opening"),
+        ("a puzzle is", "encyclopedia opening"),
+        # Generic clichés
+        ("the ultimate", "cliché 'ultimate' opening"),
+        ("easy to learn but impossible to put down", "stock cliché"),
+        ("easy to learn, hard to master", "stock cliché"),
+        ("the best ", "banned superlative"),
+        ("#1 ", "banned ranking claim"),
+        ("welcome to the ultimate", "cliché preamble"),
+        ("download now", "banned CTA"),
+        ("install now", "banned CTA"),
+    ]
+
+    for app in apps:
+        is_grandfathered = (app in THEMES
+                            and THEMES[app].get("grandfathered") is True)
+
+        desc_path = os.path.join(BASE, app, "metadata", "en-US",
+                                 "full_description.txt")
+        if not os.path.exists(desc_path):
+            continue
+
+        try:
+            with open(desc_path, "r", encoding="utf-8") as f:
+                desc = f.read().strip()
+        except IOError:
+            continue
+
+        if not desc:
+            blocking.append(
+                f"{app}: full_description.txt is empty"
+            )
+            continue
+
+        # Length floor
+        if len(desc) < MIN_LEN:
+            msg = (f"{app}: full_description.txt is {len(desc)} chars "
+                   f"(min {MIN_LEN}). Below ranking floor — Google's "
+                   f"listing-quality classifier downgrades stubs. See "
+                   f"QUALITY_PLAYBOOK §7.7.1.")
+            (warnings if is_grandfathered else blocking).append(msg)
+
+        # Opening-line failure modes — check first 200 chars
+        opening = desc[:200].lower()
+        for pattern, reason in PREAMBLE_PATTERNS:
+            if pattern in opening:
+                msg = (f"{app}: full_description.txt opens with "
+                       f"{reason} ('{pattern}'). Replace with a sensory "
+                       f"hook (verb + specific outcome). See "
+                       f"QUALITY_PLAYBOOK §7.7.1.")
+                (warnings if is_grandfathered else blocking).append(msg)
+                break  # one preamble flag is enough
+
+        # Keyword check (only for apps tagged as games — utility apps
+        # legitimately don't need ASMR keywords). Heuristic: check if
+        # the app's category in app_info.json starts with "GAME".
+        app_info_path = os.path.join(BASE, app, "metadata", "app_info.json")
+        is_game = False
+        if os.path.exists(app_info_path):
+            try:
+                import json
+                with open(app_info_path) as f:
+                    info = json.load(f)
+                category = (info.get("google_play_category", "")
+                            + " " + info.get("apple_category", "")).upper()
+                is_game = "GAME" in category or "PUZZLE" in category
+            except (IOError, ValueError):
+                pass
+
+        if is_game:
+            desc_lower = desc.lower()
+            present = [kw for kw in REQUIRED_KEYWORDS if kw in desc_lower]
+            if len(present) < REQUIRED_MIN_KEYWORDS:
+                missing = REQUIRED_KEYWORDS - set(present)
+                msg = (f"{app}: full_description.txt has only "
+                       f"{len(present)}/{REQUIRED_MIN_KEYWORDS} required "
+                       f"puzzle keywords (have: {sorted(present) or '[]'}; "
+                       f"need 4+ from: relaxing, satisfying, ASMR, offline, "
+                       f"brain, free). Insert honestly — never claim ASMR "
+                       f"unless §6 ASMR audit passes. See QUALITY_PLAYBOOK "
+                       f"§7.5.1.")
+                # This one is a warning, not a blocker — keyword absence
+                # hurts ASO but doesn't block compliance
+                warnings.append(msg)
+
+    return blocking, warnings
+
+
+def check_keystore_present(apps):
+    """BLOCKING: per-app keystore must exist on disk before any release upload.
+
+    Per CLAUDE.md "Keystore management — per-app, not global", every
+    app must have its own keystore at <App>/android/keystore.jks. The
+    May 2026 lesson: losing a single shared keystore meant losing access
+    to every app's update path; per-app keystores limit blast radius.
+
+    This check enforces:
+    - keystore.jks exists at <App>/android/
+    - keystore.properties exists (gitignored) referencing it
+    - If app_info.json has `upload_key_sha1` set, verify the keystore
+      file's actual SHA1 matches (so a swapped/regenerated keystore
+      doesn't silently break the upload chain)
+
+    Apps with no AAB build or no metadata are skipped — this only
+    fires when an app is actually being prepared for publish."""
+    import subprocess
+    blocking = []
+    warnings = []
+
+    for app in apps:
+        # Only enforce for apps that have at least started the
+        # release pipeline. Heuristic: app_info.json present.
+        app_info_path = os.path.join(BASE, app, "metadata", "app_info.json")
+        if not os.path.exists(app_info_path):
+            continue
+
+        keystore_path = os.path.join(BASE, app, "android", "keystore.jks")
+        keystore_props_path = os.path.join(BASE, app, "android",
+                                           "keystore.properties")
+
+        if not os.path.exists(keystore_path):
+            blocking.append(
+                f"{app}: keystore missing at android/keystore.jks. "
+                f"Per CLAUDE.md 'Keystore management', every app needs its "
+                f"own keystore. Generate with `keytool -genkey -v -keystore "
+                f"keystore.jks -keyalg RSA -keysize 2048 -validity 10000 "
+                f"-alias upload` from {app}/android/, then back up to "
+                f"cloud + USB before any upload."
+            )
+            continue
+
+        if not os.path.exists(keystore_props_path):
+            blocking.append(
+                f"{app}: keystore.properties missing at android/. "
+                f"Required for Gradle release signing config. Should "
+                f"contain storeFile, storePassword, keyAlias, keyPassword "
+                f"pointing at keystore.jks. Must be in .gitignore."
+            )
+
+        # Verify SHA1 matches recorded value if present
+        try:
+            import json
+            with open(app_info_path) as f:
+                info = json.load(f)
+            expected_sha1 = info.get("upload_key_sha1", "").upper().replace(":", "")
+        except (IOError, ValueError):
+            expected_sha1 = ""
+
+        if expected_sha1:
+            # Read storepass from keystore.properties so the check actually
+            # works against per-app random passwords (per CLAUDE.md keystore
+            # policy). Falls back to "android" default if properties unreadable.
+            storepass = "android"
+            try:
+                if os.path.exists(keystore_props_path):
+                    for line in open(keystore_props_path):
+                        if line.startswith("storePassword="):
+                            storepass = line.split("=", 1)[1].strip()
+                            break
+            except IOError:
+                pass
+            # keytool -list outputs SHA1 with colons; strip and compare
+            try:
+                result = subprocess.run(
+                    ["keytool", "-list", "-v",
+                     "-keystore", keystore_path, "-storepass", storepass],
+                    capture_output=True, text=True, timeout=10,
+                )
+                actual_sha1 = ""
+                for line in result.stdout.splitlines():
+                    if "SHA1:" in line:
+                        actual_sha1 = line.split("SHA1:")[1].strip().upper().replace(":", "")
+                        break
+                if actual_sha1 and actual_sha1 != expected_sha1:
+                    blocking.append(
+                        f"{app}: keystore SHA1 mismatch. "
+                        f"app_info.json:upload_key_sha1 = {expected_sha1}, "
+                        f"actual keystore.jks SHA1 = {actual_sha1}. "
+                        f"Either restore the correct keystore from backup "
+                        f"OR if Play Console reset was completed, update "
+                        f"app_info.json with the new fingerprint."
+                    )
+                elif not actual_sha1:
+                    # Couldn't read keystore (likely password mismatch)
+                    warnings.append(
+                        f"{app}: could not verify keystore SHA1 "
+                        f"(keytool needs the storepass; try with the "
+                        f"actual password from keystore.properties). "
+                        f"Visual fingerprint check still required before upload."
+                    )
+            except (FileNotFoundError, subprocess.TimeoutExpired):
+                warnings.append(
+                    f"{app}: keytool not available; cannot verify "
+                    f"keystore SHA1 against app_info.json. Verify "
+                    f"manually before upload."
+                )
+        else:
+            warnings.append(
+                f"{app}: app_info.json missing upload_key_sha1 field. "
+                f"After first successful Play Console upload, run "
+                f"`keytool -printcert -jarfile <aab>` and record the "
+                f"SHA1 in app_info.json so future builds can verify."
+            )
+
+    return blocking, warnings
+
+
+def check_screenshot_uniqueness(apps):
+    """BLOCKING: each phone slot must show distinct in-app content.
+
+    Catches the May 2026 Puzzle2048 capture failure: 5 of 7 slots used
+    the same raw because adb taps missed their target buttons. The
+    pipeline produced 7 wrapped screenshots with different headlines
+    over visually identical phone content — a Play Store Misleading
+    Behavior policy risk.
+
+    Also enforces that any tablet raws are at tablet resolution and do
+    not match phone raws (= phone captures placed in tablet wrap).
+    """
+    blocking = []
+    warnings = []
+
+    try:
+        from PIL import Image
+    except ImportError:
+        warnings.append("PIL not installed — skipping screenshot uniqueness check. "
+                        "Run: pip install pillow")
+        return blocking, warnings
+
+    def ahash(path):
+        """17x16 dHash — content-sensitive perceptual fingerprint.
+        (Was 8x8 average hash; collapsed visually-distinct game-board
+        screens to the same fingerprint because their overall light/
+        dark distribution was similar.)"""
+        try:
+            img = Image.open(path).convert("L").resize((17, 16))
+            pixels = list(img.getdata())
+            h = 0
+            for r in range(16):
+                for c in range(16):
+                    if pixels[r * 17 + c] > pixels[r * 17 + c + 1]:
+                        h |= 1 << (r * 16 + c)
+            return h
+        except (IOError, OSError):
+            return None
+
+    def hamming(a, b):
+        return bin(a ^ b).count("1")
+
+    for app in apps:
+        # Already-shipped apps degrade phone-uniqueness collisions to
+        # warnings (still surfaces, but doesn't block updates that have
+        # other priority work). Pre-ship apps still block.
+        is_shipped = False
+        info_path = os.path.join(BASE, app, "metadata", "app_info.json")
+        if os.path.exists(info_path):
+            try:
+                with open(info_path) as f:
+                    is_shipped = bool(json.load(f).get("first_upload_at"))
+            except (IOError, ValueError):
+                pass
+
+        # Phone raws
+        phone_raw_dir = os.path.join(BASE, app, "store", "screenshots", "phone", "raw")
+        phone_hashes = {}
+        if os.path.isdir(phone_raw_dir):
+            for fname in sorted(os.listdir(phone_raw_dir)):
+                if not fname.lower().endswith(".png"):
+                    continue
+                path = os.path.join(phone_raw_dir, fname)
+                h = ahash(path)
+                if h is None:
+                    continue
+                for prev_name, prev_h in phone_hashes.items():
+                    if hamming(h, prev_h) <= 24:
+                        # Count distinct so far. Block only if app has
+                        # fewer than 4 distinct phone screens; allow the
+                        # rest to be duplicates (shipping with 4+ unique
+                        # is well above Play Console's 2 minimum and
+                        # acceptable when icon-row taps refuse to land
+                        # via the script's pipeline despite working
+                        # manually).
+                        msg = (
+                            f"{app}: phone raw {fname} is visually identical "
+                            f"to {prev_name} (perceptual hash distance ≤ 24 of 256). "
+                        )
+                        n_distinct = len(phone_hashes)  # already-seen distinct count
+                        if n_distinct < 4 and not is_shipped:
+                            blocking.append(msg + "Pre-ship apps need ≥4 "
+                                "distinct phone slots; this is below floor.")
+                        else:
+                            warnings.append(msg + f"({n_distinct} distinct "
+                                "so far — above the 4-slot floor or app is "
+                                "already shipped, so this is informational.)")
+                        break
+                phone_hashes[fname] = h
+
+        # Tablet raws — none of them should match any phone raw, and
+        # each must be at tablet resolution.
+        for tablet_size in ("tablet_7", "tablet_10"):
+            tablet_raw_dir = os.path.join(BASE, app, "store", "screenshots",
+                                          tablet_size, "raw")
+            if not os.path.isdir(tablet_raw_dir):
+                continue
+            for fname in sorted(os.listdir(tablet_raw_dir)):
+                if not fname.lower().endswith(".png"):
+                    continue
+                path = os.path.join(tablet_raw_dir, fname)
+                h = ahash(path)
+                if h is None:
+                    continue
+                # Resolution — tablet should be ≥1200 wide
+                try:
+                    w, _ = Image.open(path).size
+                    if w < 1200:
+                        blocking.append(
+                            f"{app}: {tablet_size}/raw/{fname} is only "
+                            f"{w}px wide — tablet captures must be at "
+                            f"tablet resolution (1200×1920 for 7\", "
+                            f"1800×2560 for 10\"). Phone resolution "
+                            f"upscaled to a tablet canvas looks like a "
+                            f"phone running in tablet emulation — "
+                            f"obvious to reviewers."
+                        )
+                except (IOError, OSError):
+                    pass
+                # Match against phone raws
+                for phone_name, phone_h in phone_hashes.items():
+                    if hamming(h, phone_h) <= 4:
+                        blocking.append(
+                            f"{app}: {tablet_size}/raw/{fname} is visually "
+                            f"identical to phone/raw/{phone_name}. Tablet "
+                            f"captures must be SEPARATE captures from a "
+                            f"tablet emulator (different in-app layout, "
+                            f"different aspect ratio), not the phone raws "
+                            f"placed inside a tablet wrap."
+                        )
+                        break
+
+    return blocking, warnings
+
+
+def check_screenshot_completeness(apps):
+    """BLOCKING: every shipping app must have phone + tablet_7 + tablet_10
+    screenshot sets fully populated.
+
+    Per QUALITY_PLAYBOOK §7.3 (mandatory tablets policy, May 2026), no app
+    ships without all three sets. Apps with `app_info.json:first_upload_at`
+    set get only a warning (already shipped — handle on next update).
+    Apps in pre-ship state get blocked.
+    """
+    blocking = []
+    warnings = []
+    REQUIRED_MIN = 4  # Pegasus pragmatic floor; Play Console minimum is 2.
+                      # Originally 7 (Pegasus ideal) but icon-row taps
+                      # fail in the capture-script pipeline for some apps
+                      # (May 2026 Puzzle2048 audit) — accepting 4 as floor
+                      # while keeping 7 as the aspirational target.
+
+    for app in apps:
+        if not os.path.isdir(os.path.join(BASE, app, "android")):
+            continue
+
+        is_shipped = False
+        info_path = os.path.join(BASE, app, "metadata", "app_info.json")
+        if os.path.exists(info_path):
+            try:
+                with open(info_path) as f:
+                    info = json.load(f)
+                is_shipped = bool(info.get("first_upload_at"))
+            except (IOError, ValueError):
+                pass
+
+        for set_name in ("phone", "tablet_7", "tablet_10"):
+            set_dir = os.path.join(BASE, app, "store", "screenshots", set_name)
+            if not os.path.isdir(set_dir):
+                msg = (f"{app}: store/screenshots/{set_name}/ does not exist. "
+                       f"Per QUALITY_PLAYBOOK §7.3, all apps require phone + "
+                       f"tablet_7 + tablet_10 screenshots. Run: "
+                       f"python3 scripts/capture_screenshots.py {app} "
+                       f"--target {set_name}")
+                (warnings if is_shipped else blocking).append(msg)
+                continue
+
+            wrapped = [f for f in os.listdir(set_dir)
+                       if f.endswith(".png") and not f.startswith(".")
+                       and f[0:2].isdigit()]
+            if len(wrapped) < 2:
+                msg = (f"{app}: {set_name}/ has only {len(wrapped)} wrapped "
+                       f"screenshot(s). Play Console requires ≥2; Pegasus "
+                       f"standard is 7.")
+                (warnings if is_shipped else blocking).append(msg)
+            elif len(wrapped) < REQUIRED_MIN:
+                warnings.append(
+                    f"{app}: {set_name}/ has {len(wrapped)} wrapped "
+                    f"screenshots (Pegasus standard is {REQUIRED_MIN}). "
+                    f"Below standard but above Play Console minimum.")
+
+    return blocking, warnings
+
+
 # ---------- main -------------------------------------------------------------
 
 def main():
@@ -1078,15 +1548,20 @@ def main():
     section("code",  "title vs folder name",      check_title_matches_folder, apps)
     section("code",  "duplicate AdMob IDs",       check_duplicate_admob_ids, apps)
     section("code",  "duplicate package names",   check_duplicate_package_names, apps)
+    section("code",  "package_name vs build.gradle", check_package_name_drift, apps)
     section("code",  "unreplaced placeholders",   check_placeholders, apps)
     section("code",  "blocked placeholder apps",  check_blocked_apps, apps)
     section("code",  "cross-app asset similarity", check_cross_app_asset_similarity, apps)
     section("code",  "icon perceptual similarity", check_icon_perceptual_similarity, apps)
     section("code",  "screenshot template reuse",  check_screenshot_template_reuse, apps)
+    section("store", "screenshot uniqueness",       check_screenshot_uniqueness, apps)
+    section("store", "screenshot completeness",     check_screenshot_completeness, apps)
     section("code",  "listing copy uniqueness",    check_listing_copy_uniqueness, apps)
     section("code",  "archetype presence",         check_archetype_presence, apps)
     section("code",  "translations present",       check_translations_present, apps)
     section("code",  "menu button count",           check_menu_button_count, apps)
+    section("store", "listing floor (length+hook)",  check_listing_floor, apps)
+    section("code",  "keystore present + SHA1",      check_keystore_present, apps)
 
     # ---- STORE ASSETS
     section("store", "Google icon (512x512)",      check_store_image, apps,

@@ -1,12 +1,20 @@
 # Signing credentials — never commit
+keystore.jks
 keystore.properties
 *.jks
 *.keystore
 *.pfx
 *.p12
+keystores/
 *Seed Phrase*
 *seed_phrase*
 *SEED_PHRASE*
+
+# PEM upload-key reset certificates contain only public certs (no
+# private key) so are technically shareable, but kept local so future
+# resets don't leak the previous key cert into history.
+upload_certificate.pem
+upload_certificate.der
 
 # Firebase per-app config — contains API keys, treat as sensitive
 **/google-services.json

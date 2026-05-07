@@ -234,7 +234,7 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
       <p>Pour and sort the colored water!</p>
     </div>
     <div class="menu-buttons">
-      <button class="btn btn-primary" onclick="Game.startPlay()"><svg class="ico" viewBox="0 0 24 24"><polygon points="7 4 20 12 7 20 7 4" fill="currentColor" stroke="none"/></svg>Play</button>
+      <button class="btn btn-primary" id="menuPlayBtn" onclick="Game.startPlay()"><svg class="ico" viewBox="0 0 24 24"><polygon points="7 4 20 12 7 20 7 4" fill="currentColor" stroke="none"/></svg><span id="menuPlayLabel">Play</span></button>
       <button class="btn btn-secondary" id="dailyChallengeBtn" onclick="Game.startDailyChallenge()"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>Daily Challenge</button>
       <div class="menu-icon-row">
         <button class="icon-btn" onclick="Game.showScreen('levelScreen')" aria-label="Levels">
@@ -250,10 +250,6 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
           <span>Games</span>
         </button>
       </div>
-    </div>
-    <div id="comebackBanner" style="display:none;margin-top:10px;width:100%;max-width:320px;background:rgba(79,195,247,0.1);border:1.5px solid rgba(79,195,247,0.35);border-radius:14px;padding:12px 18px;text-align:center;cursor:pointer" onclick="Game.resumeLastLevel()">
-      <div style="color:#4fc3f7;font-size:14px;font-weight:700">↩ Pick up where you left off</div>
-      <div id="comebackDetail" style="color:rgba(255,255,255,0.5);font-size:12px;margin-top:2px"></div>
     </div>
   </div>
 
@@ -314,7 +310,7 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
   <div id="settingsScreen" class="screen">
     <div class="screen-header">
       <button class="back-btn" onclick="Game.showScreen('menuScreen')">← Back</button>
-      <h2><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>Settings</h2>
+      <h2><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</h2>
       <div style="width:60px"></div>
     </div>
     <div class="settings-list">
@@ -2168,12 +2164,13 @@ const Game = {
     if (id === 'moreGamesScreen') { checkPendingPromos(); renderMoreGames(); }
     if (id === 'settingsScreen') this.updateSettingsUI();
     if (id === 'themeScreen') window.renderThemes && window.renderThemes();
-    if (id === 'menuScreen') { const cb = document.getElementById('comebackBanner'); if(cb){ if(State.lastLevelProgress){ const d=document.getElementById('comebackDetail'); if(d) d.textContent='Level '+(State.lastLevelProgress.level+1)+' — almost done!'; cb.style.display='block'; } else cb.style.display='none'; } }
+    if (id === 'menuScreen') { const lbl = document.getElementById('menuPlayLabel'); if(lbl){ lbl.textContent = State.lastLevelProgress ? ('Continue · Level '+(State.lastLevelProgress.level+1)) : 'Play'; } }
     updateCoinDisplays();
     updateHeartsDisplay();
   },
 
   startPlay() {
+    if (State.lastLevelProgress) { State.lastLevelProgress = null; State.save(); }
     this.loadLevel(State.currentLevel);
   },
 
@@ -2504,13 +2501,9 @@ function renderShop() {
 // ============================================================
 // MORE GAMES — Cross-promotion
 // ============================================================
-const PROMO_GAMES = [
-  { id: 'ballsort',   packageId: 'com.pegasusgames.ballsort',    emoji: '🎱', name: 'Ball Sort Puzzle',  desc: 'Sort colorful balls into tubes!' },
-  { id: 'nonogram',   packageId: 'com.pegasusgames.nonogram',    emoji: '🖼️', name: 'Nonogram',          desc: 'Solve pixel art grid puzzles!' },
-  { id: 'pipeconnect',packageId: 'com.pegasusgames.pipeconnect', emoji: '🔧', name: 'Pipe Connect',      desc: 'Connect matching colored pipes!' },
-  { id: 'puzzle2048', packageId: 'com.pegasusgames.puzzle2048',  emoji: '✨', name: '2048 Puzzle',       desc: 'Merge tiles to reach 2048!' },
-  { id: 'unblock',    packageId: 'com.pegasusgames.unblock',     emoji: '🧩', name: 'Unblock Puzzle',    desc: 'Slide blocks to free the red piece!' }
-];
+// Cross-promo list is empty until sister apps are live on the Play Store.
+// renderMoreGames() shows a "Coming soon" panel when this is empty.
+const PROMO_GAMES = [];
 
 function isPromoClaimed(gameId) {
   return localStorage.getItem('promo_claimed_' + gameId) === '1';
@@ -2590,6 +2583,18 @@ function renderMoreGames() {
   const grid = document.getElementById('moreGamesGrid');
   if (!grid) return;
   grid.innerHTML = '';
+  if (PROMO_GAMES.length === 0) {
+    const empty = document.createElement('div');
+    empty.style.cssText = 'padding:48px 24px;text-align:center;color:rgba(255,255,255,0.75);'
+      + 'background:rgba(79,195,247,0.08);border:1.5px dashed rgba(79,195,247,0.35);'
+      + 'border-radius:18px;margin:24px 0;';
+    empty.innerHTML =
+      '<div style="font-size:48px;margin-bottom:12px">🌊</div>'
+      + '<div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:6px">More games coming soon</div>'
+      + '<div style="font-size:13px;line-height:1.5">We\'re polishing more relaxing puzzles to share with you.<br>Check back after the next update.</div>';
+    grid.appendChild(empty);
+    return;
+  }
   for (const g of PROMO_GAMES) {
     const claimed = isPromoClaimed(g.id);
     const card = document.createElement('div');

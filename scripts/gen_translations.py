@@ -37,16 +37,18 @@ REPO_ROOT = Path(__file__).resolve().parent.parent if (Path(__file__).resolve().
 # Play Console sorts in the listing UI).
 LOCALES = [
     ("en-US", "English",       "United States",      None),  # baseline
+    ("ar",    "Arabic",        "MENA region",        "ar"),
     ("de-DE", "German",        "Germany",            "de"),
     ("es-419", "Spanish",      "Latin America",      "es"),
     ("fr-FR", "French",        "France",             "fr"),
     ("hi-IN", "Hindi",         "India",              "hi"),
-    ("id-ID", "Indonesian",    "Indonesia",          "id"),
+    ("id",    "Indonesian",    "Indonesia",          "id"),  # Play Console: id, not id-ID
     ("it-IT", "Italian",       "Italy",              "it"),
     ("ja-JP", "Japanese",      "Japan",              "ja"),
     ("pt-BR", "Portuguese",    "Brazil",             "pt"),
     ("tr-TR", "Turkish",       "Turkey",             "tr"),
-    ("uk-UA", "Ukrainian",     "Ukraine",            "uk"),
+    ("uk",    "Ukrainian",     "Ukraine",            "uk"),  # Play Console: uk, not uk-UA
+    ("zh-CN", "Chinese",       "Mainland China",     "zh"),
 ]
 
 # Subset for Kids program apps (TRANSLATIONS.md §5)
@@ -86,6 +88,8 @@ BANNED_PHRASES_BY_LANG = {
     "fr": ["n°1", "le meilleur", "télécharge maintenant"],
     "pt": ["nº 1", "o melhor", "baixe agora", "instale agora"],
     "uk": ["№1", "найкращий", "завантажуйте зараз"],
+    "ar": ["#1", "الأفضل", "حمّل الآن", "ثبّت الآن"],
+    "zh": ["#1", "最佳", "立即下载", "立即安装"],
     # ... extend as needed
 }
 

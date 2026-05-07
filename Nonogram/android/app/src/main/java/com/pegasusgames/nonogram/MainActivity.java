@@ -74,16 +74,16 @@ public class MainActivity extends Activity {
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     // Get from: apps.admob.com → Your App → Ad Units
-    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-2759523698880843/9724082089";
-    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-2759523698880843/1981323438";
-    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-2759523698880843/9339137254";
+    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-5695494884863768/5453977585";
+    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-5695494884863768/5823619037";
+    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-5695494884863768/9212199707";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
     // Paste the app's base64 RSA public key from:
     //   Play Console → Monetize setup → Licensing → "Base64-encoded RSA public key"
     // While the placeholder remains, signature verification is SKIPPED.
     // Replace before shipping (see RELEASE_HANDOFF.md).
-    private static final String LICENSE_PUBLIC_KEY = "PASTE_LICENSE_KEY_FROM_PLAY_CONSOLE_MONETIZE_LICENSING";
+    private static final String LICENSE_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo9rba786uE+P1GNZM+WXQsRihqNR2gf43lRL5d8G4d4BDTcZL9br0RgfgMMM/K0cdBPY/1qv45UPWoyefSrw7pv0cuJPfUsg1Nw0FOclCtztw+dRVQ0C6/YT65KlDp7hkxMy4EpcqBDayd4FJLvC4dGo5LvyYkumQ2H35um2jR+I3UjRJ8xjDKtHaiAoMeI4TzTft3OMKEgz4U+pzvFFus3YextBgZ/g2dS2QM+Wtld2w6R2nJFZ6VNbr8HEu1p9bOCrkk0tJOB0toYUezmvYZABOp5FiC/CbfH+IGP6x04OOnowPpd4Xo2/Cqv7dg0BPInslxclAR20mnwQeytJuQIDAQAB";
 
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
         "remove_ads", "coins_small", "coins_large", "hint_pack",

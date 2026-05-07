@@ -16,13 +16,16 @@ android {
         applicationId "com.pegasusgames.nonogram"
         minSdk 23
         targetSdk 36
-        versionCode 10
-        versionName "1.8"
+        versionCode 1
+        versionName "1.0"
     }
 
     signingConfigs {
         release {
-            storeFile file(kp['storeFile'])
+            // Resolve storeFile relative to android/ (rootProject), not app/.
+            // Per CLAUDE.md keystore policy, keystore.jks lives next to
+            // keystore.properties at <App>/android/keystore.jks.
+            storeFile rootProject.file(kp['storeFile'])
             storePassword kp['storePassword']
             keyAlias kp['keyAlias']
             keyPassword kp['keyPassword']

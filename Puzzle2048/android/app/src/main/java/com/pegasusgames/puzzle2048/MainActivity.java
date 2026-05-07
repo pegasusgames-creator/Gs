@@ -61,21 +61,20 @@ import java.util.Set;
 
 public class MainActivity extends Activity {
 
-    // ── AppLovin MAX ──────────────────────────────────────────────────────────
-    // Get SDK Key: dash.applovin.com → Account → Keys → SDK Key
-    // Get Ad Unit IDs: dash.applovin.com → Monetize → Ad Units
-    private static final String MAX_SDK_KEY              = "ENTER_YOUR_APPLOVIN_SDK_KEY_HERE";
-    private static final String MAX_BANNER_UNIT_ID       = "ENTER_YOUR_MAX_BANNER_UNIT_ID";
-    private static final String MAX_INTERSTITIAL_UNIT_ID = "ENTER_YOUR_MAX_INTER_UNIT_ID";
-    private static final String MAX_REWARDED_UNIT_ID     = "ENTER_YOUR_MAX_REWARDED_UNIT_ID";
-    // Auto-switch: uses AppLovin when SDK key is real, AdMob otherwise
-    private static final boolean USE_APPLOVIN = !MAX_SDK_KEY.startsWith("ENTER_");
+    // ── AppLovin MAX (disabled; using AdMob) ──────────────────────────────────
+    // Populate the four constants below + add the SDK key meta-data in
+    // AndroidManifest.xml to re-enable AppLovin mediation.
+    private static final String MAX_SDK_KEY              = "";
+    private static final String MAX_BANNER_UNIT_ID       = "";
+    private static final String MAX_INTERSTITIAL_UNIT_ID = "";
+    private static final String MAX_REWARDED_UNIT_ID     = "";
+    private static final boolean USE_APPLOVIN = !MAX_SDK_KEY.isEmpty();
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     // Get from: apps.admob.com → Your App → Ad Units
-    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-2759523698880843/8598135423";
-    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-2759523698880843/9640321606";
-    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-2759523698880843/8808086664";
+    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-5695494884863768/8535411813";
+    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-5695494884863768/8333515691";
+    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-5695494884863768/6020929115";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(

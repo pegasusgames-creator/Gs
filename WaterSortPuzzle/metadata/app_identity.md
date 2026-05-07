@@ -1,31 +1,45 @@
-# WaterSortPuzzle Identity (grandfathered)
+# WaterSortPuzzle Identity
 
 - **Category**: puzzle (sort/pour)
 - **Layout archetype**: A (hero Play button stack)
-- **Mascot pattern**: M0 (no mascot — flasks are the personality)
-- **Voice**: V1 (neutral functional)
-- **Texture**: T1 (flat clean)
+- **Mascot pattern**: M0 (no mascot — the flasks are the personality)
+- **Voice**: V5 (calm / zen — quiet, meditative)
+- **Texture**: T2 (soft glassmorphism on flasks and modals)
 - **Mood string**: ocean-depth
-- **Status**: GRANDFATHERED — shipped to Play Store before the
-  archetype system was rolled out. Currently under review.
 
-This app uses the template signature (A/M0/V1/T1). New apps may NOT
-use this signature; WaterSortPuzzle is exempted because its first
-release predates the archetype system. When the next major version
-of WaterSortPuzzle ships, it should adopt:
+## Feel
 
-- Layout: B (map/journey) or D (vertical card feed)
-- Mascot: M1 — small water-drop face on flasks ("Drippy")
-- Voice: V5 (calm/zen) — "Take your time. Pour. Settle."
-- Texture: T2 (soft glassmorphism on flasks)
+Water Sort Puzzle should feel like a deep ocean breath. The board sits
+in a softly lit twilight gradient (deep navy → teal → near-black), with
+flasks rendered as glassy translucent vessels that catch a soft inner
+highlight rather than a hard border. Modals float above the board with
+the same frosted-glass treatment.
 
-Until that update, this file documents the current as-shipped state.
+The voice never barks at the player. Buttons say "Pour", "Settle",
+"Continue · Level 23" — not "TAP TO PLAY!" or "Level Complete!!!".
+Tutorial text speaks in short, whole sentences ("Take your time. Pour
+one color into another. Find peace."), no exclamation points, no
+all-caps celebrations.
 
-## Phase 8 self-check (next major version)
+## Why these archetypes
 
-Re-run when shipping v2.0:
+Voice V5 (calm/zen) and Texture T2 (soft glassmorphism) move the app
+two clear steps off the A+M0+V1+T1 template signature, per
+APP_ARCHETYPES.md §6. Layout A is retained because the genre (sort
+puzzle) is best served by a clear hero Play button; mascot M0 is
+retained because adding a mascot to a meditative game would undercut
+the calm voice. Two of four varied is the minimum to clear the
+"templated AI output" classifier.
 
-1. Side-by-side test (vs Nonogram, etc.)
-2. Voice-specificity test
-3. Identity-element test
-4. Anonymous-screenshot test
+## Phase 8 self-check
+
+1. **Side-by-side test** (vs Nonogram, PipeConnect): WaterSortPuzzle's
+   glassy ocean palette should read as visibly different — colder,
+   more translucent, more spacious — than the others.
+2. **Voice-specificity test**: Menu copy reflects V5 (calm/zen), e.g.
+   the Play button reads "Continue · Level N" when there's saved
+   progress — not "RESUME!" or "TAP TO PLAY".
+3. **Identity-element test**: The translucent flask shape with
+   visible liquid layers is the signature visual.
+4. **Anonymous-screenshot test**: Without the title, the layered
+   colored liquid in glass tubes is unmistakably this app.

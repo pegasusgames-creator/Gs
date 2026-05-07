@@ -1,6 +1,6 @@
 # Translations & Localization
 
-Pegasus Games ships in **11 locales**: English baseline plus 10 markets
+Pegasus Games ships in **13 locales**: English baseline plus 12 markets
 chosen by Play Store ROI (eCPM × audience size × market growth).
 
 This doc covers:
@@ -14,23 +14,39 @@ This doc covers:
 
 ---
 
-## 1. The 11 locales
+## 1. The 13 locales
 
 In the order they appear in metadata folders (by ISO code):
 
 | Code | Language | Region | Why |
 |---|---|---|---|
 | `en-US` | English | United States | Baseline. Hand-written, source of all translations. |
+| `ar` | Arabic | MENA region | 400M+ Arabic speakers; rapidly-growing Play Store market. RTL layout required. |
 | `de-DE` | German | Germany | High eCPM (~$2-3 ARPDAU on casual puzzles). Disciplined audience. |
 | `es-419` | Spanish | Latin America | 400M+ Play Store users. High install volume. |
 | `fr-FR` | French | France + Africa | Western Europe + Francophone Africa. |
 | `hi-IN` | Hindi | India | Fastest-growing Play Store market. Lower eCPM but huge volume. |
-| `id-ID` | Indonesian | Southeast Asia | Very high engagement on casual puzzles. |
+| `id` | Indonesian | Southeast Asia | Very high engagement on casual puzzles. Play Console tag is just `id` (no region suffix). |
 | `it-IT` | Italian | Italy | Top-15 Play Store revenue country. Reliable casual gaming. |
 | `ja-JP` | Japanese | Japan | Highest ARPU per user globally. Difficult market but rewarding. |
 | `pt-BR` | Portuguese | Brazil | Huge casual gaming market, high install velocity. |
 | `tr-TR` | Turkish | Turkey + MENA | Gateway to wider Middle East / North Africa traffic. |
-| `uk-UA` | Ukrainian | Ukraine | Pegasus Games is a Ukrainian publisher. Home market is non-negotiable. |
+| `uk` | Ukrainian | Ukraine | Pegasus Games is a Ukrainian publisher. Home market is non-negotiable. Play Console tag is `uk` (no region suffix). |
+| `zh-CN` | Chinese | Mainland China + Singapore | Largest Play Store-adjacent market via WeChat-side stores; required for App Store submissions. Simplified script. |
+
+### Play Console locale tag quirks
+
+Most locales use the BCP-47 region form Play Console expects (`de-DE`,
+`hi-IN`, `pt-BR`, `es-419`). Two locales use the bare language code
+because Play Console rejects the regioned form:
+
+- Indonesian: folder is `id` (NOT `id-ID`).
+- Ukrainian: folder is `uk` (NOT `uk-UA`).
+
+Arabic (`ar`) and Chinese (`zh-CN`) follow Play Console conventions
+directly.
+
+`STORE_PASTE.md` is generated with the right Play tag automatically.
 
 ### About Russian
 
@@ -38,7 +54,7 @@ We deliberately exclude `ru-RU` from the locale list. Pegasus Games is a
 Ukrainian publisher; supporting Russian as a Play Store locale during the
 ongoing war is a values choice. Some Russian-speakers in Ukraine,
 Belarus, Kazakhstan, and EU diaspora communities install apps from
-non-Russian locales (most often `en-US` or `uk-UA`), so the audience loss
+non-Russian locales (most often `en-US` or `uk`), so the audience loss
 is real but limited. Italian fills the slot vacated by Russian's
 exclusion.
 
@@ -54,7 +70,7 @@ Two scopes, separate decisions per app:
 
 ### Scope A — Store listing translations (REQUIRED for every app)
 
-Every app ships with translations for these fields in all 11 locales:
+Every app ships with translations for these fields in all 13 locales:
 
 - `short_description.txt` (≤80 chars in target language)
 - `subtitle.txt` (≤30 chars in target language)
@@ -84,6 +100,7 @@ JSON file:
 ```
 <App>/android/app/src/main/assets/i18n/
   en.json
+  ar.json
   de.json
   es.json
   fr.json
@@ -94,6 +111,7 @@ JSON file:
   pt.json
   tr.json
   uk.json
+  zh.json
 ```
 
 Each JSON is a flat key-value map:
@@ -191,7 +209,9 @@ Compact languages (rarely overflow):
 - ja-JP (kanji density)
 - hi-IN (Devanagari density)
 - en-US (baseline)
-- id-ID (similar to English length)
+- id (similar to English length)
+- ar (Arabic — sometimes shorter, sometimes longer; varies by phrase)
+- zh-CN (very compact, like Japanese)
 
 ---
 
@@ -229,7 +249,7 @@ localization requirements. Per Play Store policy:
    `full_description` (sparingly). Kids apps cannot — Google's content
    reviewers flag emoji use as "potentially advertising-like" for Kids.
 
-6. **Voice in Kids translations:** all 11 translations of a Kids app
+6. **Voice in Kids translations:** all 13 translations of a Kids app
    should use the V7 (Educational warm) voice from APP_ARCHETYPES §3.
    Not V4 (snarky) or V6 (enthusiastic arcade). The voice MUST be
    consistent across locales for Kids apps.
@@ -289,8 +309,8 @@ and terminology consistent across the portfolio.
 ## 7. When to translate vs when to skip
 
 Always translate:
-- All 11 store-listing locales for every app from day 1
-- All 11 in-game locales for new apps from app #3 onward (per Scope B)
+- All 13 store-listing locales for every app from day 1
+- All 13 in-game locales for new apps from app #3 onward (per Scope B)
 
 Sometimes skip in-game translation:
 - Pure tools (calculator, timer, ruler) where UI is 5 buttons total —
@@ -301,7 +321,7 @@ Sometimes skip in-game translation:
   store listing always gets translated
 
 Never skip:
-- Store listing translation in any of the 11 locales for any app you
+- Store listing translation in any of the 13 locales for any app you
   publish
 - Store listing for Kids apps in any of the 4 minimum Kids locales
 - In-game translation for any app entering the Kids program
@@ -310,7 +330,7 @@ Never skip:
 
 ## 8. Translation cost
 
-For reference, doing all 11 locales for an app's store listing using
+For reference, doing all 13 locales for an app's store listing using
 machine translation:
 - Time: ~3 minutes via `gen_translations.py` API call
 - API cost: ~$0.05-0.20 per app (negligible)
@@ -319,7 +339,7 @@ For 100 apps: ~$5-20 API spend, ~5 hours total wall-clock.
 
 Hand-translation cost (Fiverr, professional native review):
 - Per locale: $15-50 per app for short copy
-- Per app for all 10 non-English locales: $150-500
+- Per app for all 12 non-English locales: $180-600
 - For 100 apps: $15k-50k
 
 The phased approach: machine-translate everything, then commission
@@ -332,9 +352,11 @@ the same week.
 ## 9. How translations integrate with the workflow
 
 - **`gen_translations.py <AppName>`** — runs at SHIP_GAME.md Phase 4.5
-  (after Phase 4 hand-writes English listing). Generates all 11
-  locale folders for store listing.
-- **`pre_publish_check.py`** — verifies every shipped app has all 11
+  (after Phase 4 hand-writes English listing). Generates all 13
+  locale folders for store listing. If `ANTHROPIC_API_KEY` is unset,
+  Claude Code falls back to hand-translating directly (multilingual
+  capability is in scope for short marketing copy).
+- **`pre_publish_check.py`** — verifies every shipped app has all 13
   locales populated for store listing. Warns (not blocks) if any are
   missing during the migration period; blocks for new apps from
   archetype-system rollout onward.
@@ -345,5 +367,5 @@ the same week.
 In-game translation:
 - The `i18n/` folder structure under `assets/` is part of
   SHIP_GAME.md Phase 1 (game.html scaffolding).
-- `pre_publish_check.py` verifies all 11 `i18n/*.json` files exist
+- `pre_publish_check.py` verifies all 13 `i18n/*.json` files exist
   for new apps and have key parity with the English file.

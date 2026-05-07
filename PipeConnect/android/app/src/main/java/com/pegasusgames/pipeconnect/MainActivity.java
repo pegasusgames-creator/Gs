@@ -73,9 +73,9 @@ public class MainActivity extends Activity {
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     // Get from: apps.admob.com → Your App → Ad Units
-    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-2759523698880843/3613135158";
-    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-2759523698880843/3907113770";
-    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-2759523698880843/2144974966";
+    private static final String ADMOB_BANNER_UNIT_ID       = "__ADMOB_BANNER_UNIT_PLACEHOLDER__";
+    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "__ADMOB_INTERSTITIAL_UNIT_PLACEHOLDER__";
+    private static final String ADMOB_REWARDED_UNIT_ID     = "__ADMOB_REWARDED_UNIT_PLACEHOLDER__";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(

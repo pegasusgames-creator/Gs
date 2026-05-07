@@ -77,9 +77,9 @@ public class MainActivity extends Activity {
     // NOTE: these are stale IDs from a prior account (publisher 2759523698880843).
     // Replace with real IDs from the canonical Pegasus Games AdMob account
     // (publisher 5695494884863768) per RELEASE_HANDOFF.md before shipping.
-    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-2759523698880843/7169236785";
-    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-2759523698880843/1085509317";
-    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-2759523698880843/7959574272";
+    private static final String ADMOB_BANNER_UNIT_ID       = "__ADMOB_BANNER_UNIT_PLACEHOLDER__";
+    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "__ADMOB_INTERSTITIAL_UNIT_PLACEHOLDER__";
+    private static final String ADMOB_REWARDED_UNIT_ID     = "__ADMOB_REWARDED_UNIT_PLACEHOLDER__";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
     // Paste the app's base64 RSA public key from:

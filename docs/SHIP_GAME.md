@@ -183,6 +183,39 @@ If 3 or more apply, redesign before writing code. This is the most
 important step in this whole document. Apps that hit 3+ anti-patterns
 read as templated AI output to actual users.
 
+### 1.4.1 Consult the designer when stuck
+
+If at any point during Phase 1 you (Claude Code) are uncertain about a
+design decision — what mascot the app should have, which archetype
+combination fits the mechanic, whether the planned layout will feel
+templated — call `consult_designer.py` to get a second opinion from a
+fresh Claude API session acting as the design reviewer:
+
+```
+python3 scripts/consult_designer.py archetype-pick --app <AppName> \\
+    --mechanic "describe the gameplay mechanic in one sentence"
+
+python3 scripts/consult_designer.py mascot --app <AppName> \\
+    --mechanic "describe the gameplay mechanic"
+
+python3 scripts/consult_designer.py custom --app <AppName> \\
+    --question "Should the Stats screen for a Sudoku-style game use a
+    grid layout or a list layout?"
+```
+
+Each call costs ~$0.05-0.30 in API spend. The designer has access to
+the app's archetypes (from app_themes.py) and identity.md. For
+mascot calls specifically, it can produce ready-to-paste SVG, an
+image-gen prompt, or an OpenGameArt link depending on what's best.
+
+Use this instead of:
+- Defaulting to a safe template choice when unsure
+- Shipping a mediocre design and listing it as a "known gap"
+- Asking the user to manually relay design questions to a chat session
+
+The `consult_designer.py` script handles the relay automatically. The
+user does NOT need to be in the loop for design questions.
+
 ### 1.5 Write `<AppName>/android/app/src/main/assets/game.html`
 
 Following the playbook. Default required features for any GAME (not
@@ -286,16 +319,39 @@ solution. Test plan:
    meta-data — disable it (wrap in `if (false)` in MainActivity) until
    AppLovin is approved.
 
-5. **Generate `<AppName>/keystore.properties`:**
+5. **Generate a dedicated keystore for this app** (per-app, not shared —
+   per CLAUDE.md "Keystore management"):
    ```
-   storeFile=../keystores/pegasus-upload.keystore
-   storePassword=<from environment or vault>
-   keyAlias=pegasus-upload
-   keyPassword=<from environment or vault>
+   python3 scripts/migrate_to_per_app_keystores.py --app <AppName>
    ```
-   Use the SAME upload keystore as Ball Sort and WaterSort (the one with
-   SHA1 starting `EC:24:33:14:46`). All Pegasus Games apps share this
-   upload key — that's the standard publisher pattern.
+   This creates `<AppName>/android/keystore.jks` with random
+   passwords, writes `<AppName>/android/keystore.properties` (gitignored)
+   referencing it, and records the SHA1 fingerprint in
+   `metadata/app_info.json:upload_key_sha1`.
+
+   **DO NOT copy keystore.properties from another app.** This was the
+   May 2026 Nonogram failure mode: Nonogram's first build was signed
+   with WaterSort's keystore, permanently locking Nonogram's Play
+   Console listing to WaterSort's upload key. The fix required a
+   1-3 business day upload-key reset request from Google. Don't repeat
+   it. Each app gets its own dedicated keystore generated fresh; never
+   reuse another app's signing material.
+
+   **After running the script: BACK UP the new keystore.jks immediately**
+   (within 24 hours, before the first Play Console upload):
+   - Google Drive (encrypted folder, pegasusgames@atomicmail.io account)
+   - USB stick (physical, kept off the development machine)
+   - Password manager entry with the SHA1 fingerprint and password
+     copied from keystore.properties
+
+   Until backed up, the keystore exists only on this machine. If the
+   machine fails, the app is permanently locked from updates (or
+   requires a Play Console upload-key reset, which can take 1-3 days
+   and may be denied).
+
+   The 5 already-shipped/keyed apps (WaterSort, Nonogram, Puzzle2048,
+   PipeConnect, UnblockPuzzle) keep their existing per-app keystores —
+   `migrate_to_per_app_keystores.py` exempts them from migration.
 
 6. **Run `init_app_metadata.py <AppName>`** to scaffold the metadata/
    and store/ folders if not already present.
@@ -326,213 +382,7 @@ python3 wrap_tablet_screenshots.py <AppName>
 That's it. No script cloning, no inline editing, no manual color
 adjustment. The theme registry handles per-app variation.
 
-### Step 3.1 — Capture raw device screenshots first
-
-Before wrapping, raw screenshots must exist at:
-
-```
-<AppName>/store/screenshots/phone/raw/01.png  (deep gameplay, ~60-80% board fill)
-<AppName>/store/screenshots/phone/raw/02.png  (early-mid gameplay, simpler)
-<AppName>/store/screenshots/phone/raw/03.png  (level complete celebration)
-<AppName>/store/screenshots/phone/raw/04.png  (daily missions / similar)
-<AppName>/store/screenshots/phone/raw/05.png  (stats / progression)
-<AppName>/store/screenshots/phone/raw/06.png  (levels list)
-<AppName>/store/screenshots/phone/raw/07.png  (menu)
-```
-
-#### Step 3.1.1 — Pre-screenshot state seeding (MANDATORY)
-
-Before capturing, the game's localStorage MUST be pre-seeded with realistic
-mid-game state. Otherwise the Stats / Missions / Levels screenshots show
-"0/0/0" everywhere and look like a broken fresh install.
-
-Create `<AppName>/test/seed_screenshot_state.js` containing:
-
-```javascript
-// Seeds localStorage with mid-game state for screenshot capture.
-// Run this in headless Chromium BEFORE navigating to each modal/screen.
-window.localStorage.setItem('coins', '247');
-window.localStorage.setItem('currentLevel', '23');
-window.localStorage.setItem('streak', '7');
-window.localStorage.setItem('starsEarned', '34');
-window.localStorage.setItem('totalSolved', '17');
-// Mission progress (use the mission key names from your game.html):
-window.localStorage.setItem('mission_solver_progress', '3');     // 3/5
-window.localStorage.setItem('mission_dedicated_progress', '12'); // 12/20
-window.localStorage.setItem('mission_streak_progress', '1');     // 1/3
-window.localStorage.setItem('mission_perfectionist_done', 'true');
-// Recently-played levels (for level select screen):
-window.localStorage.setItem('completedLevels', JSON.stringify([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]));
-window.localStorage.setItem('threeStarLevels', JSON.stringify([1,2,3,5,6,8,11,15]));
-```
-
-Adjust the keys to match what the actual `game.html` reads. Run this
-script before each headless capture so the captured screen has real
-data populated. If the game's localStorage schema doesn't match these
-keys, update the seed script — the goal is "every visible number reflects
-mid-game state, not zeros."
-
-#### Step 3.1.2 — Pick the right level/state for each screenshot
-
-For puzzle games where board complexity grows with level number:
-
-- `01.png` (deep gameplay): pick a level number that produces the
-  LARGEST board the game generates AND in mid-progression state (not
-  blank, not nearly-solved). For Nonogram with grids up to N×N, capture
-  level 30+ in the middle of solving. For Sudoku, capture a near-
-  complete grid. For sort puzzles, capture with several tubes nearly
-  done.
-- `02.png` (early-mid): a level around 8-15 in early-progression state.
-  Demonstrates the same mechanic at lower complexity.
-
-For all screenshots, the playable area must occupy at least 50% of
-the captured 1080×2400 canvas. If your in-app layout doesn't scale to
-fill tall phones, FIX THAT FIRST per QUALITY_PLAYBOOK.md §1.5 — don't
-ship screenshots with 60% empty space.
-
-#### Step 3.1.3 — Modal screenshots without the darkened scrim
-
-For screenshots showing modals (Daily Missions, Stats, Level Complete,
-Shop), don't capture the modal-over-darkened-menu state. Reasons in
-QUALITY_PLAYBOOK §7.1.5.
-
-The game.html should support a query parameter like
-`?screenshot=modal_missions` that, when set, renders the modal on a
-clean background using the app's theme color directly — no scrim, no
-faded menu visible behind. Each captured modal needs this clean-bg
-render.
-
-#### Step 3.1.4 — Mission/list screen population check
-
-Per QUALITY_PLAYBOOK.md §3.6, modals showing lists of missions/items
-must demonstrate visual hierarchy: featured item, active items with
-non-zero progress, completed items with checkmarks, locked items
-grayed out.
-
-Before capturing the missions screenshot, verify the captured screen
-shows:
-- At least one featured/highlighted item visually distinct from others
-- At least 2 missions with non-zero progress (1/5, 12/20, etc.)
-- At least 1 completed mission visually different (checkmark, dimmed)
-- NOT 8 identical cards stacked with all-zero progress
-
-If the captured screen looks like 8 identical beige cards with 0/N
-everywhere, the seed script didn't run or the in-app layout doesn't
-implement hierarchy. Fix before continuing — this is the #1 "looks
-AI-ish" signal.
-
-Capture method (Pegasus Games uses Android emulator via adb — produces
-real Android WebView output with proper font rendering and mobile chrome,
-not desktop Chromium approximations):
-
-```
-python3 scripts/capture_screenshots.py <AppName>
-```
-
-What the script does:
-1. Boots the user's Android emulator if not already running
-   (`emulator -avd <name>` against the first installed AVD)
-2. Waits for boot complete (up to 90s)
-3. Builds and installs the app's debug APK from
-   `<App>/android/app/build/outputs/apk/debug/app-debug.apk`
-   (you must build it first: `cd <App>/android && ./gradlew assembleDebug`)
-4. For each of 7 slots:
-   - Force-stops and re-launches the app (clean menu state)
-   - Sends a tap sequence via `adb shell input tap` to navigate to the
-     target screen (Play, Daily Challenge, Levels, Stats, etc.)
-   - Waits for animations to settle
-   - Captures via `adb shell screencap` and pulls the PNG
-5. Writes to `<App>/store/screenshots/phone/raw/01.png` through `07.png`
-
-### Tap coordinates
-
-Tap fractions for the default Pegasus Games menu layout (hero Play
-button at 50%/50%, Daily Challenge at 50%/62%, icon row at 50%/72%) are
-hardcoded in `DEFAULT_TAPS` at the top of `capture_screenshots.py`.
-
-For apps with non-default layouts (Layout B = map/journey, Layout F =
-direct-to-game, etc.), create a per-app override at
-`<App>/test/screenshot_taps.json` with the correct tap sequence for
-each slot. Format:
-
-```json
-{
-  "01_deep_gameplay": [
-    ["tap", 0.50, 0.50, 1500]
-  ],
-  "06_levels_grid": [
-    ["tap", 0.85, 0.10, 1000],
-    ["tap", 0.50, 0.50, 1500]
-  ]
-}
-```
-
-### Per-slot quality verification
-
-After running, OPEN each output PNG and verify per the §3.6 iterative
-checklist (mobile proportions, board fills canvas, no zeros, mid-
-progression, hierarchy in panels). If any slot captured the wrong
-screen, fix the tap fractions and re-capture just that slot:
-
-```
-python3 scripts/capture_screenshots.py <AppName> --slot 04
-```
-
-If the emulator wasn't running and you want to use one you're
-launching manually:
-
-```
-python3 scripts/capture_screenshots.py <AppName> --no-launch
-```
-
-If the script can't find an APK to install:
-```
-cd <App>/android
-./gradlew assembleDebug
-cd ../..
-python3 scripts/capture_screenshots.py <AppName>
-```
-
-### Why emulator, not headless Chromium — and why this is non-negotiable
-
-**Store screenshots are emulator-only. Headless Chromium / Puppeteer captures
-are forbidden.** This is a blocking policy, not a preference.
-
-Headless desktop Chromium can render `game.html` but produces output that
-looks like "browser tab," not "phone screen": different font rendering
-pipeline, no Android status bar / system insets, no real WebView init,
-desktop-style flexbox quirks (canvas-wrap collapsing, footers floating
-off-place). The output reads as low-effort indie work on the Play Store
-grid — exactly the failure mode the wrap script is supposed to prevent.
-
-The emulator runs the actual APK through real Android initialization and
-produces the correct mobile look. It also gives the app a chance to
-populate localStorage organically — if the emulator has been used for
-testing before, the app already has level progress, coin balances, and
-other realistic mid-game state baked in.
-
-**Rules:**
-
-- The canonical capture command is `python3 scripts/capture_screenshots.py
-  <App>` (boots an AVD if none is running, installs the debug APK, sends
-  adb tap sequences, pulls screenshots via `screencap`).
-- **Never write or re-run a Puppeteer / headless Chromium fallback** —
-  even at a 1080×2400 viewport with `evaluateOnNewDocument` seeding, the
-  output reads as web. Existing Puppeteer scripts in `scripts/` (e.g.
-  `capture_nonogram.js`) are deprecated; do not use, do not extend.
-- **If no emulator / AVD is available in the environment, STOP and surface
-  to the user as a blocker.** Do not fall back to headless Chromium "to
-  keep the ship moving." Fresh raw screenshots are a hard prerequisite
-  for shipping per Phase 5; if they can't be captured legitimately,
-  shipping pauses until the emulator is available.
-- A user override ("just use Puppeteer this once") does NOT lift the
-  rule. Refuse and resurface the emulator setup. The classifier scoring
-  applies to the published asset; it doesn't care whose decision skipped
-  the emulator.
-
-Each raw screenshot must show DIFFERENT in-game content from the others.
-
-### Step 3.2 — Generate the icon
+### Step 3.1 — Generate the icon
 
 ```
 python3 gen_icon.py <AppName>
@@ -553,7 +403,7 @@ Output:
 <AppName>/store/icon_1024_appstore.png
 ```
 
-### Step 3.3 — Generate the feature graphic
+### Step 3.2 — Generate the feature graphic
 
 ```
 python3 gen_feature.py <AppName>
@@ -567,24 +417,129 @@ Output:
 <AppName>/store/feature_graphic_1024x500.png
 ```
 
-### Step 3.4 — Wrap phone screenshots (MANDATORY)
+### Step 3.3 — Capture raw screenshots from emulator
+
+Run `python3 scripts/capture_screenshots.py <AppName>`. The script
+boots the emulator, installs the debug APK, force-stops/relaunches the
+app for each slot, executes a tap sequence, and saves each capture to
+`<App>/store/screenshots/phone/raw/0N.png`.
+
+**Pre-capture seed file required.** Create
+`<App>/test/seed_screenshot_state.js` with the EXACT localStorage keys
+this app's `game.html` reads. Generic templates with keys like 'coins'
+or 'streak' will silently fail if the app uses different keys. To find
+the real keys:
+
+    grep -n "localStorage.setItem" <App>/android/app/src/main/assets/game.html
+
+Then write the seed with realistic mid-game values. See QUALITY_PLAYBOOK
+§7.1.5.5 for required state.
+
+**Per-app tap overrides.** The default `DEFAULT_TAPS` in the script
+target the standard Pegasus menu layout. Apps with different layouts
+(custom Play button position, no Daily/Best buttons in the same place,
+etc.) need overrides at `<App>/test/screenshot_taps.json`:
+
+```json
+{
+  "01_deep_gameplay": [
+    {"x": 0.50, "y": 0.55, "delay": 0.8},
+    {"x": 0.30, "y": 0.40, "delay": 1.2}
+  ],
+  "03_level_complete": [
+    {"x": 0.50, "y": 0.55, "delay": 0.8}
+  ]
+}
+```
+
+Coordinates are FRACTIONS of screen w/h, not absolute pixels.
+
+**★ NEW post-capture verification (May 2026 Puzzle2048 fix).** The
+script now hashes each capture as it produces it. If a new capture
+matches a prior slot's hash within 4 hamming distance, the script
+**fails immediately** with a message identifying which slots collided
+and why. This catches the case where adb taps miss target buttons and
+all 7 slots silently capture the menu/initial state.
+
+When verification fails:
+1. Open the captured PNGs in `raw/` to see what actually got captured
+2. Identify which intended screen each slot SHOULD have shown
+3. Edit `<App>/test/screenshot_taps.json` with the correct coordinates
+4. Re-run the capture
+5. Iterate until all 7 slots produce visually distinct content
+
+This is iterative for new apps — first run will likely fail
+verification on at least one slot. That's expected and correct
+behavior. Far better than the old silent-failure mode where the
+pipeline shipped 7 wrapped screenshots over 2 distinct images.
+
+**Why emulator, not headless Chromium.** Headless desktop Chromium can
+render game.html but produces output that looks like "browser tab,"
+not "phone screen": different font rendering pipeline, no Android
+status bar / system insets, no real WebView init. The emulator runs
+the actual APK through real Android initialization and produces the
+correct mobile look.
+
+### Step 3.4 — Visual verification of raw captures
+
+BEFORE wrapping, open all 7 raw PNGs and verify against
+`metadata/screenshot_headlines.json`:
+
+| Slot | Headline says | Image must show |
+|---|---|---|
+| 01 | (deep gameplay claim) | mid-progression board, 60-80% filled |
+| 02 | (mid-action claim) | gameplay mid-move, NOT menu |
+| 03 | (level-complete / score claim) | celebration UI with stars/coins |
+| 04 | (variety / Daily claim) | the screen the headline names |
+| 05 | (event / mission claim) | the screen the headline names |
+| 06 | (booster / undo claim) | the relevant button or modal visible |
+| 07 | (brand / scope claim) | typically the menu, OK |
+
+If any slot's image doesn't match its headline, EITHER re-capture with
+the right screen content OR change the headline to match what was
+actually captured. Per QUALITY_PLAYBOOK §7.1.6 this is mandatory and
+non-negotiable — the May 2026 Puzzle2048 audit found 5 of 7 slots
+with mismatches; fixing this before upload prevents Misleading
+Behavior policy strikes.
+
+Per-screenshot checklist — for each PNG verify ALL items:
+
+A. **Mobile-device proportions.** UI elements at the size they would
+   appear on a real phone, not tiny against tall canvas.
+B. **Playable area fills the canvas.** ≥50% of vertical space.
+C. **No "fresh install" zeros.** Stats screen shows realistic numbers
+   (247 coins, level 23, 7-day streak), NOT all zeros.
+D. **No darkened-modal-over-blurred-menu.** Modal screens show the
+   modal on a clean theme-colored background.
+E. **Mid-progression content, not tutorial-tier.** Deep-gameplay
+   slot shows complex board state.
+F. **Mission/list panels show hierarchy** per QUALITY_PLAYBOOK §3.6:
+   featured item visible, varied progress bars, completed items dimmed.
+
+Iterate raw → fix underlying cause → re-capture until each slot
+passes.
+
+### Step 3.5 — Wrap (only after step 3.4 passes)
 
 ```
-python3 wrap_screenshots.py <AppName>
+python3 scripts/wrap_screenshots.py <AppName>
 ```
 
 Behavior: reads each raw screenshot from
 `<AppName>/store/screenshots/phone/raw/`, wraps each in the per-app
 theme's marketing frame (gradient bg + headline + subtitle + framed
 device shot + footer), writes the final 1080×2400 versions to
-`<AppName>/store/screenshots/phone/01.png` through `07.png` (replacing
-any earlier non-wrapped versions).
+`<AppName>/store/screenshots/phone/01.png` through `07.png`.
 
-Headlines come from a per-app `SCREENSHOTS_HEADLINES` registry (in
-`app_themes.py` or a separate `app_listing_copy.py`). If no headlines
-are registered, the script refuses to run and asks Claude Code to
-write 7 distinct headlines for the app (5 words max each, no banned
-phrases).
+Headlines come from a per-app `metadata/screenshot_headlines.json`
+file. If no headlines are registered, the script refuses to run and
+asks Claude Code to write 7 distinct headlines for the app (5 words
+max each, no banned phrases).
+
+The wrapper now enforces the 4% headline-to-subtitle gap (was 2%, too
+tight for heavy display fonts per Puzzle2048 audit). If subtitles
+overflow the canvas width, wrap to 2 lines with shrink-to-fit
+fallback per the existing logic.
 
 **Verify after running:**
 - The wrapped `01.png` shows a colored background gradient (NOT just
@@ -598,102 +553,66 @@ phrases).
 If the output looks like the raw device screenshot with no wrapping,
 the script silently failed — investigate immediately, don't ship.
 
-### Step 3.5 — Wrap tablet screenshots
+### Step 3.6 — Tablet captures and wraps (MANDATORY, all apps)
 
-```
-python3 wrap_tablet_screenshots.py <AppName>
-```
+Every app ships with phone, 7" tablet, AND 10" tablet screenshots
+per QUALITY_PLAYBOOK §7.3. No skipping. Steps 3.3-3.5 above run for
+phone; this step repeats them for both tablet sizes.
 
-Same wrapping logic at 1200×1920 (7") and 1800×2560 (10"). Outputs to
-`<AppName>/store/screenshots/tablet_7/` and `tablet_10/`.
+For each tablet target:
 
-Default 2 screenshots per tablet size. If Play Console rejects (Google
-docs say min 4), open the script, set `MIN_SCREENSHOTS = 4`, re-run.
+1. Boot the tablet AVD if not already running:
+   ```
+   emulator -avd pegasus_tablet_7    # or pegasus_tablet_10
+   ```
+   Wait for full boot (animation finishes, home screen settled).
 
-### Step 3.6 — Visual sanity check (ITERATIVE LOOP, MANDATORY)
+2. Capture with the target flag:
+   ```
+   python3 scripts/capture_screenshots.py <AppName> --target tablet_7
+   python3 scripts/capture_screenshots.py <AppName> --target tablet_10
+   ```
+   The script writes to `<App>/store/screenshots/tablet_7/raw/0N.png`
+   and `<App>/store/screenshots/tablet_10/raw/0N.png` respectively.
+   Tap fractions are reused from `<App>/test/screenshot_taps.json`,
+   but if tablet UI shifts buttons (some apps have side panels at
+   tablet width), add tablet-specific overrides under
+   `tablet_7_*` / `tablet_10_*` keys in that file.
 
-This is not a one-pass step. After running the wrap scripts, OPEN each
-generated screenshot using the `view` tool and check it against this
-specific checklist. If anything fails, fix the underlying cause and
-regenerate. Repeat until all 7 phone screenshots pass.
+3. Visual verification (per Step 3.4) — open the tablet raws, confirm
+   each shows the in-app content the headline claims. Tablet captures
+   must look DIFFERENT from phone captures (different aspect, different
+   board sizing, different HUD positions) — if they look like
+   stretched phone screens, the tablet AVD config is wrong or the app's
+   in-app layout doesn't adapt to wider screens. Fix the in-app layout
+   first, recapture.
 
-**Per-screenshot checklist** — open each, check ALL items:
+4. Wrap:
+   ```
+   python3 scripts/wrap_tablet_screenshots.py <AppName>
+   ```
+   Reads from both `tablet_7/raw/` and `tablet_10/raw/`, writes wrapped
+   PNGs to `tablet_7/0N.png` and `tablet_10/0N.png`.
 
-A. **Mobile-device proportions.** UI elements (header text, buttons,
-   icons) appear at the size they would on a real phone. If the header
-   text looks tiny, the in-app layout isn't scaling — fix it before
-   continuing (per QUALITY_PLAYBOOK §1.5 tall phone support).
+**`wrap_tablet_screenshots.py` rejects phone-resolution raws.** If
+the wrap script errors with "raw screenshot is only 1080px wide, too
+narrow for tablet_7 target", the tablet capture step didn't actually
+run on a tablet AVD — phone raws got copied or rescaled into the
+tablet folder. Don't work around with `--force`; fix by re-capturing
+from a real tablet emulator. The April 2026 Puzzle2048 ship had this
+defect and it's a tell that the build is unfinished.
 
-B. **Playable area fills the canvas.** The board / game elements
-   occupy at least 50% of the captured 1080×2400 vertical space. If
-   the playable area is small and there's >40% empty background,
-   FIX THE IN-APP LAYOUT first. Don't try to fix it with screenshot
-   crops — the underlying app needs to scale.
+5. Run uniqueness check, which now covers all three sets:
+   ```
+   python3 scripts/pre_publish_check.py <AppName> --check screenshot_uniqueness
+   ```
+   Blocks if any tablet raw matches a phone raw, or if tablet raws are
+   below required resolution.
 
-C. **No "fresh install" zeros.** Stats screenshot shows realistic
-   numbers (247 coins, level 23, 7-day streak), NOT all zeros. If
-   zeros, the localStorage seed (Phase 3.1.1) didn't run. Fix and
-   recapture.
+**One-time setup if tablet AVDs aren't installed:** see
+QUALITY_PLAYBOOK §7.3 for the avdmanager commands. Total cost ~2 GB
+disk per AVD, ~5 min setup.
 
-D. **No darkened-modal-over-blurred-menu.** Modal screenshots show
-   the modal on a clean theme-colored background. If you see ghost
-   menu buttons faded behind the modal, the screenshot mode wasn't
-   enabled. Fix and recapture.
-
-E. **Mid-progression content, not tutorial-tier.** "Deep gameplay"
-   screenshot shows complex board state (lots of pieces, advanced
-   level), not Level 1 with a 5×5 grid. Recapture from a higher level.
-
-F. **Marketing wrap visible.** Around the device-area screenshot:
-   theme-colored gradient background, headline at top in accent color,
-   subtitle below, app-name footer at bottom. If the screenshot looks
-   like raw device output with no wrapping, the wrap script silently
-   failed — debug.
-
-G. **Mission/list panels show hierarchy.** Per QUALITY_PLAYBOOK §3.6:
-   featured item visible, varied progress bars (not all 0/N), at least
-   one completed item dimmed. If 8 identical cards stacked, fix the
-   in-app layout AND seed state.
-
-**Iterative process:**
-
-```
-for each screenshot 01-07:
-    view <AppName>/store/screenshots/phone/{NN}.png
-    check items A-G
-    if any fail:
-        fix underlying cause (in-app layout, seed script, query param, etc.)
-        re-capture raw/{NN}.png
-        re-run wrap_screenshots.py <AppName>
-        view again
-    else:
-        mark passed
-```
-
-Do NOT proceed to Phase 4 until all 7 screenshots pass all 7 checks.
-
-**Same brand language test (cross-app):**
-
-After per-screenshot pass, look at `<AppName>` screenshots side-by-side
-with WaterSort screenshots. They should:
-- Use clearly different theme colors (not both teal-ish)
-- Have visibly different in-game content (not both showing colored
-  vertical bars)
-- Use the same wrapping LAYOUT (same headline position, same footer
-  style) — that's intentional brand consistency
-
-If the three apps could be confused for each other at a thumbnail
-size, the theme registry isn't producing enough variety. Surface this.
-
----
-
-5. **Generate tablet screenshots.** Clone
-   `wrap_tablet_screenshots.py` similarly. Run. Outputs go to
-   `store/screenshots/tablet_7/` and `store/screenshots/tablet_10/`.
-   Default 2 per size; uncomment EXTRA_SCREENSHOTS if Play Console
-   rejects (Google requires min 4 — mention this when handing off).
-
----
 
 ## Phase 4 — Listing copy & metadata (fully automated)
 
@@ -765,9 +684,11 @@ mechanic, not a template.
 
 ## Phase 4.5 — Translations (REQUIRED for every app)
 
-Every app ships with all 11 locales for store listing. Per
-`TRANSLATIONS.md`. The 11 locales are: en-US, de-DE, es-419, fr-FR,
-hi-IN, id-ID, it-IT, ja-JP, pt-BR, tr-TR, uk-UA. Russian is excluded.
+Every app ships with all 13 locales for store listing. Per
+`TRANSLATIONS.md`. The 13 locales are: en-US, ar, de-DE, es-419, fr-FR,
+hi-IN, id, it-IT, ja-JP, pt-BR, tr-TR, uk, zh-CN. Russian is excluded.
+Note: Indonesian uses `id` (not `id-ID`) and Ukrainian uses `uk` (not
+`uk-UA`) — those are the codes Play Console accepts.
 
 ### 4.5.1 — Generate store listing translations
 
@@ -779,7 +700,7 @@ python3 scripts/gen_translations.py <AppName>
 
 Behavior:
 - Reads `<App>/metadata/en-US/` source files
-- Generates `<App>/metadata/<locale>/` for each of the 10 non-English
+- Generates `<App>/metadata/<locale>/` for each of the 12 non-English
   locales using LLM translation with the app's chosen voice from
   `app_themes.py`
 - Validates each translation against Play Store character limits
@@ -788,7 +709,11 @@ Behavior:
 
 If the script reports any failures, hand-edit the `.rejected` files
 down to character limit, then rename to remove `.rejected` suffix.
-Don't ship until all 10 non-English locales have valid files.
+Don't ship until all 12 non-English locales have valid files.
+
+If `ANTHROPIC_API_KEY` isn't set in the shell, fall back to writing
+the translations directly (Claude Code is multilingual — short
+marketing copy in any of the 12 target languages is in scope).
 
 ### 4.5.2 — In-game string translations (REQUIRED for new apps)
 
@@ -840,14 +765,14 @@ i18n folder vs a metadata folder).
 If the app has `kids_program: true` in `metadata/app_info.json`,
 `gen_translations.py` automatically uses Kids mode:
 - Generates only the 4 minimum locales (en-US, es-419, pt-BR, fr-FR)
-  rather than all 11
+  rather than all 13
 - Adds a `# KIDS APP — REVIEW BY NATIVE SPEAKER BEFORE SHIPPING` header
   to each translated file
 - Forces voice = V7 (educational warm) regardless of app's normal voice
 - `pre_publish_check.py` blocks the build until those headers are
   removed (signaling native review happened)
 
-For non-Kids apps, all 11 locales are generated and shipped without
+For non-Kids apps, all 13 locales are generated and shipped without
 human review (machine translation is fine for short marketing copy in
 adult apps).
 
@@ -1120,6 +1045,29 @@ app is NOT ready — return to Phase 1 and refine.
 
 If all four pass, proceed to 8.2.
 
+### 8.1.5 Designer review of screenshots (RECOMMENDED)
+
+Before 8.2 honesty audit, get a fresh design eye on the wrapped
+screenshots. Run:
+
+```
+python3 scripts/consult_designer.py screenshot-review --app <AppName>
+```
+
+This sends the 7 screenshots to a fresh Claude API session that
+reviews each against the §3.6 quality checklist (mobile proportions,
+50% canvas fill, real numbers, mid-progression, hierarchy in panels)
+and returns per-slot pass/fail with specific fix recommendations.
+
+Cost: ~$0.20 per call. Catches issues you missed during Phase 3.6's
+own iterative loop because a fresh reviewer doesn't have the "I've
+been staring at these for 20 minutes" blindness.
+
+Treat the designer's BLOCKER findings as actual blockers — don't
+ship through them. POLISH findings can be deferred but should be
+written into `RELEASE_HANDOFF.md`'s "Deferred polish" section so the
+user knows what's pending for the next version.
+
 ### 8.2 Headline honesty audit (MANDATORY)
 
 Open `<AppName>/metadata/screenshot_headlines.json`. For EACH headline,
@@ -1209,7 +1157,21 @@ minimal version inline — Playwright + click each button by selector +
 assert no console errors. The version that ships per-app should be at
 least this minimal level, not skipped entirely.
 
-If 8.1, 8.2, and 8.3 all pass, hand the path to the user. Done.
+### 8.4 Screenshot-pipeline output verification
+
+Run the full screenshot uniqueness + content match check:
+
+    python3 scripts/pre_publish_check.py <AppName> --check screenshot_uniqueness
+
+Must pass cleanly. This catches:
+- Any two phone raws with hash distance ≤ 4 (= same screen captured twice)
+- Tablet raws at phone resolution
+- Tablet raws matching any phone raw (= phone captures placed in tablet wrap)
+
+If this fails, the issues from Phase 3 weren't actually fixed. Don't
+upload until they are.
+
+If 8.1, 8.2, 8.3, and 8.4 all pass, hand the path to the user. Done.
 
 If any fail, do NOT proceed to handoff. The app is not ready. Return
 to the appropriate Phase to fix.
@@ -1265,9 +1227,16 @@ Stop and ask the user, do NOT proceed:
    (`check_icon_perceptual_similarity` triggered). Don't auto-pick a
    different palette; surface the conflict, ask which to regenerate.
 
-5. **`keystore.properties` is missing or has placeholder values** — need
-   the real upload keystore credentials. Ask once, expect them in env
-   vars or a vault path. Never write keystore credentials into the repo.
+5. **`<App>/android/keystore.jks` is missing** — the app needs its
+   dedicated keystore generated. Run
+   `python3 scripts/migrate_to_per_app_keystores.py --app <AppName>`
+   (Phase 1 step 5). NEVER copy keystore.jks/keystore.properties from
+   another app — that was the May 2026 Nonogram failure mode and
+   required a 1-3 day Play Console reset to recover. If `keystore.jks`
+   exists but the SHA1 doesn't match
+   `metadata/app_info.json:upload_key_sha1`, surface to the user — do
+   NOT auto-overwrite, the existing keystore may be the one Play
+   Console has registered.
 
 6. **The user's intent suggests they don't actually want full release**
    — e.g., "I just want to test this build" → don't run Phase 6

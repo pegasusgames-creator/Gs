@@ -31,7 +31,7 @@
         <!-- AdMob App ID — kept for AppLovin MAX mediation adapter -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-2759523698880843~9194379298"/>
+            android:value="__ADMOB_APP_ID_PLACEHOLDER__"/>
 
         <activity
             android:name=".MainActivity"

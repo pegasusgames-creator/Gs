@@ -103,6 +103,18 @@ def app_info_template(app):
         "support_url":             "https://pegasusgames-creator.github.io/",
         "marketing_url":           "https://pegasusgames-creator.github.io/",
         "copyright":               "© 2026 Pegasus Games",
+        # Android applicationId — must match android/app/build.gradle.
+        # Play Console identifies apps by package name (Назва пакета),
+        # so it lives here as the canonical store-listing identifier.
+        "package_name":            pkg_name(app),
+        # Filled in by migrate_to_per_app_keystores.py after keystore generation.
+        # Format: SHA1 fingerprint of <App>/android/keystore.jks, hex with colons.
+        # pre_publish_check.py verifies AAB signing matches this on every build.
+        "upload_key_sha1":         "",
+        # Filled in manually after the first successful Play Console upload.
+        # ISO date string (YYYY-MM-DD). Once set, migrate_to_per_app_keystores.py
+        # refuses to regenerate the keystore (Play Console has it locked).
+        "first_upload_at":         "",
     }
 
 def privacy_template(app):

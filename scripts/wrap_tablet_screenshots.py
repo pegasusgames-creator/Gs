@@ -31,7 +31,6 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from app_themes import get_theme
 
@@ -42,14 +41,12 @@ SIZE_7  = (1200, 1920)
 SIZE_10 = (1800, 2560)
 S = 2
 
-_HERE = os.path.dirname(os.path.abspath(__file__))
+_FONTS_DIR = str(Path(__file__).resolve().parent / 'fonts')
 FONT_CANDIDATES = {
-    'heavy':  [os.path.join(_HERE, 'fonts/Poppins-Bold.ttf'),
-               os.path.join(_HERE, '..', '_screenshot_tools/fonts/Poppins-ExtraBold.ttf'),
+    'heavy':  [_FONTS_DIR + '/Poppins-Bold.ttf',
                '/usr/share/fonts/truetype/google-fonts/Poppins-Bold.ttf',
                '/Library/Fonts/Poppins-Bold.ttf', 'Poppins-Bold.ttf'],
-    'medium': [os.path.join(_HERE, 'fonts/Poppins-Medium.ttf'),
-               os.path.join(_HERE, '..', '_screenshot_tools/fonts/Poppins-Regular.ttf'),
+    'medium': [_FONTS_DIR + '/Poppins-Medium.ttf',
                '/usr/share/fonts/truetype/google-fonts/Poppins-Medium.ttf',
                '/Library/Fonts/Poppins-Medium.ttf', 'Poppins-Medium.ttf'],
 }
@@ -146,15 +143,7 @@ def draw_headline(img, line1, line2, subtitle, theme, w, h):
         size -= int(h * 0.003)
 
     line_font = pick_font('heavy', size)
-
-    sub_size = int(h * 0.022)
-    while sub_size > int(h * 0.014):
-        sf = pick_font('medium', sub_size)
-        sw = sf.getbbox(subtitle)[2] - sf.getbbox(subtitle)[0]
-        if sw <= max_w:
-            break
-        sub_size -= int(h * 0.001)
-    sub_font = pick_font('medium', sub_size)
+    sub_font  = pick_font('medium', int(h * 0.022))
     y = int(h * 0.045)
     sh = int(h * 0.004)
 
@@ -168,11 +157,53 @@ def draw_headline(img, line1, line2, subtitle, theme, w, h):
         draw.text((x, y), line, font=line_font, fill=color)
         y += lh + int(h * 0.002)
 
-    y += int(h * 0.018)
-    bb = sub_font.getbbox(subtitle)
+    # Headline-to-subtitle gap: 3.5% of canvas height (was 1.8%, too
+    # tight on 2560-tall canvases — heavy display fonts crowded the
+    # subtitle on the May 2026 Puzzle2048 audit). 3.5% gives proportional
+    # breathing room; matches QUALITY_PLAYBOOK §7.2.1 tablet spec.
+    y += int(h * 0.035)
+    # Same fix as wrap_screenshots.py — shrink-then-wrap subtitle.
+    sub_text = subtitle
+    sub_size = sub_font.size
+    min_size = max(int(sub_size * 0.70), 22)
+    while sub_size > min_size:
+        bb = sub_font.getbbox(sub_text)
+        if bb[2] - bb[0] <= max_w:
+            break
+        sub_size -= 2
+        sub_font = pick_font('medium', sub_size)
+
+    bb = sub_font.getbbox(sub_text)
+    if bb[2] - bb[0] > max_w:
+        words = sub_text.split()
+        best_split = None
+        for i in range(1, len(words)):
+            line_a = " ".join(words[:i])
+            line_b = " ".join(words[i:])
+            ba = sub_font.getbbox(line_a)
+            bb_ = sub_font.getbbox(line_b)
+            if (ba[2] - ba[0] <= max_w and
+                bb_[2] - bb_[0] <= max_w):
+                imbalance = abs(len(line_a) - len(line_b))
+                if best_split is None or imbalance < best_split[0]:
+                    best_split = (imbalance, line_a, line_b)
+        if best_split:
+            for line in (best_split[1], best_split[2]):
+                ba = sub_font.getbbox(line)
+                sw = ba[2] - ba[0]
+                sx = (w - sw) // 2 - ba[0]
+                draw.text((sx, y), line, font=sub_font,
+                          fill=theme["text_subtle"])
+                y += (ba[3] - ba[1]) + int(h * 0.004)
+            return y
+        while sub_text and sub_font.getbbox(sub_text + "…")[2] > max_w:
+            sub_text = sub_text[:-1]
+        sub_text += "…"
+
+    bb = sub_font.getbbox(sub_text)
     sw = bb[2] - bb[0]
     sx = (w - sw) // 2 - bb[0]
-    draw.text((sx, y), subtitle, font=sub_font, fill=theme["text_subtle"])
+    draw.text((sx, y), sub_text, font=sub_font, fill=theme["text_subtle"])
     return y + (bb[3] - bb[1])
 
 
@@ -189,6 +220,41 @@ def draw_footer(img, app_display_name, theme, w, h):
 
 def build_one(src, out, headline, subtitle, app_display_name, theme, target_size):
     out_w, out_h = target_size
+
+    # ★ Resolution guard (May 2026): tablet wraps must use captures from
+    # a TABLET emulator, not phone captures rescaled. The April 2026
+    # Puzzle2048 ship had this defect — phone raws inside a tablet
+    # canvas read as "phone running in tablet emulation" to reviewers.
+    # Threshold is 0.85 × target width — Nexus 10's native 1600 passes
+    # the 1800 target, but a phone's 1080 still fails cleanly.
+    raw_img = Image.open(src)
+    rw, rh = raw_img.size
+    min_width = int(out_w * 0.85)
+    if rw < min_width:
+        raise ValueError(
+            f"\n  ✗ {src}: raw screenshot is only {rw}x{rh}, too narrow "
+            f"for {out_w}x{out_h} target.\n"
+            f"    Tablet wraps must use raw captures from a TABLET emulator at\n"
+            f"    {out_w}px+ width, not phone captures rescaled.\n"
+            f"    The in-app layout on a tablet emulator is genuinely different\n"
+            f"    (different aspect ratio, possibly different HUD layout).\n\n"
+            f"    To capture tablet raws:\n"
+            f"      1. Boot a tablet AVD: emulator -avd pegasus_tablet_7\n"
+            f"         (or pegasus_tablet_10)\n"
+            f"      2. python3 scripts/capture_screenshots.py <App> --target tablet_7\n"
+            f"      3. Re-run this wrap script.\n\n"
+            f"    DO NOT rescale phone captures — tablet users see the\n"
+            f"    mismatch in 0.5 seconds and uninstall."
+        )
+    aspect = rh / rw if rw else 0
+    if aspect < 1.30:
+        raise ValueError(
+            f"{src}: aspect ratio {aspect:.2f} is too short for tablet "
+            f"portrait. Expected ~1.6 (1200x1920) or ~1.42 (1800x2560). "
+            f"This looks like a phone capture letterboxed into a tablet "
+            f"frame. Re-capture from a tablet AVD."
+        )
+
     w = out_w * S
     h = out_h * S
 
@@ -222,17 +288,12 @@ def main():
         print(f"ERROR: app folder not found: {app_dir}")
         sys.exit(1)
 
-    raw_dir = app_dir / "store" / "screenshots" / "phone" / "raw"
-    if not raw_dir.is_dir():
-        print(f"ERROR: raw screenshots not found: {raw_dir}")
+    default_headlines_path = app_dir / "metadata" / "screenshot_headlines.json"
+    if not default_headlines_path.exists():
+        print(f"ERROR: headlines file not found: {default_headlines_path}")
         sys.exit(1)
 
-    headlines_path = app_dir / "metadata" / "screenshot_headlines.json"
-    if not headlines_path.exists():
-        print(f"ERROR: headlines file not found: {headlines_path}")
-        sys.exit(1)
-
-    headlines = json.loads(headlines_path.read_text())
+    default_headlines = json.loads(default_headlines_path.read_text())
     theme = get_theme(args.app_name)
     print(f"Theme for {args.app_name}: {theme['mood']}")
 
@@ -240,25 +301,54 @@ def main():
     app_display_name = (title_path.read_text().strip()
                         if title_path.exists() else args.app_name)
 
-    # The 2 strongest screenshots: deep gameplay (raw/01) + level complete (raw/03)
-    source_indices = [1, 3] if MIN_SCREENSHOTS == 2 else [1, 3, 2, 6]
-    source_indices = source_indices[:MIN_SCREENSHOTS]
-
+    # Per QUALITY_PLAYBOOK §7.3 (mandatory tablets, May 2026), tablet
+    # captures are SEPARATE captures from a tablet emulator. They live
+    # at <App>/store/screenshots/tablet_7/raw/ and tablet_10/raw/ —
+    # NOT shared with phone/raw/. Each set has its own 7 slots.
+    # If <App>/metadata/screenshot_headlines_<target>.json exists, use it
+    # for that target's headlines (since tablet captures may show
+    # different content than phone). Otherwise fall back to phone's headlines.
+    any_wrapped = False
     for tablet_size, target, label in [(SIZE_7, "tablet_7", "7\""),
                                         (SIZE_10, "tablet_10", "10\"")]:
+        raw_dir = app_dir / "store" / "screenshots" / target / "raw"
+        if not raw_dir.is_dir():
+            print(f"\n{label} tablet: no raw captures at {raw_dir}")
+            print(f"  Skipping. To capture: emulator -avd pegasus_{target}")
+            print(f"  then: python3 scripts/capture_screenshots.py "
+                  f"{args.app_name} --target {target}")
+            continue
+
+        target_headlines_path = (app_dir / "metadata"
+                                 / f"screenshot_headlines_{target}.json")
+        if target_headlines_path.exists():
+            headlines = json.loads(target_headlines_path.read_text())
+            print(f"\n  using {target_headlines_path.name}")
+        else:
+            headlines = default_headlines
+
         out_dir = app_dir / "store" / "screenshots" / target
         out_dir.mkdir(parents=True, exist_ok=True)
-        print(f"\nWrapping {MIN_SCREENSHOTS} screenshots for {label} tablet → {out_dir}")
-        for slot, src_idx in enumerate(source_indices, 1):
-            src = raw_dir / f"{src_idx:02d}.png"
+        print(f"\nWrapping {label} tablet → {out_dir}")
+        for slot in range(1, 8):
+            src = raw_dir / f"{slot:02d}.png"
             if not src.exists():
-                print(f"  WARNING: missing {src.name}, skipping slot {slot}")
                 continue
             out = out_dir / f"{slot:02d}.png"
-            h = headlines[src_idx - 1]
+            if slot - 1 >= len(headlines):
+                print(f"  WARNING: no headline for slot {slot}, skipping")
+                continue
+            h = headlines[slot - 1]
             print(f"  raw/{src.name} → {out.name}  ({h['line1']} {h['line2']})")
             build_one(src, out, h, h['subtitle'], app_display_name,
                       theme, tablet_size)
+            any_wrapped = True
+
+    if not any_wrapped:
+        print(f"\n  No tablet raws found for {args.app_name}.")
+        print(f"  Per QUALITY_PLAYBOOK §7.3, every shipping app needs phone +")
+        print(f"  tablet_7 + tablet_10 screenshots. Capture tablet raws first.")
+        sys.exit(1)
 
     print(f"\n✓ Done.")
 

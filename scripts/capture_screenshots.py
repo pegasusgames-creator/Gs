@@ -44,12 +44,19 @@ Requirements:
 """
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
 import sys
 import time
 from pathlib import Path
+
+try:
+    from PIL import Image
+    HAS_PIL = True
+except ImportError:
+    HAS_PIL = False
 
 REPO_ROOT = (Path(__file__).resolve().parent.parent
              if Path(__file__).resolve().parent.name == "scripts"
@@ -121,8 +128,70 @@ def run(cmd, check=True, capture=True, timeout=60):
     return result
 
 
-def ensure_emulator_running(avd_name=None):
-    """Boot an emulator if none is running. Wait for boot to complete."""
+def _ahash(path):
+    """Fast 17x16 dHash for matching captures (content-sensitive).
+
+    Replaces 8x8 average hash (which collapsed visually-distinct
+    screens like Nonogram's level 348 board vs daily challenge board
+    to the same fingerprint, since both have similar overall light/
+    dark distribution). dHash compares adjacent pixel pairs and is
+    sensitive to content/edge structure rather than just brightness.
+    Returns None if PIL unavailable or path unreadable.
+    """
+    if not HAS_PIL:
+        return None
+    try:
+        img = Image.open(path).convert("L").resize((17, 16))
+        pixels = list(img.getdata())
+        h = 0
+        for r in range(16):
+            for c in range(16):
+                left  = pixels[r * 17 + c]
+                right = pixels[r * 17 + c + 1]
+                if left > right:
+                    h |= 1 << (r * 16 + c)
+        return h
+    except (IOError, OSError):
+        return None
+
+
+def _hamming(a, b):
+    return bin(a ^ b).count("1")
+
+
+# Per-target preferred AVD name. The user creates these via Part B
+# of the May 2026 mandatory-tablets rollout; if they're not present,
+# we fall back to the first AVD matching the form-factor profile, then
+# to the first AVD overall.
+TARGET_AVD_PREFIX = {
+    "phone":     None,                 # any AVD is fine
+    "tablet_7":  "pegasus_tablet_7",
+    "tablet_10": "pegasus_tablet_10",
+}
+
+
+def _pick_avd(avds, target, explicit=None):
+    if explicit and explicit in avds:
+        return explicit
+    preferred = TARGET_AVD_PREFIX.get(target)
+    if preferred and preferred in avds:
+        return preferred
+    if target in ("tablet_7", "tablet_10"):
+        # Prefer any AVD whose name suggests it's a tablet
+        for a in avds:
+            la = a.lower()
+            if "tablet" in la or "pixel_c" in la or "nexus_10" in la:
+                return a
+    return avds[0]
+
+
+def ensure_emulator_running(avd_name=None, target="phone"):
+    """Boot an emulator if none is running. Wait for boot to complete.
+
+    For tablet_7 / tablet_10 targets, prefers the matching pegasus_tablet_*
+    AVD (created via SHIP_GAME Part B). Falls back to any tablet-profile
+    AVD found via name heuristic, then to first AVD overall.
+    """
     result = run(["adb", "devices"], check=False)
     if result and "\tdevice" in result.stdout:
         print("  ✓ emulator already running")
@@ -140,8 +209,8 @@ def ensure_emulator_running(avd_name=None):
         print("  ✗ no AVDs installed. Create one in Android Studio AVD Manager.")
         return False
 
-    chosen = avd_name if (avd_name and avd_name in avds) else avds[0]
-    print(f"  Launching emulator: {chosen}")
+    chosen = _pick_avd(avds, target, explicit=avd_name)
+    print(f"  Launching emulator ({target}): {chosen}")
 
     # Background-launch the emulator (don't wait for it to exit)
     subprocess.Popen(
@@ -217,8 +286,11 @@ def force_stop_and_launch(package_name, readiness_expr=None):
     time.sleep(0.6)
     run(["adb", "shell", "am", "start", "-n",
          f"{package_name}/.MainActivity"], check=False)
-    time.sleep(2.0)  # baseline so the WebView exists before we connect
-    _force_cdp_navigate(package_name)
+    time.sleep(3.5)  # let MainActivity.loadUrl finish; skip _force_cdp_navigate
+    # The MainActivity already loadUrl()s file:///android_asset/game.html;
+    # forcing another Page.navigate via CDP can leave the icon row in a
+    # detached state where adb taps reach the menu but onclick handlers
+    # don't fire (Puzzle2048 May 2026 audit). Trust the natural load.
     if readiness_expr:
         _wait_for_webview_ready(package_name, timeout=12.0,
                                  readiness_expr=readiness_expr)
@@ -351,24 +423,22 @@ def evaluate_js(package_name, js, timeout=5):
             "params": {"expression": js, "awaitPromise": True,
                        "returnByValue": True},
         }))
-        resp = _json.loads(ws.recv())
+        # Drain events until we see our response (id=1). Android WebView
+        # CDP frequently emits `Page.frameRequestedNavigation` or
+        # `Runtime.executionContextDestroyed` events ahead of the
+        # response; reading just one recv() and re-sending the eval (the
+        # old behavior) caused the JS to run TWICE — for Promise-based
+        # slot JS this raced and reverted screen state right before
+        # screencap.
+        resp = None
+        for _ in range(50):
+            msg = _json.loads(ws.recv())
+            if msg.get("id") == 1 and "result" in msg:
+                resp = msg
+                break
         ws.close()
-        # Some Android WebView CDP messages arrive as bare events
-        # (`method` set, no `result` / `id`) ahead of the actual reply —
-        # accept and re-read in that case.
-        if "result" not in resp and "method" in resp:
-            try:
-                ws = websocket.create_connection(
-                    ws_url, timeout=timeout, suppress_origin=True)
-                ws.send(_json.dumps({
-                    "id": 1, "method": "Runtime.evaluate",
-                    "params": {"expression": js, "awaitPromise": True,
-                               "returnByValue": True},
-                }))
-                resp = _json.loads(ws.recv())
-                ws.close()
-            except Exception:
-                pass
+        if resp is None:
+            return False
         # CDP returns 200 OK even when the JS itself threw — surface that.
         ed = resp.get("result", {}).get("exceptionDetails")
         if ed:
@@ -397,6 +467,17 @@ def execute_taps(operations, screen_w, screen_h, package_name=None):
             run(["adb", "shell", "input", "keyevent", "KEYCODE_BACK"],
                 check=False)
             time.sleep(0.5)
+        elif op[0] == "swipe":
+            # ["swipe", x1_frac, y1_frac, x2_frac, y2_frac, duration_ms,
+            #  optional_post_wait_ms]
+            _, x1f, y1f, x2f, y2f, dur = op[:6]
+            post_wait_ms = op[6] if len(op) >= 7 else 300
+            x1 = int(screen_w * x1f); y1 = int(screen_h * y1f)
+            x2 = int(screen_w * x2f); y2 = int(screen_h * y2f)
+            run(["adb", "shell", "input", "swipe",
+                 str(x1), str(y1), str(x2), str(y2), str(dur)],
+                check=False)
+            time.sleep(post_wait_ms / 1000.0)
         elif op[0] == "js":
             # ["js", "<expression>", optional_wait_ms]
             expr = op[1]
@@ -416,8 +497,13 @@ def capture_to(out_path, package_name=None):
     return out_path.exists() and out_path.stat().st_size > 0
 
 
-def load_per_app_taps(app_dir):
-    """If <App>/test/screenshot_taps.json exists, use those overrides."""
+def load_per_app_taps(app_dir, target="phone"):
+    """If <App>/test/screenshot_taps_<target>.json exists, use that.
+    Otherwise fall back to <App>/test/screenshot_taps.json."""
+    if target != "phone":
+        p_target = app_dir / "test" / f"screenshot_taps_{target}.json"
+        if p_target.exists():
+            return json.loads(p_target.read_text())
     p = app_dir / "test" / "screenshot_taps.json"
     if p.exists():
         return json.loads(p.read_text())
@@ -433,6 +519,10 @@ def main():
     ap.add_argument("--avd", help="AVD name (default: first installed)")
     ap.add_argument("--no-reinstall", action="store_true",
                     help="skip APK reinstall (default: reinstall)")
+    ap.add_argument("--target", choices=["phone", "tablet_7", "tablet_10"],
+                    default="phone",
+                    help="capture target form factor — output goes to "
+                         "<App>/store/screenshots/<target>/raw/")
     args = ap.parse_args()
 
     app_dir = REPO_ROOT / args.app_name
@@ -447,9 +537,10 @@ def main():
         sys.exit(1)
     print(f"Package: {package}")
 
+    print(f"Target: {args.target}")
     print("Checking emulator...")
     if not args.no_launch:
-        if not ensure_emulator_running(args.avd):
+        if not ensure_emulator_running(args.avd, target=args.target):
             sys.exit(1)
     else:
         result = run(["adb", "devices"], check=False)
@@ -464,8 +555,10 @@ def main():
         if not install_apk(app_dir):
             sys.exit(1)
 
-    taps = load_per_app_taps(app_dir) or DEFAULT_TAPS
-    out_dir = app_dir / "store" / "screenshots" / "phone" / "raw"
+    taps = load_per_app_taps(app_dir, args.target) or DEFAULT_TAPS
+    # If the per-app tap file has tablet_<N>_<slot> keys for this target,
+    # prefer those; otherwise fall back to the phone (un-prefixed) keys.
+    out_dir = app_dir / "store" / "screenshots" / args.target / "raw"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     SLOTS = [
@@ -500,15 +593,26 @@ def main():
         print()
 
     print()
+    captured_hashes = {}  # slot_num -> ahash, for verification
     for slot_num, tap_key in SLOTS:
         print(f"[{slot_num}] {tap_key}")
-        if use_persistent_session:
-            # Reset to menu via JS (cheap) instead of full force-stop wipe
-            evaluate_js(package, "if(typeof showScreen==='function')showScreen('menu');")
-            time.sleep(0.5)
-        else:
-            force_stop_and_launch(package, readiness_expr=readiness_expr)
-        ops = taps.get(tap_key, [])
+        # Always do force-stop+launch between slots. The cheaper "showScreen('menu')
+        # via JS" path turned out to be unreliable on Android WebView CDP — JS
+        # navigation calls didn't always take effect before screencap, leaving
+        # the screen on whatever it was before. force_stop_and_launch is ~5s
+        # slower per slot but produces consistent captures.
+        force_stop_and_launch(package, readiness_expr=readiness_expr)
+        # If the per-app file has a _setup_taps section, re-run it after each
+        # launch to re-seed in-memory state (localStorage persists across
+        # force-stop, but `state = Object.assign({}, DEFAULT_STATE)` runs
+        # fresh on page load and only loadState() merges localStorage).
+        if setup_ops:
+            execute_taps(setup_ops, screen_w, screen_h, package_name=package)
+        # Tablet-aware key lookup: tablet_7_03_level_complete falls back
+        # to 03_level_complete when the per-app file doesn't ship a
+        # tablet override.
+        target_key = f"{args.target}_{tap_key}" if args.target != "phone" else tap_key
+        ops = taps.get(target_key) or taps.get(tap_key, [])
         if ops:
             execute_taps(ops, screen_w, screen_h, package_name=package)
         else:
@@ -521,6 +625,43 @@ def main():
         if capture_to(out_path, package_name=cap_pkg):
             kb = out_path.stat().st_size // 1024
             print(f"     ✓ {out_path.name} ({kb} KB)")
+            # ★ Post-capture verification: each slot must produce
+            # visually distinct content from prior slots. If two slots
+            # match, the tap sequence didn't navigate anywhere.
+            new_hash = _ahash(out_path)
+            if new_hash is not None:
+                for prev_slot, prev_hash in captured_hashes.items():
+                    distance = _hamming(new_hash, prev_hash)
+                    # 24/256 ≈ 9% bit-difference; distinct in-app screens
+                    # are usually 30+ apart, identical-screen captures < 5.
+                    if distance <= 24:
+                        print(f"\n  ✗ CAPTURE VERIFICATION FAILED: slot "
+                              f"{slot_num} matches slot {prev_slot} "
+                              f"(perceptual distance {distance}).",
+                              file=sys.stderr)
+                        print(f"    The tap sequence didn't navigate "
+                              f"anywhere — same screen captured twice.",
+                              file=sys.stderr)
+                        print(f"    Common causes:", file=sys.stderr)
+                        print(f"      - tap coordinates wrong for this app's "
+                              f"layout (edit screenshot_taps.json)",
+                              file=sys.stderr)
+                        print(f"      - emulator screen size differs from "
+                              f"the assumed {screen_w}x{screen_h}",
+                              file=sys.stderr)
+                        print(f"      - menu re-rendered between tap and "
+                              f"capture (increase post-tap delay)",
+                              file=sys.stderr)
+                        print(f"    Inspect {out_path} and adjust per-app "
+                              f"taps before re-running. (continuing)",
+                              file=sys.stderr)
+                        # Don't abort — let the run finish so the user can
+                        # inspect ALL captured slots before iterating on
+                        # tap coords. pre_publish_check.py also runs the
+                        # uniqueness check and will block ship if any
+                        # remain duplicated.
+                        break
+                captured_hashes[slot_num] = new_hash
         else:
             print(f"     ✗ capture failed")
         print()

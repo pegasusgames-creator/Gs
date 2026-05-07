@@ -78,8 +78,8 @@ entire contents.
 - App icon → upload `Nonogram/store/icon_512_playstore.png`
 - Feature graphic → upload `Nonogram/store/feature_graphic_1024x500.png`
 - Phone screenshots → upload all 7 files in `Nonogram/store/screenshots/phone/`
-- 7-inch tablet → upload 2 file(s) in `Nonogram/store/screenshots/tablet_7/`
-- 10-inch tablet → upload 2 file(s) in `Nonogram/store/screenshots/tablet_10/`
+- 7-inch tablet → upload 7 file(s) in `Nonogram/store/screenshots/tablet_7/`
+- 10-inch tablet → upload 7 file(s) in `Nonogram/store/screenshots/tablet_10/`
 
 If Play Console rejects 2 tablet screenshots (Google requires min 4),
 open `Nonogram/wrap_tablet_screenshots.py`, uncomment the lines under
@@ -98,16 +98,18 @@ Add these 10 locales one at a time:
 
 | Locale | Source folder |
 |---|---|
+| Arabic | `Nonogram/metadata/ar/` |
 | German (Germany) | `Nonogram/metadata/de-DE/` |
 | Spanish (Latin America) | `Nonogram/metadata/es-419/` |
 | French (France) | `Nonogram/metadata/fr-FR/` |
 | Hindi (India) | `Nonogram/metadata/hi-IN/` |
-| Indonesian (Indonesia) | `Nonogram/metadata/id-ID/` |
+| Indonesian | `Nonogram/metadata/id/` |
 | Italian (Italy) | `Nonogram/metadata/it-IT/` |
 | Japanese (Japan) | `Nonogram/metadata/ja-JP/` |
 | Portuguese (Brazil) | `Nonogram/metadata/pt-BR/` |
 | Turkish (Turkey) | `Nonogram/metadata/tr-TR/` |
-| Ukrainian (Ukraine) | `Nonogram/metadata/uk-UA/` |
+| Ukrainian | `Nonogram/metadata/uk/` |
+| Chinese (Simplified) | `Nonogram/metadata/zh-CN/` |
 
 For each locale:
 1. Click **Add language**, pick from the list above

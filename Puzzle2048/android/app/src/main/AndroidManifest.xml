@@ -21,12 +21,10 @@
             android:resource="@xml/gma_ad_services_config"
             tools:replace="android:resource" />
 
-        <meta-data
-            android:name="applovin.sdk.key"
-            android:value="ENTER_YOUR_APPLOVIN_SDK_KEY_HERE" />
+        <!-- AppLovin disabled (using AdMob). Re-enable by populating value. -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-2759523698880843~3659701763"/>
+            android:value="ca-app-pub-5695494884863768~9006185100"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

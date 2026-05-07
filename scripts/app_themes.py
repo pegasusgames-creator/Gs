@@ -79,9 +79,8 @@ THEMES = {
         "mood": "ocean-depth",
         "layout_archetype": "A",
         "mascot_pattern":   "M0",
-        "voice":            "V1",
-        "texture":          "T1",
-        "grandfathered":    True,
+        "voice":            "V5",
+        "texture":          "T2",
     },
 
     # ===== UPCOMING FLAGSHIPS =====

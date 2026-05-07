@@ -1,13 +1,13 @@
 # Puzzle2048 Identity
 
 - **Category**: puzzle
-- **Layout archetype**: C (hub world / cozy room)
-- **Mascot pattern**: M2 (static mascot with 2-3 expressions)
-- **Voice**: V3 (playful narrator)
-- **Texture**: T7 (storybook / illustrated)
-- **Mood string**: puzzle-deep
+- **Layout archetype**: F (direct-to-game minimal — number-game purists skip menu fanfare)
+- **Mascot pattern**: M0 (no mascot — the tiles are the personality)
+- **Voice**: V6 (arcade celebrations on big merges — ALL CAPS milestones, terse menu copy)
+- **Texture**: T8 (brutalist clean tiles, sharp 0-radius edges, strong contrast)
+- **Mood string**: tile-warm-sand (marketing) / dark-arcade (in-game)
 
-The app should feel like: thoughtful and tactile; each app's mechanic is the star.
+The app should feel like a classic arcade scoreboard: sharp-edged tiles, gold and warm-sand marketing wrap, dark gameplay surface. The marketing palette is warm-sand for storefront identity; in-game uses the canonical 2048 dark/gold palette so the tiles read as "2048 tiles" instantly.
 
 ## Anti-pattern audit (APP_ARCHETYPES.md §5)
 

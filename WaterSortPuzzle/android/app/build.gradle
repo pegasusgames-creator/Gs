@@ -13,12 +13,12 @@ android {
         applicationId "com.pegasusgames.watersortpuzzle"
         minSdk 23
         targetSdk 36
-        versionCode 13
-        versionName "1.6.5"
+        versionCode 16
+        versionName "1.8"
     }
     signingConfigs {
         release {
-            storeFile file(keystoreProperties['storeFile'])
+            storeFile rootProject.file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']

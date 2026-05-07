@@ -1,38 +1,16 @@
 {
-  "_comment": "Nonogram menu (V8/T3 paper). Each slot runs as a single JS Promise so all DOM updates happen in one evaluate_js round-trip — multi-call sequences race with screencap on this WebView.",
-  "_menu_layout": {
-    "play_button":     [0.50, 0.45],
-    "secondary_daily": [0.30, 0.535],
-    "secondary_levels":[0.70, 0.535],
-    "icon_stats":      [0.36, 0.605],
-    "icon_shop":       [0.50, 0.605],
-    "icon_settings":   [0.64, 0.605]
-  },
-  "_readiness_expr": "typeof startLevel === 'function' && typeof __nonoFillSolution === 'function' && typeof showOverlay === 'function' && typeof startDailyChallenge === 'function'",
+  "_comment": "Nonogram. Icon row CSS: width 240px (frac 0.222 of 1080), 3 buttons of 44px with 22px gaps. Icons centers at x 0.44, 0.50, 0.56 (NOT 0.36/0.50/0.64 — too wide, falls outside the 240px container).",
+  "_readiness_expr": "typeof startLevel === 'function' && typeof __nonoFillSolution === 'function' && typeof showScreen === 'function' && typeof startDailyChallenge === 'function'",
 
   "_setup_taps": [
-    ["js", "(function(){var seed={currentLevel:348,completedLevels:Array.from({length:47},function(_,i){return i+1;}),levelStars:(function(){var s={};for(var i=1;i<=47;i++)s[i]=(i%4===0?3:(i%3===0?2:1));return s;})(),coins:247,lives:5,lastLifeTime:Date.now(),removeAds:false,hintPack:0,soundEnabled:true,musicEnabled:false,dailyChallengeDate:'',dailyChallengeStreak:7,unlimitedLivesUntil:0,unlimitedLivesForever:false,activeTheme:'default',lastLevelProgress:null};try{localStorage.setItem('nonogram_state',JSON.stringify(seed));localStorage.setItem('ls_v2',JSON.stringify({n:7,d:new Date().toISOString().slice(0,10),ach:[]}));localStorage.setItem('nono_missions_v1',JSON.stringify({progress_solver:3,progress_dedicated:12,progress_streak:1,claimed_perfectionist:true}));}catch(e){}Object.assign(state,seed);if(typeof updateUI==='function')updateUI();if(typeof updateMenuUI==='function')updateMenuUI();return 'seeded';})()", 400]
+    ["js", "(function(){var seed={currentLevel:348,completedLevels:Array.from({length:47},function(_,i){return i+1;}),levelStars:(function(){var s={};for(var i=1;i<=47;i++)s[i]=(i%4===0?3:(i%3===0?2:1));return s;})(),coins:247,lives:5,lastLifeTime:Date.now(),removeAds:false,hintPack:0,soundEnabled:true,musicEnabled:false,dailyChallengeDate:'',dailyChallengeStreak:7,unlimitedLivesUntil:0,unlimitedLivesForever:false,activeTheme:'default',lastLevelProgress:null};try{localStorage.setItem('nonogram_state',JSON.stringify(seed));localStorage.setItem('ls_v2',JSON.stringify({n:7,d:new Date().toISOString().slice(0,10),ach:[]}));localStorage.setItem('nono_missions_v1',JSON.stringify({progress_solver:3,progress_dedicated:12,progress_streak:1,claimed_perfectionist:true}));}catch(e){}Object.assign(state,seed);if(typeof updateUI==='function')updateUI();if(typeof updateMenuUI==='function')updateMenuUI();var ov=document.getElementById('ls-overlay');if(ov)ov.style.display='none';return 'seeded';})()", 400]
   ],
 
-  "01_deep_gameplay": [
-    ["js", "new Promise(function(resolve){showScreen('menu');setTimeout(function(){startLevel(348);stopTimer();setTimeout(function(){__nonoFillSolution(0.62);setTimeout(resolve,200);},250);},150);})", 1200]
-  ],
-  "02_early_gameplay": [
-    ["js", "new Promise(function(resolve){showScreen('menu');setTimeout(function(){startLevel(90);stopTimer();setTimeout(function(){__nonoFillSolution(0.45);setTimeout(resolve,200);},250);},150);})", 1200]
-  ],
-  "03_level_complete": [
-    ["js", "new Promise(function(resolve){showScreen('menu');setTimeout(function(){startLevel(8);stopTimer();setTimeout(function(){__nonoFillSolution(1.0);setTimeout(function(){showOverlay('overlay-win');setTimeout(resolve,250);},150);},250);},150);})", 1200]
-  ],
-  "04_missions_panel": [
-    ["js", "new Promise(function(resolve){showScreen('menu');setTimeout(function(){startDailyChallenge();stopTimer();setTimeout(function(){__nonoFillSolution(0.45);setTimeout(resolve,200);},250);},150);})", 1200]
-  ],
-  "05_stats": [
-    ["js", "new Promise(function(resolve){showScreen('stats');setTimeout(resolve,400);})", 800]
-  ],
-  "06_levels_grid": [
-    ["js", "new Promise(function(resolve){showScreen('levelselect');setTimeout(resolve,400);})", 800]
-  ],
-  "07_menu": [
-    ["js", "new Promise(function(resolve){showScreen('menu');setTimeout(resolve,300);})", 600]
-  ]
+  "01_deep_gameplay":     [["tap", 0.50, 0.45,  1500]],
+  "02_early_gameplay":    [["tap", 0.30, 0.535, 1500]],
+  "03_level_complete":    [["tap", 0.70, 0.535, 1500]],
+  "04_missions_panel":    [["tap", 0.32, 0.612, 1200]],
+  "05_stats":             [["tap", 0.50, 0.605, 1200]],
+  "06_levels_grid":       [["tap", 0.68, 0.612, 1200]],
+  "07_menu":              []
 }

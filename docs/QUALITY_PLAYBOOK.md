@@ -173,31 +173,6 @@ buttons. The hierarchy is:
 2. **Secondary** (Daily Challenge, Missions): two medium buttons side by side, muted
 3. **Tertiary** (Shop, Stats, Themes, Settings): icon row at bottom or header
 
-**Total ≤ 6 tappable elements on the menu screen.** This is enforced as a
-blocking check by `pre_publish_check.py` (`check_menu_button_count`). A
-heuristic counts every `<button>` plus every non-button element with an
-`onclick` attribute inside the menu screen container. Elements outside the
-menu container don't count, so picker subscreens (e.g. category picker for
-a party game) are the right place for long lists of choices.
-
-**Layout rules for the three tiers:**
-
-- **Center every row.** The primary button, the secondary pair, and the
-  tertiary icon row must each be horizontally centered in the menu container.
-  Use `align-items: center` on the column flex parent and `justify-content:
-  center` (or matching widths) on each child row. Left-aligned rows under a
-  centered title read as "I broke the layout."
-- **Pair widths must match the primary's width.** If Play is 240px wide,
-  the secondary row and the icon row should both span 240px so the three
-  tiers stack as a clean visual column. Mismatched widths produce the
-  "rows are off-center from each other" effect.
-- **Tertiary icons are SVG, never emoji.** §1.3 forbids emoji as UI; this
-  matters most on the menu where the icon family is part of the brand. Use
-  thin line / filled / hand-drawn icons matched to the texture archetype
-  (T3 paper → pencil-line; T6 neon → glowing line; T8 brutalist → square
-  outlined) and **don't reuse identical Lucide icons across apps**
-  (APP_ARCHETYPES §5 anti-pattern #2).
-
 **Never make the Shop button visually dominant.** It signals "buy stuff before
 you play," which hurts both retention and Google's automated "manipulative
 design" review. Shop goes in the tertiary icon row, not the primary button
@@ -205,21 +180,11 @@ stack.
 
 ### 3.2 Progress cue on Play button [GAMES, P1]
 
-The Play button should show the player's current state as **a small italic
-subtitle inside the button itself**, centered below the "Play" word — never
-as a separate text row below the button:
+The Play button should show the player's current state as subtext:
 
-- Returning player: `Play / Level 47`
-- New player: `Play / Start your first level`
-- Completionist: `Play / Level 47 · Top 25%`
-
-Implementation: the button uses column flex (`flex-direction: column;
-align-items: center;`) with two children — a `<span>Play</span>` at the
-primary font size and a `<span class="play-sub">Level N</span>` at ~0.7rem
-italic with reduced opacity. A separate `<div>` below the button left-aligned
-to the menu container (the failure mode: "Play" button followed by a
-"Level 2" string at the left edge) breaks the centered visual axis and
-reads as a layout bug.
+- Returning player: `▶ PLAY` / `Continue — Level 47`
+- New player: `▶ PLAY` / `Start your first level`
+- Completionist: `▶ PLAY` / `Level 47 — Top 25%`
 
 This is a 30-minute change that noticeably improves D7 retention. Returning
 players see their investment; new players see clear direction.
@@ -232,23 +197,6 @@ buried menu buttons. After dismissing, they return to their regular menu spot.
 
 The pop-up should auto-dismiss in 3 seconds if untouched, to avoid being
 annoying for returning players who don't care.
-
-**Banner styling — match the texture archetype, never go dark.** A common
-mistake is reaching for a dark-to-accent gradient (`#3a1f00` → cream, navy →
-neon, etc.) that looks "premium" in isolation but clashes with a warm/light
-menu background — the banner reads as a foreign black bar pasted onto the
-page. Rules:
-
-- For T3 paper / T5 sketch / T7 storybook (warm-light backgrounds): use a
-  **light warm gradient** (e.g. `#fdf6e7` → `#f4e8c8`) with the accent color
-  applied to **text and border only**. Add a subtle inset highlight
-  (`inset 0 0 0 1px rgba(255,255,255,0.6)`) for paper warmth.
-- For T6 neon / dark backgrounds: a saturated accent gradient is fine, but
-  keep contrast with text legible (avoid dark-text-on-dark).
-- For T8 brutalist: solid block of accent color, square corners, no gradient.
-
-The pulse animation (`box-shadow` ring) should match the accent color at
-low opacity (0.18–0.30), not 0.4+ which feels aggressive on calm textures.
 
 ### 3.4 Kill redundant destinations [ALL, P2]
 
@@ -593,42 +541,6 @@ and rate 1-star.
 
 ## 7. Store listing and screenshots
 
-### 7.0 Capture method: emulator only [ALL, P0]
-
-**Store screenshots are captured from the Android emulator. Never from
-Puppeteer / headless Chromium.** This is non-negotiable — see SHIP_GAME.md
-"Why emulator, not headless Chromium" for the full rationale.
-
-The canonical command:
-```
-python3 scripts/capture_screenshots.py <AppName>
-```
-
-It boots the user's first available AVD if none is running, installs the
-debug APK from `<App>/android/app/build/outputs/apk/debug/app-debug.apk`,
-sends adb tap sequences to navigate, and captures via `adb shell screencap`.
-
-**Why this is enforced as P0:**
-
-- Headless Chromium produces "browser tab" output: wrong font rendering,
-  no Android system insets, no real WebView init, desktop-style flexbox
-  quirks. The output reads as web on the Play Store grid even when wrapped
-  in a marketing frame.
-- Layout bugs in `game.html` that only manifest under headless Chromium
-  (e.g. canvas-wrap collapsing because of viewport-height differences) get
-  shipped to the store while passing local visual checks. This has burned
-  the portfolio — see the Nonogram "tiny board floating in cream void at
-  Level 15" incident.
-- The emulator path also gives the app organic mid-game state in
-  localStorage (level progress, coin balance, missions partially complete)
-  from prior testing — exactly what the §7.1.5 capture-quality rules need.
-
-**No fallbacks allowed.** If the dev environment doesn't have an emulator
-or AVD configured, that's a blocker — surface to the user, pause shipping,
-do not write a Puppeteer script "to keep moving." Existing Puppeteer
-capture scripts in `scripts/` (any `capture_*.js`) are deprecated; do not
-use, do not extend.
-
 ### 7.1 Screenshot order [ALL, P0]
 
 The Play Store shows the first 3 screenshots in search results. Those 3 have
@@ -647,84 +559,155 @@ Never lead with the menu screenshot. Never lead with the shop screenshot
 
 ### 7.1.5 Capture quality — what to actually show inside the frame [ALL, P0]
 
-The marketing-frame wrapping (`wrap_screenshots.py`) gives you the gradient
-and headline, but the SCREENSHOT INSIDE the frame is what the user actually
-evaluates. Common capture failures that make screenshots look bad even
-inside a beautiful frame:
+The marketing-frame wrapping (`wrap_screenshots.py`) gives you the
+gradient and headline, but the SCREENSHOT INSIDE the frame is what
+users evaluate. May 2026 Puzzle2048 audit found six common capture
+failures, each producing a screenshot that looks unfinished even with
+a perfect wrap:
 
-**Empty / sparse boards.** Capturing level 1 or 2 of a puzzle when the
-board is mostly empty wastes screenshot real estate. The game looks shallow
-even if it's deep.
+**Empty / sparse boards.** Capturing level 1-2 of a puzzle when the
+board is mostly empty wastes screenshot real estate. Per §7.1, slot 01
+("deep gameplay") must show the LARGEST grid the level generator
+produces, in mid-progression state, NOT a tutorial-tier early board.
 
-**Fix:** capture mid-progression levels (level 15-30 for puzzles where
-boards grow with difficulty, or always-medium-density levels for fixed-
-size puzzles). The board should show ~60-80% filled state, not 10%.
+**"How to Play" tutorial overlay visible.** The tutorial appears on
+fresh installs and dismisses on first tap. If captured before
+dismissing, the tutorial sits over the entire board and blocks the
+gameplay you're trying to show. See §7.1.5.5 below for the seed
+script that prevents this.
 
-**Default first-install state ("0/0/0 everywhere").** Capturing the Stats
-or Missions screen on a fresh install shows "0 levels played, 0 coins, 0
-streak, 0/5, 0/20, 0/50". Reads as "developer forgot to populate sample
-data."
+**Default first-install state ("0/0/0 everywhere").** Stats screen,
+Missions screen, and Daily Challenge all show "0 levels played, 0
+coins, 0 streak" on a fresh install. Reads as "developer forgot to
+populate sample data." See §7.1.5.5.
 
-**Fix:** before capturing screenshots, run a script that pre-populates
-realistic mid-game state in localStorage:
+**Tiny content in tall canvas.** Phone captures are 1080×2400 (9:20).
+A 4×4 puzzle grid centered in that canvas leaves 60% of the screenshot
+as dead space. The marketing-frame wrap doesn't fix this — the
+screenshot inside the frame is still mostly empty. The in-app
+gameplay layout must scale the playable area to fill tall phones (per
+§1.5).
+
+**Modals over darkened backgrounds.** Capturing a modal (Daily
+Mission panel, Stats popup) shows a dark scrim over the menu behind.
+The result is muddy and low-contrast. For modals, capture in a
+dedicated screenshot mode where the background is replaced with the
+app's solid theme color. See §7.1.5.4.
+
+**★ NEW (Puzzle2048 May 2026 audit) — Same raw screenshot used in
+multiple slots.** The pre-wrap raw captures must be VISUALLY DISTINCT
+across the 7 slots. The Puzzle2048 audit found 7 wrapped screenshots
+using only 2 distinct raw images: tap sequences in
+`capture_screenshots.py` were missing target buttons, so 5 slots all
+captured the same early-game board. Result: 7 different headlines
+("REACH 2048", "NEW HIGH SCORE", "WEEKLY EVENT", "BEST TILES BEST
+RUNS", "ONE FREE UNDO") over visually identical content — every claim
+the headline made was a lie about what the screenshot showed.
+
+`pre_publish_check.py check_screenshot_uniqueness` enforces this:
+perceptual hashes of all 7 phone raws must differ by at least 4
+hamming distance from each other. Identical or near-identical raws
+across slots = blocking.
+
+When this check fails, `capture_screenshots.py` taps are missing their
+targets. Common causes:
+- Tap coordinates assume a default Pegasus menu layout that this
+  app doesn't use — set per-app overrides at
+  `<App>/test/screenshot_taps.json`
+- Emulator screen size differs from the script's assumed dimensions
+  — check `adb shell wm size` and adjust DEFAULT_SCREEN_W/H
+- Animations haven't settled before tap fires — increase post_delay
+  per slot
+
+The capture script ALSO checks this on the fly now and refuses to
+continue past the first duplicate.
+
+
+#### 7.1.5.5 Pre-screenshot localStorage seed (MANDATORY)
+
+Every app gets a per-app file at `<App>/test/seed_screenshot_state.js`
+containing localStorage assignments that pre-populate realistic
+mid-game state. Without this, screenshots show fresh-install zeros
+across Stats / Missions / Daily and the tutorial overlay covers the
+gameplay screen.
+
+**The seed script must use THIS app's actual localStorage keys** —
+not a generic template. Every app's `game.html` has different storage
+keys. Read the keys from the actual game code before writing the seed.
+
+For Puzzle2048 specifically (real schema confirmed by reading
+`game.html:defaultState()` — the keys live INSIDE one JSON blob keyed
+`puzzle2048_save`, not as individual `p2048_*` keys):
+
 ```javascript
-localStorage.setItem('coins', '247');
-localStorage.setItem('currentLevel', '23');
-localStorage.setItem('streak', '7');
-localStorage.setItem('starsEarned', '34');
-localStorage.setItem('mission_solver_progress', '3'); // out of 5
-localStorage.setItem('mission_dedicated_progress', '12'); // out of 20
-// etc.
+localStorage.setItem('puzzle2048_save', JSON.stringify({
+  score:                247,
+  bestScore:            512,
+  highestTile:          128,
+  achieved2048:         false,
+  coins:                85,
+  lives:                5,
+  maxLives:             5,
+  undoPack:             3,
+  dailyChallengeDate:   new Date().toISOString().slice(0, 10),
+  dailyChallengeStreak: 7,                  // shows on Best screen
+  dailyChallengeBest:   320,
+  // … rest of defaultState() schema
+}));
+// Achievements stored separately under 'ls_v2'; daily missions under
+// '2048_missions_v1' (date-keyed). See Puzzle2048/test/seed_screenshot_state.js
+// for the canonical seed used by capture_screenshots.py.
 ```
-This is mandatory before the screenshot capture step in SHIP_GAME.md
-Phase 3.1. Without it, the screenshots tell users "this game is empty."
 
-**Tiny content in tall canvas.** Phone screenshots are 1080×2400 (9:20).
-A 5×5 puzzle grid centered in that canvas leaves 60% of the screenshot as
-dead space. The marketing-frame wrap doesn't fix this — the screenshot
-inside the frame is still mostly empty.
+Generic-template seeds with keys like 'coins' or 'streak' will silently
+do nothing if the app's actual keys are different. The May 2026 audit
+caught this exact failure: a seed referencing `p2048_*` keys never
+touched the real `puzzle2048_save` blob, so all captures showed fresh-
+install zeros. Always grep `localStorage.setItem` and `localStorage.getItem`
+in the actual game.html before writing the seed. Verify after seeding
+by capturing slot 02 (menu) and confirming the displayed Score / Best /
+Best Tile / coin count match the seeded values.
 
-**Fix:** the in-app gameplay layout must scale the playable area to fill
-tall phones (per §1.5 "Tall phone support"). For puzzle games, the board
-should occupy at least 50% of vertical space on a 9:20 screen. If your
-current layout doesn't, FIX IT before capturing screenshots — don't ship
-screenshots of a game that wastes screen space.
+### 7.1.6 Headline ↔ image content match (MANDATORY) [ALL, P0]
 
-**Modals over darkened backgrounds.** Capturing a modal (Daily Mission
-panel, Stats popup) shows a dark scrim over the menu behind. The result
-is muddy and low-contrast.
+Every wrapped screenshot is a TWO-PART CLAIM: the headline says X is
+in the app, and the image must SHOW X is in the app. Screenshot 4 with
+headline "WEEKLY EVENT 5 GAMES / Play five rounds this week" sitting
+above an image of an early-game board with no event UI visible is
+false on its face — the header asserts a feature the image doesn't
+demonstrate.
 
-**Fix:** for modals, capture them in a dedicated screenshot mode where
-the background is replaced with the app's solid theme color, not the
-darkened menu. Add a `?screenshot=modal_missions` query parameter that
-your `game.html` reads, and when set, render the modal on a clean
-background with no scrim.
+**Required check before each app ships:** for each headline in
+`metadata/screenshot_headlines.json`, verify the image at the
+corresponding slot ACTUALLY SHOWS the feature claimed:
 
-**Consequences of skipping these fixes:** Wrap script makes the OUTSIDE
-of the screenshot pretty, but conversion-killing dead space INSIDE
-remains. A user scrolling past sees "another sparse mobile game" and
-swipes on. Lift from the marketing wrap is wasted.
+| Headline claim | Image must show |
+|---|---|
+| "DAILY CHALLENGE" | the daily mode UI mid-play, NOT the menu |
+| "WEEKLY EVENT" | the weekly event panel/banner, NOT generic gameplay |
+| "BEST TILES BEST RUNS" / Stats | the Stats screen, NOT a generic board |
+| "ONE FREE UNDO" | an undo button visible OR a board state mid-undo |
+| "NEW HIGH SCORE" | the score-celebration UI, NOT a quiet gameplay screen |
+| "LEVEL COMPLETE" | the Level Complete modal with stars, NOT mid-play |
 
-### 7.1.6 Honesty in screenshot copy [ALL, P0]
-
-Headlines on the marketing frame must reflect what's actually in the
-shipped app. If the level generator only produces grids up to 10×10,
-the headline cannot say "25×25 GRIDS". This is false advertising and
-Google rejects on review.
-
-**Required check before each app ships:** run through `metadata/screenshot_headlines.json`
-and verify EACH headline is true given the actual game.html content:
-
+Numerical / capability claims still apply (these were the original
+§7.1.6 rule and they remain in force):
 - "500 LEVELS" → the level generator must produce ≥500 unique solvable levels
 - "DAILY CHALLENGE" → the daily challenge mechanic must actually be implemented
 - "OFFLINE PLAY" → the app must work fully without network (test with airplane mode)
 - "25×25 GRIDS" → the largest level the generator produces must be ≥25×25
 - "NO ADS" → the app must have no AdMob integration (different setup; rare)
 
-If a headline overpromises, EITHER fix the game to match OR change the
-headline to match the game. Don't ship with the mismatch.
+If headline says it, image must show it. Otherwise either:
+- Re-capture the slot with the correct screen content
+- Change the headline to describe what's actually visible
 
-This check is part of SHIP_GAME.md Phase 8 self-audit.
+This is part of SHIP_GAME §8.2 and is non-negotiable. Mismatches are a
+Play Store Misleading Behavior policy risk and will be caught by
+reviewers.
+
+For Puzzle2048 May 2026 audit, 5 of 7 slots had this defect. Fix
+before re-uploading.
 
 ### 7.2 Screenshot text overlays [ALL, P0]
 
@@ -742,7 +725,122 @@ Text overlays are fine if they clarify the screen, not if they oversell.
 Text should be short (≤4 words), in the app's brand font, placed outside the
 core game area so the actual gameplay is visible.
 
-### 7.3 Unique screenshots per app [ALL, P0]
+### 7.2.1 Header typography spacing [ALL, P0]
+
+The marketing wrap header has three components stacked vertically:
+headline line 1, headline line 2, subtitle. The vertical gaps between
+them must respect the relative weights of the typography.
+
+**Required gaps as fractions of canvas height (1080×2400 phone, 1200×1920
+tablet 7", 1800×2560 tablet 10"):**
+
+| Element pair | Phone gap | Tablet gap |
+|---|---|---|
+| Line 1 → Line 2 | 1.5% (~36px) | 1.5% |
+| Line 2 → Subtitle | 4.0% (~96px) | 3.5% |
+| Subtitle → device frame | 2.5% (~60px) | 3.0% |
+
+The Puzzle2048 May 2026 audit found subtitle sitting too close to
+the second headline line (descender of "EVERY RUN" almost touched the
+subtitle). Root cause: the legacy 2.0% gap between line 2 and
+subtitle didn't account for heavy display-font descenders at 140-180px
+sizes.
+
+The 4.0% gap is the new minimum. Heavier or italic display fonts
+should bump to 4.5%. Tighter wrappers may try to reclaim the space —
+don't. The breathing room is what makes the header read as designed
+rather than crammed.
+
+### 7.3 Tablet screenshots [ALL, P0]
+
+**Every app gets phone, 7" tablet, AND 10" tablet screenshots.** No
+exceptions, no per-tier scaling, no "skip for long-tail." If an app
+ships, it ships with all three sets.
+
+| Set | Resolution | Slot count | Required |
+|---|---|---|---|
+| Phone | 1080×2400 | 7 | YES |
+| 7" tablet | 1200×1920 | 7 | YES |
+| 10" tablet | 1800×2560 | 7 | YES |
+
+The reasoning is operational: if the wrap pipeline supports tablets at
+all (and it does — `wrap_tablet_screenshots.py` exists), then the
+marginal cost per app is the cost of capturing tablet raws, which is
+~10 minutes once the tablet AVD is configured and the app's tap
+overrides are dialed in. That's worth it because tablet Play Store
+listings without tablet screenshots get the "Phone screenshots only"
+warning badge in some Play Store surfaces and rank lower for tablet
+searches.
+
+The previous "phone running in a tablet canvas" behavior — where
+`wrap_tablet_screenshots.py` silently rescaled phone raws into tablet
+aspect — is a worse outcome than no tablet screenshots at all, and is
+now blocked by the resolution check added in May 2026.
+
+**Tablet captures are SEPARATE captures.** A tablet emulator running
+the same app produces a fundamentally different in-app layout —
+wider boards, different HUD positioning, side panels in some games,
+larger touch targets. The captures must come from a tablet AVD, not
+from the phone AVD with phone raws rescaled.
+
+**Required tablet AVD setup (one-time per machine):**
+
+```
+# In Android Studio AVD Manager, create two AVDs:
+#   pegasus_tablet_7   — Pixel C profile or similar, 1200×1920 portrait
+#   pegasus_tablet_10  — Nexus 10 profile or similar, 1800×2560 portrait
+# Or via command line:
+avdmanager create avd -n pegasus_tablet_7 -k "system-images;android-34;google_apis;x86_64" --device "pixel_c"
+avdmanager create avd -n pegasus_tablet_10 -k "system-images;android-34;google_apis;x86_64" --device "Nexus 10"
+```
+
+Then `capture_screenshots.py --target tablet_7` and `--target tablet_10`
+boot the matching AVD. Tap coordinate fractions usually still work
+across phone/tablet because they're proportional, but per-app
+verification is required because tablet UI sometimes shifts buttons
+to side panels. Per-app tap override files at
+`<App>/test/screenshot_taps.json` may need separate `tablet_7_*` and
+`tablet_10_*` keys.
+
+**`wrap_tablet_screenshots.py` rejects phone-resolution raws** as of
+May 2026. Trying to wrap a 1080-wide phone capture into a tablet
+canvas fails with an explicit error rather than producing the
+"phone running in a tablet emulator" look that Puzzle2048 shipped in
+April 2026.
+
+**Migration plan for existing apps shipped without tablet screenshots:**
+the 5 flagships (WaterSort, Nonogram, PipeConnect, Puzzle2048,
+UnblockPuzzle) need full re-captures including tablet sets before any
+v1.x update ships. Long-tail apps need tablet captures included in
+their first SHIP_GAME run; no ship without all three sets.
+
+### 7.4 Emoji and special glyphs in game.html [ALL, P1]
+
+Many app icons and inline glyphs in game.html use Unicode emoji
+codepoints (✨ ❤ ⚡ 🎯). When the device's font stack doesn't include
+that emoji codepoint, the system renders a "tofu" rectangle (□) instead.
+The Puzzle2048 May 2026 audit caught this on the menu's bottom
+icon row and the weekly-event banner's coin glyph.
+
+**Three options to prevent emoji fallback failures:**
+
+1. **Replace emoji with inline SVG.** Most reliable; scales cleanly,
+   no font dependency. Heavier in code but only ~200 bytes per glyph.
+2. **Use Twemoji or Noto Color Emoji as a webfont** loaded inside
+   game.html. Adds ~100-300KB but covers the whole emoji range.
+3. **Stick to the safe codepoints:** ✓ ✗ ★ ☆ ♥ ♦ ◆ ◇ ● ○ — basic
+   geometric shapes that virtually every system font supports. No
+   color but always renders.
+
+For new Pegasus apps, default to option 3 (safe codepoints) for inline
+glyphs. Use option 1 (SVG) for the icon row of buttons because those
+need to be distinct + recognizable at small sizes, where geometric
+shapes are too generic.
+
+NEVER use emoji in store listing copy — Play Store's editorial review
+is uneven about emoji rendering across crawl tools and may flag listings.
+
+### 7.5 Unique screenshots per app [ALL, P0]
 
 Every app needs its own screenshot set showing THAT app's content. Never
 reuse a screenshot template across apps with just the title/icon swapped —
@@ -752,7 +850,7 @@ If you use a design template (backgrounds, frames, text positions), the
 actual gameplay screenshot inside the frame must be from each app
 individually.
 
-### 7.4 Icon principles [ALL, P0]
+### 7.6 Icon principles [ALL, P0]
 
 - Single clear focal element (one ball, one symbol, one game piece)
 - High contrast against background
@@ -765,37 +863,133 @@ individually.
 Test: take your 512x512 icon, resize to 48x48, look at it on your own home
 screen among your other apps. If it looks like a blob, redesign.
 
-### 7.5 Description structure [ALL, P0]
+### 7.7 Description structure [ALL, P0]
 
-Every full description should follow this structure:
+Every full description follows the format used by current top-grossing
+analogs (Royal Match, Block Blast, Water Sort variants — verified Apr 2026
+by reading their live Play Store listings):
 
 ```
-[Hook] — 2-3 sentences describing what the player does and why it's fun
+[OPENING HOOK — 1-2 sentences, opens with "Welcome to" or a strong
+verb, names the player benefit, uses a brand emoji or "🧩" / "🎮"]
 
-[Section header emoji + CAPS title]
-2-3 sentences expanding on the feature.
+[HOW TO PLAY section — 3-4 bulleted steps, plain language]
+🎮 HOW TO PLAY:
+• Drag and drop X onto the Y
+• Match Z to clear lines / sort colors / etc.
+• Plan your moves to maximize score / minimize moves
+• No time limit — play at your own pace
 
-[Another section header]
-Another paragraph.
+[FEATURES section — 6-10 bullets, EACH with leading emoji]
+✨ FEATURES:
+🔥 Classic Mode — endless play with increasing difficulty
+🏆 Level Mode — complete 500+ challenging puzzles
+🎯 Daily Challenges — fresh puzzle every day
+📊 Global Leaderboard — compete with players worldwide
+💎 Stunning Graphics — beautiful designs, smooth animations
+🎵 Relaxing Music — calming background sounds
+🌙 Dark Theme — easy on the eyes for night play
+📴 Offline Play — no WiFi needed!
 
-✨ FEATURES
-• 6-10 bullet points of specific features
-• Each one concrete and specific
-• Numbers where possible ("500 levels", "22 languages")
+[KEYWORD-DENSITY section — purposefully repeats "offline games" /
+"no wifi games" / "no internet games" 3-5 times. ASO play, not
+elegance. Block Blast does this and it works.]
+🌐 Play anywhere, anytime
+Block Blast is designed for players who love offline games and want
+fun without interruptions. If you are searching for no internet games,
+this is a great choice for relaxing, passing time, and enjoying a
+smart puzzle challenge wherever you are.
 
-💎 OPTIONAL EXTRAS
-• Remove all ads for distraction-free play
-• [Other IAP lines]
+[PRO TIPS section — 3-5 short tips, treats player as someone leveling up]
+✨ PRO TIPS:
+• Plan ahead: visualize moves to keep board open
+• Maximize combos: clear multiple lines for bonus
+• Master the streak: consistent clears boost your score
 
-[Closing] — 1-2 sentences, casual tone, no CTA
-
-Download free and start [action-verb-ing]!
+[CLOSING — 1-2 sentences, casual, invites download without "Download
+now" CTA which is banned]
+🔥 Ready to test your brain? Discover why players love [App Name]
+as their favorite [genre] game.
 ```
 
-Never keyword-stuff. Never repeat the app title more than ~3 times.
-Never use banned phrases.
+Strictly avoid:
+- "#1", "Best", "Top Rated", "Award winning" — Google bans these
+- "Download now", "Install now" — Google bans these
+- "% off", "$X.XX value" — Google bans these
+- Generic openers: "Welcome to [AppName]!" repeated across apps
+  (template-fill detector trips on this — see CLAUDE.md anti-suspension
+  safeguard #6)
+- Keyword stuffing of brand names ("X Game, X Puzzle, X Challenge,
+  X Adventure...")
+- Repeating the app title more than 3 times
 
-### 7.6 Short description (80 chars) [ALL, P0]
+Specifically required for puzzle game listings:
+- Reference ASMR / "satisfying" / "relaxing" / "stress-relief" at least
+  once — this is what users search for in the genre
+- Mention "offline" / "no wifi" / "no internet" at least 3 times across
+  the description — proven ASO play in casual genre
+- Specific numbers ("500 levels", "thousands of puzzles", "100+ themes")
+  — vague claims convert worse
+
+For utility/quiz/reference apps, replace gameplay sections with:
+- HOW IT WORKS (instead of HOW TO PLAY)
+- WHAT'S INCLUDED — bullet list of categories or feature scope
+- Skip PRO TIPS section (utility users don't level up at calculation)
+
+### 7.7.1 Hard rules — failure modes the May 2026 audit found in 5 of 5 flagships [ALL, P0]
+
+The Royal-Match-format spec above existed in this playbook for months
+and Claude Code still produced apps that failed it. So: hard rules,
+checked by `pre_publish_check.py check_listing_floor` (added May 2026):
+
+**Minimum length: 500 characters.** A 97-byte description ("2048 Puzzle
+is the ultimate number merging game that's easy to learn but
+impossible to put down!") or a 157-byte stub is below the casual-puzzle
+floor and signals "abandoned app" to Google's listing-quality classifier.
+Apps with sub-500-char descriptions will not rank.
+
+**The opening line must be a HOOK, not a preamble.** Specifically the
+opening must NOT be:
+
+- An encyclopedia definition ("A nonogram is a logic grid…")
+- A mechanic restatement ("Slide the colored blocks out of the way…")
+- A category description ("a deeply satisfying, calming puzzle game")
+- A genre cliché ("the ultimate X game, easy to learn but impossible
+  to put down")
+- A "Welcome to [AppName]!" template-fill
+
+The opening must contain at least one sensory verb (Pour, Slide, Mark,
+Trace, Watch, Feel, Chase, Fuse) and at least one specific outcome the
+player will experience in the first thirty seconds (a click, a
+satisfaction, a reveal, a streak). If those two requirements aren't met
+in line 1, redo the opening before continuing.
+
+**Honest claims only.** If the listing says "500+ LEVELS", `LEVELS.length`
+in `game.html` must equal or exceed 500. If it says "ASMR", the §6 ASMR
+audit must pass 2/3 (sound + haptic + animation). False numerical claims
+are a Play Store Misleading Behavior policy trigger, not a stylistic
+quibble. The May 2026 audit caught one of these (UnblockPuzzle screenshot
+06: "500+ JAMS" with `LEVELS.length === 150`). Don't repeat it.
+
+**Required keywords for casual puzzle apps.** Description must include
+at least 4 of: `relaxing`, `satisfying`, `ASMR`, `offline`, `brain`,
+`free`. Each must be honest — see ASMR rule above. Audit found all
+5 audited apps missing 3+ of these.
+
+When writing or rewriting a listing, run through this self-check
+before saving:
+
+- [ ] First line opens with a sensory verb, not a definition
+- [ ] First line names a specific outcome the player will feel
+- [ ] Total length ≥ 500 characters
+- [ ] Includes ≥ 4 of the 6 required puzzle keywords (when applicable)
+- [ ] Every numerical claim is verifiable in `game.html`
+- [ ] No banned phrases (#1, Best, Download now, % off, etc.)
+
+If any item fails, revise. This isn't optional polish — these were the
+exact gaps Claude Code's May 2026 audit found in every audited app.
+
+### 7.8 Short description (80 chars) [ALL, P0]
 
 This is the single most-read piece of copy in the whole store listing. It
 appears in search results and the app header.
@@ -1012,53 +1206,189 @@ deceptive.
 
 ## 10. App-specific guidance
 
-Some patterns above are particularly important for specific app types.
+The Pegasus Games portfolio spans multiple app types with fundamentally
+different optimization profiles. Trying to apply puzzle-game quality
+rules to a BMI calculator is wasted effort. Trying to skip them on a
+flagship puzzle game is revenue-destroying. Use the right rules for
+the app type.
 
-### 10.1 Puzzle games (Ball Sort, Water Sort, Nonogram, etc.) [GAMES, P0]
+### Portfolio-shape map
 
-- Par-move system is mandatory (§5.1)
-- Daily challenge is mandatory (§5.4)
-- Undo button (costs 1 coin or free with rewarded video) is mandatory
-- Hint button (costs 5 coins or free with rewarded video) is mandatory
+The portfolio breaks down approximately as:
+- **~30 puzzle games** (BallSort, WaterSort, Nonogram, BlockPuzzle,
+  PipeConnect, Puzzle2048, UnblockPuzzle, BrickBreaker, BubbleShooter,
+  ColorBlockJam, FruitMerge, MahjongSolitaire, KnotPuzzle, etc.)
+- **~12 quiz apps** (FlagQuiz, GeographyQuiz, FootballQuiz, EmojiQuiz,
+  CapitalCities, MentalMathQuiz, etc.)
+- **~22 utility / calculator apps** (BMICalculator, AgeCalculator,
+  LoanCalculator, BillSplit, BudgetPlanner, MedicationReminder, etc.)
+- **~10 reference / hobby apps** (CocktailGuide, GuitarChords,
+  AnimalSounds, MorseCode, DartsScorer, etc.)
+- **~6 kids apps** (ABCLearning, BasicMathKids, KidsColoring, KidsPiano,
+  KidsDrum, CountingApp)
+- **~4 timer / utility games** (DontTapWhite, FlappyBird, DiceRoller,
+  CoinFlip)
+
+These compete with completely different sets of analogs. Quality bar
+and feature scope must reflect that. This section maps each type to
+its real-world priorities.
+
+### 10.1 Puzzle games — flagship tier [GAMES, P0]
+
+**Real analogs:** Royal Match, Block Blast, Magic Sort, Nonogram.com,
+Easybrain Sudoku. These compete on retention, live ops, and IAP funnel.
+
+**Mandatory:**
+- Daily challenge (§5.4)
+- Par-move system (§5.1)
+- Undo button (1 coin or free with rewarded video)
+- Hint button (5 coins or free with rewarded video)
 - Themes/skins unlockable through progression (§5.6)
+- Streak system (§5.3)
+- Time-limited starter pack with countdown (§6.3)
 
-### 10.2 Calculator/converter apps [TOOLS, P0]
+**Strongly recommended for the 1-2 designated flagship apps:**
+- Mascot / character (M2 or M3 from APP_ARCHETYPES.md) — 100%
+  artificial-feeling without one
+- Meta-loop beyond level-clearing — castle restoration / theme
+  collection / character progression
+- 2-week content drop cadence (50 new levels / new theme / new event)
+- Global leaderboard (Firebase Realtime DB)
+- 2-3 concurrent live events (tournament, speed challenge, collection)
+- Explicit ASMR / "satisfying" / "relaxing" audio design
 
+**Designated flagship apps get full quality treatment.** Other puzzle
+games in the portfolio meet the mandatory bar but skip the recommended
+list. A solo dev cannot run live ops on 30 puzzle games. Pick 1-2 to
+be hero, the rest are portfolio filler with cross-promo to the heroes.
+
+### 10.2 Quiz apps [QUIZ, P0]
+
+**Real analogs:** Logo Quiz Ultimate, World Geography Quiz, Movie Quiz —
+the dozens of quiz apps that rank by depth-of-content + ASO.
+
+**Quality bar:**
+- ≥200 questions (Google ranks quiz apps partly by depth claimed in
+  description; "200+ questions" should be honest)
+- Categorized rounds (Easy / Medium / Hard, or thematic categories)
+- Immediate "next question" flow — no menus between questions
+- Share-your-score to social media
+- Daily challenge with one question (low effort, drives retention)
+- Listing copy emphasizes COUNT and BREADTH ("500 flag questions! All
+  countries! Includes territories!")
+
+**Skip:** mascot, meta-loop, leaderboards, live events, sophisticated
+monetization. Quiz apps make money from search ranking + AdMob impressions
+during gameplay, not from IAP funnels. A user playing FlagQuiz spends
+3 minutes per session and shows 2 ads. That's the entire revenue model.
+
+### 10.3 Calculator/converter apps [TOOLS, P0]
+
+**Real analogs:** Calculator++ (50M+ installs, dev: Calculator++ Team),
+Loan Calculator (CCSwe AB, 10M+), Currency Converter (50M+, etc).
+
+**Quality bar:**
 - Open directly to the tool, no menu (§3.5)
-- History of recent calculations, scroll to revisit
-- Unit / mode switcher in header, not a separate menu
-- No IAPs beyond "Remove Ads" — utility users don't buy content
-- No streaks, missions, or progression systems — inappropriate for a tool
-- Smaller ad footprint: banner only, no interstitials (utility users close
-  fast; interstitials = 1-star reviews)
+- Single screen — input, result, history. No tabs, no walkthrough.
+- Correct math (this IS the entire product — bugs here = 1-star reviews)
+- History of recent calculations (scroll to revisit)
+- Unit/mode switcher in header, not a separate menu
+- Banner ad at bottom, never interstitials (users close fast; interstitials
+  on close = uninstall)
+- Optional $1.99-2.99 IAP to remove banner
 
-### 10.3 Tracker apps (habit, mood, sleep, fasting) [TOOLS, P0]
+**Skip:** mascot, leaderboard, meta-loop, daily challenge, streaks,
+themes, archetype self-check (the §10.3 rules ARE the archetype),
+tutorial (a calculator doesn't need onboarding). All over-engineering
+for a tool.
 
-- Privacy first: all data local, no sync, no account, no server
-- Clear data export (CSV or JSON) as a free feature
-- "Delete all my data" button in settings
-- Streak mechanics ARE appropriate here (users want to build habits)
-- No interstitials between entries (users enter data multiple times a day;
-  interstitials = immediate uninstall)
+**Revenue model**: 30 utility apps × 100 installs/day each × 3 banner
+impressions/session × $5 eCPM ≈ $45/day from one fresh install
+cohort, compounding as installs accumulate. The math works because
+each app is cheap to produce.
 
-### 10.4 Kids apps (ABC Learning, Shapes, Kids Piano, etc.) [KIDS, P0]
+### 10.4 Tracker apps [TOOLS, P0]
 
-Complete different rulebook. Subject to Google's Designed for Families
+**Real analogs:** Habit Tracker (CoBan Co, 5M+), Daylio Mood Tracker
+(50M+), Zero Fasting (10M+).
+
+**Quality bar:**
+- Privacy-first messaging in description ("All data stays on your device.
+  No account. No sync. Your data is yours.")
+- Privacy first in implementation — no sync, no account, no server
+- Clear data export (CSV / JSON) as a free feature
+- "Delete all my data" button in Settings
+- Streak mechanics ARE appropriate (users want to build habits)
+- No interstitials between entries — users enter data multiple times
+  per day; interstitials cause immediate uninstall
+- Lock screen widgets / quick-add shortcuts where possible
+
+**Quiz/calculator advice for monetization applies** (banner only, IAP
+to remove ads, skip leaderboards/heroes/etc.) — but the data
+ownership / privacy framing matters more for trackers than for any
+other app type.
+
+### 10.5 Kids apps — Designed for Families program [KIDS, P0]
+
+**Real analogs:** Bini Bambini, Khan Academy Kids, Sago Mini.
+
+Different rulebook entirely. Subject to Google's Designed for Families
 requirements:
 
-- **No behavioral ads.** Only contextual / non-personalized ads, explicitly
-  configured in AdMob
+- **Mascot/character is non-negotiable.** ABCLearning without a
+  friendly character is dead-on-arrival. M2 or M3 from APP_ARCHETYPES.
+  This is one of the few cases where commissioning real character art
+  (or DALL-E/Replicate) is justified.
+- **No behavioral ads.** Only contextual / non-personalized, explicitly
+  configured in AdMob.
 - **No IAPs without parent gate.** Parent gate = simple math problem or
-  "press and hold for 3 seconds" before any purchase flow
-- **COPPA compliance.** No data collection beyond the absolute minimum.
-  Data Safety form must reflect this (no device IDs for advertising)
-- **No external links** (to websites, social media, email). Every link in a
-  kids app must be behind a parent gate.
-- **Age-appropriate content rating**: must pass IARC at "Everyone" / "3+"
-- **No dark patterns, ever.** Kids apps get reviewed much more strictly.
+  "press and hold for 3 seconds" before any purchase flow.
+- **COPPA compliance.** No data collection beyond absolute minimum.
+  Data Safety form reflects this (no advertising IDs).
+- **No external links** without parent gate. No social, no email, no web.
+- **No push notifications.** Forbidden by Google Play Families program.
+- **Native-speaker translation review** required before shipping (per
+  TRANSLATIONS.md §5).
+- **Age-appropriate content rating**: pass IARC at "Everyone" / "3+".
+- **No dark patterns, ever.** Kids apps get reviewed strictly; one
+  violation = removal.
 
-If building a kids app, read Google Play's Families Policy in full before
-starting, not after.
+If building a kids app, read Google Play's Families Policy in full
+before starting, not after.
+
+### 10.6 Reference / hobby apps [REFERENCE, P0]
+
+**Real analogs:** All Recipes (10M+), Guitar Tuna (50M+), genre-specific
+top apps with niche but loyal audiences.
+
+**Quality bar:**
+- **Data completeness is the entire product.** "200 cocktail recipes
+  with photos" is the pitch. Half-finished is dead.
+- Search / filter is mandatory (users come knowing what they want)
+- Favorites / bookmarks
+- Offline access to full database (no cloud fetch per item)
+- Listing copy emphasizes COMPLETENESS and SPECIFICITY ("Every IPA-style
+  cocktail. Every guitar chord in every key. All 50 US state birds.")
+
+**Skip:** mascot, daily challenge, streaks, leaderboards, IAP funnels.
+These apps rank on ASO + completeness and stay there. Limited revenue
+ceiling but cheap to make and sticky for the niche audience.
+
+### 10.7 Mini-games / hyper-casual [GAMES, P0]
+
+**Real analogs:** Flappy Bird (the original spawned dozens), DontTapWhite-
+style reflex games. Ad-supported, low retention, viral spike potential.
+
+**Quality bar:**
+- Single-screen game, no menu navigation
+- Score-based, infinite play
+- Aggressive interstitial cadence (every 2-3 deaths) — these are the
+  one app type where high ad density is expected and tolerated
+- "Beat your high score" is the entire meta-loop
+- Share-score-to-social as a deliberate viral hook
+
+**Skip:** levels, missions, IAP funnels, mascot, themes. These are
+20-second-loop ad-impression machines. Optimize for that.
 
 ---
 

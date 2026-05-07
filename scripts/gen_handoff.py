@@ -286,16 +286,18 @@ Add these 10 locales one at a time:
 
 | Locale | Source folder |
 |---|---|
+| Arabic | `{app_name}/metadata/ar/` |
 | German (Germany) | `{app_name}/metadata/de-DE/` |
 | Spanish (Latin America) | `{app_name}/metadata/es-419/` |
 | French (France) | `{app_name}/metadata/fr-FR/` |
 | Hindi (India) | `{app_name}/metadata/hi-IN/` |
-| Indonesian (Indonesia) | `{app_name}/metadata/id-ID/` |
+| Indonesian | `{app_name}/metadata/id/` |
 | Italian (Italy) | `{app_name}/metadata/it-IT/` |
 | Japanese (Japan) | `{app_name}/metadata/ja-JP/` |
 | Portuguese (Brazil) | `{app_name}/metadata/pt-BR/` |
 | Turkish (Turkey) | `{app_name}/metadata/tr-TR/` |
-| Ukrainian (Ukraine) | `{app_name}/metadata/uk-UA/` |
+| Ukrainian | `{app_name}/metadata/uk/` |
+| Chinese (Simplified) | `{app_name}/metadata/zh-CN/` |
 
 For each locale:
 1. Click **Add language**, pick from the list above

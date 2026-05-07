@@ -28,7 +28,7 @@
              applovin.sdk.key meta-data with the real key to re-enable. -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-2759523698880843~8865461839"/>
+            android:value="ca-app-pub-5695494884863768~8142660616"/>
 
         <activity
             android:name=".MainActivity"
