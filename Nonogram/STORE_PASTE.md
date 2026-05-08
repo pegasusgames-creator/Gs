@@ -22,55 +22,55 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-Warm paper redesign — every screen rebuilt around a calm, newspaper-puzzle aesthetic. Solved-state moment refreshed. 500 levels, daily challenge, streak tracking. Plays fully offline.
+A calm, focused take on classic Picross. 500 hand-crafted boards across five difficulty rings, daily challenge, streak tracking. Plays fully offline. Settle in with a tea.
 </en-US>
 
 <ar>
-تصميم ورق دافئ — كل شاشة أُعيد بناؤها حول جمالية لغز جريدة هادئة. لحظة الحل المُحدثة. 500 مستوى، تحدٍّ يومي، تتبع السلاسل. يعمل بالكامل دون اتصال.
+نسخة هادئة ومركّزة من بيكروس الكلاسيكي. 500 لوحة مصممة يدويًا عبر خمس مستويات صعوبة، تحدٍّ يومي، ومتابعة لسلسلة الأيام. تعمل دون إنترنت. اجلس مع كوب من الشاي.
 </ar>
 
 <de-DE>
-Warmes Papier-Redesign — jeder Bildschirm um eine ruhige Zeitungsrätsel-Ästhetik herum neu gebaut. Auflösungsmoment aufgefrischt. 500 Level, tägliche Herausforderung, Streak-Tracking. Spielt vollständig offline.
+Ein ruhiger, konzentrierter Picross-Klassiker. 500 handgemachte Rätsel auf fünf Schwierigkeitsstufen, tägliche Challenge, Streak-Tracking. Komplett offline spielbar. Einfach loslegen.
 </de-DE>
 
 <es-419>
-Rediseño en papel cálido — cada pantalla reconstruida en torno a una estética serena de acertijo de periódico. Momento de resolución renovado. 500 niveles, desafío diario, seguimiento de rachas. Juega totalmente sin conexión.
+Un Picross clásico, tranquilo y enfocado. 500 tableros hechos a mano en cinco niveles de dificultad, reto diario y seguimiento de rachas. Se juega totalmente sin conexión.
 </es-419>
 
 <fr-FR>
-Refonte papier chaleureux — chaque écran reconstruit autour d'une esthétique calme d'énigme de journal. Moment de résolution rafraîchi. 500 niveaux, défi quotidien, suivi de séries. Joue entièrement hors ligne.
+Un Picross classique, calme et soigné. 500 grilles faites main sur cinq niveaux de difficulté, défi quotidien et suivi de séries. Jouable entièrement hors ligne. Une tasse de thé suffit.
 </fr-FR>
 
 <hi-IN>
-गर्म कागज़ पुनः डिज़ाइन — हर स्क्रीन शांत अख़बार-पहेली सौंदर्य के आसपास फिर से बनाई गई। हल किए गए क्षण को ताज़ा किया गया। 500 स्तर, दैनिक चुनौती, स्ट्रीक ट्रैकिंग। पूरी तरह ऑफ़लाइन खेलें।
+क्लासिक पिक्रॉस का शांत, केंद्रित अनुभव। पाँच कठिनाई स्तरों में 500 हस्तनिर्मित बोर्ड, दैनिक चुनौती और स्ट्रीक ट्रैकिंग। पूरी तरह ऑफ़लाइन खेलें।
 </hi-IN>
 
 <id>
-Desain ulang kertas hangat — setiap layar dibangun ulang dengan estetika teka-teki koran yang tenang. Momen penyelesaian diperbarui. 500 level, tantangan harian, pelacakan streak. Bermain sepenuhnya offline.
+Picross klasik yang tenang dan fokus. 500 papan buatan tangan di lima tingkat kesulitan, tantangan harian, pelacakan rentetan. Bisa dimainkan sepenuhnya offline.
 </id>
 
 <it-IT>
-Riprogettazione carta calda — ogni schermata ricostruita attorno a un'estetica calma di enigma da giornale. Momento di risoluzione rinfrescato. 500 livelli, sfida quotidiana, tracciamento streak. Si gioca completamente offline.
+Un Picross classico, calmo e curato. 500 schemi fatti a mano su cinque livelli di difficoltà, sfida giornaliera e conteggio delle serie. Si gioca completamente offline.
 </it-IT>
 
 <ja-JP>
-暖かな紙のリデザイン — すべての画面を静かな新聞パズルの美学で再構築。クリア時の演出を一新。500レベル、デイリーチャレンジ、ストリーク追跡。完全オフライン対応。
+落ち着いて集中できるクラシックなピクロス。手作りの500ボードを5段階の難易度で収録、デイリーチャレンジと連勝記録を搭載。完全オフラインでも遊べます。
 </ja-JP>
 
 <pt-BR>
-Redesign em papel quente — cada tela reconstruída em torno de uma estética calma de quebra-cabeça de jornal. Momento de resolução renovado. 500 níveis, desafio diário, rastreamento de sequências. Joga totalmente offline.
+Um Picross clássico, calmo e bem cuidado. 500 quadros feitos à mão em cinco níveis de dificuldade, desafio diário e acompanhamento de sequências. Jogue totalmente offline.
 </pt-BR>
 
 <tr-TR>
-Sıcak kâğıt yeniden tasarımı — her ekran sakin bir gazete bulmacası estetiği etrafında yeniden inşa edildi. Çözüm anı yenilendi. 500 seviye, günlük meydan okuma, seri takibi. Tamamen çevrimdışı oynanır.
+Sakin ve odaklanmış klasik Picross. Beş zorluk seviyesinde 500 elden tasarlanmış bulmaca, günlük meydan okuma ve seri takibi. Tamamen çevrimdışı oynanır.
 </tr-TR>
 
 <uk-UA>
-Редизайн у теплому папері — кожен екран перебудовано навколо спокійної естетики газетної головоломки. Оновлено момент розв'язання. 500 рівнів, щоденне випробування, відстеження серій. Грається повністю офлайн.
+Спокійний і зосереджений класичний Picross. 500 створених вручну дощок п’ятьох рівнів складності, щоденне завдання, відстеження серій. Повністю офлайн.
 </uk-UA>
 
 <zh-CN>
-温暖纸张重设计 — 每个界面围绕一份安静的报纸谜题美学重建。解题瞬间焕新。500关、每日挑战、连胜追踪。完全离线游玩。
+一款安静、专注的经典数织。500 张手工设计关卡，五个难度阶梯，每日挑战，连击记录。完全离线，泡杯茶慢慢解。
 </zh-CN>
 
 ---

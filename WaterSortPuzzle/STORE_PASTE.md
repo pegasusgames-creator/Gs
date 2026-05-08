@@ -22,94 +22,81 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-• Polished Settings header with a proper gear icon
-• The Play button now reads "Continue · Level N" when you have unfinished progress
-• Cleaner More Games panel
-• Minor stability improvements
+• Smoother in-app purchases — rewards apply faster and never get stuck
+• Polished shop and toast feedback
+• Background fixes for a more stable run
 </en-US>
 
 <ar>
-• ترويسة إعدادات مصقولة بأيقونة ترس مناسبة
-• زرّ اللعب يقرأ الآن «متابعة · المستوى N» عند وجود تقدّم غير منتهٍ
-• لوحة ألعاب أخرى أنظف
-• تحسينات استقرار صغيرة
+• مشتريات داخل التطبيق أكثر سلاسة — المكافآت تُطبَّق أسرع ولا تعلق أبدًا
+• تحسين تجربة المتجر والتنبيهات
+• إصلاحات في الخلفية لتشغيل أكثر استقرارًا
 </ar>
 
 <de-DE>
-• Verfeinerte Einstellungs-Kopfzeile mit einem richtigen Zahnrad-Symbol
-• Der Play-Knopf zeigt jetzt „Weiter · Level N", wenn du unfertigen Fortschritt hast
-• Aufgeräumtes Mehr-Spiele-Panel
-• Kleine Stabilitätsverbesserungen
+• Reibungslosere In‑App‑Käufe — Belohnungen werden schneller gutgeschrieben und bleiben nie hängen
+• Verfeinerter Shop und klarere Hinweise
+• Hintergrundfixes für einen stabileren Spielverlauf
 </de-DE>
 
 <es-419>
-• Encabezado de Ajustes pulido con un ícono de engranaje adecuado
-• El botón Jugar ahora dice "Continuar · Nivel N" cuando tienes progreso sin terminar
-• Panel de Más Juegos más limpio
-• Pequeñas mejoras de estabilidad
+• Compras dentro de la app más fluidas — las recompensas se aplican más rápido y nunca se traban
+• Tienda y avisos pulidos
+• Correcciones internas para una experiencia más estable
 </es-419>
 
 <fr-FR>
-• En-tête des Paramètres affiné avec une vraie icône d'engrenage
-• Le bouton Jouer affiche désormais « Continuer · Niveau N » quand tu as une progression inachevée
-• Panneau Plus de Jeux plus propre
-• Petites améliorations de stabilité
+• Achats intégrés plus fluides — les récompenses arrivent plus vite et ne restent jamais bloquées
+• Boutique et notifications affinées
+• Correctifs en arrière‑plan pour plus de stabilité
 </fr-FR>
 
 <hi-IN>
-• सेटिंग्स हेडर को असली गियर आइकन के साथ चमकाया गया
-• प्ले बटन अब "जारी रखें · स्तर N" दिखाता है जब आपकी अधूरी प्रगति होती है
-• साफ-सुथरा अधिक खेल पैनल
-• छोटे स्थिरता सुधार
+• इन‑ऐप ख़रीदारी पहले से तेज़ और भरोसेमंद — इनाम अब तुरंत मिलते हैं और कभी अटकते नहीं
+• शॉप और टोस्ट संदेशों में निखार
+• पृष्ठभूमि सुधार से और स्थिर अनुभव
 </hi-IN>
 
 <id>
-• Header Pengaturan dipoles dengan ikon roda gigi yang tepat
-• Tombol Main sekarang menampilkan "Lanjutkan · Level N" saat ada progres yang belum selesai
-• Panel Game Lainnya lebih rapi
-• Perbaikan stabilitas kecil
+• Pembelian dalam aplikasi lebih lancar — hadiah masuk lebih cepat dan tidak pernah tersangkut
+• Toko dan notifikasi diperhalus
+• Perbaikan latar untuk pengalaman lebih stabil
 </id>
 
 <it-IT>
-• Intestazione Impostazioni rifinita con una vera icona ad ingranaggio
-• Il pulsante Gioca ora mostra "Continua · Livello N" quando hai progressi non completati
-• Pannello Altri Giochi più pulito
-• Piccoli miglioramenti di stabilità
+• Acquisti in‑app più scorrevoli — le ricompense arrivano più velocemente e non restano mai bloccate
+• Negozio e notifiche rifiniti
+• Correzioni in background per maggiore stabilità
 </it-IT>
 
 <ja-JP>
-• 設定ヘッダーを本物の歯車アイコンで磨きました
-• 未完了の進行状況がある場合、プレイボタンが「続行 · レベル N」と表示されるようになりました
-• よりすっきりした「その他のゲーム」パネル
-• 細かな安定性の改善
+• アプリ内課金がよりスムーズに — 報酬がすぐに反映され、保留状態にならなくなりました
+• ショップとトースト表示を洗練
+• バックグラウンドの修正で安定性が向上
 </ja-JP>
 
 <pt-BR>
-• Cabeçalho de Configurações polido com um ícone de engrenagem adequado
-• O botão Jogar agora mostra "Continuar · Nível N" quando há progresso inacabado
-• Painel Mais Jogos mais limpo
-• Pequenas melhorias de estabilidade
+• Compras no app mais fluidas — as recompensas são aplicadas mais rápido e nunca ficam travadas
+• Loja e avisos refinados
+• Correções internas para mais estabilidade
 </pt-BR>
 
 <tr-TR>
-• Ayarlar başlığı uygun bir dişli simgesiyle yenilendi
-• Bitmemiş ilerlemen varsa Oyna düğmesi artık "Devam Et · Seviye N" gösteriyor
-• Daha temiz Diğer Oyunlar paneli
-• Küçük kararlılık iyileştirmeleri
+• Uygulama içi satın almalar daha akıcı — ödüller artık daha hızlı ve hiç takılmadan tanımlanıyor
+• Mağaza ve bildirimler rötuşlandı
+• Daha kararlı bir deneyim için arka plan düzeltmeleri
 </tr-TR>
 
 <uk-UA>
-• Відполірований заголовок Налаштувань зі справжньою іконкою шестерні
-• Кнопка Грати тепер показує «Продовжити · Рівень N», коли в тебе є незавершений прогрес
-• Чистіша панель Інших ігор
-• Невеликі покращення стабільності
+• Покупки в застосунку працюють швидше й надійніше — винагороди зараховуються одразу й більше не зависають
+• Оновлений магазин і сповіщення
+• Фонові виправлення задля стабільнішої роботи
 </uk-UA>
 
 <zh-CN>
-• 设置标题栏抛光，换上正经的齿轮图标
-• 当存在未完成进度时，开始按钮显示「继续 · 第N关」
-• 更整洁的更多游戏面板
-• 细节稳定性改进
+• 内购更顺滑 — 奖励到账更快，再也不会卡住
+• 商店与提示更精致
+• 后台修复，运行更稳定
 </zh-CN>
 
 ---
