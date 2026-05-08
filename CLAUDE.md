@@ -349,7 +349,9 @@ required asset files present (icon 512, feature 1024×500, icon 1024,
 ≥2 phone screenshots), all metadata files valid, canonical URLs match,
 no stale per-app `privacy-policy.html`, no `pegasusgames.example` /
 `@outlook.com` placeholders, no `ENTER_*` placeholders, no prohibited
-language, AdMob ID matches manifest+MainActivity, archetype presence
+language, AdMob ID matches manifest+MainActivity, every `iaps.json`
+entry has a canonical `description` (≤200 chars, from `IAP_CATALOG.md`),
+archetype presence
 (four archetypes set in `app_themes.py` + `metadata/app_identity.md`
 present), translations present (all 13 locales), menu button count ≤6.
 
@@ -474,11 +476,34 @@ If you see any of these, stop and surface:
 - Auto-generated listings via template substitution
 - `game.html` under ~8KB planned for publishing
 - Reused screenshots across multiple apps
-- Tablet screenshots that reuse the same raw slot as phone hero shots
-  (raw/01 or raw/03). Tablet must use raw/04 + raw/06 (or other non-
-  phone-hero slots) so the tablet listing tells a different story per
-  `SHIP_GAME.md` Phase 3.5. Identical phone-and-tablet content reads as
-  low effort and hurts conversion
+- Phone, tablet 7", and tablet 10" listings reusing the same raw
+  page, the same wrapper, or the same headline copy. **Each of the
+  three surfaces must be a fully distinct listing**, varying ALL of:
+    1. **Game pages captured** — different in-app screens (menu vs.
+       active board vs. shop vs. results vs. daily challenge etc.),
+       no overlap of which screen appears in two surfaces
+    2. **Levels / boards shown** — even when the same screen type is
+       captured, the level number / board layout / progress state must
+       differ (don't ship "level 3 mid-pour" three times at three
+       resolutions)
+    3. **Wrapper variant** — different layout, headline placement,
+       gradient direction, accent treatment (not one frame with
+       different raws inside)
+    4. **Headlines and subtext** — each surface gets its own headline
+       set: phone reads from `metadata/screenshot_headlines.json`,
+       tablets read from `metadata/screenshot_headlines_tablet_7.json`
+       and `metadata/screenshot_headlines_tablet_10.json` (already
+       supported by `wrap_tablet_screenshots.py` — it falls back to
+       phone copy when the per-target files are missing, which is
+       the failure mode to avoid). Different `line1` / `line2` /
+       `subtitle` per slot; not just retitled phone headlines
+  Tablet listings exist to tell a different story than phone, and
+  Google's quality classifier flags portfolios that ship the same
+  marketing frame three times. Applies to all NEW apps from this point
+  on. The three already-shipped apps (WaterSort, Nonogram, Puzzle2048)
+  are grandfathered — don't retroactively rework them. See
+  `SHIP_GAME.md` Phase 3.6 for raw-slot allocation, wrapper variant
+  selection, and per-target headline file authoring
 - Any temptation to use Puppeteer / headless Chromium for screenshots
   — emulator-only per `QUALITY_PLAYBOOK.md` §7.0 and `SHIP_GAME.md` §3.6.
   If `capture_screenshots.py` can't run because no AVD, surface as
@@ -487,6 +512,11 @@ If you see any of these, stop and surface:
 - Per-app `store/privacy-policy.html` (delete on sight)
 - Privacy / support URL not matching canonical values
 - `iaps.json` not matching MainActivity IAP IDs
+- `iaps.json` entry missing `description`, exceeding 200 chars, or
+  drifting from `docs/IAP_CATALOG.md` canonical text. Play Console
+  requires a description on every IAP (≤200 chars). `init_app_metadata.py`
+  scaffolds canonical descriptions; `pre_publish_check.py
+  check_iaps_descriptions` enforces. Source of truth is `IAP_CATALOG.md`
 - `content_rating.json` with `gambling_mechanics` set on a kids app
 - "Just ship the placeholder app, I'll fix it later" — refuse
 - Crash rate >1% or ANR >0.5% on any shipped app

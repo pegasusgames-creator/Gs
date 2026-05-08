@@ -1,0 +1,20 @@
+{
+  "n_apps": 171,
+  "n_iaps": 1335,
+  "n_anomalies": 695,
+  "n_java": 137,
+  "n_high_fixes": 143,
+  "n_low_review": 689,
+  "apps_modified": 142,
+  "iaps_repriced": 143,
+  "n_published_repriced": 1,
+  "by_anom": {
+    "same_price_different_value": 142,
+    "mechanic_mismatch_lives": 402,
+    "mechanic_mismatch_hints": 131,
+    "mechanic_mismatch_undos": 2,
+    "off_tier_price": 1,
+    "cross_app_price_inconsistency": 1,
+    "missing_standard_skus": 16
+  }
+}

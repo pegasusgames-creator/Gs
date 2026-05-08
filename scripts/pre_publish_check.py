@@ -463,6 +463,56 @@ def check_json_file(apps, relpath, required_keys, label):
                 blocking.append(f"{app}: {relpath} key '{key}' is empty")
     return blocking
 
+# Canonical IAP descriptions — keep in sync with docs/IAP_CATALOG.md.
+# Play Console "Опис" / Description field is required, ≤200 chars.
+IAP_CANONICAL_DESCRIPTIONS = {
+    "remove_ads": "Permanently removes all banner and interstitial ads. Rewarded ads remain available so you can still earn free coins and lives.",
+    "coins_small": "Adds 100 coins to your wallet. Spend coins on hints, extra moves, and unlocking new themes.",
+    "coins_large": "Adds 500 coins to your wallet. Best value coin pack — spend on hints, extra moves, and unlocking new themes.",
+    "five_lives": "Instantly refills your hearts to the maximum so you can keep playing without waiting for them to recharge.",
+    "unlimited_lives_1h": "Play with unlimited lives for one full hour. Perfect for a long puzzle session without any interruption.",
+    "unlimited_lives_forever": "Never run out of lives again. Play as many levels as you want, whenever you want, with no waiting.",
+    "unlimited_undos": "Undo any move at any time, as many times as you want. No more restarting a level after one small mistake.",
+    "undo_pack": "Adds 10 undos to your account. Take back any move at any time so one mistake never costs you a level.",
+    "hint_pack": "Adds 10 hints to your account. Each hint reveals the next correct move on any level where you are stuck.",
+    "starter_pack": "Best value for new players: 100 coins, 5 hints, and 5 lives bundled together. One-time purchase.",
+    "season_pass_monthly": "Monthly pass: ad-free play, +50 daily coins, exclusive themes, and unlimited hints. Cancel anytime in Google Play.",
+}
+IAP_DESC_MAX = 200
+
+
+def check_iaps_descriptions(apps):
+    """BLOCK if any IAP entry is missing a description or exceeds 200 chars.
+    WARN if a description drifts from the canonical text in docs/IAP_CATALOG.md."""
+    blocking = []
+    warnings = []
+    for app in apps:
+        iaps_path = os.path.join(BASE, app, "metadata", "iaps.json")
+        data, err = read_json(iaps_path)
+        if err or not data:
+            continue  # already flagged by check_json_file
+        for section in ("one_time_products", "subscriptions"):
+            for p in data.get(section, []):
+                if not isinstance(p, dict):
+                    continue
+                pid = p.get("id", "?")
+                desc = p.get("description")
+                if not desc:
+                    blocking.append(f"{app}: iaps.json[{section}][{pid}] is missing 'description' "
+                                    f"(Play Console requires it, ≤{IAP_DESC_MAX} chars; "
+                                    f"see docs/IAP_CATALOG.md)")
+                    continue
+                if len(desc) > IAP_DESC_MAX:
+                    blocking.append(f"{app}: iaps.json[{section}][{pid}] description is "
+                                    f"{len(desc)} chars (max {IAP_DESC_MAX})")
+                    continue
+                canonical = IAP_CANONICAL_DESCRIPTIONS.get(pid)
+                if canonical and desc != canonical:
+                    warnings.append(f"{app}: iaps.json[{section}][{pid}] description drifted "
+                                    f"from docs/IAP_CATALOG.md canonical text")
+    return blocking, warnings
+
+
 def check_iaps_match_code(apps):
     """Warn if metadata/iaps.json IDs don't match the PRODUCT_IDS list in MainActivity.java."""
     warnings = []
@@ -1608,6 +1658,7 @@ def main():
     section("meta",  "review_notes.json",          check_json_file, apps,
             "metadata/review_notes.json",
             ["google_review_notes", "apple_review_notes", "demo_account_required"], "review_notes")
+    section("meta",  "iaps.json descriptions",     check_iaps_descriptions, apps)
     section("meta",  "iaps.json matches code",     lambda a: ([], check_iaps_match_code(a)), apps)
     section("meta",  "canonical privacy/support URLs", check_canonical_urls, apps)
     section("meta",  "no per-app privacy.html",    check_no_per_app_privacy_html, apps)

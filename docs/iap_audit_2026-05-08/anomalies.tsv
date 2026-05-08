@@ -1,0 +1,696 @@
+severity	app	product_ids	anomaly_type	evidence	confidence
+BLOCKER	ABCLearning	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	ABCLearning	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ABCLearning	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ABCLearning	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ABCLearning	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	AnimalQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	AnimalQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	AnimalQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	AnimalQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	AnimalQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	AnimalSounds	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	AnimalSounds	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	AnimalSounds	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	AnimalSounds	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	AnimalSounds	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	AspectRatio	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	AspectRatio	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	AspectRatio	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	AspectRatio	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	AspectRatio	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	BMICalculator	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	BMICalculator	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BMICalculator	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BMICalculator	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BMICalculator	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	BalloonPop	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	BalloonPop	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	BasicMathKids	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	BasicMathKids	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BasicMathKids	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BasicMathKids	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BasicMathKids	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	BibleQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	BibleQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BibleQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BibleQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BibleQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Binairo	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	Binairo	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Binairo	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Binairo	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Binairo	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	BlockPuzzle	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	BlockPuzzle	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BlockPuzzle	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BlockPuzzle	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BlockPuzzle	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	BloodPressureLog	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	BloodPressureLog	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BloodPressureLog	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BloodPressureLog	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BloodPressureLog	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	BloodSugarLog	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	BloodSugarLog	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BloodSugarLog	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BloodSugarLog	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BloodSugarLog	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	BreathingExercise	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	BreathingExercise	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BreathingExercise	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BreathingExercise	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BreathingExercise	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	BrickBreaker	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	BrickBreaker	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	BubbleShooter	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	BubbleShooter	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BubbleShooter	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BubbleShooter	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BubbleShooter	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	BudgetPlanner	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	BudgetPlanner	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BudgetPlanner	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BudgetPlanner	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	BudgetPlanner	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	CapitalCities	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	CapitalCities	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CapitalCities	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CapitalCities	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CapitalCities	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	CharadesApp	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	CharadesApp	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CharadesApp	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CharadesApp	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CharadesApp	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	ChessClock	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	ChessClock	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ChessClock	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ChessClock	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ChessClock	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	ChoreChart	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	ChoreChart	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ChoreChart	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ChoreChart	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ChoreChart	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	CocktailGuide	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	CocktailGuide	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CocktailGuide	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CocktailGuide	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CocktailGuide	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	CoffeeGuide	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	CoffeeGuide	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CoffeeGuide	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CoffeeGuide	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CoffeeGuide	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	CompoundInterest	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	CompoundInterest	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CompoundInterest	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CompoundInterest	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CompoundInterest	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Connections	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	Connections	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	CountingApp	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	CountingApp	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CountingApp	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CountingApp	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CountingApp	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Cryptogram	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	Cryptogram	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Cryptogram	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Cryptogram	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CurrencyConverter	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	CurrencyConverter	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CurrencyConverter	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CurrencyConverter	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	CurrencyConverter	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	DartsScorer	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	DartsScorer	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DartsScorer	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DartsScorer	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DartsScorer	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	DecisionMaker	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	DecisionMaker	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DecisionMaker	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DecisionMaker	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DecisionMaker	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	DiceRoller	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	DiceRoller	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DiceRoller	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DiceRoller	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DiceRoller	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	DinosaurApp	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	DinosaurApp	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DinosaurApp	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DinosaurApp	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DinosaurApp	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	DotArt	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	DotArt	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DotArt	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DotArt	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DotArt	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	DrumMachine	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	DrumMachine	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DrumMachine	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DrumMachine	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	DrumMachine	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	EmojiQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	EmojiQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	EmojiQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	EmojiQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	EmojiQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	EmotionFlash	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	EmotionFlash	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	EmotionFlash	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	EmotionFlash	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	EmotionFlash	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	ExpenseTracker	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	ExpenseTracker	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ExpenseTracker	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ExpenseTracker	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ExpenseTracker	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	EyeRest	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	EyeRest	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	EyeRest	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	EyeRest	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	EyeRest	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	FastingTimer	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	FastingTimer	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FastingTimer	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FastingTimer	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FastingTimer	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	FindDifference	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	FindDifference	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FindDifference	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FindDifference	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FishingLog	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	FishingLog	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FishingLog	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FishingLog	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FishingLog	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	FlagQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	FlagQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FlagQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FlagQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FlagQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	FlashcardMaker	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	FlashcardMaker	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FlashcardMaker	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FlashcardMaker	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FlashcardMaker	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	FoodQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	FoodQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FoodQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FoodQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FoodQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	FootballQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	FootballQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FootballQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FootballQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FootballQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	FruitMerge	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	FruitMerge	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FruitMerge	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FruitMerge	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FruitMerge	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	FruitSort	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	FruitSort	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FruitSort	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FruitSort	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	FruitSort	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	GPACalculator	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	GPACalculator	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GPACalculator	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GPACalculator	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GPACalculator	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	GeneralQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	GeneralQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GeneralQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GeneralQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GeneralQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	GeographyQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	GeographyQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GeographyQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GeographyQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GeographyQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	GolfScorecard	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	GolfScorecard	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GolfScorecard	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GolfScorecard	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GolfScorecard	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	GroceryList	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	GroceryList	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GroceryList	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GroceryList	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	GroceryList	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	HabitTracker	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	HabitTracker	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HabitTracker	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HabitTracker	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HabitTracker	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Hangman	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	Hangman	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Hangman	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Hangman	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HarryPotterFan	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	HarryPotterFan	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HarryPotterFan	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HarryPotterFan	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HarryPotterFan	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	HeadsUpGame	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	HeadsUpGame	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HeadsUpGame	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HeadsUpGame	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HeadsUpGame	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	HiddenObject	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	HiddenObject	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HiddenObject	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HiddenObject	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HistoryQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	HistoryQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HistoryQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HistoryQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	HistoryQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	IceBreaker	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	IceBreaker	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	IceBreaker	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	IceBreaker	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	IceBreaker	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	JigsawPuzzle	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	JigsawPuzzle	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	JigsawPuzzle	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	JigsawPuzzle	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	JigsawPuzzle	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	KidsColoring	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	KidsColoring	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	KidsColoring	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	KidsColoring	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	KidsColoring	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	KidsDrum	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	KidsDrum	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	KidsDrum	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	KidsDrum	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	KidsDrum	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	KidsPiano	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	KidsPiano	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	KidsPiano	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	KidsPiano	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	KidsPiano	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	KnotPuzzle	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	KnotPuzzle	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	KnotPuzzle	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	KnotPuzzle	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	KnotPuzzle	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	LoanCalculator	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	LoanCalculator	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	LoanCalculator	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	LoanCalculator	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	LoanCalculator	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	LogoQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	LogoQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	LogoQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	LogoQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	LogoQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	MahjongSolitaire	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	MahjongSolitaire	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MahjongSolitaire	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MahjongSolitaire	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MahjongSolitaire	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	MandalaColor	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	MandalaColor	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MandalaColor	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MandalaColor	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MandalaColor	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Mastermind	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	Mastermind	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Mastermind	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Mastermind	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Mastermind	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	MedicationReminder	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	MedicationReminder	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MedicationReminder	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MedicationReminder	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MedicationReminder	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	MentalMathQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	MentalMathQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MentalMathQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MentalMathQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MentalMathQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Minesweeper	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	Minesweeper	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Minesweeper	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Minesweeper	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Minesweeper	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	MoodTracker	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	MoodTracker	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MoodTracker	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MoodTracker	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MoodTracker	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	MorseCode	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	MorseCode	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MorseCode	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MorseCode	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MorseCode	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	MovieTrivia	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	MovieTrivia	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MovieTrivia	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MovieTrivia	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MovieTrivia	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	MultiplicationGame	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	MultiplicationGame	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MultiplicationGame	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MultiplicationGame	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	MultiplicationGame	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Nonogram	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	NumberBase	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	NumberBase	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	NumberBase	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	NumberBase	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	NumberBase	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	NumberLink	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	NumberLink	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	NumberLink	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	NumberLink	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	NumberLink	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	NumberMemory	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	NumberMemory	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	NumberMemory	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	NumberMemory	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	NumberMemory	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	NumberTap	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	NumberTap	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	NumberTap	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	NumberTap	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	NumberTap	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	PackingChecklist	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	PackingChecklist	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PackingChecklist	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PackingChecklist	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PackingChecklist	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	PackingList	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	PackingList	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PackingList	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PackingList	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PackingList	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	PercentageCalc	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	PercentageCalc	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PercentageCalc	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PercentageCalc	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PercentageCalc	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	PeriodTracker	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	PeriodTracker	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PeriodTracker	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PeriodTracker	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PeriodTracker	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	PhoneticApp	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	PhoneticApp	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PhoneticApp	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PhoneticApp	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PhoneticApp	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Phrasebook	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	Phrasebook	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Phrasebook	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Phrasebook	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Phrasebook	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	PinPull	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	PinPull	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PinPull	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PinPull	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PinPull	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	PipeConnect	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	PixelArt	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	PixelArt	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PixelArt	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PixelArt	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PixelArt	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	PlantWater	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	PlantWater	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PlantWater	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PlantWater	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PlantWater	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	PostureReminder	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	PostureReminder	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PostureReminder	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PostureReminder	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PostureReminder	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	PushUpCounter	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	PushUpCounter	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PushUpCounter	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PushUpCounter	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	PushUpCounter	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Puzzle2048	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	Puzzle2048	undo_pack	mechanic_mismatch_undos	no 'undos' references found in game.html	LOW
+BLOCKER	QRCodeGen	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	QRCodeGen	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	QRCodeGen	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	QRCodeGen	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	QRCodeGen	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	QuitSmoking	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	QuitSmoking	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	QuitSmoking	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	QuitSmoking	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	QuitSmoking	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	RecipeConverter	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	RecipeConverter	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	RecipeConverter	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	RecipeConverter	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	RecipeConverter	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	RomanNumeralConverter	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	RomanNumeralConverter	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	RomanNumeralConverter	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	RomanNumeralConverter	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	RomanNumeralConverter	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	SalaryCalculator	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	SalaryCalculator	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SalaryCalculator	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SalaryCalculator	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SalaryCalculator	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	SavingsGoal	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	SavingsGoal	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SavingsGoal	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SavingsGoal	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SavingsGoal	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	ScienceQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	ScienceQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ScienceQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ScienceQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ScienceQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	ScientificCalc	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	ScientificCalc	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ScientificCalc	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ScientificCalc	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ScientificCalc	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	ScoreTracker	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	ScoreTracker	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ScoreTracker	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ScoreTracker	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ScoreTracker	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	ScrewPuzzle	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	ScrewPuzzle	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ScrewPuzzle	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ScrewPuzzle	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ScrewPuzzle	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	ShapesColors	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	ShapesColors	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ShapesColors	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ShapesColors	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ShapesColors	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	SleepTracker	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	SleepTracker	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SleepTracker	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SleepTracker	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SleepTracker	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	SlidingTiles	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	SlidingTiles	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SlidingTiles	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SlidingTiles	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SlidingTiles	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	SnakeGame	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	SnakeGame	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SnakeGame	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SnakeGame	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SnakeGame	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	SobrietyCounter	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	SobrietyCounter	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SobrietyCounter	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SobrietyCounter	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SobrietyCounter	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Sokoban	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	Sokoban	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Sokoban	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Sokoban	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Sokoban	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	SolarSystem	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	SolarSystem	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SolarSystem	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SolarSystem	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SolarSystem	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Solitaire	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	Solitaire	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Solitaire	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Solitaire	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Solitaire	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	SoundBoard	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	SoundBoard	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SoundBoard	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SoundBoard	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SoundBoard	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	SpellingBee	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	SpellingBee	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SpellingBee	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SpellingBee	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SpinBottle	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	SpinBottle	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SpinBottle	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SpinBottle	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SpinBottle	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	SportsQuiz	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	SportsQuiz	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SportsQuiz	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SportsQuiz	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	SportsQuiz	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	StepCounter	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	StepCounter	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	StepCounter	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	StepCounter	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	StepCounter	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Sudoku	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	Sudoku	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Sudoku	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Sudoku	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Sudoku	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	Sumplete	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	Sumplete	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Sumplete	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Sumplete	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	Sumplete	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	TapColor	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	TapColor	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TapColor	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TapColor	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TapColor	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	TetrisGame	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	TetrisGame	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TetrisGame	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TetrisGame	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TetrisGame	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	TextCase	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	TextCase	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TextCase	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TextCase	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TextCase	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	ThisOrThat	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	ThisOrThat	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ThisOrThat	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ThisOrThat	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ThisOrThat	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	TimesTable	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	TimesTable	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TimesTable	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TimesTable	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TimesTable	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	TimezoneConverter	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	TimezoneConverter	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TimezoneConverter	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TimezoneConverter	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TimezoneConverter	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	TipCalculator	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	TipCalculator	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TipCalculator	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TipCalculator	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TipCalculator	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	TrueOrFalse	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	TrueOrFalse	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TrueOrFalse	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TrueOrFalse	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TrueOrFalse	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	TruthOrDare	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	TruthOrDare	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TruthOrDare	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TruthOrDare	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TruthOrDare	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	TwoTruthsOneLie	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	TwoTruthsOneLie	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TwoTruthsOneLie	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TwoTruthsOneLie	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	TwoTruthsOneLie	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	UnblockPuzzle	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	UnitConverter	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	UnitConverter	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	UnitConverter	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	UnitConverter	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	UnitConverter	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	VATCalculator	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	VATCalculator	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	VATCalculator	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	VATCalculator	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	VATCalculator	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	WaterReminder	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	WaterReminder	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WaterReminder	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WaterReminder	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WaterReminder	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	WaterSortPuzzle	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+MINOR	WaterSortPuzzle	unlimited_undos	off_tier_price	$3.99 is not in spec tier list ([0.99, 1.99, 2.99, 4.99, 7.99, 9.99, 14.99, 19.99, 29.99, 49.99, 99.99])	HIGH
+BLOCKER	WaterSortPuzzle	unlimited_undos	mechanic_mismatch_undos	no 'undos' references found in game.html	LOW
+BLOCKER	WhackaMole	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	WhackaMole	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WhackaMole	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WhackaMole	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WhackaMole	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	WhiteNoise	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	WhiteNoise	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WhiteNoise	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WhiteNoise	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WhiteNoise	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	WordConnect	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	WordConnect	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WordConnect	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WordConnect	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WordLadder	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	WordLadder	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WordLadder	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WordLadder	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WordLadder	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	WordleClone	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	WordleClone	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WordleClone	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WordleClone	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WordleClone	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	WorkoutLog	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	WorkoutLog	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WorkoutLog	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WorkoutLog	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WorkoutLog	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	WouldYouRather	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	WouldYouRather	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WouldYouRather	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WouldYouRather	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	WouldYouRather	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	YarnSort	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	YarnSort	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	YarnSort	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	YarnSort	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	YarnSort	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+BLOCKER	ZenGarden	five_lives + unlimited_lives_1h	same_price_different_value	both at $0.99; 'unlimited_lives_1h' grants strictly more lives than 'five_lives'	HIGH
+BLOCKER	ZenGarden	five_lives	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ZenGarden	unlimited_lives_1h	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ZenGarden	unlimited_lives_forever	mechanic_mismatch_lives	no 'lives' / 'hearts' references found in game.html — user could buy a SKU the app can't grant	LOW
+BLOCKER	ZenGarden	hint_pack	mechanic_mismatch_hints	no 'hints' references found in game.html	LOW
+MAJOR	<portfolio-wide>	remove_ads	cross_app_price_inconsistency	'remove_ads' priced at multiple values: $2.99 (170 apps), $1.99 (1 apps)	LOW
+MINOR	AgeCalculator	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	CoinFlip	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	FlashlightSOS	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	GuitarChords	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	MemoryCard	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	Metronome	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	MusicTheory	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	PasswordGen	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	PianoKeyboard	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	RandomName	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	RandomNumber	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	RandomRecipe	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	StroopTest	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	TwentyQuestions	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	WordScramble	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW
+MINOR	WordSearch	coin_packs,starter_pack,season_pass	missing_standard_skus	app missing 3 standard buckets: ['coin_packs', 'starter_pack', 'season_pass']	LOW

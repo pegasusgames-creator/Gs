@@ -11,6 +11,15 @@ The titles and descriptions in this file are designed to fit Play
 Console's character limits and to match what the in-game shop screen
 shows the user.
 
+**`description` is mandatory in every `iaps.json` entry** (one-time
+products AND subscriptions). Play Console's "Опис" / Description field
+is required when creating any IAP and accepts up to 200 characters. The
+canonical text per product ID is the table below; copy it verbatim into
+`iaps.json`. `init_app_metadata.py` writes the canonical descriptions for
+new apps automatically, and `pre_publish_check.py check_iaps_descriptions`
+blocks any app whose `iaps.json` is missing a description, exceeds 200
+chars, or drifts from the catalog text.
+
 ---
 
 ## Play Console form structure (one-time products)
@@ -62,11 +71,12 @@ in `MainActivity.java` `VALID_PRODUCTS` and in `iaps.json`.
 | 2 | `coins_small` | Consumable | $0.99 | 100 Coins | Adds 100 coins to your wallet. Spend coins on hints, extra moves, and unlocking new themes. |
 | 3 | `coins_large` | Consumable | $2.99 | 500 Coins | Adds 500 coins to your wallet. Best value coin pack — spend on hints, extra moves, and unlocking new themes. |
 | 4 | `five_lives` | Consumable | $0.99 | 5 Lives | Instantly refills your hearts to the maximum so you can keep playing without waiting for them to recharge. |
-| 5 | `unlimited_lives_1h` | Consumable | $0.99 | 1 Hour Unlimited Lives | Play with unlimited lives for one full hour. Perfect for a long puzzle session without any interruption. |
+| 5 | `unlimited_lives_1h` | Consumable | $1.99 | 1 Hour Unlimited Lives | Play with unlimited lives for one full hour. Perfect for a long puzzle session without any interruption. |
 | 6 | `unlimited_lives_forever` | Non-consumable | $4.99 | Unlimited Lives Forever | Never run out of lives again. Play as many levels as you want, whenever you want, with no waiting. |
-| 7 | `unlimited_undos` | Non-consumable | $3.99 | Unlimited Undos | Undo any move at any time, as many times as you want. No more restarting a level after one small mistake. |
-| 8 | `hint_pack` | Consumable | $1.99 | Hint Pack | Adds 10 hints to your account. Each hint reveals the next correct move on any level where you are stuck. |
-| 9 | `starter_pack` | Consumable | $0.99 | Starter Pack | Best value for new players: 100 coins, 5 hints, and 5 lives bundled together. One-time purchase. |
+| 7 | `unlimited_undos` | Non-consumable | $4.99 | Unlimited Undos | Undo any move at any time, as many times as you want. No more restarting a level after one small mistake. |
+| 8 | `undo_pack` | Consumable | $0.99 | Undo Pack (10) | Adds 10 undos to your account. Take back any move at any time so one mistake never costs you a level. |
+| 9 | `hint_pack` | Consumable | $1.99 | Hint Pack | Adds 10 hints to your account. Each hint reveals the next correct move on any level where you are stuck. |
+| 10 | `starter_pack` | Consumable | $0.99 | Starter Pack | Best value for new players: 100 coins, 5 hints, and 5 lives bundled together. One-time purchase. |
 
 ---
 

@@ -1,9 +1,29 @@
 {
   "one_time_products": [
-    {"id": "remove_ads",  "title": "Remove Ads",  "price_usd": 1.99},
-    {"id": "coins_small", "title": "100 Coins",   "price_usd": 0.99},
-    {"id": "coins_large", "title": "500 Coins",   "price_usd": 2.99},
-    {"id": "starter_pack","title": "Starter Pack","price_usd": 0.99}
+    {
+      "id": "remove_ads",
+      "title": "Remove Ads",
+      "price_usd": 1.99,
+      "description": "Permanently removes all banner and interstitial ads. Rewarded ads remain available so you can still earn free coins and lives."
+    },
+    {
+      "id": "coins_small",
+      "title": "100 Coins",
+      "price_usd": 0.99,
+      "description": "Adds 100 coins to your wallet. Spend coins on hints, extra moves, and unlocking new themes."
+    },
+    {
+      "id": "coins_large",
+      "title": "500 Coins",
+      "price_usd": 2.99,
+      "description": "Adds 500 coins to your wallet. Best value coin pack — spend on hints, extra moves, and unlocking new themes."
+    },
+    {
+      "id": "starter_pack",
+      "title": "Starter Pack",
+      "price_usd": 0.99,
+      "description": "Best value for new players: 100 coins, 5 hints, and 5 lives bundled together. One-time purchase."
+    }
   ],
   "subscriptions": []
 }

@@ -3,42 +3,50 @@
     {
       "id": "remove_ads",
       "title": "Remove Ads",
-      "price_usd": 2.99
+      "price_usd": 2.99,
+      "description": "Permanently removes all banner and interstitial ads. Rewarded ads remain available so you can still earn free coins and lives."
     },
     {
       "id": "coins_small",
       "title": "100 Coins",
-      "price_usd": 0.99
+      "price_usd": 0.99,
+      "description": "Adds 100 coins to your wallet. Spend coins on hints, extra moves, and unlocking new themes."
     },
     {
       "id": "coins_large",
       "title": "500 Coins",
-      "price_usd": 2.99
+      "price_usd": 2.99,
+      "description": "Adds 500 coins to your wallet. Best value coin pack — spend on hints, extra moves, and unlocking new themes."
     },
     {
       "id": "five_lives",
       "title": "5 Lives",
-      "price_usd": 0.99
+      "price_usd": 0.99,
+      "description": "Instantly refills your hearts to the maximum so you can keep playing without waiting for them to recharge."
     },
     {
       "id": "unlimited_lives_1h",
       "title": "1hr Unlimited",
-      "price_usd": 0.99
+      "price_usd": 1.99,
+      "description": "Play with unlimited lives for one full hour. Perfect for a long puzzle session without any interruption."
     },
     {
       "id": "unlimited_lives_forever",
       "title": "Unlimited Lives",
-      "price_usd": 4.99
+      "price_usd": 4.99,
+      "description": "Never run out of lives again. Play as many levels as you want, whenever you want, with no waiting."
     },
     {
       "id": "undo_pack",
       "title": "Undo Pack (10)",
-      "price_usd": 0.99
+      "price_usd": 0.99,
+      "description": "Adds 10 undos to your account. Take back any move at any time so one mistake never costs you a level."
     },
     {
       "id": "starter_pack",
       "title": "Starter Pack",
-      "price_usd": 0.99
+      "price_usd": 0.99,
+      "description": "Best value for new players: 100 coins, 5 hints, and 5 lives bundled together. One-time purchase."
     }
   ],
   "subscriptions": [
@@ -47,7 +55,8 @@
       "title": "Season Pass",
       "price_usd": 1.99,
       "billing_period": "P1M",
-      "grace_period_days": 3
+      "grace_period_days": 3,
+      "description": "Monthly pass: ad-free play, +50 daily coins, exclusive themes, and unlimited hints. Cancel anytime in Google Play."
     }
   ]
 }

@@ -559,6 +559,71 @@ Every app ships with phone, 7" tablet, AND 10" tablet screenshots
 per QUALITY_PLAYBOOK §7.3. No skipping. Steps 3.3-3.5 above run for
 phone; this step repeats them for both tablet sizes.
 
+**Three surfaces, three distinct stories — applies to all NEW apps
+(grandfathered: WaterSort, Nonogram, Puzzle2048 ship as-is, do not
+retroactively rework).** Phone, tablet 7", and tablet 10" must each
+be a fully distinct listing — they share the same app and brand, but
+EVERY axis below must differ across the three:
+
+1. **Different in-app pages captured.** Don't capture the same
+   screen type for all three surfaces. Vary which game state each
+   surface shows: phone might lead with the active board + daily
+   challenge + shop; tablet 7" might lead with the level select +
+   power-up panel + win screen; tablet 10" might lead with the
+   themes gallery + leaderboard + tutorial. The three listings
+   together should cover ~10–12 distinct in-app moments, not the
+   same 2–3 moments reframed three times.
+2. **Different levels / boards / progress states.** Even when the
+   same screen type is captured (e.g. "active board"), the level
+   number, board layout, color palette in play, or progress state
+   shown must differ across surfaces. Phone showing "level 3 mid-
+   pour" + tablet 7" showing the same level 3 + tablet 10" showing
+   the same level 3 is the failure mode — capture level 3 for
+   phone, level 27 for tablet 7", level 84 for tablet 10".
+3. **No raw slot reused across surfaces.** Standard allocation:
+   - Phone:     raw/01–raw/07 (the 7 hero pages on phone AVD)
+   - Tablet 7": raw/04 + raw/06 (captured FRESH on the 7" AVD,
+     showing different levels/screens than phone slots)
+   - Tablet 10": raw/02 + raw/05 (different from BOTH phone hero
+     and tablet 7" content, captured FRESH on the 10" AVD)
+4. **Different wrapper variant per surface.** Don't ship the same
+   marketing frame (background gradient, headline placement, device
+   mockup style, accent treatment) on all three surfaces with only
+   the inner raw swapped:
+   - Phone:     primary wrapper variant (full hero crop, top-aligned
+     headline)
+   - Tablet 7": secondary variant (split-pane layout or side-aligned
+     headline, different accent texture)
+   - Tablet 10": tertiary variant (landscape-friendly composition,
+     larger device mockup, different gradient direction)
+   Variant selection lives in `wrap_screenshots.py` /
+   `wrap_tablet_screenshots.py`. If the scripts only emit one
+   variant, add per-target variants before shipping the app — do not
+   ship three identical frames.
+5. **Per-surface headlines and subtext.** Phone reads
+   `metadata/screenshot_headlines.json`. Tablets must have their own
+   `metadata/screenshot_headlines_tablet_7.json` and
+   `metadata/screenshot_headlines_tablet_10.json` files (already
+   supported by `wrap_tablet_screenshots.py` line ~322 — when
+   missing, it silently falls back to phone copy, which is the
+   failure mode to avoid). Each file is the same schema as the phone
+   one (array of `{line1, line2, subtitle}`), but every entry must be
+   different copy from the phone version — different angle, different
+   feature emphasized, different verb. Don't translate phone copy
+   into "tablet voice" with synonym swaps; write fresh hooks that
+   match what each surface's raw page actually shows. If a surface
+   has only 2 wrapped slots (the Pegasus minimum), 2 fresh headlines
+   per surface = 6 unique headlines per app.
+
+**Enforcement state (May 2026):** `check_screenshot_uniqueness`
+currently blocks tablet raws that match phone raws, and blocks tablet
+raws below tablet resolution. It does NOT yet block tablet_7-vs-
+tablet_10 raw collisions or wrapper-variant reuse across the three
+surfaces — those rules are doc-only for now. Hold the bar manually
+during Phase 3.6: pick distinct raw slots for each of the three
+surfaces, and confirm visually that the three wrapped marketing
+frames look like three different listings, not three copies of one.
+
 For each tablet target:
 
 1. Boot the tablet AVD if not already running:

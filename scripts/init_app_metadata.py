@@ -151,20 +151,32 @@ def content_rating_template(app):
     }
 
 def iaps_template(app):
+    # Descriptions are canonical text from docs/IAP_CATALOG.md (≤200 chars,
+    # Play Console "Опис" / Description limit). Keep these in sync with that
+    # catalog; pre_publish_check.py blocks on missing or non-canonical text.
     return {
         "one_time_products": [
-            {"id": "remove_ads",         "title": "Remove Ads",   "price_usd": 2.99},
-            {"id": "coins_small",        "title": "100 Coins",    "price_usd": 0.99},
-            {"id": "coins_large",        "title": "500 Coins",    "price_usd": 2.99},
-            {"id": "five_lives",         "title": "5 Lives",      "price_usd": 0.99},
-            {"id": "unlimited_lives_1h",      "title": "1hr Unlimited",      "price_usd": 0.99},
-            {"id": "unlimited_lives_forever", "title": "Unlimited Lives",    "price_usd": 4.99},
-            {"id": "hint_pack",          "title": "Hint Pack",    "price_usd": 1.99},
-            {"id": "starter_pack",       "title": "Starter Pack", "price_usd": 0.99},
+            {"id": "remove_ads",         "title": "Remove Ads",   "price_usd": 2.99,
+             "description": "Permanently removes all banner and interstitial ads. Rewarded ads remain available so you can still earn free coins and lives."},
+            {"id": "coins_small",        "title": "100 Coins",    "price_usd": 0.99,
+             "description": "Adds 100 coins to your wallet. Spend coins on hints, extra moves, and unlocking new themes."},
+            {"id": "coins_large",        "title": "500 Coins",    "price_usd": 2.99,
+             "description": "Adds 500 coins to your wallet. Best value coin pack — spend on hints, extra moves, and unlocking new themes."},
+            {"id": "five_lives",         "title": "5 Lives",      "price_usd": 0.99,
+             "description": "Instantly refills your hearts to the maximum so you can keep playing without waiting for them to recharge."},
+            {"id": "unlimited_lives_1h",      "title": "1hr Unlimited",      "price_usd": 1.99,
+             "description": "Play with unlimited lives for one full hour. Perfect for a long puzzle session without any interruption."},
+            {"id": "unlimited_lives_forever", "title": "Unlimited Lives",    "price_usd": 4.99,
+             "description": "Never run out of lives again. Play as many levels as you want, whenever you want, with no waiting."},
+            {"id": "hint_pack",          "title": "Hint Pack",    "price_usd": 1.99,
+             "description": "Adds 10 hints to your account. Each hint reveals the next correct move on any level where you are stuck."},
+            {"id": "starter_pack",       "title": "Starter Pack", "price_usd": 0.99,
+             "description": "Best value for new players: 100 coins, 5 hints, and 5 lives bundled together. One-time purchase."},
         ],
         "subscriptions": [
             {"id": "season_pass_monthly", "title": "Season Pass",
-             "price_usd": 1.99, "billing_period": "P1M", "grace_period_days": 3},
+             "price_usd": 1.99, "billing_period": "P1M", "grace_period_days": 3,
+             "description": "Monthly pass: ad-free play, +50 daily coins, exclusive themes, and unlimited hints. Cancel anytime in Google Play."},
         ],
     }
 
