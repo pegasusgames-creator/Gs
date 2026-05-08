@@ -651,6 +651,32 @@ def check_no_per_app_privacy_html(apps):
                 )
     return blocking
 
+def check_store_paste_locale_tags(apps):
+    """BLOCKING: STORE_PASTE.md must NOT contain `<uk-UA>` or `<id-ID>`
+    locale tags. Play Console's actual codes are `uk` and `id` — using
+    the BCP-47 forms means the user pastes Ukrainian copy into a Play
+    Console field that doesn't exist (or worse, into the wrong field).
+    Source-of-truth: TRANSLATIONS.md §1 + scripts/gen_store_paste.py."""
+    blocking = []
+    bad = ["<uk-UA>", "</uk-UA>", "<id-ID>", "</id-ID>"]
+    for app in apps:
+        path = os.path.join(BASE, app, "STORE_PASTE.md")
+        if not os.path.isfile(path):
+            continue
+        try:
+            text = open(path, encoding="utf-8").read()
+        except (IOError, UnicodeDecodeError):
+            continue
+        hits = [tag for tag in bad if tag in text]
+        if hits:
+            blocking.append(
+                f"{app}: STORE_PASTE.md uses {hits} — Play Console wants "
+                f"<uk> and <id> (no country code). Regenerate via "
+                f"`python3 scripts/gen_store_paste.py {app} --force`."
+            )
+    return blocking
+
+
 def check_old_placeholder_urls(apps):
     """BLOCKING: detect old scaffold placeholder URLs that snuck through."""
     blocking = []
@@ -1662,6 +1688,7 @@ def main():
     section("meta",  "iaps.json matches code",     lambda a: ([], check_iaps_match_code(a)), apps)
     section("meta",  "canonical privacy/support URLs", check_canonical_urls, apps)
     section("meta",  "no per-app privacy.html",    check_no_per_app_privacy_html, apps)
+    section("meta",  "STORE_PASTE locale tags",     check_store_paste_locale_tags, apps)
     section("meta",  "no old placeholder URLs",    check_old_placeholder_urls, apps)
 
     # ---- CONTENT QUALITY

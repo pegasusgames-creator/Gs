@@ -4,7 +4,7 @@ One file with every translated string for every locale, wrapped in
 `<locale>…</locale>` blocks. Open in Play Console / App Store Connect,
 find the right field, and paste the matching block for each language.
 
-The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, it-IT, ja-JP, pt-BR, tr-TR, uk-UA, zh-CN
+The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, it-IT, ja-JP, pt-BR, tr-TR, uk, zh-CN
 
 **Notes:**
 - Indonesian uses tag `<id>` (not `id-ID`) — Play Console quirk.
@@ -65,9 +65,9 @@ Um Picross clássico, calmo e bem cuidado. 500 quadros feitos à mão em cinco n
 Sakin ve odaklanmış klasik Picross. Beş zorluk seviyesinde 500 elden tasarlanmış bulmaca, günlük meydan okuma ve seri takibi. Tamamen çevrimdışı oynanır.
 </tr-TR>
 
-<uk-UA>
+<uk>
 Спокійний і зосереджений класичний Picross. 500 створених вручну дощок п’ятьох рівнів складності, щоденне завдання, відстеження серій. Повністю офлайн.
-</uk-UA>
+</uk>
 
 <zh-CN>
 一款安静、专注的经典数织。500 张手工设计关卡，五个难度阶梯，每日挑战，连击记录。完全离线，泡杯茶慢慢解。
@@ -123,9 +123,9 @@ Pistas numéricas, imagens ocultas. Lógica lenta. Sem cronômetro. Picross diá
 Sayı ipuçları, gizli resimler. Yavaş mantık. Zamanlayıcı yok. Günlük picross.
 </tr-TR>
 
-<uk-UA>
+<uk>
 Числові підказки, приховані картини. Логіка. Без таймера. Щоденний пікрос
-</uk-UA>
+</uk>
 
 <zh-CN>
 数字提示，隐藏图画。慢逻辑。无计时器。每日数图。
@@ -489,7 +489,7 @@ Bir satırı işaretle, sütunu say ve boş bir ızgaradan küçük bir piksel s
 Picross, hanjie veya sayılarla boyama olarak da bilinir. Adı ne olursa olsun, bugün telefonunla geçireceğin en sakin yirmi dakika.
 </tr-TR>
 
-<uk-UA>
+<uk>
 Познач рядок, порахуй стовпець, і спостерігай, як крихітна картинка піксельного мистецтва з'являється з порожньої сітки — головоломка для тієї частини твого дня, коли хочеш думати, а не бігти.
 
 500 ручних дошок від ранкової розминки 5×5 до марафону 20×20. Без таймера. Без серії, яку можна перервати, пропустивши один день. Лише повільне задоволення від логіки, керованої підказками.
@@ -519,7 +519,7 @@ Picross, hanjie veya sayılarla boyama olarak da bilinir. Adı ne olursa olsun, 
 • Коли всі підказки збігаються, картина розкривається
 
 Також відома як пікрос, ханджі, або малювання за номерами. Як би ти її не називав, це найспокійніші двадцять хвилин, які проведеш зі своїм телефоном сьогодні.
-</uk-UA>
+</uk>
 
 <zh-CN>
 标记一行，数一列，看一幅小小的像素艺术从一片空白格中浮现 — 这是为你想思考而非奔跑的那段时光准备的谜题。
@@ -603,9 +603,9 @@ Pinte por números. Diário.
 Sayılarla boya. Her gün.
 </tr-TR>
 
-<uk-UA>
+<uk>
 Малюй за номерами. Щодня.
-</uk-UA>
+</uk>
 
 <zh-CN>
 数字填色。每日。
@@ -661,9 +661,9 @@ nonograma,picross,hanjie,pixel art,quebra cabeca,logica,jogo mental,pintar numer
 nonogram,picross,hanjie,piksel sanat,sayı bulmaca,mantık,zeka oyunu,sayı boyama,rahatlatıcı
 </tr-TR>
 
-<uk-UA>
+<uk>
 нонограма,пікрос,піксель арт,логіка,головоломка,для мозку,малювання,розслабляюча
-</uk-UA>
+</uk>
 
 <zh-CN>
 数织,数图,picross,像素艺术,数字谜题,逻辑谜题,益智游戏,数字填色,放松
@@ -719,9 +719,9 @@ O quebra-cabeça de hoje é uma pequena imagem escondida atrás de uma coluna de
 Bugünün bulmacası bir sayı sütununun arkasına saklanmış küçük bir resim. Çöz.
 </tr-TR>
 
-<uk-UA>
+<uk>
 Сьогоднішня головоломка — маленька картинка, схована за стовпцем чисел. Розв'яжи її.
-</uk-UA>
+</uk>
 
 <zh-CN>
 今日谜题是一张藏在数字列后的小图。解开它。

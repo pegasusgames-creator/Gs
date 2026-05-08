@@ -4,7 +4,7 @@ One file with every translated string for every locale, wrapped in
 `<locale>…</locale>` blocks. Open in Play Console / App Store Connect,
 find the right field, and paste the matching block for each language.
 
-The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, it-IT, ja-JP, pt-BR, tr-TR, uk-UA, zh-CN
+The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, it-IT, ja-JP, pt-BR, tr-TR, uk, zh-CN
 
 **Notes:**
 - Indonesian uses tag `<id>` (not `id-ID`) — Play Console quirk.
@@ -65,9 +65,9 @@ Combinação 4×4 clássica em um tema limpo e aconchegante. Desafio diário com
 Sade ve sıcak bir temada klasik 4×4 birleştirme. Seri takipli günlük meydan okuma, haftalık etkinlik, cömert geri al desteği ve tamamen çevrimdışı oyun. Kaydırarak birleştirin.
 </tr-TR>
 
-<uk-UA>
+<uk>
 Класичне 4×4‑злиття у затишному, чистому стилі. Щоденне завдання з відстеженням серій, щотижнева подія, щедра функція скасування і повністю офлайн‑гра. Гортайте, зливайте, побийте свій рекорд.
-</uk-UA>
+</uk>
 
 <zh-CN>
 经典 4×4 合成，干净温暖的主题。每日挑战配连击记录、每周活动、慷慨的撤销机制、纯离线游玩。滑动合并，刷新自己的纪录。
@@ -123,9 +123,9 @@ Tabuleiro 2048 clássico 4×4. Desafio diário, evento semanal. Jogue offline.
 Klasik 4×4 2048 tahtası. Günlük görev, haftalık etkinlik. Çevrimdışı oyna.
 </tr-TR>
 
-<uk-UA>
+<uk>
 Класична дошка 2048 4×4. Щоденний виклик, тижнева подія. Грай офлайн.
-</uk-UA>
+</uk>
 
 <zh-CN>
 经典4×4 2048棋盘。每日挑战、周挑战、撤销。离线畅玩。
@@ -390,7 +390,7 @@ Yol için yapıldı: tamamen çevrimdışı, hesap yok, bağlantı bekleme yok. 
 Daha önce 2048 karosunu kovaladıysanız, bu geri döneceğiniz versiyon. Daha önce kovalamadıysanız, şimdi başlayın — çekiciliğini anlamak için tek bir kaydırma yeter.
 </tr-TR>
 
-<uk-UA>
+<uk>
 Ласкаво просимо до 2048 Puzzle — найгострішого класичного 4×4 злиття чисел на Android. Гортай. Зливай. Піднімайся. І знову.
 
 Це канонічна дошка 2048, налаштована для гри однією рукою на телефоні з аркадним фідбеком на кожне велике злиття. Кожен свайп рухає дошку; однакові плитки зливаються в наступний степінь двійки; один змарнований хід може замкнути твою найвищу плитку у неправильному кутку. Чиста стратегія, без везіння — твій єдиний суперник це твій власний останній рекорд.
@@ -411,7 +411,7 @@ Daha önce 2048 karosunu kovaladıysanız, bu geri döneceğiniz versiyon. Daha 
 • Грає повністю офлайн, без потреби в інтернеті
 
 Якщо ти вже ганявся за плиткою 2048 раніше, це версія, до якої ти повернешся. Якщо ні, почни зараз — одного свайпа вистачить, щоб зрозуміти, як це затягує.
-</uk-UA>
+</uk>
 
 <zh-CN>
 欢迎来到 2048 Puzzle,Android 上最锋利的经典 4×4 数字合并。滑动。合并。攀升。然后再来一次。
@@ -486,9 +486,9 @@ Fusão clássica 4×4 de números
 Klasik 4×4 sayı birleştirme
 </tr-TR>
 
-<uk-UA>
+<uk>
 Класичне 4×4 злиття чисел
-</uk-UA>
+</uk>
 
 <zh-CN>
 经典4×4数字合并
@@ -534,8 +534,8 @@ _Apple App Store Connect → Version → Keywords_
 <tr-TR>
 </tr-TR>
 
-<uk-UA>
-</uk-UA>
+<uk>
+</uk>
 
 <zh-CN>
 </zh-CN>
@@ -580,8 +580,8 @@ Daily Challenge streaks and arcade-style merge feedback. Swipe, merge, climb the
 <tr-TR>
 </tr-TR>
 
-<uk-UA>
-</uk-UA>
+<uk>
+</uk>
 
 <zh-CN>
 </zh-CN>

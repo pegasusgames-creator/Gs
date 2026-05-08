@@ -13,7 +13,7 @@ Read this file end-to-end before doing anything in here.
   `COMPETITIVE_BENCHMARK.md`, `NOTIFICATIONS_IMPL.md`)
 - `Gs/scripts/` — all Python scripts (`pre_publish_check.py`,
   `build_release.py`, `gen_handoff.py`, `gen_translations.py`,
-  `consult_designer.py`, `init_app_metadata.py`,
+  `gen_store_paste.py`, `consult_designer.py`, `init_app_metadata.py`,
   `capture_screenshots.py`, `wrap_screenshots.py`,
   `wrap_tablet_screenshots.py`, `app_themes.py`,
   `dedup_similar_apps.py`, `cleanup_repo.py`, `fix_all_apps.py`,
@@ -51,6 +51,11 @@ respectively. Run scripts from the repo root:
 - **`gen_translations.py`** — Phase 4.5 translations (needs `ANTHROPIC_API_KEY`)
 - **`consult_designer.py`** — sub-agent design questions during Phase 1/8
 - **`init_app_metadata.py`** — scaffolds metadata/store folders
+- **`gen_store_paste.py`** — assembles `<App>/STORE_PASTE.md` from
+  per-locale metadata. Uses Play Console's actual locale tags (`<uk>`,
+  `<id>` — never `<uk-UA>` / `<id-ID>`). `pre_publish_check.py
+  check_store_paste_locale_tags` blocks any STORE_PASTE.md that drifts
+  back to BCP-47 country codes
 - **`capture_screenshots.py`** — emulator-driven (uses `adb`)
 - **`wrap_screenshots.py` / `wrap_tablet_screenshots.py`** — marketing frames
 - **`app_themes.py`** — per-app palette + 4-archetype registry

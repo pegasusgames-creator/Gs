@@ -4,7 +4,7 @@ One file with every translated string for every locale, wrapped in
 `<locale>…</locale>` blocks. Open in Play Console / App Store Connect,
 find the right field, and paste the matching block for each language.
 
-The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, it-IT, ja-JP, pt-BR, tr-TR, uk-UA, zh-CN
+The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, it-IT, ja-JP, pt-BR, tr-TR, uk, zh-CN
 
 **Notes:**
 - Indonesian uses tag `<id>` (not `id-ID`) — Play Console quirk.
@@ -87,11 +87,11 @@ _Test and release → Production → release details_
 • Daha kararlı bir deneyim için arka plan düzeltmeleri
 </tr-TR>
 
-<uk-UA>
+<uk>
 • Покупки в застосунку працюють швидше й надійніше — винагороди зараховуються одразу й більше не зависають
 • Оновлений магазин і сповіщення
 • Фонові виправлення задля стабільнішої роботи
-</uk-UA>
+</uk>
 
 <zh-CN>
 • 内购更顺滑 — 奖励到账更快，再也不会卡住
@@ -149,9 +149,9 @@ Despeje e classifique água colorida. 500 níveis, missões diárias e calma!
 Renkli suyu dök ve ayır. 500 seviye, günlük görevler ve huzur!
 </tr-TR>
 
-<uk-UA>
+<uk>
 Наливай і сортуй кольорову воду. 500 рівнів, щоденні місії та спокій!
-</uk-UA>
+</uk>
 
 <zh-CN>
 倒入并归类彩色液体。500关，每日任务，宁静感！
@@ -901,7 +901,7 @@ Her tekrar oynadığında skorunu iyileştir!
 • Sınırsız Can (∞) — bir daha asla can kaybetme
 </tr-TR>
 
-<uk-UA>
+<uk>
 💧 Water Sort Puzzle — Наливай, сортуй, видихни.
 
 Сортуй кольорові рідини у пробірки та поверни порядок із хаосу. Глибоко заспокійлива головоломка, що винагороджує терпіння, стратегію та той ідеальний момент «ага!».
@@ -966,7 +966,7 @@ Her tekrar oynadığında skorunu iyileştir!
 • Додаткові Життя — миттєво відновлюй 5 життів
 • Необмежені Життя (1 год) — грай вільно цілу годину
 • Необмежені Життя (∞) — більше ніколи не втрачай життя
-</uk-UA>
+</uk>
 
 <zh-CN>
 💧 Water Sort Puzzle — 倒入、归类、深呼吸。
@@ -1085,9 +1085,9 @@ Despeje e classifique água
 Renkli su dök & ayır
 </tr-TR>
 
-<uk-UA>
+<uk>
 Налий і сортуй воду
-</uk-UA>
+</uk>
 
 <zh-CN>
 倒水、归类
@@ -1143,9 +1143,9 @@ classificar agua,puzzle cores,liquido,quebra cabeca tubos,despejar,relaxante,rac
 su ayırma,renk bulmaca,sıvı bulmaca,tüp bulmaca,dökme,rahatlatıcı,zeka oyunu
 </tr-TR>
 
-<uk-UA>
+<uk>
 сортування води,кольорова головоломка,рідина,пробірки,наливати,розслаблююча,логіка
-</uk-UA>
+</uk>
 
 <zh-CN>
 水排序,颜色排序,液体谜题,试管谜题,倒水,放松,益智
@@ -1201,9 +1201,9 @@ Despeje, classifique e respire. 500 níveis feitos à mão com desafio diário e
 Dök, ayır ve nefes al. 500 el yapımı seviye, günlük meydan okuma ve görevlerle.
 </tr-TR>
 
-<uk-UA>
+<uk>
 Наливай, сортуй і видихни. 500 ручних рівнів зі щоденним викликом і місіями.
-</uk-UA>
+</uk>
 
 <zh-CN>
 倒入、归类、深呼吸。500个手工关卡，每日挑战与任务。
