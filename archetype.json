@@ -1,0 +1,6 @@
+{
+  "_doc": "App archetypes — keyed by app folder name. Used by game.html to filter visible SKUs in the shop UI per Phase F of docs/iap_audit_2026-05-08/iap_audit_fix_proposals.md. Catalog (iaps.json) is NEVER filtered — restore-purchase must work for existing buyers across all SKUs. Only the SHOP UI is filtered. Archetypes: 'game-economy' (lives/coins/hints/undos — show all SKUs), 'game-simple' (gameplay but no economy — show remove_ads + pro_upgrade only), 'utility' (no gameplay — show remove_ads + pro_upgrade only).",
+  "WaterSortPuzzle": "game-economy",
+  "Nonogram": "game-economy",
+  "Puzzle2048": "game-economy"
+}

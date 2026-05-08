@@ -2065,6 +2065,27 @@ function onPurchaseSuccess(productId) {
       State.unlimitedLivesPermanent = true;
       showToast('Unlimited lives forever!');
       break;
+    case 'hint_pack':
+      // Water Sort gameplay does not have a hint mechanic. Record the
+      // purchase for future replay if hints are ever added so the user
+      // doesn't pay for nothing — and still ack with a thank-you toast.
+      try {
+        var pg = JSON.parse(localStorage.getItem('pendingGrants') || '{}');
+        pg.hint_pack = (pg.hint_pack || 0) + 10;
+        localStorage.setItem('pendingGrants', JSON.stringify(pg));
+      } catch(e) {}
+      showToast('Thank you for your purchase!');
+      break;
+    default:
+      // Unknown SKU (newly added in iaps.json before game.html caught up).
+      // Defer for replay rather than dropping silently.
+      try {
+        var pg2 = JSON.parse(localStorage.getItem('pendingGrants') || '{}');
+        pg2[productId] = Date.now();
+        localStorage.setItem('pendingGrants', JSON.stringify(pg2));
+      } catch(e) {}
+      showToast('Thank you for your purchase!');
+      break;
   }
   State.save();
   updateCoinDisplays();
@@ -4770,19 +4791,54 @@ function hookNoLivesOverlay(){
 }
 
 // ── HOOK onPurchaseSuccess ────────────────────────────────────────
-var _origPurchase=window.onPurchaseSuccess;
+// Outer wrapper: never throws (a thrown exception in the bridge looks
+// identical to a failed purchase to the user) and defers unknown SKUs
+// to localStorage.pendingGrants for replay on next launch.
+var _origPurchase=window.onPurchaseSuccess||window.onPurchaseComplete;
 window.onPurchaseSuccess=function(id){
-  if(id==='season_pass_monthly'){ activateSeason(); return; }
-  if(id==='starter_pack'){
-    var s=G.st(); if(s){ s.removeAds=true; G.addCoins(100); G.doSave(); }
-    xToast('🎁 Starter Pack activated! Ads removed + 100 🪙');
-    var adBanner=document.getElementById('admob-banner');
-    if(adBanner) adBanner.style.display='none';
-    if(window.Android&&window.Android.hideBannerAd) window.Android.hideBannerAd();
-    return;
+  try {
+    if(id==='season_pass_monthly'){ activateSeason(); return; }
+    if(id==='starter_pack'){
+      var s=G.st(); if(s){ s.removeAds=true; G.addCoins(100); G.doSave(); }
+      xToast('🎁 Starter Pack activated! Ads removed + 100 🪙');
+      var adBanner=document.getElementById('admob-banner');
+      if(adBanner) adBanner.style.display='none';
+      if(window.Android&&window.Android.hideBannerAd) window.Android.hideBannerAd();
+      return;
+    }
+    if(typeof _origPurchase==='function'){ _origPurchase(id); return; }
+    // No handler at all — defer.
+    iapDeferGrant(id);
+    iapThanksToast();
+  } catch(e) {
+    try { console && console.warn && console.warn('IAP grant error', id, e); } catch(e2){}
+    iapDeferGrant(id);
   }
-  if(typeof _origPurchase==='function') _origPurchase(id);
 };
+function iapDeferGrant(id){
+  try {
+    var p=JSON.parse(localStorage.getItem('pendingGrants')||'{}');
+    p[id]=Date.now();
+    localStorage.setItem('pendingGrants', JSON.stringify(p));
+  } catch(e){}
+}
+function iapThanksToast(){
+  try {
+    if(typeof xToast==='function') xToast('Thank you for your purchase!');
+    else if(typeof showToast==='function') showToast('Thank you for your purchase!');
+  } catch(e){}
+}
+window.replayPendingGrants=function(){
+  var p={};
+  try { p=JSON.parse(localStorage.getItem('pendingGrants')||'{}'); } catch(e){ return; }
+  var ids=Object.keys(p);
+  if(!ids.length) return;
+  // Clear first; if the replay re-defers, it will write fresh entries.
+  try { localStorage.removeItem('pendingGrants'); } catch(e){}
+  ids.forEach(function(id){ try { window.onPurchaseSuccess(id); } catch(e){} });
+};
+if(document.readyState==='complete'||document.readyState==='interactive') setTimeout(window.replayPendingGrants,0);
+else window.addEventListener('load', window.replayPendingGrants);
 
 // ── PATCH VALID_PRODUCTS ──────────────────────────────────────────
 function patchValidProducts(){

@@ -1717,7 +1717,10 @@ window.onAdMobLoaded = function() {
 };
 
 window.onPurchaseComplete = function(productId) {
-  if (!VALID_PRODUCTS.has(productId)) return;
+  // Note: VALID_PRODUCTS gate intentionally omitted here so future
+  // SKUs (e.g. starter_pack, season_pass_monthly handled by the
+  // retention hook) still flow through. Unknown SKUs fall to the
+  // pendingGrants default branch.
   switch(productId) {
     case 'remove_ads':
       State.removeAds = true;
@@ -1749,10 +1752,25 @@ window.onPurchaseComplete = function(productId) {
       State.unlimitedLivesPermanent = true;
       showToast('Unlimited lives forever!');
       break;
+    default:
+      // Unknown SKU — defer for replay rather than dropping silently.
+      try {
+        var p = JSON.parse(localStorage.getItem('pendingGrants') || '{}');
+        p[productId] = Date.now();
+        localStorage.setItem('pendingGrants', JSON.stringify(p));
+      } catch(e) {}
+      showToast('Thank you for your purchase!');
+      break;
   }
   saveState();
   Game.updateUI();
 };
+// Java's bridge calls window.onPurchaseSuccess(id); alias it to the
+// onPurchaseComplete handler so SKUs aren't silently dropped during
+// the brief window before retention-features hook installs.
+if (typeof window.onPurchaseSuccess !== 'function') {
+  window.onPurchaseSuccess = window.onPurchaseComplete;
+}
 
 window.onAdReward = function(rewardType) {
   if (!VALID_REWARD_TYPES.has(rewardType)) return;
@@ -3088,19 +3106,52 @@ function hookNoLivesOverlay(){
 }
 
 // ── HOOK onPurchaseSuccess ────────────────────────────────────────
-var _origPurchase=window.onPurchaseSuccess;
+// Falls through to the original onPurchaseComplete handler for SKUs
+// it doesn't know about. Wrapped in try/catch — a thrown exception in
+// the bridge looks identical to a failed purchase to the user.
+var _origPurchase=window.onPurchaseSuccess||window.onPurchaseComplete;
 window.onPurchaseSuccess=function(id){
-  if(id==='season_pass_monthly'){ activateSeason(); return; }
-  if(id==='starter_pack'){
-    var s=G.st(); if(s){ s.removeAds=true; G.addCoins(100); G.doSave(); }
-    xToast('🎁 Starter Pack activated! Ads removed + 100 🪙');
-    var adBanner=document.getElementById('admob-banner');
-    if(adBanner) adBanner.style.display='none';
-    if(window.Android&&window.Android.hideBannerAd) window.Android.hideBannerAd();
-    return;
+  try {
+    if(id==='season_pass_monthly'){ activateSeason(); return; }
+    if(id==='starter_pack'){
+      var s=G.st(); if(s){ s.removeAds=true; G.addCoins(100); G.doSave(); }
+      xToast('🎁 Starter Pack activated! Ads removed + 100 🪙');
+      var adBanner=document.getElementById('admob-banner');
+      if(adBanner) adBanner.style.display='none';
+      if(window.Android&&window.Android.hideBannerAd) window.Android.hideBannerAd();
+      return;
+    }
+    if(typeof _origPurchase==='function'){ _origPurchase(id); return; }
+    iapDeferGrant(id);
+    iapThanksToast();
+  } catch(e) {
+    try { console && console.warn && console.warn('IAP grant error', id, e); } catch(e2){}
+    iapDeferGrant(id);
   }
-  if(typeof _origPurchase==='function') _origPurchase(id);
 };
+function iapDeferGrant(id){
+  try {
+    var p=JSON.parse(localStorage.getItem('pendingGrants')||'{}');
+    p[id]=Date.now();
+    localStorage.setItem('pendingGrants', JSON.stringify(p));
+  } catch(e){}
+}
+function iapThanksToast(){
+  try {
+    if(typeof xToast==='function') xToast('Thank you for your purchase!');
+    else if(typeof showToast==='function') showToast('Thank you for your purchase!');
+  } catch(e){}
+}
+window.replayPendingGrants=function(){
+  var p={};
+  try { p=JSON.parse(localStorage.getItem('pendingGrants')||'{}'); } catch(e){ return; }
+  var ids=Object.keys(p);
+  if(!ids.length) return;
+  try { localStorage.removeItem('pendingGrants'); } catch(e){}
+  ids.forEach(function(id){ try { window.onPurchaseSuccess(id); } catch(e){} });
+};
+if(document.readyState==='complete'||document.readyState==='interactive') setTimeout(window.replayPendingGrants,0);
+else window.addEventListener('load', window.replayPendingGrants);
 
 // ── PATCH VALID_PRODUCTS ──────────────────────────────────────────
 function patchValidProducts(){

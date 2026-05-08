@@ -7,7 +7,7 @@ android {
     namespace "com.pegasusgames.puzzle2048"
     defaultConfig {
         applicationId "com.pegasusgames.puzzle2048"
-        minSdk 23; targetSdk 36; versionCode 2; versionName "1.0"
+        minSdk 23; targetSdk 36; versionCode 3; versionName "1.0.1"
     }
     signingConfigs {
         release {
