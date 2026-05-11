@@ -1,16 +1,16 @@
 {
-  "_comment": "Nonogram. Icon row CSS: width 240px (frac 0.222 of 1080), 3 buttons of 44px with 22px gaps. Icons centers at x 0.44, 0.50, 0.56 (NOT 0.36/0.50/0.64 — too wide, falls outside the 240px container).",
-  "_readiness_expr": "typeof startLevel === 'function' && typeof __nonoFillSolution === 'function' && typeof showScreen === 'function' && typeof startDailyChallenge === 'function'",
+  "_comment": "Nonogram screenshot capture. Per May 2026 rule: no shop, no more-games, no settings — every slot shows actual gameplay at distinct content. Uses JS-based showScreen/startLevel rather than tap coordinates so the same config works across phone, tablet_7, and tablet_10.",
+  "_readiness_expr": "typeof startLevel === 'function' && typeof showScreen === 'function' && typeof state !== 'undefined'",
 
   "_setup_taps": [
     ["js", "(function(){var seed={currentLevel:348,completedLevels:Array.from({length:47},function(_,i){return i+1;}),levelStars:(function(){var s={};for(var i=1;i<=47;i++)s[i]=(i%4===0?3:(i%3===0?2:1));return s;})(),coins:247,lives:5,lastLifeTime:Date.now(),removeAds:false,hintPack:0,soundEnabled:true,musicEnabled:false,dailyChallengeDate:'',dailyChallengeStreak:7,unlimitedLivesUntil:0,unlimitedLivesForever:false,activeTheme:'default',lastLevelProgress:null};try{localStorage.setItem('nonogram_state',JSON.stringify(seed));localStorage.setItem('ls_v2',JSON.stringify({n:7,d:new Date().toISOString().slice(0,10),ach:[]}));localStorage.setItem('nono_missions_v1',JSON.stringify({progress_solver:3,progress_dedicated:12,progress_streak:1,claimed_perfectionist:true}));}catch(e){}Object.assign(state,seed);if(typeof updateUI==='function')updateUI();if(typeof updateMenuUI==='function')updateMenuUI();var ov=document.getElementById('ls-overlay');if(ov)ov.style.display='none';return 'seeded';})()", 400]
   ],
 
-  "01_deep_gameplay":     [["tap", 0.50, 0.45,  1500]],
-  "02_early_gameplay":    [["tap", 0.30, 0.535, 1500]],
-  "03_level_complete":    [["tap", 0.70, 0.535, 1500]],
-  "04_missions_panel":    [["tap", 0.32, 0.612, 1200]],
-  "05_stats":             [["tap", 0.50, 0.605, 1200]],
-  "06_levels_grid":       [["tap", 0.68, 0.612, 1200]],
+  "01_deep_gameplay":     [["js", "if(typeof startLevel==='function'){startLevel(350);if(typeof __nonoFillSolution==='function')setTimeout(function(){__nonoFillSolution(0.6);},400);}'ok';", 2500]],
+  "02_early_gameplay":    [["js", "if(typeof startLevel==='function'){startLevel(5);if(typeof __nonoFillSolution==='function')setTimeout(function(){__nonoFillSolution(0.4);},400);}'ok';", 2500]],
+  "03_level_complete":    [["js", "if(typeof showScreen==='function'){showScreen('levelselect');}'ok';", 2000]],
+  "04_missions_panel":    [["js", "if(typeof startLevel==='function'){startLevel(125);if(typeof __nonoFillSolution==='function')setTimeout(function(){__nonoFillSolution(0.55);},400);}'ok';", 2500]],
+  "05_stats":             [["js", "if(typeof startDailyChallenge==='function'){startDailyChallenge();}else if(typeof startLevel==='function'){startLevel(80);}'ok';", 2500]],
+  "06_levels_grid":       [["js", "if(typeof startLevel==='function'){startLevel(220);if(typeof __nonoFillSolution==='function')setTimeout(function(){__nonoFillSolution(0.5);},400);}'ok';", 2500]],
   "07_menu":              []
 }
