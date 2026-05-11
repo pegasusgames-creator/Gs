@@ -1055,6 +1055,30 @@ The AAB is built twice: once before the human goes to AdMob/Play Console
 (so they can test the build works), once after they've pasted real IDs
 in.
 
+**HARD BLOCKER before Phase 7 runs at all:**
+
+If this app has not yet had its Play Console "App signing settings"
+page configured with the local keystore, every AAB upload will be
+rejected. Before invoking gradle:
+
+1. Confirm `<App>/android/encryption_public_key.pem` and
+   `<App>/android/pepk.jar` are present. The human must download
+   these two files from Play Console → App integrity → App signing
+   (radio "Export and upload key from Java keystore"). If either
+   file is missing, STOP and ask the human to download them.
+2. Run `python3 scripts/pepk_command.py <App>` and execute the
+   printed command. It produces `<App>/android/<alias>_pepk.zip`.
+3. Human uploads that `.zip` via Play Console step 4, hits Save.
+4. THEN run `./gradlew bundleRelease`.
+
+WaterSort and Nonogram skipped this — they each went through the
+slower upload-key reset workflow (1-3 business days). For every app
+from Puzzle2048 onward, use the PEPK flow above.
+
+The `app_info.json:first_upload_at` field marks whether an app has
+already cleared this step. If unset and `<App>/android/*_pepk.zip`
+doesn't exist, the PEPK flow has not run yet.
+
 **First build (before Phase 6 hand-off):**
 ```
 cd <AppName>/android && ./gradlew bundleRelease

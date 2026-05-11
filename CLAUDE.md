@@ -13,7 +13,8 @@ Read this file end-to-end before doing anything in here.
   `COMPETITIVE_BENCHMARK.md`, `NOTIFICATIONS_IMPL.md`)
 - `Gs/scripts/` — all Python scripts (`pre_publish_check.py`,
   `build_release.py`, `gen_handoff.py`, `gen_translations.py`,
-  `gen_store_paste.py`, `consult_designer.py`, `init_app_metadata.py`,
+  `gen_store_paste.py`, `pepk_command.py`, `consult_designer.py`,
+  `init_app_metadata.py`,
   `capture_screenshots.py`, `wrap_screenshots.py`,
   `wrap_tablet_screenshots.py`, `app_themes.py`,
   `dedup_similar_apps.py`, `cleanup_repo.py`, `fix_all_apps.py`,
@@ -56,6 +57,14 @@ respectively. Run scripts from the repo root:
   `<id>` — never `<uk-UA>` / `<id-ID>`). `pre_publish_check.py
   check_store_paste_locale_tags` blocks any STORE_PASTE.md that drifts
   back to BCP-47 country codes
+- **`pepk_command.py`** — prints the exact PEPK command for one app,
+  pulling alias + password from `keystore.properties`. Refuses to run
+  if `encryption_public_key.pem` or `pepk.jar` isn't already in
+  `<App>/android/` (the human must download both from Play Console
+  before this script can produce a useful output). The produced
+  `.zip` is what gets uploaded under Play Console's "App signing"
+  flow — registers the local keystore as the app's signing key with
+  no upload-key reset wait
 - **`capture_screenshots.py`** — emulator-driven (uses `adb`)
 - **`wrap_screenshots.py` / `wrap_tablet_screenshots.py`** — marketing frames
 - **`app_themes.py`** — per-app palette + 4-archetype registry
@@ -177,6 +186,52 @@ mistake or loss cascades across the entire portfolio.
   `metadata/app_info.json:upload_key_sha1`
 - WARNS if `app_info.json:upload_key_sha1` isn't set (records absence;
   fill in after first successful Play Console upload)
+
+### Play Console "App signing settings" — REQUIRED before first AAB upload
+
+Every new app in the Pegasus Games account is auto-enrolled in Play
+App Signing with a Google-generated upload key (cert SHA-1
+`EC:24:33:14:46:29:71:D1:4C:B0:2B:86:D0:4D:D4:FF:EC:6F:86:B5`,
+owned by `O=Google, OU=Bundle & Delivery`). Google holds the private
+key for that — uploading an AAB signed with the local `keystore.jks`
+will be rejected. Two paths to fix it; the **PEPK option below is
+preferred** because it avoids the 1-3 day Google approval wait of
+the reset request.
+
+**PEPK upload (preferred, takes ~5 minutes per app):**
+
+Before triggering bundleRelease for any app that has not yet been
+uploaded to Play Console:
+1. In Play Console for the app: **App integrity → App signing**.
+2. Pick radio **"Експортувати й завантажити ключ зі сховища Java"**
+   (Export and upload key from Java keystore) — NOT the default
+   "Let Google manage" option.
+3. Download both files into `<App>/android/`:
+   - `encryption_public_key.pem` (step 1 link on the page)
+   - `pepk.jar`                    (step 2 link on the page)
+4. Run `python3 scripts/pepk_command.py <App>` to print the exact
+   `java -jar pepk.jar …` command pre-filled with that app's
+   keystore alias and password. Run it; it produces
+   `<App>/android/<alias>_pepk.zip`.
+5. Upload that `.zip` via step 4 link in Play Console.
+6. Save. Done — the local keystore is now this app's signing key
+   without a reset request.
+
+**Reset request (fallback, takes 1-3 business days):**
+
+Only needed if the app's first AAB was already uploaded with a
+wrong-key AAB and Play has locked in the Google-generated upload
+key. Submit `<App>/android/upload_cert_request.pem` (auto-generated
+by `migrate_to_per_app_keystores.py`) via Play Console "Request
+upload key reset". WaterSort and Nonogram already went through this
+path. All other apps in the portfolio should use the PEPK option
+above on their first Play Console listing setup, BEFORE any AAB
+upload, to avoid the reset wait.
+
+**Shipping flag:** SHIP_GAME.md Phase 7 (AAB build + upload) MUST
+verify the local keystore SHA-1 matches Play Console's registered
+upload key before attempting an upload. If it doesn't,
+hard-block the upload step and run the PEPK flow first.
 
 ---
 
