@@ -145,7 +145,12 @@ def generate_keystore(app_name: str, app_dir: Path, dry_run: bool):
     props_path = app_dir / "android" / "keystore.properties"
 
     store_password = gen_password()
-    key_password = gen_password()
+    # PKCS12 keystores (keytool's default since JDK 9) enforce
+    # keyPassword == storePassword. Writing a different keyPassword to
+    # keystore.properties causes "Given final block not properly padded"
+    # at gradle signRelease time — the May 2026 migration hit this on
+    # 166 apps. Always keep them equal.
+    key_password = store_password
     alias = app_name.lower().replace(" ", "")[:30]
 
     print(f"  [{app_name}]")
@@ -153,7 +158,7 @@ def generate_keystore(app_name: str, app_dir: Path, dry_run: bool):
     print(f"    properties: {props_path}")
     print(f"    alias: {alias}")
     print(f"    storePassword: {store_password}")
-    print(f"    keyPassword: {key_password}")
+    print(f"    keyPassword: {key_password} (=storePassword, required by PKCS12)")
 
     if dry_run:
         print(f"    DRY RUN — would generate keystore + write properties")
@@ -201,6 +206,26 @@ def generate_keystore(app_name: str, app_dir: Path, dry_run: bool):
         f"keyPassword={key_password}\n"
     )
     props_path.write_text(props_content)
+
+    # Export the public certificate as upload_cert_request.pem so the
+    # user has it ready to attach when requesting an upload-key reset
+    # in Play Console. (Every new app in this account is auto-enrolled
+    # in Play App Signing with a Google-generated upload key; switching
+    # to the local key requires a per-app reset request, attaching this
+    # PEM file.)
+    pem_path = app_dir / "android" / "upload_cert_request.pem"
+    try:
+        subprocess.run([
+            "keytool", "-export", "-rfc",
+            "-keystore", str(keystore_path),
+            "-storepass", store_password,
+            "-alias", alias,
+            "-file", str(pem_path),
+        ], capture_output=True, text=True, timeout=15, check=True)
+        print(f"    upload_cert_request.pem exported for Play Console reset")
+    except (FileNotFoundError, subprocess.TimeoutExpired,
+            subprocess.CalledProcessError) as e:
+        print(f"    WARN — couldn't export upload_cert_request.pem: {e}")
 
     # Compute SHA1 and record in app_info.json
     sha1 = get_keystore_sha1(keystore_path, store_password, alias)
