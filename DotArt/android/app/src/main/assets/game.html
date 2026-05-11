@@ -171,6 +171,56 @@ window.onPurchaseComplete = function(sku) {
     if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
   }
 };
+// ── IAP safety net (added by portfolio-wide IAP fix rollout) ─────
+// 1. Java's bridge calls window.onPurchaseSuccess; alias it to the
+//    existing onPurchaseComplete handler so SKUs aren't silently
+//    dropped (the original bug class).
+// 2. Wrap the bridge function in try/catch — a thrown exception in
+//    the bridge looks identical to a failed purchase to the user.
+// 3. Defer unknown SKUs to localStorage.pendingGrants and replay on
+//    next launch via window.replayPendingGrants(), called on load.
+(function(){
+  var inner = window.onPurchaseComplete;
+  function deferGrant(id){
+    try {
+      var p = JSON.parse(localStorage.getItem('pendingGrants') || '{}');
+      p[id] = Date.now();
+      localStorage.setItem('pendingGrants', JSON.stringify(p));
+    } catch(e){}
+  }
+  function thanksToast(){
+    try {
+      if (typeof showToast === 'function') showToast('Thank you for your purchase!');
+      else if (typeof xToast === 'function') xToast('Thank you for your purchase!');
+    } catch(e){}
+  }
+  window.iapDeferGrant  = deferGrant;
+  window.iapThanksToast = thanksToast;
+  window.onPurchaseSuccess = function(id){
+    try {
+      if (typeof inner === 'function') { inner(id); return; }
+      deferGrant(id);
+      thanksToast();
+    } catch(e) {
+      try { console && console.warn && console.warn('IAP grant error', id, e); } catch(e2){}
+      deferGrant(id);
+    }
+  };
+  window.replayPendingGrants = function(){
+    var p = {};
+    try { p = JSON.parse(localStorage.getItem('pendingGrants') || '{}'); } catch(e){ return; }
+    var ids = Object.keys(p);
+    if (!ids.length) return;
+    try { localStorage.removeItem('pendingGrants'); } catch(e){}
+    ids.forEach(function(id){ try { window.onPurchaseSuccess(id); } catch(e){} });
+  };
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(window.replayPendingGrants, 0);
+  } else {
+    window.addEventListener('load', window.replayPendingGrants);
+  }
+})();
+// ── end IAP safety net ───────────────────────────────────────────
 
 // Restore remove-ads state on load
 if (window.Android) {

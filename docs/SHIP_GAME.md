@@ -863,6 +863,13 @@ The new checks added recently:
 - `canonical privacy/support URLs`
 - `no per-app privacy.html`
 - `no old placeholder URLs`
+- `IAP correctness invariants` — enforces the four invariants from
+  CLAUDE.md "## IAP correctness invariants":
+  1. `VALID_PRODUCTS` in `MainActivity.java` matches `iaps.json` SKUs
+  2. `CONSUMABLE_PRODUCTS` declared, `consumeAsync` + `acknowledgePurchase` both wired
+  3. `window.onPurchaseSuccess` defined in `game.html`
+  4. `replayPendingGrants()` + `pendingGrants` fallback wired
+  Standalone: `python3 scripts/check_iap_invariants.py <AppName>`
 
 ---
 

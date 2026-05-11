@@ -244,6 +244,64 @@ Detailed limits and field requirements are in `SHIP_GAME.md` Phase 4
 
 ---
 
+## IAP correctness invariants
+
+Every app on Play has its IAP purchase flow validated against these
+four invariants before any AAB is built. Violating any invariant
+means released users tap Buy and get nothing while Google still
+charges them. `pre_publish_check.py check_iap_invariants` enforces
+all four; `scripts/check_iap_invariants.py --all` runs them
+standalone.
+
+**Invariant 1** — `VALID_PRODUCTS` in `MainActivity.java` MUST equal
+the full set of SKU ids in `iaps.json`. `launchBillingFlow` checks
+this set; an unlisted SKU is rejected before Play even opens the
+purchase sheet. Source-of-truth flow: `iaps.json` → `VALID_PRODUCTS`
+(generate from json, never hand-curate).
+
+**Invariant 2** — Every PURCHASED purchase MUST be acknowledged
+within 3 days. Consumable SKUs via `consumeAsync`, non-consumable
+and subscription SKUs via `acknowledgePurchase`. Unacknowledged
+purchases are auto-refunded by Play. The `CONSUMABLE_PRODUCTS` set
+in `MainActivity.java` declares which path each SKU takes; both
+`consumeAsync` and `acknowledgePurchase` MUST be wired in
+`handlePurchase`.
+
+**Invariant 3** — `game.html` MUST define `window.onPurchaseSuccess`
+(directly or as alias to `onPurchaseComplete`). Java's bridge calls
+`window.onPurchaseSuccess(id)`; if undefined every purchase silently
+drops. The historical bug class (Nonogram + Puzzle2048 +
+~140 long-tail apps): only `onPurchaseComplete` was defined; the
+retention-features hook then chained to `_origPurchase =
+window.onPurchaseSuccess` which was undefined; result was every
+non-`season_pass` SKU dropped on the floor while Google charged for
+it. The grant function must NEVER throw — a thrown exception in
+the bridge looks identical to a failed purchase to the user.
+
+**Invariant 4** — Unhandled SKUs (purchase succeeded but the
+matching mechanic isn't in `game.html`, e.g. a utility app that
+inherited the canonical IAP catalog without implementing lives or
+hints) MUST fall through to a `window.iapDeferGrant(id)` that writes
+to `localStorage.pendingGrants`, with `window.replayPendingGrants()`
+called on each game load to drain the queue. This way a SKU bought
+before its mechanic existed is replayed once the mechanic is added,
+rather than being dropped forever.
+
+**Catalog rule with teeth:** SKUs are hidden from the shop UI per
+archetype (`archetype.json`). Catalog (`iaps.json`) is NEVER
+filtered — restore-purchase must work for existing buyers across all
+SKUs even on archetypes that no longer expose those SKUs in the
+shop UI.
+
+**Future apps** — `SHIP_GAME.md` Phase 1 records the archetype.
+Phase 2 generates `VALID_PRODUCTS` directly from `iaps.json` (never
+hard-codes it). Phase 2 also injects the canonical
+`onPurchaseSuccess` alias + `replayPendingGrants` safety net into
+`game.html`. `pre_publish_check.py check_iap_invariants` re-asserts
+all four during Phase 5 and fails the build on any blocker.
+
+---
+
 ## Red lines — never do these
 
 Any one of these can terminate the developer account.

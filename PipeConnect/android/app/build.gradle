@@ -2,7 +2,7 @@ plugins { id 'com.android.application' }
 def kpf = rootProject.file("keystore.properties"); def kp = new Properties(); if (kpf.exists()) { kp.load(new FileInputStream(kpf)) }
 android {
     compileSdk 36; namespace "com.pegasusgames.pipeconnect"
-    defaultConfig { applicationId "com.pegasusgames.pipeconnect"; minSdk 23; targetSdk 36; versionCode 10; versionName "1.7" }
+    defaultConfig { applicationId "com.pegasusgames.pipeconnect"; minSdk 23; targetSdk 36; versionCode 11; versionName "1.7.1" }
     signingConfigs { release { storeFile rootProject.file(kp['storeFile']); storePassword kp['storePassword']; keyAlias kp['keyAlias']; keyPassword kp['keyPassword'] } }
     buildTypes {
         release { minifyEnabled true; proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'; signingConfig signingConfigs.release }

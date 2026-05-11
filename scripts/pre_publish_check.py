@@ -513,6 +513,26 @@ def check_iaps_descriptions(apps):
     return blocking, warnings
 
 
+def check_iap_invariants(apps):
+    """BLOCKING: enforce the four IAP correctness invariants from
+    CLAUDE.md "## IAP correctness invariants". Delegates to
+    scripts/check_iap_invariants.py for the actual rules so both this
+    pre-publish guard and the standalone command share one source of
+    truth."""
+    blocking = []
+    warnings = []
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import check_iap_invariants as cii
+    except ImportError as e:
+        warnings.append(f"check_iap_invariants module not importable: {e}")
+        return blocking, warnings
+    for app in apps:
+        for sev, msg in cii.check_app(app):
+            (blocking if sev == 'BLOCKER' else warnings).append(f"{app}: {msg}")
+    return blocking, warnings
+
+
 def check_iaps_match_code(apps):
     """Warn if metadata/iaps.json IDs don't match the PRODUCT_IDS list in MainActivity.java."""
     warnings = []
@@ -1685,6 +1705,7 @@ def main():
             "metadata/review_notes.json",
             ["google_review_notes", "apple_review_notes", "demo_account_required"], "review_notes")
     section("meta",  "iaps.json descriptions",     check_iaps_descriptions, apps)
+    section("meta",  "IAP correctness invariants", check_iap_invariants, apps)
     section("meta",  "iaps.json matches code",     lambda a: ([], check_iaps_match_code(a)), apps)
     section("meta",  "canonical privacy/support URLs", check_canonical_urls, apps)
     section("meta",  "no per-app privacy.html",    check_no_per_app_privacy_html, apps)

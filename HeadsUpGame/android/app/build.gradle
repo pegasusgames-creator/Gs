@@ -21,13 +21,13 @@ android {
         applicationId "com.pegasusgames.headsupgame"
         minSdk 23
         targetSdk 36
-        versionCode 12
-        versionName "1.7"
+        versionCode 13
+        versionName "1.7.1"
     }
 
     signingConfigs {
         release {
-            storeFile file(keystoreProperties['storeFile'])
+            storeFile rootProject.file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']

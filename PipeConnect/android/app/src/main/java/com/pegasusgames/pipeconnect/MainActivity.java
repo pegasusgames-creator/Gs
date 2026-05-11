@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -44,6 +45,7 @@ import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.PendingPurchasesParams;
 import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.Purchase;
@@ -79,10 +81,22 @@ public class MainActivity extends Activity {
 
     // ── IAP ───────────────────────────────────────────────────────────────────
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
-        "remove_ads", "coins_small", "coins_large", "hint_pack",
-        "five_lives", "unlimited_lives_1h", "unlimited_lives_forever",
-        "starter_pack", "season_pass_monthly"
+        "coins_large", "coins_small", "five_lives", "hint_pack", "remove_ads",
+        "season_pass_monthly", "starter_pack", "unlimited_lives_1h",
+        "unlimited_lives_forever"
+    
+    
     ));
+    // SKUs that are CONSUMABLE — must be consumed via consumeAsync after each
+    // purchase, otherwise the user can buy once and never re-buy. Anything in
+    // VALID_PRODUCTS but NOT in this set is non-consumable / subscription and
+    // acknowledged via acknowledgePurchase. Both flows must complete within
+    // Play's 3-day window or the purchase is auto-refunded.
+    private static final Set<String> CONSUMABLE_PRODUCTS = new HashSet<>(Arrays.asList(
+        "coins_large", "coins_small", "five_lives", "hint_pack",
+        "starter_pack", "unlimited_lives_1h"
+    ));
+
     private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
         "undo", "skip", "life"
     ));
@@ -378,12 +392,40 @@ public class MainActivity extends Activity {
             });
     }
 
-    private void handlePurchase(Purchase purchase) {
+        private void handlePurchase(Purchase purchase) {
         if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED) return;
-        if (!purchase.isAcknowledged())
+
+        boolean isConsumable = false;
+        for (String id : purchase.getProducts()) {
+            if (CONSUMABLE_PRODUCTS.contains(id)) { isConsumable = true; break; }
+        }
+
+        if (isConsumable) {
+            billingClient.consumeAsync(
+                ConsumeParams.newBuilder()
+                    .setPurchaseToken(purchase.getPurchaseToken()).build(),
+                (r, token) -> {
+                    if (r.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                        Log.i("IAP", "consumeAsync OK for " + purchase.getProducts());
+                    } else {
+                        Log.w("IAP", "consumeAsync failed (" + r.getResponseCode()
+                                + "): " + r.getDebugMessage());
+                    }
+                });
+        } else if (!purchase.isAcknowledged()) {
             billingClient.acknowledgePurchase(
                 AcknowledgePurchaseParams.newBuilder()
-                    .setPurchaseToken(purchase.getPurchaseToken()).build(), r -> {});
+                    .setPurchaseToken(purchase.getPurchaseToken()).build(),
+                r -> {
+                    if (r.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                        Log.i("IAP", "acknowledgePurchase OK for " + purchase.getProducts());
+                    } else {
+                        Log.w("IAP", "acknowledgePurchase failed (" + r.getResponseCode()
+                                + "): " + r.getDebugMessage());
+                    }
+                });
+        }
+
         for (String id : purchase.getProducts()) {
             if (!VALID_PRODUCTS.contains(id)) continue;
             runOnUiThread(() -> webView.evaluateJavascript(
@@ -391,7 +433,6 @@ public class MainActivity extends Activity {
             if ("remove_ads".equals(id)) hideBanner();
         }
     }
-
     private void launchSubscription(String productId) {
         billingClient.queryProductDetailsAsync(
             QueryProductDetailsParams.newBuilder().setProductList(Arrays.asList(
