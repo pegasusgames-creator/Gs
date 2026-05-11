@@ -13,8 +13,8 @@ Read this file end-to-end before doing anything in here.
   `COMPETITIVE_BENCHMARK.md`, `NOTIFICATIONS_IMPL.md`)
 - `Gs/scripts/` — all Python scripts (`pre_publish_check.py`,
   `build_release.py`, `gen_handoff.py`, `gen_translations.py`,
-  `gen_store_paste.py`, `pepk_command.py`, `consult_designer.py`,
-  `init_app_metadata.py`,
+  `gen_store_paste.py`, `pepk_command.py`, `gen_upload_keystore.py`,
+  `consult_designer.py`, `init_app_metadata.py`,
   `capture_screenshots.py`, `wrap_screenshots.py`,
   `wrap_tablet_screenshots.py`, `app_themes.py`,
   `dedup_similar_apps.py`, `cleanup_repo.py`, `fix_all_apps.py`,
@@ -57,6 +57,11 @@ respectively. Run scripts from the repo root:
   `<id>` — never `<uk-UA>` / `<id-ID>`). `pre_publish_check.py
   check_store_paste_locale_tags` blocks any STORE_PASTE.md that drifts
   back to BCP-47 country codes
+- **`gen_upload_keystore.py`** — generates `<App>/android/upload-
+  keystore.jks` + `upload_certificate.pem` and rewrites
+  `keystore.properties` so gradle signs AABs with the upload key
+  (which Play Console requires to differ from the app signing key).
+  Run after PEPK setup, before first AAB build for that app
 - **`pepk_command.py`** — prints the exact PEPK command for one app,
   pulling alias + password from `keystore.properties`. Refuses to run
   if `encryption_public_key.pem` or `pepk.jar` isn't already in
@@ -198,10 +203,29 @@ will be rejected. Two paths to fix it; the **PEPK option below is
 preferred** because it avoids the 1-3 day Google approval wait of
 the reset request.
 
-**PEPK upload (preferred, takes ~5 minutes per app):**
+**Two keystores per app (the Play App Signing reality):**
+
+Play Console enforces that the **app signing key and upload key
+MUST be different**. After completing PEPK in step 4, leaving step 5
+empty means Play implicitly tries to make app signing key = upload
+key, and the release page errors with "ключ завантаження має
+відрізнятися від ключа розгортання". So every app actually needs
+TWO keystores:
+
+| File | SHA-1 example (Puzzle2048) | Role |
+|---|---|---|
+| `<App>/android/keystore.jks` | `97:71:24:...` | **App signing key** — uploaded encrypted via PEPK in step 4. Play uses this server-side to re-sign delivered APKs. Gradle does NOT use this for AAB signing. |
+| `<App>/android/upload-keystore.jks` | `76:A0:1D:...` | **Upload key** — gradle signs AABs with this. Its public cert (`upload_certificate.pem`) is uploaded via step 5c. Play validates uploads against this cert. |
+
+`<App>/android/keystore.properties` points gradle at the **upload**
+keystore, not the app signing one — so `bundleRelease` produces an
+AAB Play Console will accept.
+
+**PEPK + upload-keystore setup (the one-time per-app flow):**
 
 Before triggering bundleRelease for any app that has not yet been
 uploaded to Play Console:
+
 1. In Play Console for the app: **App integrity → App signing**.
 2. Pick radio **"Експортувати й завантажити ключ зі сховища Java"**
    (Export and upload key from Java keystore) — NOT the default
@@ -209,13 +233,16 @@ uploaded to Play Console:
 3. Download both files into `<App>/android/`:
    - `encryption_public_key.pem` (step 1 link on the page)
    - `pepk.jar`                    (step 2 link on the page)
-4. Run `python3 scripts/pepk_command.py <App>` to print the exact
-   `java -jar pepk.jar …` command pre-filled with that app's
-   keystore alias and password. Run it; it produces
-   `<App>/android/<alias>_pepk.zip`.
+4. Run `python3 scripts/pepk_command.py <App>` to print the PEPK
+   command. Run it; it produces `<App>/android/<alias>_pepk.zip`.
 5. Upload that `.zip` via step 4 link in Play Console.
-6. Save. Done — the local keystore is now this app's signing key
-   without a reset request.
+6. Run `python3 scripts/gen_upload_keystore.py <App>`. This
+   generates a SEPARATE upload keystore + cert and rewrites
+   `keystore.properties` to point gradle at it.
+7. Upload `<App>/android/upload_certificate.pem` via step 5c link
+   in Play Console.
+8. Save. Done — the red "must differ" error clears, and any
+   subsequent `bundleRelease` produces an AAB Play accepts.
 
 **Reset request (fallback, takes 1-3 business days):**
 
@@ -224,14 +251,20 @@ wrong-key AAB and Play has locked in the Google-generated upload
 key. Submit `<App>/android/upload_cert_request.pem` (auto-generated
 by `migrate_to_per_app_keystores.py`) via Play Console "Request
 upload key reset". WaterSort and Nonogram already went through this
-path. All other apps in the portfolio should use the PEPK option
-above on their first Play Console listing setup, BEFORE any AAB
-upload, to avoid the reset wait.
+path. All other apps in the portfolio should use the PEPK +
+upload-keystore flow above on their first Play Console listing
+setup, BEFORE any AAB upload, to avoid the reset wait.
 
 **Shipping flag:** SHIP_GAME.md Phase 7 (AAB build + upload) MUST
-verify the local keystore SHA-1 matches Play Console's registered
-upload key before attempting an upload. If it doesn't,
-hard-block the upload step and run the PEPK flow first.
+verify three things before kicking off bundleRelease:
+1. `<App>/android/encryption_public_key.pem` and `pepk.jar` exist
+   (PEPK prerequisites downloaded).
+2. `<App>/android/upload-keystore.jks` and `upload_certificate.pem`
+   exist (separate upload key generated).
+3. `<App>/android/keystore.properties` `storeFile` points at
+   `upload-keystore.jks` (so gradle signs AABs with the upload key).
+If any of these isn't true, hard-block the upload step and run the
+PEPK + gen_upload_keystore.py flow first.
 
 ---
 
@@ -594,9 +627,24 @@ If you see any of these, stop and surface:
 - Auto-generated listings via template substitution
 - `game.html` under ~8KB planned for publishing
 - Reused screenshots across multiple apps
+- **Shop / "More Games" / settings screens used as screenshots.**
+  Every screenshot slot must show ACTUAL GAMEPLAY at a varied level
+  — different board layouts, different progress states, different
+  game phases. Capturing the shop or "More Games" panel is a
+  wasted slot (Play Store users see "this app is mostly a paywall
+  and a list of other apps" instead of "this is a fun puzzle") and
+  is auto-blocked from May 2026. Use diverse level captures
+  instead — e.g. an early-game level, a mid-game level, a late-game
+  board, the daily challenge active, a streak banner state.
+  This rule applies retroactively: WaterSort, Nonogram, and
+  Puzzle2048 had slots showing shop / more-games and have been
+  regenerated. No more grandfathering of those three.
 - Phone, tablet 7", and tablet 10" listings reusing the same raw
   page, the same wrapper, or the same headline copy. **Each of the
-  three surfaces must be a fully distinct listing**, varying ALL of:
+  three surfaces must be a fully distinct listing**, AND every
+  individual wrapped screenshot within each surface must have a
+  unique raw + unique headline + visually distinct wrapper variant
+  from every other slot in that surface. Varying ALL of:
     1. **Game pages captured** — different in-app screens (menu vs.
        active board vs. shop vs. results vs. daily challenge etc.),
        no overlap of which screen appears in two surfaces

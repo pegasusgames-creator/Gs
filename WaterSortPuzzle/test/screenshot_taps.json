@@ -1,16 +1,16 @@
 {
-  "_comment": "WaterSort. Menu has 7 visible buttons across 3 rows: Play (hero), Daily Challenge (secondary), Levels/Shop/Games (3-row), Missions (wide), Stats (wide). Each slot taps a different one.",
-  "_readiness_expr": "typeof showScreen === 'function' && typeof startLevel === 'function' && typeof loadGame === 'function'",
+  "_comment": "WaterSort screenshot capture. Per May 2026 rule: no shop, no more-games panels — every slot shows actual gameplay at a different level / state. The tap_key NAMES below are the slot identifiers the capture script looks up (script SLOTS list is hardcoded); the CONTENT is what we want captured for that slot. Mapping per headlines.json: 01=deep, 02=daily, 03=levels, 04=early, 05=mid, 06=missions, 07=menu.",
+  "_readiness_expr": "typeof showScreen === 'function' && typeof Game !== 'undefined' && typeof Game.startPlay === 'function'",
 
   "_setup_taps": [
     ["js", "(function(){var today=new Date().toISOString().slice(0,10);var save={currentLevel:87,completedLevels:Array.from({length:86},function(_,i){return i+1;}),levelStars:(function(){var s={};for(var i=1;i<=86;i++)s[i]=(i%4===0?3:(i%3===0?2:1));return s;})(),coins:412,lives:5,lastLifeTime:Date.now(),removeAds:false,soundEnabled:true,musicEnabled:false,activeTheme:'default',dailyChallengeDate:today,dailyChallengeStreak:9,bestStreak:14};try{localStorage.setItem('watersort_save',JSON.stringify(save));localStorage.setItem('ls_v2',JSON.stringify({n:9,d:today,ach:['first_solve','streak_3','streak_7']}));localStorage.setItem('ws_missions_v1',JSON.stringify({date:today,progress:{mission_solver:3,mission_dedicated:12,mission_streak:1},claimed:{mission_perfectionist:true}}));localStorage.setItem('ws_stats_v1',JSON.stringify({levels_solved:86,total_pours:1247,total_undo:34,total_play_time_s:8420,sessions:47,best_streak:14,tubes_solved:318}));}catch(e){}var ov=document.getElementById('ls-overlay');if(ov)ov.style.display='none';if(typeof loadGame==='function')loadGame();return 'seeded';})()", 500]
   ],
 
-  "01_deep_gameplay":  [["tap", 0.50, 0.32, 1500]],
-  "02_early_gameplay": [["tap", 0.50, 0.39, 1500]],
-  "03_level_complete": [["tap", 0.20, 0.50, 1500]],
-  "04_missions_panel": [["tap", 0.50, 0.50, 1200]],
-  "05_stats":          [["tap", 0.80, 0.50, 1200]],
-  "06_levels_grid":    [["tap", 0.50, 0.59, 1200]],
+  "01_deep_gameplay":  [["js", "if(typeof State!=='undefined'){State.currentLevel=87;}Game.startPlay();'ok';", 1500]],
+  "02_early_gameplay": [["js", "if(typeof Game.startDailyChallenge==='function'){Game.startDailyChallenge();}else{State.currentLevel=87;Game.startPlay();}'ok';", 1500]],
+  "03_level_complete": [["js", "if(typeof Game!=='undefined' && Game.showScreen){Game.showScreen('levelScreen');}'ok';", 1500]],
+  "04_missions_panel": [["js", "if(typeof State!=='undefined'){State.currentLevel=8;}Game.startPlay();'ok';", 1500]],
+  "05_stats":          [["js", "if(typeof State!=='undefined'){State.currentLevel=42;}Game.startPlay();'ok';", 1500]],
+  "06_levels_grid":    [["js", "if(typeof window.wsMissionsOpen==='function'){window.wsMissionsOpen();}'ok';", 1500]],
   "07_menu":           []
 }

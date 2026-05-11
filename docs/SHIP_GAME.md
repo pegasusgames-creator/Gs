@@ -424,6 +424,36 @@ boots the emulator, installs the debug APK, force-stops/relaunches the
 app for each slot, executes a tap sequence, and saves each capture to
 `<App>/store/screenshots/phone/raw/0N.png`.
 
+**What each slot must show — and what's banned.**
+
+Every slot must show **actual gameplay at a different level / state**.
+Banned content (Play Console BLOCKS as of May 2026 via
+`check_screenshot_uniqueness`):
+
+- ✗ The Shop screen (IAP purchase panel)
+- ✗ The "More Games" / cross-promo panel
+- ✗ Settings / preferences screen
+- ✗ Privacy policy / about screen
+- ✗ Two slots showing the same level number / board state
+
+Required: vary the **level, board state, color palette in play,
+progress, and HUD state** across slots. Reasonable allocation for a
+7-slot phone listing:
+
+| Slot | Suggested content |
+|---|---|
+| 01 | Late-game board (level ≥ 60) mid-action |
+| 02 | Early-game board (level ≤ 10) showing the core mechanic clean |
+| 03 | Mid-game board (level 20-40) at a moment of choice |
+| 04 | Daily challenge screen actively running |
+| 05 | Level select / progress map showing stars / completion ring |
+| 06 | A different mid-game board (different palette, different layout) |
+| 07 | Win / level-complete screen with reward animation |
+
+These are starting points — the rule is "no shop, no more-games, no
+two duplicates," not a rigid template. Pick what shows the app at
+its best.
+
 **Pre-capture seed file required.** Create
 `<App>/test/seed_screenshot_state.js` with the EXACT localStorage keys
 this app's `game.html` reads. Generic templates with keys like 'coins'
@@ -1058,8 +1088,10 @@ in.
 **HARD BLOCKER before Phase 7 runs at all:**
 
 If this app has not yet had its Play Console "App signing settings"
-page configured with the local keystore, every AAB upload will be
-rejected. Before invoking gradle:
+page configured with the local keystore AND a separate upload
+keystore, every AAB upload will be rejected. Play Console enforces
+that **app signing key ≠ upload key** — completing only PEPK is not
+enough. Before invoking gradle:
 
 1. Confirm `<App>/android/encryption_public_key.pem` and
    `<App>/android/pepk.jar` are present. The human must download
@@ -1068,16 +1100,30 @@ rejected. Before invoking gradle:
    file is missing, STOP and ask the human to download them.
 2. Run `python3 scripts/pepk_command.py <App>` and execute the
    printed command. It produces `<App>/android/<alias>_pepk.zip`.
-3. Human uploads that `.zip` via Play Console step 4, hits Save.
-4. THEN run `./gradlew bundleRelease`.
+3. Human uploads that `.zip` via Play Console step 4 (step 1-4 on
+   the App signing page).
+4. Run `python3 scripts/gen_upload_keystore.py <App>`. This
+   generates `<App>/android/upload-keystore.jks`,
+   `upload_certificate.pem`, and rewrites `keystore.properties` so
+   gradle signs AABs with the upload key.
+5. Human uploads `<App>/android/upload_certificate.pem` via Play
+   Console step 5c. Hits Save (no red "must differ" error this
+   time).
+6. THEN run `./gradlew bundleRelease`. The AAB is signed with the
+   upload key, which is what Play accepts on the release page.
 
 WaterSort and Nonogram skipped this — they each went through the
-slower upload-key reset workflow (1-3 business days). For every app
-from Puzzle2048 onward, use the PEPK flow above.
+slower upload-key reset workflow (1-3 business days) before the
+two-keystore requirement was understood. For every app from
+Puzzle2048 onward, use the PEPK + upload-keystore flow above.
 
-The `app_info.json:first_upload_at` field marks whether an app has
-already cleared this step. If unset and `<App>/android/*_pepk.zip`
-doesn't exist, the PEPK flow has not run yet.
+The `app_info.json` fields mark progress:
+- `app_signing_key_sha1` = original keystore.jks SHA-1 (server-side)
+- `upload_key_sha1`      = upload-keystore.jks SHA-1 (gradle signing)
+- `first_upload_at`       = set after first successful Play upload.
+
+If `upload_key_sha1 == app_signing_key_sha1`, gen_upload_keystore.py
+hasn't run yet — block on it.
 
 **First build (before Phase 6 hand-off):**
 ```
