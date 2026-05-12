@@ -548,11 +548,16 @@ to sell the game. Order:
 
 1. **Gameplay mid-action** — a dramatic in-progress state showing what the
    player does. Not the menu. Not an empty board.
-2. **Level complete celebration** — stars, particles, coin reward. Shows the
-   emotional payoff.
-3. **Progression / themes / variety** — shows long-term content (many levels,
-   unlockable themes).
-4-8. Various gameplay, features, daily challenge, missions, stats.
+2. **Level complete celebration** — 3-star clear, particles, coin reward —
+   **and the theme-unlock celebration card visible when the level crosses a
+   theme threshold** (this is the emotional + progression payoff in one shot).
+3. **Progression / variety** — shows long-term content (many levels, daily
+   challenge, missions).
+4-8. Various gameplay, daily challenge, missions, stats, **and a dedicated
+   Themes screen shot — the full unlockable-palette grid with one card
+   highlighted** (this slot is now part of the standard set; `capture_screenshots.py`
+   raw slot `08` = themes grid; `screenshot_headlines.json` carries a
+   `needs_capture: true` placeholder until an emulator run grabs it).
 
 Never lead with the menu screenshot. Never lead with the shop screenshot
 (signals monetization-first).

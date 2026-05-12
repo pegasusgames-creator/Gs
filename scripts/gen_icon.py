@@ -222,12 +222,14 @@ def build_icon():
     my = int(SIZE * 0.56) - middle.height // 2
     canvas.alpha_composite(middle, (mx, my))
 
-    os.makedirs('/home/claude/assets', exist_ok=True)
+    out_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                           'WaterSortPuzzle', 'store')
+    os.makedirs(out_dir, exist_ok=True)
     for target_size, name in OUT_SIZES:
         out = canvas.resize((target_size, target_size), Image.LANCZOS)
         flat = Image.new('RGB', (target_size, target_size), BG_TOP)
         flat.paste(out, mask=out.split()[3])
-        path = f'/home/claude/assets/{name}'
+        path = os.path.join(out_dir, name)
         flat.save(path, 'PNG', optimize=True)
         print(f'  wrote {path} ({os.path.getsize(path) // 1024} KB)')
 

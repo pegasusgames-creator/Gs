@@ -471,22 +471,28 @@ Banned content (Play Console BLOCKS as of May 2026 via
 - ✗ Two slots showing the same level number / board state
 
 Required: vary the **level, board state, color palette in play,
-progress, and HUD state** across slots. Reasonable allocation for a
-7-slot phone listing:
+progress, and HUD state** across slots. Reasonable allocation for an
+8-slot phone listing (slot 08 — the Themes grid — is now part of the
+standard set, see QUALITY_PLAYBOOK §7.1):
 
 | Slot | Suggested content |
 |---|---|
 | 01 | Late-game board (level ≥ 60) mid-action |
 | 02 | Early-game board (level ≤ 10) showing the core mechanic clean |
-| 03 | Mid-game board (level 20-40) at a moment of choice |
+| 03 | Win / level-complete screen — **3-star clear + the theme-unlock celebration card** when the level crosses a theme threshold |
 | 04 | Daily challenge screen actively running |
-| 05 | Level select / progress map showing stars / completion ring |
+| 05 | Daily missions panel (3 active objectives) or stats screen |
 | 06 | A different mid-game board (different palette, different layout) |
-| 07 | Win / level-complete screen with reward animation |
+| 07 | Menu — showing the Continue button, Free Coins, Weekly Tournament banner, theme progress strip |
+| 08 | **Themes screen — the full unlockable-palette grid with one card highlighted** |
 
 These are starting points — the rule is "no shop, no more-games, no
 two duplicates," not a rigid template. Pick what shows the app at
-its best.
+its best. Until an emulator run captures slots 03 and 08 in their new
+form, `screenshot_headlines.json` carries `needs_capture: true` markers
+on those entries. (`wrap_screenshots.py` currently wraps the first 7
+raws; bump it to 8 when `capture_screenshots.py` is updated to grab the
+Themes screen too.)
 
 **Pre-capture seed file required.** Create
 `<App>/test/seed_screenshot_state.js` with the EXACT localStorage keys

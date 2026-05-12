@@ -11,11 +11,13 @@ Usage:
 Inputs:
     <AppName>/store/screenshots/phone/raw/01.png  (deep gameplay)
     <AppName>/store/screenshots/phone/raw/02.png  (early gameplay)
-    <AppName>/store/screenshots/phone/raw/03.png  (level complete)
-    <AppName>/store/screenshots/phone/raw/04.png  (daily missions)
-    <AppName>/store/screenshots/phone/raw/05.png  (stats)
-    <AppName>/store/screenshots/phone/raw/06.png  (levels list)
-    <AppName>/store/screenshots/phone/raw/07.png  (menu)
+    <AppName>/store/screenshots/phone/raw/03.png  (level complete — 3-star + theme-unlock card)
+    <AppName>/store/screenshots/phone/raw/04.png  (daily challenge / missions)
+    <AppName>/store/screenshots/phone/raw/05.png  (missions or stats)
+    <AppName>/store/screenshots/phone/raw/06.png  (another mid-game board)
+    <AppName>/store/screenshots/phone/raw/07.png  (menu — Continue / Free Coins / Weekly Tournament / theme strip)
+    <AppName>/store/screenshots/phone/raw/08.png  (themes grid — NEW standard slot; this script still wraps only 01-07,
+                                                 bump the range when capture_screenshots.py is updated to grab it)
 
 Outputs (1080×2400):
     <AppName>/store/screenshots/phone/01.png ... 07.png

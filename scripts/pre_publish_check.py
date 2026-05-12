@@ -468,15 +468,18 @@ def check_json_file(apps, relpath, required_keys, label):
 IAP_CANONICAL_DESCRIPTIONS = {
     "remove_ads": "Permanently removes all banner and interstitial ads. Rewarded ads remain available so you can still earn free coins and lives.",
     "coins_small": "Adds 100 coins to your wallet. Spend coins on hints, extra moves, and unlocking new themes.",
+    "coins_medium": "Adds 600 coins to your wallet. Spend coins on hints, boosters, and unlocking new themes.",
     "coins_large": "Adds 500 coins to your wallet. Best value coin pack — spend on hints, extra moves, and unlocking new themes.",
+    "coins_mega": "Adds 1400 coins to your wallet. Our largest coin pack — spend on hints, boosters, and unlocking new themes.",
     "five_lives": "Instantly refills your hearts to the maximum so you can keep playing without waiting for them to recharge.",
     "unlimited_lives_1h": "Play with unlimited lives for one full hour. Perfect for a long puzzle session without any interruption.",
     "unlimited_lives_forever": "Never run out of lives again. Play as many levels as you want, whenever you want, with no waiting.",
     "unlimited_undos": "Undo any move at any time, as many times as you want. No more restarting a level after one small mistake.",
     "undo_pack": "Adds 10 undos to your account. Take back any move at any time so one mistake never costs you a level.",
     "hint_pack": "Adds 10 hints to your account. Each hint reveals the next correct move on any level where you are stuck.",
-    "starter_pack": "Best value for new players: 100 coins, 5 hints, and 5 lives bundled together. One-time purchase.",
-    "season_pass_monthly": "Monthly pass: ad-free play, +50 daily coins, exclusive themes, and unlimited hints. Cancel anytime in Google Play.",
+    "starter_pack": "100 coins + 5 hints (or 5 undos) + 5 lives + Ads Off, bundled for new players. One-time purchase.",
+    "season_pass_monthly": "Monthly pass: ad-free play, +50 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play.",
+    "weekly_pass": "Weekly pass: ad-free play, +100 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play.",
 }
 IAP_DESC_MAX = 200
 

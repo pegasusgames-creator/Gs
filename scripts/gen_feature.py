@@ -32,8 +32,20 @@ BG_RIGHT  = (22, 75, 105)
 
 GLASS = (235, 248, 255)
 
-FONT_REG  = '/usr/share/fonts/truetype/google-fonts/Poppins-Bold.ttf'
-FONT_LITE = '/usr/share/fonts/truetype/google-fonts/Poppins-Medium.ttf'
+def _first_existing(*paths):
+    for p in paths:
+        if os.path.exists(p):
+            return p
+    return paths[-1]  # let PIL raise if truly nothing is available
+
+FONT_REG  = _first_existing(
+    '/usr/share/fonts/truetype/google-fonts/Poppins-Bold.ttf',
+    '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf',
+    '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf')
+FONT_LITE = _first_existing(
+    '/usr/share/fonts/truetype/google-fonts/Poppins-Medium.ttf',
+    '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf',
+    '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf')
 
 
 def gradient_bg():
@@ -306,8 +318,10 @@ def build_feature_graphic():
     out = canvas.resize((out_w, out_h), Image.LANCZOS)
     flat = Image.new('RGB', (out_w, out_h), BG_TOP)
     flat.paste(out, mask=out.split()[3])
-    os.makedirs('/home/claude/assets', exist_ok=True)
-    path = '/home/claude/assets/feature_graphic_1024x500.png'
+    out_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                           'WaterSortPuzzle', 'store')
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, 'feature_graphic_1024x500.png')
     flat.save(path, 'PNG', optimize=True)
     print(f'  wrote {path} ({os.path.getsize(path) // 1024} KB)')
 

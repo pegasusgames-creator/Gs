@@ -33,7 +33,7 @@
     {
       "id": "coins_medium",
       "name": "600 Coins",
-      "description": "Adds 600 coins to your wallet. Spend coins on hints, boosters, extra tubes, and unlocking new themes.",
+      "description": "Adds 600 coins to your wallet. Spend coins on hints, boosters, and unlocking new themes.",
       "type": "consumable",
       "price_usd": 4.99,
       "offer_id": "base",
@@ -43,7 +43,7 @@
     {
       "id": "coins_mega",
       "name": "1400 Coins",
-      "description": "Adds 1400 coins to your wallet. Our largest coin pack — spend on hints, boosters, extra tubes, and themes.",
+      "description": "Adds 1400 coins to your wallet. Our largest coin pack — spend on hints, boosters, and unlocking new themes.",
       "type": "consumable",
       "price_usd": 9.99,
       "offer_id": "base",
@@ -103,7 +103,7 @@
     {
       "id": "starter_pack",
       "name": "Starter Pack",
-      "description": "Best value for new players: 100 coins, 5 hints, and 5 lives bundled together. One-time purchase.",
+      "description": "100 coins + 5 hints (or 5 undos) + 5 lives + Ads Off, bundled for new players. One-time purchase.",
       "type": "consumable",
       "price_usd": 0.99,
       "offer_id": "base",
@@ -115,7 +115,7 @@
     {
       "id": "season_pass_monthly",
       "name": "Season Pass",
-      "description": "Monthly pass: ad-free play, +50 coins every day, all themes unlocked, and unlimited hints. Cancel anytime in Google Play.",
+      "description": "Monthly pass: ad-free play, +50 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play.",
       "price_usd": 1.99,
       "billing_period": "P1M",
       "grace_period_days": 3,
@@ -128,7 +128,7 @@
     {
       "id": "weekly_pass",
       "name": "Weekly Pass",
-      "description": "Weekly pass: ad-free play, +100 coins every day, all themes unlocked, and unlimited hints. Cancel anytime in Google Play.",
+      "description": "Weekly pass: ad-free play, +100 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play.",
       "price_usd": 4.99,
       "billing_period": "P1W",
       "grace_period_days": 3,

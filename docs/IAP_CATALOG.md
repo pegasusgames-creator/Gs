@@ -69,16 +69,16 @@ in `MainActivity.java` `VALID_PRODUCTS` and in `iaps.json`.
 |---|---|---|---|---|---|
 | 1 | `remove_ads` | Non-consumable | $2.99 | Remove Ads | Permanently removes all banner and interstitial ads. Rewarded ads remain available so you can still earn free coins and lives. |
 | 2 | `coins_small` | Consumable | $0.99 | 100 Coins | Adds 100 coins to your wallet. Spend coins on hints, extra moves, and unlocking new themes. |
-| 2b | `coins_medium` | Consumable | $4.99 | 600 Coins | Adds 600 coins to your wallet. Spend coins on hints, boosters, extra tubes, and unlocking new themes. |
+| 2b | `coins_medium` | Consumable | $4.99 | 600 Coins | Adds 600 coins to your wallet. Spend coins on hints, boosters, and unlocking new themes. |
 | 3 | `coins_large` | Consumable | $2.99 | 500 Coins | Adds 500 coins to your wallet. Best value coin pack — spend on hints, extra moves, and unlocking new themes. |
-| 3b | `coins_mega` | Consumable | $9.99 | 1400 Coins | Adds 1400 coins to your wallet. Our largest coin pack — spend on hints, boosters, extra tubes, and themes. |
+| 3b | `coins_mega` | Consumable | $9.99 | 1400 Coins | Adds 1400 coins to your wallet. Our largest coin pack — spend on hints, boosters, and unlocking new themes. |
 | 4 | `five_lives` | Consumable | $0.99 | 5 Lives | Instantly refills your hearts to the maximum so you can keep playing without waiting for them to recharge. |
 | 5 | `unlimited_lives_1h` | Consumable | $1.99 | 1 Hour Unlimited Lives | Play with unlimited lives for one full hour. Perfect for a long puzzle session without any interruption. |
 | 6 | `unlimited_lives_forever` | Non-consumable | $4.99 | Unlimited Lives Forever | Never run out of lives again. Play as many levels as you want, whenever you want, with no waiting. |
 | 7 | `unlimited_undos` | Non-consumable | $4.99 | Unlimited Undos | Undo any move at any time, as many times as you want. No more restarting a level after one small mistake. |
 | 8 | `undo_pack` | Consumable | $0.99 | Undo Pack (10) | Adds 10 undos to your account. Take back any move at any time so one mistake never costs you a level. |
 | 9 | `hint_pack` | Consumable | $1.99 | Hint Pack | Adds 10 hints to your account. Each hint reveals the next correct move on any level where you are stuck. |
-| 10 | `starter_pack` | Consumable | $0.99 | Starter Pack | Best value for new players: 100 coins, 5 hints, and 5 lives bundled together. One-time purchase. |
+| 10 | `starter_pack` | Consumable | $0.99 | Starter Pack | 100 coins + 5 hints (or 5 undos) + 5 lives + Ads Off, bundled for new players. One-time purchase. |
 
 ---
 
@@ -90,10 +90,13 @@ and at least one offer.
 
 | # | Product ID | Name (≤55) | Description (≤200) | Billing period | Grace period | Price (USD) |
 |---|---|---|---|---|---|---|
-| 1 | `season_pass_monthly` | Season Pass | Monthly pass: ad-free play, +50 coins every day, all themes unlocked, and unlimited hints. Cancel anytime in Google Play. | 1 month (P1M) | 3 days | $1.99 |
-| 2 | `weekly_pass` | Weekly Pass | Weekly pass: ad-free play, +100 coins every day, all themes unlocked, and unlimited hints. Cancel anytime in Google Play. | 1 week (P1W) | 3 days | $4.99 |
+| 1 | `season_pass_monthly` | Season Pass | Monthly pass: ad-free play, +50 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play. | 1 month (P1M) | 3 days | $1.99 |
+| 2 | `weekly_pass` | Weekly Pass | Weekly pass: ad-free play, +100 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play. | 1 week (P1W) | 3 days | $4.99 |
 
-> Note: 2048-style games word the "unlimited hints" benefit as "unlimited undos" (they have no hint mechanic) and `starter_pack` as "100 coins + 5 undos + 5 lives + Ads Off" rather than "5 hints" — `check_iaps_descriptions` will surface that as a benign warning, not a blocker.
+> Note: the `starter_pack` and pass descriptions are deliberately
+> genre-neutral ("5 hints (or 5 undos)", "unlimited boosters") so the
+> exact same string works for sort-puzzle, picross, and 2048-style games
+> — `check_iaps_descriptions` enforces these verbatim across every app.
 
 **Subscription form fields:**
 

@@ -1,9 +1,47 @@
 [
-  {"line1": "20×20 GRIDS", "line2": "TIGHT CLUES", "subtitle": "Late-game boards that reward careful deduction."},
-  {"line1": "READ THE", "line2": "NUMBERS", "subtitle": "Clue-driven logic — the picture emerges as you solve."},
-  {"line1": "500 BOARDS", "line2": "ALL FREE", "subtitle": "Every board included, no paywall. Five difficulty rings."},
-  {"line1": "PIXEL ART", "line2": "REVEALED", "subtitle": "Mark a cell, cross a cell — the image takes shape."},
-  {"line1": "DAILY", "line2": "CHALLENGE", "subtitle": "One fresh puzzle every 24 hours. Build a streak."},
-  {"line1": "STUCK?", "line2": "REVEAL IT", "subtitle": "Reveal Cell and Reveal Row boosters when you need a nudge."},
-  {"line1": "PAINT BY", "line2": "NUMBERS", "subtitle": "Calm, offline picross — settle in with a tea."}
+  {
+    "line1": "20×20 GRIDS",
+    "line2": "TIGHT CLUES",
+    "subtitle": "Late-game boards that reward careful deduction."
+  },
+  {
+    "line1": "READ THE",
+    "line2": "NUMBERS",
+    "subtitle": "Clue-driven logic — the picture emerges as you solve."
+  },
+  {
+    "line1": "SOLVED",
+    "line2": "CLEAN",
+    "subtitle": "Win screen — and a new color theme is unlocked.",
+    "needs_capture": true,
+    "capture_note": "Win overlay showing stars + the theme-unlock card."
+  },
+  {
+    "line1": "PIXEL ART",
+    "line2": "REVEALED",
+    "subtitle": "Mark a cell, cross a cell — the image takes shape."
+  },
+  {
+    "line1": "DAILY",
+    "line2": "CHALLENGE",
+    "subtitle": "One fresh puzzle every 24 hours. Build a streak."
+  },
+  {
+    "line1": "STUCK?",
+    "line2": "REVEAL IT",
+    "subtitle": "Reveal Cell and Reveal Row boosters when you need a nudge."
+  },
+  {
+    "line1": "PAINT BY",
+    "line2": "NUMBERS",
+    "subtitle": "Calm, offline picross — settle in with a tea."
+  },
+  {
+    "line1": "PICK YOUR",
+    "line2": "PALETTE",
+    "subtitle": "Earn new color themes as you climb the level ladder.",
+    "_raw_slot": "08",
+    "needs_capture": true,
+    "capture_note": "Themes screen — full palette grid with one card highlighted."
+  }
 ]
