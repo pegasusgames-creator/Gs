@@ -33,7 +33,7 @@ Click **Create app**. You're now on the app's dashboard.
 
 ---
 
-## Step 3 — Create the 9 IAP products (10 min)
+## Step 3 — Create the 12 IAP products (10 min)
 
 Play Console → Nonogram Puzzle → **Monetize → Products → In-app products**.
 
@@ -45,12 +45,15 @@ Click **Create product** for each row below. Activate after creating
 | `remove_ads` | Managed | Remove Ads | $2.99 |
 | `coins_small` | Managed | 100 Coins | $0.99 |
 | `coins_large` | Managed | 500 Coins | $2.99 |
+| `coins_medium` | Managed | 600 Coins | $4.99 |
+| `coins_mega` | Managed | 1400 Coins | $9.99 |
 | `five_lives` | Managed | 5 Lives | $0.99 |
-| `unlimited_lives_1h` | Managed | 1hr Unlimited | $0.99 |
+| `unlimited_lives_1h` | Managed | 1hr Unlimited | $1.99 |
 | `unlimited_lives_forever` | Managed | Unlimited Lives | $4.99 |
 | `hint_pack` | Managed | Hint Pack | $1.99 |
 | `starter_pack` | Managed | Starter Pack | $0.99 |
 | `season_pass_monthly` | Subscription | Season Pass | $1.99/mo |
+| `weekly_pass` | Subscription | Weekly Pass | $4.99/P1W |
 
 ---
 
@@ -210,7 +213,15 @@ Play Console → Nonogram Puzzle → **Test and release → Production → Creat
 
 Drag in `app-release.aab`. Add release notes:
 ```
-Warm paper redesign — every screen rebuilt around a calm, newspaper-puzzle aesthetic. Solved-state moment refreshed. 500 levels, daily challenge, streak tracking. Plays fully offline.
+• Coin Pack S and L now grant the full 100 and 500
+• Hint Pack now grants the full 10 hints
+• Season Pass benefits expanded: ad-free + 50 daily coins + all themes
+• Reveal Row and Reveal Cell boosters
+• Weekly Tournament bracket
+• Seasonal events (Halloween, Winter, Spring)
+• Free Coins button — 25 every 4 hours
+• Continue from the menu
+• 7-day login streak rewards
 ```
 
 Save → **Review release** → **Start rollout to Production**.

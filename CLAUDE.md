@@ -11,14 +11,19 @@ Read this file end-to-end before doing anything in here.
 - `Gs/docs/` — all `.md` reference docs (`SHIP_GAME.md`,
   `QUALITY_PLAYBOOK.md`, `APP_ARCHETYPES.md`, `TRANSLATIONS.md`,
   `COMPETITIVE_BENCHMARK.md`, `NOTIFICATIONS_IMPL.md`)
-- `Gs/scripts/` — all Python scripts (`pre_publish_check.py`,
-  `build_release.py`, `gen_handoff.py`, `gen_translations.py`,
-  `gen_store_paste.py`, `pepk_command.py`, `gen_upload_keystore.py`,
-  `consult_designer.py`, `init_app_metadata.py`,
-  `capture_screenshots.py`, `wrap_screenshots.py`,
-  `wrap_tablet_screenshots.py`, `app_themes.py`,
-  `dedup_similar_apps.py`, `cleanup_repo.py`, `fix_all_apps.py`,
-  `prepare_for_publish.py`)
+- `Gs/scripts/` — all Python scripts. Key ones: `pre_publish_check.py`
+  (the master guard — runs every other check below), `build_release.py`,
+  `gen_handoff.py`, `gen_translations.py`, `gen_store_paste.py`,
+  `pepk_command.py`, `gen_upload_keystore.py`, `consult_designer.py`,
+  `init_app_metadata.py`, `capture_screenshots.py`, `wrap_screenshots.py`,
+  `wrap_tablet_screenshots.py`, `app_themes.py`, `dedup_similar_apps.py`,
+  `cleanup_repo.py`, `fix_all_apps.py`, `prepare_for_publish.py`.
+  Standalone check modules wired into `pre_publish_check.py`:
+  `check_iap_invariants.py`, `check_iap_grant_parity.py`,
+  `check_retention_features.py`, `check_subscription_parity.py`,
+  `check_coin_tier_ladder.py`, `check_booster_catalog.py`,
+  `check_menu_completeness.py`, `check_seasonal_events.py` (each runs
+  standalone with `<App>` or `--all`).
 - `Gs/<AppName>/` — one folder per app
 
 When this file references files by bare name (e.g. `SHIP_GAME.md` or
@@ -49,7 +54,11 @@ respectively. Run scripts from the repo root:
 - **`pre_publish_check.py`** — guard script (auto-run by `build_release.py`)
 - **`build_release.py`** — Phase 5/7/8 automation
 - **`gen_handoff.py`** — generates per-app `RELEASE_HANDOFF.md`
-- **`gen_translations.py`** — Phase 4.5 translations (needs `ANTHROPIC_API_KEY`)
+- **`gen_translations.py`** — Phase 4.5 translations into the 13 locales
+  (uses `ANTHROPIC_API_KEY` if set, else falls back to `OPENAI_API_KEY`;
+  has a shrink-to-fit retry for over-limit fields; writes `.rejected`
+  files only when even that overflows — those must be hand-trimmed +
+  renamed before ship)
 - **`consult_designer.py`** — sub-agent design questions during Phase 1/8
 - **`init_app_metadata.py`** — scaffolds metadata/store folders
 - **`gen_store_paste.py`** — assembles `<App>/STORE_PASTE.md` from
@@ -606,28 +615,52 @@ language, AdMob ID matches manifest+MainActivity, every `iaps.json`
 entry has a canonical `description` (≤200 chars, from `IAP_CATALOG.md`),
 archetype presence
 (four archetypes set in `app_themes.py` + `metadata/app_identity.md`
-present), translations present (all 13 locales), menu button count ≤6.
+present), translations present (all 13 locales), menu button count ≤6,
+keystore present + SHA1 matches `app_info.json:upload_key_sha1`.
+
+For games that ship the retention stack (sell `season_pass_monthly`)
+it additionally enforces: IAP grant parity (literal grant == iaps.json
+description), retention-feature parity (`replayPendingGrants`,
+`isSeasonActive`, wrapped `onPurchaseSuccess`, hint/undo counters),
+subscription promise parity, coin tier ladder (all 4 coin SKUs),
+booster catalog (genre set present), menu completeness (Continue /
+Free Coins / theme strip / weekly tournament / Daily / Stats markers),
+and a `SEASONAL_EVENTS` table covering Oct/Dec/Feb. See the
+"Retention-feature parity invariant" section above for the canonical
+definitions; the long-tail utility apps (no season pass, no coin packs)
+are not subject to these.
 
 If any blocker fails, stop. Do not build, do not upload, do not advance
 to the next app.
 
 ---
 
-## State of the apps (last audit)
+## State of the apps (last audit: 2026-05-12)
 
 - **Hero app (1):** **WaterSort** is the official hero. All 5 flagships
   ship to flagship quality, but the hero app gets meta-loop, live ops,
   real mascot, and any other "above-baseline" investment. See
   `docs/COMPETITIVE_BENCHMARK.md` §10 for the rationale.
-- **Finished and release-ready (5):** WaterSort, Nonogram, PipeConnect,
-  Puzzle2048, UnblockPuzzle. Game code done; metadata folders need full
-  population.
-- **Already shipped to Play Store (1):** WaterSort.
+- **Audited + retention-feature-complete + listing-ready (3):**
+  WaterSort (v2.0.0), Nonogram (v1.1.0), Puzzle2048 (v1.1.0). The
+  May 2026 audit pass landed: full coin-tier ladder + Season/Weekly
+  Pass with honored benefits + hint/undo counters + genre booster
+  catalog + Free Coins + Continue + theme progress strip + theme-unlock
+  card + 7-day login-streak ladder + weekly tournament (synthetic
+  bracket) + seasonal events + Settings Restore/Privacy links; all 13
+  locales translated; phone + tablet 7"/10" screenshots regenerated
+  from the emulator; AABs built in `release_aabs/`. `pre_publish_check`
+  is clean for all three. Remaining work is Play-Console-side only
+  (create the new SKUs, App Signing setup for the two unpublished ones,
+  internal test → promote — see each app's `RELEASE_HANDOFF.md`).
+- **Finished game code, metadata not yet populated (2):** PipeConnect,
+  UnblockPuzzle. Game code done; needs the same audit pass + full
+  metadata + screenshots + the per-app keystore/PEPK flow before ship.
+- **Already shipped to Play Store (1):** WaterSort (an older version;
+  v2.0.0 is built but not yet uploaded).
 - **Recently deleted:** BallSortPuzzle (Apr 30 2026 — too similar to
-  WaterSort, ~zero downloads). Removed from `app_themes.py`,
-  `dedup_similar_apps.py`, `promo.json`, CLAUDE.md state. **NOTE: as of
-  May 2026 audit the BallSortPuzzle/ folder still exists in the repo
-  working tree — run `cleanup_repo.py` to move it out.**
+  WaterSort, ~zero downloads); folder removed from the working tree,
+  and removed from `app_themes.py` / `dedup_similar_apps.py` / `promo.json`.
 - **Unique but thin (~150):** `game.html` matches folder name but
   5-20KB. Needs game logic expansion + full metadata.
 - **Placeholder clones — DO NOT PUBLISH (33):** DiceRoller, EmotionFlash,

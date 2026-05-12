@@ -33,7 +33,7 @@ Click **Create app**. You're now on the app's dashboard.
 
 ---
 
-## Step 3 — Create the 10 IAP products (10 min)
+## Step 3 — Create the 13 IAP products (10 min)
 
 Play Console → Water Sort Puzzle → **Monetize → Products → In-app products**.
 
@@ -45,13 +45,16 @@ Click **Create product** for each row below. Activate after creating
 | `remove_ads` | Managed |  | $2.99 |
 | `coins_small` | Managed |  | $0.99 |
 | `coins_large` | Managed |  | $2.99 |
+| `coins_medium` | Managed |  | $4.99 |
+| `coins_mega` | Managed |  | $9.99 |
 | `five_lives` | Managed |  | $0.99 |
-| `unlimited_lives_1h` | Managed |  | $0.99 |
+| `unlimited_lives_1h` | Managed |  | $1.99 |
 | `unlimited_lives_forever` | Managed |  | $4.99 |
-| `unlimited_undos` | Managed |  | $3.99 |
+| `unlimited_undos` | Managed |  | $4.99 |
 | `hint_pack` | Managed |  | $1.99 |
 | `starter_pack` | Managed |  | $0.99 |
 | `season_pass_monthly` | Subscription |  | $1.99/mo |
+| `weekly_pass` | Subscription |  | $4.99/P1W |
 
 ---
 
@@ -211,10 +214,16 @@ Play Console → Water Sort Puzzle → **Test and release → Production → Cre
 
 Drag in `app-release.aab`. Add release notes:
 ```
-• Polished Settings header with a proper gear icon
-• The Play button now reads "Continue · Level N" when you have unfinished progress
-• Cleaner More Games panel
-• Minor stability improvements
+• Color Reveal, Steady Pour, Fresh Start — renamed boosters
+• NEW Extra Tube and Magic Wand boosters
+• Hints now use a counter — earn with ads or buy a 10-pack
+• Starter Pack and Season Pass now grant their full rewards
+• Coin Pack S and L now grant 100 and 500 coins
+• Weekly Tournament bracket on the main menu
+• Seasonal events (Halloween, Winter, Spring)
+• Free Coins button — 25 every 4 hours
+• Continue · Level N from the menu
+• 7-day login streak rewards
 ```
 
 Save → **Review release** → **Start rollout to Production**.

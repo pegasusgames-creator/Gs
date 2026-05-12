@@ -33,7 +33,7 @@ Click **Create app**. You're now on the app's dashboard.
 
 ---
 
-## Step 3 — Create the 9 IAP products (10 min)
+## Step 3 — Create the 12 IAP products (10 min)
 
 Play Console → 2048 Puzzle → **Monetize → Products → In-app products**.
 
@@ -45,12 +45,15 @@ Click **Create product** for each row below. Activate after creating
 | `remove_ads` | Managed | Remove Ads | $2.99 |
 | `coins_small` | Managed | 100 Coins | $0.99 |
 | `coins_large` | Managed | 500 Coins | $2.99 |
+| `coins_medium` | Managed | 600 Coins | $4.99 |
+| `coins_mega` | Managed | 1400 Coins | $9.99 |
 | `five_lives` | Managed | 5 Lives | $0.99 |
-| `unlimited_lives_1h` | Managed | 1hr Unlimited | $0.99 |
+| `unlimited_lives_1h` | Managed | 1hr Unlimited | $1.99 |
 | `unlimited_lives_forever` | Managed | Unlimited Lives | $4.99 |
 | `undo_pack` | Managed | Undo Pack (10) | $0.99 |
 | `starter_pack` | Managed | Starter Pack | $0.99 |
 | `season_pass_monthly` | Subscription | Season Pass | $1.99/mo |
+| `weekly_pass` | Subscription | Weekly Pass | $4.99/P1W |
 
 ---
 
@@ -210,7 +213,13 @@ Play Console → 2048 Puzzle → **Test and release → Production → Create ne
 
 Drag in `app-release.aab`. Add release notes:
 ```
-Welcome to 2048 Puzzle. Classic 4×4 board, daily challenge with streak tracking, weekly event, undo support, and offline play. Swipe to merge — beat your own record.
+• Starter Pack grants 5 undos and 5 lives
+• Season Pass: +50 daily coins, all themes, unlimited undos
+• Magic Merge and Remove Tile boosters
+• Weekly Tournament bracket
+• Seasonal events
+• Free Coins button
+• Continue · current run
 ```
 
 Save → **Review release** → **Start rollout to Production**.
