@@ -30,6 +30,11 @@ try:
     HAS_ANTHROPIC = True
 except ImportError:
     HAS_ANTHROPIC = False
+try:
+    from openai import OpenAI
+    HAS_OPENAI = True
+except ImportError:
+    HAS_OPENAI = False
 
 REPO_ROOT = Path(__file__).resolve().parent.parent if (Path(__file__).resolve().parent.name == "scripts") else Path(__file__).resolve().parent
 
@@ -99,19 +104,20 @@ BANNED_PHRASES_BY_LANG = {
 def llm_translate(english_text, target_locale, target_lang_name, field_name,
                   char_limit, app_voice="V1 (neutral functional)",
                   is_kids=False):
-    """Translate one field via Claude API. Returns the translated string,
-    or None if API not available / call fails."""
-    if not HAS_ANTHROPIC:
-        print(f"  WARNING: anthropic package not installed. "
-              f"Run: pip install anthropic")
+    """Translate one field via the Claude API (preferred) or, if
+    ANTHROPIC_API_KEY is absent, the OpenAI API. Returns the translated
+    string, or None if no provider is available / the call fails."""
+    anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
+    openai_key = os.environ.get("OPENAI_API_KEY")
+    provider = None
+    if HAS_ANTHROPIC and anthropic_key:
+        provider = "anthropic"
+    elif HAS_OPENAI and openai_key:
+        provider = "openai"
+    if provider is None:
+        print(f"  WARNING: no LLM provider available (need ANTHROPIC_API_KEY "
+              f"or OPENAI_API_KEY + the matching SDK). Skipping {target_locale}.")
         return None
-
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        print(f"  WARNING: ANTHROPIC_API_KEY not set. Skipping {target_locale}.")
-        return None
-
-    client = Anthropic(api_key=api_key)
 
     kids_constraint = ""
     if is_kids:
@@ -142,16 +148,30 @@ ENGLISH TEXT:
 {english_text}"""
 
     try:
-        response = client.messages.create(
-            model="claude-sonnet-4-5",  # fast and good enough for short marketing copy
-            max_tokens=2000,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        translated = response.content[0].text.strip()
-        # Strip surrounding quotes if the LLM added them
-        if translated.startswith('"') and translated.endswith('"'):
+        if provider == "anthropic":
+            client = Anthropic(api_key=anthropic_key)
+            response = client.messages.create(
+                model="claude-sonnet-4-5",  # fast and good enough for short marketing copy
+                max_tokens=2000,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            translated = response.content[0].text.strip()
+        else:  # openai
+            client = OpenAI(api_key=openai_key)
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",  # fast + cheap; fine for short marketing copy
+                max_tokens=2000,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            translated = (response.choices[0].message.content or "").strip()
+        # Strip surrounding quotes / code fences if the LLM added them
+        if translated.startswith("```"):
+            translated = translated.strip("`")
+            if "\n" in translated:
+                translated = translated.split("\n", 1)[1]
+        if len(translated) >= 2 and translated[0] == '"' and translated[-1] == '"':
             translated = translated[1:-1]
-        return translated
+        return translated.strip()
     except Exception as e:
         print(f"  WARNING: API call failed for {target_locale}/{field_name}: {e}")
         return None

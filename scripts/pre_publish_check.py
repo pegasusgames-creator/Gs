@@ -1389,23 +1389,32 @@ def check_keystore_present(apps):
             expected_sha1 = ""
 
         if expected_sha1:
-            # Read storepass from keystore.properties so the check actually
-            # works against per-app random passwords (per CLAUDE.md keystore
-            # policy). Falls back to "android" default if properties unreadable.
+            # Read storeFile + storePassword from keystore.properties so the
+            # check works against per-app random passwords AND against the
+            # two-keystore PEPK layout (keystore.jks = app-signing key,
+            # upload-keystore.jks = the UPLOAD key gradle actually signs
+            # with — and `upload_key_sha1` is the upload key's fingerprint).
+            # Falls back to keystore.jks + "android" if properties unreadable.
             storepass = "android"
+            verify_path = keystore_path
             try:
                 if os.path.exists(keystore_props_path):
                     for line in open(keystore_props_path):
                         if line.startswith("storePassword="):
                             storepass = line.split("=", 1)[1].strip()
-                            break
+                        elif line.startswith("storeFile="):
+                            sf = line.split("=", 1)[1].strip()
+                            cand = sf if os.path.isabs(sf) else os.path.join(
+                                BASE, app, "android", sf)
+                            if os.path.exists(cand):
+                                verify_path = cand
             except IOError:
                 pass
             # keytool -list outputs SHA1 with colons; strip and compare
             try:
                 result = subprocess.run(
                     ["keytool", "-list", "-v",
-                     "-keystore", keystore_path, "-storepass", storepass],
+                     "-keystore", verify_path, "-storepass", storepass],
                     capture_output=True, text=True, timeout=10,
                 )
                 actual_sha1 = ""
