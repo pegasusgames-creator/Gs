@@ -147,6 +147,35 @@ ONLY OUTPUT THE TRANSLATED TEXT. No explanation, no quote marks, no preamble.
 ENGLISH TEXT:
 {english_text}"""
 
+    return _llm_call(provider, anthropic_key, openai_key, prompt,
+                     f"{target_locale}/{field_name}")
+
+
+def llm_shorten(text, target_lang_name, target_locale, field_name, char_limit):
+    """Ask the model to shorten an over-limit translation to fit, preserving
+    structure and meaning. Returns the shortened string or None."""
+    anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
+    openai_key = os.environ.get("OPENAI_API_KEY")
+    provider = "anthropic" if (HAS_ANTHROPIC and anthropic_key) else (
+        "openai" if (HAS_OPENAI and openai_key) else None)
+    if provider is None:
+        return None
+    prompt = f"""This is a Google Play listing field ({field_name}) in {target_lang_name}.
+It is {len(text)} characters but the HARD limit is {char_limit}.
+Rewrite it in {target_lang_name} so it is AT MOST {char_limit} characters — cut
+filler, tighten phrasing, drop the least important bullet/sentence if needed —
+while keeping the meaning, the bullet/paragraph structure, and a natural tone.
+Do NOT add Play Store banned phrases ("#1", "best", "top rated", "download now",
+"install now", "% off" or target-language equivalents).
+ONLY OUTPUT THE REWRITTEN TEXT — no explanation, no quotes, no preamble.
+
+TEXT:
+{text}"""
+    return _llm_call(provider, anthropic_key, openai_key, prompt,
+                     f"{target_locale}/{field_name} (shrink)")
+
+
+def _llm_call(provider, anthropic_key, openai_key, prompt, label):
     try:
         if provider == "anthropic":
             client = Anthropic(api_key=anthropic_key)
@@ -173,7 +202,7 @@ ENGLISH TEXT:
             translated = translated[1:-1]
         return translated.strip()
     except Exception as e:
-        print(f"  WARNING: API call failed for {target_locale}/{field_name}: {e}")
+        print(f"  WARNING: API call failed for {label}: {e}")
         return None
 
 
@@ -328,8 +357,19 @@ def main():
                 total_failed += 1
                 continue
 
-            # Validate
+            # Validate — and if it's an over-limit overflow, ask the model to
+            # shrink it to fit (up to 2 retries) before giving up.
             ok, msg = validate_translation(translated, field, short)
+            if not ok and "exceeds" in msg:
+                for attempt in range(2):
+                    print(f"  {field:30s} retry shrink ({msg})")
+                    shorter = llm_shorten(translated, name, locale, field, char_limit)
+                    if not shorter:
+                        break
+                    translated = shorter
+                    ok, msg = validate_translation(translated, field, short)
+                    if ok:
+                        break
             if not ok:
                 print(f"  {field:30s} FAIL ({msg})")
                 # Write the bad translation to a .rejected file so the user
@@ -339,6 +379,12 @@ def main():
                 print(f"    saved as {rejected_path.name} for manual editing")
                 total_failed += 1
                 continue
+            # A previous run may have left a stale .rejected file — clear it now
+            # that we have a clean translation.
+            stale_rej = out_path.with_suffix(out_path.suffix + ".rejected")
+            if stale_rej.exists():
+                try: stale_rej.unlink()
+                except OSError: pass
 
             # Add Kids header if Kids mode
             content = translated

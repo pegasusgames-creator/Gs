@@ -1,20 +1,38 @@
-2048 Puzzle'a hoş geldiniz, Android'in en keskin klasik 4×4 sayı birleştirme oyunu. Kaydır. Birleştir. Tırman. Sonra baştan başla.
+SÜRÜKLE. BİRLEŞTİR. TIRMAN. Tek elle telefonla oynamaya uygun klasik 2048 tahtası.
 
-Bu, kanonik 2048 tahtasıdır, tek elle telefon oyunu için ayarlanmış ve her büyük birleştirmede arcade tarzı geri bildirim sunar. Her kaydırma tahtayı kaydırır; eşit karolar bir sonraki ikinin kuvvetine kaynaşır; israf edilmiş bir hamle en yüksek karonuzu yanlış köşeye sıkıştırabilir. Saf strateji, şans yok — tek rakibiniz kendi son rekorunuz.
+Kısa süreli ödüllerle günlük meydan okumalar. Haftalık turnuva eşleşmeleri. Saf strateji — şans yok, bekleme yok.
 
-Günlük Meydan Okuma her 24 saatte bir taze tohumla sıfırlanır ve her gün katılmanızı ödüllendiren bir seri sayacı vardır. Yüksek Skorlar ekranı en iyi skorunuzu, en yüksek karonuzu ve mevcut günlük serinizi takip eder, böylece haftalar boyunca gelişiminizi görebilirsiniz. Menünün yanında bir Haftalık Etkinlik bandı çalışır — bir haftada beş tur oynayın, bonus paralar otomatik olarak iner.
+Her sürükleme tahtayı hareket ettirir; eşleşen karolar bir sonrakine birleşir; bir harcanan hamle en yüksek karonu yanlış köşeye hapseder. Tek rakibin son kaydındır.
 
-Yol için yapıldı: tamamen çevrimdışı, hesap yok, bağlantı bekleme yok. Koşularınız kaydırdığınız anda otomatik kaydedilir.
+İçerik:
+• Ücretsiz oynama — tam oyun, sürpriz ödeme yok
+• Akıcı sürükleme kontrolleriyle klasik 4×4 2048 tahtası
+• Köşeye sıkıştığında güçlendiriciler: Geri Al, Sihirli Birleşim (otomatik birleşim), Karoyu Kaldır (sıkışan bir karoyu sil)
+• Günlük Meydan Okuma, seriler takip edilir ve bonus paralar kazanılır
+• Haftalık Turnuva — bu hafta en yüksek puanın seni bir eşleşmeye yerleştirir; ilk %25 para kazanır
+• Mevsimsel etkinlikler — Cadılar Bayramı, Kış ve Bahar 1.5× hafta getirir
+• Ücretsiz Paralar butonu — her birkaç saatte bir kısa bir reklam izleyerek 25 para kazan
+• Devam et · mevcut oyun — menüden son tahtanı direkt al
+• 7 günlük giriş serisi — art arda oynadıkça büyük ödüller
+• Tema koleksiyonu — daha fazla oyun oynadıkça yeni karo paletlerini aç
+• Yüksek Skorlar: en yüksek puan, en yüksek karo, günlük dizi
+• Cömert yenilenme ile hayatlar sistemi
+• Kaybedilen bir oyunu hızlı bir ödüllü reklam izleyerek devam ettir
+• Tamamen çevrimdışı oynanır, internet gerekmez — kayıtlar otomatik kaydedilir
 
-İçinde neler var
-• Akıcı kaydırma kontrollü klasik 4×4 2048 tahtası
-• Seri takibi ve bonus paralarla Günlük Meydan Okuma
-• Yüksek Skorlar: en iyi skor, en yüksek karo, günlük seri
-• İstikrarlı oyunu ödüllendiren Haftalık Etkinlik
-• Herhangi bir hamleyi geri al (oyun başına bir tane ücretsiz, daha fazlası Geri Al Paketi'nden)
-• Kısa bir ödüllü reklam izleyerek kaybedilen koşuya devam edin
-• Can sistemi, Başlangıç Paketi ve sürpriz paywall'sız temiz Mağaza
-• Reklamsız oyun ve ekstra ödüller için isteğe bağlı Sezon Pass
-• Tamamen çevrimdışı oynanır, internet gerekmez
+🏅 HAFTALIK TURNUVA
+Her hafta en yüksek puanın seni bir eşleşmeye yerleştirir — önde %10 / %25 / %50 / %75. Haftayı önde bitirirsen paralar uygulamayı bir sonraki açışında gelir. Yenileme Pazartesi.
 
-Daha önce 2048 karosunu kovaladıysanız, bu geri döneceğiniz versiyon. Daha önce kovalamadıysanız, şimdi başlayın — çekiciliğini anlamak için tek bir kaydırma yeter.
+🎨 TEMALAR & MEVSİMSEL ETKİNLİKLER
+Oyun sayısını artırdıkça yeni karo paletlerini aç. Ekim, Aralık ve Şubat'ta mevsimsel bir etkinlik 1.5× haftası düzenlenir.
+
+🛒 DÜKKAN
+• Reklamları Kaldır — kesintisiz deneyimin tadını çıkar
+• Para Paketi S — 100 para · Para Paketi M — 600 para · Para Paketi L — 500 para (dolar başına en fazla) · Para Paketi XL — 1400 para
+• Geri Al Paketi — 10 geri alma
+• Başlangıç Paketi — 100 para + 5 geri alma + 5 hayat + Reklamsız
+• Sezon Pass — reklamsız, günde +50 para, tüm temalar, sınırsız geri alma (30 gün)
+• Haftalık Pass — reklamsız, günde +100 para, tüm temalar, sınırsız geri alma (7 gün)
+• Ekstra Hayatlar — anında 5 hayat yeniden kazan · Sınırsız Hayatlar 1s · Sınırsız Hayatlar sonsuza dek
+
+Eğer daha önce 2048 karosunu kovaladıysan, geri dönülecek olan budur. Eğer kovaladıysan, şimdi başla — çekimi anlamak için bir sürükleme yeter.
