@@ -1673,3 +1673,56 @@ Before release, verify every item for the specific app:
 Every item is blocking for a "polished" release. For a "shippable MVP"
 release, only P0 items are blocking. P1 items are the next update; P2 items
 are polish when time permits.
+
+---
+
+## 14. Retention economy (WaterSort/Nonogram/Puzzle2048 audit, May 2026)
+
+These are P0 for any game that ships the retention stack (sells
+`season_pass_monthly`). See CLAUDE.md for the canonical definitions; the
+matching `pre_publish_check.py` checks are named in parentheses.
+
+### 14.1 — Booster economy must match the SKU catalog
+Every coin/hint/undo pack sold in the shop needs the matching in-game
+mechanic; every in-game booster button needs a coins-or-rewarded-ad cost.
+`hint_pack` ⇒ a hint counter; `undo_pack` ⇒ an undo counter; a "Magic
+Wand" / "Reveal Row" / "Magic Merge" button ⇒ a 200-coin / ad price; an
+"Extra Tube" / "Reveal Cell" / "Remove Tile" button ⇒ a 100-coin / ad
+price. (`check_booster_catalog`, `check_iap_grant_parity`.)
+
+### 14.2 — Menu surface requirements
+The main menu surfaces (statically OR runtime-injected): Continue
+button when applicable · Play · Daily Challenge / streak · Levels/Shop/
+Games row · Missions w/ count · Stats / High Scores · Free Coins
+(rewarded ad, 25 coins / 4 h) · Weekly Tournament banner with a synthetic
+bracket · theme progress strip · season-pass active badge. Static
+tappable elements stay ≤ 6 (`check_menu_button_count`) — anything beyond
+that is injected by the audit-addendum `<script>` block.
+(`check_menu_completeness`.)
+
+### 14.3 — Seasonal events required
+`SEASONAL_EVENTS` constant covering October (Halloween), December
+(Winter), February (Spring); each unlocks a temporary theme + 5 bonus
+levels (leveled games) or a 7-day 1.5× multiplier (non-leveled). Menu
+shows an event banner while active. (`check_seasonal_events`.)
+
+### 14.4 — Coin tier ladder required
+Four tiers, always all four: `coins_small` $0.99/100, `coins_medium`
+$4.99/600, `coins_large` $2.99/500 (best value-per-dollar, the anchor),
+`coins_mega` $9.99/1400. Partial ladders are blocked.
+(`check_coin_tier_ladder`.)
+
+### 14.5 — Booster catalog by genre
+Sort-puzzle: Color Reveal, Steady Pour, Fresh Start, Extra Tube, Magic
+Wand. Picross: Hint, Undo, Reset, Check, Reveal Row, Reveal Cell.
+2048-like: Undo, New Game, Magic Merge, Remove Tile. (`check_booster_catalog`.)
+
+### 14.6 — Weekly tournament with a synthetic bracket
+Replace "play any 5 levels" with a best-metric-this-week leaderboard
+mapped through a per-game 10/25/50/75% threshold table; Monday reset;
++100 coins top-25%, +250 top-10%, settled at week rollover on next open.
+
+### 14.7 — Subscription/bundle promise parity
+Every benefit named in a sub/bundle description has a code flag honored.
+`check_subscription_parity` + `check_retention_features` enforce. 2048-style
+games say "unlimited undos" where leveled games say "unlimited hints".

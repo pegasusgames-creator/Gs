@@ -291,6 +291,20 @@ solution. Test plan:
 
 6. **Confirm folder name matches `<title>` tag and `android:label`.**
 
+7. **Implement the genre booster catalog** from CLAUDE.md "Booster
+   catalog by genre" for the current genre (sort-puzzle / picross /
+   2048-like), each booster wired to a coins-or-rewarded-ad cost.
+
+8. **Implement the retention systems** every game ships:
+   - Weekly Tournament with a synthetic bracket (per-game
+     `WEEKLY_BRACKETS` 10/25/50/75% table, Monday reset, +100/+250
+     coin awards at week rollover)
+   - `SEASONAL_EVENTS` (Oct Halloween / Dec Winter / Feb Spring) — temp
+     theme + 5 bonus levels (leveled games) or 7-day 1.5× (non-leveled)
+   - 7-day login-streak reward ladder
+   - starter-pack-on-first-launch popup
+   - the coin tier ladder (4 SKUs) in `iaps.json` + `VALID_PRODUCTS`
+
 ---
 
 ## Phase 2 — Wrapper integration (mostly templated)
@@ -355,6 +369,26 @@ solution. Test plan:
 
 6. **Run `init_app_metadata.py <AppName>`** to scaffold the metadata/
    and store/ folders if not already present.
+
+7. **Inject the retention-feature template into `game.html`** (an "audit
+   addendum" `<script>` block at the bottom of the file, kept outside the
+   static menu so the ≤6-tappable-element cap holds):
+   - `replayPendingGrants` + the canonical wrapped `onPurchaseSuccess`
+     that delegates to the original handler (which grants every known
+     SKU fully) and defers unknown SKUs
+   - `isSeasonActive()` / `isPremium()` / `isWeeklyActive()` / `adsRemoved()`
+     helpers, and gate every ad-show path on `adsRemoved()`
+   - the Free Coins menu button (rewarded ad, 25 coins / 4 h cooldown)
+   - the Continue button when last-progress exists
+   - the theme progress strip + theme-unlock celebration card
+   - the daily-coin grant for season/weekly pass on menu open
+   - Settings → Restore Purchases + Privacy Policy links (and confirm
+     `MainActivity.java` exposes `@JavascriptInterface restorePurchases()`
+     + `openUrl(String)`)
+   - the no-lives recovery overlay's `5 Lives $0.99` / `Unlimited Lives
+     1h $1.99` CTAs alongside the watch-ad-for-a-life option
+   `pre_publish_check.py check_retention_features` / `check_menu_completeness`
+   verify this in Phase 5.
 
 ---
 
@@ -900,6 +934,28 @@ The new checks added recently:
   3. `window.onPurchaseSuccess` defined in `game.html`
   4. `replayPendingGrants()` + `pendingGrants` fallback wired
   Standalone: `python3 scripts/check_iap_invariants.py <AppName>`
+- `IAP grant parity` — the literal grant value in `onPurchaseSuccess`
+  matches the SKU's `iaps.json` description (the "Coin Pack S grants 50
+  instead of 100" bug class). `python3 scripts/check_iap_grant_parity.py`
+- `subscription promise parity` — every benefit named in a subscription
+  description has a code path (ad-free gate, daily-coin grant, theme
+  unlock, premium-gated hint/undo). `python3 scripts/check_subscription_parity.py`
+- `coin tier ladder` — a game that sells any coin pack sells all four:
+  `coins_small/medium/large/mega` at $0.99/$4.99/$2.99/$9.99 →
+  100/600/500/1400. `python3 scripts/check_coin_tier_ladder.py`
+- `retention-feature parity` — for any season-pass game: `replayPendingGrants`,
+  `isSeasonActive()`, wrapped `onPurchaseSuccess`, `isPremium()`, and a
+  hint/undo counter if the matching pack is sold.
+  `python3 scripts/check_retention_features.py`
+- `booster catalog` — genre-appropriate booster set present in `game.html`
+  (sort-puzzle / picross / 2048-like). `python3 scripts/check_booster_catalog.py`
+- `menu completeness` — for any season-pass game: Free Coins, theme
+  progress strip, Weekly Tournament banner, Continue, Daily, Stats markers
+  present. `python3 scripts/check_menu_completeness.py`
+- `seasonal events present` — `SEASONAL_EVENTS` constant covering Oct/Dec/Feb.
+  `python3 scripts/check_seasonal_events.py`
+
+All of the above block the build on a `BLOCKER` and warn on a `WARNING`.
 
 ---
 

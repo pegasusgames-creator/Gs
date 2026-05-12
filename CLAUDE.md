@@ -390,6 +390,108 @@ all four during Phase 5 and fails the build on any blocker.
 
 ---
 
+## Retention-feature parity invariant
+
+Every game that ships the retention stack (i.e. sells
+`season_pass_monthly`) MUST have, in `game.html`:
+
+- `window.replayPendingGrants` on init (IAP invariant 4)
+- a wrapped `window.onPurchaseSuccess` that delegates to the original
+  `onPurchaseComplete`/switch handler (which grants every known SKU
+  fully) and defers unknown SKUs to `pendingGrants`
+- an `isSeasonActive()` / `hasActiveSeasonPass()` helper and an
+  `isPremium()` / `isWeeklyActive()` helper, with `adsRemoved()` =
+  `removeAds || isPremium()` gating every ad-show path
+- a hint counter (`hintCount` / `hintPack`) if `hint_pack` is sold; an
+  `undoPack` counter if `undo_pack` is sold — and the decrement is
+  skipped while a pass is active
+- `starter_pack`, `season_pass_monthly`, `weekly_pass` handlers that
+  grant their full advertised bundle (not a partial one)
+- a Free Coins menu surface (rewarded ad, 25 coins / 4 h cooldown)
+- a Continue button when last-progress exists
+- a theme progress strip on the menu + a theme-unlock celebration card
+  with a 6-chip palette preview
+- a 7-day login-streak reward ladder (replaces any simpler streak UI)
+- a starter-pack-on-first-launch popup
+- Restore Purchases + Privacy Policy links in Settings (and
+  `MainActivity.java` must expose `@JavascriptInterface restorePurchases()`
+  and `openUrl(String)`)
+
+These are usually **injected at runtime** by an "audit addendum"
+`<script>` block at the bottom of `game.html`, not added to the static
+menu HTML — because the static menu is capped at 6 tappable elements
+(`check_menu_button_count`). `pre_publish_check.py check_retention_features`
++ `check_menu_completeness` enforce this for any season-pass game.
+
+## Subscription/bundle promise parity
+
+Every benefit promised in an IAP description needs a corresponding code
+flag. `season_pass_monthly` listing "ad-free + 50 daily coins + all
+themes + unlimited hints" requires four honored flags
+(`adsRemoved()`, `lastSeasonGrantDate` daily-grant, `isPremium()`
+theme unlock, premium-gated hint decrement). `weekly_pass` at
+`$4.99/week` with "+100 daily coins" requires the +100 grant path
+(`lastWeeklyGrantDate`). `pre_publish_check.py check_subscription_parity`
+enforces. 2048-style games word "unlimited hints" as "unlimited undos".
+
+## Coin tier ladder
+
+Every game that sells any coin pack ships the full four-tier ladder:
+
+| SKU | Price | Coins | Coins/$ |
+|---|---|---|---|
+| `coins_small`  | $0.99 |  100 | ~101 |
+| `coins_medium` | $4.99 |  600 | ~120 |
+| `coins_large`  | $2.99 |  500 | ~167 (best value-per-dollar — the anchor) |
+| `coins_mega`   | $9.99 | 1400 | ~140 |
+
+A partial ladder is forbidden. `pre_publish_check.py check_coin_tier_ladder`
+blocks it. (`lives_5_coins`-style in-game-currency products are not real
+SKUs and don't count.)
+
+## Booster catalog by genre
+
+| Genre | Booster set |
+|---|---|
+| Sort-puzzle (Water Sort etc.) | Color Reveal (hint), Steady Pour (undo), Fresh Start (restart), Extra Tube, Magic Wand |
+| Picross (Nonogram etc.)       | Hint, Undo, Reset, Check, Reveal Row, Reveal Cell |
+| 2048-like                     | Undo, New Game, Magic Merge, Remove Tile |
+
+The shop SKU catalog and the in-game booster set must match (a sold pack
+needs the matching mechanic; a booster button needs a coins-or-ad cost).
+`pre_publish_check.py check_booster_catalog` enforces by genre keyword.
+
+## Cross-cutting menu requirements
+
+Every game's main menu surfaces (statically or injected): Continue button
+(when applicable) · Play button · Daily Challenge / streak indicator ·
+Levels/Shop/Games (or equivalent) row · Missions button with count ·
+Stats / High Scores · Free Coins button (rewarded ad, 25 / 4 h) · Weekly
+Tournament banner with a synthetic bracket · theme progress strip ·
+season-pass active badge when applicable. Static tappable elements still
+capped at 6 — push the rest into runtime injection.
+
+## Seasonal events
+
+Every game ships a `SEASONAL_EVENTS` constant covering at least October
+(Halloween), December (Winter), February (Spring). On init, if the
+current month matches: temporarily unlock the event theme and inject 5
+bonus levels with the event palette (leveled games) or grant a 7-day
+1.5× multiplier (non-leveled games like 2048). The menu shows an event
+banner while active. `pre_publish_check.py check_seasonal_events` enforces.
+
+## Weekly tournament (synthetic bracket)
+
+Every game replaces the old "Weekly: play any 5 levels" banner with a
+synthetic-bracket leaderboard: track best-metric-this-week
+(best-level for level games, best-score for 2048), map it through a
+per-game `WEEKLY_BRACKETS` table (10 / 25 / 50 / 75 % tiers), show
+"🏆 This week — <metric> · Top <pct>%", reset Monday 00:00 local, and
+award 100 coins for finishing in the top 25 % / 250 for top 10 %,
+granted at week rollover the next time the app opens within 7 days.
+
+---
+
 ## Red lines — never do these
 
 Any one of these can terminate the developer account.

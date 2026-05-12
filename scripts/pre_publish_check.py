@@ -533,6 +533,42 @@ def check_iap_invariants(apps):
     return blocking, warnings
 
 
+def _delegated_check(module_name):
+    """Build a check function that delegates per-app to a sibling module's
+    check_app(app) -> list of (sev, msg). Used for the retention/economy
+    parity checks added alongside the WaterSort/Nonogram/Puzzle2048 audit."""
+    def _run(apps):
+        blocking, warnings = [], []
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            mod = __import__(module_name)
+        except ImportError as e:
+            warnings.append(f"{module_name} module not importable: {e}")
+            return blocking, warnings
+        for app in apps:
+            try:
+                results = mod.check_app(app)
+            except Exception as e:  # never let a heuristic check abort the run
+                warnings.append(f"{app}: {module_name}.check_app raised {e!r}")
+                continue
+            for sev, msg in results:
+                (blocking if sev == 'BLOCKER' else warnings).append(f"{app}: {msg}")
+        return blocking, warnings
+    return _run
+
+
+# Retention / economy parity checks (CLAUDE.md "Retention-feature parity
+# invariant", "Subscription/bundle promise parity", "Coin tier ladder",
+# "Booster catalog by genre", "Cross-cutting menu requirements", "Seasonal events").
+check_iap_grant_parity     = _delegated_check("check_iap_grant_parity")
+check_retention_features   = _delegated_check("check_retention_features")
+check_subscription_parity  = _delegated_check("check_subscription_parity")
+check_coin_tier_ladder     = _delegated_check("check_coin_tier_ladder")
+check_booster_catalog      = _delegated_check("check_booster_catalog")
+check_menu_completeness    = _delegated_check("check_menu_completeness")
+check_seasonal_events      = _delegated_check("check_seasonal_events")
+
+
 def check_iaps_match_code(apps):
     """Warn if metadata/iaps.json IDs don't match the PRODUCT_IDS list in MainActivity.java."""
     warnings = []
@@ -1706,6 +1742,13 @@ def main():
             ["google_review_notes", "apple_review_notes", "demo_account_required"], "review_notes")
     section("meta",  "iaps.json descriptions",     check_iaps_descriptions, apps)
     section("meta",  "IAP correctness invariants", check_iap_invariants, apps)
+    section("meta",  "IAP grant parity",            check_iap_grant_parity, apps)
+    section("meta",  "subscription promise parity", check_subscription_parity, apps)
+    section("meta",  "coin tier ladder",            check_coin_tier_ladder, apps)
+    section("code",  "retention-feature parity",    check_retention_features, apps)
+    section("code",  "booster catalog",             check_booster_catalog, apps)
+    section("code",  "menu completeness",           check_menu_completeness, apps)
+    section("code",  "seasonal events present",     check_seasonal_events, apps)
     section("meta",  "iaps.json matches code",     lambda a: ([], check_iaps_match_code(a)), apps)
     section("meta",  "canonical privacy/support URLs", check_canonical_urls, apps)
     section("meta",  "no per-app privacy.html",    check_no_per_app_privacy_html, apps)
