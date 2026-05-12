@@ -80,9 +80,15 @@ public class MainActivity extends Activity {
 
     // ── IAP ───────────────────────────────────────────────────────────────────
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
-        "remove_ads", "coins_small", "coins_large", "undo_pack",
+        "remove_ads", "coins_small", "coins_large", "coins_medium", "coins_mega", "undo_pack",
         "five_lives", "unlimited_lives_1h", "unlimited_lives_forever",
-        "starter_pack", "season_pass_monthly"
+        "starter_pack", "season_pass_monthly", "weekly_pass"
+    ));
+
+    // Subscription SKUs — routed through launchSubscription(), never the
+    // one-time INAPP flow.
+    private static final Set<String> SUBSCRIPTION_PRODUCTS = new HashSet<>(Arrays.asList(
+        "season_pass_monthly", "weekly_pass"
     ));
 
     // SKUs that are CONSUMABLE — must be consumed via consumeAsync after each
@@ -91,11 +97,11 @@ public class MainActivity extends Activity {
     // acknowledged via acknowledgePurchase. Both flows must complete within
     // Play's 3-day window or the purchase is auto-refunded.
     private static final Set<String> CONSUMABLE_PRODUCTS = new HashSet<>(Arrays.asList(
-        "coins_small", "coins_large", "five_lives", "unlimited_lives_1h",
-        "undo_pack", "starter_pack"
+        "coins_small", "coins_large", "coins_medium", "coins_mega",
+        "five_lives", "unlimited_lives_1h", "undo_pack", "starter_pack"
     ));
     private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
-        "undo", "skip", "life"
+        "undo", "skip", "life", "continue", "extra_life", "free_coins", "magic_merge", "remove_tile"
     ));
 
     private static final int WEBVIEW_BG_COLOR = 0xFFfaf8ef;
@@ -372,7 +378,7 @@ public class MainActivity extends Activity {
 
     private void launchPurchase(String productId) {
         if (!VALID_PRODUCTS.contains(productId)) return;
-        if ("season_pass_monthly".equals(productId)) { launchSubscription(productId); return; }
+        if (SUBSCRIPTION_PRODUCTS.contains(productId)) { launchSubscription(productId); return; }
         billingClient.queryProductDetailsAsync(
             QueryProductDetailsParams.newBuilder().setProductList(Arrays.asList(
                 QueryProductDetailsParams.Product.newBuilder()
@@ -468,6 +474,8 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void showInterstitial()              { showInterstitialAd(); }
         @JavascriptInterface public void showRewarded(String type)       { showRewardedAd(type); }
         @JavascriptInterface public void purchase(String id)             { launchPurchase(id); }
+        @JavascriptInterface public void restorePurchases()              { MainActivity.this.restorePurchases(); }
+        @JavascriptInterface public void openUrl(String url)             { try { startActivity(new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))); } catch (Exception e) {} }
         @JavascriptInterface public void hideBannerAd()                  { hideBanner(); }
         @JavascriptInterface public void showBannerAd()                  { showBanner(); }
         @JavascriptInterface public void log(String msg)                 { /* disabled in release */ }

@@ -16,7 +16,19 @@
       "id": "coins_large",
       "title": "500 Coins",
       "price_usd": 2.99,
-      "description": "Adds 500 coins to your wallet. Best value coin pack — spend on hints, extra moves, and unlocking new themes."
+      "description": "Adds 500 coins to your wallet. Best value coin pack — spend on undos, boosters, and unlocking new themes."
+    },
+    {
+      "id": "coins_medium",
+      "title": "600 Coins",
+      "price_usd": 4.99,
+      "description": "Adds 600 coins to your wallet. Spend coins on undos, boosters like Magic Merge, and unlocking new themes."
+    },
+    {
+      "id": "coins_mega",
+      "title": "1400 Coins",
+      "price_usd": 9.99,
+      "description": "Adds 1400 coins to your wallet. Our largest coin pack — spend on undos, boosters, and themes."
     },
     {
       "id": "five_lives",
@@ -46,7 +58,7 @@
       "id": "starter_pack",
       "title": "Starter Pack",
       "price_usd": 0.99,
-      "description": "Best value for new players: 100 coins, 5 hints, and 5 lives bundled together. One-time purchase."
+      "description": "Best value for new players: 100 coins + 5 undos + 5 lives + Ads Off, bundled together. One-time purchase."
     }
   ],
   "subscriptions": [
@@ -56,7 +68,15 @@
       "price_usd": 1.99,
       "billing_period": "P1M",
       "grace_period_days": 3,
-      "description": "Monthly pass: ad-free play, +50 daily coins, exclusive themes, and unlimited hints. Cancel anytime in Google Play."
+      "description": "Monthly pass: ad-free play, +50 coins every day, all themes unlocked, and unlimited undos. Cancel anytime in Google Play."
+    },
+    {
+      "id": "weekly_pass",
+      "title": "Weekly Pass",
+      "price_usd": 4.99,
+      "billing_period": "P1W",
+      "grace_period_days": 3,
+      "description": "Weekly pass: ad-free play, +100 coins every day, all themes unlocked, and unlimited undos. Cancel anytime in Google Play."
     }
   ]
 }
