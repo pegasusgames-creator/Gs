@@ -62,3 +62,6 @@ scripts/fix_duplicate2.py
 scripts/add_login_streak.py
 scripts/add_retention_features.py
 scripts/add_translations.py
+
+# local backup copies (keystore / PEPK zip / cert backups — never commit)
+*.bak1
