@@ -1,5 +1,17 @@
 # WaterSort — Competitive Audit
 
+> **STATUS: RESOLVED — 2026-05-12.** Every BLOCKER and POLISH item below
+> was implemented in the May 2026 audit pass (leader-format hook + ASMR/
+> brain/free keywords in `full_description`, boosters renamed Color
+> Reveal / Steady Pour / Fresh Start + Extra Tube + Magic Wand added,
+> theme progress strip + theme-unlock card on the menu, screenshots
+> reordered + recaptured from the emulator, Continue / Free Coins /
+> Weekly Tournament / 7-day login streak / Season+Weekly Pass / seasonal
+> events all built, IAP catalog wired). Shipped as v2.0.0. DEFER items
+> (3D-rendered icon, true social-proof slot) are still deferred. Kept
+> for the record; not a live to-do list.
+
+
 Audit date: 2026-05-04. Auditing the flagship sort-puzzle against the
 top-of-genre listings (Water Sort Puzzle / IEC Global, Ball Sort / Ariel
 Software) and against Pegasus Games' own quality bar.

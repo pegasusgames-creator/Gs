@@ -352,10 +352,16 @@ the same week.
 ## 9. How translations integrate with the workflow
 
 - **`gen_translations.py <AppName>`** — runs at SHIP_GAME.md Phase 4.5
-  (after Phase 4 hand-writes English listing). Generates all 13
-  locale folders for store listing. If `ANTHROPIC_API_KEY` is unset,
-  Claude Code falls back to hand-translating directly (multilingual
-  capability is in scope for short marketing copy).
+  (after Phase 4 hand-writes English listing). Generates all 13 locale
+  folders for store listing. Uses `ANTHROPIC_API_KEY` if set, else
+  falls back to `OPENAI_API_KEY` (`gpt-4o-mini`); if neither is set,
+  Claude Code can hand-translate directly (multilingual capability is
+  in scope for short marketing copy). Has a shrink-to-fit retry — an
+  over-limit translation gets one or two "tighten to ≤N chars" passes
+  before it falls back to `<field>.rejected`; `--update` regenerates
+  any locale whose English source is newer; titles are synced verbatim
+  from `en-US` (never translated). `pre_publish_check.py` flags any
+  `*.rejected` file as a blocker — hand-trim it to fit and rename.
 - **`pre_publish_check.py`** — verifies every shipped app has all 13
   locales populated for store listing. Warns (not blocks) if any are
   missing during the migration period; blocks for new apps from

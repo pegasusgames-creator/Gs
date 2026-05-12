@@ -1,5 +1,15 @@
 # Nonogram — Competitive Audit
 
+> **STATUS: RESOLVED — 2026-05-12.** Implemented in the May 2026 audit
+> pass: coin grants fixed (100/500), hint pack fixed (10), Season +
+> Weekly Pass with full honored benefits, Reveal Cell / Reveal Row
+> boosters, Free Coins / Continue / theme progress strip / theme-unlock
+> card / 7-day login-streak ladder / weekly tournament / seasonal
+> events / Settings Restore+Privacy links, new coin tiers, 13 locales
+> translated, phone + tablet screenshots recaptured. Shipped as v1.1.0
+> (pending Play App Signing setup + SKU creation). Kept for the record.
+
+
 ## §1 — Listing structure
 
 Literal opening line of `metadata/en-US/full_description.txt`:

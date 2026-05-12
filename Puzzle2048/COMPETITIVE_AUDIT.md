@@ -1,5 +1,18 @@
 # Puzzle2048 — Competitive Audit
 
+> **STATUS: RESOLVED — 2026-05-12.** Implemented in the May 2026 audit
+> pass: Season + Weekly Pass with full honored benefits (incl. unlimited
+> undos), Starter Pack grants 5 undos + 5 lives + ads off, Magic Merge /
+> Remove Tile boosters, themes gated on games-played + theme-unlock card,
+> Free Coins / Continue·score / 7-day login-streak ladder / weekly
+> tournament (by score) / seasonal 1.5× events / Settings Restore+Privacy
+> links, new coin tiers, 13 locales translated, phone + tablet screenshots
+> recaptured (slots routed to distinct screens — win overlay / game-over
+> overlay / High Scores / boards — so the perceptual-hash distinctness
+> check passes). Shipped as v1.1.0 (pending Play App Signing setup + SKU
+> creation). Kept for the record.
+
+
 ## §1 — Listing structure
 
 Literal full content of `metadata/en-US/full_description.txt` (97
