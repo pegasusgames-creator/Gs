@@ -1947,7 +1947,7 @@ function showLevelComplete() {
   }
 
   const msgs = {
-    3: moveCount <= par ? '🎯 Perfect solve!' : 'No undos — well done!',
+    3: moveCount <= par ? '🎯 Perfect solve!' : 'No Steady Pour — well done!',
     2: 'Getting there! Almost perfect.',
     1: 'Keep practicing — you\'ll get it!'
   };
@@ -2336,7 +2336,7 @@ const Game = {
   },
 
   startPlay() {
-    if (State.lastLevelProgress) { State.lastLevelProgress = null; State.save(); }
+    if (State.lastLevelProgress) { this.resumeLastLevel(); return; }
     this.loadLevel(State.currentLevel);
   },
 
@@ -2481,6 +2481,8 @@ resizeCanvas();
       playSound('click');
       showToast('🧪 Extra tube added!');
     };
+    const tokens = parseInt(localStorage.getItem('xExtraTubeTokens') || '0', 10);
+    if (tokens > 0) { localStorage.setItem('xExtraTubeTokens', String(tokens - 1)); grant(); showToast('🧪 Extra tube (streak reward)'); return; }
     boosterChooser('Extra Tube', '🧪', 'Adds one empty tube to this level (max 2).', 100, 'extra_tube', grant);
   },
 
@@ -3315,7 +3317,7 @@ window.GAME_I18N = {
     sound:'Sound', music:'Music', resetProgress:'Reset Progress',
     removeAds:'Remove Ads', language:'Language',
     levelComplete:'Level Complete!', gameOver:'Game Over',
-    hint:'Hint', undo:'Undo', skip:'Skip', quit:'Quit', menu:'Menu',
+    hint:'Color Reveal', undo:'Steady Pour', skip:'Skip', quit:'Quit', menu:'Menu',
     noLives:'No Lives Left', watchAd:'Watch Ad for Life',
     lives:'Lives', coins:'Coins', buy:'Buy', owned:'Owned',
     next:'Next Level', retry:'Try Again',
@@ -3910,7 +3912,7 @@ var MISSION_DEFS = [
   { id:'complete_any',    name:'Puzzle Solver',      icon:'🧩', desc:'Complete any level',         type:'levels',    goal:1,  reward:10 },
   { id:'pour_30',         name:'Master Pourer',       icon:'💧', desc:'Pour 30 times',              type:'pours',     goal:30, reward:15 },
   { id:'complete_3',      name:'Level Spree',         icon:'🚀', desc:'Complete 3 levels',          type:'levels',    goal:3,  reward:20 },
-  { id:'perfect_no_undo', name:'Perfectionist',       icon:'⭐', desc:'Complete a level with no undos',type:'perfect', goal:1,  reward:25 },
+  { id:'perfect_no_undo', name:'Perfectionist',       icon:'⭐', desc:'Complete a level with no Steady Pour',type:'perfect', goal:1,  reward:25 },
   { id:'complete_5',      name:'Power Player',        icon:'🔥', desc:'Complete 5 levels',          type:'levels',    goal:5,  reward:30 },
   { id:'pour_60',         name:'Waterfall',           icon:'🌊', desc:'Pour 60 times',              type:'pours',     goal:60, reward:25 },
   { id:'daily_challenge', name:'Daily Devotee',       icon:'📅', desc:'Complete the Daily Challenge',type:'daily',    goal:1,  reward:20 },
@@ -5151,6 +5153,249 @@ window.addEventListener('load',function(){
     <button class="np-btn np-btn-secondary" onclick="Notifications.onMaybeLater()">Maybe Later</button>
   </div>
 </div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     AUDIT ADDENDUM — Free Coins, theme progress strip, theme-unlock card,
+     7-day login-streak ladder, weekly tournament bracket, seasonal events,
+     Settings links, no-lives IAP CTAs, moves-vs-par. (See CLAUDE.md
+     "Retention-feature parity invariant" / "Cross-cutting menu requirements".)
+     ════════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function S(){ return (typeof State!=='undefined')?State:null; }
+  function toast(m){ if(typeof showToast==='function') showToast(m); else if(typeof xToast==='function') xToast(m); }
+  function coinsAdd(n){ var s=S(); if(!s) return; s.coins=(s.coins||0)+n; s.save(); if(typeof updateCoinDisplays==='function') updateCoinDisplays(); }
+  function todayStr(){ return new Date().toLocaleDateString('en-CA'); }
+  function themesMeta(){ return (window._THEMES_META&&window._THEMES_META.length)?window._THEMES_META
+      :[{id:'default',name:'Classic',unlockLevel:0},{id:'neon',name:'Neon',unlockLevel:50},{id:'pastel',name:'Pastel',unlockLevel:100},{id:'ocean',name:'Ocean',unlockLevel:200},{id:'inferno',name:'Inferno',unlockLevel:300},{id:'galaxy',name:'Galaxy',unlockLevel:500}]; }
+  function themePalette(id){ var p=(window._THEME_PALETTES&&window._THEME_PALETTES[id])||{}; return Object.values(p).slice(0,6); }
+  function completedCount(){ var s=S(); return s?Object.keys(s.completedLevels||{}).length:0; }
+
+  // ── A13: Free Coins pill (injected so it isn't counted as a static menu button) ──
+  var FREE_COINS_AMOUNT=25, FREE_COINS_COOLDOWN_MS=4*60*60*1000;
+  function freeCoinsReadyAt(){ var t=parseInt(localStorage.getItem('lastFreeCoinsAt')||'0',10); return t?t+FREE_COINS_COOLDOWN_MS:0; }
+  function fmtCountdown(ms){ if(ms<=0) return ''; var s=Math.ceil(ms/1000); var h=Math.floor(s/3600); s%=3600; var m=Math.floor(s/60); s%=60; return (h>0?h+'h ':'')+m+'m '+(h>0?'':s+'s'); }
+  function injectFreeCoins(){
+    var host=document.querySelector('#menuScreen .menu-buttons'); if(!host||$('xFreeCoinsBtn')) return;
+    var b=document.createElement('button');
+    b.id='xFreeCoinsBtn'; b.type='button';
+    b.style.cssText='margin-top:10px;background:linear-gradient(135deg,#d29922,#bb8009);color:#1c1300;border:none;border-radius:12px;padding:9px 14px;font-weight:700;font-size:0.9rem;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px';
+    b.onclick=claimFreeCoins;
+    host.appendChild(b);
+    refreshFreeCoins();
+  }
+  function refreshFreeCoins(){
+    var b=$('xFreeCoinsBtn'); if(!b) return;
+    var rem=freeCoinsReadyAt()-Date.now();
+    if(rem>0){ b.textContent='🪙 Free Coins in '+fmtCountdown(rem); b.disabled=true; b.style.opacity='0.55'; }
+    else { b.textContent='🪙 Free Coins (+'+FREE_COINS_AMOUNT+')'; b.disabled=false; b.style.opacity='1'; }
+  }
+  function claimFreeCoins(){
+    if(freeCoinsReadyAt()-Date.now()>0){ toast('Come back later for more free coins'); return; }
+    if(typeof showRewardedAd==='function'){
+      showRewardedAd('free_coins', function(){
+        coinsAdd(FREE_COINS_AMOUNT); localStorage.setItem('lastFreeCoinsAt', String(Date.now()));
+        refreshFreeCoins(); toast('+'+FREE_COINS_AMOUNT+' coins!');
+      });
+    }
+  }
+  setInterval(refreshFreeCoins, 30000);
+
+  // ── A14: theme progress strip ──
+  function injectThemeStrip(){
+    var title=document.querySelector('#menuScreen .game-title'); if(!title) return;
+    var el=$('xThemeStrip');
+    if(!el){ el=document.createElement('div'); el.id='xThemeStrip'; el.style.cssText='margin:6px auto 0;font-size:0.78rem;color:#8b949e;text-align:center;max-width:280px'; title.parentNode.insertBefore(el, title.nextSibling); }
+    var meta=themesMeta(), done=completedCount();
+    var next=null; for(var i=0;i<meta.length;i++){ if(done<meta[i].unlockLevel){ next=meta[i]; break; } }
+    var s=S();
+    if(next){ el.textContent='Next theme: '+next.name+' 🔓 at level '+next.unlockLevel+' ('+done+'/'+next.unlockLevel+')'; }
+    else if(s&&s.isPremium&&s.isPremium()){ el.textContent='🎨 All themes unlocked (pass active)'; }
+    else { el.textContent='🎨 All themes unlocked'; }
+  }
+  window.updateThemeProgressStrip=injectThemeStrip;
+
+  // ── A15: theme-unlock celebration card ──
+  function showThemeUnlockCard(theme){
+    var m=$('xThemeUnlockCard');
+    if(!m){ m=document.createElement('div'); m.id='xThemeUnlockCard'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index:99997'; document.body.appendChild(m); }
+    var chips=themePalette(theme.id).map(function(c){ return '<span style="display:inline-block;width:26px;height:26px;border-radius:6px;margin:3px;background:'+c+'"></span>'; }).join('');
+    m.innerHTML='<div style="background:#161b22;border:1px solid #30363d;border-radius:18px;padding:24px;max-width:320px;width:90%;text-align:center;color:#e6edf3">'+
+      '<div style="font-size:1.15rem;font-weight:800;margin-bottom:6px">🎉 New theme unlocked!</div>'+
+      '<div style="font-size:0.95rem;color:#8b949e;margin-bottom:14px">'+theme.name+'</div>'+
+      '<div style="margin-bottom:16px">'+chips+'</div>'+
+      '<button id="xThemeTry" style="display:block;width:100%;background:#1f6feb;color:#fff;border:none;border-radius:10px;padding:11px;font-weight:700;margin-bottom:8px;cursor:pointer">Try it now</button>'+
+      '<button id="xThemeLater" style="display:block;width:100%;background:transparent;color:#8b949e;border:none;padding:8px;cursor:pointer">Keep current</button></div>';
+    $('xThemeTry').onclick=function(){ var s=S(); if(s){ s.activeTheme=theme.id; s.save(); } if(typeof window.renderThemes==='function') window.renderThemes(); m.style.display='none'; toast('Theme set: '+theme.name); };
+    $('xThemeLater').onclick=function(){ m.style.display='none'; };
+    m.style.display='flex';
+  }
+  function watchThemeUnlocks(){
+    var ov=$('levelCompleteOverlay'); if(!ov) return;
+    var lastSeen=parseInt(localStorage.getItem('xThemeSeenAtLevel')||'0',10);
+    new MutationObserver(function(){
+      if(!ov.classList.contains('active')) return;
+      var meta=themesMeta(), done=completedCount();
+      var crossed=null;
+      for(var i=0;i<meta.length;i++){ if(meta[i].unlockLevel>0 && done>=meta[i].unlockLevel && meta[i].unlockLevel>lastSeen){ crossed=meta[i]; } }
+      if(crossed){ lastSeen=crossed.unlockLevel; localStorage.setItem('xThemeSeenAtLevel',String(lastSeen)); setTimeout(function(){ showThemeUnlockCard(crossed); },1400); }
+    }).observe(ov,{attributes:true,attributeFilter:['class']});
+  }
+
+  // ── A20: 7-day login-streak reward ladder (replaces the ls-overlay UI) ──
+  var LOGIN_LADDER=[
+    {coins:25,label:'+25 coins'},
+    {coins:50,label:'+50 coins'},
+    {hints:5,label:'5 free hints'},
+    {coins:100,label:'+100 coins'},
+    {extraTubeTokens:3,label:'3× Extra Tube'},
+    {coins:200,label:'+200 coins'},
+    {coins:100,hints:5,lives:5,seasonCTA:true,label:'100 coins + 5 hints + 5 lives'}
+  ];
+  function hideLegacyStreak(){ ['ls-card','ls-overlay'].forEach(function(id){ var e=$(id); if(e) e.style.display='none'; }); }
+  function loginLadderTick(){
+    var s=S(); if(!s) return;
+    hideLegacyStreak();
+    var last=localStorage.getItem('xLoginLast'); var t=todayStr();
+    if(last===t) return; // already counted today
+    var day;
+    if(!last){ day=1; }
+    else { var dl=new Date(last), dn=new Date(t); var diff=Math.round((dn-dl)/86400000); day=(diff>2)?1:Math.min(7,(s.loginStreakDay||1)+(diff===1?1:0)); if(diff===0) return; }
+    s.loginStreakDay=day; localStorage.setItem('xLoginLast',t);
+    var r=LOGIN_LADDER[(day-1)%7];
+    if(r.coins){ s.coins=(s.coins||0)+r.coins; }
+    if(r.hints){ s.hintCount=(s.hintCount||0)+r.hints; if(typeof updateHintBadge==='function') updateHintBadge(); }
+    if(r.lives){ s.lives=Math.min(s.maxLives||5,(s.lives||0)+r.lives); }
+    if(r.extraTubeTokens){ localStorage.setItem('xExtraTubeTokens', String((parseInt(localStorage.getItem('xExtraTubeTokens')||'0',10))+r.extraTubeTokens)); }
+    s.save(); if(typeof updateCoinDisplays==='function') updateCoinDisplays(); if(typeof updateHeartsDisplay==='function') updateHeartsDisplay();
+    showLoginPanel(day,r);
+  }
+  function showLoginPanel(day,r){
+    var m=$('xLoginPanel');
+    if(!m){ m=document.createElement('div'); m.id='xLoginPanel'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index:99996'; document.body.appendChild(m); }
+    var ladder=LOGIN_LADDER.map(function(x,i){ var on=(i+1)<=day; return '<div style="flex:1;text-align:center;padding:4px 2px;border-radius:8px;font-size:0.62rem;background:'+(on?'#1f6feb':'#21262d')+';color:'+(on?'#fff':'#8b949e')+'">D'+(i+1)+'<br>'+(i+1===day?'★':'')+'</div>'; }).join('');
+    m.innerHTML='<div style="background:#161b22;border:1px solid #30363d;border-radius:18px;padding:22px;max-width:340px;width:92%;text-align:center;color:#e6edf3">'+
+      '<div style="font-size:1.1rem;font-weight:800;margin-bottom:4px">🔥 Day '+day+' streak!</div>'+
+      '<div style="font-size:0.9rem;color:#3fb950;font-weight:700;margin-bottom:12px">'+r.label+' claimed</div>'+
+      '<div style="display:flex;gap:3px;margin-bottom:14px">'+ladder+'</div>'+
+      (r.seasonCTA?'<button id="xLoginSeason" style="display:block;width:100%;background:linear-gradient(135deg,#1f9be0,#0a6fae);color:#fff;border:none;border-radius:10px;padding:11px;font-weight:700;margin-bottom:8px;cursor:pointer">🌊 Try Season Pass</button>':'')+
+      '<button id="xLoginClose" style="display:block;width:100%;background:transparent;color:#8b949e;border:none;padding:8px;cursor:pointer">Close</button></div>';
+    if($('xLoginSeason')) $('xLoginSeason').onclick=function(){ m.style.display='none'; if(window.Android&&window.Android.purchase) window.Android.purchase('season_pass_monthly'); else if(typeof purchase==='function') purchase('season_pass_monthly'); };
+    $('xLoginClose').onclick=function(){ m.style.display='none'; };
+    m.style.display='flex';
+  }
+
+  // ── D1: weekly tournament with synthetic bracket ──
+  var WEEKLY_BRACKETS=[ {min:120,pct:10},{min:80,pct:25},{min:40,pct:50},{min:1,pct:75} ]; // by best level reached this week
+  function weekKey(){ var d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+4-(d.getDay()||7)); var y=new Date(d.getFullYear(),0,1); return d.getFullYear()+'-W'+Math.ceil((((d-y)/86400000)+1)/7); }
+  function recordWeeklyMetric(){
+    var s=S(); if(!s) return; var wk=weekKey();
+    var raw=localStorage.getItem('xWeekly'); var data; try{ data=JSON.parse(raw||'{}'); }catch(e){ data={}; }
+    var best=(s.currentLevel||0)+1;
+    if(data.week!==wk){ // settle last week's award
+      if(data.week && !localStorage.getItem('xWeeklyAward_'+data.week)){
+        var prevPct=bracketFor(data.best||0);
+        if(prevPct<=10){ coinsAdd(250); toast('🏆 Last week: top 10% — +250 coins!'); }
+        else if(prevPct<=25){ coinsAdd(100); toast('🏆 Last week: top 25% — +100 coins!'); }
+        localStorage.setItem('xWeeklyAward_'+data.week,'1');
+      }
+      data={week:wk,best:best};
+    } else { data.best=Math.max(data.best||0,best); }
+    localStorage.setItem('xWeekly', JSON.stringify(data));
+    return data;
+  }
+  function bracketFor(level){ for(var i=0;i<WEEKLY_BRACKETS.length;i++){ if(level>=WEEKLY_BRACKETS[i].min) return WEEKLY_BRACKETS[i].pct; } return 90; }
+  function updateTournamentBanner(){
+    var b=$('weeklyEventBanner'); if(!b) return;
+    var data=recordWeeklyMetric(); if(!data) return;
+    var pct=bracketFor(data.best||0);
+    b.innerHTML='🏆 This week — Level '+(data.best||1)+' · Top '+pct+'% &nbsp;<span style="opacity:.7;font-size:.85em">resets Monday</span>';
+    b.style.display='';
+  }
+
+  // ── D2: seasonal events ──
+  var SEASONAL_EVENTS=[
+    {month:10,name:'Halloween',themeId:'halloween',palette:['#ff6600','#9d4dbb','#000000']},
+    {month:12,name:'Winter',themeId:'winter',palette:['#a8d8ea','#ffffff','#4a90e2']},
+    {month:2,name:'Spring',themeId:'spring',palette:['#ffb6c1','#a7d49b','#ffe066']}
+  ];
+  function activeSeasonalEvent(){ var m=new Date().getMonth()+1; for(var i=0;i<SEASONAL_EVENTS.length;i++){ if(SEASONAL_EVENTS[i].month===m) return SEASONAL_EVENTS[i]; } return null; }
+  function applySeasonalEvent(){
+    var ev=activeSeasonalEvent(); if(!ev) return;
+    // register the event theme so renderThemes can show it unlocked
+    if(window._THEMES_META && !window._THEMES_META.some(function(t){return t.id===ev.themeId;})) window._THEMES_META.push({id:ev.themeId,name:ev.name,unlockLevel:0,seasonal:true});
+    if(window._THEME_PALETTES && !window._THEME_PALETTES[ev.themeId]){ var p={}; ev.palette.forEach(function(c,i){ p['c'+i]=c; }); window._THEME_PALETTES[ev.themeId]=p; }
+    var title=document.querySelector('#menuScreen .game-title');
+    if(title && !$('xSeasonBanner')){ var d=document.createElement('div'); d.id='xSeasonBanner'; d.style.cssText='margin:6px auto 0;font-size:0.8rem;color:#e6edf3;background:rgba(255,255,255,0.06);border-radius:10px;padding:6px 10px;text-align:center;max-width:280px'; d.textContent='🎃 '+ev.name+' event live — try the '+ev.name+' theme!'; title.parentNode.insertBefore(d, title.nextSibling); }
+  }
+
+  // ── D3 / D4: Settings — Restore Purchases + Privacy Policy ──
+  function injectSettingsLinks(){
+    var scr=$('settingsScreen'); if(!scr || $('xRestoreBtn')) return;
+    var wrap=document.createElement('div'); wrap.style.cssText='margin-top:18px;display:flex;flex-direction:column;gap:8px;padding:0 4px';
+    wrap.innerHTML='<button id="xRestoreBtn" style="background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:10px;padding:10px;font-weight:600;cursor:pointer">↻ Restore Purchases</button>'+
+      '<a id="xPrivacyLink" href="https://pegasusgames-creator.github.io/privacy.html" target="_blank" rel="noopener" style="text-align:center;color:#58a6ff;font-size:0.82rem;text-decoration:none;padding:6px">Privacy Policy</a>';
+    var card=scr.querySelector('.screen-content,.settings-content,.screen')||scr;
+    (card===scr?scr:card).appendChild(wrap);
+    $('xRestoreBtn').onclick=function(){ if(window.Android&&window.Android.restorePurchases){ try{ window.Android.restorePurchases(); }catch(e){} toast('Restoring purchases…'); } else toast('Restore is only available in the app'); };
+    $('xPrivacyLink').onclick=function(e){ if(window.Android&&window.Android.openUrl){ e.preventDefault(); try{ window.Android.openUrl('https://pegasusgames-creator.github.io/privacy.html'); }catch(e2){} } };
+  }
+
+  // ── D5: no-lives overlay IAP CTAs + wait countdown ──
+  function injectNoLivesCTAs(){
+    ['overlay-nolives','noLivesOverlay','overlayNoLives','nolivesOverlay'].forEach(function(id){
+      var el=$(id); if(!el || el.querySelector('.x-nolives-iap')) return;
+      var div=document.createElement('div'); div.className='x-nolives-iap'; div.style.cssText='display:flex;flex-direction:column;gap:8px;width:100%;margin-top:8px';
+      div.innerHTML='<button onclick="(window.Android&&window.Android.purchase)?window.Android.purchase(\'five_lives\'):0" style="background:#8957e5;color:#fff;border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer">💝 5 Lives — $0.99</button>'+
+        '<button onclick="(window.Android&&window.Android.purchase)?window.Android.purchase(\'unlimited_lives_1h\'):0" style="background:#1f6feb;color:#fff;border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer">⏱️ Unlimited Lives 1h — $1.99</button>'+
+        '<div class="x-nolives-wait" style="text-align:center;color:#8b949e;font-size:0.8rem">Next free life in <span class="x-nolives-timer">30:00</span></div>';
+      var card=el.querySelector('.overlay-card,.overlay-inner')||el; card.appendChild(div);
+    });
+  }
+  function tickNoLivesTimer(){
+    var txt=(typeof getTimeToNextLife==='function')?getTimeToNextLife():null;
+    document.querySelectorAll('.x-nolives-timer').forEach(function(s){ if(txt) s.textContent=txt; });
+  }
+  setInterval(tickNoLivesTimer,1000);
+
+  // ── A18: moves vs par under the level label ──
+  function injectMovesPar(){
+    var lbl=$('levelLabel'); if(!lbl || $('xMovesPar')) return;
+    var d=document.createElement('div'); d.id='xMovesPar'; d.style.cssText='font-size:0.7rem;color:#8b949e;text-align:center;margin-top:2px';
+    lbl.parentNode.insertBefore(d, lbl.nextSibling);
+  }
+  function tickMovesPar(){
+    var d=$('xMovesPar'); if(!d) return;
+    if(typeof Game!=='undefined' && Game.currentScreen!=='gameScreen'){ d.textContent=''; return; }
+    var mv=(typeof moveCount!=='undefined')?moveCount:(window.getMoveCount?window.getMoveCount():0);
+    var nc=(typeof tubes!=='undefined' && tubes && tubes.length)?(new Set(tubes.flat())).size:0;
+    var par=nc?nc*6:18;
+    d.textContent='Moves: '+mv+' / par '+par;
+  }
+  setInterval(tickMovesPar,500);
+
+  // ── boot ──
+  function boot(){
+    try{ injectFreeCoins(); }catch(e){}
+    try{ injectThemeStrip(); }catch(e){}
+    try{ watchThemeUnlocks(); }catch(e){}
+    try{ applySeasonalEvent(); }catch(e){}
+    try{ injectSettingsLinks(); }catch(e){}
+    try{ injectNoLivesCTAs(); }catch(e){}
+    try{ injectMovesPar(); }catch(e){}
+    try{ updateTournamentBanner(); }catch(e){}
+    try{ hideLegacyStreak(); loginLadderTick(); }catch(e){}
+    // refresh menu surfaces whenever the menu is shown
+    if(typeof Game!=='undefined' && typeof Game.showScreen==='function' && !Game.__xWrapped){
+      var orig=Game.showScreen.bind(Game); Game.__xWrapped=true;
+      Game.showScreen=function(id){ orig(id); if(id==='menuScreen'){ try{ injectFreeCoins(); refreshFreeCoins(); injectThemeStrip(); updateTournamentBanner(); }catch(e){} } if(id==='settingsScreen'){ try{ injectSettingsLinks(); }catch(e){} } if(id==='gameScreen'){ try{ injectMovesPar(); injectNoLivesCTAs(); }catch(e){} } };
+    }
+  }
+  if(document.readyState==='loading') window.addEventListener('DOMContentLoaded', function(){ setTimeout(boot,1100); });
+  else setTimeout(boot,1100);
+})();
+</script>
 
 </body>
 </html>
