@@ -65,3 +65,9 @@ scripts/add_translations.py
 
 # local backup copies (keystore / PEPK zip / cert backups — never commit)
 *.bak1
+
+# Play Console PEPK / app-signing download artifacts (downloaded per app, not source)
+pepk*.jar
+pepk-src.jar
+*_pepk.zip
+encryption_public_key.pem
