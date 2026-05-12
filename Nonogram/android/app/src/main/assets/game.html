@@ -927,11 +927,17 @@
 // ANDROID BRIDGE
 // ===================================================================
 const VALID_PRODUCTS = new Set([
-  'remove_ads','coins_small','coins_large',
-  'hint_pack','five_lives','unlimited_lives_1h','unlimited_lives_forever'
+  'remove_ads','coins_small','coins_large','coins_medium','coins_mega',
+  'hint_pack','five_lives','unlimited_lives_1h','unlimited_lives_forever',
+  'starter_pack','season_pass_monthly','weekly_pass'
 ]);
 
 function safePurchase(id) { if (window.Android && VALID_PRODUCTS.has(id)) window.Android.purchase(id); }
+function isWeeklyActive() { return !!(state.weeklyPassUntil && Date.now() < state.weeklyPassUntil); }
+function isPremium() { return (typeof isSeasonActive === 'function' && isSeasonActive()) || isWeeklyActive(); }
+function adsRemoved() { return state.removeAds || isPremium(); }
+// Generic rewarded-ad callback (mirrors WaterSort's _pendingAdCallback).
+function safeShowRewardedCb(type, cb) { window._pendingRewardCb = cb; if (window.Android) window.Android.showRewarded(type); }
 
 function claimPromo(gameId, packageId, btn) {
   var key = 'promo_claimed_' + gameId;
@@ -969,14 +975,14 @@ function safeShowRewarded(type) {
   }
 }
 function safeShowInterstitial() {
-  if (state.removeAds) return;
+  if (adsRemoved()) return;
   if (window.Android) {
     window.Android.showInterstitial();
   }
 }
 
 window.onAdMobLoaded = function() {
-  if (state.removeAds) {
+  if (adsRemoved()) {
     document.getElementById('admob-banner').style.display = 'none';
     if (window.Android) window.Android.hideBannerAd();
   }
@@ -986,11 +992,32 @@ window.onPurchaseComplete = function(productId) {
     state.removeAds = true;
     document.getElementById('admob-banner').style.display = 'none';
   } else if (productId === 'coins_small') {
-    state.coins += 50;
+    state.coins += 100;
   } else if (productId === 'coins_large') {
-    state.coins += 200;
+    state.coins += 500;
+  } else if (productId === 'coins_medium') {
+    state.coins += 600;
+  } else if (productId === 'coins_mega') {
+    state.coins += 1400;
   } else if (productId === 'hint_pack') {
+    state.hintPack += 10;
+  } else if (productId === 'starter_pack') {
+    state.coins += 100;
     state.hintPack += 5;
+    state.lives = Math.min(state.lives + 5, 99);
+    state.removeAds = true;
+    var _nb = document.getElementById('admob-banner'); if (_nb) _nb.style.display = 'none';
+    if (window.Android && window.Android.hideBannerAd) window.Android.hideBannerAd();
+  } else if (productId === 'season_pass_monthly') {
+    state.seasonPassUntil = Date.now() + 30 * 86400 * 1000;
+    state.removeAds = true; state.lastSeasonGrantDate = '';
+    var _nb2 = document.getElementById('admob-banner'); if (_nb2) _nb2.style.display = 'none';
+    if (window.Android && window.Android.hideBannerAd) window.Android.hideBannerAd();
+  } else if (productId === 'weekly_pass') {
+    state.weeklyPassUntil = Date.now() + 7 * 86400 * 1000;
+    state.removeAds = true; state.lastWeeklyGrantDate = '';
+    var _nb3 = document.getElementById('admob-banner'); if (_nb3) _nb3.style.display = 'none';
+    if (window.Android && window.Android.hideBannerAd) window.Android.hideBannerAd();
   } else if (productId === 'five_lives') {
     state.lives = Math.min(state.lives + 5, 99);
   } else if (productId === 'unlimited_lives_1h') {
@@ -1026,6 +1053,11 @@ window.onAdReward = function(rewardType) {
     updateUI();
     closeOverlay('overlay-nolives');
     showToast('+1 Life!');
+  } else if (rewardType === 'free_coins') {
+    state.coins += 25; saveState(); updateUI(); showToast('+25 coins!');
+  } else if (window._pendingRewardCb) {
+    var cb = window._pendingRewardCb; window._pendingRewardCb = null;
+    try { cb(); } catch(e) {}
   }
 };
 
@@ -1060,7 +1092,13 @@ const DEFAULT_STATE = {
   unlimitedLivesUntil: 0,
   unlimitedLivesForever: false,
   activeTheme: 'default',
-  lastLevelProgress: null
+  lastLevelProgress: null,
+  seasonPassUntil: 0,
+  seasonPassForever: false,
+  weeklyPassUntil: 0,
+  lastSeasonGrantDate: '',
+  lastWeeklyGrantDate: '',
+  loginStreakDay: 0
 };
 
 let state = Object.assign({}, DEFAULT_STATE);
@@ -1861,7 +1899,7 @@ function updateMenuUI() {
 function updateUI() {
   document.getElementById('stat-lives').textContent = getLivesDisplay();
   document.getElementById('stat-coins').textContent = state.coins;
-  if (state.removeAds) {
+  if (adsRemoved()) {
     document.getElementById('admob-banner').style.display = 'none';
   }
 }
@@ -2206,9 +2244,9 @@ function showOverlay(id) {
 
 function useHint() {
   playClick();
-  if (state.hintPack > 0) {
-    state.hintPack--;
-    saveState();
+  var premium = (typeof isPremium === 'function' && isPremium());
+  if (premium || state.hintPack > 0) {
+    if (!premium) { state.hintPack--; saveState(); }
     executeHint();
   } else {
     pendingHint = true;
@@ -2219,6 +2257,44 @@ function useHint() {
       window.onAdReward('hint');
     }
   }
+}
+
+// ── B6: Reveal Cell / Reveal Row boosters ──
+function nonoBoosterChooser(title, emoji, desc, coinCost, adType, onGrant) {
+  var m = document.getElementById('xNonoBoosterModal');
+  if (!m) { m = document.createElement('div'); m.id = 'xNonoBoosterModal'; m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);display:none;align-items:center;justify-content:center;z-index:99998'; document.body.appendChild(m); }
+  m.innerHTML = '<div style="background:#161b22;border:1px solid #30363d;border-radius:16px;padding:22px;max-width:300px;width:88%;text-align:center;color:#e6edf3">' +
+    '<div style="font-size:1.05rem;font-weight:700;margin-bottom:4px">'+emoji+' '+title+'</div>' +
+    '<div style="font-size:0.85rem;color:#8b949e;margin-bottom:16px">'+desc+'</div>' +
+    '<button data-a="coin" style="display:block;width:100%;background:#d29922;color:#000;border:none;border-radius:10px;padding:11px;font-weight:700;margin-bottom:8px;cursor:pointer">🪙 '+coinCost+' coins</button>' +
+    '<button data-a="ad" style="display:block;width:100%;background:#3fb950;color:#000;border:none;border-radius:10px;padding:11px;font-weight:700;margin-bottom:8px;cursor:pointer">📺 Watch Ad — free</button>' +
+    '<button data-a="x" style="display:block;width:100%;background:transparent;color:#8b949e;border:none;padding:8px;cursor:pointer">Cancel</button></div>';
+  function close(){ m.style.display = 'none'; }
+  m.querySelectorAll('button').forEach(function(b){ b.onclick = function(){
+    var a = b.getAttribute('data-a');
+    if (a === 'x') { close(); return; }
+    if (a === 'coin') { if (state.coins < coinCost) { showToast('Not enough coins!'); return; } state.coins -= coinCost; saveState(); updateUI(); close(); try{ onGrant(); }catch(e){} return; }
+    if (a === 'ad') { close(); safeShowRewardedCb(adType, function(){ try{ onGrant(); }catch(e){} }); }
+  }; });
+  m.style.display = 'flex';
+}
+function revealCell() {
+  playClick();
+  if (!currentLevelData) return;
+  nonoBoosterChooser('Reveal Cell', '🔍', 'Fills one provably-correct cell for you.', 100, 'reveal_cell', function(){ executeHint(); });
+}
+function revealRow() {
+  playClick();
+  if (!currentLevelData) return;
+  nonoBoosterChooser('Reveal Row', '📏', 'Solves an entire row for you.', 200, 'reveal_row', function(){
+    var solution = currentLevelData.solution, size = currentLevelData.size;
+    var bestRow = 0, bestWrong = -1;
+    for (var r = 0; r < size; r++) { var w = 0; for (var c = 0; c < size; c++) { var i = r*size+c; if ((currentGrid[i] === 1 ? 1 : 0) !== solution[i]) w++; } if (w > bestWrong) { bestWrong = w; bestRow = r; } }
+    for (var c2 = 0; c2 < size; c2++) { var ii = bestRow*size+c2; if (typeof pushUndo === 'function') pushUndo(ii, currentGrid[ii]); currentGrid[ii] = solution[ii] === 1 ? 1 : 0; }
+    if (typeof drawCanvas === 'function') drawCanvas();
+    showToast('Row '+(bestRow+1)+' revealed!');
+    if (typeof checkAutoWin === 'function') checkAutoWin();
+  });
 }
 
 function executeHint() {
@@ -2675,7 +2751,7 @@ setInterval(() => {
 // INIT
 // ===================================================================
 loadState();
-if (!window.Android && !state.removeAds) {
+if (!window.Android && !adsRemoved()) {
   document.getElementById('admob-banner').style.display = 'flex';
   const s = document.createElement('style');
   s.textContent = '.screen { height: 100% !important; }';
@@ -3510,7 +3586,7 @@ window._navGuard = false;
     var cur = (typeof state !== 'undefined') ? (state.activeTheme || 'default') : 'default';
     var html = '<div class="themes-grid">';
     window._THEMES_META.forEach(function(t) {
-      var locked = completed < t.unlock;
+      var locked = (completed < t.unlock) && !(typeof isPremium === 'function' && isPremium());
       var isActive = cur === t.id;
       var swatches = t.colors.map(function(c) {
         return '<div class="theme-swatch" style="background:'+c+'"></div>';
@@ -4088,16 +4164,17 @@ function hookNoLivesOverlay(){
 var _origPurchase=window.onPurchaseSuccess||window.onPurchaseComplete;
 window.onPurchaseSuccess=function(id){
   try {
-    if(id==='season_pass_monthly'){ activateSeason(); return; }
-    if(id==='starter_pack'){
-      var s=G.st(); if(s){ s.removeAds=true; G.addCoins(100); G.doSave(); }
-      xToast('🎁 Starter Pack activated! Ads removed + 100 🪙');
-      var adBanner=document.getElementById('admob-banner');
-      if(adBanner) adBanner.style.display='none';
-      if(window.Android&&window.Android.hideBannerAd) window.Android.hideBannerAd();
+    if(typeof _origPurchase==='function'){
+      _origPurchase(id);  // onPurchaseComplete now grants every known SKU fully + defers unknowns
+      if(id==='season_pass_monthly'||id==='weekly_pass'){
+        try{ if(typeof updateSeasonBadges==='function') updateSeasonBadges(); }catch(e){}
+        try{ if(typeof injectSeasonPassShop==='function') injectSeasonPassShop(); }catch(e){}
+        try{ var ab=document.getElementById('admob-banner'); if(ab) ab.style.display='none'; }catch(e){}
+        try{ if(window.Android&&window.Android.hideBannerAd) window.Android.hideBannerAd(); }catch(e){}
+        try{ xToast(id==='weekly_pass'?'🗓️ Weekly Pass active — 7 days!':'🧩 Season Pass active — 30 days!'); }catch(e){}
+      }
       return;
     }
-    if(typeof _origPurchase==='function'){ _origPurchase(id); return; }
     iapDeferGrant(id);
     iapThanksToast();
   } catch(e) {
@@ -4134,6 +4211,9 @@ function patchValidProducts(){
   if(typeof VALID_PRODUCTS!=='undefined'){
     VALID_PRODUCTS.add('season_pass_monthly');
     VALID_PRODUCTS.add('starter_pack');
+    VALID_PRODUCTS.add('weekly_pass');
+    VALID_PRODUCTS.add('coins_medium');
+    VALID_PRODUCTS.add('coins_mega');
   }
 }
 
@@ -4172,6 +4252,185 @@ window.addEventListener('load',function(){
   },900);
 });
 
+})();
+</script>
+
+<!-- ════════ AUDIT ADDENDUM — Free Coins, theme strip + unlock card, login-streak ladder,
+     weekly tournament bracket, seasonal events, Settings links, no-lives CTAs, Reveal-Cell/Row footer buttons.
+     (See CLAUDE.md "Retention-feature parity invariant" / "Cross-cutting menu requirements".) ════════ -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function S(){ return (typeof state!=='undefined')?state:null; }
+  function toast(m){ if(typeof showToast==='function') showToast(m); else if(typeof xToast==='function') xToast(m); }
+  function refresh(){ if(typeof updateUI==='function') updateUI(); if(typeof saveState==='function') saveState(); }
+  function todayStr(){ return new Date().toLocaleDateString('en-CA'); }
+  function meta(){ return (window._THEMES_META&&window._THEMES_META.length)?window._THEMES_META:[]; }
+  function done(){ var s=S(); return s&&s.completedLevels?s.completedLevels.length:0; }
+  function premium(){ return (typeof isPremium==='function')&&isPremium(); }
+
+  // ── Reveal Cell / Reveal Row footer buttons (functions defined in main script) ──
+  function injectBoosterBtns(){
+    var f=document.querySelector('#screen-game .game-footer'); if(!f||$('xRevealCellBtn')) return;
+    var a=document.createElement('button'); a.id='xRevealCellBtn'; a.className='footer-btn'; a.type='button';
+    a.innerHTML='<span class="footer-icon">🔍</span><span>Reveal Cell</span>'; a.onclick=function(){ if(typeof revealCell==='function') revealCell(); };
+    var b=document.createElement('button'); b.id='xRevealRowBtn'; b.className='footer-btn'; b.type='button';
+    b.innerHTML='<span class="footer-icon">📏</span><span>Reveal Row</span>'; b.onclick=function(){ if(typeof revealRow==='function') revealRow(); };
+    f.appendChild(a); f.appendChild(b);
+  }
+
+  // ── B8: Free Coins pill (injected → not counted as a static menu button) ──
+  var AMT=25, COOL=4*60*60*1000;
+  function readyAt(){ var t=parseInt(localStorage.getItem('lastFreeCoinsAt')||'0',10); return t?t+COOL:0; }
+  function fmt(ms){ if(ms<=0) return ''; var s=Math.ceil(ms/1000),h=Math.floor(s/3600);s%=3600;var m=Math.floor(s/60);s%=60; return (h>0?h+'h ':'')+m+'m'+(h>0?'':' '+s+'s'); }
+  function injectFree(){
+    var host=document.querySelector('#screen-menu .menu-buttons'); if(!host||$('xFreeCoins')) return;
+    var b=document.createElement('button'); b.id='xFreeCoins'; b.type='button';
+    b.style.cssText='margin-top:10px;background:linear-gradient(135deg,#d29922,#bb8009);color:#1c1300;border:none;border-radius:12px;padding:9px 14px;font-weight:700;font-size:0.9rem;cursor:pointer;width:100%';
+    b.onclick=claimFree; host.appendChild(b); refreshFree();
+  }
+  function refreshFree(){ var b=$('xFreeCoins'); if(!b) return; var r=readyAt()-Date.now(); if(r>0){ b.textContent='🪙 Free Coins in '+fmt(r); b.disabled=true; b.style.opacity='0.55'; } else { b.textContent='🪙 Free Coins (+'+AMT+')'; b.disabled=false; b.style.opacity='1'; } }
+  function claimFree(){
+    if(readyAt()-Date.now()>0){ toast('Come back later for more free coins'); return; }
+    if(typeof safeShowRewardedCb==='function'){ safeShowRewardedCb('free_coins', function(){ var s=S(); if(s){ s.coins=(s.coins||0)+AMT; } localStorage.setItem('lastFreeCoinsAt',String(Date.now())); refresh(); refreshFree(); toast('+'+AMT+' coins!'); }); }
+    else if(window.Android){ window.Android.showRewarded('free_coins'); }
+  }
+  setInterval(refreshFree,30000);
+
+  // ── B9: theme progress strip ──
+  function injectStrip(){
+    var anchor=document.querySelector('#screen-menu .menu-tagline')||document.querySelector('#screen-menu .menu-logo'); if(!anchor) return;
+    var el=$('xThemeStrip'); if(!el){ el=document.createElement('div'); el.id='xThemeStrip'; el.style.cssText='margin:4px auto 0;font-size:0.78rem;color:#9aa0a6;text-align:center;max-width:280px'; anchor.parentNode.insertBefore(el, anchor.nextSibling); }
+    var m=meta(),d=done(),next=null; for(var i=0;i<m.length;i++){ if(d<m[i].unlock){ next=m[i]; break; } }
+    if(next){ el.textContent='Next theme: '+next.name+' 🔓 at level '+next.unlock+' ('+d+'/'+next.unlock+')'; }
+    else { el.textContent= premium()?'🎨 All themes unlocked (pass active)':'🎨 All themes unlocked'; }
+  }
+
+  // ── B10: theme-unlock celebration card ──
+  function unlockCard(t){
+    var m=$('xThemeCard'); if(!m){ m=document.createElement('div'); m.id='xThemeCard'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index:99997'; document.body.appendChild(m); }
+    var chips=(t.colors||[]).slice(0,6).map(function(c){ return '<span style="display:inline-block;width:26px;height:26px;border-radius:6px;margin:3px;background:'+c+'"></span>'; }).join('');
+    m.innerHTML='<div style="background:#161b22;border:1px solid #30363d;border-radius:18px;padding:24px;max-width:320px;width:90%;text-align:center;color:#e6edf3">'+
+      '<div style="font-size:1.15rem;font-weight:800;margin-bottom:6px">🎉 New theme unlocked!</div>'+
+      '<div style="font-size:0.95rem;color:#9aa0a6;margin-bottom:14px">'+t.name+'</div><div style="margin-bottom:16px">'+chips+'</div>'+
+      '<button id="xTcTry" style="display:block;width:100%;background:#1f6feb;color:#fff;border:none;border-radius:10px;padding:11px;font-weight:700;margin-bottom:8px;cursor:pointer">Try it now</button>'+
+      '<button id="xTcNo" style="display:block;width:100%;background:transparent;color:#9aa0a6;border:none;padding:8px;cursor:pointer">Keep current</button></div>';
+    $('xTcTry').onclick=function(){ if(typeof selectTheme==='function') selectTheme(t.id, 0); else { var s=S(); if(s){ s.activeTheme=t.id; refresh(); } } m.style.display='none'; toast('Theme set: '+t.name); };
+    $('xTcNo').onclick=function(){ m.style.display='none'; };
+    m.style.display='flex';
+  }
+  function watchUnlocks(){
+    var ov=$('overlay-win'); if(!ov) return;
+    var lastSeen=parseInt(localStorage.getItem('xThemeSeenAt')||'0',10);
+    new MutationObserver(function(){
+      if(!(ov.classList.contains('active')||ov.style.display==='flex')) return;
+      var m=meta(),d=done(),crossed=null; for(var i=0;i<m.length;i++){ if(m[i].unlock>0 && d>=m[i].unlock && m[i].unlock>lastSeen) crossed=m[i]; }
+      if(crossed){ lastSeen=crossed.unlock; localStorage.setItem('xThemeSeenAt',String(lastSeen)); setTimeout(function(){ unlockCard(crossed); },1500); }
+    }).observe(ov,{attributes:true,attributeFilter:['class','style']});
+  }
+
+  // ── B12: 7-day login-streak reward ladder ──
+  var LADDER=[ {coins:25,label:'+25 coins'},{coins:50,label:'+50 coins'},{hints:5,label:'5 free hints'},{coins:100,label:'+100 coins'},{revealCellTokens:3,label:'3× Reveal Cell'},{coins:200,label:'+200 coins'},{coins:100,hints:5,lives:5,seasonCTA:true,label:'100 coins + 5 hints + 5 lives'} ];
+  function hideLegacy(){ ['ls-card','ls-overlay'].forEach(function(id){ var e=$(id); if(e) e.style.display='none'; }); }
+  function ladderTick(){
+    var s=S(); if(!s) return; hideLegacy();
+    var last=localStorage.getItem('xLoginLast'),t=todayStr(); if(last===t) return;
+    var day; if(!last){ day=1; } else { var diff=Math.round((new Date(t)-new Date(last))/86400000); if(diff===0) return; day=(diff>2)?1:Math.min(7,(s.loginStreakDay||1)+(diff===1?1:0)); }
+    s.loginStreakDay=day; localStorage.setItem('xLoginLast',t);
+    var r=LADDER[(day-1)%7];
+    if(r.coins) s.coins=(s.coins||0)+r.coins;
+    if(r.hints) s.hintPack=(s.hintPack||0)+r.hints;
+    if(r.lives) s.lives=Math.min(s.maxLives||99,(s.lives||0)+r.lives);
+    if(r.revealCellTokens) localStorage.setItem('xRevealCellTokens',String((parseInt(localStorage.getItem('xRevealCellTokens')||'0',10))+r.revealCellTokens));
+    refresh(); showPanel(day,r);
+  }
+  function showPanel(day,r){
+    var m=$('xLoginPanel'); if(!m){ m=document.createElement('div'); m.id='xLoginPanel'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index:99996'; document.body.appendChild(m); }
+    var row=LADDER.map(function(x,i){ var on=(i+1)<=day; return '<div style="flex:1;text-align:center;padding:4px 2px;border-radius:8px;font-size:0.62rem;background:'+(on?'#1f6feb':'#21262d')+';color:'+(on?'#fff':'#9aa0a6')+'">D'+(i+1)+'<br>'+(i+1===day?'★':'')+'</div>'; }).join('');
+    m.innerHTML='<div style="background:#161b22;border:1px solid #30363d;border-radius:18px;padding:22px;max-width:340px;width:92%;text-align:center;color:#e6edf3">'+
+      '<div style="font-size:1.1rem;font-weight:800;margin-bottom:4px">🔥 Day '+day+' streak!</div>'+
+      '<div style="font-size:0.9rem;color:#3fb950;font-weight:700;margin-bottom:12px">'+r.label+' claimed</div>'+
+      '<div style="display:flex;gap:3px;margin-bottom:14px">'+row+'</div>'+
+      (r.seasonCTA?'<button id="xLpSeason" style="display:block;width:100%;background:linear-gradient(135deg,#1f9be0,#0a6fae);color:#fff;border:none;border-radius:10px;padding:11px;font-weight:700;margin-bottom:8px;cursor:pointer">🧩 Try Season Pass</button>':'')+
+      '<button id="xLpClose" style="display:block;width:100%;background:transparent;color:#9aa0a6;border:none;padding:8px;cursor:pointer">Close</button></div>';
+    if($('xLpSeason')) $('xLpSeason').onclick=function(){ m.style.display='none'; if(window.Android&&window.Android.purchase) window.Android.purchase('season_pass_monthly'); };
+    $('xLpClose').onclick=function(){ m.style.display='none'; };
+    m.style.display='flex';
+  }
+
+  // ── D1: weekly tournament with synthetic bracket (by best level reached this week) ──
+  var BRACKETS=[ {min:120,pct:10},{min:60,pct:25},{min:25,pct:50},{min:1,pct:75} ];
+  function bracketFor(l){ for(var i=0;i<BRACKETS.length;i++){ if(l>=BRACKETS[i].min) return BRACKETS[i].pct; } return 90; }
+  function weekKey(){ var d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+4-(d.getDay()||7)); var y=new Date(d.getFullYear(),0,1); return d.getFullYear()+'-W'+Math.ceil((((d-y)/86400000)+1)/7); }
+  function tournament(){
+    var s=S(); if(!s) return null; var wk=weekKey(),raw=localStorage.getItem('xWeekly'),data; try{ data=JSON.parse(raw||'{}'); }catch(e){ data={}; }
+    var best=(s.currentLevel||1);
+    if(data.week!==wk){ if(data.week&&!localStorage.getItem('xWeeklyAward_'+data.week)){ var p=bracketFor(data.best||0); if(p<=10){ s.coins=(s.coins||0)+250; refresh(); toast('🏆 Last week: top 10% — +250 coins!'); } else if(p<=25){ s.coins=(s.coins||0)+100; refresh(); toast('🏆 Last week: top 25% — +100 coins!'); } localStorage.setItem('xWeeklyAward_'+data.week,'1'); } data={week:wk,best:best}; } else { data.best=Math.max(data.best||0,best); }
+    localStorage.setItem('xWeekly',JSON.stringify(data)); return data;
+  }
+  function updateTournamentBanner(){
+    var d=tournament(); if(!d) return; var p=bracketFor(d.best||0);
+    var b=$('weeklyEventBanner')||$('xTournamentBanner');
+    if(!b){ var anchor=document.querySelector('#screen-menu .menu-buttons'); if(!anchor) return; b=document.createElement('div'); b.id='xTournamentBanner'; b.style.cssText='margin-top:8px;background:rgba(255,255,255,0.06);border-radius:10px;padding:6px 10px;text-align:center;color:#e6edf3;font-size:0.8rem'; anchor.insertBefore(b, anchor.firstChild.nextSibling); }
+    b.innerHTML='🏆 This week — Level '+(d.best||1)+' · Top '+p+'% <span style="opacity:.7">· resets Monday</span>'; b.style.display='';
+  }
+
+  // ── D2: seasonal events ──
+  var SEASONAL=[ {month:10,name:'Halloween',id:'halloween',colors:['#ff6600','#9d4dbb','#1a0a1a','#3a1d3a','#000000']},{month:12,name:'Winter',id:'winter',colors:['#a8d8ea','#ffffff','#e8f4f8','#cfe8f0','#4a90e2']},{month:2,name:'Spring',id:'spring',colors:['#ffb6c1','#a7d49b','#ffe066','#fdf0d5','#7bb661']} ];
+  function activeEvent(){ var m=new Date().getMonth()+1; for(var i=0;i<SEASONAL.length;i++){ if(SEASONAL[i].month===m) return SEASONAL[i]; } return null; }
+  function applyEvent(){
+    var ev=activeEvent(); if(!ev) return;
+    if(window._THEMES_META&&!window._THEMES_META.some(function(t){return t.id===ev.id;})) window._THEMES_META.push({id:ev.id,name:ev.name,unlock:0,colors:ev.colors,seasonal:true});
+    var anchor=document.querySelector('#screen-menu .menu-tagline'); if(anchor&&!$('xSeasonBanner')){ var d=document.createElement('div'); d.id='xSeasonBanner'; d.style.cssText='margin:4px auto 0;font-size:0.8rem;color:#e6edf3;background:rgba(255,255,255,0.06);border-radius:10px;padding:6px 10px;text-align:center;max-width:280px'; d.textContent='🎃 '+ev.name+' event live — unlock the '+ev.name+' theme!'; anchor.parentNode.insertBefore(d, anchor.nextSibling); }
+  }
+
+  // ── D3 / D4: Settings — Restore Purchases + Privacy Policy ──
+  function injectSettings(){
+    var scr=$('screen-settings'); if(!scr||$('xRestoreBtn')) return;
+    var box=scr.querySelector('.settings-scroll')||scr;
+    var wrap=document.createElement('div'); wrap.style.cssText='margin-top:16px;display:flex;flex-direction:column;gap:8px';
+    wrap.innerHTML='<button id="xRestoreBtn" style="background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:10px;padding:10px;font-weight:600;cursor:pointer">↻ Restore Purchases</button>'+
+      '<a id="xPrivacy" href="https://pegasusgames-creator.github.io/privacy.html" target="_blank" rel="noopener" style="text-align:center;color:#58a6ff;font-size:0.82rem;text-decoration:none;padding:6px">Privacy Policy</a>';
+    box.appendChild(wrap);
+    $('xRestoreBtn').onclick=function(){ if(window.Android&&window.Android.restorePurchases){ try{ window.Android.restorePurchases(); }catch(e){} toast('Restoring purchases…'); } else toast('Restore is only available in the app'); };
+    $('xPrivacy').onclick=function(e){ if(window.Android&&window.Android.openUrl){ e.preventDefault(); try{ window.Android.openUrl('https://pegasusgames-creator.github.io/privacy.html'); }catch(e2){} } };
+  }
+
+  // ── D5: no-lives overlay IAP CTAs + wait countdown ──
+  function injectNoLivesCTAs(){
+    ['overlay-nolives','noLivesOverlay','overlayNoLives','nolivesOverlay'].forEach(function(id){
+      var el=$(id); if(!el||el.querySelector('.x-nolives-iap')) return;
+      var div=document.createElement('div'); div.className='x-nolives-iap'; div.style.cssText='display:flex;flex-direction:column;gap:8px;width:100%;margin-top:8px';
+      div.innerHTML='<button onclick="(window.Android&&window.Android.purchase)?window.Android.purchase(\'five_lives\'):0" style="background:#8957e5;color:#fff;border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer">💝 5 Lives — $0.99</button>'+
+        '<button onclick="(window.Android&&window.Android.purchase)?window.Android.purchase(\'unlimited_lives_1h\'):0" style="background:#1f6feb;color:#fff;border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer">⏱️ Unlimited Lives 1h — $1.99</button>';
+      var card=el.querySelector('.overlay-card,.overlay-inner')||el; card.appendChild(div);
+    });
+  }
+
+  // ── daily pass bonus on menu ──
+  function passDaily(){
+    var s=S(); if(!s) return; var t=todayStr();
+    if(s.seasonPassUntil&&Date.now()<s.seasonPassUntil&&s.lastSeasonGrantDate!==t){ s.lastSeasonGrantDate=t; s.coins=(s.coins||0)+50; refresh(); toast('🧩 Season Pass bonus: +50 coins!'); }
+    if(s.weeklyPassUntil&&Date.now()<s.weeklyPassUntil&&s.lastWeeklyGrantDate!==t){ s.lastWeeklyGrantDate=t; s.coins=(s.coins||0)+100; refresh(); toast('🗓️ Weekly Pass bonus: +100 coins!'); }
+  }
+
+  function boot(){
+    try{ injectBoosterBtns(); }catch(e){}
+    try{ injectFree(); }catch(e){}
+    try{ injectStrip(); }catch(e){}
+    try{ watchUnlocks(); }catch(e){}
+    try{ applyEvent(); }catch(e){}
+    try{ injectSettings(); }catch(e){}
+    try{ injectNoLivesCTAs(); }catch(e){}
+    try{ updateTournamentBanner(); }catch(e){}
+    try{ hideLegacy(); ladderTick(); passDaily(); }catch(e){}
+    if(typeof showScreen==='function' && !window.__xNonoWrapped){
+      var orig=showScreen; window.__xNonoWrapped=true;
+      window.showScreen=function(id){ orig(id); try{ if(id==='menu'||id==='screen-menu'){ injectFree(); refreshFree(); injectStrip(); updateTournamentBanner(); passDaily(); } if(id==='settings'||id==='screen-settings'){ injectSettings(); } if(id==='game'||id==='screen-game'){ injectBoosterBtns(); injectNoLivesCTAs(); } }catch(e){} };
+    }
+  }
+  if(document.readyState==='loading') window.addEventListener('DOMContentLoaded', function(){ setTimeout(boot,1100); });
+  else setTimeout(boot,1100);
 })();
 </script>
 
