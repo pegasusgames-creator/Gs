@@ -119,7 +119,14 @@ public class MainActivity extends Activity {
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
         "remove_ads", "coins_small", "coins_large", "unlimited_undos",
         "five_lives", "unlimited_lives_1h", "unlimited_lives_forever",
-        "hint_pack", "starter_pack", "season_pass_monthly"
+        "hint_pack", "starter_pack", "season_pass_monthly",
+        "coins_medium", "coins_mega", "weekly_pass"
+    ));
+
+    // Subscription SKUs — routed through launchSubscription(), never the
+    // one-time INAPP flow.
+    private static final Set<String> SUBSCRIPTION_PRODUCTS = new HashSet<>(Arrays.asList(
+        "season_pass_monthly", "weekly_pass"
     ));
 
     // SKUs that are CONSUMABLE — must be consumed via consumeAsync after each
@@ -128,7 +135,8 @@ public class MainActivity extends Activity {
     // subscription and acknowledged via acknowledgePurchase. Both flows must
     // complete within Play's 3-day window or the purchase is auto-refunded.
     private static final Set<String> CONSUMABLE_PRODUCTS = new HashSet<>(Arrays.asList(
-        "coins_small", "coins_large", "five_lives", "unlimited_lives_1h",
+        "coins_small", "coins_large", "coins_medium", "coins_mega",
+        "five_lives", "unlimited_lives_1h",
         "hint_pack", "starter_pack"
     ));
 
@@ -426,7 +434,7 @@ public class MainActivity extends Activity {
 
     private void launchPurchase(String productId) {
         if (!VALID_PRODUCTS.contains(productId)) return;
-        if ("season_pass_monthly".equals(productId)) { launchSubscription(productId); return; }
+        if (SUBSCRIPTION_PRODUCTS.contains(productId)) { launchSubscription(productId); return; }
         billingClient.queryProductDetailsAsync(
             QueryProductDetailsParams.newBuilder().setProductList(Arrays.asList(
                 QueryProductDetailsParams.Product.newBuilder()

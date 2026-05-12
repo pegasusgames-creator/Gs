@@ -280,9 +280,11 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
     </div>
     <canvas id="gameCanvas"></canvas>
     <div class="game-footer">
-      <button class="game-btn" onclick="Game.undoMove()"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6.7 3L3 13"/></svg>Undo</button>
-      <button class="game-btn" onclick="Game.showHint()"><svg class="ico" viewBox="0 0 24 24"><path d="M9 18h6m-5 3h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>Hint</button>
-      <button class="game-btn" onclick="Game.restartLevel()"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M3 13a9 9 0 1 0 3-6.7L3 9"/></svg>Restart</button>
+      <button class="game-btn" onclick="Game.undoMove()"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6.7 3L3 13"/></svg>Steady Pour</button>
+      <button class="game-btn" onclick="Game.showHint()"><svg class="ico" viewBox="0 0 24 24"><path d="M9 18h6m-5 3h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>Color Reveal<span id="hintCountBadge" style="margin-left:4px;background:#1f6feb;color:#fff;border-radius:9px;padding:0 5px;font-size:0.68rem;font-weight:700;vertical-align:top;display:inline-block;min-width:14px">3</span></button>
+      <button class="game-btn" onclick="Game.restartLevel()"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M3 13a9 9 0 1 0 3-6.7L3 9"/></svg>Fresh Start</button>
+      <button class="game-btn" onclick="Game.addExtraTube()"><svg class="ico" viewBox="0 0 24 24"><path d="M6 2v14a4 4 0 0 0 8 0V2M4 2h12M19 8v8"/><path d="M16 12h6"/></svg>Extra Tube</button>
+      <button class="game-btn" onclick="Game.magicWand()"><svg class="ico" viewBox="0 0 24 24"><path d="M15 4V2m0 16v-2M8 9h2M20 9h2M17.8 11.8 19 13M15 9h0M17.8 6.2 19 5M3 21l9-9M12.2 6.2 11 5"/></svg>Magic Wand</button>
     </div>
     <div id="tutorialOverlay" class="tut-overlay" style="display:none">
       <div class="tut-bubble">
@@ -1058,6 +1060,15 @@ const State = {
   dailyChallengeStreak: 0,
   activeTheme: 'default',
   lastLevelProgress: null,
+  hintCount: 3,
+  seasonPassUntil: 0,
+  seasonPassForever: false,
+  weeklyPassUntil: 0,
+  lastSeasonGrantDate: '',
+  lastWeeklyGrantDate: '',
+  firstLaunchAt: 0,
+  starterModalSeen: false,
+  loginStreakDay: 0,
 
   load() {
     try {
@@ -1079,6 +1090,15 @@ const State = {
       this.dailyChallengeStreak = d.dailyChallengeStreak || 0;
       this.activeTheme = d.activeTheme || 'default';
       this.lastLevelProgress = d.lastLevelProgress || null;
+      this.hintCount = d.hintCount !== undefined ? d.hintCount : 3;
+      this.seasonPassUntil = d.seasonPassUntil || 0;
+      this.seasonPassForever = d.seasonPassForever || false;
+      this.weeklyPassUntil = d.weeklyPassUntil || 0;
+      this.lastSeasonGrantDate = d.lastSeasonGrantDate || '';
+      this.lastWeeklyGrantDate = d.lastWeeklyGrantDate || '';
+      this.firstLaunchAt = d.firstLaunchAt || Date.now();
+      this.starterModalSeen = d.starterModalSeen || false;
+      this.loginStreakDay = d.loginStreakDay || 0;
     } catch(e) {}
   },
 
@@ -1101,7 +1121,16 @@ const State = {
         dailyChallengeDate: this.dailyChallengeDate,
         dailyChallengeStreak: this.dailyChallengeStreak,
         activeTheme: this.activeTheme,
-        lastLevelProgress: this.lastLevelProgress
+        lastLevelProgress: this.lastLevelProgress,
+        hintCount: this.hintCount,
+        seasonPassUntil: this.seasonPassUntil,
+        seasonPassForever: this.seasonPassForever,
+        weeklyPassUntil: this.weeklyPassUntil,
+        lastSeasonGrantDate: this.lastSeasonGrantDate,
+        lastWeeklyGrantDate: this.lastWeeklyGrantDate,
+        firstLaunchAt: this.firstLaunchAt,
+        starterModalSeen: this.starterModalSeen,
+        loginStreakDay: this.loginStreakDay
       });
       localStorage.setItem('watersort_save', json);
     } catch(e) { /* QuotaExceededError - storage full, ignore */ }
@@ -1126,12 +1155,31 @@ const State = {
     this.dailyChallengeStreak = 0;
     this.activeTheme = 'default';
     this.lastLevelProgress = null;
+    this.hintCount = 3;
+    this.seasonPassUntil = 0;
+    this.seasonPassForever = false;
+    this.weeklyPassUntil = 0;
+    this.lastSeasonGrantDate = '';
+    this.lastWeeklyGrantDate = '';
+    this.firstLaunchAt = Date.now();
+    this.starterModalSeen = false;
+    this.loginStreakDay = 0;
     this.save();
   },
 
+  isPremium() {
+    if (this.seasonPassForever) return true;
+    if (this.seasonPassUntil && Date.now() < this.seasonPassUntil) return true;
+    if (this.weeklyPassUntil && Date.now() < this.weeklyPassUntil) return true;
+    return false;
+  },
+  adsRemoved() {
+    return this.removeAds || this.isPremium();
+  },
   hasUnlimitedLives() {
     if (this.unlimitedLivesPermanent) return true;
     if (this.unlimitedLivesExpiry > Date.now()) return true;
+    if (this.isPremium()) return true;
     return false;
   }
 };
@@ -1341,6 +1389,7 @@ let hintFrom = -1;
 let hintTo = -1;
 let hintTimer = 0;
 let levelCompleted = false;
+let extraTubesUsedThisLevel = 0;
 let rafId = null;
 let dailyChallengeMode = false;
 
@@ -1980,7 +2029,7 @@ canvas.addEventListener('click', (e) => {
 // ADMOB
 // ============================================================
 function showInterstitial() {
-  if (State.removeAds) return;
+  if (State.adsRemoved()) return;
   if (window.Android) {
     try { Android.showInterstitial(); } catch(e) {}
   }
@@ -1988,11 +2037,68 @@ function showInterstitial() {
 
 function showRewardedAd(type, callback) {
   // Security whitelist
-  const validTypes = ['undo', 'skip', 'life'];
+  const validTypes = ['undo', 'skip', 'life', 'hint', 'extra_tube', 'magic_wand', 'free_coins'];
   if (!validTypes.includes(type)) return;
   if (window.Android) {
     window._pendingAdCallback = callback;
     try { Android.showRewarded(type); } catch(e) {}
+  }
+}
+
+// Generic booster chooser: "spend coins" / "watch ad" / cancel.
+function boosterChooser(title, emoji, desc, coinCost, adType, onGrant) {
+  let m = document.getElementById('boosterChooserModal');
+  if (!m) {
+    m = document.createElement('div');
+    m.id = 'boosterChooserModal';
+    m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);display:none;align-items:center;justify-content:center;z-index:99998;';
+    document.body.appendChild(m);
+  }
+  m.innerHTML =
+    '<div style="background:#161b22;border:1px solid #30363d;border-radius:16px;padding:22px;max-width:300px;width:88%;text-align:center;color:#e6edf3">'+
+    '<div style="font-size:1.05rem;font-weight:700;margin-bottom:4px"></div>'+
+    '<div style="font-size:0.85rem;color:#8b949e;margin-bottom:16px"></div>'+
+    (coinCost ? '<button data-act="coin" style="display:block;width:100%;background:#d29922;color:#000;border:none;border-radius:10px;padding:11px;font-weight:700;margin-bottom:8px;cursor:pointer">🪙 '+coinCost+' coins</button>' : '')+
+    (adType ? '<button data-act="ad" style="display:block;width:100%;background:#3fb950;color:#000;border:none;border-radius:10px;padding:11px;font-weight:700;margin-bottom:8px;cursor:pointer">📺 Watch Ad — free</button>' : '')+
+    '<button data-act="cancel" style="display:block;width:100%;background:transparent;color:#8b949e;border:none;padding:8px;cursor:pointer">Cancel</button>'+
+    '</div>';
+  m.querySelector('div div:nth-child(1)').textContent = (emoji ? emoji + ' ' : '') + title;
+  m.querySelector('div div:nth-child(2)').textContent = desc;
+  const close = () => { m.style.display = 'none'; };
+  m.querySelectorAll('button').forEach(function(btn){
+    btn.onclick = function() {
+      const act = btn.getAttribute('data-act');
+      if (act === 'cancel') { close(); return; }
+      if (act === 'coin') {
+        if (State.coins < coinCost) { showToast('Not enough coins!'); return; }
+        State.coins -= coinCost; State.save(); updateCoinDisplays(); close(); try { onGrant(); } catch(e){}
+        return;
+      }
+      if (act === 'ad') { close(); showRewardedAd(adType, function(){ try { onGrant(); } catch(e){} }); }
+    };
+  });
+  m.style.display = 'flex';
+}
+
+function updateHintBadge() {
+  const b = document.getElementById('hintCountBadge');
+  if (b) b.textContent = (typeof State !== 'undefined' && typeof State.hintCount === 'number') ? String(State.hintCount) : '3';
+}
+
+// Season Pass / Weekly Pass grant their daily coins the first time the menu
+// opens on a new calendar day while the pass is active.
+function grantPassDailyBonus() {
+  if (typeof State === 'undefined') return;
+  const today = new Date().toLocaleDateString('en-CA');
+  if (State.seasonPassUntil && Date.now() < State.seasonPassUntil && State.lastSeasonGrantDate !== today) {
+    State.lastSeasonGrantDate = today; State.coins += 50; State.save();
+    if (typeof updateCoinDisplays === 'function') updateCoinDisplays();
+    showToast('🌊 Season Pass bonus: +50 coins!');
+  }
+  if (State.weeklyPassUntil && Date.now() < State.weeklyPassUntil && State.lastWeeklyGrantDate !== today) {
+    State.lastWeeklyGrantDate = today; State.coins += 100; State.save();
+    if (typeof updateCoinDisplays === 'function') updateCoinDisplays();
+    showToast('🗓️ Weekly Pass bonus: +100 coins!');
   }
 }
 
@@ -2006,19 +2112,25 @@ function initAdMob() {
 // IN-APP PURCHASES
 // ============================================================
 const PRODUCTS = [
-  { id: 'remove_ads',              name: 'Remove Ads',           desc: 'No more ads forever!',      price: '$1.99',  emoji: '🚫',  type: 'real' },
-  { id: 'coins_small',             name: 'Coin Pack S',          desc: '+50 coins',                 price: '$0.99',  emoji: '🪙',  type: 'real' },
-  { id: 'coins_large',             name: 'Coin Pack L',          desc: '+200 coins',                price: '$2.99',  emoji: '💰',  type: 'real' },
+  { id: 'remove_ads',              name: 'Remove Ads',           desc: 'No more ads forever!',      price: '$2.99',  emoji: '🚫',  type: 'real' },
+  { id: 'coins_small',             name: 'Coin Pack S',          desc: '+100 coins',                price: '$0.99',  emoji: '🪙',  type: 'real' },
+  { id: 'coins_large',             name: 'Coin Pack L',          desc: '+500 coins',                price: '$2.99',  emoji: '💰',  type: 'real' },
   { id: 'unlimited_undos',         name: 'Unlimited Undos',      desc: 'Never run out of undos',    price: '$3.99',  emoji: '↩',   type: 'real' },
   { id: 'five_lives',              name: '5 Lives',              desc: 'Restore 5 lives instantly', price: '$0.99',  emoji: '💝',  type: 'real' },
   { id: 'unlimited_lives_1h',      name: 'Unlimited Lives 1h',   desc: 'Play freely for 1 hour',   price: '$0.99',  emoji: '⏱️',  type: 'real' },
   { id: 'unlimited_lives_forever', name: 'Unlimited Lives ∞',    desc: 'Never lose a life again',  price: '$4.99',  emoji: '♾️',  type: 'real' },
+  { id: 'coins_medium',            name: 'Coin Pack M',          desc: '+600 coins',               price: '$4.99',  emoji: '💰',  type: 'real' },
+  { id: 'coins_mega',              name: 'Coin Pack XL',         desc: '+1400 coins',              price: '$9.99',  emoji: '💎',  type: 'real' },
+  { id: 'hint_pack',               name: 'Hint Pack',            desc: '10 hints when stuck',      price: '$1.99',  emoji: '💡',  type: 'real' },
+  { id: 'starter_pack',            name: 'Starter Pack',         desc: '100 coins + 5 hints + 5 lives + Ads Off', price: '$0.99',  emoji: '🎁',  type: 'real' },
+  { id: 'season_pass_monthly',     name: 'Season Pass',          desc: 'Ad-free, +50 daily coins, all themes, 30 days', price: '$1.99/mo', emoji: '🌊', type: 'real' },
+  { id: 'weekly_pass',             name: 'Weekly Pass',          desc: 'Ad-free + 100 daily coins + all themes', price: '$4.99/week', emoji: '🗓️', type: 'real' },
   { id: 'lives_5_coins',           name: '5 Lives (Coins)',      desc: 'Restore 5 lives',          price: '30 🪙',  emoji: '❤️',  type: 'coin', coinCost: 30 }
 ];
 
 function purchase(productId) {
   // Security: whitelist check before calling Android bridge
-  const validIds = ['remove_ads','coins_small','coins_large','unlimited_undos','five_lives','unlimited_lives_1h','unlimited_lives_forever'];
+  const validIds = ['remove_ads','coins_small','coins_large','coins_medium','coins_mega','unlimited_undos','five_lives','unlimited_lives_1h','unlimited_lives_forever','hint_pack','starter_pack','season_pass_monthly','weekly_pass'];
   if (!validIds.includes(productId)) return;
   if (window.Android) {
     try { Android.purchase(productId); } catch(e) {}
@@ -2041,12 +2153,12 @@ function onPurchaseSuccess(productId) {
       showToast('Ads removed! Thank you!');
       break;
     case 'coins_small':
-      State.coins += 50;
-      showToast('+50 coins!');
+      State.coins += 100;
+      showToast('+100 coins!');
       break;
     case 'coins_large':
-      State.coins += 200;
-      showToast('+200 coins!');
+      State.coins += 500;
+      showToast('+500 coins!');
       break;
     case 'unlimited_undos':
       State.unlimitedUndo = true;
@@ -2065,16 +2177,43 @@ function onPurchaseSuccess(productId) {
       State.unlimitedLivesPermanent = true;
       showToast('Unlimited lives forever!');
       break;
+    case 'coins_medium':
+      State.coins += 600;
+      showToast('+600 coins!');
+      break;
+    case 'coins_mega':
+      State.coins += 1400;
+      showToast('+1400 coins!');
+      break;
     case 'hint_pack':
-      // Water Sort gameplay does not have a hint mechanic. Record the
-      // purchase for future replay if hints are ever added so the user
-      // doesn't pay for nothing — and still ack with a thank-you toast.
-      try {
-        var pg = JSON.parse(localStorage.getItem('pendingGrants') || '{}');
-        pg.hint_pack = (pg.hint_pack || 0) + 10;
-        localStorage.setItem('pendingGrants', JSON.stringify(pg));
-      } catch(e) {}
-      showToast('Thank you for your purchase!');
+      State.hintCount = (State.hintCount || 0) + 10;
+      showToast('+10 hints!');
+      break;
+    case 'starter_pack':
+      State.coins += 100;
+      State.hintCount = (State.hintCount || 0) + 5;
+      State.lives = Math.min(State.maxLives, State.lives + 5);
+      State.removeAds = true;
+      { const _b = document.getElementById('admob-banner'); if (_b) _b.style.display = 'none'; }
+      if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+      showToast('🎁 Starter Pack unlocked!');
+      break;
+    case 'season_pass_monthly':
+      State.seasonPassUntil = Date.now() + 30 * 86400 * 1000;
+      State.removeAds = true;
+      State.lastSeasonGrantDate = '';
+      { const _b = document.getElementById('admob-banner'); if (_b) _b.style.display = 'none'; }
+      if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+      if (typeof updateSeasonBadges === 'function') { try { updateSeasonBadges(); } catch(e) {} }
+      showToast('🌊 Season Pass active — 30 days!');
+      break;
+    case 'weekly_pass':
+      State.weeklyPassUntil = Date.now() + 7 * 86400 * 1000;
+      State.removeAds = true;
+      State.lastWeeklyGrantDate = '';
+      { const _b = document.getElementById('admob-banner'); if (_b) _b.style.display = 'none'; }
+      if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+      showToast('🗓️ Weekly Pass active — 7 days!');
       break;
     default:
       // Unknown SKU (newly added in iaps.json before game.html caught up).
@@ -2090,6 +2229,7 @@ function onPurchaseSuccess(productId) {
   State.save();
   updateCoinDisplays();
   updateHeartsDisplay();
+  if (typeof updateHintBadge === 'function') updateHintBadge();
   renderShop();
   playSound('click');
 }
@@ -2185,7 +2325,12 @@ const Game = {
     if (id === 'moreGamesScreen') { checkPendingPromos(); renderMoreGames(); }
     if (id === 'settingsScreen') this.updateSettingsUI();
     if (id === 'themeScreen') window.renderThemes && window.renderThemes();
-    if (id === 'menuScreen') { const lbl = document.getElementById('menuPlayLabel'); if(lbl){ lbl.textContent = State.lastLevelProgress ? ('Continue · Level '+(State.lastLevelProgress.level+1)) : 'Play'; } }
+    if (id === 'menuScreen') {
+      const lbl = document.getElementById('menuPlayLabel');
+      if(lbl){ lbl.textContent = State.lastLevelProgress ? ('Continue · Level '+((State.lastLevelProgress.level||State.currentLevel)+1)) : 'Play'; }
+      if (typeof grantPassDailyBonus === 'function') grantPassDailyBonus();
+      if (typeof updateThemeProgressStrip === 'function') updateThemeProgressStrip();
+    }
     updateCoinDisplays();
     updateHeartsDisplay();
   },
@@ -2217,6 +2362,8 @@ const Game = {
     animation = null;
     particles = [];
     hintFrom = -1; hintTo = -1; hintTimer = 0;
+    extraTubesUsedThisLevel = 0;
+    if (typeof updateHintBadge === 'function') updateHintBadge();
     levelCompleted = false;
 
     document.getElementById('levelLabel').textContent = `Level ${idx + 1}`;
@@ -2309,10 +2456,63 @@ resizeCanvas();
 
   showHint() {
     playSound('click');
+    const premium = State.isPremium();
+    if (!premium && (State.hintCount || 0) <= 0) {
+      boosterChooser('Out of hints', '💡', 'Color Reveal shows your next move. Buy a 10-pack in the Shop, or watch an ad for one now.', null, 'hint',
+        function(){ State.hintCount = (State.hintCount || 0) + 1; State.save(); updateHintBadge(); showToast('+1 hint!'); });
+      return;
+    }
     const hint = findHint();
     if (!hint) { showToast('No valid moves found!'); return; }
+    if (!premium) { State.hintCount = Math.max(0, (State.hintCount || 0) - 1); State.save(); updateHintBadge(); }
     [hintFrom, hintTo] = hint;
     hintTimer = 90;
+  },
+
+  addExtraTube() {
+    if (this.currentScreen !== 'gameScreen' || levelCompleted) return;
+    if (extraTubesUsedThisLevel >= 2) { showToast('No more extra tubes this level'); return; }
+    const grant = () => {
+      tubes.push([]);
+      extraTubesUsedThisLevel++;
+      selectedTube = -1;
+      resizeCanvas();
+      cancelAnimationFrame(rafId); rafId = requestAnimationFrame(render);
+      playSound('click');
+      showToast('🧪 Extra tube added!');
+    };
+    boosterChooser('Extra Tube', '🧪', 'Adds one empty tube to this level (max 2).', 100, 'extra_tube', grant);
+  },
+
+  magicWand() {
+    if (this.currentScreen !== 'gameScreen' || levelCompleted) return;
+    const grant = () => {
+      for (let pass = 0; pass < 3; pass++) {
+        let best = -1, bestRun = 0, bestColor = null;
+        for (let i = 0; i < tubes.length; i++) {
+          const t = tubes[i];
+          if (!t.length || t.length >= MAX_LAYERS) continue;
+          const c = t[t.length - 1];
+          let run = 0; for (let k = t.length - 1; k >= 0 && t[k] === c; k--) run++;
+          if (run > bestRun) { bestRun = run; best = i; bestColor = c; }
+        }
+        if (best < 0) break;
+        let moved = false, safety = 0;
+        for (let i = 0; i < tubes.length && safety < 80; i++) {
+          if (i === best) continue;
+          while (canMove(i, best) && tubes[i].length && tubes[i][tubes[i].length - 1] === bestColor) {
+            tubes[best].push(tubes[i].pop()); moved = true; safety++;
+          }
+        }
+        if (!moved) break;
+      }
+      selectedTube = -1; moveHistory = [];
+      cancelAnimationFrame(rafId); rafId = requestAnimationFrame(render);
+      playSound('click');
+      showToast('✨ Magic Wand!');
+      checkLevelComplete();
+    };
+    boosterChooser('Magic Wand', '✨', 'Auto-pours your three best colours into place.', 200, 'magic_wand', grant);
   },
 
   restartLevel() {
@@ -2418,6 +2618,8 @@ resizeCanvas();
     animation = null;
     particles = [];
     hintFrom = -1; hintTo = -1; hintTimer = 0;
+    extraTubesUsedThisLevel = 0;
+    if (typeof updateHintBadge === 'function') updateHintBadge();
     levelCompleted = false;
     document.getElementById('levelLabel').textContent = '📅 Daily Challenge';
     this.showScreen('gameScreen');
@@ -2494,9 +2696,11 @@ function renderShop() {
   for (const p of PRODUCTS) {
     const card = document.createElement('div');
     card.className = 'shop-card';
-    const owned = (p.id === 'remove_ads' && State.removeAds) ||
+    const owned = (p.id === 'remove_ads' && State.adsRemoved()) ||
                   (p.id === 'unlimited_undos' && State.unlimitedUndo) ||
-                  (p.id === 'unlimited_lives_forever' && State.unlimitedLivesPermanent);
+                  (p.id === 'unlimited_lives_forever' && State.unlimitedLivesPermanent) ||
+                  (p.id === 'season_pass_monthly' && State.seasonPassUntil > Date.now()) ||
+                  (p.id === 'weekly_pass' && State.weeklyPassUntil > Date.now());
     const btnClass = owned ? 'owned' : (p.type === 'coin' ? 'coin-price' : '');
     card.innerHTML = `
       <div class="shop-icon">${p.emoji}</div>
@@ -2724,7 +2928,7 @@ function init() {
   updateCoinDisplays();
   updateHeartsDisplay();
 
-  if (!window.Android && !State.removeAds) {
+  if (!window.Android && !State.adsRemoved()) {
     document.getElementById('admob-banner').style.display = 'flex';
     const style = document.createElement('style');
     style.textContent = '.screen { height: calc(100% - 60px - env(safe-area-inset-bottom, 0px)) !important; }';
@@ -2732,7 +2936,7 @@ function init() {
   }
   if (window.Android) try { Android.log('Water Sort: running in Android WebView'); } catch(e) {}
 
-  if (!State.removeAds) initAdMob();
+  if (!State.adsRemoved()) initAdMob();
 
   document.getElementById('soundToggle').checked = State.soundEnabled;
   document.getElementById('musicToggle').checked = State.musicEnabled;
@@ -4196,7 +4400,7 @@ setTimeout(function() { wsUpdateMissionsBadge(); }, 1500);
     var done = Object.keys(State.completedLevels).length;
     grid.innerHTML = '';
     window._THEMES_META.forEach(function(t) {
-      var unlocked = done >= t.unlockLevel;
+      var unlocked = (done >= t.unlockLevel) || (typeof State !== 'undefined' && typeof State.isPremium === 'function' && State.isPremium());
       var isActive = State.activeTheme === t.id;
       var pal = window._THEME_PALETTES[t.id];
       var balls = Object.values(pal).slice(0,5);
@@ -4797,16 +5001,16 @@ function hookNoLivesOverlay(){
 var _origPurchase=window.onPurchaseSuccess||window.onPurchaseComplete;
 window.onPurchaseSuccess=function(id){
   try {
-    if(id==='season_pass_monthly'){ activateSeason(); return; }
-    if(id==='starter_pack'){
-      var s=G.st(); if(s){ s.removeAds=true; G.addCoins(100); G.doSave(); }
-      xToast('🎁 Starter Pack activated! Ads removed + 100 🪙');
-      var adBanner=document.getElementById('admob-banner');
-      if(adBanner) adBanner.style.display='none';
-      if(window.Android&&window.Android.hideBannerAd) window.Android.hideBannerAd();
+    if(typeof _origPurchase==='function'){
+      _origPurchase(id);  // original switch grants every known SKU fully + defers unknowns
+      if(id==='season_pass_monthly'||id==='weekly_pass'){
+        try { if(typeof updateSeasonBadges==='function') updateSeasonBadges(); } catch(e){}
+        try { if(typeof injectSeasonPassShop==='function') injectSeasonPassShop(); } catch(e){}
+        try { var adB=document.getElementById('admob-banner'); if(adB) adB.style.display='none'; } catch(e){}
+        try { if(window.Android&&window.Android.hideBannerAd) window.Android.hideBannerAd(); } catch(e){}
+      }
       return;
     }
-    if(typeof _origPurchase==='function'){ _origPurchase(id); return; }
     // No handler at all — defer.
     iapDeferGrant(id);
     iapThanksToast();
@@ -4845,6 +5049,10 @@ function patchValidProducts(){
   if(typeof VALID_PRODUCTS!=='undefined'){
     VALID_PRODUCTS.add('season_pass_monthly');
     VALID_PRODUCTS.add('starter_pack');
+    VALID_PRODUCTS.add('weekly_pass');
+    VALID_PRODUCTS.add('coins_medium');
+    VALID_PRODUCTS.add('coins_mega');
+    VALID_PRODUCTS.add('hint_pack');
   }
 }
 
