@@ -345,16 +345,23 @@ const PIPE_COLORS = {
   teal:   '#18ffff'
 };
 
-const VALID_PRODUCTS = new Set(['remove_ads','coins_small','coins_large','hint_pack','five_lives','unlimited_lives_1h','unlimited_lives_forever']);
+const VALID_PRODUCTS = new Set([
+  'remove_ads','coins_small','coins_medium','coins_large','coins_mega',
+  'hint_pack','five_lives','unlimited_lives_1h','unlimited_lives_forever',
+  'starter_pack','season_pass_monthly','weekly_pass'
+]);
 const VALID_REWARD_TYPES = new Set(['hint','skip','life']);
 
 const SHOP_PRODUCTS = [
-  {id:'remove_ads',       icon:'🚫', name:'Remove Ads',           desc:'Enjoy ad-free gameplay forever',         price:'$1.99'},
+  {id:'starter_pack',     icon:'🎁', name:'Starter Pack',         desc:'100🪙 + 5 hints + 5 lives + Ads Off',   price:'$0.99'},
+  {id:'remove_ads',       icon:'🚫', name:'Remove Ads',           desc:'Enjoy ad-free gameplay forever',         price:'$2.99'},
   {id:'coins_small',      icon:'🪙', name:'100 Coins',            desc:'Small coin pack',                        price:'$0.99'},
-  {id:'coins_large',      icon:'💰', name:'500 Coins',            desc:'Best value coin pack',                   price:'$2.99'},
+  {id:'coins_medium',     icon:'💵', name:'400 Coins',            desc:'Medium coin pack',                       price:'$2.99'},
+  {id:'coins_large',      icon:'💰', name:'800 Coins',            desc:'Great value coin pack',                  price:'$4.99'},
+  {id:'coins_mega',       icon:'🏆', name:'2000 Coins',           desc:'Mega coin pack — best value',            price:'$9.99'},
   {id:'hint_pack',        icon:'💡', name:'10 Hints',             desc:'Pack of 10 hint tokens',                 price:'$1.99'},
   {id:'five_lives',       icon:'❤️', name:'5 Extra Lives',        desc:'Refill your lives instantly',            price:'$0.99'},
-  {id:'unlimited_lives_1h',icon:'⚡',name:'Unlimited Lives 1hr',  desc:'Play without limits for 1 hour',        price:'$0.99'},
+  {id:'unlimited_lives_1h',icon:'⚡',name:'Unlimited Lives 1hr',  desc:'Play without limits for 1 hour',         price:'$1.99'},
   {id:'unlimited_lives_forever',icon:'♾️',name:'Unlimited Lives Forever',desc:'Never run out of lives again',   price:'$4.99'},
   {id:'lives_5_coins',    icon:'🪙', name:'5 Lives (Coins)',       desc:'Spend 30 coins for 5 lives',            price:'30 🪙', coinCost:30}
 ];
@@ -516,7 +523,13 @@ function defaultSave(){
     soundEnabled:true,
     musicEnabled:false,
     activeTheme:'default',
-    lastLevelProgress:null
+    lastLevelProgress:null,
+    hintPack:0,
+    hintCount:0,
+    seasonPassUntil:0,
+    weeklyPassUntil:0,
+    lastSeasonGrantDate:'',
+    lastWeeklyGrantDate:''
   };
 }
 
@@ -899,9 +912,24 @@ window.onPurchaseComplete=function(productId){
   if(!VALID_PRODUCTS.has(productId)){return;}
   switch(productId){
     case 'remove_ads': save.removeAds=true; _showMsg('Ads removed! Thank you!'); break;
-    case 'coins_small': save.coins+=100; _showMsg('+100 coins!'); break;
-    case 'coins_large': save.coins+=500; _showMsg('+500 coins!'); break;
-    case 'hint_pack': save.coins+=50; _showMsg('+10 hints (50 coins added)!'); break;
+    case 'coins_small':  save.coins+=100;  _showMsg('+100 coins!');  break;
+    case 'coins_medium': save.coins+=400;  _showMsg('+400 coins!');  break;
+    case 'coins_large':  save.coins+=800;  _showMsg('+800 coins!');  break;
+    case 'coins_mega':   save.coins+=2000; _showMsg('+2000 coins!'); break;
+    case 'hint_pack':
+      save.hintPack=(save.hintPack||0)+10;
+      save.hintCount=(save.hintCount||0)+10;
+      _showMsg('+10 hints!');
+      break;
+    case 'starter_pack':
+      // Canonical grant: 100 coins + 5 hints + 5 lives + Ads Off.
+      save.coins+=100;
+      save.hintPack=(save.hintPack||0)+5;
+      save.hintCount=(save.hintCount||0)+5;
+      addLives(5);
+      save.removeAds=true;
+      _showMsg('🎁 Starter Pack: +100🪙, +5 hints, +5 lives, Ads Off!');
+      break;
     case 'five_lives': addLives(5); _showMsg('+5 lives!'); break;
     case 'unlimited_lives_1h':
       save.unlimitedLivesExpiry=Date.now()+3600000;
@@ -912,6 +940,18 @@ window.onPurchaseComplete=function(productId){
       save.unlimitedLivesPermanent=true;
       save.lives=save.maxLives;
       _showMsg('Unlimited lives forever!');
+      break;
+    case 'season_pass_monthly':
+      save.seasonPassUntil = Date.now() + 30*86400*1000;
+      save.removeAds = true;
+      save.lastSeasonGrantDate = '';
+      _showMsg('🌟 Season Pass active — +100🪙/day, ad-free, all themes!');
+      break;
+    case 'weekly_pass':
+      save.weeklyPassUntil = Date.now() + 7*86400*1000;
+      save.removeAds = true;
+      save.lastWeeklyGrantDate = '';
+      _showMsg('🌟 Weekly Pass active — +50🪙/day, ad-free for 7 days!');
       break;
   }
   persist();updateAllUI();
@@ -2813,26 +2853,224 @@ function hookNoLivesOverlay(){
 }
 
 // ── HOOK onPurchaseSuccess ────────────────────────────────────────
+// Delegate to the original handler (which performs the canonical grant
+// per SKU in window.onPurchaseComplete), then layer UI feedback on top.
 var _origPurchase=window.onPurchaseSuccess;
 window.onPurchaseSuccess=function(id){
-  if(id==='season_pass_monthly'){ activateSeason(); return; }
-  if(id==='starter_pack'){
-    var s=G.st(); if(s){ s.removeAds=true; G.addCoins(100); G.doSave(); }
-    xToast('🎁 Starter Pack activated! Ads removed + 100 🪙');
-    var adBanner=document.getElementById('admob-banner');
-    if(adBanner) adBanner.style.display='none';
-    if(window.Android&&window.Android.hideBannerAd) window.Android.hideBannerAd();
-    return;
+  try { if(typeof _origPurchase==='function') _origPurchase(id); } catch(e){}
+  if(id==='season_pass_monthly'){
+    updateSeasonBadges();
+    xToast('🌟 Season Pass active — +100🪙/day, ad-free, all themes!');
+  } else if(id==='weekly_pass'){
+    updateSeasonBadges();
+    xToast('🌟 Weekly Pass active — +50🪙/day, ad-free for 7 days!');
+  } else if(id==='starter_pack'){
+    xToast('🎁 Starter Pack activated — 100🪙 + 5 hints + 5 lives + Ads Off!');
   }
-  if(typeof _origPurchase==='function') _origPurchase(id);
 };
+
+// ── isWeeklyActive / isPremium / adsRemoved helpers ──────────────
+window.isWeeklyActive = function(){
+  var s=G.st(); if(!s) return false;
+  return !!(s.weeklyPassUntil && Date.now() < s.weeklyPassUntil);
+};
+window.isPremium = function(){ return isSeasonActive() || isWeeklyActive(); };
+window.adsRemoved = function(){ var s=G.st(); return (s && s.removeAds) || isPremium(); };
 
 // ── PATCH VALID_PRODUCTS ──────────────────────────────────────────
 function patchValidProducts(){
   if(typeof VALID_PRODUCTS!=='undefined'){
-    VALID_PRODUCTS.add('season_pass_monthly');
-    VALID_PRODUCTS.add('starter_pack');
+    ['coins_small','coins_medium','coins_large','coins_mega',
+     'hint_pack','five_lives','unlimited_lives_1h','unlimited_lives_forever',
+     'remove_ads','starter_pack','season_pass_monthly','weekly_pass'
+    ].forEach(function(s){ VALID_PRODUCTS.add(s); });
   }
+}
+
+// ── FREE COINS PILL (rewarded ad, 25 coins / 4h cooldown) ────────
+var FREE_COINS_AMT = 25;
+var FREE_COINS_COOLDOWN_MS = 4 * 60 * 60 * 1000;
+function _freeCoinsReadyAt(){
+  return parseInt(G.flag('lastFreeCoinsAt') || '0', 10) + FREE_COINS_COOLDOWN_MS;
+}
+function _fmtCountdown(ms){
+  var s = Math.max(0, Math.ceil(ms/1000));
+  var h = Math.floor(s/3600), m = Math.floor((s%3600)/60);
+  if(h>0) return h+'h '+m+'m';
+  return m+'m';
+}
+function refreshFreeCoins(){
+  var b = document.getElementById('xFreeCoins'); if(!b) return;
+  var remain = _freeCoinsReadyAt() - Date.now();
+  if(remain > 0){
+    b.textContent = '🪙 Free Coins in ' + _fmtCountdown(remain);
+    b.disabled = true; b.style.opacity = '0.55'; b.style.cursor = 'default';
+  } else {
+    b.textContent = '🪙 Free Coins (+' + FREE_COINS_AMT + ')';
+    b.disabled = false; b.style.opacity = '1'; b.style.cursor = 'pointer';
+  }
+}
+window.xClaimFreeCoins = function(){
+  if(_freeCoinsReadyAt() > Date.now()) return;
+  if(window.Android && window.Android.showRewarded){
+    window._pendingFreeCoins = true;
+    window.Android.showRewarded('free_coins');
+  } else {
+    G.addCoins(FREE_COINS_AMT);
+    G.setFlag('lastFreeCoinsAt', String(Date.now()));
+    refreshFreeCoins();
+    xToast('+' + FREE_COINS_AMT + ' 🪙 free coins!');
+  }
+};
+(function(){
+  var prev = window.onAdReward;
+  window.onAdReward = function(type){
+    if(window._pendingFreeCoins){
+      window._pendingFreeCoins = false;
+      G.addCoins(FREE_COINS_AMT);
+      G.setFlag('lastFreeCoinsAt', String(Date.now()));
+      refreshFreeCoins();
+      xToast('+' + FREE_COINS_AMT + ' 🪙 free coins!');
+      return;
+    }
+    if(typeof prev === 'function') prev(type);
+  };
+})();
+function injectFreeCoinsBtn(){
+  if(document.getElementById('xFreeCoins')) return;
+  var b = document.createElement('button');
+  b.id = 'xFreeCoins';
+  b.onclick = function(){ xClaimFreeCoins(); };
+  b.style.cssText =
+    'margin-top:0.6rem;padding:0.55rem 1rem;border:1px solid #d29922;' +
+    'background:linear-gradient(135deg,#3a2a00,#0d1117);color:#d29922;' +
+    'border-radius:16px;font-size:0.78rem;font-weight:700;cursor:pointer;' +
+    'width:220px;max-width:90vw;';
+  var anchors = [
+    document.getElementById('weeklyEventBanner'),
+    document.querySelector('#screen-menu .menu-icon-row'),
+    document.querySelector('#screen-menu .menu-pair-row'),
+    document.querySelector('#screen-menu')
+  ].filter(Boolean);
+  if(anchors.length){
+    var a = anchors[0];
+    if(a.parentNode) a.parentNode.insertBefore(b, a.nextSibling);
+    else a.appendChild(b);
+  } else {
+    document.body.appendChild(b);
+  }
+  refreshFreeCoins();
+  setInterval(refreshFreeCoins, 30000);
+}
+
+// ── THEME PROGRESS STRIP ─────────────────────────────────────────
+function injectThemeStrip(){
+  if(document.getElementById('xThemeStrip')) return;
+  if(!window._THEMES_META || !window._THEMES_META.length) return;
+  var completed = G.completed();
+  var next = null;
+  window._THEMES_META.forEach(function(t){
+    var ul = t.unlockLevel || t.unlock || 0;
+    if(ul > completed && (!next || (next.unlockLevel||next.unlock||0) > ul)) next = t;
+  });
+  var strip = document.createElement('div');
+  strip.id = 'xThemeStrip';
+  strip.style.cssText =
+    'margin-top:0.55rem;padding:0.45rem 0.9rem;border-radius:14px;' +
+    'background:linear-gradient(135deg,#1a1330,#0d1117);' +
+    'border:1px solid #8957e5;color:#c7b5ff;font-size:0.74rem;' +
+    'font-weight:600;text-align:center;width:220px;max-width:90vw;';
+  if(next){
+    var ul = next.unlockLevel || next.unlock || 0;
+    var name = next.name || next.id || 'theme';
+    var emoji = next.emoji || '🎨';
+    strip.innerHTML = emoji + ' Next theme: <b>' + name + '</b> at level ' + ul +
+                      ' · ' + completed + '/' + ul;
+  } else {
+    strip.innerHTML = '🎨 All themes unlocked!';
+  }
+  var anchors = [
+    document.getElementById('xFreeCoins'),
+    document.getElementById('weeklyEventBanner'),
+    document.querySelector('#screen-menu .menu-icon-row'),
+    document.querySelector('#screen-menu')
+  ].filter(Boolean);
+  if(anchors.length){
+    var a = anchors[0];
+    if(a.parentNode) a.parentNode.insertBefore(strip, a.nextSibling);
+    else a.appendChild(strip);
+  } else {
+    document.body.appendChild(strip);
+  }
+}
+function updateThemeProgressStrip(){
+  var s = document.getElementById('xThemeStrip');
+  if(!s) return;
+  s.parentNode.removeChild(s);
+  injectThemeStrip();
+}
+
+// ── DAILY GRANT (Season Pass +100 / Weekly Pass +50) ─────────────
+function grantPassDailyBonus(){
+  var s = G.st(); if(!s) return;
+  var today = new Date().toISOString().slice(0,10);
+  if(s.seasonPassUntil && Date.now() < s.seasonPassUntil &&
+     s.lastSeasonGrantDate !== today){
+    s.lastSeasonGrantDate = today;
+    s.coins = (s.coins || 0) + 100;
+    G.doSave();
+    xToast('🌟 Season Pass bonus: +100 🪙');
+  }
+  if(s.weeklyPassUntil && Date.now() < s.weeklyPassUntil &&
+     s.lastWeeklyGrantDate !== today){
+    s.lastWeeklyGrantDate = today;
+    s.coins = (s.coins || 0) + 50;
+    G.doSave();
+    xToast('🌟 Weekly Pass bonus: +50 🪙');
+  }
+  if(typeof updateAllUI === 'function') updateAllUI();
+}
+
+// ── SEASONAL_EVENTS (Oct Halloween / Dec Winter / Feb Spring) ────
+var SEASONAL_EVENTS = {
+  10: { id:'halloween', name:'Halloween', themeId:'pumpkin',
+        emoji:'🎃', bonusLevels:5,
+        banner:'🎃 Halloween Event — pumpkin theme + 5 bonus levels!' },
+  12: { id:'winter',    name:'Winter',    themeId:'frost',
+        emoji:'❄️', bonusLevels:5,
+        banner:'❄️ Winter Event — frost theme + 5 bonus levels!' },
+  2:  { id:'spring',    name:'Spring',    themeId:'bloom',
+        emoji:'🌸', bonusLevels:5,
+        banner:'🌸 Spring Event — bloom theme + 5 bonus levels!' }
+};
+function currentSeasonalEvent(){
+  var m = (new Date()).getMonth() + 1;
+  return SEASONAL_EVENTS[m] || null;
+}
+function injectSeasonalBanner(){
+  var ev = currentSeasonalEvent();
+  if(!ev) return;
+  if(document.getElementById('xSeasonalBanner')) return;
+  var b = document.createElement('div');
+  b.id = 'xSeasonalBanner';
+  b.textContent = ev.banner;
+  b.style.cssText =
+    'margin-top:0.55rem;padding:0.5rem 0.9rem;border-radius:14px;' +
+    'background:linear-gradient(135deg,#1a3a00,#0d1117);' +
+    'border:1px solid #58a6ff;color:#58a6ff;font-size:0.78rem;' +
+    'font-weight:700;text-align:center;width:220px;max-width:90vw;';
+  var anchors = [
+    document.getElementById('xThemeStrip'),
+    document.getElementById('xFreeCoins'),
+    document.getElementById('weeklyEventBanner'),
+    document.querySelector('#screen-menu')
+  ].filter(Boolean);
+  if(anchors.length){
+    var a = anchors[0];
+    if(a.parentNode) a.parentNode.insertBefore(b, a.nextSibling);
+    else a.appendChild(b);
+  }
+  if(ev.themeId){ G.setFlag('xtheme_owned_'+ev.themeId, '1'); }
 }
 
 // ── INJECT STARTER PACK MODAL ────────────────────────────────────
@@ -2858,6 +3096,9 @@ window.addEventListener('load',function(){
   setTimeout(function(){
     injectStarterModal();
     injectWeeklyBanner();
+    injectFreeCoinsBtn();
+    injectThemeStrip();
+    injectSeasonalBanner();
     injectContinueBtns();
     hookWinOverlay();
     hookNoLivesOverlay();
@@ -2865,6 +3106,7 @@ window.addEventListener('load',function(){
     injectSeasonPassShop();
     updateWeeklyBanner();
     updateSeasonBadges();
+    grantPassDailyBonus();
     patchValidProducts();
     injectRankCard();
   },900);

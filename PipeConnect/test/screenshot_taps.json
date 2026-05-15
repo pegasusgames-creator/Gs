@@ -1,0 +1,22 @@
+{
+  "_comment": "PipeConnect screenshot capture. Uses JS-based showScreen/loadLevel.",
+  "_readiness_expr": "typeof save !== 'undefined' && typeof loadLevel === 'function' && typeof showScreen === 'function'",
+
+  "_setup_taps": [
+    ["js", "(function(){try{var s={currentLevel:120,completedLevels:Array.from({length:118},function(_,i){return i;}),levelStars:(function(){var x={};for(var i=0;i<118;i++)x[i]=(i%4===0?3:(i%3===0?2:1));return x;})(),coins:247,lives:5,maxLives:5,lastLifeTime:Date.now(),removeAds:false,unlimitedLivesPermanent:false,unlimitedLivesExpiry:0,dailyChallengeDate:'',dailyChallengeStreak:7,soundEnabled:true,musicEnabled:false,activeTheme:'default',lastLevelProgress:null,hintPack:3,hintCount:3,seasonPassUntil:0,weeklyPassUntil:0,lastSeasonGrantDate:'',lastWeeklyGrantDate:''};Object.assign(save,s);if(typeof persist==='function')persist();if(typeof updateAllUI==='function')updateAllUI();}catch(e){}return 'seeded';})()", 400]
+  ],
+
+  "01_deep_gameplay":   [["js", "showScreen('game');setTimeout(function(){loadLevel(118);},200);'ok';", 2200]],
+  "02_early_gameplay":  [["js", "showScreen('game');setTimeout(function(){loadLevel(5);},200);'ok';", 2200]],
+  "03_level_complete":  [["js", "showScreen('game');setTimeout(function(){loadLevel(60);setTimeout(function(){var ov=document.getElementById('overlay-complete');if(ov){ov.classList.add('active');ov.style.display='flex';}},400);},200);'ok';", 2500]],
+  "04_missions_panel":  [["js", "showScreen('daily');if(typeof initDailyChallenge==='function')initDailyChallenge();'ok';", 2200]],
+  "05_stats":           [["js", "showScreen('stats');if(typeof renderStats==='function')renderStats();setTimeout(function(){if(typeof injectRankCard==='function')injectRankCard();},250);'ok';", 2200]],
+  "06_levels_grid":     [["js", "showScreen('levelselect');if(typeof renderLevelSelect==='function')renderLevelSelect();'ok';", 2200]],
+  "07_menu":            [],
+
+  "tablet_7_01_deep_gameplay":  [["js", "showScreen('game');setTimeout(function(){loadLevel(85);},200);'ok';", 2200]],
+  "tablet_7_02_early_gameplay": [["js", "showScreen('game');setTimeout(function(){loadLevel(28);},200);'ok';", 2200]],
+
+  "tablet_10_01_deep_gameplay": [["js", "showScreen('game');setTimeout(function(){loadLevel(140);},200);'ok';", 2200]],
+  "tablet_10_02_early_gameplay":[["js", "showScreen('themes');'ok';", 2000]]
+}

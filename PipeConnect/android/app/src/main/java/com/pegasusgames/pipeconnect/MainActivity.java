@@ -66,26 +66,25 @@ public class MainActivity extends Activity {
     // ── AppLovin MAX ──────────────────────────────────────────────────────────
     // Get SDK Key: dash.applovin.com → Account → Keys → SDK Key
     // Get Ad Unit IDs: dash.applovin.com → Monetize → Ad Units
-    private static final String MAX_SDK_KEY              = "ENTER_YOUR_APPLOVIN_SDK_KEY_HERE";
-    private static final String MAX_BANNER_UNIT_ID       = "ENTER_YOUR_MAX_BANNER_UNIT_ID";
-    private static final String MAX_INTERSTITIAL_UNIT_ID = "ENTER_YOUR_MAX_INTER_UNIT_ID";
-    private static final String MAX_REWARDED_UNIT_ID     = "ENTER_YOUR_MAX_REWARDED_UNIT_ID";
+    private static final String MAX_SDK_KEY              = ""; // TODO: paste SDK key once AppLovin is approved
+    private static final String MAX_BANNER_UNIT_ID       = ""; // TODO: paste once AppLovin is approved
+    private static final String MAX_INTERSTITIAL_UNIT_ID = ""; // TODO: paste once AppLovin is approved
+    private static final String MAX_REWARDED_UNIT_ID     = ""; // TODO: paste once AppLovin is approved
     // Auto-switch: uses AppLovin when SDK key is real, AdMob otherwise
     private static final boolean USE_APPLOVIN = !MAX_SDK_KEY.startsWith("ENTER_");
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     // Get from: apps.admob.com → Your App → Ad Units
-    private static final String ADMOB_BANNER_UNIT_ID       = "__ADMOB_BANNER_UNIT_PLACEHOLDER__";
-    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "__ADMOB_INTERSTITIAL_UNIT_PLACEHOLDER__";
-    private static final String ADMOB_REWARDED_UNIT_ID     = "__ADMOB_REWARDED_UNIT_PLACEHOLDER__";
+    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-3940256099942544/6300978111";
+    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
+    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-3940256099942544/5224354917";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
-        "coins_large", "coins_small", "five_lives", "hint_pack", "remove_ads",
+        "coins_small", "coins_medium", "coins_large", "coins_mega",
+        "five_lives", "hint_pack", "remove_ads",
         "season_pass_monthly", "starter_pack", "unlimited_lives_1h",
-        "unlimited_lives_forever"
-    
-    
+        "unlimited_lives_forever", "weekly_pass"
     ));
     // SKUs that are CONSUMABLE — must be consumed via consumeAsync after each
     // purchase, otherwise the user can buy once and never re-buy. Anything in
@@ -93,8 +92,8 @@ public class MainActivity extends Activity {
     // acknowledged via acknowledgePurchase. Both flows must complete within
     // Play's 3-day window or the purchase is auto-refunded.
     private static final Set<String> CONSUMABLE_PRODUCTS = new HashSet<>(Arrays.asList(
-        "coins_large", "coins_small", "five_lives", "hint_pack",
-        "starter_pack", "unlimited_lives_1h"
+        "coins_small", "coins_medium", "coins_large", "coins_mega",
+        "five_lives", "hint_pack", "starter_pack", "unlimited_lives_1h"
     ));
 
     private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
