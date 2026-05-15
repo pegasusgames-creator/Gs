@@ -1,0 +1,22 @@
+{
+  "_comment": "FlappyBird screenshot capture. Uses JS to switch panels and seed score.",
+  "_readiness_expr": "typeof showMenu === 'function' && typeof startGame === 'function' && typeof showShop === 'function'",
+
+  "_setup_taps": [
+    ["js", "(function(){try{_coins=247;localStorage.setItem('fb_coins',_coins);_bests={classic:42};localStorage.setItem('fb_bests',JSON.stringify(_bests));_scoreHistory=[{score:42,date:'05/12'},{score:38,date:'05/11'},{score:31,date:'05/10'},{score:25,date:'05/09'},{score:19,date:'05/08'}];localStorage.setItem('fb_history',JSON.stringify(_scoreHistory));_unlockedChars=['yellow','blue'];localStorage.setItem('fb_unlocked',JSON.stringify(_unlockedChars));}catch(e){}return 'seeded';})()", 400]
+  ],
+
+  "01_deep_gameplay":   [["js", "(function(){startGame();G.started=false;G.score=23;G.bird.x=W*0.28;G.bird.y=H*0.4;G.bird.vy=0;G.bird.angle=-0.2;G.pipes=[{x:W*0.55,gapY:H*0.18,scored:false,coinAnim:0},{x:W*0.95,gapY:H*0.45,scored:false,coinAnim:0}];G.spawnTimer=9999;G.pipeSpeed=0;if(typeof updateHUD==='function')updateHUD();document.getElementById('get-ready').style.display='none';})();'ok';", 400]],
+  "02_early_gameplay":  [["js", "(function(){startGame();G.started=false;G.score=5;G.bird.x=W*0.28;G.bird.y=H*0.5;G.bird.vy=0;G.bird.angle=0.1;G.pipes=[{x:W*0.7,gapY:H*0.32,scored:false,coinAnim:0}];G.spawnTimer=9999;G.pipeSpeed=0;if(typeof updateHUD==='function')updateHUD();document.getElementById('get-ready').style.display='none';})();'ok';", 400]],
+  "03_level_complete":  [["js", "(function(){G.running=false;G.score=42;document.getElementById('hud').style.display='none';document.getElementById('get-ready').style.display='none';document.getElementById('go-medal').textContent='🥇';document.getElementById('go-score').textContent='42';document.getElementById('go-newbest').style.display='block';document.getElementById('go-stats').innerHTML='<div class=\"go-box\"><div class=\"go-val\">42</div><div class=\"go-lbl\">High Score</div></div><div class=\"go-box\"><div class=\"go-val\">+14 🪙</div><div class=\"go-lbl\">Coins Earned</div></div>';document.getElementById('go-coin-earned').textContent='Gold Medal';document.getElementById('goPanel').classList.add('show');})();'ok';", 2200]],
+  "04_missions_panel":  [["js", "showShop();'ok';", 1800]],
+  "05_stats":           [["js", "showLeaderboard();'ok';", 1800]],
+  "06_levels_grid":     [["js", "(function(){startGame();G.started=false;G.score=12;G.bird.x=W*0.28;G.bird.y=H*0.58;G.bird.vy=0;G.bird.angle=0.35;G.pipes=[{x:W*0.4,gapY:H*0.5,scored:true,coinAnim:0},{x:W*0.85,gapY:H*0.18,scored:false,coinAnim:0}];G.spawnTimer=9999;G.pipeSpeed=0;if(typeof updateHUD==='function')updateHUD();document.getElementById('get-ready').style.display='none';})();'ok';", 400]],
+  "07_menu":            [["js", "showMenu();'ok';", 1500]],
+
+  "tablet_7_01_deep_gameplay":  [["js", "(function(){startGame();G.started=false;G.score=18;G.bird.x=W*0.28;G.bird.y=H*0.35;G.bird.vy=0;G.bird.angle=-0.3;G.pipes=[{x:W*0.55,gapY:H*0.18,scored:false,coinAnim:0},{x:W*0.95,gapY:H*0.45,scored:false,coinAnim:0}];G.spawnTimer=9999;G.pipeSpeed=0;if(typeof updateHUD==='function')updateHUD();document.getElementById('get-ready').style.display='none';})();'ok';", 400]],
+  "tablet_7_02_early_gameplay": [["js", "showMenu();'ok';", 1500]],
+
+  "tablet_10_01_deep_gameplay": [["js", "(function(){startGame();G.started=false;G.score=35;G.bird.x=W*0.28;G.bird.y=H*0.5;G.bird.vy=0;G.bird.angle=0;G.pipes=[{x:W*0.5,gapY:H*0.32,scored:false,coinAnim:0},{x:W*0.9,gapY:H*0.18,scored:false,coinAnim:0}];G.spawnTimer=9999;G.pipeSpeed=0;if(typeof updateHUD==='function')updateHUD();document.getElementById('get-ready').style.display='none';})();'ok';", 400]],
+  "tablet_10_02_early_gameplay":[["js", "showShop();'ok';", 1800]]
+}

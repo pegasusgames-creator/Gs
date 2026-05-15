@@ -601,14 +601,19 @@ function renderShop() {
     div.innerHTML = '<div class="si-icon">' + c.label + '</div><div class="si-body"><div class="si-title">' + id.charAt(0).toUpperCase() + id.slice(1) + ' Bird</div><div class="si-desc">' + (owned ? 'Unlocked!' : '🪙 ' + c.price + ' coins') + '</div></div><button class="si-btn ' + (owned ? 'owned' : 'gold') + '" onclick="_buyChar(\'' + id + '\',' + (c.price||0) + ')">' + (owned ? '✓ Owned' : '🪙 Buy') + '</button>';
     list.appendChild(div);
   });
-  [{icon:'🚫',title:'Remove Ads',desc:'Remove all ads permanently.',type:'iap',id:'remove_ads',label:'$2.99'},
-   {icon:'📺',title:'Watch Ad for Coins',desc:'Earn 20 coins instantly.',type:'ad',label:'Watch'},
+  [{icon:'🚫',title:'Remove Ads',     desc:'Remove all ads permanently.',type:'iap',id:'remove_ads',  label:'$2.99'},
+   {icon:'🪙',title:'100 Coins',      desc:'Small coin pack.',           type:'iap',id:'coins_small', label:'$0.99'},
+   {icon:'💵',title:'400 Coins',      desc:'Medium coin pack.',          type:'iap',id:'coins_medium',label:'$2.99'},
+   {icon:'💰',title:'800 Coins',      desc:'Large coin pack — great value.',type:'iap',id:'coins_large', label:'$4.99'},
+   {icon:'🏆',title:'2000 Coins',     desc:'Mega coin pack — best value.',type:'iap',id:'coins_mega',  label:'$9.99'},
+   {icon:'📺',title:'Watch Ad for Coins',desc:'Earn 20 coins instantly.',type:'ad', label:'Watch'},
   ].forEach(function(item) {
     var owned = item.id === 'remove_ads' && _adsRemoved;
     var div = document.createElement('div');
     div.className = 'shop-item';
     var cl = owned ? 'owned' : (item.type==='iap' ? 'iap' : 'gold');
-    div.innerHTML = '<div class="si-icon">' + item.icon + '</div><div class="si-body"><div class="si-title">' + item.title + '</div><div class="si-desc">' + item.desc + '</div></div><button class="si-btn ' + cl + '" onclick="' + (item.type==='iap' ? "_purchase('remove_ads')" : '_watchAd()') + '">' + (owned ? '✓ Owned' : item.label) + '</button>';
+    var clickHandler = item.type==='iap' ? ("_purchase('" + item.id + "')") : '_watchAd()';
+    div.innerHTML = '<div class="si-icon">' + item.icon + '</div><div class="si-body"><div class="si-title">' + item.title + '</div><div class="si-desc">' + item.desc + '</div></div><button class="si-btn ' + cl + '" onclick="' + clickHandler + '">' + (owned ? '✓ Owned' : item.label) + '</button>';
     list.appendChild(div);
   });
 }
@@ -638,14 +643,20 @@ function renderCoins() {
 function _purchase(id) { if (window.Android) Android.purchase(id); else showToast('IAP: ' + id); }
 function _watchAd() { if (window.Android) Android.showRewardedAd(); else { addCoins(20); showToast('+20 🪙 (test)'); } }
 window.onPurchaseComplete = function(id) {
-  if (id === 'remove_ads') {
-    _adsRemoved = true;
-    localStorage.setItem('fb_adsRemoved','1');
-    document.getElementById('remove-ads-btn').style.display = 'none';
-    if (window.Android) Android.hideBannerAd();
-    showToast('Ads removed! ✨');
-    renderShop();
+  switch(id){
+    case 'remove_ads':
+      _adsRemoved = true;
+      localStorage.setItem('fb_adsRemoved','1');
+      var rb = document.getElementById('remove-ads-btn'); if (rb) rb.style.display = 'none';
+      if (window.Android) Android.hideBannerAd();
+      showToast('Ads removed! ✨');
+      break;
+    case 'coins_small':  addCoins(100);  showToast('+100 🪙');  break;
+    case 'coins_medium': addCoins(400);  showToast('+400 🪙');  break;
+    case 'coins_large':  addCoins(800);  showToast('+800 🪙');  break;
+    case 'coins_mega':   addCoins(2000); showToast('+2000 🪙'); break;
   }
+  renderShop();
 };
 // ── IAP safety net (added by portfolio-wide IAP fix rollout) ─────
 // 1. Java's bridge calls window.onPurchaseSuccess; alias it to the
