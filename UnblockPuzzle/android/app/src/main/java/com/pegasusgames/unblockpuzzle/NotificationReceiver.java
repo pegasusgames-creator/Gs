@@ -1,4 +1,4 @@
-package com.pegasusgames.unblock;
+package com.pegasusgames.unblockpuzzle;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;

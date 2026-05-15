@@ -1,4 +1,4 @@
-package com.pegasusgames.unblock;
+package com.pegasusgames.unblockpuzzle;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -79,9 +79,9 @@ public class MainActivity extends Activity {
     // NOTE: these are stale IDs from a prior account (publisher 2759523698880843).
     // Replace with real IDs from the canonical Pegasus Games AdMob account
     // (publisher 5695494884863768) per RELEASE_HANDOFF.md before shipping.
-    private static final String ADMOB_BANNER_UNIT_ID       = "__ADMOB_BANNER_UNIT_PLACEHOLDER__";
-    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "__ADMOB_INTERSTITIAL_UNIT_PLACEHOLDER__";
-    private static final String ADMOB_REWARDED_UNIT_ID     = "__ADMOB_REWARDED_UNIT_PLACEHOLDER__";
+    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-3940256099942544/6300978111";
+    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
+    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-3940256099942544/5224354917";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
     // Paste the app's base64 RSA public key from:
@@ -91,11 +91,10 @@ public class MainActivity extends Activity {
     private static final String LICENSE_PUBLIC_KEY = "PASTE_LICENSE_KEY_FROM_PLAY_CONSOLE_MONETIZE_LICENSING";
 
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
-        "coins_large", "coins_small", "five_lives", "hint_pack", "remove_ads",
+        "coins_small", "coins_medium", "coins_large", "coins_mega",
+        "five_lives", "hint_pack", "remove_ads",
         "season_pass_monthly", "starter_pack", "unlimited_lives_1h",
-        "unlimited_lives_forever"
-    
-    
+        "unlimited_lives_forever", "weekly_pass"
     ));
     // SKUs that are CONSUMABLE — must be consumed via consumeAsync after each
     // purchase, otherwise the user can buy once and never re-buy. Anything in
@@ -103,8 +102,8 @@ public class MainActivity extends Activity {
     // acknowledged via acknowledgePurchase. Both flows must complete within
     // Play's 3-day window or the purchase is auto-refunded.
     private static final Set<String> CONSUMABLE_PRODUCTS = new HashSet<>(Arrays.asList(
-        "coins_large", "coins_small", "five_lives", "hint_pack",
-        "starter_pack", "unlimited_lives_1h"
+        "coins_small", "coins_medium", "coins_large", "coins_mega",
+        "five_lives", "hint_pack", "starter_pack", "unlimited_lives_1h"
     ));
 
     private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(

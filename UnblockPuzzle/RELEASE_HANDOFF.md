@@ -7,52 +7,60 @@ Each step has all values pre-filled — paste, don't type.
 
 ---
 
-## Step 1 — Create AdMob app entry under canonical Pegasus Games account (5 min)
+## ⚠️ CRITICAL: AdMob IDs are TEST IDs, not real
 
-> ⚠️ **The code currently has stale AdMob IDs from publisher
-> `2759523698880843` (an old account). The canonical Pegasus Games account
-> used by WaterSort is publisher `5695494884863768`. Swap to the canonical
-> account before publish.**
+The AAB at
+`UnblockPuzzle/android/app/build/outputs/bundle/release/app-release.aab`
+was built with **Google's official test AdMob IDs** so the app
+launches cleanly for screenshot capture and smoke-testing:
+
+- App ID         `ca-app-pub-3940256099942544~3347511713`
+- Banner         `ca-app-pub-3940256099942544/6300978111`
+- Interstitial   `ca-app-pub-3940256099942544/1033173712`
+- Rewarded       `ca-app-pub-3940256099942544/5224354917`
+
+**DO NOT upload this AAB to Play production.** Test ads pay nothing.
+Follow **Step 1** below to create real IDs, paste them in, then
+rebuild the AAB via **Step 6** before uploading.
+
+---
+
+## Step 1 — Create the AdMob app entry (5 min)
 
 URL: https://apps.admob.com/v2/apps/list
 
-Click **Add app** → choose **Android** → "No, the app isn't published yet"
-(switch to "Yes" once on Play Store).
+Click **Add app** → Android → "No, the app isn't published yet"
+(switch to "Yes" once the Play listing exists).
 
 Fill in:
 - **App name:** `Unblock Puzzle`
-- **App store:** Google Play (or "Not yet listed" if pre-publish)
-- **User metrics:** Yes / Yes / Yes (all enabled)
+- **App store:** Google Play (or Not yet listed if pre-publish)
+- **User metrics:** Yes / Yes / Yes (recommended for casual games)
 
-Click **Add**. AdMob shows you a new APPLICATION ID like
-`ca-app-pub-5695494884863768~XXXXXXXXXX`.
+Click **Add**. AdMob will show a new APPLICATION ID like
+`ca-app-pub-5695494884863768~XXXXXXXXXX`. **Copy that.** Then in
+`UnblockPuzzle/android/app/src/main/AndroidManifest.xml`, replace:
 
-**Copy it.** Paste into:
 ```
-UnblockPuzzle/android/app/src/main/AndroidManifest.xml
+ca-app-pub-3940256099942544~3347511713
 ```
-Replace `ca-app-pub-2759523698880843~3555759989` with the new APPLICATION ID.
 
-Then in AdMob, **Apps → Unblock Puzzle → Ad units → Add ad unit**, create three:
+with your new APPLICATION ID.
 
-| Name | Format |
+Create 3 ad units (Apps → Unblock Puzzle → Ad units → Add ad unit):
+
+| Name | Type |
 |---|---|
-| `unblockpuzzle_banner` | Banner |
-| `unblockpuzzle_interstitial` | Interstitial |
-| `unblockpuzzle_rewarded` | Rewarded |
+| `UnblockPuzzle_banner`        | Banner |
+| `UnblockPuzzle_interstitial`  | Interstitial |
+| `UnblockPuzzle_rewarded`      | Rewarded |
 
-Each gives an ad unit ID like `ca-app-pub-5695494884863768/XXXXXXXXXX`.
-Copy all three. Paste into:
-```
-UnblockPuzzle/android/app/src/main/java/com/pegasusgames/unblock/MainActivity.java
-```
-Replace these constants (currently still pointing at the old publisher
-`2759523698880843`):
-```java
-ADMOB_BANNER_UNIT_ID       = "<paste banner ID>";
-ADMOB_INTERSTITIAL_UNIT_ID = "<paste interstitial ID>";
-ADMOB_REWARDED_UNIT_ID     = "<paste rewarded ID>";
-```
+Each gives an ad unit ID like `ca-app-pub-…/XXXXXXXXXX`. Paste them
+into
+`UnblockPuzzle/android/app/src/main/java/com/pegasusgames/unblockpuzzle/MainActivity.java`,
+replacing the three `ca-app-pub-3940256099942544/…` test unit IDs
+(`ADMOB_BANNER_UNIT_ID`, `ADMOB_INTERSTITIAL_UNIT_ID`,
+`ADMOB_REWARDED_UNIT_ID`).
 
 ---
 
@@ -71,7 +79,7 @@ Click **Create app**. You're now on the app's dashboard.
 
 ---
 
-## Step 3 — Create the 9 IAP products (10 min)
+## Step 3 — Create the 12 IAP products (10 min)
 
 Play Console → Unblock Puzzle → **Monetize → Products → In-app products**.
 
@@ -80,35 +88,18 @@ Click **Create product** for each row below. Activate after creating
 
 | Product ID | Type | Name | Default price |
 |---|---|---|---|
-| `unblockpuzzle_remove_ads` | Managed | Remove Ads | $1.99 |
-| `unblockpuzzle_coins_small` | Managed | 100 Coins | $0.99 |
-| `unblockpuzzle_coins_medium` | Managed | 500 Coins | $3.99 |
-| `unblockpuzzle_coins_large` | Managed | 1200 Coins | $7.99 |
-| `unblockpuzzle_coins_huge` | Managed | 3000 Coins | $14.99 |
-| `unblockpuzzle_starter_pack` | Managed | Starter Pack | $0.99 |
-| `unblockpuzzle_premium_themes` | Managed | Premium Themes | $2.99 |
-| `unblockpuzzle_hint_pack` | Managed | Hint Pack | $1.99 |
-| `unblockpuzzle_season_pass_monthly` | Subscription | Monthly Pass | $1.99/mo |
-
----
-
-## Step 3.5 — Paste the IAP license public key (1 min) **REQUIRED**
-
-Play Console → Unblock Puzzle → **Monetize → Monetization setup → Licensing**.
-
-Copy the **Base64-encoded RSA public key** (one long ~390-char string).
-
-Paste into:
-```
-UnblockPuzzle/android/app/src/main/java/com/pegasusgames/unblock/MainActivity.java
-```
-Replace the constant:
-```java
-private static final String LICENSE_PUBLIC_KEY = "PASTE_LICENSE_KEY_FROM_PLAY_CONSOLE_MONETIZE_LICENSING";
-```
-…with the real key. Without this, IAP signature verification is skipped
-and the app is vulnerable to IAP-faker tools (Lucky Patcher, etc.). The
-build script `pre_publish_check.py` blocks the build until this is real.
+| `remove_ads` | Managed | Remove Ads | $2.99 |
+| `coins_small` | Managed | 100 Coins | $0.99 |
+| `coins_medium` | Managed | 400 Coins | $2.99 |
+| `coins_large` | Managed | 800 Coins | $4.99 |
+| `coins_mega` | Managed | 2000 Coins | $9.99 |
+| `five_lives` | Managed | 5 Lives | $0.99 |
+| `unlimited_lives_1h` | Managed | 1hr Unlimited | $1.99 |
+| `unlimited_lives_forever` | Managed | Unlimited Lives | $4.99 |
+| `hint_pack` | Managed | Hint Pack | $1.99 |
+| `starter_pack` | Managed | Starter Pack | $0.99 |
+| `season_pass_monthly` | Subscription | Season Pass | $4.99/mo |
+| `weekly_pass` | Subscription | Weekly Pass | $1.99/wk |
 
 ---
 
@@ -120,22 +111,24 @@ Play Console → Unblock Puzzle → **Grow → Main store listing**.
 ```
 Unblock Puzzle
 ```
+The app name is shared across ALL locales (English globally per Pegasus
+Games policy — see TRANSLATIONS.md §3).
 
-**Short description (80 chars):**
+**Short description (English baseline, 80 chars):**
 ```
 Slide blocks to free the red piece! Classic addictive sliding puzzle.
 ```
 
-**Full description:**
+**Full description (English baseline):**
 Open `UnblockPuzzle/metadata/en-US/full_description.txt` and paste the
 entire contents.
 
 **Graphics:**
 - App icon → upload `UnblockPuzzle/store/icon_512_playstore.png`
 - Feature graphic → upload `UnblockPuzzle/store/feature_graphic_1024x500.png`
-- Phone screenshots → upload all 3 files in `UnblockPuzzle/store/screenshots/phone/`
-- 7-inch tablet → upload 1 file(s) in `UnblockPuzzle/store/screenshots/tablet_7/`
-- 10-inch tablet → upload 1 file(s) in `UnblockPuzzle/store/screenshots/tablet_10/`
+- Phone screenshots → upload all 7 files in `UnblockPuzzle/store/screenshots/phone/`
+- 7-inch tablet → upload 2 file(s) in `UnblockPuzzle/store/screenshots/tablet_7/`
+- 10-inch tablet → upload 2 file(s) in `UnblockPuzzle/store/screenshots/tablet_10/`
 
 If Play Console rejects 2 tablet screenshots (Google requires min 4),
 open `UnblockPuzzle/wrap_tablet_screenshots.py`, uncomment the lines under
@@ -144,6 +137,47 @@ open `UnblockPuzzle/wrap_tablet_screenshots.py`, uncomment the lines under
 **Categorization:**
 - App category: `GAME_PUZZLE`
 - Tags: pull from `UnblockPuzzle/metadata/en-US/keywords.txt`
+
+### 4.1 — Add localizations (10 min, repetitive but mechanical)
+
+Pegasus Games ships in 11 locales. After saving the English baseline
+above, scroll up to **Manage translations → Add your own translations**.
+
+Add these 10 locales one at a time:
+
+| Locale | Source folder |
+|---|---|
+| Arabic | `UnblockPuzzle/metadata/ar/` |
+| German (Germany) | `UnblockPuzzle/metadata/de-DE/` |
+| Spanish (Latin America) | `UnblockPuzzle/metadata/es-419/` |
+| French (France) | `UnblockPuzzle/metadata/fr-FR/` |
+| Hindi (India) | `UnblockPuzzle/metadata/hi-IN/` |
+| Indonesian | `UnblockPuzzle/metadata/id/` |
+| Italian (Italy) | `UnblockPuzzle/metadata/it-IT/` |
+| Japanese (Japan) | `UnblockPuzzle/metadata/ja-JP/` |
+| Portuguese (Brazil) | `UnblockPuzzle/metadata/pt-BR/` |
+| Turkish (Turkey) | `UnblockPuzzle/metadata/tr-TR/` |
+| Ukrainian | `UnblockPuzzle/metadata/uk/` |
+| Chinese (Simplified) | `UnblockPuzzle/metadata/zh-CN/` |
+
+For each locale:
+1. Click **Add language**, pick from the list above
+2. Paste the contents of `<locale>/short_description.txt` into "Short description"
+3. Paste `<locale>/full_description.txt` into "Full description"
+4. Leave the title field empty or paste the English title verbatim
+   (per TRANSLATIONS.md §3 — title stays English globally)
+5. Reuse the same icon, feature graphic, and screenshots — they're
+   not localized (English text in screenshots is fine; users in
+   non-English markets are accustomed to it on Play Store)
+6. Save
+
+If any locale's `*.rejected` file exists in metadata/, that means
+machine translation overflowed character limits. Edit the file down
+to fit, rename to remove `.rejected`, then upload.
+
+For Kids apps: only 4 locales required (en-US, es-419, pt-BR, fr-FR).
+Each MUST have been reviewed by a native speaker — verify no
+"# KIDS APP — REVIEW BY NATIVE SPEAKER" header remains in any file.
 
 ---
 
@@ -206,7 +240,7 @@ Now that Step 1 gave you real AdMob IDs and you've pasted them into the
 manifest and MainActivity.java, rebuild:
 
 ```
-python3 scripts/build_release.py UnblockPuzzle
+python3 build_release.py UnblockPuzzle
 ```
 
 Output AAB will be at:
