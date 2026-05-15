@@ -23,15 +23,13 @@
             android:resource="@xml/gma_ad_services_config"
             tools:replace="android:resource" />
 
-        <!-- AppLovin MAX SDK key — get from AppLovin dashboard → Account → General -->
-        <meta-data
-            android:name="applovin.sdk.key"
-            android:value="ENTER_YOUR_APPLOVIN_SDK_KEY_HERE" />
+        <!-- AppLovin disabled until SDK key is approved. Re-add the
+             applovin.sdk.key meta-data with the real key to re-enable. -->
 
-        <!-- AdMob App ID — kept for AppLovin MAX mediation adapter -->
+        <!-- AdMob App ID — kept for AppLovin MAX mediation adapter. -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="__ADMOB_APP_ID_PLACEHOLDER__"/>
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
 
         <activity
             android:name=".MainActivity"

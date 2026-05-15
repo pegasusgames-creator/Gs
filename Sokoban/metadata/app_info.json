@@ -1,12 +1,12 @@
 {
-  "category_google": "LIFESTYLE",
-  "category_apple_primary": "LIFESTYLE",
-  "category_apple_subcategory": "",
+  "category_google": "GAME_PUZZLE",
+  "category_apple_primary": "GAMES",
+  "category_apple_subcategory": "PUZZLE",
   "contains_ads": true,
   "contains_iap": true,
   "target_audience_min_age": 13,
-  "support_url": "https://pegasusgames.example/support",
-  "marketing_url": "",
+  "support_url": "https://pegasusgames-creator.github.io/",
+  "marketing_url": "https://pegasusgames-creator.github.io/",
   "copyright": "© 2026 Pegasus Games",
   "package_name": "com.pegasusgames.sokoban",
   "upload_key_sha1": "85:86:F3:FB:DE:EF:F8:A8:46:EF:19:40:D9:CF:D4:9D:D4:5F:0A:CB"

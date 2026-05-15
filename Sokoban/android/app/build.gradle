@@ -21,8 +21,8 @@ android {
         applicationId "com.pegasusgames.sokoban"
         minSdk 23
         targetSdk 36
-        versionCode 11
-        versionName "1.5.1"
+        versionCode 12
+        versionName "1.5.2"
     }
 
     signingConfigs {
@@ -41,7 +41,6 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
-            applicationIdSuffix ".debug"
             debuggable true
         }
     }

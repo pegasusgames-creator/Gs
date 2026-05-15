@@ -46,9 +46,9 @@ public class MainActivity extends Activity {
     // -------------------------------------------------------
     // AppLovin MAX ad unit IDs — create in MAX dashboard
     // -------------------------------------------------------
-    private static final String BANNER_AD_UNIT_ID       = "ENTER_BANNER_AD_UNIT_ID";
-    private static final String INTERSTITIAL_AD_UNIT_ID = "ENTER_INTERSTITIAL_AD_UNIT_ID";
-    private static final String REWARDED_AD_UNIT_ID     = "ENTER_REWARDED_AD_UNIT_ID";
+    private static final String BANNER_AD_UNIT_ID       = ""; // TODO: paste once AppLovin is approved
+    private static final String INTERSTITIAL_AD_UNIT_ID = ""; // TODO: paste once AppLovin is approved
+    private static final String REWARDED_AD_UNIT_ID     = ""; // TODO: paste once AppLovin is approved
 
     // WebView background colour — Sunset Orange theme
     private static final int WEBVIEW_BG_COLOR = 0xFF1a1400;
@@ -57,12 +57,13 @@ public class MainActivity extends Activity {
     // IAP PRODUCT IDs — must match Google Play Console
     // -------------------------------------------------------
     private static final String PRODUCT_REMOVE_ADS = "remove_ads";
+    private static final String MAX_SDK_KEY = ""; // TODO: paste SDK key once AppLovin is approved
     private static final Set<String> VALID_PRODUCTS =
         new HashSet<>(Arrays.asList(
-        "coins_large", "coins_small", "five_lives", "hint_pack", "remove_ads",
+        "coins_small", "coins_medium", "coins_large", "coins_mega",
+        "five_lives", "hint_pack", "remove_ads",
         "season_pass_monthly", "starter_pack", "unlimited_lives_1h",
-        "unlimited_lives_forever"
-    
+        "unlimited_lives_forever", "weekly_pass"
     ));
     // SKUs that are CONSUMABLE — must be consumed via consumeAsync after each
     // purchase, otherwise the user can buy once and never re-buy. Anything in
@@ -70,8 +71,8 @@ public class MainActivity extends Activity {
     // acknowledged via acknowledgePurchase. Both flows must complete within
     // Play's 3-day window or the purchase is auto-refunded.
     private static final Set<String> CONSUMABLE_PRODUCTS = new HashSet<>(Arrays.asList(
-        "coins_large", "coins_small", "five_lives", "hint_pack",
-        "starter_pack", "unlimited_lives_1h"
+        "coins_small", "coins_medium", "coins_large", "coins_mega",
+        "five_lives", "hint_pack", "starter_pack", "unlimited_lives_1h"
     ));
 
 
@@ -138,17 +139,19 @@ public class MainActivity extends Activity {
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        // Init AppLovin MAX
-        AppLovinSdkInitializationConfiguration initConfig =
-            AppLovinSdkInitializationConfiguration.builder("ENTER_YOUR_APPLOVIN_SDK_KEY_HERE", this)
-                .setMediationProvider(AppLovinMediationProvider.MAX)
-                .build();
-        AppLovinSdk.getInstance(this).initialize(initConfig, sdkConfig -> runOnUiThread(() -> {
-            runOnUiThread(() -> bannerAd.startAutoRefresh());
-            bannerAd.loadAd();
-            setupInterstitial();
-            setupRewarded();
-        }));
+        // Init AppLovin MAX (skipped until SDK key is provided).
+        if (!MAX_SDK_KEY.isEmpty()) {
+            AppLovinSdkInitializationConfiguration initConfig =
+                AppLovinSdkInitializationConfiguration.builder(MAX_SDK_KEY, this)
+                    .setMediationProvider(AppLovinMediationProvider.MAX)
+                    .build();
+            AppLovinSdk.getInstance(this).initialize(initConfig, sdkConfig -> runOnUiThread(() -> {
+                runOnUiThread(() -> bannerAd.startAutoRefresh());
+                bannerAd.loadAd();
+                setupInterstitial();
+                setupRewarded();
+            }));
+        }
 
         setupBilling();
     }

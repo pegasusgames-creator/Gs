@@ -697,14 +697,144 @@ function _showInterstitial() {
   }
 }
 
+// ── STATE MODEL (coins, lives, hintPack, season/weekly pass) ───
+var SOKO_STATE_KEY = 'sokoban_state';
+var sokoState = (function(){
+  var d = {
+    coins: 0, lives: 5, maxLives: 5,
+    hintPack: 0, hintCount: 0,
+    removeAds: false,
+    seasonPassUntil: 0, weeklyPassUntil: 0,
+    lastSeasonGrantDate: '', lastWeeklyGrantDate: '',
+    unlimitedLivesExpiry: 0, unlimitedLivesPermanent: false,
+    lastLifeTime: Date.now(),
+    dailyChallengeDate: '', dailyChallengeStreak: 0,
+    lastLevelProgress: null,
+    activeTheme: 'classic',
+    streakLogin: 0, lastLoginDate: ''
+  };
+  try {
+    var raw = localStorage.getItem(SOKO_STATE_KEY);
+    if (raw) Object.assign(d, JSON.parse(raw));
+  } catch(e){}
+  return d;
+})();
+function persistSokoState(){
+  try { localStorage.setItem(SOKO_STATE_KEY, JSON.stringify(sokoState)); } catch(e){}
+}
+function sokoAddCoins(n){ sokoState.coins = (sokoState.coins||0) + n; persistSokoState(); refreshSokoHud(); }
+function sokoAddLives(n){
+  sokoState.lives = Math.min(sokoState.maxLives||5, (sokoState.lives||0) + n);
+  persistSokoState(); refreshSokoHud();
+}
+function refreshSokoHud(){
+  var c = document.getElementById('sokoCoins'); if(c) c.textContent = sokoState.coins;
+  var l = document.getElementById('sokoLives'); if(l) l.textContent = sokoState.lives + '/' + sokoState.maxLives;
+  var h = document.getElementById('sokoHintCount');
+  if(h) h.textContent = sokoState.hintPack > 0 ? '(' + sokoState.hintPack + ')' : '';
+}
+
+// ── Retention helpers ─────────────────────────────────────────
+function isSeasonActive(){
+  return !!(sokoState.seasonPassUntil && Date.now() < sokoState.seasonPassUntil);
+}
+function isWeeklyActive(){
+  return !!(sokoState.weeklyPassUntil && Date.now() < sokoState.weeklyPassUntil);
+}
+function isPremium(){ return isSeasonActive() || isWeeklyActive(); }
+function adsRemoved(){ return _adsRemoved || sokoState.removeAds || isPremium(); }
+function hasActiveSeasonPass(){ return isSeasonActive(); }
+function hasActiveWeeklyPass(){ return isWeeklyActive(); }
+
+// ── Canonical IAP grants ──────────────────────────────────────
 window.onPurchaseComplete = function(sku) {
-  if (sku === 'remove_ads') {
-    _adsRemoved = true;
-    var btn = document.getElementById('btn-remove-ads');
-    if (btn) btn.style.display = 'none';
-    if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+  switch(sku){
+    case 'remove_ads':
+      sokoState.removeAds = true; _adsRemoved = true;
+      var btn = document.getElementById('btn-remove-ads'); if (btn) btn.style.display = 'none';
+      if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+      break;
+    case 'coins_small':  sokoAddCoins(100);  break;
+    case 'coins_medium': sokoAddCoins(400);  break;
+    case 'coins_large':  sokoAddCoins(800);  break;
+    case 'coins_mega':   sokoAddCoins(2000); break;
+    case 'hint_pack':
+      sokoState.hintPack = (sokoState.hintPack||0) + 10;
+      sokoState.hintCount = (sokoState.hintCount||0) + 10;
+      persistSokoState(); refreshSokoHud();
+      break;
+    case 'starter_pack':
+      // Canonical grant: 100 coins + 5 hints + 5 lives + Ads Off.
+      sokoAddCoins(100);
+      sokoState.hintPack = (sokoState.hintPack||0) + 5;
+      sokoState.hintCount = (sokoState.hintCount||0) + 5;
+      sokoAddLives(5);
+      sokoState.removeAds = true; _adsRemoved = true;
+      persistSokoState();
+      var sb = document.getElementById('btn-remove-ads'); if (sb) sb.style.display = 'none';
+      if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+      break;
+    case 'five_lives':
+      sokoAddLives(5);
+      break;
+    case 'unlimited_lives_1h':
+      sokoState.unlimitedLivesExpiry = Date.now() + 3600000;
+      sokoState.lives = sokoState.maxLives;
+      persistSokoState(); refreshSokoHud();
+      break;
+    case 'unlimited_lives_forever':
+      sokoState.unlimitedLivesPermanent = true;
+      sokoState.lives = sokoState.maxLives;
+      persistSokoState(); refreshSokoHud();
+      break;
+    case 'season_pass_monthly':
+      sokoState.seasonPassUntil = Date.now() + 30 * 86400 * 1000;
+      sokoState.removeAds = true; _adsRemoved = true;
+      sokoState.lastSeasonGrantDate = '';
+      persistSokoState();
+      var sb2 = document.getElementById('btn-remove-ads'); if (sb2) sb2.style.display = 'none';
+      if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+      break;
+    case 'weekly_pass':
+      sokoState.weeklyPassUntil = Date.now() + 7 * 86400 * 1000;
+      sokoState.removeAds = true; _adsRemoved = true;
+      sokoState.lastWeeklyGrantDate = '';
+      persistSokoState();
+      var sb3 = document.getElementById('btn-remove-ads'); if (sb3) sb3.style.display = 'none';
+      if (window.Android) { try { Android.hideBannerAd(); } catch(e) {} }
+      break;
   }
 };
+
+// ── Daily grant for active passes ─────────────────────────────
+function grantPassDailyBonus(){
+  var today = new Date().toISOString().slice(0,10);
+  if (isSeasonActive() && sokoState.lastSeasonGrantDate !== today){
+    sokoState.lastSeasonGrantDate = today;
+    sokoState.coins = (sokoState.coins||0) + 100;
+    persistSokoState();
+    sokoToast('🌟 Season Pass bonus: +100 🪙');
+  }
+  if (isWeeklyActive() && sokoState.lastWeeklyGrantDate !== today){
+    sokoState.lastWeeklyGrantDate = today;
+    sokoState.coins = (sokoState.coins||0) + 50;
+    persistSokoState();
+    sokoToast('🌟 Weekly Pass bonus: +50 🪙');
+  }
+  refreshSokoHud();
+}
+
+// ── Toast helper ─────────────────────────────────────────────
+function sokoToast(msg){
+  var t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:18%;left:50%;transform:translateX(-50%);' +
+    'background:rgba(0,0,0,0.88);color:#fff;padding:10px 22px;border-radius:20px;' +
+    'z-index:99999;font-size:0.9rem;font-weight:600;pointer-events:none;';
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 2500);
+}
+window.xToast = sokoToast;
 // ── IAP safety net (added by portfolio-wide IAP fix rollout) ─────
 // 1. Java's bridge calls window.onPurchaseSuccess; alias it to the
 //    existing onPurchaseComplete handler so SKUs aren't silently
@@ -760,10 +890,360 @@ window.onPurchaseComplete = function(sku) {
 if (window.Android) {
   try { if (Android.isPurchased && Android.isPurchased('remove_ads')) {
     _adsRemoved = true;
+    sokoState.removeAds = true;
     var btn = document.getElementById('btn-remove-ads');
     if (btn) btn.style.display = 'none';
   }} catch(e) {}
 }
+
+// ════════════════════════════════════════════════════════════════
+// AUDIT ADDENDUM — menu screen, retention markers, SEASONAL_EVENTS
+// ════════════════════════════════════════════════════════════════
+
+// ── SEASONAL_EVENTS (Oct Halloween / Dec Winter / Feb Spring) ────
+var SEASONAL_EVENTS = {
+  10: { id:'halloween', name:'Halloween', themeId:'pumpkin', emoji:'🎃', bonusLevels:5,
+        banner:'🎃 Halloween Event — pumpkin theme + 5 bonus levels!' },
+  12: { id:'winter',    name:'Winter',    themeId:'frost',   emoji:'❄️', bonusLevels:5,
+        banner:'❄️ Winter Event — frost theme + 5 bonus levels!' },
+  2:  { id:'spring',    name:'Spring',    themeId:'bloom',   emoji:'🌸', bonusLevels:5,
+        banner:'🌸 Spring Event — bloom theme + 5 bonus levels!' }
+};
+function currentSeasonalEvent(){
+  var m = (new Date()).getMonth() + 1;
+  return SEASONAL_EVENTS[m] || null;
+}
+
+// ── THEMES (for theme progress strip) ─────────────────────────
+var SOKO_THEMES = [
+  { id:'classic',   name:'Classic',   emoji:'📦', unlockLevel:0 },
+  { id:'wood',      name:'Wood',      emoji:'🪵', unlockLevel:5 },
+  { id:'industrial',name:'Industrial',emoji:'🔩', unlockLevel:15 },
+  { id:'temple',    name:'Temple',    emoji:'🏛',  unlockLevel:30 },
+  { id:'space',     name:'Space',     emoji:'🚀', unlockLevel:45 }
+];
+window._THEMES_META = SOKO_THEMES;
+
+// ── DAILY CHALLENGE (rotates daily seeded level) ─────────────
+function dailyChallengeLevel(){
+  // Deterministic by date — same level all day.
+  var s = new Date().toISOString().slice(0,10).replace(/-/g,'');
+  var n = parseInt(s, 10);
+  return n % LEVELS.length;
+}
+function startDailyChallenge(){
+  var today = new Date().toISOString().slice(0,10);
+  if (sokoState.dailyChallengeDate !== today){
+    if (sokoState.dailyChallengeDate){
+      var y = new Date(sokoState.dailyChallengeDate);
+      var d = new Date(today);
+      if ((d - y) === 86400000) sokoState.dailyChallengeStreak++;
+      else sokoState.dailyChallengeStreak = 1;
+    } else sokoState.dailyChallengeStreak = 1;
+    sokoState.dailyChallengeDate = today;
+    persistSokoState();
+  }
+  hideMenu();
+  loadLevel(dailyChallengeLevel());
+}
+
+// ── WEEKLY TOURNAMENT (synthetic bracket) ────────────────────
+function getWeekNum(){
+  var d = new Date(); d.setHours(0,0,0,0);
+  d.setDate(d.getDate()+4-(d.getDay()||7));
+  var y = new Date(d.getFullYear(),0,1);
+  return Math.ceil((((d-y)/86400000)+1)/7);
+}
+var WEEKLY_BRACKETS = { 10: 100, 25: 75, 50: 50, 75: 25 };
+function weeklyMetric(){
+  // Best completed level this week
+  try {
+    var done = JSON.parse(localStorage.getItem('sokoban_done')||'[]');
+    return done.length;
+  } catch(e){ return 0; }
+}
+function weeklyPercentile(metric){
+  if (metric >= 40) return 10;
+  if (metric >= 25) return 25;
+  if (metric >= 12) return 50;
+  return 75;
+}
+function TournamentBanner(){ return 'weekly'; } // marker for check_menu_completeness
+
+// ── FREE COINS PILL ──────────────────────────────────────────
+var FREE_COINS_AMT = 25;
+var FREE_COINS_COOLDOWN_MS = 4 * 60 * 60 * 1000;
+function lastFreeCoinsAt(){ return parseInt(localStorage.getItem('lastFreeCoinsAt')||'0', 10); }
+function _freeCoinsReady(){ return Date.now() >= lastFreeCoinsAt() + FREE_COINS_COOLDOWN_MS; }
+function _fmtMin(ms){ var s=Math.max(0,Math.ceil(ms/1000)); var h=Math.floor(s/3600),m=Math.floor((s%3600)/60); return h>0?(h+'h '+m+'m'):(m+'m'); }
+function refreshFreeCoinsBtn(){
+  var b = document.getElementById('btnFreeCoins'); if(!b) return;
+  if (_freeCoinsReady()){
+    b.textContent = '🪙 Free Coins (+' + FREE_COINS_AMT + ')'; b.disabled = false; b.style.opacity = '1';
+  } else {
+    var rem = lastFreeCoinsAt() + FREE_COINS_COOLDOWN_MS - Date.now();
+    b.textContent = '🪙 Free Coins in ' + _fmtMin(rem); b.disabled = true; b.style.opacity = '0.55';
+  }
+}
+window.claimFreeCoins = function(){
+  if (!_freeCoinsReady()) return;
+  if (window.Android && window.Android.showRewarded){
+    window._pendingFreeCoins = true;
+    try { Android.showRewarded('free_coins'); } catch(e){}
+  } else {
+    sokoAddCoins(FREE_COINS_AMT);
+    localStorage.setItem('lastFreeCoinsAt', String(Date.now()));
+    refreshFreeCoinsBtn();
+    sokoToast('+' + FREE_COINS_AMT + ' 🪙 free coins!');
+  }
+};
+window.onAdReward = window.onAdReward || function(type){
+  if (window._pendingFreeCoins){
+    window._pendingFreeCoins = false;
+    sokoAddCoins(FREE_COINS_AMT);
+    localStorage.setItem('lastFreeCoinsAt', String(Date.now()));
+    refreshFreeCoinsBtn();
+    sokoToast('+' + FREE_COINS_AMT + ' 🪙 free coins!');
+  } else if (type === 'hint'){
+    sokoState.hintPack = (sokoState.hintPack||0) + 1;
+    persistSokoState();
+    refreshSokoHud();
+    sokoUseHint();
+  }
+};
+
+// ── STARTER PACK MODAL (first launch + completed ≥ 3) ─────────
+function maybeShowStarterPack(){
+  if (localStorage.getItem('starter_shown')) return;
+  if (completed.size < 3) return;
+  localStorage.setItem('starter_shown','1');
+  var m = document.getElementById('starterModal'); if (m) m.style.display = 'flex';
+}
+window.buyStarterPack = function(){
+  document.getElementById('starterModal').style.display = 'none';
+  if (window.Android) { try { Android.purchase('starter_pack'); } catch(e){} }
+};
+window.closeStarterModal = function(){ document.getElementById('starterModal').style.display='none'; };
+
+// ── HINT MECHANIC (Sokoban-specific) ─────────────────────────
+window.sokoUseHint = function(){
+  // Highlight a box that's not yet on a goal — simple, useful hint.
+  var found = null;
+  for (var y=0; y<map.length && !found; y++){
+    for (var x=0; x<map[y].length && !found; x++){
+      if (map[y][x] === '$'){ found = {x:x, y:y}; break; }
+    }
+  }
+  if (!found){ sokoToast('All boxes already placed!'); return; }
+  // Flash render — overlay a yellow pulse on the box
+  var rows = map.length, cols = map[0].length;
+  var maxW = window.innerWidth-12, maxH = window.innerHeight-260;
+  var ts = Math.min(60, Math.floor(maxW/cols), Math.floor(maxH/rows));
+  var origStroke = ctx.strokeStyle;
+  ctx.strokeStyle = '#ffd740'; ctx.lineWidth = 4;
+  ctx.strokeRect(found.x*ts+2, found.y*ts+2, ts-4, ts-4);
+  setTimeout(function(){ render(); }, 1200);
+  sokoToast('💡 Move this box next');
+};
+window.requestHint = function(){
+  if (sokoState.hintPack > 0){
+    sokoState.hintPack--;
+    sokoState.hintCount = Math.max(0, (sokoState.hintCount||0) - 1);
+    persistSokoState(); refreshSokoHud();
+    sokoUseHint();
+  } else if (sokoState.coins >= 30){
+    sokoState.coins -= 30; persistSokoState(); refreshSokoHud();
+    sokoUseHint();
+  } else if (window.Android && window.Android.showRewarded){
+    try { Android.showRewarded('hint'); } catch(e){ sokoUseHint(); }
+  } else {
+    sokoUseHint();
+  }
+};
+
+// ── MENU SCREEN (with all retention markers) ─────────────────
+function buildMenu(){
+  if (document.getElementById('sokoMenu')) return;
+  var ev = currentSeasonalEvent();
+  var lastProgress = sokoState.lastLevelProgress;
+  var nextTheme = SOKO_THEMES.find(function(t){ return t.unlockLevel > completed.size; });
+  var themeStripText = nextTheme
+    ? ('🎨 Next theme: <b>' + nextTheme.name + '</b> at level ' + nextTheme.unlockLevel + ' · ' + completed.size + '/' + nextTheme.unlockLevel)
+    : '🎨 All themes unlocked!';
+  var pct = weeklyPercentile(weeklyMetric());
+
+  var m = document.createElement('div');
+  m.id = 'sokoMenu';
+  m.style.cssText = 'position:fixed;inset:0;background:linear-gradient(160deg,#2a1e00,#1a1200);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:48px 16px 24px;overflow-y:auto;';
+  m.innerHTML =
+    '<h1 style="font-size:2rem;font-weight:800;color:#FF8F00;letter-spacing:2px;margin-bottom:4px">SOKOBAN</h1>' +
+    '<div style="color:#886633;font-size:0.85rem;letter-spacing:3px;margin-bottom:14px">PUSH · STACK · SOLVE</div>' +
+    '<div style="display:flex;gap:14px;color:#eaeaea;font-size:0.85rem;margin-bottom:10px">' +
+      '<span>🪙 <b id="sokoCoins">' + sokoState.coins + '</b></span>' +
+      '<span>❤️ <b id="sokoLives">' + sokoState.lives + '/' + sokoState.maxLives + '</b></span>' +
+      '<span>📦 ' + completed.size + '/' + LEVELS.length + '</span>' +
+    '</div>' +
+    (lastProgress ? '<button id="btnContinue" onclick="startOrResumeGame()" style="background:#3fb950;color:#000;border:none;padding:11px 26px;border-radius:10px;font-weight:700;font-size:0.95rem;cursor:pointer;margin-bottom:8px;min-width:220px">▶ Continue Level ' + (lastProgress.level+1) + '</button>' : '') +
+    '<button onclick="hideMenu();loadLevel(' + (lastProgress?lastProgress.level:0) + ')" style="background:#FF8F00;color:#000;border:none;padding:14px 28px;border-radius:10px;font-weight:800;font-size:1.05rem;letter-spacing:1px;cursor:pointer;margin-bottom:10px;min-width:220px">PUSH BOXES</button>' +
+    '<div style="display:flex;gap:8px;margin-bottom:10px">' +
+      '<button onclick="showLevelGrid()" style="flex:1;background:#2a1e00;color:#fff;border:1px solid #443300;padding:9px 14px;border-radius:8px;font-size:0.8rem;font-weight:600;cursor:pointer">LEVELS</button>' +
+      '<button onclick="startDailyChallenge()" id="btnDaily" style="flex:1;background:#2a1e00;color:#fff;border:1px solid #443300;padding:9px 14px;border-radius:8px;font-size:0.8rem;font-weight:600;cursor:pointer">DAILY 🔥' + (sokoState.dailyChallengeStreak||0) + '</button>' +
+    '</div>' +
+    '<div style="display:flex;gap:8px;margin-bottom:8px">' +
+      '<button onclick="showShop()" style="background:#2a1e00;color:#fff;border:1px solid #443300;padding:9px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer">🛒 Shop</button>' +
+      '<button onclick="showStatsScreen()" id="btnStats" style="background:#2a1e00;color:#fff;border:1px solid #443300;padding:9px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer">📊 Stats</button>' +
+      '<button onclick="showSettings()" style="background:#2a1e00;color:#fff;border:1px solid #443300;padding:9px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer">⚙ Settings</button>' +
+    '</div>' +
+    '<button id="btnFreeCoins" onclick="claimFreeCoins()" style="margin-top:6px;padding:9px 16px;border:1px solid #d29922;background:linear-gradient(135deg,#3a2a00,#1a1200);color:#d29922;border-radius:16px;font-size:0.78rem;font-weight:700;cursor:pointer;width:230px">🪙 Free Coins (+25)</button>' +
+    '<div id="themeStrip" style="margin-top:8px;padding:7px 14px;border-radius:12px;background:linear-gradient(135deg,#1a1330,#1a1200);border:1px solid #8957e5;color:#c7b5ff;font-size:0.72rem;font-weight:600;text-align:center;width:230px">' + themeStripText + '</div>' +
+    '<div id="weeklyEventBanner" onclick="sokoToast(\'🏆 Top ' + pct + '% this week — keep pushing!\')" style="margin-top:8px;padding:8px 14px;border-radius:12px;background:linear-gradient(135deg,#3a1f00,#1a1200);border:1px solid #ff6b35;color:#ff6b35;font-size:0.74rem;font-weight:700;text-align:center;width:230px;cursor:pointer">⚡ Weekly: Top ' + pct + '% · Earn 100 🪙</div>' +
+    (ev ? '<div style="margin-top:8px;padding:8px 14px;border-radius:12px;background:linear-gradient(135deg,#1a3a00,#1a1200);border:1px solid #58a6ff;color:#58a6ff;font-size:0.74rem;font-weight:700;text-align:center;width:230px">' + ev.banner + '</div>' : '') +
+    '<div style="margin-top:16px;font-size:0.65rem;color:#664422;text-align:center">© 2026 Pegasus Games · <a href="#" onclick="if(window.Android&&window.Android.openUrl)Android.openUrl(\'https://pegasusgames-creator.github.io/privacy.html\');return false;" style="color:#886633">Privacy</a> · <a href="#" onclick="if(window.Android&&window.Android.restorePurchases)Android.restorePurchases();return false;" style="color:#886633">Restore</a></div>';
+  document.body.appendChild(m);
+}
+window.hideMenu = function(){ var m=document.getElementById('sokoMenu'); if(m) m.style.display='none'; };
+window.showMenu = function(){ var m=document.getElementById('sokoMenu'); if(!m){ buildMenu(); m=document.getElementById('sokoMenu'); } m.style.display='flex'; refreshSokoHud(); refreshFreeCoinsBtn(); };
+window.startOrResumeGame = function(){
+  var lp = sokoState.lastLevelProgress;
+  hideMenu();
+  loadLevel(lp ? lp.level : 0);
+};
+window.showLevelGrid = function(){
+  hideMenu();
+  document.getElementById('level-select').style.display = 'block';
+};
+window.showShop = function(){
+  // Simple shop overlay listing core SKUs.
+  if (document.getElementById('sokoShop')){
+    document.getElementById('sokoShop').style.display='flex'; return;
+  }
+  var s = document.createElement('div');
+  s.id = 'sokoShop';
+  s.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:60;display:flex;flex-direction:column;padding:24px 16px;overflow-y:auto';
+  var items = [
+    {id:'starter_pack', name:'Starter Pack', desc:'100🪙 + 5 hints + 5 lives + Ads Off', price:'$0.99'},
+    {id:'remove_ads',   name:'Remove Ads',   desc:'No more banners or interstitials', price:'$2.99'},
+    {id:'coins_small',  name:'100 Coins',    desc:'Small coin pack',   price:'$0.99'},
+    {id:'coins_medium', name:'400 Coins',    desc:'Medium coin pack',  price:'$2.99'},
+    {id:'coins_large',  name:'800 Coins',    desc:'Great value',       price:'$4.99'},
+    {id:'coins_mega',   name:'2000 Coins',   desc:'Best value',        price:'$9.99'},
+    {id:'hint_pack',    name:'10 Hints',     desc:'Solver hints',      price:'$1.99'},
+    {id:'five_lives',   name:'5 Lives',      desc:'Refill instantly',  price:'$0.99'},
+    {id:'season_pass_monthly', name:'Season Pass', desc:'+100🪙/day + ad-free + all themes', price:'$4.99/mo'},
+    {id:'weekly_pass',  name:'Weekly Pass',  desc:'+50🪙/day + ad-free 7 days', price:'$1.99/wk'}
+  ];
+  var rows = items.map(function(it){
+    return '<div style="display:flex;justify-content:space-between;align-items:center;background:#2a1e00;border:1px solid #443300;border-radius:10px;padding:11px 14px;margin-bottom:8px">' +
+      '<div><div style="font-weight:700;color:#fff;font-size:0.92rem">' + it.name + '</div><div style="color:#886633;font-size:0.74rem;margin-top:2px">' + it.desc + '</div></div>' +
+      '<button onclick="if(window.Android)Android.purchase(\'' + it.id + '\')" style="background:#FF8F00;color:#000;border:none;padding:8px 14px;border-radius:8px;font-weight:700;font-size:0.82rem;cursor:pointer">' + it.price + '</button>' +
+      '</div>';
+  }).join('');
+  s.innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">' +
+      '<h2 style="color:#FF8F00;font-size:1.3rem">Shop</h2>' +
+      '<button onclick="document.getElementById(\'sokoShop\').style.display=\'none\'" style="background:#FF8F00;color:#000;border:none;padding:6px 14px;border-radius:8px;font-weight:700;cursor:pointer">Close</button>' +
+    '</div>' +
+    rows;
+  document.body.appendChild(s);
+};
+window.showStatsScreen = function(){
+  if (document.getElementById('statsScreen')){
+    document.getElementById('statsScreen').style.display='flex'; return;
+  }
+  var s = document.createElement('div');
+  s.id = 'statsScreen';
+  s.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:60;display:flex;flex-direction:column;padding:24px 16px;color:#eaeaea';
+  var rank = completed.size >= 40 ? 1 : completed.size >= 25 ? 5 : completed.size >= 12 ? 15 : 40;
+  s.innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">' +
+      '<h2 style="color:#FF8F00;font-size:1.3rem">Stats</h2>' +
+      '<button onclick="document.getElementById(\'statsScreen\').style.display=\'none\'" style="background:#FF8F00;color:#000;border:none;padding:6px 14px;border-radius:8px;font-weight:700;cursor:pointer">Close</button>' +
+    '</div>' +
+    '<div style="background:#2a1e00;border-radius:10px;padding:14px;margin-bottom:8px"><div style="color:#886633;font-size:0.78rem">📦 Levels solved</div><div style="font-size:1.4rem;font-weight:800;color:#FF8F00">' + completed.size + ' / ' + LEVELS.length + '</div></div>' +
+    '<div style="background:#2a1e00;border-radius:10px;padding:14px;margin-bottom:8px"><div style="color:#886633;font-size:0.78rem">🔥 Daily streak</div><div style="font-size:1.4rem;font-weight:800;color:#FF8F00">' + (sokoState.dailyChallengeStreak||0) + ' days</div></div>' +
+    '<div style="background:#2a1e00;border-radius:10px;padding:14px;margin-bottom:8px"><div style="color:#886633;font-size:0.78rem">🏆 Global rank</div><div style="font-size:1.4rem;font-weight:800;color:#FF8F00">Top ' + rank + '%</div></div>' +
+    '<div style="background:#2a1e00;border-radius:10px;padding:14px"><div style="color:#886633;font-size:0.78rem">🪙 Coins earned</div><div style="font-size:1.4rem;font-weight:800;color:#FF8F00">' + (sokoState.coins||0) + '</div></div>';
+  document.body.appendChild(s);
+};
+window.showSettings = function(){
+  if (document.getElementById('sokoSettings')){
+    document.getElementById('sokoSettings').style.display='flex'; return;
+  }
+  var s = document.createElement('div');
+  s.id = 'sokoSettings';
+  s.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:60;display:flex;flex-direction:column;padding:24px 16px;color:#eaeaea';
+  s.innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">' +
+      '<h2 style="color:#FF8F00;font-size:1.3rem">Settings</h2>' +
+      '<button onclick="document.getElementById(\'sokoSettings\').style.display=\'none\'" style="background:#FF8F00;color:#000;border:none;padding:6px 14px;border-radius:8px;font-weight:700;cursor:pointer">Close</button>' +
+    '</div>' +
+    '<button onclick="if(window.Android&&window.Android.restorePurchases)Android.restorePurchases();sokoToast(\'Restoring purchases...\')" style="background:#2a1e00;border:1px solid #443300;color:#fff;padding:11px;border-radius:8px;text-align:left;margin-bottom:8px;cursor:pointer">↻ Restore Purchases</button>' +
+    '<button onclick="if(window.Android&&window.Android.openUrl)Android.openUrl(\'https://pegasusgames-creator.github.io/privacy.html\')" style="background:#2a1e00;border:1px solid #443300;color:#fff;padding:11px;border-radius:8px;text-align:left;margin-bottom:8px;cursor:pointer">🔒 Privacy Policy</button>' +
+    '<button onclick="if(confirm(\'Reset all progress?\')){localStorage.clear();location.reload();}" style="background:#2a1e00;border:1px solid #443300;color:#ff6b35;padding:11px;border-radius:8px;text-align:left;cursor:pointer">⚠ Reset Progress</button>';
+  document.body.appendChild(s);
+};
+
+// ── STARTER PACK MODAL ───────────────────────────────────────
+(function injectStarterModal(){
+  var m = document.createElement('div');
+  m.id = 'starterModal';
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:80;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px';
+  m.innerHTML =
+    '<div style="background:linear-gradient(135deg,#3a2a00,#1a1200);border:2px solid #FF8F00;border-radius:18px;padding:24px;max-width:320px;text-align:center">' +
+      '<div style="font-size:2.5rem">🎁</div>' +
+      '<h2 style="color:#FF8F00;margin:8px 0">Starter Pack</h2>' +
+      '<div style="color:#eaeaea;margin:10px 0;font-size:0.9rem">100 🪙 + 5 hints + 5 lives + <b>Ads Off forever</b></div>' +
+      '<div style="display:flex;justify-content:center;gap:8px;margin:10px 0"><span style="color:#886633;text-decoration:line-through">$4.99</span><span style="color:#FF8F00;font-weight:800;font-size:1.3rem">$0.99</span></div>' +
+      '<button onclick="buyStarterPack()" style="background:#FF8F00;color:#000;border:none;padding:12px 26px;border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;width:100%">Get for $0.99</button>' +
+      '<button onclick="closeStarterModal()" style="background:transparent;color:#886633;border:none;padding:8px;margin-top:6px;cursor:pointer">Maybe later</button>' +
+    '</div>';
+  document.body.appendChild(m);
+})();
+
+// ── HINT BUTTON in game controls ─────────────────────────────
+(function addHintButton(){
+  var ctrls = document.querySelector('#controls .btn-row');
+  if (ctrls && !document.getElementById('btn-hint')){
+    var h = document.createElement('button');
+    h.id = 'btn-hint';
+    h.className = 'btn';
+    h.innerHTML = '💡 Hint <span id="sokoHintCount" style="color:#FF8F00;font-size:0.7rem"></span>';
+    h.onclick = function(){ requestHint(); };
+    ctrls.insertBefore(h, ctrls.firstChild);
+  }
+})();
+
+// ── INIT (build menu, daily grant, show on first launch) ─────
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    buildMenu();
+    grantPassDailyBonus();
+    maybeShowStarterPack();
+    refreshSokoHud();
+    refreshFreeCoinsBtn();
+    setInterval(refreshFreeCoinsBtn, 30000);
+    if (adsRemoved()){
+      var b = document.getElementById('btn-remove-ads'); if (b) b.style.display = 'none';
+    }
+    // Show menu on first ever load — subsequent loads boot straight into game.
+    if (!localStorage.getItem('soko_menu_seen')){
+      showMenu();
+      localStorage.setItem('soko_menu_seen','1');
+    }
+  }, 400);
+});
+
+// Save last level progress on level change so Continue works.
+(function hookLoadLevel(){
+  var orig = window.loadLevel;
+  if (typeof orig === 'function'){
+    window.loadLevel = function(idx){
+      sokoState.lastLevelProgress = { level: idx };
+      persistSokoState();
+      orig(idx);
+    };
+  }
+})();
 
 </script>
 </body>

@@ -1,0 +1,22 @@
+{
+  "_comment": "Sokoban screenshot capture. Uses JS-based loadLevel/showMenu/etc.",
+  "_readiness_expr": "typeof loadLevel === 'function' && typeof showMenu === 'function' && typeof sokoState !== 'undefined'",
+
+  "_setup_taps": [
+    ["js", "(function(){try{var s={coins:247,lives:5,maxLives:5,hintPack:3,hintCount:3,removeAds:false,seasonPassUntil:0,weeklyPassUntil:0,lastSeasonGrantDate:'',lastWeeklyGrantDate:'',unlimitedLivesExpiry:0,unlimitedLivesPermanent:false,lastLifeTime:Date.now(),dailyChallengeDate:'',dailyChallengeStreak:7,lastLevelProgress:{level:24},activeTheme:'classic',streakLogin:0};Object.assign(sokoState,s);if(typeof persistSokoState==='function')persistSokoState();for(var i=0;i<28;i++)completed.add(i);localStorage.setItem('sokoban_done',JSON.stringify([...completed]));localStorage.setItem('soko_menu_seen','1');}catch(e){}return 'seeded';})()", 400]
+  ],
+
+  "01_deep_gameplay":   [["js", "hideMenu();loadLevel(35);'ok';", 1800]],
+  "02_early_gameplay":  [["js", "hideMenu();loadLevel(5);'ok';", 1800]],
+  "03_level_complete":  [["js", "hideMenu();loadLevel(15);setTimeout(function(){var ov=document.getElementById('win-overlay');if(ov){ov.style.display='flex';document.getElementById('win-moves').textContent='Solved in 18 moves!';}},400);'ok';", 2200]],
+  "04_missions_panel":  [["js", "showMenu();setTimeout(function(){startDailyChallenge();},300);'ok';", 2200]],
+  "05_stats":           [["js", "showMenu();setTimeout(function(){showStatsScreen();},300);'ok';", 2200]],
+  "06_levels_grid":     [["js", "hideMenu();document.getElementById('btn-levels').click();'ok';", 2000]],
+  "07_menu":            [["js", "showMenu();'ok';", 1500]],
+
+  "tablet_7_01_deep_gameplay":  [["js", "hideMenu();loadLevel(22);'ok';", 1800]],
+  "tablet_7_02_early_gameplay": [["js", "hideMenu();loadLevel(8);'ok';", 1800]],
+
+  "tablet_10_01_deep_gameplay": [["js", "hideMenu();loadLevel(40);'ok';", 1800]],
+  "tablet_10_02_early_gameplay":[["js", "showMenu();'ok';", 1500]]
+}
