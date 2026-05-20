@@ -1032,6 +1032,11 @@ function safeShowRewarded(type) {
 }
 function safeShowInterstitial() {
   if (adsRemoved()) return;
+  // B4 (audit 2026-05-15): 60s min cooldown so quick back-to-back
+  // levels can't double-fire an interstitial.
+  var now = Date.now();
+  if (window._lastInterstitialAt && now - window._lastInterstitialAt < 60000) return;
+  window._lastInterstitialAt = now;
   if (window.Android) {
     window.Android.showInterstitial();
   }
@@ -2471,8 +2476,16 @@ function backFromGame() {
       saveState();
     }
   }
+  // B4 (audit 2026-05-15): show an interstitial every 3rd return to
+  // menu, not every level (60s floor enforced in safeShowInterstitial).
+  if (!adsRemoved()) {
+    state.levelsSinceInterstitial = (state.levelsSinceInterstitial || 0) + 1;
+    if (state.levelsSinceInterstitial >= 3) {
+      state.levelsSinceInterstitial = 0;
+      safeShowInterstitial();
+    }
+  }
   showScreen('menu');
-  safeShowInterstitial();
 }
 
 function resumeLastLevel() {

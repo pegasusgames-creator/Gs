@@ -85,10 +85,10 @@ public class MainActivity extends Activity {
     // ── AppLovin MAX (disabled; using AdMob) ──────────────────────────────────
     // Populate the four constants below + add the SDK key meta-data in
     // AndroidManifest.xml to re-enable AppLovin mediation.
-    private static final String MAX_SDK_KEY              = "";
-    private static final String MAX_BANNER_UNIT_ID       = "";
-    private static final String MAX_INTERSTITIAL_UNIT_ID = "";
-    private static final String MAX_REWARDED_UNIT_ID     = "";
+    private static final String MAX_SDK_KEY              = ""; // TODO: paste SDK key when AppLovin account is approved
+    private static final String MAX_BANNER_UNIT_ID       = ""; // TODO: paste banner unit id
+    private static final String MAX_INTERSTITIAL_UNIT_ID = ""; // TODO: paste interstitial unit id
+    private static final String MAX_REWARDED_UNIT_ID     = ""; // TODO: paste rewarded unit id
     private static final boolean USE_APPLOVIN = !MAX_SDK_KEY.isEmpty();
 
     // ── AdMob fallback ────────────────────────────────────────────────────────

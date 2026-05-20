@@ -715,6 +715,10 @@ function boosterChooser2048(title, emoji, desc, coinCost, rewardType, onGrant) {
 }
 function safeShowInterstitial() {
   if (adsRemoved()) return;
+  // B4 (audit 2026-05-15): 60s min cooldown between interstitials.
+  var now = Date.now();
+  if (window._lastInterstitialAt && now - window._lastInterstitialAt < 60000) return;
+  window._lastInterstitialAt = now;
   if (window.Android) {
     window.Android.showInterstitial();
   }
@@ -1721,7 +1725,14 @@ this.hideOverlays();
     }
     playGameOverSound();
 
-    if (!adsRemoved()) safeShowInterstitial();
+    // B4 (audit 2026-05-15): interstitial every 3rd game-over, not every one.
+    if (!adsRemoved()) {
+      State.gamesSinceInterstitial = (State.gamesSinceInterstitial || 0) + 1;
+      if (State.gamesSinceInterstitial >= 3) {
+        State.gamesSinceInterstitial = 0;
+        safeShowInterstitial();
+      }
+    }
 
     document.getElementById('finalScore').textContent = State.score;
     document.getElementById('gameOverMsg').textContent =
