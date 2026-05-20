@@ -97,7 +97,7 @@ Shared across **all apps**. Never invent per-app URLs/emails.
 Every app has its OWN `<App>/android/keystore.jks` (gradle signs the
 AAB). Password lives in `<App>/android/keystore.properties`
 (gitignored). One keystore per app, no second "upload" keystore, no
-PEPK. (May 2026: Nonogram was mistakenly signed with WaterSort's
+PEPK. (May 2026: Nonogram was mistakenly signed with WaterSortPuzzle's
 keystore, permanently locking Nonogram's upload key — that's why
 shared keystores are forbidden.)
 
@@ -107,7 +107,7 @@ becomes the **upload key** Play validates against; Play generates and
 holds the actual **app signing key** server-side. We never opt into
 PEPK, so the "app signing key ≠ upload key" error never applies.
 
-**Current state (May 2026):** WaterSort, Nonogram, Puzzle2048,
+**Current state (May 2026):** WaterSortPuzzle, Nonogram, Puzzle2048,
 PipeConnect, UnblockPuzzle each have a dedicated `keystore.jks`. ~154
 long-tail apps still share `pegasusgames-release.jks`
 (fingerprint `E0:BD:7F:24:...`); migrate via
@@ -206,7 +206,7 @@ identical to every other app — only `keyAlias=upload` (vs per-app
 ```
 
 JSON schemas in `SHIP_GAME.md` Phase 4. Don't invent fields; copy from
-WaterSort.
+WaterSortPuzzle.
 
 ---
 
@@ -482,19 +482,21 @@ advance.
 
 ---
 
-## State of the apps (last audit: 2026-05-12)
+## State of the apps (last audit: 2026-05-15; state updated: 2026-05-20)
 
-- **Hero (1):** **WaterSort** — gets meta-loop, live ops, real mascot,
-  any "above-baseline" investment. Don't treat as just-another-flagship
-  in sprint planning. See `COMPETITIVE_BENCHMARK.md` §9-10.
-- **Audited + retention-complete + listing-ready (3):** WaterSort
-  (v2.0.2), Nonogram (v1.1.2), Puzzle2048 (v1.1.2). Full coin ladder,
+- **Hero (1):** **WaterSortPuzzle** — gets meta-loop, live ops, real
+  mascot, any "above-baseline" investment. Don't treat as
+  just-another-flagship in sprint planning. See
+  `COMPETITIVE_BENCHMARK.md` §9-10.
+- **Shipped to Play (3):** **WaterSortPuzzle** (v2.0.3), **Nonogram**
+  (v1.1.3), **Puzzle2048** (v1.1.3) — all live on the Play Store as of
+  2026-05-20. Audited + retention-complete: full coin ladder,
   Season/Weekly Pass w/ honored benefits, hint/undo counters, genre
   boosters, Free Coins, Continue, theme strip + unlock card, 7-day
   login ladder, weekly tournament, seasonal events, Restore/Privacy.
   All 13 locales translated; phone + tablet 7"/10" screenshots.
-  `pre_publish_check` clean. Remaining work is Play-Console-side only
-  (see each app's `RELEASE_HANDOFF.md`).
+  `pre_publish_check` clean. Next release for each = bump versionCode,
+  rebuild the AAB, upload (see each app's `RELEASE_HANDOFF.md`).
 - **2026-05-12/13 coin/pass overhaul (portfolio-wide):** coin ladder
   rewritten to the four-tier ladder above (was `coins_small $0.99/100`,
   `coins_large $2.99/500` cheap-anchor). Passes swapped:
@@ -503,21 +505,27 @@ advance.
   per-day value. All ~155 apps' `iaps.json` + 5 flagships' grant logic
   & shop UI + every doc + enforcement scripts updated via
   `scripts/migrate_coin_ladder_2026_05.py`. Price + grant changes need
-  re-entering in Play Console for any app already listed (currently
-  only old WaterSort build).
-- **Screenshots (grandfathered):** WaterSort/Nonogram/Puzzle2048
+  re-entering in Play Console for any app already listed; the 3
+  shipped builds (WaterSortPuzzle v2.0.3 / Nonogram v1.1.3 /
+  Puzzle2048 v1.1.3) were built post-overhaul and carry the four-tier
+  ladder natively.
+- **Screenshots (grandfathered):** WaterSortPuzzle/Nonogram/Puzzle2048
   reuse same captured levels across phone + tablet 7" + tablet 10" —
   left as-is on purpose; **do NOT rework**. Every NEW app must give
   each of the 3 surfaces fully distinct raws + headlines + wrapper
   variants (see `SHIP_GAME.md` Phase 3.6).
-- **Finished code, metadata not yet populated (2):** PipeConnect,
-  UnblockPuzzle. Still need full audit pass (incl. adding
-  `coins_medium`/`coins_mega`/`weekly_pass` for full ladder) + metadata
-  + screenshots. Signing uses single-keystore model; no PEPK.
-- **Shipped to Play (1):** WaterSort (older version; v2.0.2 built, not
-  yet uploaded).
+- **Finished code + metadata, not yet shipped (2):** PipeConnect
+  (v1.7.2), UnblockPuzzle (v1.0.3). Both have full metadata, all 13
+  locales, phone + tablet screenshots, and the four-tier coin ladder.
+  **PipeConnect** passes `pre_publish_check` (warnings only: tablet
+  7"/10" carry 2 wrapped screenshots vs. the 4-shot standard, no
+  iPhone 6.9 screenshots, one near-duplicate phone raw — none
+  blocking). **UnblockPuzzle is BLOCKED:** `pre_publish_check` fails —
+  no Restore Purchases control in `game.html` (Settings needs a row
+  whose handler calls `Android.restorePurchases()`). Fix that before
+  it can ship. Signing uses the single-keystore model; no PEPK.
 - **Recently deleted:** BallSortPuzzle (2026-04-30 — too similar to
-  WaterSort, ~zero downloads); removed from working tree, from
+  WaterSortPuzzle, ~zero downloads); removed from working tree, from
   `app_themes.py` / `dedup_similar_apps.py` / `promo.json`.
 - **Unique but thin (~150):** `game.html` matches folder but
   5-20 KB. Needs game-logic expansion + metadata.
@@ -608,7 +616,7 @@ wait for the user. Do NOT write a "Known gaps" section and proceed.
   a list of other apps". `capture_screenshots.py` no longer captures a
   menu slot — it grabs 6 gameplay slots, and the wrap scripts wrap
   exactly the raws that exist. Auto-blocked from May 2026. Applies
-  retroactively to WaterSort/Nonogram/Puzzle2048 — their menu
+  retroactively to WaterSortPuzzle/Nonogram/Puzzle2048 — their menu
   screenshots were removed 2026-05-20 (now 6 phone / 6 tablet-7 / 5
   tablet-10 gameplay slots); no more grandfathering of those three.
 - Phone, tablet 7", tablet 10" reusing same raw page, wrapper, or
@@ -628,7 +636,7 @@ wait for the user. Do NOT write a "Known gaps" section and proceed.
      `screenshot_headlines_tablet_7.json` and `_tablet_10.json`
      (`wrap_tablet_screenshots.py` falls back to phone copy when
      missing — that's the failure mode to avoid)
-  WaterSort/Nonogram/Puzzle2048 grandfathered — don't rework
+  WaterSortPuzzle/Nonogram/Puzzle2048 grandfathered — don't rework
   retroactively. See `SHIP_GAME.md` Phase 3.6.
 - Any temptation to use Puppeteer / headless Chromium for screenshots —
   **emulator-only** per `QUALITY_PLAYBOOK.md` §7.0 + `SHIP_GAME.md`
@@ -690,7 +698,7 @@ a fraction of the policy risk.
 
 ## Common audit slips to check before every release
 
-Memorialized from the 2026-05-15 WaterSort/Nonogram/Puzzle2048 audit.
+Memorialized from the 2026-05-15 WaterSortPuzzle/Nonogram/Puzzle2048 audit.
 Each line is now enforced by a `pre_publish_check.py` check.
 
 - **PRODUCTS-array price strings in `game.html` MUST match `iaps.json`

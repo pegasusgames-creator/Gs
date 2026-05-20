@@ -93,7 +93,7 @@ Fastlane).
 
 ### Scope B — In-game string translations (REQUIRED from app #3 onward)
 
-For new apps starting from the 3rd app shipped (after WaterSort and the
+For new apps starting from the 3rd app shipped (after WaterSortPuzzle and the
 next), every UI string in `game.html` must be externalized to a per-locale
 JSON file:
 
@@ -135,7 +135,7 @@ locale, falling back to `en` for unsupported languages. Implementation
 guidance is in `QUALITY_PLAYBOOK.md` §1.4 (to be added — see SHIP_GAME.md
 Phase 1 for the immediate per-app instruction).
 
-WaterSort and BallSortPuzzle don't need to be retrofitted unless they
+WaterSortPuzzle and BallSortPuzzle don't need to be retrofitted unless they
 ship a content update — at which point the in-app strings get
 externalized as part of that update.
 

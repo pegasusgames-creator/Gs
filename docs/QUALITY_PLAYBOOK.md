@@ -815,7 +815,7 @@ canvas fails with an explicit error rather than producing the
 April 2026.
 
 **Migration plan for existing apps shipped without tablet screenshots:**
-the 5 flagships (WaterSort, Nonogram, PipeConnect, Puzzle2048,
+the 5 flagships (WaterSortPuzzle, Nonogram, PipeConnect, Puzzle2048,
 UnblockPuzzle) need full re-captures including tablet sets before any
 v1.x update ships. Long-tail apps need tablet captures included in
 their first SHIP_GAME run; no ship without all three sets.
@@ -1221,7 +1221,7 @@ the app type.
 ### Portfolio-shape map
 
 The portfolio breaks down approximately as:
-- **~30 puzzle games** (BallSort, WaterSort, Nonogram, BlockPuzzle,
+- **~30 puzzle games** (BallSort, WaterSortPuzzle, Nonogram, BlockPuzzle,
   PipeConnect, Puzzle2048, UnblockPuzzle, BrickBreaker, BubbleShooter,
   ColorBlockJam, FruitMerge, MahjongSolitaire, KnotPuzzle, etc.)
 - **~12 quiz apps** (FlagQuiz, GeographyQuiz, FootballQuiz, EmojiQuiz,
@@ -1682,7 +1682,7 @@ are polish when time permits.
 
 ---
 
-## 14. Retention economy (WaterSort/Nonogram/Puzzle2048 audit, May 2026)
+## 14. Retention economy (WaterSortPuzzle/Nonogram/Puzzle2048 audit, May 2026)
 
 These are P0 for any game that ships the retention stack (sells
 `season_pass_monthly`). See CLAUDE.md for the canonical definitions; the
@@ -1739,7 +1739,7 @@ games say "unlimited undos" where leveled games say "unlimited hints".
 
 ## 15. Audit slip prevention
 
-The 2026-05-15 WaterSort/Nonogram/Puzzle2048 audit found eight recurring
+The 2026-05-15 WaterSortPuzzle/Nonogram/Puzzle2048 audit found eight recurring
 slip classes. Each is now a required pre-ship gate enforced by
 `pre_publish_check.py` — treat a BLOCKER here exactly like any other.
 (Numbered §15 because §8 "Technical polish" is taken; the audit task

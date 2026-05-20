@@ -226,7 +226,7 @@ canvas fails with an explicit error rather than producing the
 April 2026.
 
 **Migration plan for existing apps shipped without tablet screenshots:**
-the 5 flagships (WaterSort, Nonogram, PipeConnect, Puzzle2048,
+the 5 flagships (WaterSortPuzzle, Nonogram, PipeConnect, Puzzle2048,
 UnblockPuzzle) need full re-captures including tablet sets before any
 v1.x update ships. Long-tail apps need tablet captures included in
 their first SHIP_GAME run; no ship without all three sets.

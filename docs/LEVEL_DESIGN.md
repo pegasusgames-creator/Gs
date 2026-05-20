@@ -14,7 +14,7 @@ generators correctly and how to verify them before shipping.
 
 **Pure random shuffle does NOT produce solvable puzzles.**
 
-Concrete example from this repo: the v1.6.2 WaterSort generator used
+Concrete example from this repo: the v1.6.2 WaterSortPuzzle generator used
 Fisher-Yates shuffle to distribute balls across tubes. A BFS solver run
 against the resulting 500 levels found **295 unsolvable levels (59%)** —
 mostly in the 1-empty-tube difficulty bands. Players reaching level ~71
@@ -52,7 +52,7 @@ Three properties to enforce:
 
 2. **Scramble enough to be non-trivial.** A small number of anti-moves
    can wander back to (or close to) the solved state. After scrambling,
-   if `isSolvedState(tubes)` returns true, scramble more. WaterSort
+   if `isSolvedState(tubes)` returns true, scramble more. WaterSortPuzzle
    uses `max(80, 60 * numColors)` initial anti-moves and re-rolls in
    batches of 40 if still solved.
 
@@ -63,9 +63,9 @@ Three properties to enforce:
 
 ---
 
-## Reference implementation: WaterSort
+## Reference implementation: WaterSortPuzzle
 
-See `WaterSort/android/app/src/main/assets/game.html` line ~494,
+See `WaterSortPuzzle/android/app/src/main/assets/game.html` line ~494,
 `generateLevel(numTubes, numColors, seed)`. It implements:
 
 - Solved-state initialization (each color in its own full tube)
@@ -101,7 +101,7 @@ For non-ball-sort puzzle types, copy the structure:
 
 | Puzzle type | Anti-move definition | Notes |
 |---|---|---|
-| Ball sort / Water sort | Take top-stack of color C from a tube; place on a tube that is empty OR top-color C. | Verified pattern in WaterSort. |
+| Ball sort / Water sort | Take top-stack of color C from a tube; place on a tube that is empty OR top-color C. | Verified pattern in WaterSortPuzzle. |
 | Sliding tile (15-puzzle) | Slide the empty cell in the inverse direction of the forward move. | Solvability also depends on board parity; pure random shuffle gives ~50% unsolvable. |
 | Unblock me | Move a block backward along its constrained axis. | Forward rules only allow horizontal-or-vertical-along-axis; same constraint applies in reverse. |
 | Sokoban-style | Pull the box backward (and step into its previous cell). | Note: forward play PUSHES, reverse must PULL — implement explicitly. |

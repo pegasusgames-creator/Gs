@@ -135,7 +135,7 @@ some from the shop UI.
 
 | App | One-time product IDs | Subscriptions |
 |---|---|---|
-| **WaterSort** | `remove_ads`, `coins_small`, `coins_medium`, `coins_large`, `coins_mega`, `five_lives`, `unlimited_lives_1h`, `unlimited_lives_forever`, `unlimited_undos`, `hint_pack`, `starter_pack` | `season_pass_monthly`, `weekly_pass` |
+| **WaterSortPuzzle** | `remove_ads`, `coins_small`, `coins_medium`, `coins_large`, `coins_mega`, `five_lives`, `unlimited_lives_1h`, `unlimited_lives_forever`, `unlimited_undos`, `hint_pack`, `starter_pack` | `season_pass_monthly`, `weekly_pass` |
 | **Nonogram** | `remove_ads`, `coins_small`, `coins_medium`, `coins_large`, `coins_mega`, `five_lives`, `unlimited_lives_1h`, `unlimited_lives_forever`, `hint_pack`, `starter_pack` | `season_pass_monthly`, `weekly_pass` |
 | **Puzzle2048** | `remove_ads`, `coins_small`, `coins_medium`, `coins_large`, `coins_mega`, `five_lives`, `unlimited_lives_1h`, `unlimited_lives_forever`, `undo_pack`, `starter_pack` | `season_pass_monthly`, `weekly_pass` |
 | **PipeConnect** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `unlimited_lives_forever`, `hint_pack`, `starter_pack` *(metadata pass pending — needs `coins_medium`/`coins_mega` + `weekly_pass` added before ship)* | `season_pass_monthly` |
@@ -149,7 +149,7 @@ some from the shop UI.
 > `iaps.json` IDs are a subset of `VALID_PRODUCTS`. **Note:** that check
 > currently only verifies one direction (json ⊆ code). If a code
 > product is missing from json, the check passes but Play Console will
-> have no product to sell. The `WaterSort/unlimited_undos` case from
+> have no product to sell. The `WaterSortPuzzle/unlimited_undos` case from
 > 2026-04-27 is the canonical example — always cross-check both ways
 > manually before submission.
 

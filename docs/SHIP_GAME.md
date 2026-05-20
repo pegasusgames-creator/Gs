@@ -61,11 +61,11 @@ Before touching the app, verify the foundation:
 This is a quick safety check before committing time to Phase 1.
 
 1. **List apps shipped or in active prep this week.** Look at git log for
-   recent `versionCode 1` commits (new apps), or check `WaterSort/`,
+   recent `versionCode 1` commits (new apps), or check `WaterSortPuzzle/`,
    `Nonogram/`, etc., for AABs built in the last 7 days.
 
 2. **Determine the current app's genre.** Use these clusters:
-   - **Sort/pour puzzles**: BallSort, WaterSort, ColorSort, FruitSort
+   - **Sort/pour puzzles**: BallSort, WaterSortPuzzle, ColorSort, FruitSort
    - **Match/merge**: Match-3, Triple Match, Merge games, 2048 variants
    - **Connect/path puzzles**: PipeConnect, Nonogram, Bridges, Maze
    - **Word puzzles**: Wordle clones, Word Search, Crossword, Anagram
@@ -345,8 +345,8 @@ solution. Test plan:
 
    **DO NOT copy keystore.properties from another app.** This was the
    May 2026 Nonogram failure mode: Nonogram's first build was signed
-   with WaterSort's keystore, permanently locking Nonogram's Play
-   Console listing to WaterSort's upload key. The fix required a
+   with WaterSortPuzzle's keystore, permanently locking Nonogram's Play
+   Console listing to WaterSortPuzzle's upload key. The fix required a
    1-3 business day upload-key reset request from Google. Don't repeat
    it. Each app gets its own dedicated keystore generated fresh; never
    reuse another app's signing material.
@@ -363,7 +363,7 @@ solution. Test plan:
    requires a Play Console upload-key reset, which can take 1-3 days
    and may be denied).
 
-   The 5 already-shipped/keyed apps (WaterSort, Nonogram, Puzzle2048,
+   The 5 already-shipped/keyed apps (WaterSortPuzzle, Nonogram, Puzzle2048,
    PipeConnect, UnblockPuzzle) keep their existing per-app keystores —
    `migrate_to_per_app_keystores.py` exempts them from migration.
 
@@ -616,7 +616,7 @@ fallback per the existing logic.
 - Phone-frame border visible around the gameplay shot
 - Footer brand text visible at bottom
 - Different theme color than other apps in the portfolio (compare
-  visually to BallSortPuzzle and WaterSort screenshots)
+  visually to BallSortPuzzle and WaterSortPuzzle screenshots)
 
 If the output looks like the raw device screenshot with no wrapping,
 the script silently failed — investigate immediately, don't ship.
@@ -628,7 +628,7 @@ per QUALITY_PLAYBOOK §7.3. No skipping. Steps 3.3-3.5 above run for
 phone; this step repeats them for both tablet sizes.
 
 **Three surfaces, three distinct stories — applies to all NEW apps
-(grandfathered: WaterSort, Nonogram, Puzzle2048 ship as-is, do not
+(grandfathered: WaterSortPuzzle, Nonogram, Puzzle2048 ship as-is, do not
 retroactively rework).** Phone, tablet 7", and tablet 10" must each
 be a fully distinct listing — they share the same app and brand, but
 EVERY axis below must differ across the three:
@@ -789,7 +789,7 @@ mechanic, not a template.
    with canonical URLs (already correct from scaffold).
 
 9. **`metadata/privacy.json`** — Canonical privacy URL, Data Safety
-   answers identical to Ball Sort/WaterSort (game with AdMob+Firebase+
+   answers identical to Ball Sort/WaterSortPuzzle (game with AdMob+Firebase+
    IAP, no other data collection):
    ```json
    "data_collected": ["device_ids", "app_interactions", "crash_logs"],
@@ -855,7 +855,7 @@ marketing copy in any of the 12 target languages is in scope).
 
 ### 4.5.2 — In-game string translations (REQUIRED for new apps)
 
-For new apps starting from app #3 (after WaterSort and the next
+For new apps starting from app #3 (after WaterSortPuzzle and the next
 shipped app), all UI strings in `game.html` must be externalized to
 per-locale JSON in `<App>/android/app/src/main/assets/i18n/`:
 
@@ -1236,7 +1236,7 @@ Per APP_ARCHETYPES §8, answer all four honestly. If any fail, the
 app is NOT ready — return to Phase 1 and refine.
 
 1. **Side-by-side test.** Lay this app's screenshots next to
-   BallSortPuzzle's and WaterSort's. Does a viewer see "different
+   BallSortPuzzle's and WaterSortPuzzle's. Does a viewer see "different
    products" or "three games by the same publisher with the same
    template"?
    - Same template → fix Phase 1 design choices. Different layout

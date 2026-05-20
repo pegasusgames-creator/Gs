@@ -14,7 +14,7 @@ genuine identity beyond palette swaps.
 This doc is structured as a menu of choices — each app picks one
 archetype from each of: layout, mascot/character, copy voice, and
 texture/finish. Combinations are explicitly discouraged from being
-reused — if WaterSort uses Layout A + Voice 2, the next sort puzzle
+reused — if WaterSortPuzzle uses Layout A + Voice 2, the next sort puzzle
 should use Layout C + Voice 4 even though it's the same genre.
 
 ---
@@ -28,7 +28,7 @@ theme entry should have a `layout_archetype` field).
 The default. One big Play button, two secondary, three icons. **Use
 sparingly.** Best for: launch apps where you have no design budget,
 small/utility apps. Avoid for hero/flagship games. Currently used by:
-WaterSort, BallSortPuzzle.
+WaterSortPuzzle, BallSortPuzzle.
 
 ### B — Map / journey screen
 No menu buttons at all. The home screen IS a horizontal/vertical scroll
@@ -123,7 +123,7 @@ particle/motion design.
 Aim for: M0 = 30%, M1 = 30%, M2 = 20%, M3 = 10%, M4 = 10%.
 
 When picking an archetype, also pick whether mascot is named. Named
-mascots (e.g., "Drippy" the water drop in WaterSort) build
+mascots (e.g., "Drippy" the water drop in WaterSortPuzzle) build
 identification. Unnamed mascots are cheaper but disposable.
 
 ### How to actually produce mascots — the realistic options
@@ -148,7 +148,7 @@ sheets.
 
 For M1 specifically — adding eyes/expressions to existing game pieces —
 Claude Code should default to this. Examples:
-- WaterSort flask with a small eye-pair visible through the water
+- WaterSortPuzzle flask with a small eye-pair visible through the water
 - BlockPuzzle tetromino with a tiny face on the largest block
 - Sudoku digit that briefly smiles when placed in the right cell
 
@@ -369,7 +369,7 @@ hit 3+ of these read as "templated AI output" to users:
 - **Generic emoji-replacement icons.** Replacing "🪙" with an SVG coin
   is the right call, but if the SVG coin is generic (just a circle
   with a dollar sign), it reads as templated. Each app's currency
-  icon should reflect the app theme: water droplets in WaterSort,
+  icon should reflect the app theme: water droplets in WaterSortPuzzle,
   ruby gems in a fantasy puzzle, sand grains in a beach game.
 - **Identical button shapes / sizes / spacings.** The default rounded-
   rect button is fine for most apps; don't use it for ALL apps. Vary
@@ -379,7 +379,7 @@ hit 3+ of these read as "templated AI output" to users:
   bar, floating action button, full-screen background with overlay
   controls.
 - **Generic celebration moments.** "Level Complete! ⭐⭐⭐ +8 coins" —
-  every app does this. Differentiate: WaterSort says "Crystal Clear!"
+  every app does this. Differentiate: WaterSortPuzzle says "Crystal Clear!"
   and shows water settling; Sudoku says "Solved!" and the grid does a
   satisfying confirmation animation; word games say "You found it!"
   and the word fades into a journal of completed words.
@@ -399,7 +399,7 @@ hit 3+ of these read as "templated AI output" to users:
 To make the abstraction concrete, here are 5 example combinations
 showing what each app's identity should look like:
 
-### Example 1 — WaterSort (current, shipped)
+### Example 1 — WaterSortPuzzle (current, shipped)
 - Layout: A (hero Play, button stack) — fine for v1, plan B/D for v2
 - Mascot: M0 → upgrade to M1 (animated water drop in flasks)
 - Voice: V1 (neutral) → upgrade to V5 (calm/zen) — "Take your time"
@@ -470,7 +470,7 @@ Before declaring an app ready for Phase 5 (pre-publish checks), ask
 these questions and record honest answers:
 
 1. If I lay this app's screenshots next to BallSortPuzzle's and
-   WaterSort's, does any random viewer see "different products" or
+   WaterSortPuzzle's, does any random viewer see "different products" or
    "three games by the same publisher with the same template"?
    - Same template → fix Phase 1 before continuing
    - Different products → proceed

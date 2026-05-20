@@ -174,13 +174,13 @@ visible progress. No long-term goal.
 
 ### Recommended starting point
 
-Add **Theme Collection** to all 5 flagship apps (WaterSort, Nonogram,
+Add **Theme Collection** to all 5 flagship apps (WaterSortPuzzle, Nonogram,
 PipeConnect, Puzzle2048, UnblockPuzzle). It's the lowest-effort
 meta-loop with the highest organic-engagement signal. Add the
 "Themes (3/12)" counter to the menu — visible progress is the lever.
 
 Reserve **World Restoration** for the single hero app (recommend
-WaterSort since it already has data flowing).
+WaterSortPuzzle since it already has data flowing).
 
 ## 4. Live ops cadence
 
@@ -195,7 +195,7 @@ The leaders run live events on a 2-week cadence:
 This is impossible at 100-app scale. **Don't try.** The right
 strategy:
 
-- **Hero app (WaterSort)**: real 2-week event cycle. Time-limited
+- **Hero app (WaterSortPuzzle)**: real 2-week event cycle. Time-limited
   themes, weekend tournaments, holiday-themed level packs.
 - **Other 4 flagships**: pure daily challenge + weekly leaderboard
   reset. No human-curated events.
@@ -213,7 +213,7 @@ Implementing live ops on the hero app:
   level design + a JSON commit
 
 Cost-benefit: real live ops on the hero app could 2-3x its retention
-if done well, which is the difference between WaterSort earning $50/mo
+if done well, which is the difference between WaterSortPuzzle earning $50/mo
 and $200/mo. Worth the recurring 1 hour/2 weeks.
 
 ## 5. Booster economy
@@ -237,7 +237,7 @@ boosters. No names. No visual identity.
 
 ### Recommended booster set per genre
 
-**Sort/pour games (WaterSort)**:
+**Sort/pour games (WaterSortPuzzle)**:
 - "Empty Tube" — adds an empty tube to the board
 - "Color Reveal" — shows where one color belongs
 - "Undo Move" — reverses last 3 moves
@@ -416,18 +416,18 @@ living expenses for a solo dev in Ukraine. That's the right target.
    Apr 30 — directory listing shows it's still there.
 3. **Add a README to the repo root** describing what Pegasus Games
    is. Even a 5-sentence description.
-4. **Pick WaterSort as the official hero app.** Document the decision
+4. **Pick WaterSortPuzzle as the official hero app.** Document the decision
    in CLAUDE.md State of apps section.
-5. **Rewrite WaterSort's full_description.txt** in the leader-format
+5. **Rewrite WaterSortPuzzle's full_description.txt** in the leader-format
    (hook + sections + scannable bullets + How to Play + closing). Use
    the Royal Match opening as the template.
 6. **Add the ASMR/satisfying/relaxing keywords** to all 5 flagship
    listings (only for apps that genuinely have these qualities).
-7. **Plan one meta-loop addition for WaterSort** (recommend Theme
+7. **Plan one meta-loop addition for WaterSortPuzzle** (recommend Theme
    Collection — lowest effort, highest signal-test value).
-8. **Run consult_designer.py mascot --app WaterSort** and pick the
+8. **Run consult_designer.py mascot --app WaterSortPuzzle** and pick the
    best returned option for a real mascot character.
 
 That's a one-week sprint. Everything else (live ops, booster economy,
 icon regeneration, world restoration meta-loop) can wait until you
-see whether WaterSort starts pulling installs after these changes.
+see whether WaterSortPuzzle starts pulling installs after these changes.
