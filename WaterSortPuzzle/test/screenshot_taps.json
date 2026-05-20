@@ -27,6 +27,6 @@
   "tablet_10_03_level_complete": [["js", "window._hideModals();window._jumpTo(100,'galaxy');'ok';", 3000]],
   "tablet_10_04_missions_panel": [["js", "window._hideModals();window._jumpTo(12,'default');'ok';", 3000]],
   "tablet_10_05_stats":          [["js", "window._hideModals();window._jumpTo(50,'neon');'ok';", 3000]],
-  "tablet_10_06_levels_grid":    [["js", "window._hideModals();window._setTheme('fire');State.coins=940;if(State.save)State.save();Game.showScreen('menuScreen');'ok';", 2800]],
+  "tablet_10_06_levels_grid":    [["js", "window._hideModals();window._jumpTo(64,'ocean');'ok';", 3000]],
   "tablet_10_07_menu":           [["js", "window._hideModals();window._setTheme('galaxy');State.coins=1240;if(State.save)State.save();Game.showScreen('menuScreen');setTimeout(function(){if(typeof updateCoinDisplays==='function')updateCoinDisplays();},300);'ok';", 2800]]
 }
