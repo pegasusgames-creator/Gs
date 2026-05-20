@@ -59,37 +59,104 @@ def pick_font(kind, size):
     return ImageFont.load_default()
 
 
-def make_gradient_bg(theme, w, h):
+# ── per-slot wrapper variants ──────────────────────────────────────
+# Each tablet slot gets a visually distinct marketing frame so no two
+# wrapped shots look templated. Only two levers vary: the background
+# (gradient direction + decoration pattern + theme colour) and headline
+# placement (top vs bottom). The framed screenshot and headline text
+# always stay horizontally centered — no off-center nudging, no accent
+# box behind the text. The table is rotated per surface (see
+# SURFACE_OFFSETS) so slot N on tablet_7 differs from slot N on
+# tablet_10 and on phone.
+VARIANTS = [
+    {"gradient": "tl-br",      "headline": "top",    "deco": "bubbles"},
+    {"gradient": "tr-bl",      "headline": "bottom", "deco": "corner"},
+    {"gradient": "vertical",   "headline": "top",    "deco": "sparse"},
+    {"gradient": "bl-tr",      "headline": "top",    "deco": "dots"},
+    {"gradient": "horizontal", "headline": "bottom", "deco": "sidebar"},
+    {"gradient": "tl-br",      "headline": "top",    "deco": "rings"},
+    {"gradient": "tr-bl",      "headline": "bottom", "deco": "none"},
+]
+# Phone uses offset 0; rotate the tablets so a given slot looks
+# different across the three surfaces.
+SURFACE_OFFSETS = {"tablet_7": 3, "tablet_10": 5}
+
+
+def variant_for(slot_index, surface_offset):
+    return VARIANTS[(slot_index + surface_offset) % len(VARIANTS)]
+
+
+def make_gradient_bg(theme, w, h, direction="tl-br"):
+    c1 = theme["bg_top_left"]
+    c2 = theme["bg_top_right"]
+    c3 = theme["bg_bottom"]
+    mid = tuple((c1[i] + c3[i]) // 2 for i in range(3))
+    layouts = {
+        "tl-br":      (c1, c2, mid, c3),
+        "tr-bl":      (c2, c1, c3, mid),
+        "bl-tr":      (mid, c3, c1, c2),
+        "vertical":   (c1, c2, c3, c3),
+        "horizontal": (c1, c3, c1, c3),
+    }
+    tl, tr, bl, br = layouts.get(direction, layouts["tl-br"])
     base = Image.new('RGB', (2, 2))
-    base.putpixel((0, 0), theme["bg_top_left"])
-    base.putpixel((1, 0), theme["bg_top_right"])
-    base.putpixel((0, 1), theme["bg_bottom"])
-    base.putpixel((1, 1), (
-        (theme["bg_top_right"][0] + theme["bg_bottom"][0]) // 2,
-        (theme["bg_top_right"][1] + theme["bg_bottom"][1]) // 2,
-        (theme["bg_top_right"][2] + theme["bg_bottom"][2]) // 2,
-    ))
+    base.putpixel((0, 0), tl)
+    base.putpixel((1, 0), tr)
+    base.putpixel((0, 1), bl)
+    base.putpixel((1, 1), br)
     return base.resize((w, h), Image.BICUBIC)
 
 
-def draw_decorations(img, theme, w, h):
+def draw_decorations(img, theme, w, h, style="bubbles"):
+    if style == "none":
+        return
     draw = ImageDraw.Draw(img, 'RGBA')
-    bubbles = [
-        (0.08, 0.06, 0.045), (0.92, 0.09, 0.035),
-        (0.04, 0.28, 0.025), (0.95, 0.44, 0.050),
-        (0.06, 0.58, 0.030), (0.93, 0.75, 0.022),
-        (0.12, 0.90, 0.038), (0.88, 0.95, 0.028),
-    ]
     tp = theme["text_primary"]
     deco = (tp[0], tp[1], tp[2], 35)
-    for bx, by, br in bubbles:
-        x = int(w * bx); y = int(h * by); r = int(w * br)
-        draw.ellipse([x - r, y - r, x + r, y + r],
-                     outline=deco, width=max(3, r // 10))
+    ac = theme["text_accent"]
+    if style == "bubbles":
+        for bx, by, br in [(0.08, 0.06, 0.045), (0.92, 0.09, 0.035),
+                           (0.04, 0.28, 0.025), (0.95, 0.44, 0.050),
+                           (0.06, 0.58, 0.030), (0.93, 0.75, 0.022),
+                           (0.12, 0.90, 0.038), (0.88, 0.95, 0.028)]:
+            x, y, r = int(w * bx), int(h * by), int(w * br)
+            draw.ellipse([x - r, y - r, x + r, y + r],
+                         outline=deco, width=max(3, r // 10))
+    elif style == "corner":
+        for cx, cy in [(0.0, 0.0), (1.0, 1.0)]:
+            for rr in (0.30, 0.42, 0.54):
+                r = int(w * rr)
+                x, y = int(w * cx), int(h * cy)
+                draw.ellipse([x - r, y - r, x + r, y + r],
+                             outline=deco, width=4)
+    elif style == "dots":
+        for gx in range(6):
+            for gy in range(13):
+                x = int(w * (0.07 + gx * 0.172))
+                y = int(h * (0.05 + gy * 0.075))
+                r = int(w * 0.007)
+                draw.ellipse([x - r, y - r, x + r, y + r], fill=deco)
+    elif style == "sidebar":
+        bw = int(w * 0.13)
+        draw.rectangle([w - bw, 0, w, h], fill=(ac[0], ac[1], ac[2], 26))
+        draw.rectangle([w - bw - 6, 0, w - bw, h],
+                       fill=(ac[0], ac[1], ac[2], 50))
+    elif style == "sparse":
+        for bx, by, br in [(0.12, 0.11, 0.10), (0.90, 0.40, 0.13),
+                           (0.16, 0.83, 0.11)]:
+            x, y, r = int(w * bx), int(h * by), int(w * br)
+            draw.ellipse([x - r, y - r, x + r, y + r],
+                         outline=deco, width=5)
+    elif style == "rings":
+        x, y = int(w * 0.04), int(h * 0.96)
+        for rr in (0.14, 0.22, 0.30, 0.38):
+            r = int(w * rr)
+            draw.ellipse([x - r, y - r, x + r, y + r],
+                         outline=deco, width=4)
 
 
-def frame_screenshot(shot, theme, w, h):
-    target_h = int(h * 0.62)
+def frame_screenshot(shot, theme, w, h, height_frac=0.62):
+    target_h = int(h * height_frac)
     ratio = shot.size[1] / shot.size[0]
     target_w = int(target_h / ratio)
     if target_w > int(w * 0.78):
@@ -131,8 +198,11 @@ def frame_screenshot(shot, theme, w, h):
     return frame, fw, fh
 
 
-def draw_headline(img, line1, line2, subtitle, theme, w, h):
+def draw_headline(img, line1, line2, subtitle, theme, w, h,
+                  y_start=None):
     draw = ImageDraw.Draw(img, 'RGBA')
+    if y_start is None:
+        y_start = int(h * 0.045)
     max_w = int(w * 0.88)
     size = int(h * 0.075)
     while size > int(h * 0.04):
@@ -144,7 +214,7 @@ def draw_headline(img, line1, line2, subtitle, theme, w, h):
 
     line_font = pick_font('heavy', size)
     sub_font  = pick_font('medium', int(h * 0.022))
-    y = int(h * 0.045)
+    y = y_start
     sh = int(h * 0.004)
 
     for line, color in [(line1, theme["text_accent"]),
@@ -218,7 +288,8 @@ def draw_footer(img, app_display_name, theme, w, h):
     draw.text((x, y), text, font=font, fill=(*theme["footer_tint"], 200))
 
 
-def build_one(src, out, headline, subtitle, app_display_name, theme, target_size):
+def build_one(src, out, headline, subtitle, app_display_name, theme,
+              target_size, variant):
     out_w, out_h = target_size
 
     # ★ Resolution guard (May 2026): tablet wraps must use captures from
@@ -258,17 +329,30 @@ def build_one(src, out, headline, subtitle, app_display_name, theme, target_size
     w = out_w * S
     h = out_h * S
 
-    canvas = make_gradient_bg(theme, w, h).convert('RGBA')
-    draw_decorations(canvas, theme, w, h)
-    headline_bottom = draw_headline(canvas, headline['line1'], headline['line2'],
-                                    subtitle, theme, w, h)
+    canvas = make_gradient_bg(theme, w, h, variant["gradient"]).convert('RGBA')
+    draw_decorations(canvas, theme, w, h, variant["deco"])
 
+    bottom = variant["headline"] == "bottom"
     shot = Image.open(src)
-    frame, fw, fh = frame_screenshot(shot, theme, w, h)
+    frame, fw, fh = frame_screenshot(
+        shot, theme, w, h, height_frac=(0.52 if bottom else 0.62))
+
+    # Framed screenshot always stays horizontally centered.
     fx = (w - fw) // 2
-    fy = headline_bottom + int(h * 0.03)
-    if fy > int(h * 0.94) - fh:
-        fy = int(h * 0.94) - fh
+
+    if bottom:
+        fy = int(h * 0.060)
+        draw_headline(canvas, headline['line1'], headline['line2'],
+                      subtitle, theme, w, h,
+                      y_start=fy + fh + int(h * 0.035))
+    else:
+        headline_bottom = draw_headline(canvas, headline['line1'],
+                                        headline['line2'], subtitle, theme,
+                                        w, h)
+        fy = headline_bottom + int(h * 0.03)
+        if fy > int(h * 0.94) - fh:
+            fy = int(h * 0.94) - fh
+
     canvas.alpha_composite(frame, (fx, fy))
     draw_footer(canvas, app_display_name, theme, w, h)
 
@@ -339,9 +423,11 @@ def main():
                 print(f"  WARNING: no headline for slot {slot}, skipping")
                 continue
             h = headlines[slot - 1]
-            print(f"  raw/{src.name} → {out.name}  ({h['line1']} {h['line2']})")
+            variant = variant_for(slot - 1, SURFACE_OFFSETS[target])
+            print(f"  raw/{src.name} → {out.name}  ({h['line1']} {h['line2']})"
+                  f"  [{variant['gradient']}/{variant['headline']}/{variant['deco']}]")
             build_one(src, out, h, h['subtitle'], app_display_name,
-                      theme, tablet_size)
+                      theme, tablet_size, variant)
             any_wrapped = True
 
     if not any_wrapped:

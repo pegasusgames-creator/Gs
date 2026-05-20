@@ -3,10 +3,13 @@
 capture_screenshots.py — capture raw screenshots from the running Android emulator.
 
 Boots the user's Android emulator if not already running, installs the
-app's latest debug APK, navigates to each of 7 in-app states by sending
-tap events via adb, and saves screenshots to:
+app's latest debug APK, navigates to each of 6 in-app GAMEPLAY states by
+sending tap events via adb, and saves screenshots to:
 
-    <AppName>/store/screenshots/phone/raw/01.png ... 07.png
+    <AppName>/store/screenshots/phone/raw/01.png ... 06.png
+
+The main menu / shop / settings are NOT captured — every store slot must
+show actual gameplay (CLAUDE.md "Things to flag", QUALITY_PLAYBOOK §7.1).
 
 Each screenshot is the actual app rendered by Android WebView with real
 font rendering, real localStorage state from previous use, real status
@@ -24,7 +27,7 @@ How it works:
 2. Wait for boot complete
 3. Install <App>/android/app/build/outputs/apk/debug/app-debug.apk
    (build it first with `./gradlew assembleDebug` in the app's android/ dir)
-4. For each of 7 slots:
+4. For each of 6 slots:
    - Force-stop and re-launch the app (clean state)
    - Wait for menu to render
    - Send tap sequence to navigate to the target state (Play, Daily, Stats…)
@@ -100,9 +103,8 @@ DEFAULT_TAPS = {
     "06_levels_grid": [
         ("tap", 0.40, 0.72, 1500),  # left of icon row
     ],
-    "07_menu": [
-        # Already on menu after force-stop + relaunch — capture as-is
-    ],
+    # NOTE: no menu/shop/settings slot — every store screenshot must show
+    # actual gameplay (CLAUDE.md "Things to flag", QUALITY_PLAYBOOK §7.1).
 }
 
 
@@ -568,7 +570,6 @@ def main():
         ("04", "04_missions_panel"),
         ("05", "05_stats"),
         ("06", "06_levels_grid"),
-        ("07", "07_menu"),
     ]
     if args.slot:
         SLOTS = [s for s in SLOTS if s[0] == args.slot]

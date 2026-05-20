@@ -8,19 +8,18 @@ from app_themes.py. ONE script for all apps. No per-app cloning.
 Usage:
     python3 wrap_screenshots.py <AppName>
 
-Inputs:
-    <AppName>/store/screenshots/phone/raw/01.png  (deep gameplay)
+Inputs (one wrapped output per raw; menu / shop / settings screens are
+NOT captured — every slot must show actual gameplay):
+    <AppName>/store/screenshots/phone/raw/01.png  (deep / late-game board)
     <AppName>/store/screenshots/phone/raw/02.png  (early gameplay)
     <AppName>/store/screenshots/phone/raw/03.png  (level complete — 3-star + theme-unlock card)
-    <AppName>/store/screenshots/phone/raw/04.png  (daily challenge / missions)
-    <AppName>/store/screenshots/phone/raw/05.png  (missions or stats)
-    <AppName>/store/screenshots/phone/raw/06.png  (another mid-game board)
-    <AppName>/store/screenshots/phone/raw/07.png  (menu — Continue / Free Coins / Weekly Tournament / theme strip)
-    <AppName>/store/screenshots/phone/raw/08.png  (themes grid — NEW standard slot; this script still wraps only 01-07,
-                                                 bump the range when capture_screenshots.py is updated to grab it)
+    <AppName>/store/screenshots/phone/raw/04.png  (daily challenge active)
+    <AppName>/store/screenshots/phone/raw/05.png  (another mid-game board)
+    <AppName>/store/screenshots/phone/raw/06.png  (another gameplay state)
+    (5-7 gameplay slots; the script wraps however many raws exist)
 
 Outputs (1080×2400):
-    <AppName>/store/screenshots/phone/01.png ... 07.png
+    <AppName>/store/screenshots/phone/01.png ... NN.png
 
 Headline copy comes from <AppName>/metadata/screenshot_headlines.json.
 If that file doesn't exist, the script REFUSES to run and tells Claude
@@ -73,47 +72,108 @@ def pick_font(kind, size):
     return ImageFont.load_default()
 
 
+# ---------------------- per-slot wrapper variants ----------------------
+# Each of the 7 screenshot slots gets a visually distinct marketing
+# frame so no two wrapped shots look templated. Only two levers vary:
+# the background (gradient direction + decoration pattern + theme
+# colour) and headline placement (top vs bottom). The framed screenshot
+# and the headline text always stay horizontally centered — no off-
+# center nudging, no accent box behind the text.
+VARIANTS = [
+    {"gradient": "tl-br",      "headline": "top",    "deco": "bubbles"},
+    {"gradient": "tr-bl",      "headline": "bottom", "deco": "corner"},
+    {"gradient": "vertical",   "headline": "top",    "deco": "sparse"},
+    {"gradient": "bl-tr",      "headline": "top",    "deco": "dots"},
+    {"gradient": "horizontal", "headline": "bottom", "deco": "sidebar"},
+    {"gradient": "tl-br",      "headline": "top",    "deco": "rings"},
+    {"gradient": "tr-bl",      "headline": "bottom", "deco": "none"},
+]
+
+
+def variant_for(slot_index, surface_offset=0):
+    """slot_index is 0-based; surface_offset rotates the table so the same
+    slot number on phone vs tablet_7 vs tablet_10 gets a different layout."""
+    return VARIANTS[(slot_index + surface_offset) % len(VARIANTS)]
+
+
 # ---------------------- image helpers ----------------------
 
-def make_gradient_bg(theme):
-    """Build a 3-stop diagonal gradient using the theme's bg colors."""
-    # 2x2 base extended to W x H via bicubic resize — fast and smooth
+def make_gradient_bg(theme, direction="tl-br"):
+    """3-stop gradient; corner placement varies by direction so each
+    variant reads as a visually different background."""
+    c1 = theme["bg_top_left"]
+    c2 = theme["bg_top_right"]
+    c3 = theme["bg_bottom"]
+    mid = tuple((c1[i] + c3[i]) // 2 for i in range(3))
+    # (TL, TR, BL, BR) corner colours per direction
+    layouts = {
+        "tl-br":      (c1, c2, mid, c3),
+        "tr-bl":      (c2, c1, c3, mid),
+        "bl-tr":      (mid, c3, c1, c2),
+        "vertical":   (c1, c2, c3, c3),
+        "horizontal": (c1, c3, c1, c3),
+    }
+    tl, tr, bl, br = layouts.get(direction, layouts["tl-br"])
     base = Image.new('RGB', (2, 2))
-    base.putpixel((0, 0), theme["bg_top_left"])
-    base.putpixel((1, 0), theme["bg_top_right"])
-    base.putpixel((0, 1), theme["bg_bottom"])
-    base.putpixel((1, 1), (
-        (theme["bg_top_right"][0] + theme["bg_bottom"][0]) // 2,
-        (theme["bg_top_right"][1] + theme["bg_bottom"][1]) // 2,
-        (theme["bg_top_right"][2] + theme["bg_bottom"][2]) // 2,
-    ))
+    base.putpixel((0, 0), tl)
+    base.putpixel((1, 0), tr)
+    base.putpixel((0, 1), bl)
+    base.putpixel((1, 1), br)
     return base.resize((W, H), Image.BICUBIC)
 
 
-def draw_decorations(img, theme):
-    """Subtle decorative circles for visual texture."""
+def draw_decorations(img, theme, style="bubbles"):
+    """Decorative texture; style varies per slot variant."""
+    if style == "none":
+        return
     draw = ImageDraw.Draw(img, 'RGBA')
-    bubbles = [
-        (0.08, 0.06, 0.045), (0.92, 0.09, 0.035),
-        (0.04, 0.28, 0.025), (0.95, 0.44, 0.050),
-        (0.06, 0.58, 0.030), (0.93, 0.75, 0.022),
-        (0.12, 0.90, 0.038), (0.88, 0.95, 0.028),
-    ]
-    # Decoration color: light text color at low alpha — works on dark and
-    # light themes because we use whichever text_primary is.
     tp = theme["text_primary"]
     deco = (tp[0], tp[1], tp[2], 35)
-    for bx, by, br in bubbles:
-        x = int(W * bx)
-        y = int(H * by)
-        r = int(W * br)
-        draw.ellipse([x - r, y - r, x + r, y + r],
-                     outline=deco, width=max(3, r // 10))
+    ac = theme["text_accent"]
+    if style == "bubbles":
+        for bx, by, br in [(0.08, 0.06, 0.045), (0.92, 0.09, 0.035),
+                           (0.04, 0.28, 0.025), (0.95, 0.44, 0.050),
+                           (0.06, 0.58, 0.030), (0.93, 0.75, 0.022),
+                           (0.12, 0.90, 0.038), (0.88, 0.95, 0.028)]:
+            x, y, r = int(W * bx), int(H * by), int(W * br)
+            draw.ellipse([x - r, y - r, x + r, y + r],
+                         outline=deco, width=max(3, r // 10))
+    elif style == "corner":
+        for cx, cy in [(0.0, 0.0), (1.0, 1.0)]:
+            for rr in (0.30, 0.42, 0.54):
+                r = int(W * rr)
+                x, y = int(W * cx), int(H * cy)
+                draw.ellipse([x - r, y - r, x + r, y + r],
+                             outline=deco, width=4)
+    elif style == "dots":
+        for gx in range(6):
+            for gy in range(13):
+                x = int(W * (0.07 + gx * 0.172))
+                y = int(H * (0.05 + gy * 0.075))
+                r = int(W * 0.007)
+                draw.ellipse([x - r, y - r, x + r, y + r], fill=deco)
+    elif style == "sidebar":
+        bw = int(W * 0.13)
+        draw.rectangle([W - bw, 0, W, H], fill=(ac[0], ac[1], ac[2], 26))
+        draw.rectangle([W - bw - 6, 0, W - bw, H],
+                       fill=(ac[0], ac[1], ac[2], 50))
+    elif style == "sparse":
+        for bx, by, br in [(0.12, 0.11, 0.10), (0.90, 0.40, 0.13),
+                           (0.16, 0.83, 0.11)]:
+            x, y, r = int(W * bx), int(H * by), int(W * br)
+            draw.ellipse([x - r, y - r, x + r, y + r],
+                         outline=deco, width=5)
+    elif style == "rings":
+        x, y = int(W * 0.04), int(H * 0.96)
+        for rr in (0.14, 0.22, 0.30, 0.38):
+            r = int(W * rr)
+            draw.ellipse([x - r, y - r, x + r, y + r],
+                         outline=deco, width=4)
 
 
-def frame_screenshot(shot, theme):
+def frame_screenshot(shot, theme, height_frac=0.62):
     """Wrap a screenshot in a rounded-corner phone-frame with glow + shadow."""
-    target_h = int(H * 0.62)
+    target_h = int(H * height_frac)
     ratio = shot.size[1] / shot.size[0]
     target_w = int(target_h / ratio)
     if target_w > int(W * 0.78):
@@ -162,8 +222,10 @@ def frame_screenshot(shot, theme):
     return frame, frame_w, frame_h
 
 
-def draw_headline(img, line1, line2, subtitle, theme):
+def draw_headline(img, line1, line2, subtitle, theme, y_start=None):
     draw = ImageDraw.Draw(img, 'RGBA')
+    if y_start is None:
+        y_start = int(H * 0.045)
     max_width = int(W * 0.88)
     heavy_size = int(H * 0.075)
 
@@ -182,7 +244,7 @@ def draw_headline(img, line1, line2, subtitle, theme):
     # so visual hierarchy is preserved.
     sub_font  = pick_font('medium', int(H * 0.026))
 
-    y = int(H * 0.045)
+    y = y_start
     shadow_offset = int(H * 0.004)
 
     # Line 1 — accent color
@@ -277,21 +339,31 @@ def draw_footer(img, app_display_name, theme):
               fill=(*theme["footer_tint"], 200))
 
 
-def build_one(src_path, out_path, line1, line2, subtitle, app_display_name, theme):
-    canvas = make_gradient_bg(theme).convert('RGBA')
-    draw_decorations(canvas, theme)
-    headline_bottom = draw_headline(canvas, line1, line2, subtitle, theme)
+def build_one(src_path, out_path, line1, line2, subtitle,
+              app_display_name, theme, variant):
+    canvas = make_gradient_bg(theme, variant["gradient"]).convert('RGBA')
+    draw_decorations(canvas, theme, variant["deco"])
 
+    bottom = variant["headline"] == "bottom"
     shot = Image.open(src_path)
-    framed, fw, fh = frame_screenshot(shot, theme)
-    fx = (W - fw) // 2
-    gap = int(H * 0.03)
-    fy = headline_bottom + gap
-    bottom_limit = int(H * 0.94) - fh
-    if fy > bottom_limit:
-        fy = bottom_limit
-    canvas.alpha_composite(framed, (fx, fy))
+    framed, fw, fh = frame_screenshot(
+        shot, theme, height_frac=(0.52 if bottom else 0.62))
 
+    # Framed screenshot always stays horizontally centered.
+    fx = (W - fw) // 2
+
+    if bottom:
+        fy = int(H * 0.060)
+        draw_headline(canvas, line1, line2, subtitle, theme,
+                      y_start=fy + fh + int(H * 0.035))
+    else:
+        headline_bottom = draw_headline(canvas, line1, line2, subtitle, theme)
+        fy = headline_bottom + int(H * 0.03)
+        bottom_limit = int(H * 0.94) - fh
+        if fy > bottom_limit:
+            fy = bottom_limit
+
+    canvas.alpha_composite(framed, (fx, fy))
     draw_footer(canvas, app_display_name, theme)
 
     out = canvas.resize((OUT_W, OUT_H), Image.LANCZOS)
@@ -337,8 +409,18 @@ def main():
         sys.exit(1)
 
     headlines = json.loads(headlines_path.read_text())
-    if len(headlines) < 7:
-        print(f"ERROR: need 7 headlines, found {len(headlines)} in {headlines_path}")
+
+    # Slot count follows how many raw captures exist. Menu / shop / settings
+    # screens are no longer captured (every slot must show actual gameplay),
+    # so a set may legitimately be 6 rather than 7.
+    raw_files = sorted(p for p in raw_dir.glob("*.png") if p.stem.isdigit())
+    n_slots = len(raw_files)
+    if n_slots < 2:
+        print(f"ERROR: need at least 2 raw screenshots, found {n_slots} in {raw_dir}")
+        sys.exit(1)
+    if len(headlines) < n_slots:
+        print(f"ERROR: need {n_slots} headlines (one per raw screenshot), "
+              f"found {len(headlines)} in {headlines_path}")
         sys.exit(1)
 
     theme = get_theme(app_name)
@@ -355,21 +437,23 @@ def main():
     out_dir = app_dir / "store" / "screenshots" / "phone"
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"\nWrapping 7 screenshots for {app_name}...")
+    print(f"\nWrapping {n_slots} screenshots for {app_name}...")
     print(f"  source: {raw_dir}")
     print(f"  output: {out_dir}")
     print()
 
-    for i in range(7):
+    for i in range(n_slots):
         src = raw_dir / f"{i+1:02d}.png"
         out = out_dir / f"{i+1:02d}.png"
         if not src.exists():
             print(f"  WARNING: missing {src.name}, skipping")
             continue
         h = headlines[i]
-        print(f"  {src.name} → {out.name}  ({h['line1']} {h['line2']})")
+        variant = variant_for(i)
+        print(f"  {src.name} → {out.name}  ({h['line1']} {h['line2']})"
+              f"  [{variant['gradient']}/{variant['headline']}/{variant['deco']}]")
         build_one(src, out, h['line1'], h['line2'], h['subtitle'],
-                  app_display_name, theme)
+                  app_display_name, theme, variant)
 
     print()
     print(f"✓ Done. Phone screenshots ready at {out_dir}")

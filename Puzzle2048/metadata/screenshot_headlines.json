@@ -10,11 +10,9 @@
     "subtitle": "Equal tiles combine into the next power of two."
   },
   {
-    "line1": "BIG TILE",
-    "line2": "BIG WIN",
-    "subtitle": "Reach a milestone and a new tile palette unlocks.",
-    "needs_capture": true,
-    "capture_note": "Milestone/win moment + the theme-unlock card."
+    "line1": "PLAN EACH",
+    "line2": "MOVE",
+    "subtitle": "A crowded grid rewards thinking two moves ahead."
   },
   {
     "line1": "STUCK?",
@@ -30,18 +28,5 @@
     "line1": "WEEKLY",
     "line2": "TOURNAMENT",
     "subtitle": "Your best score this week places you in a bracket."
-  },
-  {
-    "line1": "2048",
-    "line2": "ONE-HANDED",
-    "subtitle": "Free, offline, no paywall. Swipe until you can't merge anymore."
-  },
-  {
-    "line1": "TILE",
-    "line2": "PALETTES",
-    "subtitle": "Unlock new tile color sets the more games you play.",
-    "_raw_slot": "08",
-    "needs_capture": true,
-    "capture_note": "Themes screen — full palette grid with one card highlighted."
   }
 ]

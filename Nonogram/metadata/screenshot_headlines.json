@@ -10,11 +10,9 @@
     "subtitle": "Clue-driven logic — the picture emerges as you solve."
   },
   {
-    "line1": "SOLVED",
-    "line2": "CLEAN",
-    "subtitle": "Win screen — and a new color theme is unlocked.",
-    "needs_capture": true,
-    "capture_note": "Win overlay showing stars + the theme-unlock card."
+    "line1": "PIECE BY",
+    "line2": "PIECE",
+    "subtitle": "Every deduction fills another run of cells on the grid."
   },
   {
     "line1": "PIXEL ART",
@@ -30,18 +28,5 @@
     "line1": "STUCK?",
     "line2": "REVEAL IT",
     "subtitle": "Reveal Cell and Reveal Row boosters when you need a nudge."
-  },
-  {
-    "line1": "PAINT BY",
-    "line2": "NUMBERS",
-    "subtitle": "Calm, offline picross — settle in with a tea."
-  },
-  {
-    "line1": "PICK YOUR",
-    "line2": "PALETTE",
-    "subtitle": "Earn new color themes as you climb the level ladder.",
-    "_raw_slot": "08",
-    "needs_capture": true,
-    "capture_note": "Themes screen — full palette grid with one card highlighted."
   }
 ]
