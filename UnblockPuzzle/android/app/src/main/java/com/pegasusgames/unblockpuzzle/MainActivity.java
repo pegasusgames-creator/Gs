@@ -96,6 +96,13 @@ public class MainActivity extends Activity {
         "season_pass_monthly", "starter_pack", "unlimited_lives_1h",
         "unlimited_lives_forever", "weekly_pass"
     ));
+
+    // Subscription SKUs — routed through launchSubscription(), never the
+    // one-time INAPP flow.
+    private static final Set<String> SUBSCRIPTION_PRODUCTS = new HashSet<>(Arrays.asList(
+        "season_pass_monthly", "weekly_pass"
+    ));
+
     // SKUs that are CONSUMABLE — must be consumed via consumeAsync after each
     // purchase, otherwise the user can buy once and never re-buy. Anything in
     // VALID_PRODUCTS but NOT in this set is non-consumable / subscription and
@@ -384,7 +391,7 @@ public class MainActivity extends Activity {
 
     private void launchPurchase(String productId) {
         if (!VALID_PRODUCTS.contains(productId)) return;
-        if ("season_pass_monthly".equals(productId)) { launchSubscription(productId); return; }
+        if (SUBSCRIPTION_PRODUCTS.contains(productId)) { launchSubscription(productId); return; }
         billingClient.queryProductDetailsAsync(
             QueryProductDetailsParams.newBuilder().setProductList(Arrays.asList(
                 QueryProductDetailsParams.Product.newBuilder()
