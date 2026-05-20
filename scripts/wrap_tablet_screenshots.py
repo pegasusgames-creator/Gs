@@ -73,7 +73,7 @@ VARIANTS = [
     {"gradient": "tr-bl",      "headline": "bottom", "deco": "corner"},
     {"gradient": "vertical",   "headline": "top",    "deco": "sparse"},
     {"gradient": "bl-tr",      "headline": "top",    "deco": "dots"},
-    {"gradient": "horizontal", "headline": "bottom", "deco": "sidebar"},
+    {"gradient": "horizontal", "headline": "bottom", "deco": "bubbles"},
     {"gradient": "tl-br",      "headline": "top",    "deco": "rings"},
     {"gradient": "tr-bl",      "headline": "bottom", "deco": "none"},
 ]
