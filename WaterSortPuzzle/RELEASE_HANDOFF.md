@@ -42,19 +42,19 @@ Click **Create product** for each row below. Activate after creating
 
 | Product ID | Type | Name | Default price |
 |---|---|---|---|
-| `remove_ads` | Managed |  | $2.99 |
-| `coins_small` | Managed |  | $0.99 |
-| `coins_large` | Managed |  | $4.99 |
-| `coins_medium` | Managed |  | $2.99 |
-| `coins_mega` | Managed |  | $9.99 |
-| `five_lives` | Managed |  | $0.99 |
-| `unlimited_lives_1h` | Managed |  | $1.99 |
-| `unlimited_lives_forever` | Managed |  | $4.99 |
-| `unlimited_undos` | Managed |  | $4.99 |
-| `hint_pack` | Managed |  | $1.99 |
-| `starter_pack` | Managed |  | $0.99 |
-| `season_pass_monthly` | Subscription |  | $4.99/mo |
-| `weekly_pass` | Subscription |  | $1.99/wk |
+| `remove_ads` | Managed | Remove Ads | $2.99 |
+| `coins_small` | Managed | 100 Coins | $0.99 |
+| `coins_large` | Managed | 800 Coins | $4.99 |
+| `coins_medium` | Managed | 400 Coins | $2.99 |
+| `coins_mega` | Managed | 2000 Coins | $9.99 |
+| `five_lives` | Managed | 5 Lives | $0.99 |
+| `unlimited_lives_1h` | Managed | 1 Hour Unlimited Lives | $1.99 |
+| `unlimited_lives_forever` | Managed | Unlimited Lives Forever | $4.99 |
+| `unlimited_undos` | Managed | Unlimited Undos | $4.99 |
+| `hint_pack` | Managed | Hint Pack | $1.99 |
+| `starter_pack` | Managed | Starter Pack | $0.99 |
+| `season_pass_monthly` | Subscription | Season Pass | $4.99/mo |
+| `weekly_pass` | Subscription | Weekly Pass | $1.99/wk |
 
 ---
 
