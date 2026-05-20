@@ -26,9 +26,9 @@ below), `build_release.py`, `gen_handoff.py`, `gen_translations.py`,
 **Standalone check modules** (run with `<App>` or `--all`, wired into
 `pre_publish_check.py`): `check_iap_invariants.py`,
 `check_iap_grant_parity.py`, `check_retention_features.py`,
-`check_subscription_parity.py`, `check_coin_tier_ladder.py`,
-`check_booster_catalog.py`, `check_menu_completeness.py`,
-`check_seasonal_events.py`.
+`check_subscription_parity.py`, `check_subscription_routing.py`,
+`check_coin_tier_ladder.py`, `check_booster_catalog.py`,
+`check_menu_completeness.py`, `check_seasonal_events.py`.
 
 ## Companion files
 
@@ -704,7 +704,8 @@ a fraction of the policy risk.
 
 ## Common audit slips to check before every release
 
-Memorialized from the 2026-05-15 WaterSortPuzzle/Nonogram/Puzzle2048 audit.
+Memorialized from the 2026-05-15 WaterSortPuzzle/Nonogram/Puzzle2048
+audit and the 2026-05-20 PipeConnect/UnblockPuzzle ship-prep pass.
 Each line is now enforced by a `pre_publish_check.py` check.
 
 - **PRODUCTS-array price strings in `game.html` MUST match `iaps.json`
@@ -733,3 +734,12 @@ Each line is now enforced by a `pre_publish_check.py` check.
 - **Translations MUST be reviewed by native speakers for at least the
   top-3-revenue locales** — literal calques look amateur and depress
   conversion.
+- **Every subscription SKU MUST be routed to the SUBS billing flow.**
+  `launchPurchase()` in `MainActivity.java` picks INAPP vs SUBS per
+  product ID; a subscription sent down the one-time INAPP path makes
+  Play return no `ProductDetails`, so `launchBillingFlow()` never fires
+  and the purchase sheet never opens — a sold SKU that cannot be
+  bought. Route every subscription through a `SUBSCRIPTION_PRODUCTS`
+  set, never a hardcoded single-SKU `.equals` (the 2026-05-20
+  UnblockPuzzle/PipeConnect `weekly_pass` dead-end).
+  `check_subscription_routing` enforces.

@@ -978,6 +978,10 @@ The new checks added recently:
   Missions, Weekly Tournament…) matches the raw capture; OCR-verified
   when `tesseract` is installed.
   `python3 scripts/check_screenshot_headline_match.py`
+- `subscription billing routing` — every subscription SKU in
+  `iaps.json` is routed to the SUBS billing flow in `launchPurchase()`,
+  not the one-time INAPP path (the `weekly_pass` dead-end bug).
+  `python3 scripts/check_subscription_routing.py`
 
 All of the above block the build on a `BLOCKER` and warn on a `WARNING`.
 

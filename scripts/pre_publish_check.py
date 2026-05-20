@@ -580,6 +580,11 @@ check_interstitial_cadence      = _delegated_check("check_interstitial_cadence")
 check_iap_display_name_table    = _delegated_check("check_iap_display_name_table")
 check_screenshot_headline_match = _delegated_check("check_screenshot_headline_match")
 
+# Audit 2026-05-20 — subscription billing routing: every subscription SKU
+# must reach the SUBS billing flow, never the one-time INAPP path (the
+# UnblockPuzzle/PipeConnect weekly_pass dead-end bug).
+check_subscription_routing      = _delegated_check("check_subscription_routing")
+
 
 def check_iaps_match_code(apps):
     """Warn if metadata/iaps.json IDs don't match the PRODUCT_IDS list in MainActivity.java."""
@@ -1895,6 +1900,7 @@ def main():
     section("meta",  "IAP correctness invariants", check_iap_invariants, apps)
     section("meta",  "IAP grant parity",            check_iap_grant_parity, apps)
     section("meta",  "subscription promise parity", check_subscription_parity, apps)
+    section("code",  "subscription billing routing", check_subscription_routing, apps)
     section("meta",  "coin tier ladder",            check_coin_tier_ladder, apps)
     section("code",  "retention-feature parity",    check_retention_features, apps)
     section("code",  "booster catalog",             check_booster_catalog, apps)
