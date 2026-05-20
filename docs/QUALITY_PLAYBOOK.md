@@ -1734,3 +1734,33 @@ mapped through a per-game 10/25/50/75% threshold table; Monday reset;
 Every benefit named in a sub/bundle description has a code flag honored.
 `check_subscription_parity` + `check_retention_features` enforce. 2048-style
 games say "unlimited undos" where leveled games say "unlimited hints".
+
+---
+
+## 15. Audit slip prevention
+
+The 2026-05-15 WaterSort/Nonogram/Puzzle2048 audit found eight recurring
+slip classes. Each is now a required pre-ship gate enforced by
+`pre_publish_check.py` — treat a BLOCKER here exactly like any other.
+(Numbered §15 because §8 "Technical polish" is taken; the audit task
+called for "§8".)
+
+1. **Price-string parity** — `game.html` `PRODUCTS` price strings must
+   equal `iaps.json` `price_usd` to the cent. `check_price_string_parity`.
+2. **Generated-puzzle solvability** — procedurally generated boards must
+   be verified solvable / uniquely determined before ship; bake offline
+   if runtime validation is too slow.
+3. **Screenshot headline ↔ content match** — a headline naming a screen
+   must sit over a capture of that screen. `check_screenshot_headline_match`.
+4. **IAP display-name table** — every `RELEASE_HANDOFF.md` IAP row has a
+   Name. `check_iap_display_name_table`.
+5. **Restore Purchases in Settings** — every game exposes
+   `Android.restorePurchases()`. `check_restore_purchases_ui`.
+6. **Queue-based rewarded-ad callbacks** — never a single overwrite-prone
+   pending-callback variable.
+7. **Counter-gated interstitials** — at least one interstitial gated by a
+   level/game counter, not only a screen transition.
+   `check_interstitial_cadence`.
+8. **Native-speaker translation review** — at least the top-3-revenue
+   locales reviewed by a native speaker; literal calques depress
+   conversion.

@@ -685,3 +685,37 @@ app/week sustainably = 4 years for 200. When asked to "finish all of
 them," help one at a time at the flagship bar rather than racing to
 ship thin versions of many. 30 polished apps out-earn 200 thin ones at
 a fraction of the policy risk.
+
+---
+
+## Common audit slips to check before every release
+
+Memorialized from the 2026-05-15 WaterSort/Nonogram/Puzzle2048 audit.
+Each line is now enforced by a `pre_publish_check.py` check.
+
+- **PRODUCTS-array price strings in `game.html` MUST match `iaps.json`
+  `price_usd` to the cent.** `iaps.json` is the catalog source of
+  truth; the `PRODUCTS` array is the in-game display source of truth —
+  they drift independently, and a shop quoting below what Play charges
+  is a Misleading-Behavior risk. `check_price_string_parity` enforces.
+- **Procedurally generated puzzles MUST be validated solvable / uniquely
+  determined before shipping** — never trust the generator without a
+  solver pass. If runtime validation is too slow for startup, validate
+  offline and bake the result (Nonogram levels 151-500).
+- **Screenshot headlines MUST match screenshot content.** A "Daily
+  Missions" headline over a plain gameplay board is a Play policy red
+  flag. `check_screenshot_headline_match` enforces.
+- **`RELEASE_HANDOFF.md` IAP tables MUST have every column populated.**
+  An empty Name column means SKUs ship with blank display names.
+  `check_iap_display_name_table` enforces.
+- **Restore Purchases MUST be reachable from Settings in every game.**
+  Refunds spike on reinstalls without it. `check_restore_purchases_ui`
+  enforces.
+- **Rewarded-ad callback handling MUST be queue-based, not overwrite.**
+  A single pending-callback variable is a race that drops rewards.
+- **Interstitial triggers MUST count levels/games played**, not only
+  fire on "return to menu" — long uninterrupted sessions otherwise see
+  zero interstitials. `check_interstitial_cadence` enforces.
+- **Translations MUST be reviewed by native speakers for at least the
+  top-3-revenue locales** — literal calques look amateur and depress
+  conversion.

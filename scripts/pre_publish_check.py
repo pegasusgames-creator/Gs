@@ -571,6 +571,15 @@ check_booster_catalog      = _delegated_check("check_booster_catalog")
 check_menu_completeness    = _delegated_check("check_menu_completeness")
 check_seasonal_events      = _delegated_check("check_seasonal_events")
 
+# Audit 2026-05-15 — slip-prevention checks (G2-G6): price-string parity,
+# restore-purchases UI, interstitial cadence, IAP display-name table,
+# screenshot headline/content match.
+check_price_string_parity       = _delegated_check("check_price_string_parity")
+check_restore_purchases_ui      = _delegated_check("check_restore_purchases_ui")
+check_interstitial_cadence      = _delegated_check("check_interstitial_cadence")
+check_iap_display_name_table    = _delegated_check("check_iap_display_name_table")
+check_screenshot_headline_match = _delegated_check("check_screenshot_headline_match")
+
 
 def check_iaps_match_code(apps):
     """Warn if metadata/iaps.json IDs don't match the PRODUCT_IDS list in MainActivity.java."""
@@ -1891,6 +1900,12 @@ def main():
     section("code",  "booster catalog",             check_booster_catalog, apps)
     section("code",  "menu completeness",           check_menu_completeness, apps)
     section("code",  "seasonal events present",     check_seasonal_events, apps)
+    # Audit 2026-05-15 slip-prevention checks (G2-G6).
+    section("meta",  "IAP price string parity",     check_price_string_parity, apps)
+    section("code",  "restore purchases UI",        check_restore_purchases_ui, apps)
+    section("code",  "interstitial cadence",        check_interstitial_cadence, apps)
+    section("meta",  "IAP display-name table",      check_iap_display_name_table, apps)
+    section("store", "screenshot headline match",   check_screenshot_headline_match, apps)
     section("meta",  "iaps.json matches code",     lambda a: ([], check_iaps_match_code(a)), apps)
     section("meta",  "canonical privacy/support URLs", check_canonical_urls, apps)
     section("meta",  "no per-app privacy.html",    check_no_per_app_privacy_html, apps)

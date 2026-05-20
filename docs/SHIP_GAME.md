@@ -963,6 +963,21 @@ The new checks added recently:
   present. `python3 scripts/check_menu_completeness.py`
 - `seasonal events present` — `SEASONAL_EVENTS` constant covering Oct/Dec/Feb.
   `python3 scripts/check_seasonal_events.py`
+- `IAP price string parity` — `game.html` `PRODUCTS` price strings match
+  `iaps.json` `price_usd` to the cent.
+  `python3 scripts/check_price_string_parity.py`
+- `restore purchases UI` — `game.html` exposes a control calling
+  `Android.restorePurchases()`.
+  `python3 scripts/check_restore_purchases_ui.py`
+- `interstitial cadence` — at least one interstitial is gated by a
+  level/game counter, not only a screen transition.
+  `python3 scripts/check_interstitial_cadence.py`
+- `IAP display-name table` — every `RELEASE_HANDOFF.md` Step-3 IAP row
+  has a non-empty Name. `python3 scripts/check_iap_display_name_table.py`
+- `screenshot headline match` — a headline naming a screen (Daily
+  Missions, Weekly Tournament…) matches the raw capture; OCR-verified
+  when `tesseract` is installed.
+  `python3 scripts/check_screenshot_headline_match.py`
 
 All of the above block the build on a `BLOCKER` and warn on a `WARNING`.
 
