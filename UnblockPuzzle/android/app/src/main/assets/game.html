@@ -257,7 +257,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#161020;font-family:
     <div class="set-row"><span class="set-label">🎨 Block Theme</span><button onclick="showScreen('themeScreen')" id="themeBtn" style="background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.3);border-radius:8px;padding:6px 14px;color:#ffd740;font-size:13px;font-weight:600;cursor:pointer">Classic</button></div>
     <div class="set-row"><span class="set-label">View Stats</span><button class="ov-btn ov-retry" style="width:auto;padding:8px 20px;font-size:0.85rem" onclick="showScreen('statsScreen')">Open</button></div>
     <div class="set-row"><span class="set-label">Missions</span><button class="ov-btn ov-retry" style="width:auto;padding:8px 20px;font-size:0.85rem" onclick="showScreen('missionsScreen')">Open</button></div>
-    <div class="set-row"><span class="set-label">App Version</span><span style="color:#666;font-size:0.85rem">1.0.0</span></div>
+    <div class="set-row"><span class="set-label">Restore Purchases</span><button class="ov-btn ov-retry" style="width:auto;padding:8px 20px;font-size:0.85rem" onclick="restorePurchasesUI()">Restore</button></div>
+    <div class="set-row"><span class="set-label">Privacy Policy</span><button class="ov-btn ov-retry" style="width:auto;padding:8px 20px;font-size:0.85rem" onclick="openPrivacyPolicy()">View</button></div>
+    <div class="set-row"><span class="set-label">App Version</span><span style="color:#666;font-size:0.85rem">1.0.3</span></div>
     <div class="set-row"><span class="set-label">Reset Progress</span><button class="ov-btn ov-retry" style="width:auto;padding:8px 20px;font-size:0.85rem" onclick="confirmReset()">Reset All</button></div>
   </div>
 </div>
@@ -1677,6 +1679,24 @@ function toggleSetting(key, toggleId){
 function confirmReset(){
   const ok = window.confirm ? confirm('Reset all progress? This cannot be undone.') : false;
   if(ok){ state = defaultState(); saveState(); _showMsg('Progress reset.'); }
+}
+
+function restorePurchasesUI(){
+  if(window.Android && typeof Android.restorePurchases === 'function'){
+    try{ Android.restorePurchases(); }catch(e){}
+    _showMsg('Restoring purchases…');
+  } else {
+    _showMsg('Restore is only available in the app.');
+  }
+}
+
+function openPrivacyPolicy(){
+  const url = 'https://pegasusgames-creator.github.io/privacy.html';
+  if(window.Android && typeof Android.openUrl === 'function'){
+    Android.openUrl(url);
+  } else {
+    window.open(url, '_blank');
+  }
 }
 
 // =====================================================================

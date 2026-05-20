@@ -482,6 +482,8 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void hideBannerAd()                  { hideBanner(); }
         @JavascriptInterface public void showBannerAd()                  { showBanner(); }
         @JavascriptInterface public void log(String msg)                 { /* disabled in release */ }
+        @JavascriptInterface public void restorePurchases()              { MainActivity.this.restorePurchases(); }
+        @JavascriptInterface public void openUrl(String url)             { try { startActivity(new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))); } catch (Exception e) {} }
 
         @JavascriptInterface
         public void scheduleNotification(String title, String body, long delayMs) {

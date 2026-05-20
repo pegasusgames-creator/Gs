@@ -514,16 +514,22 @@ advance.
   left as-is on purpose; **do NOT rework**. Every NEW app must give
   each of the 3 surfaces fully distinct raws + headlines + wrapper
   variants (see `SHIP_GAME.md` Phase 3.6).
-- **Finished code + metadata, not yet shipped (2):** PipeConnect
-  (v1.7.2), UnblockPuzzle (v1.0.3). Both have full metadata, all 13
-  locales, phone + tablet screenshots, and the four-tier coin ladder.
-  **PipeConnect** passes `pre_publish_check` (warnings only: tablet
-  7"/10" carry 2 wrapped screenshots vs. the 4-shot standard, no
-  iPhone 6.9 screenshots, one near-duplicate phone raw — none
-  blocking). **UnblockPuzzle is BLOCKED:** `pre_publish_check` fails —
-  no Restore Purchases control in `game.html` (Settings needs a row
-  whose handler calls `Android.restorePurchases()`). Fix that before
-  it can ship. Signing uses the single-keystore model; no PEPK.
+- **In ship prep (2):** PipeConnect (v1.7.2), UnblockPuzzle (v1.0.3).
+  Both have full metadata, all 13 locales, phone + tablet screenshots,
+  the four-tier coin ladder, and dedicated keystores (single-keystore
+  model; no PEPK). Both still carry AdMob test-ID placeholders
+  (`ca-app-pub-3940256099942544`) — those clear only when the user
+  does the AdMob setup in `RELEASE_HANDOFF.md` Step 1 (Phase 6), so
+  they always show as `pre_publish_check` blockers until upload prep.
+  - **UnblockPuzzle** — code clean as of 2026-05-20: Restore Purchases
+    + Privacy Policy wired into Settings, with `restorePurchases()` /
+    `openUrl()` added to the `MainActivity` JS bridge. Release AAB
+    builds clean. Only the AdMob-placeholder blockers remain — ready
+    for the Phase 6 hand-off + upload.
+  - **PipeConnect** — still has 2 unfixed code blockers: no Restore
+    Purchases control in `game.html`, and interstitials aren't gated
+    by a level/game counter (`check_interstitial_cadence`). Fix both
+    before shipping.
 - **Recently deleted:** BallSortPuzzle (2026-04-30 — too similar to
   WaterSortPuzzle, ~zero downloads); removed from working tree, from
   `app_themes.py` / `dedup_similar_apps.py` / `promo.json`.
