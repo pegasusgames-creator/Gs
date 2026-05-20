@@ -33,9 +33,9 @@ SKIP = {'_template', '_release', 'docs', 'scripts', 'release_aabs',
 # ladder" and "## IAP correctness invariants".
 EXPECTED_GRANTS = {
     'coins_small':  [('100 coins', r'\b100\b')],
-    'coins_medium': [('600 coins', r'\b600\b')],
-    'coins_large':  [('500 coins', r'\b500\b')],
-    'coins_mega':   [('1400 coins', r'\b1400\b')],
+    'coins_medium': [('400 coins', r'\b400\b')],
+    'coins_large':  [('800 coins', r'\b800\b')],
+    'coins_mega':   [('2000 coins', r'\b2000\b')],
     'hint_pack':    [('10 hints', r'\b10\b')],
     'undo_pack':    [('10 undos', r'\b10\b')],
     'starter_pack': [('100 coins', r'\b100\b'),

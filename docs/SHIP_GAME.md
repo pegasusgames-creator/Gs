@@ -471,9 +471,10 @@ Banned content (Play Console BLOCKS as of May 2026 via
 - ✗ Two slots showing the same level number / board state
 
 Required: vary the **level, board state, color palette in play,
-progress, and HUD state** across slots. Reasonable allocation for an
-8-slot phone listing (slot 08 — the Themes grid — is now part of the
-standard set, see QUALITY_PLAYBOOK §7.1):
+progress, and HUD state** across slots. Reasonable allocation for a
+6-slot phone listing — every slot is actual gameplay; the main menu,
+shop, and settings screens are never captured (CLAUDE.md "Things to
+flag", QUALITY_PLAYBOOK §7.1):
 
 | Slot | Suggested content |
 |---|---|
@@ -483,16 +484,14 @@ standard set, see QUALITY_PLAYBOOK §7.1):
 | 04 | Daily challenge screen actively running |
 | 05 | Daily missions panel (3 active objectives) or stats screen |
 | 06 | A different mid-game board (different palette, different layout) |
-| 07 | Menu — showing the Continue button, Free Coins, Weekly Tournament banner, theme progress strip |
-| 08 | **Themes screen — the full unlockable-palette grid with one card highlighted** |
 
-These are starting points — the rule is "no shop, no more-games, no
-two duplicates," not a rigid template. Pick what shows the app at
-its best. Until an emulator run captures slots 03 and 08 in their new
-form, `screenshot_headlines.json` carries `needs_capture: true` markers
-on those entries. (`wrap_screenshots.py` currently wraps the first 7
-raws; bump it to 8 when `capture_screenshots.py` is updated to grab the
-Themes screen too.)
+These are starting points — the rule is "no menu, no shop, no
+more-games, no settings, no two duplicates," not a rigid template.
+Pick what shows the app at its best. `wrap_screenshots.py` wraps
+exactly as many raws as `capture_screenshots.py` produced. Until an
+emulator run captures slot 03 in its new form,
+`screenshot_headlines.json` carries a `needs_capture: true` marker on
+that entry.
 
 **Pre-capture seed file required.** Create
 `<App>/test/seed_screenshot_state.js` with the EXACT localStorage keys
@@ -529,14 +528,14 @@ script now hashes each capture as it produces it. If a new capture
 matches a prior slot's hash within 4 hamming distance, the script
 **fails immediately** with a message identifying which slots collided
 and why. This catches the case where adb taps miss target buttons and
-all 7 slots silently capture the menu/initial state.
+all 6 slots silently capture the menu/initial state.
 
 When verification fails:
 1. Open the captured PNGs in `raw/` to see what actually got captured
 2. Identify which intended screen each slot SHOULD have shown
 3. Edit `<App>/test/screenshot_taps.json` with the correct coordinates
 4. Re-run the capture
-5. Iterate until all 7 slots produce visually distinct content
+5. Iterate until all 6 slots produce visually distinct content
 
 This is iterative for new apps — first run will likely fail
 verification on at least one slot. That's expected and correct
@@ -552,7 +551,7 @@ correct mobile look.
 
 ### Step 3.4 — Visual verification of raw captures
 
-BEFORE wrapping, open all 7 raw PNGs and verify against
+BEFORE wrapping, open all 6 raw PNGs and verify against
 `metadata/screenshot_headlines.json`:
 
 | Slot | Headline says | Image must show |
@@ -563,7 +562,6 @@ BEFORE wrapping, open all 7 raw PNGs and verify against
 | 04 | (variety / Daily claim) | the screen the headline names |
 | 05 | (event / mission claim) | the screen the headline names |
 | 06 | (booster / undo claim) | the relevant button or modal visible |
-| 07 | (brand / scope claim) | typically the menu, OK |
 
 If any slot's image doesn't match its headline, EITHER re-capture with
 the right screen content OR change the headline to match what was
@@ -805,10 +803,15 @@ mechanic, not a template.
     contains ads, contains IAP. KIDS apps need different answers — see
     QUALITY_PLAYBOOK §10.4 / §11.8.
 
-11. **`metadata/iaps.json`** — Standard 9 products from the Pegasus
-    Games IAP catalog (remove_ads, coins_small/medium/large/huge,
-    starter_pack, premium_themes, season_pass_monthly, hint_pack).
-    Product IDs prefixed with `<lowername>_` to be unique per app.
+11. **`metadata/iaps.json`** — A subset of the Pegasus Games IAP catalog
+    (`docs/IAP_CATALOG.md`): typically `remove_ads`,
+    `coins_small/medium/large/mega` (the full 4-tier ladder —
+    $0.99/$2.99/$4.99/$9.99 → 100/400/800/2000), `five_lives`,
+    `unlimited_lives_1h`, `hint_pack`, `starter_pack`, plus
+    `season_pass_monthly` ($4.99/mo) and optionally `weekly_pass`
+    ($1.99/wk). Product IDs prefixed with `<lowername>_` to be unique
+    per app. Descriptions are verbatim from `IAP_CATALOG.md`
+    (`check_iaps_descriptions` enforces).
 
 12. **`metadata/review_notes.json`** — For Google: explain that this is
     a casual puzzle game with AdMob ads, no login required, no special
@@ -946,9 +949,9 @@ The new checks added recently:
 - `subscription promise parity` — every benefit named in a subscription
   description has a code path (ad-free gate, daily-coin grant, theme
   unlock, premium-gated hint/undo). `python3 scripts/check_subscription_parity.py`
-- `coin tier ladder` — a game that sells any coin pack sells all four:
-  `coins_small/medium/large/mega` at $0.99/$4.99/$2.99/$9.99 →
-  100/600/500/1400. `python3 scripts/check_coin_tier_ladder.py`
+- `coin tier ladder` — a game that sells any coin pack sells all four,
+  strictly monotonic: `coins_small/medium/large/mega` at
+  $0.99/$2.99/$4.99/$9.99 → 100/400/800/2000. `python3 scripts/check_coin_tier_ladder.py`
 - `retention-feature parity` — for any season-pass game: `replayPendingGrants`,
   `isSeasonActive()`, wrapped `onPurchaseSuccess`, `isPremium()`, and a
   hint/undo counter if the matching pack is sold.
@@ -1027,24 +1030,37 @@ Click "Create app". Fill in:
 
 Click "Create app". You're now on the dashboard for the new app.
 
-## Step 3 — Create the 9 IAP products in Play Console (10 min)
+## Step 3 — Create the IAP products in Play Console (10 min)
 
 Play Console → <AppName> → Monetize → Products → In-app products.
-Click "Create product" 9 times, with these exact values:
+Create exactly the products this app's `metadata/iaps.json` lists (a
+subset of `docs/IAP_CATALOG.md` — never invent IDs). The standard
+flagship subset and its canonical prices/names:
 
-| Product ID                          | Type      | Name                | Default price |
-|-------------------------------------|-----------|---------------------|---------------|
-| <lowername>_remove_ads              | Managed   | Remove Ads          | $1.99         |
-| <lowername>_coins_small             | Managed   | 100 Coins           | $0.99         |
-| <lowername>_coins_medium            | Managed   | 500 Coins           | $3.99         |
-| <lowername>_coins_large             | Managed   | 1200 Coins          | $7.99         |
-| <lowername>_coins_huge              | Managed   | 3000 Coins          | $14.99        |
-| <lowername>_starter_pack            | Managed   | Starter Pack        | $0.99         |
-| <lowername>_premium_themes          | Managed   | Premium Themes      | $2.99         |
-| <lowername>_hint_pack               | Managed   | Hint Pack           | $1.99         |
-| <lowername>_season_pass_monthly     | Subscription | Monthly Pass     | $1.99/mo      |
+| Product ID (use the bare ID, no `<lowername>_` prefix) | Type | Name | Default price |
+|-------------------------------------|--------------|------------------------|---------------|
+| `remove_ads`              | Managed      | Remove Ads             | $2.99         |
+| `coins_small`             | Managed      | 100 Coins              | $0.99         |
+| `coins_medium`            | Managed      | 400 Coins              | $2.99         |
+| `coins_large`             | Managed      | 800 Coins              | $4.99         |
+| `coins_mega`              | Managed      | 2000 Coins             | $9.99         |
+| `five_lives`              | Managed      | 5 Lives                | $0.99         |
+| `unlimited_lives_1h`      | Managed      | 1 Hour Unlimited Lives | $1.99         |
+| `hint_pack`               | Managed      | Hint Pack              | $1.99         |
+| `starter_pack`            | Managed      | Starter Pack           | $0.99         |
 
-For each: Activate after creating. (Default state is Inactive.)
+Then under **Monetize → Subscriptions**:
+
+| Product ID            | Name        | Base plan        | Price     |
+|-----------------------|-------------|------------------|-----------|
+| `season_pass_monthly` | Season Pass | `monthly-base` (1 month, auto-renew) | $4.99/mo  |
+| `weekly_pass`         | Weekly Pass | `weekly-base` (1 week, auto-renew)   | $1.99/wk  |
+
+Coin packs are Consumable; `remove_ads` / `unlimited_lives_forever` /
+`unlimited_undos` are Non-consumable; everything else one-time is
+Consumable. Names and descriptions are verbatim from
+`docs/IAP_CATALOG.md`. For each: Activate after creating. (Default
+state is Inactive.)
 
 ## Step 4 — Fill in store listing (5 min, mostly copy-paste)
 
@@ -1149,43 +1165,27 @@ in.
 
 **HARD BLOCKER before Phase 7 runs at all:**
 
-If this app has not yet had its Play Console "App signing settings"
-page configured with the local keystore AND a separate upload
-keystore, every AAB upload will be rejected. Play Console enforces
-that **app signing key ≠ upload key** — completing only PEPK is not
-enough. Before invoking gradle:
+The app must have its own keystore. Gradle signs the AAB with it
+directly; on the first Play Console upload, Play auto-enrols and
+registers this keystore's certificate as the upload key (no PEPK,
+no second "upload" keystore — see CLAUDE.md "Keystore management"
+for the why). Before invoking gradle:
 
-1. Confirm `<App>/android/encryption_public_key.pem` and
-   `<App>/android/pepk.jar` are present. The human must download
-   these two files from Play Console → App integrity → App signing
-   (radio "Export and upload key from Java keystore"). If either
-   file is missing, STOP and ask the human to download them.
-2. Run `python3 scripts/pepk_command.py <App>` and execute the
-   printed command. It produces `<App>/android/<alias>_pepk.zip`.
-3. Human uploads that `.zip` via Play Console step 4 (step 1-4 on
-   the App signing page).
-4. Run `python3 scripts/gen_upload_keystore.py <App>`. This
-   generates `<App>/android/upload-keystore.jks`,
-   `upload_certificate.pem`, and rewrites `keystore.properties` so
-   gradle signs AABs with the upload key.
-5. Human uploads `<App>/android/upload_certificate.pem` via Play
-   Console step 5c. Hits Save (no red "must differ" error this
-   time).
-6. THEN run `./gradlew bundleRelease`. The AAB is signed with the
-   upload key, which is what Play accepts on the release page.
+1. `<App>/android/keystore.jks` exists. If missing:
+   `python3 scripts/migrate_to_per_app_keystores.py --app <App>`.
+2. `<App>/android/keystore.properties` exists, has real (not
+   placeholder) `storePassword` + `keyPassword`, and `storeFile`
+   equals `keystore.jks`.
+3. The keystore is backed up three ways (local + Google Drive +
+   USB stick) — see CLAUDE.md rule 2. Lose `keystore.jks` + its
+   password and the only recovery is a 1-3 business day Play
+   upload-key reset.
 
-WaterSort and Nonogram skipped this — they each went through the
-slower upload-key reset workflow (1-3 business days) before the
-two-keystore requirement was understood. For every app from
-Puzzle2048 onward, use the PEPK + upload-keystore flow above.
+If any of these isn't true, hard-block and fix before bundleRelease.
 
-The `app_info.json` fields mark progress:
-- `app_signing_key_sha1` = original keystore.jks SHA-1 (server-side)
-- `upload_key_sha1`      = upload-keystore.jks SHA-1 (gradle signing)
-- `first_upload_at`       = set after first successful Play upload.
-
-If `upload_key_sha1 == app_signing_key_sha1`, gen_upload_keystore.py
-hasn't run yet — block on it.
+The `app_info.json` field `upload_key_sha1` records the keystore
+SHA-1 once the first Play upload succeeds; `check_keystore_present`
+verifies later builds sign with the same key.
 
 **First build (before Phase 6 hand-off):**
 ```

@@ -26,158 +26,158 @@ _Test and release → Production → release details_
 <en-US>
 • Color Reveal, Steady Pour, Fresh Start — renamed boosters
 • NEW Extra Tube and Magic Wand boosters
-• Hints now use a counter — earn with ads or buy a 10-pack
-• Starter Pack and Season Pass now grant their full rewards
-• Coin Pack S and L now grant 100 and 500 coins
-• Weekly Tournament bracket on the main menu
+• Hints use a counter — earn via ads or buy a 10-pack
+• Season Pass +100 daily coins (was +50); Weekly Pass +50
+• Coin packs: M 400 · L 800 · XL 2000; Weekly Pass $1.99/week
+• Weekly Tournament bracket on the menu
 • Seasonal events (Halloween, Winter, Spring)
-• Free Coins button — 25 every 4 hours
+• Free Coins — 25 every 4 hours
 • Continue · Level N from the menu
 • 7-day login streak rewards
 </en-US>
 
 <ar>
-• إعادة تسمية المعززات: كشف الألوان، صب ثابت، بداية جديدة  
-• معززات جديدة: أنبوب إضافي وعصا سحرية  
-• الآن تستخدم التلميحات عدادًا — اربح من الإعلانات أو اشترِ حزمة 10  
-• يتيح حزمة البداية ومرور الموسم مكافآتهما الكاملة  
-• حزمة العملات S وL تمنح الآن 100 و500 قطعة نقدية  
-• دوري أسبوعي على القائمة الرئيسية  
-• أحداث موسمية (الهالوين، الشتاء، الربيع)  
-• زر العملات المجانية — 25 كل 4 ساعات  
-• متابعة · المستوى N من القائمة  
-• مكافآت تسجيل الدخول لمدة 7 أيام
+• إعادة تسمية المحفزات: كشف الألوان، صب ثابت، بداية جديدة  
+• محفزات جديدة: أنبوب إضافي وعصا سحرية  
+• استخدام تلميحات مع عداد — اكسب عبر الإعلانات أو اشترِ حزمة 10  
+• بطاقة الموسم +100 قطعة نقدية يوميًا (كانت +50)؛ بطاقة أسبوعية +50  
+• حزم القطع النقدية: م 400 · ل 800 · إكس 2000؛ البطاقة الأسبوعية $1.99/أسبوع  
+• فعاليات موسمية (عيد الهالوين، الشتاء، الربيع)  
+• قطع نقدية مجانية — 25 كل 4 ساعات  
+• مكافآت لتسجيل الدخول لمدة 7 أيام
 </ar>
 
 <de-DE>
-• Farbenthüllung, Stetiges Gießen, Frischer Start — umbenannte Booster  
-• NEU Extra-Tube und Zauberstab-Booster  
-• Hinweise nutzen jetzt einen Zähler — verdienen mit Werbung oder 10er-Pack kaufen  
-• Starter-Pack und Saisonpass gewähren jetzt volle Belohnungen  
-• Münzpaket S und L gewähren 100 bzw. 500 Münzen  
-• Wöchentliche Turnier-Rangliste im Hauptmenü  
-• Saisonale Ereignisse (Halloween, Winter, Frühling)  
-• Kostenloser Münzen-Button — 25 alle 4 Stunden  
+• Farbenthüllung, gleichmäßige Ausgießung, umbenannte Booster  
+• NEU: Extra-Rohr und Zauberstab-Booster  
+• Tipps nutzen einen Zähler — Verdienen durch Werbung oder Kauf eines 10er-Packs  
+• Saisonpass +100 tägliche Münzen (war +50); Wochenpass +50  
+• Münzpakete: M 400 · L 800 · XL 2000; Wochenpass 1,99 $/Woche  
+• Wöchentliche Turnier-Rangliste im Menü  
+• Saisonale Events (Halloween, Winter, Frühling)  
+• Kostenlose Münzen — 25 alle 4 Stunden  
 • Fortsetzen · Level N im Menü
 </de-DE>
 
 <es-419>
-• Color Revelar, Vertido Estable, Nuevo Comienzo — refuerzos renombrados  
-• NUEVOS refuerzos Extra Tubo y Varita Mágica  
-• Las pistas ahora usan un contador — gana con anuncios o compra 10  
-• El Paquete Inicial y el Pase de Temporada ofrecen todas sus recompensas  
-• Paquetes de Monedas S y L dan 100 y 500 monedas  
-• Torneo Semanal en el menú principal  
+• Revelación de Color, Vertido Constante, Nuevo Comienzo — potenciadores renombrados  
+• NUEVO Extra Tubo y varita mágica  
+• Pistas con contador: gana a través de anuncios o compra un paquete de 10  
+• Pase de Temporada +100 monedas diarias; Pase Semanal +50  
+• Paquetes de monedas: M 400 · L 800 · XL 2000; Pase Semanal $1.99  
+• Torneo Semanal en el menú  
 • Eventos estacionales (Halloween, Invierno, Primavera)  
-• Botón de Monedas Gratis — 25 cada 4 horas  
+• Monedas Gratis — 25 cada 4 horas  
 • Continuar · Nivel N desde el menú
 </es-419>
 
 <fr-FR>
-• Color Reveal, Steady Pour, Fresh Start : boosters renommés
-• NOUVEAUX boosters Tube Extra et Baguette Magique
-• Les indices utilisent un compteur — gagnez-en par pub ou pack de 10
-• Le Pack de Démarrage et le Pass Saison offrent toutes leurs récompenses
-• Tournoi hebdomadaire sur le menu principal
-• Événements saisonniers (Halloween, Hiver, Printemps)
-• Bouton Pièces Gratuites — 25 toutes les 4 heures
-• Bouton Continuer · Niveau N depuis le menu
+• Color Reveal, Steady Pour, Fresh Start — nouveaux boosters  
+• NOUVEAUX boosters Extra Tube et Magic Wand  
+• Les indices avec un compteur — gagnez via des publicités ou achetez un pack de 10  
+• Season Pass +100 pièces quotidiennes (anciennement +50) ; Weekly Pass +50  
+• Packs de pièces : M 400 · L 800 · XL 2000 ; Weekly Pass 1,99 $/semaine  
+• Événements saisonniers (Halloween, Hiver, Printemps)  
+• Pièces gratuites — 25 toutes les 4 heures  
+• Récompenses pour connexions 7 jours
 </fr-FR>
 
 <hi-IN>
-• रंग प्रकट करें, स्थिर बहाव, नया प्रारंभ — नाम बदले गए बूस्टर्स  
-• नए अतिरिक्त ट्यूब और जादुई छड़ी बूस्टर्स  
-• संकेत अब एक काउंटर का उपयोग करते हैं — विज्ञापनों के साथ कमाएँ या 10-पैक खरीदें  
-• शुरुआती पैक और सीजन पास अब अपने पूरे पुरस्कार देते हैं  
-• कॉइन पैक S और L अब 100 और 500 सिक्के देते हैं  
-• मुख्य मेनू पर साप्ताहिक टूर्नामेंट ब्रैकेट  
-• मौसमी कार्यक्रम (हैलोवीन, सर्दी, गर्मी)  
-• मुफ्त सिक्के बटन — हर 4 घंटे में 25  
+• रंग प्रकट करें, स्थिर डालना, ताज़ा शुरुआत — नए नाम लिए बूस्टर  
+• नए अतिरिक्त ट्यूब और जादुई छड़ी बूस्टर  
+• संकेतों का उपयोग काउंटर से करें — विज्ञापनों के जरिए कमाएँ या 10-पैक्स खरीदें  
+• सीजन पास +100 दैनिक सिक्के (पहले +50); वीकली पास +50  
+• सिक्का पैक: M 400 · L 800 · XL 2000; वीकली पास $1.99/सप्ताह  
+• मेनू पर साप्ताहिक प्रतियोगिता ब्रैकेट  
+• मौसमी आयोजन (हैलोवीन, सर्दी, वसंत)  
+• मुफ्त सिक्के — हर 4 घंटे में 25  
 • मेनू से जारी रखें · स्तर N  
-• 7-दिन की लॉगिन श्रंखला पुरस्कार
+• 7-दिन की लॉगिन श्रृंखला इनाम
 </hi-IN>
 
 <id>
-• Pengungkap Warna, Tuang Stabil, Awal Baru — nama booster diperbarui  
-• Booster Tabung Ekstra dan Tongkat Ajaib yang Baru  
-• Petunjuk kini menggunakan penghitung — dapatkan melalui iklan atau beli paket 10  
-• Paket Pemula dan Pass Musim memberikan semua hadiah  
-• Paket Koin S dan L memberikan 100 dan 500 koin  
-• Turnamen Mingguan di menu utama  
+• Pengungkap Warna, Tuangan Stabil, Awal Segar — penamaan ulang booster  
+• BOOTER Baru Tabung Ekstra dan Tongkat Sihir  
+• Petunjuk menggunakan penghitung — dapatkan melalui iklan atau beli paket 10  
+• Season Pass +100 koin harian (sebelumnya +50); Weekly Pass +50  
+• Paket koin: M 400 · L 800 · XL 2000; Weekly Pass $1,99/minggu  
+• Turnamen Mingguan di menu  
 • Acara musiman (Halloween, Musim Dingin, Musim Semi)  
-• Tombol Koin Gratis — 25 setiap 4 jam  
+• Koin Gratis — 25 setiap 4 jam  
 • Lanjutkan · Level N dari menu
 </id>
 
 <it-IT>
-• Rivelazione di Colore, Versamento Stabile, Nuovo Inizio — booster rinominati
-• NUOVI booster Extra Tube e Magic Wand
-• Gli indizi ora usano un contatore — guadagnali con annunci o acquista 10
-• Pacchetto Iniziale e Pass Stagionale ora danno tutte le ricompense
-• Pacchetti Monete S e L danno 100 e 500 monete
-• Torneo settimanale nel menu principale
-• Eventi stagionali (Halloween, Inverno, Primavera)
-• Pulsante Monete Gratuite — 25 ogni 4 ore
+• Rivelazione Colore, Versamento Stabile, Nuovo Inizio — booster rinominati  
+• Nuovi booster Extra Tubo e Bacchetta Magica  
+• Gli indizi usano un contatore — guadagna tramite annunci o acquista un pacchetto da 10  
+• Pass Stagionale +100 monete quotidiane (prima +50); Pass Settimanale +50  
+• Pacchetti monete: M 400 · L 800 · XL 2000; Pass Settimanale $1.99/settimana  
+• Torneo Settimanale nel menu  
+• Eventi stagionali: Halloween, Inverno, Primavera  
+• Monete Gratuite — 25 ogni 4 ore
 </it-IT>
 
 <ja-JP>
-• カラーリヴェール、スティディポア、フレッシュスタート — 名前変更されたブースター  
+• カラーレヴェール、スティディポア、フレッシュスタート — 名前変更されたブースター  
 • 新しいエクストラチューブとマジックワンドのブースター  
-• ヒントにはカウンターが追加 — 広告を見て獲得するか、10パックを購入  
-• スタートパックとシーズンパスは全報酬を獲得  
-• コインパックSとLはそれぞれ100コインと500コインを提供  
-• メインメニューに週刊トーナメントのブランケット  
+• ヒントはカウンターを使用 — 広告で獲得または10パック購入  
+• シーズンパス +100日コイン（以前は+50）；ウィークリーパス +50  
+• コインパック：M 400 · L 800 · XL 2000；ウィークリーパス $1.99/週  
+• メニューにウィークリートーナメントのブランケット  
 • 季節イベント（ハロウィン、冬、春）  
-• 無料コインボタン — 4時間ごとに25コイン  
-• メニューから続ける · レベルN  
-• 7日間のログインストリーク報酬
+• 無料コイン — 4時間ごとに25  
+• メニューからレベルNを続行  
+• 7日間のログイン連続報酬
 </ja-JP>
 
 <pt-BR>
-• Revelação de Cor, Despejo Contínuo, Novo Começo — renomeação dos impulsionadores  
-• NOVOS impulsionadores Extra Tubo e Varinha Mágica  
-• Dicas agora têm um contador — ganhe com anúncios ou compre pacote de 10  
-• Pacote Inicial e Passe de Temporada concedem recompensas completas  
-• Pacotes de Moedas S e L oferecem 100 e 500 moedas  
-• Torneio Semanal no menu principal  
+• Revelação de Cores, Despejo Contínuo, Novo Começo — impulsionadores renomeados  
+• Novo impulso Extra Tube e varinha mágica  
+• Dicas com contador — ganhe por anúncios ou compre pacotes de 10  
+• Passe de Temporada +100 moedas diárias; Passe Semanal +50  
+• Pacotes de moedas: M 400 · L 800 · XL 2000; Passe Semanal R$1,99  
+• Torneio Semanal disponível no menu  
 • Eventos sazonais (Halloween, Inverno, Primavera)  
-• Botão de Moedas Grátis — 25 a cada 4 horas
+• Moedas Grátis — 25 a cada 4 horas  
+• Nível N no menu
 </pt-BR>
 
 <tr-TR>
-• Renk Açılımı, Düz Akış, Taze Başlangıç — yeniden adlandırılan güçlendiriciler  
+• Renk Açığa Çıkarma, Dikkatli Dökme, Temiz Başlangıç — yeni güçlendiriciler  
 • YENİ Ekstra Tüp ve Sihirli Değnek güçlendiricileri  
-• İpuçları artık sayıcı kullanıyor — reklamlarla kazan veya paket satın al  
-• Başlangıç Paketi ve Sezon Passi tam ödüller sunuyor  
-• Koin Paketi S ve L artık 100 ve 500 koin veriyor  
-• Ana menüde Haftalık Turnuva braketleri  
-• Mevsimsel etkinlikler: Cadılar Bayramı, Kış, Bahar  
-• Ücretsiz Koin butonu — her 4 saatte 25 koin
+• İpuçları, reklamlarla kazanma veya 10'lu paket ile kullanılabilir  
+• Sezon Pass +100 jeton; Haftalık Pass +50  
+• Jeton paketleri: M 400 · L 800 · XL 2000; Haftalık $1.99
+• Haftalık Turnuva bölümü eklendi  
+• Mevsimlik etkinlikler (Cadılar Bayramı, Kış, Bahar)  
+• Ücretsiz Jeton — her 4 saatte 25  
+• Menüden Devam et · Seviye N  
+• 7 günlük giriş ödülleri
 </tr-TR>
 
 <uk>
-• Розкриття кольору, Стійкий налива, Свіже початок — перейменовані бустери  
-• НОВІ бустери Додаткова трубка та Магічна паличка  
-• Підказки тепер з лічильником — отримуйте з реклами або купуйте комплект з 10  
-• Стартовий пакет і Сезонний пропуск надають усі свої винагороди  
-• Монетні пакети S та L — 100 та 500 монет  
-• Щотижневий турнір у меню  
+• Нові назви бустерів: Відкриття кольору, Стійкий вилив, Свіже початок  
+• НОВІ бустери: Додаткова трубка та Магічна паличка  
+• Поради з лічильником — заробляйте через рекламу або купуйте пакет з 10  
+• Сезонний пропуск +100 монет щодня (було +50); Щотижневий пропуск +50  
+• Пакети монет: М 400 · Л 800 · XL 2000; Щотижневий пропуск $1.99/тиждень  
+• Щотижневий турнір в меню  
 • Сезонні події (Хеллоуїн, Зима, Весна)  
-• Кнопка безкоштовних монет — 25 кожні 4 години  
-• Винагорода за 7-денний вхід
+• Безкоштовні монети — 25 кожні 4 години
 </uk>
 
 <zh-CN>
-• 色彩显现、稳定倾倒、崭新开始 — 新命名的助推器  
+• 颜色揭秘、稳定倾倒、全新开始 — 名称更新的助推器  
 • 新增额外管和魔法棒助推器  
-• 提示现在使用计数器 — 可通过广告获得或购买10个包  
-• 新手包和赛季通行证现在可获得全部奖励  
-• 硬币包S和L分别奖励100和500个硬币  
-• 每周锦标赛在主菜单中显示  
+• 提示使用计数器 — 可通过广告获得或购买10个包  
+• 赛季通行证每日+100金币（之前为+50）；每周通行证+50  
+• 金币包：中 400 · 大 800 · 超大 2000；每周通行证$1.99/周  
+• 菜单上有每周锦标赛的区间  
 • 季节性活动（万圣节、冬季、春季）  
-• 免费硬币按钮 — 每4小时获得25个  
-• 从菜单继续 · 等级N  
-• 7天登录奖励
+• 免费金币 — 每4小时获取25个  
+• 从菜单继续 · N关卡  
+• 7天登录连击奖励
 </zh-CN>
 
 ---
@@ -191,51 +191,51 @@ Pour & sort colored water. 500 levels, daily missions & relaxing fun!
 </en-US>
 
 <ar>
-اسكب ورتب الماء الملون. 500 مستوى، مهام يومية ومتعة مريحة!
+صب ورتب الماء الملون. 500 مستوى، مهام يومية ومتعة مريحة!
 </ar>
 
 <de-DE>
-Gieße und sortiere farbiges Wasser. 500 Level, tägliche Missionen & Entspannung!
+Gieße und sortiere farbiges Wasser. 500 Levels, tägliche Aufgaben & Entspannung!
 </de-DE>
 
 <es-419>
-Vierte y clasifica agua de colores. 500 niveles y diversión relajante.
+Vierte y ordena agua de colores. 500 niveles, misiones diarias y diversión.
 </es-419>
 
 <fr-FR>
-Verse et trie l'eau colorée. 500 niveaux, missions quotidiennes et calme !
+Versez et triez de l'eau colorée. 500 niveaux, missions quotidiennes & détente !
 </fr-FR>
 
 <hi-IN>
-रंगीन पानी डालें और छानें। 500 स्तर, दैनिक मिशन और शांत आनंद!
+रंगीन पानी डालें और छानें। 500 स्तर, दैनिक मिशन और आरामदायक मजा!
 </hi-IN>
 
 <id>
-Tuang & sortir air berwarna. 500 level, misi harian & hiburan menenangkan!
+Tuangkan & urutkan air berwarna. 500 level dan misi harian yang menyenangkan!
 </id>
 
 <it-IT>
-Versa e ordina acqua colorata. 500 livelli, missioni quotidiane e divertimento!
+Versa e ordina acqua colorata. 500 livelli, missioni giornaliere e divertimento!
 </it-IT>
 
 <ja-JP>
-色水を注ぎ、仕分ける。500のレベル、日々のミッションとリラックス！
+色水を注ぎ、並べましょう。500のレベル、日替わりミッションでリラックス！
 </ja-JP>
 
 <pt-BR>
-Despeje e ordene água colorida. 500 níveis, missões diárias e diversão!
+Despeje e organize água colorida. 500 níveis, missões diárias e diversão!
 </pt-BR>
 
 <tr-TR>
-Renkli su dök ve sıralayın. 500 seviye, günlük görevler ve rahatlatıcı eğlence!
+Renkli su dök ve sırala. 500 seviye, günlük görevler ve rahatlatıcı eğlence!
 </tr-TR>
 
 <uk>
-Наливайте та сортуйте кольорову воду. 500 рівнів, щоденні місії та релакс!
+Наливайте та сортуйте кольорову воду. 500 рівнів, щоденні місії!
 </uk>
 
 <zh-CN>
-倒水与分类。500个关卡，日常任务与放松乐趣！
+倒入并分类彩色水。500个关卡，日常任务和放松乐趣！
 </zh-CN>
 
 ---
@@ -303,13 +303,13 @@ Unlock new color palettes as you climb the level ladder. In October, December an
 🛒 SHOP
 • Remove Ads — enjoy an uninterrupted experience forever
 • Coin Pack S — 100 coins for hints and boosters
-• Coin Pack M — 600 coins
-• Coin Pack L — 500 coins, the most coins per dollar
-• Coin Pack XL — 1400 coins, our biggest bundle
+• Coin Pack M — 400 coins
+• Coin Pack L — 800 coins
+• Coin Pack XL — 2000 coins, our biggest bundle and the most coins per dollar
 • Hint Pack — 10 Color Reveal hints
 • Starter Pack — 100 coins + 5 hints + 5 lives + Ads Off
-• Season Pass — ad-free, +50 coins daily, all themes, unlimited hints (30 days)
-• Weekly Pass — ad-free, +100 coins daily, all themes, unlimited hints (7 days)
+• Season Pass — ad-free, +100 coins daily, all themes, unlimited hints (30 days, the better deal)
+• Weekly Pass — ad-free, +50 coins daily, all themes, unlimited hints (7 days, no commitment)
 • Unlimited Undos — never get stuck again
 • Extra Lives — restore 5 lives instantly
 • Unlimited Lives (1h) — play freely for a full hour
@@ -317,393 +317,391 @@ Unlock new color palettes as you climb the level ladder. In October, December an
 </en-US>
 
 <ar>
-💧 لعبة فرز الماء — صب، فرز واستمتع بالاسترخاء!
+💧 لعبة فرز المياه — اسكب، فرز واسترخِ!
 
-اضغط لصب السائل. شاهد الألوان تتجمع. تدفق مريح في كل مرة.
+اضغط لتسكب. راقب الألوان تستقر. تدفق مُرضٍ واحد في كل مرة.
 
-500 لغز مصمم يدويًا، بلا توقيت، بلا عجلة. استمتع بالموسيقى وركز.
+500 لغز مصمم بعناية، لا وقت محدد، لا عجلة. ارتد سماعات الأذن، واغمض عينيك.
 
 🌊 كيفية اللعب
-• اضغط على أنبوب لالتقاط طبقة السائل العلوية
-• صبها على لون مطابق أو في أنبوب فارغ
+• اضغط على الأنبوب لالتقاط الطبقة السائلة العليا
+• اسكبها على لون مطابق أو في أنبوب فارغ
 • املأ كل أنبوب بلون واحد لإكمال المستوى
-• لا ضغط زمني — العب على طريقتك الخاصة!
+• لا ضغط زمني — العب وفق وتيرتك الخاصة!
 
 ✨ الميزات
-• مجانية — جميع المستويات الـ 500 متاحة، بلا قيود للدفع
-• 500 مستوى مصممة بيد — من ألغاز للمبتدئين إلى تحديات صعبة
-• animations سلسة لترتيب السوائل — شاهد الماء يتدفق!
-• تأثيرات صوتية مهدئة لجريان الماء وموسيقى جوية
-• معززات عند التعثر: كشف اللون (تلميح)، صب ثابت (تراجع)، بداية جديدة (إعادة تشغيل)، أنبوب إضافي، عصا سحرية
-• تحدي يومي — لغز جديد كل يوم مع مكافآت سلسلة
-• مهام يومية — 3 أهداف جديدة كل يوم، احصل على عملات مكافأة
-• بطولة أسبوعية — تسلق لوحة قادة مصطنعة، الأنجح 25% يحصلون على عملات
-• فعاليات موسمية — موضوعات مؤقتة في هالوين، الشتاء والربيع
-• زر العملات المجانية — شاهد إعلانًا قصيرًا للحصول على 25 عملة كل بضعة ساعات
-• زر الاستمرار — استأنف المستوى الأخير من القائمة
-• سلسلة تسجيل دخول لمدة 7 أيام — مكافآت أكبر كلما لعبت بشكل متواصل
-• مجموعة ثيمات — افتح لوحات ألوان جديدة مع تقدمك
-• مقارنة التحركات — انظر عدد تحركاتك مقارنةً بالمتوسط ومكانك في الترتيب
-• شاشة الإحصائيات — تتبع المستويات المكتملة، إجمالي الصب، السلسلة اليومية، والمزيد
-• نظام الحياة مع تجديد سخي كل 30 دقيقة
-• تعمل بالكامل بدون إنترنت
-• 20+ لغة مدعومة
+• مجانية للعب — كل واحد من 500 مستوى مطلوب، لا حواجز دفع
+• 500 مستوى مصنوعة يدويًا — من الألغاز السهلة للمبتدئين إلى تحديات الخبراء المعقدة
+• رسوم متحركة سلسة لتدفق السائل — شاهد المياه تتدفق!
+• تأثيرات صوتية ASMR لصوت سكب المياه وموسيقى محيطة معالجة
+• معززات عند التعرض للجمود: كشف اللون (تلميح)، سكب ثابت (تراجع)، بداية جديدة (إعادة تشغيل)، أنبوب إضافي، عصا سحرية
+• تحدي يومي — لغز جديد كل يوم مع مكافآت طويلة
+• مهام يومية — 3 أهداف جديدة كل يوم، اكسب عملات إضافية
+• بطولة أسبوعية — تسلق لائحة تصنيف صناعية، يحصل 25% الأوائل على عملات
+• أحداث موسمية — عيد الهالوين، الشتاء والربيع تأتي بمواضيع محددة الوقت
+• زر العملات المجانية — شاهد إعلان قصير للحصول على 25 عملة كل بضع ساعات
+• زر المتابعة — استأنف آخر مستوى لك مباشرة من القائمة
+• سلسلة تسجيل الدخول لمدة 7 أيام — مكافآت أكبر كلما لعبت بشكل متتالي
+• مجموعة ثيمات — افتح لوحات ألوان جديدة بينما تتقدم
+• مقارنة التحركات — راقب عدد تحركاتك مقابل المستوى ونطاقك المصنف
+• شاشة الإحصائيات — تتبع المستويات المكتملة، إجمالي السكب، السلسلة اليومية، والمزيد
+• نظام الحياة مع تجديد سخي لمدة 30 دقيقة
+• يعمل بالكامل دون اتصال
+• دعم لأكثر من 20 لغة
 
 🏆 تقدم المستويات
-تزداد مستويات الصعوبة تدريجياً — لا يوجد ارتفاع مفاجئ في المستوى:
-• تعليمات (1–10):  3 ألوان — تعلم الأساسيات
-• سهل (11–30):   4 ألوان — زيادة الثقة
+تزداد مستويات الصعوبة تدريجيًا — لا يوجد ارتفاع مفاجئ في الصعوبة:
+• الدرس (1–10): 3 ألوان — تعلم الأساسيات
+• سهل (11–30): 4 ألوان — بناء الثقة
 • متوسط (31–130): 5 ألوان — يبدأ التحدي الحقيقي
-• صعب (131–300): 6–7 ألوان — الإتقان الحقيقي للمتعة
+• صعب (131–300): 6–7 ألوان — إتقان الألغاز الحقيقي
 • خبير (301–500): 8 ألوان — التحدي النهائي
 
-📅 التحدي اليومي
-لغز جديد كل يوم! ابنِ سلسلة انتصاراتك للحصول على عملات مكافأة متزايدة. تخلفت عن يوم؟ استخدم العملات للحفاظ على سلسلة انتصاراتك.
+📅 تحدي يومي
+لغز جديد كل يوم! ابني سلسلتك لزيادة عملات المكافأة. إذا فاتك يوم؟ أنفق عملات لإنقاذ سلسلتك واستمرار الحماس.
 
-🎯 المهام اليومية
+🎯 مهام يومية
 ثلاثة أهداف جديدة تتجدد كل منتصف الليل:
-• أكمل أي مستوى · صب 30 مرة · اFinish 3 levels
-• حل مثالي (بدون صب ثابت) · أكمل التحدي اليومي
-احصل على ما يصل إلى 75 عملة مكافأة يوميًا لمجرد اللعب!
+• إكمال أي مستوى · صب 30 مرة · إنهاء 3 مستويات
+• حل مثالي (بدون سكب ثابت) · إكمال التحدي اليومي
+احصل على ما يصل إلى 75 عملة إضافية يوميًا لمجرد اللعب!
 
-🏅 البطولة الأسبوعية
-كل أسبوع، المستوى الذي تصل إليه يضعك في ترتيب — أفضل 10% / 25% / 50% / 75%. أنهِ الأسبوع في الربع الأول وستحصل على العملات في المرة التالية التي تفتح فيها التطبيق. يعاد تعيينه يوم الاثنين.
+🏅 بطولة أسبوعية
+كل أسبوع، المستوى الذي تصل إليه يضعك في تصنيف — الأوائل 10% / 25% / 50% / 75%. أنهِ الأسبوع في الربع الأوائل وستظهر العملات عند فتح التطبيق مرة أخرى. تعيد التعيين يوم الاثنين.
 
-🎨 الثيمات والفعاليات الموسمية
-افتح لوحات ألوان جديدة كلما تسلقت سلم المستويات. في أكتوبر وديسمبر وفبراير، يظهر موضوع موسمي لمدة شهر.
+🎨 الثيمات والأحداث الموسمية
+افتح لوحات ألوان جديدة بينما تتسلق سلم المستوى. في أكتوبر، ديسمبر وفبراير، يظهر ثيم موسمي لمدة شهر.
 
 🛒 المتجر
-• إزالة الإعلانات — استمتع بتجربة غير متقطعة إلى الأبد
-• حزمة العملات S — 100 عملة لتلميحات ومعززات
-• حزمة العملات M — 600 عملة
-• حزمة العملات L — 500 عملة، الأكثر العملات مقابل الدولار
-• حزمة العملات XL — 1400 عملة، أكبر حزمة لدينا
-• حزمة التلميحات — 10 تلميحات لكشف اللون
-• حزمة البدء — 100 عملة + 5 تلميحات + 5 أرواح + إعلانات غير مفعلّة
-• جواز الموسم — خالي من الإعلانات، +50 عملة يوميًا، جميع الثيمات، تلميحات غير محدودة (30 يومًا)
-• جواز أسبوعي — خالي من الإعلانات، +100 عملة يوميًا، جميع الثيمات، تلميحات غير محدودة (7 أيام)
-• تراجعات غير محدودة — لا تعلق مجددًا
-• أرواح إضافية — استعد 5 أرواح فورًا
-• أرواح غير محدودة (1 ساعة) — العب بحرية لمدة ساعة كاملة
-• أرواح غير محدودة (∞) — لا تفقد حياة مرة أخرى
+• إزالة الإعلانات — استمتع بتجربة خالية من الانقطاعات إلى الأبد
+• حزمة العملات S — 100 عملة للتلميحات والمعززات
+• حزمة العملات M — 400 عملة
+• حزمة العملات L — 800 عملة
+• حزمة العملات XL — 2000 عملة، أكبر حزمة لدينا وأكثر العملات مقابل الدولار
+• حزمة تلميحات — 10 تلميحات لكشف الألوان
+• حزمة البدء — 100 عملة + 5 تلميحات + 5 حياة + إعلانات مغلقة
+• تمرير موسمي — بدون إعلانات، +100 عملة يوميًا، جميع الثيمات، تلميحات غير محدودة (30 يوم، أفضل صفقة)
+• تمرير أسبوعي — بدون إعلانات، +50 عملة يوميًا، جميع الثيمات، تلميحات غير محدودة (7 أيام، بدون التزام)
+• تراجعات غير محدودة — لا تتعثر مرة أخرى
+• حياة إضافية — استعد 5 حياة على الفور
+• حياة غير محدودة (1 ساعة) — العب بحرية لمدة ساعة كاملة
+• حياة غير محدودة (∞) — لن تفقد حياة مرة أخرى
 </ar>
 
 <de-DE>
-💧 Water Sort Puzzle — Gieße, Sortiere & Entspanne!
+💧 Wasser Sortier Puzzle — Gießen, Sortieren & Entspannen!
 
-Tippe, um zu gießen und beobachte, wie sich die Farben setzen. Immer wieder ein befriedigendes Erlebnis.
+Tippe zum Gießen und beobachte, wie sich die Farben absetzen. Ein erfüllender Fluss nach dem anderen.
 
-500 handverlesene Rätsel, kein Timer, kein Druck. Kopfhörer auf, Gehirn aus.
+500 handgefertigte Rätsel, kein Timer, kein Stress. Kopfhörer auf, Gedanken aus.
 
-🌊 SO SPIELST DU
-• Tippe auf ein Rohr, um die oberste Flüssigkeitsschicht zu entnehmen
-• Gieße sie auf eine passende Farbe oder in ein leeres Rohr
-• Fülle jedes Rohr mit einer Farbe, um das Level abzuschließen
-• Spiele in deinem eigenen Tempo!
+🌊 SPIELANLEITUNG
+• Tippe auf ein Röhrchen, um die oberste Flüssigkeitsschicht aufzunehmen.
+• Gieße sie in ein leeres Röhrchen oder auf eine passende Farbe.
+• Fülle jedes Röhrchen mit einer einzigen Farbe, um das Level abzuschließen.
+• Kein Zeitdruck — spiele in deinem Tempo!
 
 ✨ MERKMALE
-• Kostenlos spielbar — alle 500 Levels ohne Kosten
-• 500 Levels — von einfachen Rätseln bis kniffligen Herausforderungen
-• Flüssigkeitsguss-Animationen — sieh dem Wasser beim Fließen zu!
-• Entspannende ASMR-Geräusche und Musik
-• Booster für knifflige Situationen: Farbenthüllung, Ruhiges Gießen, Frischer Start, Extra Rohr
-• Tägliche Herausforderung — jeden Tag ein neues Rätsel
-• Tägliche Missionen — 3 neue Ziele täglich für Bonusmünzen
-• Wöchentlicher Wettkampf — verbessere deine Position und verdiene Münzen
-• Saisonale Events — spezielle Themen für verschiedene Jahreszeiten
-• Kostenloser Münzen-Button — sieh dir eine kurze Werbung für Münzen an
-• Fortsetzungs-Button — greife direkt auf dein letztes Level zu
-• 7-Tage-Anmelde-Streak — größere Belohnungen für kontinuierliches Spielen
-• Themenkollektion — schalte neue Farbpaletten frei
-• Zugangsvergleich — vergleiche deine Züge mit der Idealanzahl
-• Statistiken — verfolge abgeschlossene Levels und mehr
-• Lebens-System mit 30 Minuten Erneuerung
-• Offline spielbar
-• Unterstützung für über 20 Sprachen
+• Kostenlos spielbar — alle 500 Levels enthalten, keine Bezahlschranke.
+• 500 handgefertigte Levels — von einfachen bis komplexen Rätseln.
+• Flüssigkeitsanimationen — beobachte das Wasserfließen!
+• ASMR-Wassergeräusche und entspannende Ambientmusik.
+• Booster für knifflige Stellen: Farbe Enthüllen, Stetiges Gießen, Frischer Start, Extra Röhrchen, Zauberstab.
+• Tägliche Herausforderungen — täglich ein neues Rätsel mit Belohnungen für Serien.
+• Tägliche Missionen — 3 neue Ziele täglich, verdiene Bonusmünzen.
+• Wöchentliches Turnier — steig in der Rangliste auf, die obersten 25 % verdienen Münzen.
+• Saisonale Events — spezielle Themen zu Halloween, Winter und Frühling.
+• Button für kostenlose Münzen — schaue dir eine Werbung für 25 Münzen an.
+• Fortsetzen-Button — spiele direkt aus dem Menü weiter.
+• 7-tägige Anmeldeserie — größere Belohnungen für längeres Spielen.
+• Themenkollektion — schalte neue Farbpaletten frei.
+• Statistiken-Bildschirm — verfolge deine Fortschritte.
+• Lebenssystem mit großzügiger Regeneration von 30 Minuten.
+• Offline spielbar.
+• Unterstützt 20+ Sprachen.
 
-🏆 LEVEL-FORTSCHRITT
-Die Levels steigern sich allmählich:
-• Tutorial (1–10): 3 Farben — Grundlagen
-• Einfach (11–30): 4 Farben — Selbstvertrauen aufbauen
-• Mittel (31–130): 5 Farben — erste Herausforderungen
-• Schwer (131–300): 6–7 Farben — echte Puzzle-Meisterschaft
-• Experte (301–500): 8 Farben — höchste Herausforderung
+🏆 LEVELFORTSCHRITT
+Die Schwierigkeitsgrade steigen allmählich:
+• Tutorial (1–10): 3 Farben — lerne die Grundlagen.
+• Einfach (11–30): 4 Farben — Selbstvertrauen aufbauen.
+• Mittel (31–130): 5 Farben — echte Herausforderungen.
+• Schwer (131–300): 6–7 Farben — Puzzlebeherrschung.
+• Experte (301–500): 8 Farben — maximale Herausforderung.
 
 📅 TÄGLICHE HERAUSFORDERUNG
-Jeden Tag ein neues Rätsel! Baue deine Streak für Bonusmünzen auf. Einen Tag verpasst? Münzen ausgeben, um die Streak zu retten.
+Jeden Tag ein neues Rätsel! Baue deine Serie für mehr Bonusmünzen auf. Verpasst? Nutze Münzen, um deine Serie zu retten.
 
 🎯 TÄGLICHE MISSIONEN
-Drei neue Ziele täglich:
-• Schließe ein Level ab, gieße 30 Mal oder beende 3 Levels
-• Perfekte Lösung (kein Ruhiges Gießen), Abschluss der täglichen Herausforderung
-Verdiene bis zu 75 Bonusmünzen täglich!
+Drei neue Ziele erneuern sich jede Nacht:
+• Schließe ein beliebiges Level ab · Gieße 30 Mal · Beende 3 Levels.
+• Perfekte Lösung (ohne Stetiges Gießen) · Schließe die tägliche Herausforderung ab.
+Verdiene täglich bis zu 75 Bonusmünzen!
 
-🏅 WÖCHENTLICHER WETTKAMPF
-Wöchentliches Ranking — erreiche die obersten 10% bis 75%. Schließe die Woche im oberen Viertel ab, um Münzen zu erhalten. Setzt jeden Montag zurück.
+🏅 WÖCHENTLICHES TURNIER
+Dein Level bestimmt deinen Platz in der Rangliste — führende 10 % / 25 % / 50 % / 75 %. Beende die Woche im obersten Viertel, um Münzen zu verdienen.
 
 🎨 THEMEN & SAISONALE EVENTS
-Neue Farbpaletten in verschiedenen Themen und monatliche saisonale Events.
+Schalte neue Farbpaletten frei, während du die Levels spielst. Saisonale Themen erscheinen im Oktober, Dezember und Februar.
 
 🛒 SHOP
-• Werbung entfernen — ununterbrochenes Spielen
-• Münzen Paket S — 100 Münzen
-• Münzen Paket M — 600 Münzen
-• Münzen Paket L — 500 Münzen
-• Münzen Paket XL — 1400 Münzen
-• Hinweis-Paket — 10 Tipps
-• Starter-Paket — 100 Münzen + 5 Hinweise + 5 Leben
-• Saisonpass — werbefrei, +50 Münzen täglich, unbegrenzte Hinweise (30 Tage)
-• Wochenpass — werbefrei, +100 Münzen täglich, unbegrenzte Hinweise (7 Tage)
-• Unbegrenzte Rückgängig — nie wieder feststecken
-• Extraleben — stelle sofort 5 Leben wieder her
-• Unbegrenzte Leben (1h) — spiele eine volle Stunde kostenlos
-• Unbegrenzte Leben (∞) — verliere nie wieder ein Leben
+• Werbung entfernen — unterbrechungsfreies Erlebnis.
+• Münzenpaket S — 100 Münzen.
+• Münzenpaket M — 400 Münzen.
+• Münzenpaket L — 800 Münzen.
+• Münzenpaket XL — 2000 Münzen, unser größtes Paket.
+• Hinweispaket — 10 Hinweise.
+• Starter-Paket — 100 Münzen + 5 Hinweise + 5 Leben.
+• Saison-Pass — werbefrei, +100 Münzen täglich, unbegrenzte Hinweise (30 Tage).
+• Wochenpass — werbefrei, +50 Münzen täglich (7 Tage).
+• Unbegrenzte Rückgängig — stecke nie wieder fest.
+• Extra Leben — stelle sofort 5 Leben wieder her.
+• Unbegrenzte Leben (1h) — spiele 1 Stunde lang.
+• Unbegrenzte Leben (∞) — verliere nie wieder ein Leben.
 </de-DE>
 
 <es-419>
-💧 Rompecabezas de Clasificación de Agua — Vierte, Clasifica y Relájate
+💧 Juego de Clasificación de Agua — ¡Vierte, Clasifica y Relájate!
 
-Toca para verter y observa cómo se asientan los colores. Un flujo satisfactorio a la vez.
+Toca para verter y observa cómo los colores se asientan. Un flujo satisfactorio a la vez.
 
-500 rompecabezas ajustados a mano, sin cronómetro. Ponte los auriculares y relájate.
+500 rompecabezas diseñados, sin temporizador ni prisa. Auriculares puestos, mente en calma.
 
 🌊 CÓMO JUGAR
-• Toca un tubo para recoger el líquido superior.
-• Vierte sobre un color coincidente o en un tubo vacío.
-• Llena cada tubo con un solo color para completar el nivel.
-• Sin presión de tiempo: juega a tu propio ritmo.
+• Toca un tubo para recoger la capa superior
+• Vierte sobre un color coincidente o en un tubo vacío
+• Llena cada tubo con un solo color para completar el nivel
+• Sin presión de tiempo — ¡juega a tu propio ritmo!
 
 ✨ CARACTERÍSTICAS
-• Gratis para jugar: 500 niveles incluidos, sin muros de pago.
-• Niveles hechos a mano: desde rompecabezas para principiantes hasta desafiantes para expertos.
-• Animaciones de vertido suaves: ¡observa fluir el agua!
-• Efectos de sonido ASMR y música ambiental.
-• Potenciadores: Revelación de Color, Vierte Constante, Nuevo Comienzo, Tubo Extra, Varita Mágica.
-• Desafío Diario: un nuevo rompecabezas con recompensas por rachas.
-• Misiones Diarias: 3 objetivos cada día, gana monedas extra.
-• Torneo Semanal: asciende en la tabla de clasificación, el 25% principal gana monedas.
-• Eventos Estacionales: temas por tiempo limitado en Halloween, Invierno y Primavera.
-• Botón de Monedas Gratis: mira un anuncio para obtener monedas.
-• Botón de Continuar: reanuda tu último nivel directamente desde el menú.
-• Racha de inicio de sesión de 7 días: recompensas mayores por jugar consecutivamente.
-• Colección de Temas: desbloquea nuevas paletas de colores.
-• Comparación de Movimientos: ve tu conteo de movimientos frente al par.
-• Pantalla de Estadísticas: rastrea niveles completados y más.
-• Sistema de vidas con 30 minutos de regeneración.
-• Funciona sin conexión.
-• Soporta más de 20 idiomas.
+• Gratis para jugar — 500 niveles disponibles, sin muro de pago
+• Niveles variados — desde rompecabezas fáciles hasta retos complejos
+• Animaciones de vertido suaves — ¡observa fluir el agua!
+• Sonidos ASMR de verter agua y música ambiental
+• Potenciadores cuando te quedas atascado: Revelar Color (pista), Vierte Constantemente (deshacer), Nuevo Comienzo (reiniciar), Tubo Extra, Varita Mágica
+• Reto Diario — un nuevo rompecabezas cada día con recompensas por racha
+• Misiones Diarias — 3 nuevas tareas diarias, gana monedas adicionales
+• Torneo Semanal — sube en el tablón de líderes, el 25% superior gana monedas
+• Eventos estacionales — temas temporales en Halloween, Invierno y Primavera
+• Botón de Monedas Gratis — mira anuncios cortos para ganar 25 monedas cada pocas horas
+• Botón Continuar — retoma tu último nivel desde el menú
+• Racha de inicio de sesión de 7 días — recompensas por jugar consecutivamente
+• Colección de Temas — desbloquea nuevas paletas a medida que avanzas
+• Comparación de Movimientos — ve tu conteo de movimientos contra el par
+• Pantalla de Estadísticas — sigue tus logros y progreso
+• Generosa regeneración del sistema de vidas en 30 minutos
+• Funciona completamente offline
+• Soporta más de 20 idiomas
 
 🏆 PROGRESIÓN DE NIVELES
-Los niveles aumentan en dificultad sin saltos repentinos:
-• Tutorial (1–10): 3 colores — aprende lo básico.
-• Fácil (11–30): 4 colores — aumenta tu confianza.
-• Medio (31–130): 5 colores — comienza el verdadero desafío.
-• Difícil (131–300): 6–7 colores — dominio de los rompecabezas.
-• Experto (301–500): 8 colores — el desafío definitivo.
+Los niveles aumentan gradualmente en dificultad:
+• Tutorial (1–10): 3 colores — aprende lo básico
+• Fácil (11–30): 4 colores — construye confianza
+• Medio (31–130): 5 colores — comienza el verdadero desafío
+• Difícil (131–300): 6–7 colores — dominio total
+• Experto (301–500): 8 colores — desafío máximo
 
-📅 DESAFÍO DIARIO
-¡Un nuevo rompecabezas cada día! Construye tu racha para obtener monedas bonus. Si te perdiste un día, gasta monedas para mantener tu racha.
+📅 RETO DIARIO
+¡Un nuevo rompecabezas diariamente! Construye tu racha para aumentar las monedas. Si te pierdes un día, usa monedas para mantener tu racha.
 
 🎯 MISIONES DIARIAS
-Actualiza tres objetivos cada medianoche:
-• Completa cualquier nivel · Vierte 30 veces · Termina 3 niveles.
-• Solución perfecta · Completa el Desafío Diario.
-¡Gana hasta 75 monedas bonus al día!
+Tres objetivos nuevos se refrescan cada medianoche:
+• Completa cualquier nivel · Vierte 30 veces · Termina 3 niveles
+• Solución perfecta (sin Vierte Constantemente) · Completa el Reto Diario
+Consigue hasta 75 monedas de bonificación por día solo por jugar.
 
 🏅 TORNEO SEMANAL
-Cada semana, el nivel que alcanzas te ubica en un bracket. Termina en el primer cuarto para recibir monedas al abrir la app, reinicio el lunes.
+Cada semana, tu nivel te coloca en un bracket — 10% / 25% / 50% / 75%. Termina en el cuarto superior para ganar monedas la próxima vez que abras la app. Reinicio los lunes.
 
 🎨 TEMAS Y EVENTOS ESTACIONALES
-Desbloquea nuevas paletas al avanzar. En octubre, diciembre y febrero llegan temas estacionales.
+Desbloquea paletas de colores conforme avanzas. Temas estacionales en octubre, diciembre y febrero.
 
 🛒 TIENDA
-• Remover Anuncios — disfruta de una experiencia sin interrupciones.
-• Paquete de Monedas S — 100 monedas para pistas.
-• Paquete de Monedas M — 600 monedas.
-• Paquete de Monedas L — 500 monedas.
-• Paquete de Monedas XL — 1400 monedas.
-• Paquete de Pistas — 10 pistas de Revelación de Color.
-• Paquete Inicial — 100 monedas + 5 pistas + 5 vidas.
-• Pase de Temporada — sin anuncios, +50 monedas diarias, todos los temas.
-• Pase Semanal — sin anuncios, +100 monedas diarias, todos los temas.
-• Deshacer Ilimitados — nunca más te quedes atascado.
-• Vidas Extra — restaura 5 vidas al instante.
-• Vidas Ilimitadas (1h) — juega libremente durante una hora.
+• Eliminar Anuncios — disfruta de una experiencia ininterrumpida
+• Paquete de Monedas S — 100 monedas
+• Paquete de Monedas M — 400 monedas
+• Paquete de Monedas L — 800 monedas
+• Paquete de Monedas XL — 2000 monedas
+• Paquete de Pistas — 10 pistas de Revelar Color
+• Paquete de Inicio — 100 monedas + 5 pistas + 5 vidas 
+• Pase de Temporada — sin anuncios, +100 monedas diarias, todos los temas, pistas ilimitadas (30 días)
+• Pase Semanal — sin anuncios, +50 monedas diarias, todos los temas, pistas ilimitadas (7 días)
+• Deshacer Ilimitado — nunca te quedes atascado
+• Vidas Extras — restaura 5 vidas al instante
+• Vidas Ilimitadas (1h) — juega libremente durante una hora
 • Vidas Ilimitadas (∞) — nunca pierdas una vida.
 </es-419>
 
 <fr-FR>
-💧 Jeu de Tri d’Eau — Versez, Triez & Détendez-vous !
+💧 Puzzle de tri d'eau — Versez, Triez & Détendez-vous !
 
-Appuyez pour verser et observez les couleurs se stabiliser. Un flux satisfaisant à la fois.
+Touchez pour verser. Regardez les couleurs se stabiliser dans un flux satisfaisant.
 
-500 puzzles soigneusement conçus, sans minuterie ni précipitation. Casque sur les oreilles, esprit au repos.
+500 énigmes soigneusement conçues, sans minuteur ni pression. Écouteurs en place, cerveau au repos.
 
 🌊 COMMENT JOUER
-• Appuyez sur un tube pour prendre la couche de liquide supérieure
-• Versez-la sur une couleur correspondante ou dans un tube vide
-• Remplissez chaque tube avec une seule couleur pour terminer le niveau
-• Pas de pression — jouez à votre rythme !
+• Touchez un tube pour prendre la couche de liquide du dessus
+• Versez-la sur une couleur assortie ou dans un tube vide
+• Remplissez chaque tube d'une seule couleur pour terminer le niveau
+• Pas de pression temporelle — jouez à votre rythme !
 
 ✨ CARACTÉRISTIQUES
-• Gratuit à jouer — 500 niveaux inclus, sans mur payant
-• Niveaux de divers niveaux de difficulté, des débutants aux experts
-• Animations de versement fluides — regardez l’eau s’écouler !
-• Sons ASMR de versement d’eau et musique ambiante
-• Boosters disponibles : Révélation de Couleur, Versement Stable, Nouveau Départ, Tube Supplémentaire
-• Défi Quotidien : un nouveau puzzle chaque jour avec des récompenses
-• Missions Quotidiennes : 3 objectifs chaque jour, gagnez des pièces supplémentaires
-• Tournoi Hebdomadaire : grimpez le classement, les 25 % premiers remportent des prix
-• Événements saisonniers avec thèmes limités
-• Pièces Gratuites : regardez une courte pub pour 25 pièces
-• Continuer : reprenez votre dernier niveau depuis le menu
-• Série de connexion de 7 jours : plus grandes récompenses en jouant consécutivement
-• Collection de thèmes : débloquez de nouvelles palettes en progressant
-• Comparaison de Mouvements : comparez votre nombre de mouvements avec le par
-• Écran des Statistiques : suivez vos progrès et réalisations
+• Gratuit à jouer — 500 niveaux tous inclus, sans mur payant
+• Niveaux artisanaux — des énigmes douces aux défis tordus
+• Animations de versement d'une fluidité incroyable — regardez l'eau s'écouler !
+• Effets sonores ASMR et musique d'ambiance
+• Boosters lorsqu’inbloqué : pistes pour avancer, recommencer, nouveau départ, tube supplémentaire
+• Défi quotidien — une nouvelle énigme chaque jour avec des récompenses
+• Missions quotidiennes — 3 nouveaux objectifs chaque jour pour gagner des pièces
+• Tournoi hebdomadaire — grimpez dans le classement, les meilleurs gagnent des pièces
+• Événements saisonniers — thèmes temporaires pour Halloween, Hiver et Printemps
+• Bouton de pièces gratuites — visionnez une courte publicité pour 25 pièces
+• Bouton Continuer — reprenez votre dernier niveau directement depuis le menu
+• Série de connexion de 7 jours — récompenses accrues pour jeu continu
+• Collection de thèmes — débloquez de nouvelles palettes de couleurs
+• Comparaison de mouvements — comparez vos mouvements au standard
+• Écran de statistiques — suivez niveaux complétés, versements et plus
 • Régénération de vies généreuse de 30 minutes
-• Fonctionne hors ligne
-• Supporte plus de 20 langues
+• Fonctionne entièrement hors ligne
+• Support de 20+ langues
 
 🏆 PROGRESSION DES NIVEAUX
-Les niveaux augmentent progressivement en difficulté :
+Les niveaux progressent sans pic de difficulté :
 • Tutoriel (1–10) : 3 couleurs — apprenez les bases
-• Facile (11–30) : 4 couleurs — gagnez en confiance
-• Moyen (31–130) : 5 couleurs — le vrai défi commence
-• Difficile (131–300) : 6–7 couleurs — maîtrise du puzzle
+• Facile (11–30) : 4 couleurs — construction de confiance
+• Moyen (31–130) : 5 couleurs — le véritable défi commence
+• Difficile (131–300) : 6–7 couleurs — maîtrise des énigmes
 • Expert (301–500) : 8 couleurs — le défi ultime
 
 📅 DÉFI QUOTIDIEN
-Un nouveau puzzle chaque jour ! Construisez votre série pour des pièces bonus. Manquez un jour ? Dépensez des pièces pour conserver votre série.
+Une nouvelle énigme chaque jour ! Construisez votre série pour gagner des pièces. Si vous manquez un jour, dépensez des pièces pour la sauvegarder.
 
 🎯 MISSIONS QUOTIDIENNES
-Trois nouveaux objectifs chaque jour à minuit :
-• Complétez n’importe quel niveau · Versez 30 fois · Terminez 3 niveaux
-• Résolution parfaite sans Versement Stable · Complétez le Défi Quotidien
-Gagnez jusqu’à 75 pièces bonus par jour en jouant !
+Trois nouveaux objectifs se rafraîchissent chaque nuit :
+• Complétez un niveau · Versez 30 fois · Terminez 3 niveaux
+• Résolution parfaite (sans aides) · Complétez le défi quotidien
+Gagnez jusqu'à 75 pièces bonus chaque jour !
 
 🏅 TOURNOI HEBDOMADAIRE
-Chaque semaine, votre niveau vous classe. Terminez dans le quart supérieur pour gagner des pièces. Réinitialisation lundi.
+Chaque semaine, votre niveau vous classe dans un groupe — 10 % / 25 % / 50 % / 75 %. Terminez dans le quart supérieur pour obtenir des pièces. Réinitialisation le lundi.
 
-🎨 THÈMES ET ÉVÉNEMENTS SAISONNIERS
-Débloquez de nouvelles palettes en progressant. Un thème saisonnier apparaît chaque mois en octobre, décembre et février.
+🎨 THÈMES & ÉVÉNEMENTS SAISONNIERS
+Débloquez des palettes de couleurs au fur et à mesure. En octobre, décembre et février, un thème saisonnier est disponible.
 
 🛒 BOUTIQUE
-• Supprimer les Publicités — profitez d'une expérience sans interruption
-• Packs de Pièces variés pour indices et boosters
-• Pack d’Indices — 10 indices de Révélation de Couleur
-• Pass de Saison et Pass Hebdomadaire — sans publicités, récompenses quotidiennes
-• Annulations Illimitées — ne soyez jamais bloqué à nouveau
-• Vies Supplémentaires et Illimitées pour jouer librement
+• Supprimez les publicités pour une expérience ininterrompue
+• Packs de pièces pour indices et boosters de diverses tailles
+• Pass de saison — sans publicité, 100 pièces par jour, tous les thèmes
+• Pass hebdomadaire — sans publicité, 50 pièces par jour
+• Vies supplémentaires et illimitées pour jouer sans interruption
 </fr-FR>
 
 <hi-IN>
-💧 जल сорт पहेली — डालें, क्रमबद्ध करें और आराम करें!
+💧 वाटर सॉर्ट पज़ल — डालें, छांटें और आराम करें!
 
-डालने के लिए टैप करें। रंगों को व्यवस्थित होते देखें। एक संतोषजनक प्रवाह एक समय में।
+टैप करें और डालें। रंगों को जमते हुए देखें। एक संतोषजनक धारा एक समय में।
 
-500 हाथ से तैयार की गई पहेलियाँ, बिना समय सीमा, बिना जल्दबाजी। हेडफ़ोन लगाएँ, दिमाग को शांत करें।
+500 हाथ से बनाए गए पज़ल्स, बिना टाइमर, बिना जल्दी। हेडफोन्स पहनें, दिमाग को बंद करें।
 
 🌊 कैसे खेलें
-• एक ट्यूब पर टैप करें ताकि शीर्षmost तरल स्तर उठ सके
+• एक ट्यूब पर टैप करें ताकि सबसे ऊपर की तरल परत उठाए
 • इसे एक समान रंग पर या एक खाली ट्यूब में डालें
-• प्रत्येक ट्यूब को एकल रंग से भरें ताकि स्तर पूरा हो सके
-• कोई समय दबाव नहीं — अपने खुद के गति से खेलें!
+• हर ट्यूब को एक ही रंग से भरें ताकि स्तर पूरा हो सके
+• कोई समय का दबाव नहीं — अपनी गति से खेलें!
 
 ✨ विशेषताएँ
-• खेलने के लिए मुफ्त — 500 स्तरों में से हर एक शामिल, कोई भुगतान दीवार नहीं
-• 500 हाथ से निर्मित स्तर — शुरुआती पहेलियों से लेकर मन को झकझोर देने वाली विशेषज्ञ चुनौतियों तक
-• चिकनी तरल डालने की एनीमेशन — पानी के प्रवाह को देखें!
-• ASMR पानी डालने की ध्वनि प्रभाव और प्रक्रियात्मक वातावरण संगीत
-• जब आप रुके हों: रंग प्रकट करना (संकेत), स्थिर डालना (पूर्ववत), ताजा शुरुआत (पुनः प्रारंभ), अतिरिक्त ट्यूब, जादुई छड़ी
-• दैनिक चुनौती — हर दिन एक नई पहेली, लगातार खेलने पर पुरस्कार
-• दैनिक मिशन — हर दिन 3 नए लक्ष्यों को प्राप्त करें, बोनस सिक्के अर्जित करें
-• साप्ताहिक टूर्नामेंट — सिंथेटिक-ब्रैकेट लीडरबोर्ड में चढ़ें, शीर्ष 25% सिक्के अर्जित करते हैं
-• मौसमी कार्यक्रम — हैलोवीन, सर्दी और वसंत सीमित अवधि के थीम लाते हैं
-• मुफ्त सिक्के बटन — हर कुछ घंटे में 25 सिक्के के लिए एक संक्षिप्त विज्ञापन देखें
-• जारी रखें बटन — मेनू से अपने आखिरी स्तर को सीधे उठाएँ
-• 7-दिन का लॉगिन स्ट्रीक — लगातार खेलने पर बड़े पुरस्कार
-• थीम संग्रह — प्रगति के साथ नए रंग पैलेट अनलॉक करें
-• चाल तुलना — अपनी चालों की संख्या को पर और अपने रैंक ब्रैकेट के विरुद्ध देखें
-• आँकड़े स्क्रीन — पूर्ण स्तरों, कुल डालने, दैनिक स्ट्रीक, और अधिक को ट्रैक करें
-• जीवन प्रणाली के साथ उदार 30-मिनट की पुनर्जनन
-• पूरी तरह से ऑफलाइन काम करता है
-• 20+ भाषाएँ समर्थित
+• खेलने के लिए मुफ्त — 500 स्तरों में से हर एक शामिल, बिना भुगतान की दीवार
+• 500 हाथ से बनाए गए स्तर — हल्की शुरुआत के पज़ल से लेकर चुनौतीपूर्ण विशेषज्ञ चुनौतियों तक
+• मलाईदार-नरम तरल डालने वाली एनीमेशन — पानी को बहते हुए देखें!
+• ASMR पानी-डालने वाली ध्वनि प्रभाव और प्रक्रिया-आधारित वातावरण संगीत
+• जब आप उलझ जाते हैं तो बूस्टर्स: रंग प्रकट (संकेत), स्थिर डालना (पूर्ववत), ताजा शुरुआत (पुनः प्रारंभ), अतिरिक्त ट्यूब, जादू की छड़ी
+• दैनिक चुनौती — हर दिन एक नया पज़ल जिसमें बोनस पुरस्कार होते हैं
+• दैनिक मिशन — हर दिन 3 नए उद्देश्यों, बोनस सिक्के कमाएं
+• सप्ताहिक टूर्नामेंट — एक कृत्रिम-ब्रैकेट लीडरबोर्ड पर चढ़ें, अगला 25% सिक्के कमाता है
+• मौसमी कार्यक्रम — हैलोवीन, सर्दी और वसंत सीमित समय की थीम लाते हैं
+• मुफ्त सिक्के बटन — हर कुछ घंटे में 25 सिक्कों के लिए एक छोटा विज्ञापन देखें
+• जारी रक्खें बटन — मेनू से सीधे अपने अंतिम स्तर को उठाएं
+• 7-दिन का लॉगिन स्ट्रीक — लगातार खेलते रहने पर बड़े पुरस्कार
+• थीम संग्रह — प्रगति करते हुए नए रंग पैलेट अनलॉक करें
+• मूव तुलना — अपनी चालों की गणना बनाम पार और अपने रैंक किए गए ब्रैकेट की तुलना करें
+• आंकड़ों का स्क्रीन — पूरा किए गए स्तर, कुल डालने, दैनिक स्ट्रीक, और अधिक को ट्रैक करें
+• जीवन प्रणाली जिसमें 30 मिनट की उदार पुनर्जनन
+• पूरी तरह से ऑफ़लाइन कार्य करता है
+• 20+ भाषाओं का समर्थन
 
-🏆 स्तर वृद्धि
-स्तर धीरे-धीरे कठिनाई में बढ़ते हैं — कभी भी अचानक कठिनाई नहीं होती:
-• पाठ्यक्रम (1–10): 3 रंग — मूल बातें सीखें
-• आसान (11–30): 4 रंग — आत्मविश्वास बनाते हैं
-• मध्यम (31–130): 5 रंग — असली चुनौती शुरू होती है
-• कठिन (131–300): 6–7 रंग — सच्ची पहेली में महारत
+🏆 स्तर प्रगति
+स्तर धीरे-धीरे कठिनाई में बढ़ते हैं — कभी भी अचानक कठिनाई में वृद्धि नहीं होती:
+• ट्यूटोरियल (1–10): 3 रंग — मूल बातें सीखें
+• आसान (11–30): 4 रंग — आत्मविश्वास बनाना
+• मध्य (31–130): 5 रंग — असली चुनौती शुरू होती है
+• कठिन (131–300): 6–7 रंग — पज़ल का सच्चा कौशल
 • विशेषज्ञ (301–500): 8 रंग — अंतिम चुनौती
 
 📅 दैनिक चुनौती
-हर दिन एक नई पहेली! बोनस सिक्कों के लिए अपनी स्ट्रीक बनाएं। अगर एक दिन चूक जाएँ? अपने स्ट्रीक को बचाने के लिए सिक्के खर्च करें और आग जलाए रखें।
+हर दिन एक ताजा पज़ल! अपने स्ट्रीक को बढ़ाएं ताकि बुनियादी बोनस सिक्के मिल सकें। एक दिन चूक गए? अपने स्ट्रीक को बचाने और आग को जलाए रखने के लिए सिक्कों का उपयोग करें।
 
 🎯 दैनिक मिशन
-हर मध्यरात्रि तीन नए लक्ष्य रीसेट होते हैं:
-• किसी भी स्तर को पूरा करें · 30 बार डालें · 3 स्तर पूरे करें
-• पूर्ण समाधान (कोई स्थिर डालना नहीं) · दैनिक चुनौती पूरी करें
-केवल खेलने के लिए रोजाना 75 बोनस सिक्के अर्जित करें!
+हर मध्यरात्रि तीन नए उद्देश्य ताजगी लाते हैं:
+• कोई भी स्तर पूरा करें · 30 बार डालें · 3 स्तर खत्म करें
+• परफेक्ट समाधान (कोई स्थिर डालना नहीं) · दैनिक चुनौती पूरी करें
+खेलने के लिए प्रति दिन 75 बोनस सिक्के तक कमाएँ!
 
-🏅 साप्ताहिक टूर्नामेंट
-हर सप्ताह आपका स्तर आपको एक ब्रैकेट में रखता है - शीर्ष 10% / 25% / 50% / 75%। सप्ताह के अंत में शीर्ष चौथाई में समाप्त करें और अगली बार ऐप खोलने पर सिक्के मिलते हैं। सोमवार को रिसेट होता है।
+🏅 सप्ताहिक टूर्नामेंट
+हर सप्ताह का स्तर आपको एक ब्रैकेट में रखता है — अग्रणी 10% / 25% / 50% / 75%। सप्ताह का अंतिम चौथाई में समाप्त करें और अगली बार जब आप एप्लिकेशन खोलें तो सिक्के मिलेंगे। सोमवार को रीसेट होता है।
 
-🎨 थीम & मौसमी कार्यक्रम
-स्तर के सिड़ी पर चढ़ते समय नए रंग पैलेट अनलॉक करें। अक्टूबर, दिसंबर और फरवरी में एक मौसमी थीम महीने के लिए आती है।
+🎨 थीम और मौसमी कार्यक्रम
+स्तर की सीढ़ी चढ़ते हुए नए रंग पैलेट अनलॉक करें। अक्टूबर, दिसंबर और फरवरी में एक मौसमी थीम महीने के लिए उतरती है।
 
 🛒 दुकान
-• विज्ञापन हटाएँ — हमेशा के लिए एक अव्यवाधित अनुभव का आनंद लें
-• सिक्का पैक S — संकेतों और बूस्टर के लिए 100 सिक्के
-• सिक्का पैक M — 600 सिक्के
-• सिक्का पैक L — 500 सिक्के, डॉलर में सबसे ज्यादा सिक्के
-• सिक्का पैक XL — 1400 सिक्के, हमारा सबसे बड़ा पैकेज
-• संकेत पैक — 10 रंग प्रकट करने वाले संकेत
-• प्रारंभिक पैक — 100 सिक्के + 5 संकेत + 5 जीवन + विज्ञापन बंद
-• सीजन पास — विज्ञापन-मुक्त, प्रतिदिन 50 सिक्के, सभी थिम, असीमित संकेत (30 दिन)
-• साप्ताहिक पास — विज्ञापन-मुक्त, प्रतिदिन 100 सिक्के, सभी थिम, असीमित संकेत (7 दिन)
-• असीमित पूर्ववत — कभी फिर से अटकें नहीं
-• अतिरिक्त जीवन — तुरंत 5 जीवन बहाल करें
-• असीमित जीवन (1 घंटा) — एक पूरे घंटे के लिए स्वतंत्र रूप से खेलें
-• असीमित जीवन (∞) — कभी भी जीवन न खोएं
+• विज्ञापन हटाएँ — हमेशा के लिए अवरुद्ध अनुभव का आनंद लें
+• सिक्का पैक एस — संकेत और बूस्टर्स के लिए 100 सिक्के
+• सिक्का पैक एम — 400 सिक्के
+• सिक्का पैक एल — 800 सिक्के
+• सिक्का पैक एक्सएल — 2000 सिक्के, हमारा सबसे बड़ा पैकेज और डॉलर प्रति सबसे अधिक सिक्के
+• संकेत पैक — 10 रंग प्रकट संकेत
+• स्टार्ट पैक — 100 सिक्के + 5 संकेत + 5 जीवन + विज्ञापन बंद
+• सीजन पास — विज्ञापन मुक्त, +100 सिक्के दैनिक, सभी थीम, असीमित संकेत (30 दिन, बेहतर डील)
+• साप्ताहिक पास — विज्ञापन मुक्त, +50 सिक्के दैनिक, सभी थीम, असीमित संकेत (7 दिन, कोई प्रतिबद्धता नहीं)
+• असीमित पूर्ववत — फिर कभी उलझ न जाएं
+• अतिरिक्त जीवन — तुरंत 5 जीवन पुनर्स्थापित करें
+• असीमित जीवन (1घंटा) — पूरी एक घंटे के लिए स्वतंत्र रूप से खेलें
+• असीमित जीवन (∞) — फिर कभी एक जीवन न खोएं
 </hi-IN>
 
 <id>
-💧 Permainan Penyortiran Air — Tuang, Sortir & Santai!
+💧 Water Sort Puzzle — Tuang, Urut & Santai!
 
-Ketuk untuk menuang. Saksikan warna-warna teratur. Satu aliran yang memuaskan pada satu waktu.
+Ketuk untuk menuang. Saksikan warna-warna menetap. Satu aliran memuaskan pada satu waktu.
 
-500 teka-teki yang dibuat dengan hati-hati, tanpa batas waktu, tanpa terburu-buru. Gunakan headphone, matikan otak.
+500 teka-teki yang disesuaikan, tanpa timer, tanpa terburu-buru. Headphone menyala, otak mati.
 
-🌊 CARA MEMAINKAN
+🌊 CARA BERMAIN
 • Ketuk tabung untuk mengambil lapisan cairan teratas
-• Tuangkan ke warna yang cocok atau ke tabung kosong
+• Tuangkan ke warna yang sesuai atau ke tabung kosong
 • Isi setiap tabung dengan satu warna untuk menyelesaikan level
-• Tanpa tekanan waktu — bermain dengan santai!
+• Tanpa tekanan waktu — mainkan sesuai kecepatanmu sendiri!
 
 ✨ FITUR
-• Gratis untuk dimainkan — setiap satu dari 500 level termasuk, tanpa dinding pembayaran
-• 500 level yang dibuat secara manual — dari teka-teki pemula yang mudah hingga tantangan ahli yang membingungkan
-• Animasi tuangan cairan yang sangat halus — saksikan air mengalir!
-• Efek suara tuangan air ASMR dan musik ambient prosedural
-• Penguat saat Anda terjebak: Pengungkapan Warna (petunjuk), Tuang Stabil (ulang), Awal Baru (mulai ulang), Tabung Tambahan, Tongkat Ajaib
-• Tantangan Harian — teka-teki baru setiap hari dengan hadiah beruntun
+• Gratis untuk dimainkan — semua 500 level termasuk, tanpa pembayaran tambahan
+• 500 level yang dirancang dengan tangan — dari teka-teki pemula yang lembut hingga tantangan ahli yang memutar otak
+• Animasi menuang cairan yang sangat halus — saksikan air mengalir!
+• Efek suara air menuang ASMR dan musik latar yang prosedural
+• Booster saat kamu terjebak: Color Reveal (petunjuk), Steady Pour (batalkan), Fresh Start (mulai ulang), Extra Tube, Magic Wand
+• Tantangan Harian — teka-teki baru setiap hari dengan hadiah berturut-turut
 • Misi Harian — 3 tujuan baru setiap hari, dapatkan koin bonus
-• Turnamen Mingguan — naik papan peringkat sintetik, 25% teratas mendapatkan koin
+• Turnamen Mingguan — naik papan peringkat dengan braket sintetik, 25% teratas mendapatkan koin
 • Acara Musiman — Halloween, Musim Dingin dan Musim Semi membawa tema terbatas
 • Tombol Koin Gratis — tonton iklan pendek untuk 25 koin setiap beberapa jam
-• Tombol Lanjutkan — ambil level terakhir Anda langsung dari menu
-• Rangkaian masuk 7 hari — hadiah lebih besar semakin lama Anda bermain berturut-turut
-• Koleksi tema — buka palet warna baru seiring kemajuan
-• Perbandingan Langkah — lihat jumlah langkah Anda vs. par dan peringkat Anda
-• Layar Statistik — lacak level yang diselesaikan, total tuangan, urutan harian, dan lainnya
-• Sistem kehidupan dengan regenerasi 30 menit yang baik
-• Berfungsi sepenuhnya offline
-• Mendukung 20+ bahasa
+• Tombol Lanjut — lanjutkan level terakhir langsung dari menu
+• Rangkaian login 7 hari — hadiah lebih besar semakin lama kamu bermain berturut-turut
+• Koleksi Tema — buka palet warna baru saat kamu maju
+• Perbandingan Langkah — lihat jumlah langkahmu dibandingkan dengan par dan braket peringkatmu
+• Layar Statistik — lacak level yang diselesaikan, total menuang, streak harian, dan banyak lagi
+• Sistem kehidupan dengan regenerasi yang murah hati 30 menit
+• Bekerja sepenuhnya offline
+• Mendukung lebih dari 20 bahasa
 
-🏆 PROGRESI LEVEL
-Level meningkat secara bertahap dalam kesulitan — tidak ada lonjakan kesulitan yang tiba-tiba:
+🏆 PERKEMBANGAN LEVEL
+Level secara bertahap meningkat dalam kesulitan — tidak ada lonjakan kesulitan yang mendadak:
 • Tutorial (1–10):   3 warna — pelajari dasar-dasarnya
 • Mudah (11–30):      4 warna — membangun kepercayaan diri
 • Sedang (31–130):   5 warna — tantangan sebenarnya dimulai
@@ -711,460 +709,460 @@ Level meningkat secara bertahap dalam kesulitan — tidak ada lonjakan kesulitan
 • Ahli (301–500):  8 warna — tantangan tertinggi
 
 📅 TANTANGAN HARIAN
-Teka-teki segar setiap hari! Bangun urutan Anda untuk mendapatkan koin bonus yang semakin meningkat. Terlewat satu hari? Habiskan koin untuk menyimpan urutan Anda dan teruskan semangatnya.
+Teka-teki baru setiap hari! Bangun streakmu untuk mendapatkan koin bonus yang meningkat. Terlewat sehari? Habiskan koin untuk menyelamatkan streak dan tetap menjaga semangat.
 
 🎯 MISI HARIAN
-Tiga tujuan baru diperbarui setiap tengah malam:
-• Selesaikan level apa saja · Tuang 30 kali · Selesaikan 3 level
-• Penyelesaian sempurna (tanpa Tuang Stabil) · Selesaikan Tantangan Harian
+Tiga tujuan baru segar muncul setiap tengah malam:
+• Selesaikan level apapun · Tuang 30 kali · Selesaikan 3 level
+• Penyelesaian sempurna (tanpa Steady Pour) · Selesaikan Tantangan Harian
 Dapatkan hingga 75 koin bonus per hari hanya untuk bermain!
 
 🏅 TURNAMEN MINGGUAN
-Setiap minggu level yang Anda capai menempatkan Anda di peringkat — 10% / 25% / 50% / 75% teratas. Selesaikan minggu di kuartal teratas dan koin akan tiba saat Anda membuka aplikasi. Resets Senin.
+Setiap minggu level yang kamu capai menempatkanmu dalam braket — 10% / 25% / 50% / 75%. Selesaikan minggu di kuartal teratas dan koin kamu akan tersedia saat membuka aplikasi. Reset pada hari Senin.
 
 🎨 TEMA & ACARA MUSIMAN
-Buka palet warna baru saat Anda naik tangga level. Pada bulan Oktober, Desember dan Februari, tema musiman akan hadir selama sebulan.
+Buka palet warna baru saat kamu naik tangga level. Di bulan Oktober, Desember, dan Februari tema musiman tersedia untuk bulan tersebut.
 
 🛒 TOKO
 • Hapus Iklan — nikmati pengalaman tanpa gangguan selamanya
-• Paket Koin S — 100 koin untuk petunjuk dan penguat
-• Paket Koin M — 600 koin
-• Paket Koin L — 500 koin, koin terbanyak per dolar
-• Paket Koin XL — 1400 koin, bundel terbesar kami
-• Paket Petunjuk — 10 petunjuk Pengungkapan Warna
-• Paket Pemula — 100 koin + 5 petunjuk + 5 nyawa + Iklan Dimatikan
-• Pass Musim — tanpa iklan, +50 koin harian, semua tema, petunjuk tanpa batas (30 hari)
-• Pass Mingguan — tanpa iklan, +100 koin harian, semua tema, petunjuk tanpa batas (7 hari)
-• Pembatalan Tak Terbatas — tidak pernah terjebak lagi
-• Nyawa Tambahan — pulihkan 5 nyawa secara instan
-• Nyawa Tak Terbatas (1 jam) — bermain bebas selama satu jam penuh
-• Nyawa Tak Terbatas (∞) — tidak akan kehilangan satu nyawa pun lagi
+• Paket Koin S — 100 koin untuk petunjuk dan booster
+• Paket Koin M — 400 koin
+• Paket Koin L — 800 koin
+• Paket Koin XL — 2000 koin, bundel terbesar dan koin terbanyak per dolar
+• Paket Petunjuk — 10 petunjuk Color Reveal
+• Paket Pemula — 100 koin + 5 petunjuk + 5 kehidupan + Iklan Off
+• Season Pass — tanpa iklan, +100 koin setiap hari, semua tema, petunjuk tanpa batas (30 hari, penawaran terbaik)
+• Weekly Pass — tanpa iklan, +50 koin setiap hari, semua tema, petunjuk tanpa batas (7 hari, tanpa komitmen)
+• Undo tanpa batas — tidak akan terjebak lagi
+• Kehidupan Tambahan — pulihkan 5 kehidupan secara instan
+• Kehidupan Tanpa Batas (1 jam) — bermain bebas selama satu jam penuh
+• Kehidupan Tanpa Batas (∞) — tidak akan kehilangan kehidupan lagi
 </id>
 
 <it-IT>
 💧 Water Sort Puzzle — Versa, Ordina e Rilassati!
 
-Tocca per versare. Osserva i colori assestarsi. Un flusso soddisfacente alla volta.
+Tocca per versare e osserva i colori stabilizzarsi. Un flusso soddisfacente alla volta.
 
-500 enigmi realizzati a mano, senza timer, senza fretta. Cuffie indossate, mente aperta.
+500 enigmi calibrati a mano, senza timer e senza fretta. Cuffie indossate, mente rilassata.
 
 🌊 COME GIOCARE
-• Tocca un tubo per sollevare il liquido superiore
+• Tocca un tubo per raccogliere il liquido superiore
 • Versalo su un colore corrispondente o in un tubo vuoto
-• Riempi ogni tubo con un unico colore per completare il livello
+• Riempi ogni tubo con un colore unico per completare il livello
 • Nessuna pressione temporale — gioca al tuo ritmo!
 
 ✨ CARATTERISTICHE
-• Gioco gratuito — tutti e 500 i livelli disponibili, senza paywall
-• 500 livelli artigianali — da enigmi semplici a sfide che mettono alla prova la tua mente
-• Animazioni di versamento fluido — osserva l'acqua scorrere!
-• Effetti sonori ASMR durante il versamento e musica ambientale
-• Boosters quando sei bloccato: Rivelazione Colore (suggerimento), Versata Stabile (annulla), Nuovo Inizio (riavvia), Tubo Extra, Bacchetta Magica
-• Sfida Quotidiana — un nuovo enigma ogni giorno con ricompense
-• Missioni Giornalieri — 3 obiettivi ogni giorno, guadagna monete bonus
-• Torneo Settimanale — scala una classifica, il 25% migliore ottiene monete
-• Eventi stagionali — temi a tempo limitato per Halloween, Inverno e Primavera
-• Pulsante Monete Gratuite — guarda un breve annuncio per 25 monete ogni poche ore
-• Pulsante Continua — riprendi dal tuo ultimo livello direttamente dal menu
-• Catena di accesso di 7 giorni — ricompense più grandi per giochi consecutivi
-• Raccolta di Temi — sblocca nuove palette di colori mentre progredisci
-• Confronto Mosse — vedi il tuo conteggio mosse rispetto al par e alla tua classifica
-• Schermata Statistiche — monitora livelli completati, versamenti totali, catena giornaliera e altro
-• Sistema di Vite con rigenerazione di 30 minuti
-• Funziona completamente offline
-• Supporta oltre 20 lingue
+• Gioco gratuito — 500 livelli disponibili senza paywall
+• 500 livelli artigianali — dai puzzle per principianti a sfide per esperti
+• Animazioni fluide — guarda l'acqua fluire!
+• Effetti sonori ASMR e musica ambientale
+• Boosters quando sei bloccato: Rivelazione Colore, Versamento Costante, Nuovo Inizio, Tubo Extra, Bacchetta Magica
+• Sfida Giornaliera — un nuovo puzzle ogni giorno con premi in serie
+• Missioni Giornalieri — guadagna monete bonus completando 3 obiettivi quotidiani
+• Torneo Settimanale — scala una classifica, il 25% migliore guadagna monete
+• Eventi stagionali — temi limitati per Halloween, Inverno e Primavera
+• Pulsante Monete Gratuite — guarda un breve annuncio per 25 monete periodicamente
+• Pulsante Continua — riprendi il tuo ultimo livello direttamente dal menu
+• Raccolta Temi — sblocca nuove palette di colori mentre progredisci
+• Confronto Mosse — confronta il tuo numero di mosse con il par
+• Statistiche dettagliate — monitora i tuoi progressi e le statistiche di gioco
+• Vite rigenerabili in 30 minuti
+• Gioco offline totale
+• Supporto per oltre 20 lingue
 
 🏆 PROGRESSIONE DEI LIVELLI
-I livelli aumentano gradualmente in difficoltà:
+Difficoltà crescente senza brusche impennate:
 • Tutorial (1–10): 3 colori — impara le basi
 • Facile (11–30): 4 colori — costruisci fiducia
 • Medio (31–130): 5 colori — inizia la vera sfida
-• Difficile (131–300): 6–7 colori — vera maestria nei puzzle
-• Esperto (301–500): 8 colori — la sfida definitiva
+• Difficile (131–300): 6-7 colori — vera padronanza
+• Esperto (301–500): 8 colori — sfida finale
 
-📅 SFIDA QUOTIDIANA
-Risolvi un enigma fresco ogni giorno! Costruisci la tua catena per monete bonus crescenti. Sbagli un giorno? Spendi monete per salvare la tua catena e continuare a giocare.
+📅 SFIDA GIORNALIERA
+Un puzzle nuovo ogni giorno! Costruisci la tua serie per monete bonus. Salti un giorno? Spendi monete per salvare la tua serie.
 
-🎯 MISSIONI GIORNALIERI
-Tre nuovi obiettivi ogni giorno:
+🎯 MISSIONI GIORNALIERE
+Tre obiettivi rinnovati ogni mezzanotte:
 • Completa un livello · Versa 30 volte · Finisci 3 livelli
-• Risoluzione perfetta (senza Versata Stabile) · Completa la Sfida Quotidiana
-Guadagna fino a 75 monete bonus al giorno semplicemente giocando!
+Guadagna fino a 75 monete bonus giornaliere!
 
 🏅 TORNEO SETTIMANALE
-Ogni settimana, il livello che raggiungi ti colloca in un bracket — i primi 10% / 25% / 50% / 75%. Finisci la settimana nel primo quarto e ricevi le monete la volta successiva che apri l’app. Si azzera il lunedì.
+Ogni settimana, il tuo livello di completamento ti colloca in un bracket. Completa nel primo quarto per ricevere monete alla prossima apertura dell'app. Si resetta lunedì.
 
-🎨 TEMI E EVENTI STAGIONALI
-Sblocca nuove palette di colori man mano che progredisci. Ad ottobre, dicembre e febbraio arriva un tema stagionale.
+🎨 TEMI & EVENTI STAGIONALI
+Sblocca nuove palette di colori mentre sali di livello. Temi stagionali ad ottobre, dicembre e febbraio.
 
 🛒 NEGOZIO
-• Rimuovi Annunci — goditi un'esperienza senza interruzioni
+• Rimuovi Annunci — gioca senza interruzioni
 • Pacchetto Monete S — 100 monete
-• Pacchetto Monete M — 600 monete
-• Pacchetto Monete L — 500 monete
-• Pacchetto Monete XL — 1400 monete
-• Pacchetto Suggerimenti — 10 suggerimenti
-• Pacchetto Iniziale — 100 monete + 5 suggerimenti + 5 vite
-• Pass Stagionale — senza pubblicità, +50 monete giornaliere, tutti i temi, suggerimenti illimitati (30 giorni)
-• Pass Settimanale — senza pubblicità, +100 monete giornaliere, sugget. illimitati (7 giorni)
-• Annullamenti Illimitati — non rimanere mai bloccato
-• Vite Extra — ripristina 5 vite
+• Pacchetto Monete M — 400 monete
+• Pacchetto Monete L — 800 monete
+• Pacchetto Monete XL — 2000 monete
+• Pacchetto Indizi — 10 indizi Rivelazione Colore
+• Pacchetto Inizio — 100 monete + 5 indizi + 5 vite
+• Pass Stagionale — senza pubblicità, +100 monete quotidiane
+• Pass Settimanale — senza pubblicità, +50 monete quotidiane
+• Annullamenti Illimitati — mai più bloccato
+• Vite Extra — ripristina 5 vite istantaneamente
 • Vite Illimitate (1h) — gioca liberamente per un'ora
 • Vite Illimitate (∞) — non perdere mai più una vita
 </it-IT>
 
 <ja-JP>
-💧 ウォーターソートパズル — 注ぎ、並べ替えてリラックス！
+💧 ウォーターソートパズル — 注いで、整理して、リラックス！
 
-タップして注ぎます。色が落ち着くのを見守りましょう。心地よい流れを一つずつ。
+タップして注ぐ。色が落ち着くのを見守る。一度に一つの満足の流れを。
 
-500の手作りパズル、タイマーなし、急ぐ必要なし。ヘッドフォンをつけて、心を静めましょう。
+500の手作りパズル、タイマーなし、急かされることもなし。ヘッドフォンをつけて、心を静めて。
 
 🌊 プレイ方法
-・チューブをタップして、最上部の液体層を取りましょう
-・同じ色のチューブに注ぐか、空のチューブに注ぎます
-・各チューブを単一の色で満たしてレベルをクリアします
-・時間に追われることなく、自分のペースでプレイ！
+• チューブをタップして一番上の液体層を持ち上げる
+• マッチする色の上に注ぐか、空のチューブに注ぐ
+• 各チューブを単一の色で満たしてレベルをクリアする
+• 時間に追われることはなし — 自分のペースでプレイ！
 
 ✨ 特徴
-・無料プレイ — 500のレベルすべてが含まれ、課金はなし
-・500の手作りレベル — 優しい初心者向けから、頭をひねる上級者向けまで
-・なめらかな液体の注ぎアニメーション — 水の流れを楽しめます！
-・ASMRの水の注ぎ音と空間的な音楽
-・詰まった時のブースター: カラーリビール（ヒント）、ステディポア（やり直し）、フレッシュスタート（再スタート）、エクストラチューブ、マジックワンド
-・デイリーチャレンジ — 毎日新しいパズルが登場し、連続報酬があります
-・デイリーミッション — 毎日3つの新しい目標を達成してボーナスコインを獲得
-・週間トーナメント — シンセティックブランケットリーダーボードで上位25％がコインを獲得
-・季節イベント — ハロウィン、冬、春の限定テーマ
-・無料コインボタン — 短い広告を視聴して数時間ごとに25コイン
-・続行ボタン — メニューから最後のレベルをそのまま続行
-・7日間ログイン連続 — 連続してプレイするほど大きな報酬
-・テーマコレクション — 進行に応じて新しいカラーパレットを解除
-・移動比較 — 自分の移動回数と基準を比較
-・統計画面 — 完了したレベル、総注ぎ回数、デイリーストリークなどを追跡
-・たっぷりとした30分のライフ再生システム
-・完全オフライン対応
-・20以上の言語をサポート
+• 無料でプレイ可能 — 500のレベルすべてが含まれており、支払いの壁もなし
+• 500の手作りレベル — 対応スキルに応じて初心者から上級者向けパズルまで
+• 滑らかな液体注ぎアニメーション — 水が流れる様子を楽しもう！
+• ASMRの水を注ぐ音効果と周囲の雰囲気を演出する音楽
+• 行き詰まった時のブースター：色のヒント（カラーリビール）、安定した注ぎ（アンドゥ）、新たなスタート（再スタート）、追加チューブ、マジックワンド
+• デイリーチャレンジ — 毎日新しいパズルが出題され、連続クリアで報酬を獲得
+• デイリーミッション — 毎日3つの新しい目標、ボーナスコインを獲得
+• 週間トーナメント — 合成ブラケットリーダーボードに参加し、上位25%がコインを得られる
+• 季節イベント — ハロウィン、冬、春の限られたテーマが楽しめる
+• 無料コインボタン — 短い広告を見ることで数時間ごとに25コイン獲得
+• 継続ボタン — メニューから最後のレベルをすぐに続行
+• 7日間ログイン連続 — 継続するほど報酬が増える
+• テーマコレクション — 進行に応じて新しいカラーパレットをアンロック
+• 移動比較 — 自分の移動回数をパーと比較し、ランクを確認
+• スタッツ画面 — 完了したレベル、合計注ぎ回数、デイリーストリークなどをトラッキング
+• 30分の再生回復をもつライフシステム
+• 完全オフラインで動作
+• 20以上の言語に対応
 
 🏆 レベル進行
-レベルは徐々に難易度が上がります — 突然の難易度上昇はありません：
-・チュートリアル (1–10):  3色 — 基本を学ぶ
-・イージー (11–30):      4色 — 自信をつける
-・ミディアム (31–130):   5色 — 本格的な挑戦が始まる
-・ハード (131–300):      6–7色 — 真のパズルマスター
-・エキスパート (301–500): 8色 — 究極の挑戦
+レベルは徐々に難易度が上がる — 急な難易度の上昇はなし：
+• チュートリアル (1–10): 3色 — 基本を学ぶ
+• イージー (11–30): 4色 — 自信をつける
+• ミディアム (31–130): 5色 — 本当の挑戦が始まる
+• ハード (131–300): 6–7色 — 真のパズルマスターへの道
+• エキスパート (301–500): 8色 — 究極の挑戦
 
 📅 デイリーチャレンジ
-毎日新しいパズル！連続プレイでボーナスコインを増やしましょう。1日逃してしまった？コインを使ってストリークを保存し、火を絶やさず。
+毎日新しいパズル！連続クリアでボーナスコインを増やそう。1日サボった？コインを使って連続記録を保存し、続けよう。
 
 🎯 デイリーミッション
-3つの新しい目標が毎日真夜中にリフレッシュされます：
-・任意のレベルをクリア · 30回注ぐ · 3レベルを終える
-・パーフェクトソルブ（ステディポアなし） · デイリーチャレンジをクリア
+毎日午前0時に3つの新しい目標がリフレッシュ：
+• 任意のレベルをクリア · 30回注ぐ · 3つのレベルをクリア
+• パーフェクトソルブ（安定した注ぎなし） · デイリーチャレンジをクリア
 プレイするだけで最大75コインのボーナスを獲得！
 
 🏅 週間トーナメント
-毎週、到達したレベルでブランケットに入ります — 上位10％ / 25％ / 50％ / 75％。 週の終わりに上位四分の一に入れば、アプリを開いたときにコインがもらえます。月曜日にリセット。
+毎週、到達したレベルに応じてブラケットに配置される — 上位10% / 25% / 50% / 75%。 週の終わりに上位四分の一に入れば、アプリを開いた時にコインが手に入る。月曜日リセット。
 
-🎨 テーマと季節イベント
-レベルを上がるにつれて新しいカラーパレットが解除されます。10月、12月、2月には季節テーマが追加されます。
+🎨 テーマ & 季節イベント
+レベルのステップを登ることで新しいカラーパレットをアンロック。10月、12月、2月には季節テーマが登場。
 
 🛒 ショップ
-・広告を削除 — 永遠に邪魔されない体験を楽しめます
-・コインパック S — ヒントやブースター用の100コイン
-・コインパック M — 600コイン
-・コインパック L — 500コイン、ドルあたりのコインが最も多い
-・コインパック XL — 1400コイン、最大のバンドル
-・ヒントパック — 10のカラーリビールヒント
-・スターターパック — 100コイン + 5ヒント + 5ライフ + 広告オフ
-・シーズンパス — 広告なし、毎日+50コイン、すべてのテーマ、無制限ヒント（30日）
-・ウィークリーパス — 広告なし、毎日+100コイン、すべてのテーマ、無制限ヒント（7日）
-・無制限やり直し — もう詰まることはありません
-・エクストラライフ — 5ライフを即時復活
-・無制限ライフ (1時間) — 1時間自由にプレイ
-・無制限ライフ (∞) — もうライフを失うことはありません
+• 広告の削除 — 永久に途切れのない体験を楽しむ
+• コインパック S — ヒントとブースター用に100コイン
+• コインパック M — 400コイン
+• コインパック L — 800コイン
+• コインパック XL — 2000コイン、最大のバンドルで、ドルあたりのコインも最も多い
+• ヒントパック — 10のカラーリビールヒント
+• スターターパック — 100コイン + 5ヒント + 5ライフ + 広告オフ
+• シーズンパス — 広告なし、毎日+100コイン、すべてのテーマ、無制限のヒント（30日間、お得）
+• 週間パス — 広告なし、毎日+50コイン、すべてのテーマ、無制限のヒント（7日間、契約不要）
+• 無制限アンドゥ — 二度と行き詰まらない
+• エクストライフ — 5ライフを即時に復元
+• 無制限ライフ (1時間) — 自由にプレイできる1時間
+• 無制限ライフ (∞) — 二度とライフを失わない
 </ja-JP>
 
 <pt-BR>
-💧 Quebra-Cabeça da Água — Despeje, Classifique & Relaxe!
+💧 Quebra-Cabeça de Separar Água — Despeje, Separe e Relaxe!
 
-Toque para despejar. Veja as cores se organizarem. Um fluxo satisfatório de cada vez.
+Toque para despejar e observe as cores se acomodarem, um fluxo satisfatório por vez.
 
-500 quebra-cabeças elaborados, sem cronômetro, sem pressa. Fones de ouvido ligados, mente tranquila.
+500 quebra-cabeças feitos manualmente, sem cronômetro. Fones de ouvido ligados, mente desligada.
 
 🌊 COMO JOGAR
-• Toque em um tubo para pegar a camada de líquido superior
-• Despeje sobre uma cor correspondente ou em um tubo vazio
+• Toque em um tubo para pegar a camada de líquido do topo
+• Despeje em uma cor correspondente ou em um tubo vazio
 • Preencha cada tubo com uma única cor para completar o nível
-• Jogue no seu ritmo!
+• Sem pressão de tempo — jogue no seu próprio ritmo!
 
 ✨ RECURSOS
-• Gratuito para jogar — todos os 500 níveis disponíveis, sem bloqueios
-• Níveis variados — desafios desde iniciantes até especialistas
-• Animações de derramamento de água suaves — observe a água fluir!
-• Efeitos sonoros ASMR relaxantes
-• Potenciadores úteis: Revelar Cor, Despejo Estável, Novo Começo, Tubo Extra, Varinha Mágica
-• Desafio Diário — um novo quebra-cabeça todo dia com recompensas em sequência
-• Missões Diárias — 3 novos objetivos a cada dia, ganhe moedas bônus
-• Torneio Semanal — suba no quadro de líderes e ganhe moedas
-• Eventos sazonais — temas especiais em Halloween, Inverno e Primavera
-• Botão de Moedas Gratuitas — ganhe moedas assistindo a anúncios curtos
-• Sequência de login de 7 dias — maiores recompensas para jogadas consecutivas
-• Coleção de Temas — desbloqueie novas paletas de cores
+• Gratuito para jogar — todos os 500 níveis inclusos, sem barreiras de pagamento
+• Níveis variados — de quebra-cabeças fáceis a desafios complexos
+• Animações de despejo de líquido suaves — observe a água fluir!
+• Efeitos sonoros relaxantes de água e música ambiente
+• Boosters para ajudar: revelação de cor, despejo preciso, novo começo, tubo extra e varinha mágica
+• Desafio Diário — um quebra-cabeça novo todo dia com recompensas
+• Missões Diárias — 3 objetivos diários para moedas bônus
+• Torneio Semanal — suba no ranking e ganhe moedas
+• Eventos sazonais — temas limitados em datas especiais
+• Botão de Moedas Grátis — assista um anúncio para 25 moedas a cada poucas horas
+• Botão Continuar — retome do último nível facilmente
+• Sequência de login de 7 dias — recompensas maiores com jogatina contínua
+• Coleta de temas — desbloqueie novas paletas conforme avança
+• Comparação de Movimentos — veja sua contagem em relação ao par
 • Tela de Estatísticas — acompanhe seu progresso
-• Sistema de Vidas regenerativo em 30 minutos
+• Sistema de vidas com regeneração a cada 30 minutos
 • Funciona offline
 • Suporte a mais de 20 idiomas
 
 🏆 PROGRESSÃO DE NÍVEIS
 Os níveis aumentam gradualmente em dificuldade:
 • Tutorial (1–10): 3 cores — aprenda o básico
-• Fácil (11–30): 4 cores — ganhando confiança
-• Médio (31–130): 5 cores — começando o desafio
-• Difícil (131–300): 6–7 cores — maestria em quebra-cabeças
-• Especialista (301–500): 8 cores — desafio definitivo
+• Fácil (11–30): 4 cores — construindo confiança
+• Médio (31–130): 5 cores — o verdadeiro desafio começa
+• Difícil (131–300): 6-7 cores — maestria em quebra-cabeças
+• Expert (301–500): 8 cores — o desafio supremo
 
 📅 DESAFIO DIÁRIO
-Um quebra-cabeça novo todo dia! Manutenção da sequência para moedas de bônus. Perdeu um dia? Gaste moedas para salvá-la.
+Um quebra-cabeça novo diariamente! Construa sua sequência para moedas bônus. Perdeu um dia? Gaste moedas para salvar sua sequência.
 
 🎯 MISSÕES DIÁRIAS
-Novos objetivos a cada meia-noite:
-• Completar qualquer nível · Despejar 30 vezes · Finalizar 3 níveis
-• Solução perfeita (sem Despejo Estável) · Completar o Desafio Diário
-Ganhe até 75 moedas bônus por dia!
+Três novos objetivos renovados diariamente:
+• Complete qualquer nível · Despeje 30 vezes · Finalize 3 níveis
+• Solução perfeita · Complete o Desafio Diário
+Ganhe até 75 moedas bônus por dia jogando!
 
 🏅 TORNEIO SEMANAL
-Cada semana, seu nível o coloca em um grupo — 10% / 25% / 50% / 75%. Ao finalizar, as moedas caem na próxima abertura do app. Reinício na segunda.
+Seu nível semanal o coloca entre grupos — 10% / 25% / 50% / 75%. Termine entre os líderes e ganhe moedas na próxima abertura do app. Reinício na segunda-feira.
 
 🎨 TEMAS E EVENTOS SAZONAIS
-Desbloqueie paletas de cores à medida que avança. Temas sazonais são lançados em outubro, dezembro e fevereiro.
+Desbloqueie novas paletas enquanto avança. Temas sazonais aparecem em outubro, dezembro e fevereiro.
 
 🛒 LOJA
-• Remover Anúncios — jogue sem interrupções para sempre
-• Pacotes de Moedas — opções de 100 a 1400 moedas
-• Pacote de Dicas — 10 dicas para Revelar Cor
-• Pacote Inicial — 100 moedas + 5 dicas + 5 vidas + Anúncios Desativados
-• Passe de Temporada — sem anúncios, +50 moedas diárias, temas ilimitados
-• Desfazer Ilimitado — nunca fique preso
+• Remover Anúncios — aproveite uma experiência sem interrupções
+• Pacotes de Moedas — de 100 a 2000 moedas disponíveis
+• Pacote de Dicas — 10 dicas para ajudar
+• Passe de Temporada — sem anúncios, +100 moedas diárias, todos os temas
+• Passe Semanal — sem anúncios, +50 moedas diárias, todos os temas
+• Desfazimentos Ilimitados — nunca fique preso
 • Vidas Extras — restaure 5 vidas instantaneamente
 • Vidas Ilimitadas (1h) — jogue livremente por uma hora
-• Vidas Ilimitadas (∞) — nunca perca uma vida novamente
+• Vidas Ilimitadas (∞) — sem perda de vidas novamente
 </pt-BR>
 
 <tr-TR>
-💧 Su Sıralama Bulmacası — Dök, Sıralayıp Rahatla!
+💧 Su Sıralama Bulmacası — Dök, Sırala ve Rahatla!
 
-Dökmek için dokunun. Renklerin yerleşimini izleyin. Tek bir tatmin edici akışta.
+Dökmek için dokunun. Renklerin yerleşmesini izleyin. Her seferinde keyif veren bir akış.
 
-500 özel hazırlanmış bulmaca, zaman hedefi yok, acele yok. Kulaklıklar takılı, zihin dinlensin.
+500 el ile ayarlanmış bulmaca, zamanlayıcı yok, acele yok. Kulaklıklarınızı takın, zihninizi kapatın.
 
-🌊 OYNAMAK İÇİN
-• En üstteki sıvı katmanını almak için bir tüpe dokunun
-• Bunu eşleşen bir renge ya da boş bir tüpe dökün
-• Her tüpü tek bir renkle doldurarak bölümü tamamlayın
+🌊 OYNAMANIN YOLU
+• Üstteki sıvı katmanı almak için bir tüpe dokunun
+• Eşleşen bir renge veya boş bir tüpe dökün
+• Her tüpü tek bir renkle doldurarak seviyeyi tamamlayın
 • Zaman baskısı yok — kendi hızınızda oynayın!
 
 ✨ ÖZELLİKLER
-• Ücretsiz oynama — 500 seviyenin hepsi dahil, ödeme duvarı yok
-• 500 el yapımı seviye — başlangıç bulmacalarından, zihin bükücü uzman zorluklarına
+• Oynaması ücretsiz — 500 seviyenin hepsi dahil, ücret duvarı yok
+• 500 el yapımı seviye — nazik başlangıç bulmacalarından akıl kıvrımcı uzman zorluklarına
 • Pürüzsüz sıvı dökme animasyonları — suyun akışını izleyin!
-• ASMR su dökme ses efektleri ve prosedürel ambient müzik
-• Sıkıştığınızda kullanabileceğiniz destekler: Renk Açıklama (ipuçları), Sabit Dökme (geri alma), Taze Başlangıç (yeniden başlama), Ekstra Tüp, Sihirli Değnek
-• Günlük Görev — her gün yeni bir bulmaca ile peş peşe ödüller
-• Günlük Görevler — her gün 3 yeni hedef, bonus madeni paralar kazanın
-• Haftalık Turnuva — yapay sıralamada zirveye çıkın, ilk %25 madeni para kazanır
+• ASMR su dökme ses efektleri ve procedural ambient müzik
+• Sıkıştığınızda yardımcılar: Renk Açıklama (ipucu), Dikkatli Dökme (geri al), Taze Başlangıç (yeniden başlat), Ekstra Tüp, Sihirli Değnek
+• Günlük Zorluk — her gün yeni bir bulmaca ile yan ödüller
+• Günlük Görevler — her gün 3 yeni hedef, bonus paralar kazanın
+• Haftalık Turnuva — sentetik sıralama liderliğinde tırmanın, en üst %25 para kazanıyor
 • Mevsimsel etkinlikler — Cadılar Bayramı, Kış ve Bahar sınırlı süreli temalar getirir
-• Ücretsiz Madeni Paralar butonu — her birkaç saatte kısa bir reklam izleyerek 25 madeni para
-• Devam Butonu — menüden son seviyenizi hemen alın
-• 7 günlük giriş serisi — ardışık olarak oynadıkça daha büyük ödüller
+• Ücretsiz Jeton butonu — her birkaç saatte kısa bir reklam izleyerek 25 jeton kazanın
+• Devam butonu — menüden son seviyenizden devam edin
+• 7 günlük giriş sırası — ardışık oynadıkça daha büyük ödüller
 • Tema koleksiyonu — ilerledikçe yeni renk paletlerini açın
-• Hamle Karşılaştırması — hamle sayınızı par ile kıyaslayın ve sıralamanızı görün
-• İstatistikler Ekranı — tamamlanan seviyeleri, toplam dökme, günlük zinciri ve daha fazlasını takip edin
-• Cömert 30 dakikalık yenilenme ile hayat sistemi
+• Hareket Karşılaştırması — hamle sayınızı standart ile görün ve sıralamanızı kontrol edin
+• İstatistikler Ekranı — tamamlanan seviyeleri, toplam dökme sayısını, günlük sırayı ve daha fazlasını takip edin
+• Cömert 30 dakikalık can yenileme sistemi
 • Tamamen çevrimdışı çalışır
-• 20'den fazla dil desteği
+• 20'den fazla dil desteklenir
 
-🏆 SEVİYE İLERLEME
-Seviyeler yavaş yavaş zorluk artışı gösterir — aniden zorluk artışı yok:
-• Eğitim (1–10):   3 renk — temelleri öğrenin
-• Kolay (11–30):   4 renk — güven inşa etme
-• Orta (31–130):   5 renk — gerçek zorluk başlıyor
-• Zor (131–300):    6–7 renk — gerçek bulmaca ustalığı
-• Uzman (301–500):  8 renk — nihai zorluk
+🏆 SEVİYE ilerlemesi
+Seviyeler yavaş yavaş zorluk artırır - asla ani bir zorluk füzyonu yok:
+• Eğitim (1-10): 3 renk — temelleri öğrenin
+• Kolay (11-30): 4 renk — güven inşa etme
+• Orta (31-130): 5 renk — gerçek zorlayıcı başlıyor
+• Zor (131-300): 6-7 renk — gerçek bulmaca ustalığı
+• Uzman (301-500): 8 renk — nihai zorluk
 
 📅 GÜNLÜK ZORLUK
-Her gün yeni bir bulmaca! Zincirinizi artırarak ek bonus madeni paralar kazanın. Bir günü kaçırdınız mı? Zincirinizi kurtarmak ve ateşi canlı tutmak için madeni paralar harcayın.
+Her gün taze bir bulmaca! Bonus jetonlar için sıranızı artırın. Bir günü kaçırdınız mı? Sıranızı kaydetmek ve ateşi sürdürmek için jeton harcayın.
 
 🎯 GÜNLÜK GÖREVLER
 Her gece yarısı üç yeni hedef yenilenir:
-• Herhangi bir seviyeyi tamamla · 30 kez dök · 3 seviye bitir
-• Mükemmel çözüm (Sabit Dökme olmadan) · Günlük Zorluğu tamamlayın
-Oynadığınız için her gün 75 bonus madeni para kazanabilirsiniz!
+• Herhangi bir seviyeyi tamalayın · 30 kez dökün · 3 seviyeyi bitirin
+• Mükemmel çözüm (Dikkatli Dökme olmadan) · Günlük Zorluğu tamamlayın
+Sadece oynayarak günde 75 bonus jeton kazanın!
 
 🏅 HAFTALIK TURNUVA
-Her hafta ulaştığınız seviye sizi bir sıraya yerleştirir — önde giden %10 / %25 / %50 / %75. Haftayı öndeki çeyrekte bitirirseniz, madeni paralar uygulamayı bir sonraki açışınızda gelir. Yenileme Pazartesi.
+Her hafta ulaştığınız seviye sizi bir sıralama içine yerleştirir — lider %10 / %25 / %50 / %75. Haftayı en üst çeyrekte bitirirseniz, uygulamayı açtığınızda jetonlar elinize geçer. Pazartesi sıfırlanır.
 
 🎨 TEMALAR & MEVSİMSEL ETKİNLİKLER
-Seviye merdivenini tırmanırken yeni renk paletlerini açın. Ekim, Aralık ve Şubat'ta mevsimsel bir tema ay boyunca kullanıma sunuluyor.
+Seviye merdivenini tırmandıkça yeni renk paletlerini açın. Ekim, Aralık ve Şubat'ta mevsimsel bir tema aylık olarak kullanıma sunulur.
 
-🛒 DÜKKÂN
-• Reklamları kaldır — kesintisiz bir deneyimin tadını çıkarın
-• Madeni Para Paketi S — ipuçları ve destekler için 100 madeni para
-• Madeni Para Paketi M — 600 madeni para
-• Madeni Para Paketi L — 500 madeni para, dolar başına en çok madeni para
-• Madeni Para Paketi XL — 1400 madeni para, en büyük paketimiz
+🛒 MAĞAZA
+• Reklamları kaldır — kesintisiz bir deneyim için sonsuza dek
+• Jeton Paketi S — ipuçları ve yardımcılar için 100 jeton
+• Jeton Paketi M — 400 jeton
+• Jeton Paketi L — 800 jeton
+• Jeton Paketi XL — 2000 jeton, en büyük pakette en fazla jeton
 • İpucu Paketi — 10 Renk Açıklama ipucu
-• Başlangıç Paketi — 100 madeni para + 5 ipucu + 5 hayat + Reklamsız
-• Sezon Pass — reklamsız, her gün +50 madeni para, tüm temalar, sınırsız ipuçları (30 gün)
-• Haftalık Pass — reklamsız, her gün +100 madeni para, tüm temalar, sınırsız ipuçları (7 gün)
-• Sınırsız Geri Almalar — bir daha asla sıkışmayın
-• Ekstra Hayatlar — anında 5 hayat geri kazanın
-• Sınırsız Hayatlar (1s) — bir tam saat özgürce oynayın
-• Sınırsız Hayatlar (∞) — bir daha asla hayat kaybetmeyin
+• Başlangıç Paketi — 100 jeton + 5 ipucu + 5 can + Reklamları Kapat
+• Mevsim Pass — reklamsız, günlük +100 jeton, tüm temalar, sınırsız ipuçları (30 gün, daha iyi fırsat)
+• Haftalık Pass — reklamsız, günlük +50 jeton, tüm temalar, sınırsız ipuçları (7 gün, taahhüt yok)
+• Sınırsız Geri Alma — bir daha asla sıkışmayın
+• Ekstra Can — 5 canı anında geri yükleyin
+• Sınırsız Can (1s) — bir saat boyunca serbestçe oynayın
+• Sınırsız Can (∞) — bir daha can kaybetmeyin
 </tr-TR>
 
 <uk>
-💧 Водяна Пазл — Налий, Сортуй та Розслабся!
+💧 Гра "Сортування Води" — Налийте, Сортуйте та Розслабляйтесь!
 
 Натискайте, щоб налити. Спостерігайте, як кольори осідають. Один задовольняючий потік за раз.
 
-500 ретельно налаштованих головоломок, без таймера, без поспіху. Наушники на, мозок відключено.
+500 ретельно налаштованих головоломок, без таймера, без поспіху. Озвучте у навушниках, відключіть розум.
 
 🌊 ЯК ГРАТИ
-• Натискайте на трубку, щоб підняти верхній шар рідини  
-• Налийте його на відповідний колір або в порожню трубку  
-• Заповніть кожну трубку єдиним кольором, щоб завершити рівень  
+• Натисніть на трубку, щоб підняти верхній шар рідини
+• Налийте її на відповідний колір або в порожню трубку
+• Заповніть кожну трубку єдиним кольором, щоб завершити рівень
 • Без тиску часу — грайте у своєму темпі!
 
 ✨ ОСОБЛИВОСТІ
-• Безкоштовна гра — всі 500 рівнів включені, без платних бар’єрів  
-• 500 ручних рівнів — від легких задач для початківців до заплутаних викликів для експертів  
-• Масляні анімації наливу рідини — спостерігайте, як вода тече!  
-• Звукові ефекти ASMR та процедурна атмосферна музика  
-• Підсилювачі, коли ви застрягли: Color Reveal (підказка), Steady Pour (відміна), Fresh Start (перезапуск), Extra Tube, Magic Wand  
-• Щоденний виклик — нова головоломка щодня з бонусами за серії  
-• Щоденні місії — 3 нові завдання щодня, заробляйте бонусні монети  
-• Тижневий турнір — піднімайтесь у таблиці лідерів, перші 25% заробляють монети  
-• Сезонні події — Хелловін, Зима та Весна приносять тематичні обмеження за часом  
-• Кнопка безкоштовних монет — подивіться коротку рекламу для отримання 25 монет кожні кілька годин  
-• Кнопка продовження — продовжте свій останній рівень безпосередньо з меню  
-• 7-денна серія входу — більші винагороди за тривалу гру  
-• Колекція тем — відкривайте нові кольорові палітри в міру прогресу  
-• Порівняння ходів — бачте, скільки ходів ви використали проти стандарту та вашу групу  
-• Екран статистики — відстежуйте завершені рівні, загальні наливу, щоденну серію та інше  
-• Система життів з щедрою регенерацією 30 хвилин  
-• Повністю працює офлайн  
-• Підтримується 20+ мов  
+• Безкоштовно грати — всі 500 рівнів включені, без платних перешкод
+• 500 ручних рівнів — від легких початкових головоломок до складних експертних викликів
+• Плавна анімація наливу рідини — спостерігайте за течією води!
+• Звук наливу води ASMR та процедурна атмосферна музика
+• Підсилювачі, коли ви застряєте: Розкриття кольору (підказка), Стабільний налив (скасування), Новий старт (перезапуск), Додаткова трубка, Чарівна паличка
+• Щоденний виклик — нова головоломка щодня з винагородами за серії
+• Щоденні місії — 3 нові завдання щодня, заробляйте бонусні монети
+• Щотижневий турнір — піднімайтеся у синтетичному рейтингу, ведучі 25% отримують монети
+• Сезонні події — Геловін, Зима та Весна приносять обмежені тематичні події
+• Кнопка безкоштовних монет — дивіться коротке відео за 25 монет кожні кілька годин
+• Кнопка продовження — продовжте свій останній рівень прямо з меню
+• 7-денна серія входу — більші винагороди, чим довше ви граєте безперервно
+• Колекція тем — відкривайте нові кольорові палітри по мірі проходження
+• Порівняння ходів — переглядайте свою кількість ходів порівняно з паром та вашим рейтинговим місцем
+• Екран статистики — відстежуйте завершені рівні, загальні наливи, щоденну серію та більше
+• Система життів з щедрою регенерацією 30 хвилин
+• Працює повністю офлайн
+• Підтримується 20+ мов
 
-🏆 ПРОГРЕСІЯ РІВНІВ
-Рівні поступово ускладнюються — жодного раптового стрибка складності:  
-• Туторіал (1–10): 3 кольори — вивчайте основи  
-• Легкий (11–30): 4 кольори — формування впевненості  
-• Середній (31–130): 5 кольорів — справжнє випробування починається  
-• Важкий (131–300): 6–7 кольорів — справжнє володіння головоломками  
-• Експерт (301–500): 8 кольорів — остаточне випробування  
+🏆 ПРОГРЕС РІВНІВ
+Рівні поступово ускладнюються — ніколи раптові стрибки складності:
+• Туторіал (1–10):  3 кольори — вивчайте основи
+• Легкий (11–30):   4 кольори — набирайте впевненість
+• Середній (31–130): 5 кольорів — справжній виклик починається
+• Важкий (131–300): 6–7 кольорів — справжнє володіння головоломкою
+• Експерт (301–500): 8 кольорів — остаточний виклик
 
 📅 ЩОДЕННИЙ ВИКЛИК
-Нова головоломка щодня! Накопичуйте серію для збільшення бонусних монет. Пропустили день? Витратьте монети, щоб зберегти серію та підтримувати вогонь.
+Нова головоломка щодня! Підвищуйте свою серію для збільшення бонусних монет. Пропустили день? Витратьте монети, щоб зберегти серію та підтримувати вогонь.
 
 🎯 ЩОДЕННІ МІСІЇ
-Три нові завдання оновлюються кожну північ:  
-• Завершіть будь-який рівень · Налийте 30 разів · Завершіть 3 рівні  
-• Ідеальне розв'язання (без Steady Pour) · Завершіть Щоденний виклик  
-Заробляйте до 75 бонусних монет на день просто граючи!
+Три нові завдання оновлюються кожну північ:
+• Завершіть будь-який рівень · Налийте 30 разів · Закінчіть 3 рівня
+• Ідеальне рішення (без Стабільного наливу) · Завершіть Щоденний виклик
+Заработайте до 75 бонусних монет на день лише за гру!
 
-🏅 ТИЖНЕВИЙ ТУРНІР
-Кожного тижня рівень, який ви досягаєте, розміщує вас у групі — провідні 10% / 25% / 50% / 75%. Завершіть тиждень у провідному чверті, і монети будуть доступні наступного разу, коли ви відкриєте додаток. Скидається в понеділок.
+🏅 ЩОТИЖНЕВИЙ ТУРНІР
+Кожного тижня рівень, який ви досягли, поміщає вас у рейтинг — ведучі 10% / 25% / 50% / 75%. Завершіть тиждень у ведучій чверті і монети надійдуть, коли ви відкриєте додаток. Скидається в понеділок.
 
 🎨 ТЕМИ ТА СЕЗОННІ ПОДІЇ
-Відкривайте нові кольорові палітри, поки піднімаєтеся по рівнях. В жовтні, грудні і лютому з’являється сезонна тема.
+Відкривайте нові кольорові палітри, піднімаючись рівнями. У жовтні, грудні та лютому з'являється сезонна тема на місяць.
 
 🛒 МАГАЗИН
-• Видалити рекламу — насолоджуйтесь безперервною грою  
-• Пакет монет S — 100 монет для підказок та підсилювачів  
-• Пакет монет M — 600 монет  
-• Пакет монет L — 500 монет, найвигідніше за гроші  
-• Пакет монет XL — 1400 монет, наш найбільший пакет  
-• Пакет підказок — 10 підказок Color Reveal  
-• Стартовий пакет — 100 монет + 5 підказок + 5 життів + без реклами  
-• Сезонний проїзд — без реклами, +50 монет щодня, всі теми, необмежені підказки (30 днів)  
-• Тижневий проїзд — без реклами, +100 монет щодня, всі теми, необмежені підказки (7 днів)  
-• Безмежні відміни — ніколи більше не застрягайте  
-• Додаткові життя — миттєве відновлення 5 життів  
-• Безмежні життя (1 год) — грайте вільно протягом години  
-• Безмежні життя (∞) — ніколи більше не втрачаєте життя
+• Видалити рекламу — насолоджуйтесь безперервним досвідом назавжди
+• Пакет монет S — 100 монет для підказок і підсилювачів
+• Пакет монет M — 400 монет
+• Пакет монет L — 800 монет
+• Пакет монет XL — 2000 монет, наш найбільший комплект та найбільше монет за долар
+• Пакет підказок — 10 підказок Розкриття кольору
+• Стартовий пакет — 100 монет + 5 підказок + 5 життів + без реклами
+• Сезонний пропуск — без реклами, +100 монет щодня, усі теми, необмежені підказки (30 днів, найвигідніша угода)
+• Щотижневий пропуск — без реклами, +50 монет щодня, усі теми, необмежені підказки (7 днів, без зобов'язань)
+• Безмежні скасовування — більше не застрягайте
+• Додаткові життя — відновіть 5 життів миттєво
+• Безмежні життя (1 година) — грайте вільно протягом повної години
+• Безмежні життя (∞) — більше не втрачайте життя
 </uk>
 
 <zh-CN>
-💧 水排序谜题 — 倾倒、分类与放松！
+💧 水排序谜题 — 倾倒、排序与放松！
 
-轻击倾倒。观察颜色沉淀。一次满意的流动。
+轻触以倾倒。观察颜色的沉淀。每次都带来满足的流动。
 
-500个精心调试的谜题，无计时，无压力。戴上耳机，放松大脑。
+500个手工调试的谜题，无需计时，无需匆忙。戴上耳机，放松大脑。
 
-🌊 如何玩
-• 点击管道以提起最上面的液体层
-• 将其倒入匹配颜色的管道或空管道中
+🌊 玩的方式
+• 轻触管道以拾起最上面的液体层
+• 将其倒入匹配的颜色或空管中
 • 用单一颜色填满每个管道以完成关卡
-• 没有时间压力 — 按自己的节奏玩！
+• 无时间压力 — 按自己的节奏玩！
 
 ✨ 特点
-• 免费游玩 — 包含的500个关卡，无付费墙
-• 500个手工制作的关卡 — 从简单的初学者谜题到错综复杂的专家挑战
-• 流畅的液体倾倒动画 — 观看水流动！
-• ASMR水倒声效和程序生成的环境音乐
-• 遇到难题时的助力：颜色提示（提示），稳定倾倒（撤销），重新开始（重启），额外管道，魔法棒
-• 每日挑战 — 每天全新的谜题和连胜奖励
-• 每日任务 — 每天更新的3个目标，赚取额外金币
-• 每周锦标赛 — 攀升合成分组排行榜，前25%获取金币
-• 季节性活动 — 万圣节、冬季和春季带来限时主题
-• 免费金币按钮 — 每隔几小时观看短视频获得25金币
-• 继续按钮 — 从菜单直接进入您上一个关卡
-• 7天登录连击 — 连续游玩奖励更丰厚
-• 主题收藏 — 随着进度解锁新的配色方案
-• 移动比较 — 查看您的移动次数与标准和排行榜
-• 统计屏幕 — 跟踪完成的关卡、总倾倒次数、每日连胜等
-• 生命系统，每30分钟慷慨再生
-• 完全离线工作
+• 免费游玩 — 500个关卡全部包含，无需付费
+• 500个手工制作的关卡 — 从温和的初学者谜题到令人费解的专家挑战
+• 如丝般顺滑的液体倾倒动画 — 观看水流！
+• ASMR水倾倒音效和程序生成的环境音乐
+• 当您陷入困境时的助推器：颜色揭示（提示）、稳定倾倒（撤销）、全新开始（重启）、额外管道、魔法棒
+• 每日挑战 — 每天一个全新谜题，享有连胜奖励
+• 每日任务 — 每天3个全新目标，赚取额外金币
+• 每周锦标赛 — 在合成分组的排行榜上名列前茅，前25%可获得金币
+• 节日活动 — 万圣节、冬季和春季带来限时主题
+• 免费金币按钮 — 每几小时观看短视频可获得25个金币
+• 继续按钮 — 从菜单直接续玩上一个关卡
+• 7天登陆连击 — 连续游戏越久，奖励越丰厚
+• 主题收集 — 随着进度解锁新的颜色调色板
+• 移动比较 — 查看您的移动次数与标准及您的排名
+• 统计屏幕 — 跟踪已完成关卡、总倾倒次数、每日连击等
+• 生命系统，慷慨的30分钟再生
+• 完全离线运作
 • 支持20多种语言
 
-🏆 关卡进程
-关卡的难度逐渐增加 — 从不突然增加：
-• 教程（1–10）： 3种颜色 — 学习基础
-• 简单（11–30）： 4种颜色 — 建立信心
-• 中等（31–130）： 5种颜色 — 真正的挑战开始
-• 难（131–300）： 6–7种颜色 — 真正的谜题掌控
-• 专家（301–500）： 8种颜色 — 终极挑战
+🏆 级别进展
+关卡难度逐渐提升 — 从不突如其来：
+• 教程 (1–10)：3种颜色 — 学习基础
+• 简单 (11–30)：4种颜色 — 建立信心
+• 中等 (31–130)：5种颜色 — 真正的挑战开始
+• 困难 (131–300)：6–7种颜色 — 真实的谜题掌握
+• 专家 (301–500)：8种颜色 — 最终挑战
 
 📅 每日挑战
-每天都有新谜题！建立您的连胜以获取逐步增加的金币奖励。错过一天？花费金币保住连胜，保持火焰燃烧。
+每天都有全新的谜题！建立连击以获取逐步增加的额外金币。错过一天？花费金币保存您的连击，保持火热。
 
 🎯 每日任务
 每个午夜更新三个新目标：
-• 完成任何一个关卡 · 倾倒30次 · 完成3个关卡
-• 完美解谜（无稳定倾倒） · 完成每日挑战
-仅通过游玩就能赚取每日最多75个金币奖励！
+• 完成任何关卡 · 倾倒30次 · 完成3个关卡
+• 完美解决（无稳定倾倒） · 完成每日挑战
+仅靠玩游戏就能每天赚取最多75个额外金币！
 
 🏅 每周锦标赛
-每周达到的关卡将您放入一个分组 — 前10% / 25% / 50% / 75%。如果在本周结束时进入前四分之一，金币将在下次打开应用时到账。每周一重置。
+每周达到的关卡将把您放置在一个分组中 — 前10% / 25% / 50% / 75%。在周末结束时位列前四分之一，金币将在您下次打开应用时到账。每周一重置。
 
-🎨 主题与季节性活动
-随着您在关卡梯度的上升，解锁新的配色方案。在十月、十二月和二月，会有季节性主题推出。
+🎨 主题与季节活动
+随着您攀登等级梯队，解锁新的颜色调色板。每年十月、十二月和二月，限时季节主题会降临。
 
 🛒 商店
-• 移除广告 — 享受无干扰的体验
-• 硬币包 S — 100个硬币用于提示和助力
-• 硬币包 M — 600个硬币
-• 硬币包 L — 500个硬币，每美元最多硬币
-• 硬币包 XL — 1400个硬币，我们最大的礼包
-• 提示包 — 10个颜色提示
-• 启动包 — 100个硬币 + 5个提示 + 5条生命 + 广告关闭
-• 季票 — 无广告，每日+50个硬币，所有主题，无限制提示（30天）
-• 每周通行证 — 无广告，每日+100个硬币，所有主题，无限制提示（7天）
-• 无限撤销 — 不再被困住
+• 去广告 — 永久享受无干扰体验
+• 硬币包 S — 100个金币用于提示和助推器
+• 硬币包 M — 400个金币
+• 硬币包 L — 800个金币
+• 硬币包 XL — 2000个金币，最大的包裹，每美元最多金币
+• 提示包 — 10个颜色揭示提示
+• 启动包 — 100个金币 + 5个提示 + 5条生命 + 不显示广告
+• 季度通行证 — 无广告，每日+100个金币，所有主题，无限制提示（30天，性价比更高）
+• 每周通行证 — 无广告，每日+50个金币，所有主题，无限制提示（7天，无需承诺）
+• 无限撤销 — 再也不会卡住
 • 额外生命 — 立即恢复5条生命
-• 无限生命（1小时） — 自由游戏一整小时
-• 无限生命（∞） — 不再失去生命
+• 无限生命（1小时） — 自由玩整整一个小时
+• 无限生命（∞） — 再也不会失去生命
 </zh-CN>
 
 ---
@@ -1178,7 +1176,7 @@ Pour & sort colored water
 </en-US>
 
 <ar>
-صب وفرز المياه الملونة
+اسكب واطفئ الماء الملون
 </ar>
 
 <de-DE>
@@ -1186,7 +1184,7 @@ Gieß und sortiere Wasser
 </de-DE>
 
 <es-419>
-Vierte y ordena agua
+Vierte y clasifica agua teñida
 </es-419>
 
 <fr-FR>
@@ -1194,11 +1192,11 @@ Versez et triez l'eau colorée
 </fr-FR>
 
 <hi-IN>
-रंगीन पानी भरें और डालें
+रंगीन पानी डालें और छानें
 </hi-IN>
 
 <id>
-Tuang & atur air berwarna
+Tuang & urutkan air berwarna
 </id>
 
 <it-IT>
@@ -1210,19 +1208,19 @@ Versa e ordina acqua colorata
 </ja-JP>
 
 <pt-BR>
-Despeje e classifique água
+Despeje e ordene água colorida
 </pt-BR>
 
 <tr-TR>
-Renkli su dök ve ayır
+Renkli su dök ve sırala
 </tr-TR>
 
 <uk>
-Наливайте та сортуйте воду
+Наливай та сортуй воду
 </uk>
 
 <zh-CN>
-倒水并分类色水
+倒入并分类彩色水
 </zh-CN>
 
 ---
@@ -1236,51 +1234,51 @@ water sort,color sort puzzle,liquid sort,tube puzzle,pouring game,relaxing puzzl
 </en-US>
 
 <ar>
-لعبة فرز الماء، لعبة فرز الألوان، لغز السوائل، لغز الأنابيب، لعبة الصب، لغز مريح
+فرز المياه، فرز الألوان، لغز السوائل، لغز الأنابيب، لعبة الصب، لغز مهدئ، لغز ذهني
 </ar>
 
 <de-DE>
-wassersortierung, farbsortierung, flüssigkeitsrätsel, rohrrätsel, schüttspiel, entspannendes rätsel
+wassersortierung, farben sortieren, flüssigkeitssortierung, röhrenrätsel, ausguss spiel
 </de-DE>
 
 <es-419>
-ordenar agua,clasificar colores,liquido,puzzle de tubos,verter,relajante,rompecabezas
+rompecabezas de agua, rompecabezas de colores, juego de líquidos, juego de tubos, juego relajante
 </es-419>
 
 <fr-FR>
-jeu de tri de liquide,tri de couleur,puzzle apaisant,puzzle cérébral
+tri d'eau, puzzle de couleurs, tri de liquides, jeu de tubes, jeu de versement, puzzle relaxant
 </fr-FR>
 
 <hi-IN>
-वाटर सॉर्ट,रंग पहेली,तरल पहेली,ट्यूब पहेली,आरामदायक,दिमागी खेल
+पानी_sort, रंग_sort_पज़ल, तरल_sort, ट्यूब_पज़ल, डालने_का_खेल, आरामदायक_पज़ल, दिमागी_पज़ल
 </hi-IN>
 
 <id>
-tebak warna,teka-teki cair,permainan tuang,permainan santai,teka-teki otak
+sortir air,sortir warna,teka-teki cair,teka-teki tabung,permainan tuang,teka-teki menenangkan
 </id>
 
 <it-IT>
-gioco di colori, rompicapo di liquidi, puzzle tubi, gioco rilassante, gioco mentale
+gioco di versamento,rompicapo rilassante,rompicapo liquido,puzzle di colori,gioco di tubi
 </it-IT>
 
 <ja-JP>
-水分け, 色分けパズル, 液体分け, チューブパズル, 注ぎゲーム, リラックスパズル, 脳パズル
+水の仕分け, 色の仕分けパズル, 液体仕分け, チューブパズル, 注ぐゲーム, リラックスペズル, 脳トレパズル
 </ja-JP>
 
 <pt-BR>
-jogo de ordenar água, quebra-cabeça de cores, quebra-cabeça líquido, jogo de tubos, jogo relaxante
+jogo de água, quebra-cabeça de cores, jogo de líquidos, quebra-cabeça de tubos, jogo relaxante
 </pt-BR>
 
 <tr-TR>
-su ayırma,renk bulmaca,sıvı bulmaca,tüp bulmaca,dökme,rahatlatıcı,zeka oyunu
+su sıralama, renk bulmacası, sıvı sıralama, tüp bulmacası, dökme oyunu, dinlendirici oyun
 </tr-TR>
 
 <uk>
-сортування води,кольорова головоломка,рідина,пробірки,наливати,розслаблююча,логіка
+водяний сортувальник, кольоровий пазл, гра з рідиною, розслаблюючий пазл, головоломка для розуму
 </uk>
 
 <zh-CN>
-水彩排序, 液体分类, 管道拼图, 倒水游戏, 放松益智, 大脑游戏
+水排序,颜色分类,液体排序,管道谜题,倒水游戏,放松谜题,智力游戏
 </zh-CN>
 
 ---
@@ -1294,7 +1292,7 @@ Pour, sort, and relax. 500 handcrafted levels with daily challenges and missions
 </en-US>
 
 <ar>
-صب، صفّ، واسترخ. 500 مستوى مصمم يدوياً مع تحديات ومهام يومية.
+اسكب، فرز، واسترخ. 500 مستوى يدوي الصنع مع تحديات ومهام يومية.
 </ar>
 
 <de-DE>
@@ -1302,19 +1300,19 @@ Gießen, sortieren und entspannen. 500 handgefertigte Levels mit täglichen Hera
 </de-DE>
 
 <es-419>
-Vierte, ordena y relájate. 500 niveles artesanales con retos y misiones diarias.
+Vierte, ordena y relájate. 500 niveles diseñados a mano con desafíos y misiones diarias.
 </es-419>
 
 <fr-FR>
-Triez, détendez-vous et appréciez. 500 niveaux artisanaux avec des défis et missions quotidiens.
+Triez, relaxez-vous et jouez. 500 niveaux artisanaux avec des défis et missions quotidiens.
 </fr-FR>
 
 <hi-IN>
-पौधे, छानें और शांत हों। 500 हस्तनिर्मित स्तर, दैनिक चुनौतियाँ और मिशन।
+पोर करें, छिड़कें, और आराम करें। 500 हस्तनिर्मित स्तरों के साथ दैनिक चुनौतियाँ और मिशन।
 </hi-IN>
 
 <id>
-Tuang, susun, dan tenangkan diri. 500 level buatan tangan dengan tantangan dan misi harian.
+Tuang, atur, dan bersantai. 500 level buatan tangan dengan tantangan dan misi harian.
 </id>
 
 <it-IT>
@@ -1322,23 +1320,23 @@ Versa, ordina e rilassati. 500 livelli artigianali con sfide e missioni quotidia
 </it-IT>
 
 <ja-JP>
-注ぎ、揺らし、リラックス。500の手作りレベルと日々のチャレンジ、ミッションが待っています。
+注ぎ、並べ、リラックス。日々のチャレンジとミッションを含む500の手作りレベル。
 </ja-JP>
 
 <pt-BR>
-Despeje, classifique e relaxe. 500 níveis artesanais com desafios e missões diárias.
+Despeje, organize e relaxe. 500 níveis artesanais com desafios e missões diárias.
 </pt-BR>
 
 <tr-TR>
-Dök, sırala ve rahatla. 500 el yapımı seviye ile günlük zorluklar ve görevler.
+Döndür, sırala ve rahatla. Günlük zorluklarla 500 el yapımı seviye seni bekliyor.
 </tr-TR>
 
 <uk>
-Наливайте, сортуйте та розслабляйтеся. 500 ручних рівнів із щоденними завданнями та місіями.
+Наливай, сортуй та розслабляйся. 500 унікально створених рівнів із щоденними викликами та завданнями.
 </uk>
 
 <zh-CN>
-倾倒、分类、放松。500个手工制作的关卡，以及每日挑战与任务。
+倒入、筛选，放松心情。500个手工制作的关卡，带来每日挑战与任务。
 </zh-CN>
 
 ---

@@ -525,7 +525,8 @@ monetization performs in the first week.
 
 ### 6.6 Subscription [GAMES, P2]
 
-The `season_pass_monthly` subscription ($1.99/mo) should offer sustained
+The `season_pass_monthly` subscription ($4.99/mo — the `weekly_pass`
+is the cheaper $1.99/wk entry plan) should offer sustained
 value, not a one-time boost:
 
 - 2x coins on every level for the subscription period
@@ -553,14 +554,13 @@ to sell the game. Order:
    theme threshold** (this is the emotional + progression payoff in one shot).
 3. **Progression / variety** — shows long-term content (many levels, daily
    challenge, missions).
-4-8. Various gameplay, daily challenge, missions, stats, **and a dedicated
-   Themes screen shot — the full unlockable-palette grid with one card
-   highlighted** (this slot is now part of the standard set; `capture_screenshots.py`
-   raw slot `08` = themes grid; `screenshot_headlines.json` carries a
-   `needs_capture: true` placeholder until an emulator run grabs it).
+4-6. Various gameplay, daily challenge, missions, stats — a different board
+   or state in each slot.
 
-Never lead with the menu screenshot. Never lead with the shop screenshot
-(signals monetization-first).
+**Every screenshot is gameplay.** The main menu, shop, settings, and
+"More Games" screens are NEVER used as store screenshots — a menu shot
+wastes a slot and a shop shot signals monetization-first.
+`capture_screenshots.py` captures 6 gameplay slots and never the menu.
 
 ### 7.1.5 Capture quality — what to actually show inside the frame [ALL, P0]
 
@@ -601,7 +601,7 @@ app's solid theme color. See §7.1.5.4.
 
 **★ NEW (Puzzle2048 May 2026 audit) — Same raw screenshot used in
 multiple slots.** The pre-wrap raw captures must be VISUALLY DISTINCT
-across the 7 slots. The Puzzle2048 audit found 7 wrapped screenshots
+across the 6 slots. The Puzzle2048 audit found 7 wrapped screenshots
 using only 2 distinct raw images: tap sequences in
 `capture_screenshots.py` were missing target buttons, so 5 slots all
 captured the same early-game board. Result: 7 different headlines
@@ -610,7 +610,7 @@ RUNS", "ONE FREE UNDO") over visually identical content — every claim
 the headline made was a lie about what the screenshot showed.
 
 `pre_publish_check.py check_screenshot_uniqueness` enforces this:
-perceptual hashes of all 7 phone raws must differ by at least 4
+perceptual hashes of all 6 phone raws must differ by at least 4
 hamming distance from each other. Identical or near-identical raws
 across slots = blocking.
 
@@ -670,8 +670,9 @@ caught this exact failure: a seed referencing `p2048_*` keys never
 touched the real `puzzle2048_save` blob, so all captures showed fresh-
 install zeros. Always grep `localStorage.setItem` and `localStorage.getItem`
 in the actual game.html before writing the seed. Verify after seeding
-by capturing slot 02 (menu) and confirming the displayed Score / Best /
-Best Tile / coin count match the seeded values.
+by launching the app once and confirming the menu/HUD shows the seeded
+Score / Best / Best Tile / coin count before capturing the gameplay
+slots.
 
 ### 7.1.6 Headline ↔ image content match (MANDATORY) [ALL, P0]
 
@@ -1712,10 +1713,12 @@ levels (leveled games) or a 7-day 1.5× multiplier (non-leveled). Menu
 shows an event banner while active. (`check_seasonal_events`.)
 
 ### 14.4 — Coin tier ladder required
-Four tiers, always all four: `coins_small` $0.99/100, `coins_medium`
-$4.99/600, `coins_large` $2.99/500 (best value-per-dollar, the anchor),
-`coins_mega` $9.99/1400. Partial ladders are blocked.
-(`check_coin_tier_ladder`.)
+Four tiers, always all four, strictly monotonic (each costs more, gives
+more coins, and a better coins-per-dollar rate than the one below):
+`coins_small` $0.99/100, `coins_medium` $2.99/400, `coins_large`
+$4.99/800, `coins_mega` $9.99/2000 (best value-per-dollar, the anchor).
+Partial ladders — and the old "`coins_large` cheaper than `coins_medium`"
+ordering — are blocked. (`check_coin_tier_ladder`.)
 
 ### 14.5 — Booster catalog by genre
 Sort-puzzle: Color Reveal, Steady Pour, Fresh Start, Extra Tube, Magic

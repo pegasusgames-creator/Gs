@@ -23,16 +23,20 @@ CANONICAL_PRIVACY = "https://pegasusgames-creator.github.io/privacy.html"
 CANONICAL_SUPPORT = "https://pegasusgames-creator.github.io/"
 CANONICAL_EMAIL   = "pegasusgames@atomicmail.io"
 
+# Fallback only — used when an app has no parseable metadata/iaps.json.
+# Mirrors the canonical catalog in docs/IAP_CATALOG.md.
 DEFAULT_IAPS = [
-    ("remove_ads",            "Managed",      "Remove Ads",      "$1.99"),
+    ("remove_ads",            "Managed",      "Remove Ads",      "$2.99"),
     ("coins_small",           "Managed",      "100 Coins",       "$0.99"),
-    ("coins_medium",          "Managed",      "500 Coins",       "$3.99"),
-    ("coins_large",           "Managed",      "1200 Coins",      "$7.99"),
-    ("coins_huge",            "Managed",      "3000 Coins",      "$14.99"),
-    ("starter_pack",          "Managed",      "Starter Pack",    "$0.99"),
-    ("premium_themes",        "Managed",      "Premium Themes",  "$2.99"),
+    ("coins_medium",          "Managed",      "400 Coins",       "$2.99"),
+    ("coins_large",           "Managed",      "800 Coins",       "$4.99"),
+    ("coins_mega",            "Managed",      "2000 Coins",      "$9.99"),
+    ("five_lives",            "Managed",      "5 Lives",         "$0.99"),
+    ("unlimited_lives_1h",    "Managed",      "1 Hour Unlimited Lives", "$1.99"),
     ("hint_pack",             "Managed",      "Hint Pack",       "$1.99"),
-    ("season_pass_monthly",   "Subscription", "Monthly Pass",    "$1.99/mo"),
+    ("starter_pack",          "Managed",      "Starter Pack",    "$0.99"),
+    ("season_pass_monthly",   "Subscription", "Season Pass",     "$4.99/mo"),
+    ("weekly_pass",           "Subscription", "Weekly Pass",     "$1.99/wk"),
 ]
 
 
@@ -114,7 +118,7 @@ def main():
             ))
         for entry in iaps_meta.get("subscriptions", []) or []:
             period = entry.get("billing_period", "P1M")
-            suffix = "/mo" if period == "P1M" else f"/{period}"
+            suffix = {"P1M": "/mo", "P1W": "/wk", "P1Y": "/yr"}.get(period, f"/{period}")
             iap_rows.append((
                 entry.get("id", ""),
                 "Subscription",

@@ -309,6 +309,18 @@ public class MainActivity extends Activity {
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     private void initAdMob() {
+        // Register the emulator as a test device so production unit IDs serve
+        // test ads in dev builds (otherwise live IDs return "no fill").
+        boolean isDebuggable = (getApplicationInfo().flags
+            & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        if (isDebuggable) {
+            com.google.android.gms.ads.RequestConfiguration cfg =
+                new com.google.android.gms.ads.RequestConfiguration.Builder()
+                    .setTestDeviceIds(java.util.Arrays.asList(
+                        com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR))
+                    .build();
+            MobileAds.setRequestConfiguration(cfg);
+        }
         MobileAds.initialize(this, s -> runOnUiThread(() -> {
             loadAdmobBanner(); loadAdmobInterstitial(); loadAdmobRewarded();
         }));

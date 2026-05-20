@@ -3,10 +3,12 @@
 check_subscription_parity.py — every benefit promised in a subscription's
 store description must have a corresponding code path in game.html.
 
-`season_pass_monthly` listed as "ad-free play, +50 coins every day, all
+`season_pass_monthly` listed as "ad-free play, +100 coins every day, all
 themes unlocked, unlimited hints" requires four honored flags. `weekly_pass`
-at "+100 coins every day" requires the +100 grant path. We can't prove the
-semantics, but we can require the obvious markers exist.
+at "+50 coins every day" requires the +50 grant path. We can't prove the
+semantics, but we can require the obvious markers exist. (The monthly plan
+intentionally grants MORE daily coins than the weekly — the monthly is the
+unambiguous best deal, the weekly is the low-commitment entry tier.)
 
 Standalone:  python3 scripts/check_subscription_parity.py [--all] [App...]
 """
@@ -15,6 +17,12 @@ import argparse, json, os, re, sys
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SKIP = {'_template','_release','docs','scripts','release_aabs','BLOCKED_APPS',
         '__pycache__','.git','.idea','node_modules'}
+
+# Canonical subscription prices (USD), keep in sync with docs/IAP_CATALOG.md.
+# season_pass_monthly is the higher-priced default offer; weekly_pass is the
+# cheap low-commitment entry plan — a weekly sub costing MORE than the monthly
+# one (the pre-2026-05 bug) is a blocker.
+CANONICAL_SUB_PRICE = {'season_pass_monthly': 4.99, 'weekly_pass': 1.99}
 
 
 def read(p):
@@ -44,6 +52,20 @@ def check_app(app):
     if not html:
         out.append(('BLOCKER', 'has subscriptions but game.html is unreadable'))
         return out
+    # Price sanity: canonical values + weekly must be cheaper than monthly.
+    prices = {}
+    for s in subs:
+        sid, p = s.get('id') or '', s.get('price_usd')
+        if sid and p is not None:
+            try: prices[sid] = float(p)
+            except (TypeError, ValueError): pass
+        want = CANONICAL_SUB_PRICE.get(sid)
+        if want is not None and sid in prices and abs(prices[sid] - want) > 0.001:
+            out.append(('WARNING', f"{sid} priced ${prices[sid]} — canonical price is ${want:.2f}"))
+    if 'weekly_pass' in prices and 'season_pass_monthly' in prices \
+            and prices['weekly_pass'] >= prices['season_pass_monthly']:
+        out.append(('BLOCKER', f"weekly_pass (${prices['weekly_pass']}) is priced >= season_pass_monthly "
+                               f"(${prices['season_pass_monthly']}) — the weekly plan must be the cheaper one"))
     for s in subs:
         sid = s.get('id') or ''
         desc = (s.get('description') or '').lower()

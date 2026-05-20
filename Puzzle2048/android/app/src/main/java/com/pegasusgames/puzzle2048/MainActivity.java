@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -56,12 +57,30 @@ import com.android.billingclient.api.QueryPurchasesParams;
 // Firebase
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends Activity {
+
+    // ── Cross-promo allowlist ─────────────────────────────────────────────────
+    // Restricts isAppInstalled() to portfolio packages so JS can't probe
+    // arbitrary installed apps via the bridge. Mirror in WaterSortPuzzle.
+    private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(
+        "com.pegasusgames.ballsort",
+        "com.pegasusgames.nonogram",
+        "com.pegasusgames.pipeconnect",
+        "com.pegasusgames.puzzle2048",
+        "com.pegasusgames.unblock",
+        "com.pegasusgames.watersortpuzzle"
+    ));
 
     // ── AppLovin MAX (disabled; using AdMob) ──────────────────────────────────
     // Populate the four constants below + add the SDK key meta-data in
@@ -79,6 +98,12 @@ public class MainActivity extends Activity {
     private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-5695494884863768/6020929115";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
+    // Base64-encoded RSA public key from:
+    //   Play Console → Monetize setup → Licensing → "Base64-encoded RSA public key"
+    // Used to verify the RSA-SHA1 signature on every Purchase object so a
+    // tampered/spoofed purchase from a hacked billing library is rejected.
+    private static final String LICENSE_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqZbb4fskEZI4QxeFI/SiL5C/vGMhOGUmfC+Tm35beStZnnp2OLPtYhXkWHkSiUEJHNkTyMFEpIqj43we/sTU+5TwO9MTEfWFA/aTLmoLR6Edx4Lw6KMPTjIsIr6bVMjK6AO9Jmxeiwff56qIIiBwX6L71SjoDG+gHwcakdHMAka3ICCfzSRs6QBSNQmXBGuL9h5jdbrZgILP2YzkEECirzDxvzgXvHGL4foGmSvWUurs5S1cYNitPai+07bW3/lUCT/suwtI9WwW3KUnS4SZHDHMEKIFbPy1HP4GYHRYy9JNXmTHl4Bhn9eaBOViwEX7He3KHGq3ijg00GK5v62C3wIDAQAB";
+
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
         "remove_ads", "coins_small", "coins_large", "coins_medium", "coins_mega", "undo_pack",
         "five_lives", "unlimited_lives_1h", "unlimited_lives_forever",
@@ -253,6 +278,19 @@ public class MainActivity extends Activity {
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     private void initAdMob() {
+        // Register the emulator and any wired-up debug device as test devices so
+        // banner/interstitial/rewarded production unit IDs serve test ads in
+        // dev builds (otherwise live IDs return "no fill" on non-test devices).
+        boolean isDebuggable = (getApplicationInfo().flags
+            & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        if (isDebuggable) {
+            com.google.android.gms.ads.RequestConfiguration cfg =
+                new com.google.android.gms.ads.RequestConfiguration.Builder()
+                    .setTestDeviceIds(java.util.Arrays.asList(
+                        com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR))
+                    .build();
+            MobileAds.setRequestConfiguration(cfg);
+        }
         MobileAds.initialize(this, s -> runOnUiThread(() -> {
             loadAdmobBanner(); loadAdmobInterstitial(); loadAdmobRewarded();
         }));
@@ -397,6 +435,10 @@ public class MainActivity extends Activity {
 
     private void handlePurchase(Purchase purchase) {
         if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED) return;
+        if (!verifyPurchaseSignature(purchase)) {
+            Log.w("IAP", "Signature verification failed; reward NOT granted.");
+            return;
+        }
 
         boolean isConsumable = false;
         for (String id : purchase.getProducts()) {
@@ -434,6 +476,34 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> webView.evaluateJavascript(
                 "window.onPurchaseSuccess && window.onPurchaseSuccess('" + id + "');", null));
             if ("remove_ads".equals(id)) hideBanner();
+        }
+    }
+
+    // RSA-SHA1 signature check against the app's Play Console public key.
+    // Returns true if verified, false if invalid. Returns true (skip) when the
+    // public key is still a placeholder so local debug builds work before the
+    // real key is pasted in.
+    private boolean verifyPurchaseSignature(Purchase purchase) {
+        if (LICENSE_PUBLIC_KEY == null || LICENSE_PUBLIC_KEY.startsWith("PASTE_")) {
+            Log.w("Puzzle2048", "LICENSE_PUBLIC_KEY is placeholder — signature check skipped.");
+            return true;
+        }
+        String signedData = purchase.getOriginalJson();
+        String signature  = purchase.getSignature();
+        if (signedData == null || signature == null || signature.isEmpty()) return false;
+        try {
+            byte[] keyBytes = Base64.decode(LICENSE_PUBLIC_KEY, Base64.DEFAULT);
+            PublicKey pub = KeyFactory.getInstance("RSA")
+                .generatePublic(new X509EncodedKeySpec(keyBytes));
+            Signature sig = Signature.getInstance("SHA1withRSA");
+            sig.initVerify(pub);
+            sig.update(signedData.getBytes("UTF-8"));
+            return sig.verify(Base64.decode(signature, Base64.DEFAULT));
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException
+                 | java.security.SignatureException | java.security.InvalidKeyException
+                 | java.io.UnsupportedEncodingException | IllegalArgumentException e) {
+            Log.w("Puzzle2048", "Purchase signature verify error: " + e.getMessage());
+            return false;
         }
     }
 
@@ -479,6 +549,15 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void hideBannerAd()                  { hideBanner(); }
         @JavascriptInterface public void showBannerAd()                  { showBanner(); }
         @JavascriptInterface public void log(String msg)                 { /* disabled in release */ }
+
+        // Restricted to CROSS_PROMO_PACKAGES to prevent JS from probing
+        // arbitrary installed apps via this bridge.
+        @JavascriptInterface
+        public boolean isAppInstalled(String pkg) {
+            if (pkg == null || !CROSS_PROMO_PACKAGES.contains(pkg)) return false;
+            try { getPackageManager().getPackageInfo(pkg, 0); return true; }
+            catch (PackageManager.NameNotFoundException e) { return false; }
+        }
 
         @JavascriptInterface
         public void scheduleNotification(String title, String body, long delayMs) {

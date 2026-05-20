@@ -51,7 +51,7 @@ The `scripts/` folder contains automation:
 - `gen_handoff.py` — generates per-app release checklist (`RELEASE_HANDOFF.md`)
 - `gen_store_paste.py` — assembles per-app Play-Console paste content (`STORE_PASTE.md`)
 - `gen_translations.py` — LLM translations into the 13 locales (Anthropic, or OpenAI fallback)
-- `pepk_command.py` / `gen_upload_keystore.py` — Play App Signing setup per app
+- `migrate_to_per_app_keystores.py` — generate a dedicated `keystore.jks` for an app
 - `consult_designer.py` — sub-agent design questions
 - `capture_screenshots.py` — emulator-driven Play Store screenshots (phone + tablet 7"/10")
 - `wrap_screenshots.py` / `wrap_tablet_screenshots.py` — marketing-frame wrapping

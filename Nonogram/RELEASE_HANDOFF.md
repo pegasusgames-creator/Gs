@@ -44,16 +44,16 @@ Click **Create product** for each row below. Activate after creating
 |---|---|---|---|
 | `remove_ads` | Managed | Remove Ads | $2.99 |
 | `coins_small` | Managed | 100 Coins | $0.99 |
-| `coins_large` | Managed | 500 Coins | $2.99 |
-| `coins_medium` | Managed | 600 Coins | $4.99 |
-| `coins_mega` | Managed | 1400 Coins | $9.99 |
+| `coins_large` | Managed | 800 Coins | $4.99 |
+| `coins_medium` | Managed | 400 Coins | $2.99 |
+| `coins_mega` | Managed | 2000 Coins | $9.99 |
 | `five_lives` | Managed | 5 Lives | $0.99 |
 | `unlimited_lives_1h` | Managed | 1hr Unlimited | $1.99 |
 | `unlimited_lives_forever` | Managed | Unlimited Lives | $4.99 |
 | `hint_pack` | Managed | Hint Pack | $1.99 |
 | `starter_pack` | Managed | Starter Pack | $0.99 |
-| `season_pass_monthly` | Subscription | Season Pass | $1.99/mo |
-| `weekly_pass` | Subscription | Weekly Pass | $4.99/P1W |
+| `season_pass_monthly` | Subscription | Season Pass | $4.99/mo |
+| `weekly_pass` | Subscription | Weekly Pass | $1.99/wk |
 
 ---
 
@@ -213,9 +213,9 @@ Play Console → Nonogram Puzzle → **Test and release → Production → Creat
 
 Drag in `app-release.aab`. Add release notes:
 ```
-• Coin Pack S and L now grant the full 100 and 500
+• Bigger coin packs — M 400 · L 800 · XL 2000; Weekly Pass now $1.99/week
 • Hint Pack now grants the full 10 hints
-• Season Pass benefits expanded: ad-free + 50 daily coins + all themes
+• Season Pass now grants +100 daily coins (was +50); Weekly Pass grants +50
 • Reveal Row and Reveal Cell boosters
 • Weekly Tournament bracket
 • Seasonal events (Halloween, Winter, Spring)

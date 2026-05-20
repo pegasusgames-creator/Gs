@@ -24,8 +24,9 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
+• Bigger coin packs — M 400 · L 800 · XL 2000; Weekly Pass now $1.99/week
 • Starter Pack grants 5 undos and 5 lives
-• Season Pass: +50 daily coins, all themes, unlimited undos
+• Season Pass: +100 daily coins (was +50), all themes, unlimited undos; Weekly +50
 • Magic Merge and Remove Tile boosters
 • Weekly Tournament bracket
 • Seasonal events
@@ -34,123 +35,135 @@ _Test and release → Production → release details_
 </en-US>
 
 <ar>
-• حزمة البداية تمنح 5 تراجعات و5 أرواح  
-• تذكرة الموسم: +50 عملة يومية، جميع المواضيع، تراجعات غير محدودة  
-• معززات الدمج السحري وإزالة البلاط  
-• بطولة أسبوعية  
-• أحداث موسمية  
+• حزم العملات أكبر — M 400 · L 800 · XL 2000؛ الاشتراك الأسبوعي الآن 1.99 دولار/الأسبوع  
+• حزمة البداية تمنح 5 تراجع و5 أرواح  
+• بطاقة الموسم: +100 عملة يومية (كانت +50)، جميع الثيمات، تراجعات غير محدودة؛ أسبوعياً +50  
+• تعزيزات الدمج السحري وإزالة البلاط  
+• تصنيف البطولة الأسبوعية  
+• فعاليات موسمية  
 • زر العملات المجانية  
 • متابعة · الجري الحالي
 </ar>
 
 <de-DE>
+• Größere Münzpakete — M 400 · L 800 · XL 2000; Wochenpass jetzt 1,99 $/Woche  
 • Starter-Paket gewährt 5 Rückgängig-Möglichkeiten und 5 Leben  
-• Saisonpass: +50 tägliche Münzen, alle Themen, unbegrenzt Rückgängig  
-• Magische Mischen- und Fliese Entfernen-Boosts  
-• Wöchentlicher Turnier-Block  
+• Saisonpass: +100 tägliche Münzen (früher +50), alle Themen, unbegrenzte Rückgängig-Möglichkeiten; Wöchentlich +50  
+• Magic Merge und Remove Tile Booster  
+• Wöchentlicher Turnierbaum  
 • Saisonale Ereignisse  
 • Kostenloser Münzen-Button  
 • Fortsetzen · aktuelle Runde
 </de-DE>
 
 <es-419>
-• El Paquete Inicial otorga 5 deshacer y 5 vidas  
-• Pase de Temporada: +50 monedas diarias, todos los temas, deshacer ilimitados  
-• Potenciadores de Fusión Mágica y Quitar Azulejos  
-• Torneo Semanal  
-• Eventos Estacionales  
-• Botón de Monedas Gratis  
-• Continuar · corrida actual
+• Paquetes de monedas más grandes — M 400 · L 800 · XL 2000; Pase semanal ahora $1.99/semana  
+• Paquete inicial otorga 5 deshacer y 5 vidas  
+• Pase de temporada: +100 monedas diarias (antes +50), todos los temas, deshacer ilimitados; Semanal +50  
+• Impulsores de Fusión Mágica y Quitar Losetas  
+• Torneo semanal  
+• Eventos estacionales  
+• Botón de monedas gratis  
+• Continuar · carrera actual
 </es-419>
 
 <fr-FR>
-• Le Pack de Démarrage offre 5 annulations et 5 vies  
-• Pass de Saison : +50 pièces par jour, tous les thèmes, annulations illimitées  
-• Boosters Magie Fusion et Retirer Tuile  
-• Tournoi hebdomadaire  
+• Packs de pièces plus grands — M 400 · L 800 · XL 2000 ; Pass hebdomadaire désormais à 1,99 $/semaine  
+• Pack de démarrage offre 5 annulations et 5 vies  
+• Pass saisonnier : +100 pièces quotidiennes (avant +50), tous les thèmes, annulations illimitées ; Hebdomadaire +50  
+• Boosters Fusion magique et Supprimer tuile  
+• Barre de tournoi hebdomadaire  
 • Événements saisonniers  
-• Bouton de Pièces Gratuits  
+• Bouton Pièces gratuites  
 • Continuer · course actuelle
 </fr-FR>
 
 <hi-IN>
-• स्टार्ट पैक से मिलते हैं 5 अंडू और 5 ज़िंदगी  
-• सीजन पास: हर दिन +50 सिक्के, सभी थीम, अनलिमिटेड अंडू  
+• बड़े सिक्के पैक — M 400 · L 800 · XL 2000; साप्ताहिक पास अब $1.99/सप्ताह  
+• स्टार्टर पैक 5.undo और 5 जीवन प्रदान करता है  
+• सीजन पास: +100 दैनिक सिक्के (पहले +50), सभी थीम, असीमित.undo; साप्ताहिक +50  
 • जादुई मर्ज और टाइल हटाने के बूस्टर  
-• साप्ताहिक टूर्नामेंट ब्रैकेट  
+• साप्ताहिक टूर्नामेंट ब्रेस्केट  
 • मौसमी कार्यक्रम  
 • मुफ्त सिक्के बटन  
-• जारी रखें · वर्तमान रन
+• जारी रखें · वर्तमान खेल
 </hi-IN>
 
 <id>
-• Paket Pemula memberikan 5 undur dan 5 nyawa  
-• Pass Musim: +50 koin harian, semua tema, undur tanpa batas  
-• Pendorong Gabung Ajaib dan Hapus Ubin  
+• Paket koin lebih besar — M 400 · L 800 · XL 2000; Pass Mingguan kini $1.99/minggu  
+• Paket Pemula memberikan 5 undo dan 5 nyawa  
+• Pass Musim: +100 koin harian (sebelumnya +50), semua tema, undo tak terbatas; Mingguan +50  
+• Penguat Magic Merge dan Hapus Ubin  
 • Turnamen Mingguan  
-• Acara Musiman  
+• Acara musiman  
 • Tombol Koin Gratis  
-• Lanjutkan · permainan saat ini
+• Lanjutkan · jalankan saat ini
 </id>
 
 <it-IT>
-• Il Pacchetto Iniziale offre 5 ripristini e 5 vite  
-• Pass Stagionale: +50 monete giornaliere, tutti i temi, ripristini illimitati  
-• Potenziamenti Merge Magico e Rimuovi Nodo  
-• Tabellone del Torneo Settimanale  
-• Eventi Stagionali  
+• Pacchetti di monete più grandi — M 400 · L 800 · XL 2000; Pass settimanale ora 1,99€/settimana  
+• Pacchetto Iniziale concede 5 annullamenti e 5 vite  
+• Pass Stagionale: +100 monete giornaliere (prima +50), tutti i temi, annullamenti illimitati; Settimanale +50  
+• Potenziamenti Magia Fusione e Rimuovi Piastrella  
+• Tabellone Torneo Settimanale  
+• Eventi stagionali  
 • Pulsante Monete Gratuite  
 • Continua · corsa attuale
 </it-IT>
 
 <ja-JP>
-• スターターパックで5回のアンドゥと5ライフが獲得できる！  
-• シーズンパス：毎日+50コイン、すべてのテーマ、無制限のアンドゥ！  
-• マジックマージとタイル除去ブースター！  
-• 週間トーナメントのブランケット！  
-• 季節イベント！  
-• 無料コインボタン！  
-• 続行 · 現在のラン！
+• コインパックが増加 — M 400 · L 800 · XL 2000; ウィークリーパスが週 $1.99 に！  
+• スターターパックでアン undo 5回とライフ 5個をゲット！  
+• シーズンパス: 毎日 +100 コイン（以前は +50）、全テーマ、無制限 undo; 週間 +50  
+• マジックマージとタイル削除ブースター  
+• ウィークリートーナメントブランケット  
+• シーズナルイベント  
+• 無料コインボタン  
+• 現在のランを続行
 </ja-JP>
 
 <pt-BR>
-• Pacote Inicial concede 5 recomeços e 5 vidas  
-• Passe de Temporada: +50 moedas diárias, todos os temas, recomeços ilimitados  
-• Boosters Mágicos de Mesclar e Remover Tile  
-• Chave do Torneio Semanal  
+• Pacotes de moedas maiores — M 400 · L 800 · XL 2000; Pass semanal agora R$ 1,99/semana  
+• Pacote Inicial concede 5 replays e 5 vidas  
+• Passe de Temporada: +100 moedas diárias (era +50), todos os temas, replays ilimitados; Semanal +50  
+• Impulsionadores Mágicos de Combinação e Remoção de Blocos  
+• Chave de Torneio Semanal  
 • Eventos sazonais  
 • Botão de Moedas Grátis  
-• Continuar · corrida atual
+• Continue · partida atual
 </pt-BR>
 
 <tr-TR>
-• Başlangıç Paketi 5 geri alma ve 5 hayat verir  
-• Mevsim Geçişi: Günlük +50 madeni para, tüm temalar, sınırsız geri alma  
-• Büyülü Birleştir ve Kaldır Tile güçlendiricileri  
-• Haftalık Turnuva kategorisi  
+• Daha büyük jeton paketleri — M 400 · L 800 · XL 2000; Haftalık Geçiş şimdi 1,99 $/hafta  
+• Başlangıç Paketi 5 geri alma ve 5 yaşam verir  
+• Mevsim Geçişi: +100 günlük jeton (önce +50), tüm temalar, sınırsız geri alma; Haftalık +50  
+• Sihirli Birleştir ve Kaldır Kartları güçlendiricileri  
+• Haftalık Turnuva braketleri  
 • Mevsimsel etkinlikler  
-• Ücretsiz Madeni Paralar butonu  
+• Ücretsiz Jeton butonu  
 • Devam et · mevcut oyun
 </tr-TR>
 
 <uk>
-• Пакет початківця надає 5 скасувань та 5 життів  
-• Сезонний пропуск: +50 монет щодня, усі теми, необмежені скасування  
-• Магічні підсилювачі злиття та видалення плиток  
-• Щотижневий турнір  
+• БІЛЬШЕ ПАКЕТІВ MONET — M 400 · L 800 · XL 2000; Тижневий проїзний тепер $1.99/тиждень  
+• Пакет для початківців дає 5 скасувань та 5 життів  
+• Сезонний проїзний: +100 монет щодня (було +50), всі теми, безмежні скасування; Тижневий +50  
+• Чарівне злиття та прискорювач видалення плитки  
+• Тижневий турнір  
 • Сезонні події  
 • Кнопка безкоштовних монет  
-• Продовжити · поточний запуск
+• Продовжити · поточний забіг
 </uk>
 
 <zh-CN>
-• 启动包赠送5次撤回和5条生命  
-• 赛季通行证：每日额外50个金币，所有主题，无限撤回  
-• 魔法合并和移除方块的助推器  
+• 更大的金币包 — M 400 · L 800 · XL 2000；每周通行证现价$1.99/周  
+• 入门包提供5次撤回和5条生命  
+• 季票：每日增加100金币（之前为50），所有主题，无限撤回；每周 +50  
+• 魔力合并和移除方块增益  
 • 每周锦标赛  
 • 季节性活动  
 • 免费金币按钮  
-• 继续 · 当前进程
+• 继续 · 当前游戏
 </zh-CN>
 
 ---
@@ -164,51 +177,51 @@ Classic 4×4 2048 board. Daily challenge, weekly event, undo. Plays offline.
 </en-US>
 
 <ar>
-لوحة 2048 الكلاسيكية 4×4. تحدي يومي، حدث أسبوعي، تراجع. العب بدون إنترنت.
+لوحة 2048 كلاسيكية 4×4. تحديات يومية، فعاليات أسبوعية، تراجع. دون اتصال.
 </ar>
 
 <de-DE>
-Klassisches 4×4 2048 Brett. Tägliche Herausforderung, Wochenevent. Offline.
+Klassisches 4×4 2048-Brett. Tägliche Herausforderung, wöchentliche Events!
 </de-DE>
 
 <es-419>
-Tablero 2048 clásico 4×4. Reto diario, evento semanal, deshacer. Sin internet.
+¡Clásico 4x4 de 2048! Desafío diario, evento semanal, juega sin conexión.
 </es-419>
 
 <fr-FR>
-Plateau 2048 classique 4×4. Défi quotidien, événement hebdo. Hors ligne.
+Plateau classique 4×4 2048. Défis quotidiens, hebdomadaires, hors ligne.
 </fr-FR>
 
 <hi-IN>
-क्लासिक 4×4 2048 बोर्ड। डेली चैलेंज, साप्ताहिक इवेंट, अनडू। ऑफलाइन खेलें।
+क्लासिक 4×4 2048 बोर्ड। दैनिक चुनौती, साप्ताहिक कार्यक्रम, उलटें। ऑफ़लाइन खेलें।
 </hi-IN>
 
 <id>
-Papan 2048 klasik 4×4. Tantangan harian, event mingguan, undo. Main offline.
+Papan klasik 4×4 2048. Tantangan harian, acara mingguan, batalkan. Offline!
 </id>
 
 <it-IT>
-Tabellone 2048 classico 4×4. Sfida giornaliera, evento settimanale. Offline.
+Tavola 4×4 di 2048. Sfida quotidiana, evento settimanale. Gioca offline.
 </it-IT>
 
 <ja-JP>
-クラシックな4×4の2048ボード。デイリーチャレンジ、ウィークリーイベント、アンドゥ。オフライン対応。
+クラシック4×4 2048ボード。デイリーチャレンジ、ウィークリーイベント、アンドゥ！オフラインプレイ！
 </ja-JP>
 
 <pt-BR>
-Tabuleiro 2048 clássico 4×4. Desafio diário, evento semanal. Jogue offline.
+Quadro 4×4 clássico de 2048. Desafio diário, evento semanal. Jogue offline.
 </pt-BR>
 
 <tr-TR>
-Klasik 4×4 2048 tahtası. Günlük görev, haftalık etkinlik. Çevrimdışı oyna.
+KLASIK 4×4 2048 TAHTASI. GÜNLÜK ZORLUK, HAFTALIK ETKİNLİK, GERI AL.
 </tr-TR>
 
 <uk>
-Класична дошка 2048 4×4. Щоденний виклик, тижнева подія. Грай офлайн.
+Класична дошка 4×4 2048. Щоденний виклик, тижнева подія, грайте офлайн.
 </uk>
 
 <zh-CN>
-经典4×4 2048棋盘。每日挑战、周挑战、撤销。离线畅玩。
+经典4×4 2048棋盘。每日挑战，周末活动，撤消。离线畅玩。
 </zh-CN>
 
 ---
@@ -248,11 +261,11 @@ Unlock new tile palettes as you rack up games. In October, December and February
 
 🛒 SHOP
 • Remove Ads — enjoy an uninterrupted experience forever
-• Coin Pack S — 100 coins · Coin Pack M — 600 coins · Coin Pack L — 500 coins (most per dollar) · Coin Pack XL — 1400 coins
+• Coin Pack S — 100 coins · Coin Pack M — 400 coins · Coin Pack L — 800 coins · Coin Pack XL — 2000 coins (most per dollar)
 • Undo Pack — 10 undos
 • Starter Pack — 100 coins + 5 undos + 5 lives + Ads Off
-• Season Pass — ad-free, +50 coins daily, all themes, unlimited undos (30 days)
-• Weekly Pass — ad-free, +100 coins daily, all themes, unlimited undos (7 days)
+• Season Pass — ad-free, +100 coins daily, all themes, unlimited undos (30 days, the better deal)
+• Weekly Pass — ad-free, +50 coins daily, all themes, unlimited undos (7 days, no commitment)
 • Extra Lives — restore 5 lives instantly · Unlimited Lives 1h · Unlimited Lives forever
 
 If you've chased the 2048 tile before, this is the one to come back to. If you haven't, start now — it takes one swipe to understand the pull.
@@ -261,493 +274,493 @@ If you've chased the 2048 tile before, this is the one to come back to. If you h
 <ar>
 اسحب. ادمج. تسلق. لوحة 2048 الكلاسيكية، مصممة للعب بيد واحدة على الهاتف.
 
-تحدي يومي مع مكافآت متتالية. بطولة أسبوعية. استراتيجية صرفة — لا حظ، لا انتظار.
+تحدي يومي مع جوائز متتالية. بطولة أسبوعية. استراتيجية بحتة — لا حظ، لا انتظار.
 
-كل سحبة تحرك اللوحة؛ تتمازج البلاطات المطابقة لتتحول إلى القوة التالية من اثنين؛ حركة واحدة ضائعة يمكن أن تحبس البلاطة الأعلى لديك في الزاوية الخطأ. خصمك الوحيد هو سجلّك الأخير.
+كل سحب يحرك اللوحة؛ تتفاعل البلاطات المتطابقة لتندمج في القوة التالية للعدد اثنين؛ حركة واحدة مهدرة يمكن أن تحبس أعلى بلاطة لديك في الزاوية الخطأ. خصمك الوحيد هو سجلك السابق.
 
-ماذا يوجد بداخلها
-• مجانية للعب — اللعبة كاملة، بدون حواجز مفاجئة
+ما هو موجود
+• مجاني للعب — اللعبة كاملة، لا أسوار دفع مفاجئة
 • لوحة 2048 الكلاسيكية 4×4 مع تحكم سلس بالسحب
-• معززات عندما تكون محاصرًا: تراجع، دمج سحري (دمج تلقائي بجولة واحدة)، إزالة بلاطة (حذف بلاطة عالقة)
-• تحدي يومي مع تتبع السلاسل ومكافآت إضافية
-• بطولة أسبوعية — أعلى نقاطك هذا الأسبوع تضعك في مجموعة؛ الـ 25% الأوائل يكسبون عملات
-• فعاليات موسمية — عيد الهالوين، الشتاء والربيع يقدمون أسبوع 1.5×
-• زر العملات المجانية — شاهد إعلانًا قصيرًا لربح 25 عملة كل بضع ساعات
-• تابع · التشغيل الحالي — التقط لوحتك الأخيرة مباشرة من القائمة
-• سلسلة تسجيل دخول لمدة 7 أيام — مكافآت أكبر كلما لعبت بشكل متواصل
-• مجموعة ثيمات — افتح لوحات بلاطات جديدة كلما لعبت المزيد من الألعاب
-• النقاط العالية: أعلى نقطة، أعلى بلاطة، سلسلة يومية
+• معززات عندما تكون محاصرًا: تراجع، دمج سحري (دمج تلقائي لمرة واحدة)، إزالة بلاطة (حذف بلاطة عالقة)
+• تحدي يومي مع تتبع المتتالية وعملات إضافية
+• بطولة أسبوعية — أعلى نقاطك هذا الأسبوع تضعك في ترتيب؛ أعلى 25% تكسب عملات
+• فعاليات موسمية — هالوين، الشتاء والربيع تجلب أسبوعًا بقيمة 1.5×
+• زر عملات مجانية — شاهد إعلانًا قصيرًا للحصول على 25 عملة كل بضع ساعات
+• متابعة · الجري الحالي — ابدأ اللوحة الأخيرة مباشرة من القائمة
+• سلسلة تسجيل دخول لمدة 7 أيام — مكافآت أكبر كلما لعبت بشكل متسلسل
+• مجموعة سمات — افتح لوحات بلاطات جديدة كلما لعبت المزيد من الألعاب
+• أعلى النقاط: أعلى نتيجة، أعلى بلاطة، تسلسل يومي
 • نظام الحياة مع تجديد سخي
-• تابع جولة فقدتها من خلال مشاهدة إعلان مكافئ سريع
-• يمكن اللعب بشكل كامل أوفلاين، لا حاجة للإنترنت — تحفظ الجولات تلقائيًا
+• استمر في الجري المفقود من خلال مشاهدة إعلان قصير مكافأته
+• يعمل بالكامل في وضع عدم الاتصال، لا حاجة للإنترنت — يتم حفظ الجلسات تلقائيًا
 
-🏅 بطولة أسبوعية
-كل أسبوع، أعلى نقاطك تضعك في مجموعة — 10% / 25% / 50% / 75% الأوائل. أنهِ الأسبوع في الربع الرائد وسنضع النقود في حسابك عند فتح التطبيق مرة أخرى. يتم التحديث يوم الاثنين.
+🏅 البطولة الأسبوعية
+كل أسبوع، أعلى نقاطك تضعك في ترتيب — 10% / 25% / 50% / 75%. أنهي الأسبوع في الربع المتصدر وستحصل على العملات في المرة التالية التي تفتح فيها التطبيق. إعادة تعيين يوم الاثنين.
 
-🎨 الثيمات والفعاليات الموسمية
-افتح لوحات بلاطات جديدة كلما جمعت ألعاب. في أكتوبر، ديسمبر وفبراير، تقام فعالية موسمية لمدة أسبوع 1.5×.
+🎨 السمات والفعاليات الموسمية
+افتح لوحات بلاطات جديدة بينما تجمع الألعاب. في أكتوبر وديسمبر وفبراير، تقام فعالية موسمية لمدة أسبوع بقيمة 1.5×.
 
 🛒 المتجر
-• إزالة الإعلانات — استمتع بتجربة غير متقطعة إلى الأبد
-• حزمة النقود S — 100 عملة · حزمة النقود M — 600 عملة · حزمة النقود L — 500 عملة (الأكثر لكل دولار) · حزمة النقود XL — 1400 عملة
+• إزالة الإعلانات — استمتع بتجربة بدون انقطاع إلى الأبد
+• حزمة عملات S — 100 عملة · حزمة عملات M — 400 عملة · حزمة عملات L — 800 عملة · حزمة عملات XL — 2000 عملة (الأكثر لكل دولار)
 • حزمة التراجع — 10 تراجعات
-• حزمة البداية — 100 عملة + 5 تراجعات + 5 أرواح + إعلانات مُعطلة
-• تذكرة الموسم — بدون إعلانات، +50 عملة يوميًا، جميع الثيمات، تراجعات غير محدودة (30 يومًا)
-• تذكرة أسبوعية — بدون إعلانات، +100 عملة يوميًا، جميع الثيمات، تراجعات غير محدودة (7 أيام)
-• أرواح إضافية — استعد 5 أرواح على الفور · أرواح غير محدودة لمدة ساعة · أرواح غير محدودة للأبد
+• حزمة البداية — 100 عملة + 5 تراجعات + 5 أرواح + بدون إعلانات
+• بطاقة الموسم — بدون إعلانات، +100 عملة يوميًا، جميع السمات، تراجعات غير محدودة (30 يومًا، أفضل صفقة)
+• بطاقة أسبوعية — بدون إعلانات، +50 عملة يوميًا، جميع السمات، تراجعات غير محدودة (7 أيام، بدون التزام)
+• أرواح إضافية — استعد 5 أرواح على الفور · أرواح غير محدودة لمدة ساعة · أرواح غير محدودة إلى الأبد
 
-إذا كنت قد لاحقت البلاطة 2048 من قبل، فهذا هو ما يجب العودة إليه. إذا لم تفعل، ابدأ الآن — تحتاج إلى سحبة واحدة لفهم الجاذبية.
+إذا كنت قد طاردت بلاطة 2048 من قبل، فهذه هي العودة المناسبة. إذا لم تفعل، ابدأ الآن — تأخذ سحبة واحدة لفهم الجذب.
 </ar>
 
 <de-DE>
-Wische. Verschmelze. Steige auf. Das klassische 2048-Brett, optimiert für einhändiges Spiel auf dem Smartphone.
+Wischen. Kombinieren. Steigen. Das klassische 2048-Spielbrett, perfekt für einhändiges Spielen auf dem Handy.
 
-Tägliche Herausforderung mit Streckenbelohnungen. Wöchentlicher Turnierbaum. Reine Strategie – kein Glück, kein Warten.
+Tägliche Herausforderungen mit Streak-Belohnungen. Wöchentliches Turnier. Reine Strategie — kein Glück, kein Warten.
 
-Jeder Wisch verschiebt das Brett; Übereinstimmende Kacheln verschmelzen zur nächsten Zweierpotenz; ein vergeudeter Zug kann deine höchste Kachel in die falsche Ecke fangen. Dein einzigster Gegner bist du selbst – dein letztes Rekord.
+Jeder Wisch verschiebt das Brett; passende Kacheln verschmelzen zur nächsten Potenz von zwei; ein vergeudeter Zug kann deine höchste Kachel in die falsche Ecke sperren. Dein einziger Gegner bist du selbst — dein letztes Ergebnis.
 
-Was ist enthalten
-• Kostenlos spielbar – das gesamte Spiel, keine versteckten Bezahlwände
-• Klassisches 4×4 2048-Brett mit flüssigen Wischkontrollen
-• Booster bei Engpässen: Rückgängig machen, Magische Verschmelzung (automatische Kombination in einem Durchgang), Kachel entfernen (lösche eine festsitzende Kachel)
-• Tägliche Herausforderung mit Streak-Tracking und Bonus-Münzen
-• Wöchentlicher Turnier – deine höchste Punktzahl dieser Woche platziert dich in einem Baum; die führenden 25% verdienen Münzen
-• Saisonale Events – Halloween, Winter und Frühling bringen eine 1,5× Woche
-• Kostenloser Münzen-Button – Schaue dir alle paar Stunden eine kurze Werbung an für 25 Münzen
-• Fortsetzen · aktueller Lauf – nimm dein letztes Brett direkt aus dem Menü
-• 7-tägige Anmeldestrecke – größere Belohnungen je länger du am Stück spielst
-• Themenkollektion – schalte neue Kachelpaletten frei, während du mehr Spiele spielst
-• Höchste Punktzahlen: deine höchste Punktzahl, höchste Kachel, tägliche Streak
-• Leben-System mit großzügiger Regeneration
-• Setze einen verlorenen Lauf fort, indem du dir eine kurze belohnte Werbung ansiehst
-• Vollständig offline spielbar, kein Internet erforderlich – Fortschritte werden automatisch gespeichert
+Was gibt es drin
+• Kostenlos spielbar — das gesamte Spiel, keine versteckten Kosten
+• Klassisches 4×4 2048-Brett mit flüssigen Wischsteuerungen
+• Booster, wenn du in der Klemme steckst: Rückgängig machen, Magische Fusion (automatische Kombination in einem Durchgang), Kachel entfernen (lösche eine festgefahrene Kachel)
+• Tägliche Herausforderung mit Streak-Verfolgung und Bonus-Münzen
+• Wöchentliches Turnier — dein höchster Punktestand in dieser Woche platziert dich in einem Bracket; die führenden 25 % verdienen Münzen
+• Saisonale Events — Halloween, Winter und Frühling bringen eine 1,5× Woche
+• Kostenloser Münzen-Button — schaue dir alle paar Stunden eine kurze Werbung für 25 Münzen an
+• Fortsetzen · laufenden Spielstand — hol dir dein letztes Brett direkt aus dem Menü
+• 7-tägige Anmeldestreak — größere Belohnungen, je länger du hintereinander spielst
+• Themenkollektion — schalte neue Kachelpaletten frei, während du mehr Spiele spielst
+• Hochpunkte: höchster Punktestand, höchste Kachel, tägliche Streak
+• Lives-System mit großzügiger Regeneration
+• Setze einen verlorenen Lauf fort, indem du dir eine kurze belohnte Werbung anschaust
+• Vollständig offline spielbar, kein Internet erforderlich — Fortschritte werden automatisch gespeichert
 
 🏅 WÖCHENTLICHES TURNIER
-Jede Woche platziert dich deine höchste Punktzahl in einem Baum – führende 10% / 25% / 50% / 75%. Beende die Woche in dem führenden Viertel und die Münzen landen beim nächsten Öffnen der App. Setzt sich montags zurück.
+Jede Woche platziert dich dein höchster Punktestand in einem Bracket — führende 10 % / 25 % / 50 % / 75 %. Beende die Woche im führenden Viertel, und die Münzen werden beim nächsten Öffnen der App gutgeschrieben. Setzt montags zurück.
 
 🎨 THEMEN & SAISONALE EVENTS
-Schalte neue Kachelpaletten frei, während du Spiele sammelst. Im Oktober, Dezember und Februar läuft ein saisonales Event mit einer 1,5× Woche.
+Schalte neue Kachelpaletten frei, während du mehr Spiele spielst. Im Oktober, Dezember und Februar gibt es ein saisonales Event mit einer 1,5× Woche.
 
 🛒 SHOP
-• Werbung entfernen – genieße ein unterbrechungsfreies Erlebnis für immer
-• Münzen-Paket S – 100 Münzen · Münzen-Paket M – 600 Münzen · Münzen-Paket L – 500 Münzen (die meisten pro Dollar) · Münzen-Paket XL – 1400 Münzen
-• Rückgängig-Paket – 10 Rückgängig
-• Starter-Paket – 100 Münzen + 5 Rückgängig + 5 Leben + Werbung aus
-• Saisonpass – werbefrei, täglich +50 Münzen, alle Themen, unbegrenzte Rückgängig (30 Tage)
-• Wöchentlicher Pass – werbefrei, täglich +100 Münzen, alle Themen, unbegrenzte Rückgängig (7 Tage)
-• Extra Leben – stelle sofort 5 Leben wieder her · Unbegrenzte Leben 1h · Unbegrenzte Leben für immer
+• Werbung entfernen — genieße ein ununterbrochenes Erlebnis für immer
+• Münzen-Pack S — 100 Münzen · Münzen-Pack M — 400 Münzen · Münzen-Pack L — 800 Münzen · Münzen-Pack XL — 2000 Münzen (maximal pro Dollar)
+• Rückgängig-Paket — 10 Rückgängig-Möglichkeiten
+• Starter-Paket — 100 Münzen + 5 Rückgängig-Möglichkeiten + 5 Leben + Werbung aus
+• Saison-Pass — werbefrei, +100 Münzen täglich, alle Themen, unbegrenzte Rückgängig-Möglichkeiten (30 Tage, das bessere Angebot)
+• Wöchentlicher Pass — werbefrei, +50 Münzen täglich, alle Themen, unbegrenzte Rückgängig-Möglichkeiten (7 Tage, keine Verpflichtung)
+• Zusätzliche Leben — stelle 5 Leben sofort wieder her · Unbegrenzt Leben 1h · Unbegrenzt Leben für immer
 
-Wenn du den 2048-Kachel schon einmal verfolgt hast, ist dies die, zu der du zurückkehren solltest. Wenn nicht, fang jetzt an – es braucht nur einen Wisch, um den Sog zu verstehen.
+Wenn du schon einmal den 2048-Ziegel verfolgt hast, ist das hier das ideale Comeback. Wenn nicht, fang jetzt an — es braucht nur einen Wisch, um den Sog zu verstehen.
 </de-DE>
 
 <es-419>
-Desliza. Combina. Escala. La clásica tabla 2048, optimizada para jugar con una mano en el teléfono.
+Desliza. Fusiona. Escala. El tablero clásico de 2048, ajustado para jugar con una mano en el teléfono.
 
-Desafío diario con recompensas por rachas. Torneo semanal. Estrategia pura: nada de suerte, nada de esperar.
+Desafío diario con recompensas en racha. Torneo semanal. Estrategia pura, sin suerte, sin esperar.
 
-Cada deslizada mueve la tabla; los mosaicos que coinciden se fusionan en el siguiente poder de dos; un movimiento desperdiciado puede atrapar tu mosaico más alto en la esquina equivocada. Tu único oponente es tu propio récord anterior.
+Cada deslizamiento mueve el tablero; los azulejos que coinciden se fusionan en la siguiente potencia de dos; un movimiento desperdiciado puede atrapar tu azulejo más alto en una esquina equivocada. Tu único oponente es tu propio último récord.
 
-Dentro de la aplicación
-• Juego gratuito: el juego completo, sin muros de pago inesperados
-• Tabla clásica de 4×4 2048 con controles de deslizamiento suaves
-• Mejoras cuando te encuentres acorralado: Deshacer, Fusión Mágica (combinación automática en un solo paso), Quitar Mosaic (elimina un mosaico atascado)
-• Desafío diario con seguimiento de rachas y monedas de bonificación
-• Torneo semanal: tu mejor puntuación de esta semana te coloca en un torneo; el 25% mejor gana monedas
-• Eventos estacionales: Halloween, Invierno y Primavera traen una semana de 1.5×
-• Botón de Monedas Gratis: mira un anuncio breve por 25 monedas cada pocas horas
-• Continuar · corrida actual: retoma tu última tabla directamente desde el menú
-• Racha de inicio de sesión de 7 días: recompensas más grandes cuanto más juegas consecutivamente
-• Colección de temas: desbloquea nuevas paletas de mosaicos mientras juegas más
-• Puntuaciones altas: mejor puntuación, mosaico más alto, racha diaria
-• Sistema de vidas con regeneración generosa
-• Continúa una corrida perdida viendo un anuncio recompensado rápido
-• Juega totalmente offline, no se requiere internet: los progresos se guardan automáticamente
+Lo que hay dentro
+• Gratis para jugar — el juego completo, sin sorpresas ni muros de pago
+• Tablero clásico 4×4 de 2048 con controles de deslizamiento suaves
+• Mejoras cuando estás acorralado: Deshacer, Fusión Mágica (auto-combinación instantánea), Quitar Azulejo (eliminar un azulejo atascado)
+• Desafío Diario con seguimiento de racha y monedas extra
+• Torneo Semanal — tu mejor puntaje esta semana te coloca en un grupo; el 25% superior gana monedas
+• Eventos estacionales — Halloween, Invierno y Primavera traen una semana de 1.5×
+• Botón de Monedas Gratis — mira un anuncio corto para 25 monedas cada pocas horas
+• Continuar · carrera actual — retoma tu último tablero directamente desde el menú
+• Racha de inicio de sesión de 7 días — mayores recompensas cuanto más juegues de manera consecutiva
+• Colección de Temas — desbloquea nuevas paletas de azulejos a medida que juegas más
+• Puntuaciones Altas: mejor puntaje, azulejo más alto, racha diaria
+• Sistema de vidas con generosa regeneración
+• Continúa una carrera perdida viendo un anuncio recompensado rápido
+• Juega completamente offline, no se requiere internet — las partidas se guardan automáticamente
 
 🏅 TORNEO SEMANAL
-Cada semana, tu mejor puntuación te coloca en un torneo: el 10% / 25% / 50% / 75% mejor. Termina la semana en el cuartil líder y las monedas aparecerán la próxima vez que abras la app. Se reinicia el lunes.
+Cada semana tu mejor puntaje te coloca en un grupo — 10% / 25% / 50% / 75% líderes. Termina la semana en el cuarto líder y las monedas llegarán la próxima vez que abras la app. Se reinicia el lunes.
 
 🎨 TEMAS Y EVENTOS ESTACIONALES
-Desbloquea nuevas paletas de mosaicos a medida que acumulas juegos. En octubre, diciembre y febrero, un evento estacional activa una semana de 1.5×.
+Desbloquea nuevas paletas de azulejos a medida que acumulas partidas. En octubre, diciembre y febrero se lleva a cabo un evento estacional con una semana de 1.5×.
 
 🛒 TIENDA
-• Eliminar anuncios: disfruta de una experiencia ininterrumpida para siempre
-• Paquete de Monedas S: 100 monedas · Paquete de Monedas M: 600 monedas · Paquete de Monedas L: 500 monedas (más por dólar) · Paquete de Monedas XL: 1400 monedas
-• Paquete Deshacer: 10 deshacer
-• Paquete Inicial: 100 monedas + 5 deshacer + 5 vidas + Anuncios Apagados
-• Pase de Temporada: sin anuncios, +50 monedas diarias, todos los temas, deshacer ilimitado (30 días)
-• Pase Semanal: sin anuncios, +100 monedas diarias, todos los temas, deshacer ilimitado (7 días)
-• Vidas Extra: restaura 5 vidas al instante · Vidas Ilimitadas 1h · Vidas Ilimitadas para siempre
+• Quitar Anuncios — disfruta de una experiencia ininterrumpida para siempre
+• Paquete de Monedas S — 100 monedas · Paquete de Monedas M — 400 monedas · Paquete de Monedas L — 800 monedas · Paquete de Monedas XL — 2000 monedas (más por dólar)
+• Paquete de Deshacer — 10 deshacer
+• Paquete Inicial — 100 monedas + 5 deshacer + 5 vidas + Anuncios Desactivados
+• Pase de Temporada — sin anuncios, +100 monedas diarias, todos los temas, deshacer ilimitados (30 días, la mejor oferta)
+• Pase Semanal — sin anuncios, +50 monedas diarias, todos los temas, deshacer ilimitados (7 días, sin compromiso)
+• Vidas Extras — recupera 5 vidas instantáneamente · Vidas Ilimitadas 1h · Vidas Ilimitadas para siempre
 
-Si has perseguido el mosaico 2048 antes, este es el que debes volver a jugar. Si no lo has hecho, empieza ahora: solo se necesita un deslizamiento para entender la atracción.
+Si ya has perseguido el azulejo 2048 antes, este es al que debes volver. Si no lo has hecho, comienza ahora — solo un deslizamiento para entender la atracción.
 </es-419>
 
 <fr-FR>
-Glissez. Fusionnez. Grimpez. Le tableau 2048 classique, optimisé pour le jeu d'une main sur téléphone.
+Balayez. Fusionnez. Grimpez. Le tableau canonical 2048, optimisé pour le jeu d'une main sur téléphone.
 
-Défi quotidien avec récompenses en série. Tournoi hebdomadaire. Stratégie pure — pas de chance, pas d'attente.
+Défi quotidien avec récompenses de série. Tournoi hebdomadaire. Stratégie pure — pas de chance, pas d'attente.
 
-Chaque glissement déplace le tableau ; les tuiles assorties fusionnent en la prochaine puissance de deux ; un mouvement perdu peut piéger votre tuile la plus haute dans le mauvais coin. Votre seul adversaire est votre dernier score.
+Chaque glissement déplace le tableau ; les tuiles correspondantes fusionnent en la prochaine puissance de deux ; un mouvement gaspillé peut piéger votre tuile la plus haute dans le mauvais coin. Votre seul adversaire est votre précédent record.
 
-Ce qu'il y a à l'intérieur
-• Gratuit à jouer — le jeu complet, sans mur payant surprise
-• Tableau 2048 classique 4×4 avec un contrôle de glissement fluide
-• Boosters lorsque vous êtes coincé : Annuler, Fusion Magique (auto-combinaison en un passage), Retirer une tuile (supprimer une tuile bloquée)
-• Défi Quotidien avec suivi des séries et pièces bonus
-• Tournoi Hebdomadaire — votre meilleur score cette semaine vous place dans un groupe ; les 25 % en tête gagnent des pièces
-• Événements saisonniers — Halloween, Hiver et Printemps offrent une semaine à 1,5×
-• Bouton Coins Gratuits — regardez une courte publicité pour 25 pièces toutes les quelques heures
-• Continuer · course actuelle — reprenez votre dernier tableau directement depuis le menu
-• Série de connexion de 7 jours — plus de récompenses plus vous jouez consécutivement
-• Collection de thèmes — débloquez de nouveaux palettes de tuiles au fur et à mesure que vous jouez
+Ce qui vous attend
+• Gratuit à jouer — le jeu complet, pas de murs de paiement surprises
+• Tableau classique 4×4 2048 avec des commandes de glissement fluides
+• Boosters quand vous êtes coincé : Annuler, Fusion Magique (auto-combinaison en un passage), Supprimer Tuile (supprimer une tuile bloquée)
+• Défi Quotidien avec suivi de série et pièces bonus
+• Tournoi Hebdomadaire — votre meilleur score cette semaine vous place dans un groupe ; les 25% premiers gagnent des pièces
+• Événements saisonniers — Halloween, Hiver et Printemps apportent une semaine à 1,5×
+• Bouton de Pièces Gratuites — regardez une courte publicité pour 25 pièces toutes les quelques heures
+• Continuer · session actuelle — récupérez votre dernier tableau directement depuis le menu
+• Série de connexion de 7 jours — plus grosses récompenses plus vous jouez consécutivement
+• Collection de thèmes — débloquez de nouvelles palettes de tuiles au fur et à mesure que vous jouez
 • Scores Élevés : meilleur score, tuile la plus haute, série quotidienne
 • Système de vies avec régénération généreuse
-• Continuez une course perdue en regardant une courte publicité récompensée
-• Joue entièrement hors ligne, pas d'internet requis — sauvegarde automatique
+• Continuez une session perdue en regardant une courte publicité récompensée
+• Se joue entièrement hors ligne, pas d'internet requis — les sauvegardes s'effectuent automatiquement
 
 🏅 TOURNOI HEBDOMADAIRE
-Chaque semaine, votre meilleur score vous place dans un groupe — 10 % / 25 % / 50 % / 75 % en tête. Terminez la semaine dans le quart supérieur et les pièces apparaissent la prochaine fois que vous ouvrez l'application. Réinitialisations le lundi.
+Chaque semaine, votre meilleur score vous place dans un groupe — 10% / 25% / 50% / 75%. Terminez la semaine dans le quart supérieur et les pièces arrivent la prochaine fois que vous ouvrez l'application. Réinitialisations le lundi.
 
 🎨 THÈMES & ÉVÉNEMENTS SAISONNIERS
-Débloquez de nouvelles palettes de tuiles au fil des jeux. En octobre, décembre et février, un événement saisonnier propose une semaine à 1,5×.
+Débloquez de nouvelles palettes de tuiles à mesure que vous accumulez des jeux. En octobre, décembre et février, un événement saisonnier propose une semaine à 1,5×.
 
 🛒 BOUTIQUE
-• Supprimer les Publicités — profitez d'une expérience ininterrompue pour toujours
-• Pack de Pièces S — 100 pièces · Pack de Pièces M — 600 pièces · Pack de Pièces L — 500 pièces (plus par dollar) · Pack de Pièces XL — 1400 pièces
+• Enlever les Annonces — profitez d'une expérience ininterrompue pour toujours
+• Pack de Pièces S — 100 pièces · Pack de Pièces M — 400 pièces · Pack de Pièces L — 800 pièces · Pack de Pièces XL — 2000 pièces (le maximum par dollar)
 • Pack Annuler — 10 annulations
 • Pack Débutant — 100 pièces + 5 annulations + 5 vies + Publicités Désactivées
-• Pass de Saison — sans publicité, +50 pièces par jour, tous les thèmes, annulations illimitées (30 jours)
-• Pass Hebdomadaire — sans publicité, +100 pièces par jour, tous les thèmes, annulations illimitées (7 jours)
+• Pass de Saison — sans publicité, +100 pièces par jour, tous les thèmes, annulations illimitées (30 jours, la meilleure offre)
+• Pass Hebdomadaire — sans publicité, +50 pièces par jour, tous les thèmes, annulations illimitées (7 jours, sans engagement)
 • Vies Supplémentaires — restaurez 5 vies instantanément · Vies Illimitées 1h · Vies Illimitées pour toujours
 
-Si vous avez déjà poursuivi la tuile 2048, c'est celle à laquelle revenir. Si ce n'est pas le cas, commencez maintenant — il suffit d'un seul glissement pour comprendre l'attrait.
+Si vous avez déjà poursuivi la tuile 2048, c'est celle à laquelle revenir. Si ce n'est pas le cas, commencez maintenant — il suffit d'un glissement pour comprendre l'attraction.
 </fr-FR>
 
 <hi-IN>
-स्वाइप करें। मर्ज करें। चढ़ें। एक हाथ से फ़ोन खेलने के लिए तैयार की गई 2048 बोर्ड।
+स्वाइप करें। मर्ज करें। चढ़ें। कैनॉनिकल 2048 बोर्ड, जिसे एक हाथ से फोन खेलने के लिए ट्यून किया गया है।
 
-दैनिक चुनौती के साथ स्ट्रिक पुरस्कार। साप्ताहिक टूर्नामेंट ब्रैकेट। शुद्ध रणनीति — कोई भाग्य नहीं, कोई प्रतीक्षा नहीं।
+दैनिक चुनौती के साथ स्ट्रीक पुरस्कार। साप्ताहिक टूर्नामेंट ब्रैकेट। शुद्ध रणनीति — कोई भाग्य नहीं, कोई इंतजार नहीं।
 
-हर स्वाइप बोर्ड को हिलाता है; मिलती हुई टाइलें अगले दो की शक्ति में मिलती हैं; एक बर्बाद कदम आपके उच्चतम टाइल को गलत कोने में फंसा सकता है। आपका एकमात्र प्रतिद्वंद्वी आपका अपना पिछला रिकॉर्ड है।
+हर स्वाइप बोर्ड को हिलाता है; मिलते हुए टाइल्स अगले दो के अधिकार में विलीन हो जाते हैं; एक बर्बाद मूव आपके सबसे ऊँचे टाइल को गलत कोने में फंसा सकता है। आपका केवल प्रतिकूल आपका अपना अंतिम रिकॉर्ड है।
 
-अंदर क्या है
-• खेलने के लिए स्वतंत्र — पूरा खेल, कोई आश्चर्य पेवॉल नहीं
+क्या है अंदर
+• मुफ्त खेलने के लिए — पूरा खेल, कोई आश्चर्यजनक भुगतान दीवारें नहीं
 • क्लासिक 4×4 2048 बोर्ड के साथ स्मूथ स्वाइप नियंत्रण
-• जब आप कोने में हों तो बूस्टर्स: अनडू, मैजिक मर्ज (एक पास ऑटो-कंबाइन), टाइल हटाएं (एक फंसी हुई टाइल मिटाएं)
-• दैनिक चुनौती के साथ स्ट्रिक ट्रैकिंग और बोनस सिक्के
-• साप्ताहिक टूर्नामेंट — इस सप्ताह आपका उच्चतम स्कोर आपको एक ब्रैकेट में रखता है; अग्रणी 25% सिक्के कमाते हैं
-• मौसमी कार्यक्रम — हैलोवीन, सर्दी और वसंत 1.5× सप्ताह लाते हैं
-• मुफ्त सिक्कों का बटन — हर कुछ घंटों में 25 सिक्कों के लिए एक शॉर्ट विज्ञापन देखें
-• जारी रखें · वर्तमान रन — मेनू से सीधे अपने अंतिम बोर्ड को उठाएं
-• 7-दिन की लॉगिन स्ट्रिक — लगातार खेलने पर बड़े पुरस्कार
-• थीम संग्रह — अधिक खेल खेलने पर नई टाइल पैलेट अनलॉक करें
-• उच्च स्कोर: शीर्ष स्कोर, उच्चतम टाइल, दैनिक स्ट्रिक
-• जीवन प्रणाली के साथ उदार पुनर्जनन
-• एक त्वरित पुरस्कार वाले विज्ञापन देखकर एक खोई हुई रन को जारी रखें
-• पूर्ण रूप से ऑफ़लाइन खेलता है, इंटरनेट की आवश्यकता नहीं — चलन अपने आप सहेजता है
+• जब आप कोने में हों: अनडू, मैजिक मर्ज (एक पास ऑटो-कांबिन), टाइल हटाएं (फंसी हुई टाइल हटाएं)
+• दैनिक चुनौती के साथ स्ट्रीक ट्रैकिंग और बोनस सिक्के
+• साप्ताहिक टूर्नामेंट — इस सप्ताह आपका सबसे ऊँचा स्कोर आपको एक ब्रैकेट में रखता है; अग्रणी 25% को सिक्के मिलते हैं
+• मौसमी आयोजन — हैलोवीन, सर्दी और बसंत 1.5× सप्ताह लाते हैं
+• फ्री कॉइन्स बटन — हर कुछ घंटों में 25 सिक्कों के लिए एक छोटा विज्ञापन देखें
+• जारी रखें · वर्तमान दौड़ — अपने पिछले बोर्ड को सीधे मेनू से उठाएं
+• 7-दिन की लॉगिन स्ट्रीम — आप जितना अधिक लगातार खेलेंगे, बड़े इनाम
+• थीम संग्रह — जैसे-जैसे आप अधिक खेलते हैं, नए टाइल पैलेट अनलॉक करें
+• उच्च स्कोर: शीर्ष स्कोर, सबसे ऊँचा टाइल, दैनिक स्ट्रीक
+• जीवन प्रणाली जो उदार पुनर्जनन देती है
+• एक खोई हुई दौड़ को जल्दी से पुरस्कृत विज्ञापन देखकर जारी रखें
+• पूर्ण रूप से ऑफ़लाइन खेलता है, इंटरनेट की आवश्यकता नहीं — खेलों का स्वचालित रूप से सेव हो जाता है
 
 🏅 साप्ताहिक टूर्नामेंट
-प्रत्येक सप्ताह आपका उच्चतम स्कोर आपको एक ब्रैकेट में रखता है — अग्रणी 10% / 25% / 50% / 75%। सप्ताह के अंत में अग्रणी चौकड़ी में समाप्त करें और सिक्के अगली बार जब आप ऐप खोलेंगे तब मिलेंगे। सोमवार को रीसेट होता है।
+प्रत्येक सप्ताह आपका उच्चतम स्कोर आपको एक ब्रैकेट में रखता है — अग्रणी 10% / 25% / 50% / 75%। सप्ताह के अंत में अग्रणी चौकड़ी मेंFinished करने पर सिक्के अगली बार जब आप ऐप खोलेंगे, मिलेंगे। सोमवार को रीसेट होता है।
 
-🎨 थीम और मौसमी कार्यक्रम
-जितने अधिक खेल खेलेंगे, नई टाइल पैलेट अनलॉक करें। अक्टूबर, दिसंबर और फरवरी में एक मौसमी कार्यक्रम 1.5× सप्ताह चलाता है।
+🎨 थीम और मौसमी आयोजन
+जैसे-जैसे आप खेलते हैं, नए टाइल पैलेट अनलॉक करें। अक्टूबर, दिसंबर और फरवरी में एक मौसमी आयोजन 1.5× सप्ताह चलता है।
 
-🛒 शॉप
-• विज्ञापन हटाएं — हमेशा के लिए बिना रुकावट का अनुभव करें
-• सिक्का पैक S — 100 सिक्के · सिक्का पैक M — 600 सिक्के · सिक्का पैक L — 500 सिक्के (प्रति डॉलर सबसे अधिक) · सिक्का पैक XL — 1400 सिक्के
+🛒 दुकान
+• विज्ञापन हटाएं — हमेशा के लिए निर्बाध अनुभव का आनंद लें
+• कॉइन पैक एस — 100 सिक्के · कॉइन पैक एम — 400 सिक्के · कॉइन पैक एल — 800 सिक्के · कॉइन पैक एक्सएल — 2000 सिक्के (प्रति डॉलर सबसे अधिक)
 • अनडू पैक — 10 अनडू
-• स्टार्ट पैक — 100 सिक्के + 5 अनडू + 5 जीवन + विज्ञापन बंद
-• सीजन पास — विज्ञापन-मुक्त, दैनिक +50 सिक्के, सभी थीम, असीमित अनडू (30 दिन)
-• साप्ताहिक पास — विज्ञापन-मुक्त, दैनिक +100 सिक्के, सभी थीम, असीमित अनडू (7 दिन)
-• अतिरिक्त जीवन — तुरंत 5 जीवन बहाल करें · असीमित जीवन 1 घंटे · असीमित जीवन हमेशा 
+• स्टार्टर पैक — 100 सिक्के + 5 अनडू + 5 जीवन + विज्ञापन बंद
+• सीजन पास — बिना विज्ञापन, दैनिक +100 सिक्के, सभी थीम, असीमित अनडू (30 दिन, बेहतर सौदा)
+• साप्ताहिक पास — बिना विज्ञापन, दैनिक +50 सिक्के, सभी थीम, असीमित अनडू (7 दिन, कोई प्रतिबद्धता नहीं)
+• अतिरिक्त जीवन — तुरंत 5 जीवन ठीक करें · असीमित जीवन 1 घंटा · हमेशा के लिए असीमित जीवन
 
-अगर आपने पहले 2048 टाइल का पीछा किया है, तो यह वापस आने के लिए एकदम सही है। अगर नहीं, तो अभी शुरू करें — समझने के लिए एक स्वाइप लगता है।
+यदि आपने पहले 2048 टाइल का पीछा किया है, तो यह वापस आने का एक सही मौका है। यदि आप नहीं जानते, तो अभी शुरू करें — समझने के लिए एक स्वाइप लगता है।
 </hi-IN>
 
 <id>
-Geser. Gabungkan. Naik. Papan 2048 klasik, disesuaikan untuk dimainkan dengan satu tangan di ponsel.
+GESER. GABUNGKAN. NAIK. Papan 2048 kanonik, dirancang untuk bermain dengan satu tangan di ponsel.
 
-Tantangan harian dengan hadiah beruntun. Turnamen mingguan. Strategi murni — tidak ada keberuntungan, tidak ada menunggu.
+Tantangan harian dengan hadiah beruntun. Turnamen mingguan. Murni strategi — tidak ada keberuntungan, tidak ada menunggu.
 
-Setiap geseran menggerakkan papan; ubin yang cocok menggabungkan menjadi kekuatan dua berikutnya; satu langkah terbuang bisa menjebak ubin tertinggi Anda di sudut yang salah. Satu-satunya lawan Anda adalah catatan terakhir Anda sendiri.
+Setiap geseran menggeser papan; ubin yang cocok bergabung menjadi kekuatan dua berikutnya; satu langkah yang terbuang bisa menjebak ubin tertinggi Anda di sudut yang salah. Satu-satunya lawan Anda adalah catatan terakhir Anda sendiri.
 
-Apa yang ada di dalamnya
-• Gratis untuk dimainkan — permainan lengkap, tanpa tembok bayar yang mengejutkan
-• Papan 2048 4×4 klasik dengan kontrol geser yang halus
-• Pendorong ketika Anda terjepit: Batalkan, Gabung Ajaib (auto-combine satu kali), Hapus Ubin (hapus ubin yang terjebak)
+Apa yang ada di dalam
+• Gratis untuk bermain — permainan penuh, tanpa tembok bayar yang mengejutkan
+• Papan 2048 4×4 klasik dengan kontrol geser yang lancar
+• Penguat saat Anda terjebak: Batalkan, Gabungan Sihir (auto-gabung sekali jalan), Hapus Ubin (hapus ubin yang terjebak)
 • Tantangan Harian dengan pelacakan beruntun dan koin bonus
-• Turnamen Mingguan — skor tertinggi Anda minggu ini menempatkan Anda dalam braket; 25% teratas mendapatkan koin
-• Acara musiman — Halloween, Musim Dingin, dan Musim Semi membawa minggu 1,5×
-• Tombol Koin Gratis — tonton iklan singkat untuk 25 koin setiap beberapa jam
+• Turnamen Mingguan — skor tertinggi Anda minggu ini menempatkan Anda di braket; 25% teratas mendapatkan koin
+• Acara musiman — Halloween, Musim Dingin, dan Musim Semi membawa minggu 1.5×
+• Tombol Koin Gratis — tonton iklan pendek untuk 25 koin setiap beberapa jam
 • Lanjutkan · jalankan saat ini — ambil papan terakhir Anda langsung dari menu
-• Jejak login 7 hari — hadiah lebih besar semakin lama Anda bermain berturut-turut
-• Koleksi Tema — buka palet ubin baru saat Anda memainkan lebih banyak permainan
+• Beruntun login 7 hari — hadiah lebih besar semakin lama Anda bermain berturut-turut
+• Koleksi tema — buka palet ubin baru saat Anda memainkan lebih banyak permainan
 • Skor Tinggi: skor tertinggi, ubin tertinggi, beruntun harian
-• Sistem kehidupan dengan regenerasi yang murah hati
-• Lanjutkan jalur yang hilang dengan menonton iklan singkat yang mendapatkan hadiah
-• Bisa dimainkan sepenuhnya offline, tidak memerlukan internet — simpan permainan secara otomatis
+• Sistem nyawa dengan regenerasi yang dermawan
+• Lanjutkan jalur yang hilang dengan menonton iklan cepat berhadiah
+• Bermain sepenuhnya offline, tanpa memerlukan internet — penyimpanan otomatis
 
 🏅 TURNAMEN MINGGUAN
-Setiap minggu skor tertinggi Anda menempatkan Anda dalam braket — 10% / 25% / 50% / 75% teratas. Selesaikan minggu di kuartal teratas dan koin akan jatuh saat Anda membuka aplikasi berikutnya. Reset setiap Senin.
+Setiap minggu, skor tertinggi Anda menempatkan Anda di braket — 10% / 25% / 50% / 75% teratas. Selesaikan minggu di kuartal teratas dan koin akan muncul saat Anda membuka aplikasi berikutnya. Reset hari Senin.
 
 🎨 TEMA & ACARA MUSIMAN
-Buka palet ubin baru saat Anda mengumpulkan permainan. Di bulan Oktober, Desember, dan Februari, acara musiman berlangsung dengan minggu 1,5×.
+Buka palet ubin baru saat Anda mengumpulkan permainan. Di bulan Oktober, Desember, dan Februari, acara musiman berjalan dengan minggu 1.5×.
 
 🛒 TOKO
 • Hapus Iklan — nikmati pengalaman tanpa gangguan selamanya
-• Paket Koin S — 100 koin · Paket Koin M — 600 koin · Paket Koin L — 500 koin (paling banyak per dolar) · Paket Koin XL — 1400 koin
+• Paket Koin S — 100 koin · Paket Koin M — 400 koin · Paket Koin L — 800 koin · Paket Koin XL — 2000 koin (paling banyak per dolar)
 • Paket Batalkan — 10 batalkan
-• Paket Pemula — 100 koin + 5 batalkan + 5 kehidupan + Iklan Mati
-• Tiket Musim — tanpa iklan, +50 koin setiap hari, semua tema, batalkan tanpa batas (30 hari)
-• Tiket Mingguan — tanpa iklan, +100 koin setiap hari, semua tema, batalkan tanpa batas (7 hari)
-• Kehidupan Ekstra — pulihkan 5 kehidupan secara instan · Kehidupan Tanpa Batas 1 jam · Kehidupan Tanpa Batas selamanya
+• Paket Pemula — 100 koin + 5 batalkan + 5 nyawa + Iklan Mati
+• Season Pass — tanpa iklan, +100 koin harian, semua tema, batalkan tanpa batas (30 hari, penawaran lebih baik)
+• Weekly Pass — tanpa iklan, +50 koin harian, semua tema, batalkan tanpa batas (7 hari, tanpa komitmen)
+• Nyawa Tambahan — pulihkan 5 nyawa secara instan · Nyawa Tak Terbatas 1 jam · Nyawa Tak Terbatas selamanya
 
-Jika Anda pernah mengejar ubin 2048 sebelumnya, inilah yang harus Anda kembali ke. Jika tidak, mulai sekarang — hanya perlu satu geseran untuk memahami tarikannya.
+Jika Anda pernah mengejar ubin 2048 sebelumnya, inilah yang harus Anda kembalikan. Jika belum, mulai sekarang — hanya diperlukan satu geseran untuk memahami tarikannya.
 </id>
 
 <it-IT>
-Scorri. Unisci. Sali. Il classico tabellone 2048, ottimizzato per il gioco con una mano.
+Scorri. Unisci. Scala. La canonica tavola 2048, ottimizzata per il gioco con una sola mano.
 
-Sfida giornaliera con ricompense per le serie. Torneo settimanale. Pura strategia — nessuna fortuna, nessuna attesa.
+Sfida quotidiana con premi per le serie. Torneo settimanale. Pura strategia — niente fortuna, niente attese.
 
-Ogni scorrimento sposta il tabellone; le tessere abbinate si fondono nel successivo potere di due; una mossa sprecata può intrappolare la tua tessera più alta nell'angolo sbagliato. Il tuo unico avversario è il tuo ultimo record personale.
+Ogni scorrimento sposta la tavola; le tessere abbinate si fondono nel prossimo potere di due; una mossa sprecata può intrappolare la tua tessera più alta nell'angolo sbagliato. Il tuo unico avversario è il tuo ultimo record.
 
 Cosa c'è dentro
-• Giocabile gratuitamente — il gioco completo, senza sorprese
-• Classico tabellone 4×4 di 2048 con controlli scorrevoli fluidi
-• Potenziamenti quando sei nel cul-de-sac: Annulla, Fusione Magica (combinazione automatica in un colpo), Rimuovi Tessera (cancella una tessera incastrata)
-• Sfida Giornaliera con monitoraggio serie e monete bonus
-• Torneo Settimanale — il tuo punteggio più alto di questa settimana ti inserisce in un raggruppamento; il 25% dei migliori guadagna monete
-• Eventi stagionali — Halloween, Inverno e Primavera offrono una settimana 1.5×
-• Pulsante Monete Gratuite — guarda un breve annuncio per 25 monete ogni poche ore
-• Continua · corsa attuale — riprendi il tuo ultimo tabellone direttamente dal menu
-• Serie di accesso di 7 giorni — ricompense maggiori più a lungo giochi consecutivamente
-• Collezione di Temi — sblocca nuove tavolozze di tessere man mano che giochi di più
-• Punteggi Alti: punteggio massimo, tessera più alta, serie giornaliera
-• Sistema di vite con generosa rigenerazione
+• Gioco gratuito — l'intero gioco, senza sorprese
+• Classica tavola 4×4 2048 con controlli di scorrimento fluidi
+• Booster quando sei in difficoltà: Annulla, Fusione Magica (auto-combinazione in un colpo), Rimuovi Tessera (elimina una tessera bloccata)
+• Sfida Giornaliera con tracciamento delle serie e monete bonus
+• Torneo Settimanale — il tuo punteggio più alto di questa settimana ti posiziona in un gruppo; il 25% di testa guadagna monete
+• Eventi stagionali — Halloween, Inverno e Primavera portano una settimana 1.5×
+• Pulsante Monete Gratis — guarda un breve annuncio per 25 monete ogni poche ore
+• Continua · corsa attuale — riprendi la tua ultima tavola direttamente dal menu
+• Serie di accesso di 7 giorni — premi maggiori più a lungo giochi consecutivamente
+• Raccolta di Temi — sblocca nuove palette di tessere man mano che giochi
+• Punteggi alti: punteggio massimo, tessera più alta, serie giornaliera
+• Sistema di vite con rigenerazione generosa
 • Continua una corsa persa guardando un breve annuncio ricompensato
-• Gioca completamente offline, senza internet richiesto — i salvataggi si effettuano automaticamente
+• Gioca completamente offline, senza internet richiesto — i salvataggi vengono memorizzati automaticamente
 
 🏅 TORNEO SETTIMANALE
-Ogni settimana il tuo punteggio più alto ti colloca in un raggruppamento — 10% / 25% / 50% / 75% in cima. Completa la settimana nel quartile principale e le monete arriveranno la prossima volta che apri l'app. Si azzera il lunedì.
+Ogni settimana il tuo punteggio più alto ti posiziona in un gruppo — 10% / 25% / 50% / 75%. Completa la settimana nel primo quarto e le monete arriveranno la prossima volta che apri l'app. Si resetta lunedì.
 
 🎨 TEMI & EVENTI STAGIONALI
-Sblocca nuove tavolozze di tessere mentre accumuli partite. In ottobre, dicembre e febbraio si svolge un evento stagionale con una settimana 1.5×.
+Sblocca nuove palette di tessere man mano che accumuli partite. In ottobre, dicembre e febbraio si svolge un evento stagionale con una settimana 1.5×.
 
 🛒 NEGOZIO
-• Rimuovi Annunci — goditi un'esperienza senza interruzioni per sempre
-• Pacchetto Monete S — 100 monete · Pacchetto Monete M — 600 monete · Pacchetto Monete L — 500 monete (il massimo per dollaro) · Pacchetto Monete XL — 1400 monete
+• Rimuovi Annunci — goditi un'esperienza continua per sempre
+• Pacchetto Monete S — 100 monete · Pacchetto Monete M — 400 monete · Pacchetto Monete L — 800 monete · Pacchetto Monete XL — 2000 monete (maggior valore per dollaro)
 • Pacchetto Annulla — 10 annullamenti
 • Pacchetto Iniziale — 100 monete + 5 annullamenti + 5 vite + Annunci Disattivati
-• Pass Stagionale — senza pubblicità, +50 monete quotidiane, tutti i temi, annullamenti illimitati (30 giorni)
-• Pass Settimanale — senza pubblicità, +100 monete quotidiane, tutti i temi, annullamenti illimitati (7 giorni)
-• Vite Extra — ripristina 5 vite istantaneamente · Vite Illimitate 1h · Vite Illimitate per sempre
+• Pass Stagionale — senza annunci, +100 monete quotidiane, tutti i temi, annullamenti illimitati (30 giorni, l'affare migliore)
+• Pass Settimanale — senza annunci, +50 monete quotidiane, tutti i temi, annullamenti illimitati (7 giorni, senza impegno)
+• Vite Extra — ripristina 5 vite immediatamente · Vite Illimitate 1h · Vite Illimitate per sempre
 
-Se hai inseguido la tessera 2048 prima, questa è quella a cui tornare. Se non l'hai fatto, inizia ora — ci vuole un scorrimento per comprendere l'attrazione.
+Se hai già cercato la tessera 2048, questa è quella a cui tornare. Se non l'hai mai fatto, inizia adesso — basta una scorrimento per capire l'attrazione.
 </it-IT>
 
 <ja-JP>
-スワイプ。マージ。クライム。片手でプレイするために調整された伝説の2048ボード。
+スワイプ。マージ。クライム。片手でプレイするために調整された基本の2048ボード。
 
-デイリーチャレンジには連続報酬があります。週間トーナメントブランケット。純粋な戦略 — 運無し、待ち無し。
+ストリーク報酬付きのデイリーチャレンジ。週ごとのトーナメント。純粋な戦略 — 運なし、待ち時間なし。
 
-すべてのスワイプがボードをシフトさせ、マッチするタイルが次の2の累乗に融合します。一度の無駄な動きが、高いタイルを間違ったコーナーに閉じ込める可能性があります。あなたの唯一の対戦相手は、自分の過去の最高記録です。
+すべてのスワイプがボードを移動させ、マッチしたタイルが次の2の累乗に融合します。無駄な動きが高得点タイルを間違った隅に trappingしてしまうことも。あなたの唯一の対戦相手は、あなた自身の最後の記録です。
 
-中身
-• 無料でプレイ — 完全なゲーム、驚きの課金無し
-• スムーズなスワイプ操作のクラシック4×4 2048ボード
-• 追い詰められた時のブースター：アンドゥ、マジックマージ（一度の自動結合）、タイル削除（スタックしたタイルを削除）
-• デイリーチャレンジ、連続記録とボーナスコイン付き
-• 週間トーナメント — 今週の最高スコアがブランケットに配置され、上位25%がコイン獲得
-• 季節イベント — ハロウィン、冬、春に1.5倍週を実施
-• 無料コインボタン — 数時間ごとに短い広告を見て25コイン
-• 現在のランを続ける — メニューから最後のボードを引き継ぎ
-• 7日間ログインストリーク — 連続プレイするほど大きな報酬
-• テーマコレクション — もっと多くのゲームをプレイすることで新しいタイルパレットをアンロック
-• ハイスコア：最高スコア、最高タイル、デイリーストリーク
-• 寛大な再生システムのライフ
-• 失ったランを素早い報酬広告で再開
-• 完全オフラインでプレイ、インターネット不要 — 自動的にセーブされます
+内容
+• 無料プレイ — 完全なゲーム、サプライズのペイウォールなし
+• スムーズなスワイプ操作のクラシックな4×4 2048ボード
+• 追い詰められた時のブースター: アンドゥ、マジックマージ（一回の自動結合）、タイル削除（詰まったタイルを削除）
+• ストリーク追跡とボーナスコインのついたデイリーチャレンジ
+• 週ごとのトーナメント — 今週の最高得点でブランケットに参加; 上位25%がコインを獲得
+• 季節イベント — ハロウィン、冬、春に1.5倍ウィークを実施
+• 無料コインボタン — 数時間ごとに短い広告を見て25コインを獲得
+• 途中での続行 — メニューから最後のボードを直接取得
+• 7日間のログインストリーク — 連続プレイするほど大きな報酬
+• テーマコレクション — プレイするたびに新しいタイルパレットをアンロック
+• ハイスコア: 最高得点、最高タイル、デイリーストリーク
+• 寛大な再生システム
+• クイックな報酬広告を見て失ったランを続行
+• 完全オフラインでプレイ可能、インターネット不要 — 自動的に保存
 
-🏅 週間トーナメント
-毎週の最高スコアがブランケットに配置されます — 上位10% / 25% / 50% / 75%。週の最後に上位四分位にいると、次回アプリを開いた時にコインが貯まります。リセットは月曜日。
+🏅 週ごとのトーナメント
+毎週、あなたの最高得点がブランケットに参加 — 上位10% / 25% / 50% / 75%。週の終わりに上位四分の一に入ると、アプリを開いたときにコインがもらえます。リセットは月曜日。
 
-🎨 テーマ & 季節イベント
-ゲームを重ねることで新しいタイルパレットをアンロックします。10月、12月、2月には季節イベントで1.5倍週が行われます。
+🎨 テーマと季節イベント
+ゲームを重ねるごとに新しいタイルパレットがアンロックされます。10月、12月、2月には季節イベントが1.5倍ウィークを実施。
 
 🛒 ショップ
-• 広告削除 — 永遠に途切れのない体験を楽しめます
-• コインパックS — 100コイン · コインパックM — 600コイン · コインパックL — 500コイン（ドルあたり最大） · コインパックXL — 1400コイン
+• 広告削除 — 永久に妨げのない体験
+• コインパックS — 100コイン · コインパックM — 400コイン · コインパックL — 800コイン · コインパックXL — 2000コイン（ドルあたり最大）
 • アンドゥパック — 10回のアンドゥ
-• スターターパック — 100コイン + 5アンドゥ + 5ライフ + 広告オフ
-• シーズンパス — 広告無し、毎日＋50コイン、すべてのテーマ、無制限アンドゥ（30日間）
-• 週間パス — 広告無し、毎日＋100コイン、すべてのテーマ、無制限アンドゥ（7日間）
-• エクストライフ — 5ライフを即座に回復 · 無制限ライフ1時間 · 無制限ライフ永遠
+• スタートパック — 100コイン + 5アンドゥ + 5ライフ + 広告オフ
+• シーズンパス — 広告なし、毎日100コイン、すべてのテーマ、無制限のアンドゥ（30日間、よりお得）
+• ウィークリーパス — 広告なし、毎日50コイン、すべてのテーマ、無制限のアンドゥ（7日間、いつでも解約可能）
+• エクストラライフ — 5ライフを即座に回復 · 無制限ライフ1時間 · 無制限ライフ永遠に
 
-これまで2048タイルを追いかけたことがあるなら、これが戻ってくるべき一つです。まだやったことがないなら、今すぐ始めましょう — 一度スワイプすれば、その魅力がわかります。
+もし過去に2048タイルを追いかけたことがあるなら、これが戻るべきゲームです。まだの方は今すぐ始めてください — 一回のスワイプでその魅力がわかります。
 </ja-JP>
 
 <pt-BR>
-DESLIZE. FUNDA. ESCALADA. O TABULEIRO CANÔNICO DE 2048, AJUSTADO PARA JOGAR COM UMA MÃO NO CELULAR.
+DESLIZE. FUNDAMENTALIZE. ESCALONE. O TABULEIRO CANÔNICO 2048, AJUSTADO PARA JOGOS COM UMA MÃO NO CELULAR.
 
-Desafio diário com recompensas em sequência. Torneio semanal. Estratégia pura — sem sorteios, sem esperas.
+Desafio diário com recompensas por sequência. Torneio semanal. Pura estratégia — sem sorte, sem espera.
 
-Cada deslize move o tabuleiro; os blocos combinados se fundem no próximo poder de dois; um movimento desperdiçado pode prender seu maior bloco no canto errado. Seu único adversário é seu próprio recorde anterior.
+Cada deslize move o tabuleiro; azulejos correspondentes se fundem no próximo número que é potência de dois; um movimento desperdiçado pode prender seu azulejo mais alto no canto errado. Seu único oponente é o seu próprio último recorde.
 
-O que está dentro
-• Gratuito para jogar — o jogo completo, sem surpresas de pagamento
-• Tabuleiro clássico 4×4 de 2048 com controles suaves de deslizar
-• Boosters quando você está encurralado: Desfazer, Mescla Mágica (fusão automática em uma passada), Remover Bloco (deletar um bloco preso)
+O QUE TEM DENTRO
+• Gratuito para jogar — o jogo completo, sem surpresas
+• Tabuleiro clássico 4×4 com controles de deslizar suaves
+• Impulso quando você está encurralado: Desfazer, Mágica de Fusão (combinação automática em um passe), Remover Azulejo (deletar um azulejo preso)
 • Desafio Diário com rastreamento de sequência e moedas bônus
-• Torneio Semanal — sua maior pontuação dessa semana te coloca em uma chave; os 25% melhores ganham moedas
-• Eventos sazonais — Halloween, Inverno e Primavera trazem uma semana de 1.5×
-• Botão de Moedas Grátis — assista a um anúncio curto para ganhar 25 moedas a cada poucas horas
-• Continuar · rodadas atuais — recupere seu último tabuleiro direto do menu
+• Torneio Semanal — sua maior pontuação desta semana o coloca em um grupo; os 25% melhores ganham moedas
+• Eventos sazonais — Halloween, Inverno e Primavera trazem uma semana de 1,5×
+• Botão de Moedas Gratuitas — assista a um anúncio curto para ganhar 25 moedas a cada poucas horas
+• Continuar · corrida atual — retome seu último tabuleiro diretamente pelo menu
 • Sequência de login de 7 dias — recompensas maiores quanto mais você jogar consecutivamente
-• Coleção de temas — desbloqueie novas paletas de blocos à medida que joga mais partidas
-• Altas Pontuações: maior pontuação, maior bloco, sequência diária
+• Coleção de temas — desbloqueie novas paletas de azulejos ao jogar mais
+• Maiores Pontuações: maior pontuação, azulejo mais alto, sequência diária
 • Sistema de vidas com regeneração generosa
-• Continue uma rodada perdida assistindo a um rápido anúncio recompensado
-• Joga totalmente offline, sem internet necessária — saves automáticos
+• Continue uma corrida perdida assistindo a um anúncio curto com recompensa
+• Joga totalmente offline, sem necessidade de internet — os jogos salvam automaticamente
 
 🏅 TORNEIO SEMANAL
-A cada semana, sua maior pontuação te coloca em uma chave — 10% / 25% / 50% / 75%. Termine a semana no quartil superior e as moedas aparecem na próxima vez que abrir o aplicativo. Reinicia na segunda-feira.
+A cada semana, sua maior pontuação o coloca em um grupo — 10% / 25% / 50% / 75%. Termine a semana no quartil superior e as moedas serão creditadas na próxima vez que você abrir o app. Reinicia na segunda-feira.
 
 🎨 TEMAS & EVENTOS SAZONAIS
-Desbloqueie novas paletas de blocos enquanto acumula jogos. Em outubro, dezembro e fevereiro, um evento sazonal roda uma semana de 1.5×.
+Desbloqueie novas paletas de azulejos enquanto acumula jogos. Em outubro, dezembro e fevereiro ocorre um evento sazonal de 1,5×.
 
 🛒 LOJA
-• Remover Anúncios — aproveite uma experiência ininterrupta para sempre
-• Pacote de Moedas S — 100 moedas · Pacote de Moedas M — 600 moedas · Pacote de Moedas L — 500 moedas (maior por dólar) · Pacote de Moedas XL — 1400 moedas
+• Remover Anúncios — aproveite uma experiência sem interrupções para sempre
+• Pacote de Moedas S — 100 moedas · Pacote de Moedas M — 400 moedas · Pacote de Moedas L — 800 moedas · Pacote de Moedas XL — 2000 moedas (maior quantidade por dólar)
 • Pacote de Desfazer — 10 desfeitos
-• Pacote Inicial — 100 moedas + 5 desfeitos + 5 vidas + sem anúncios
-• Passe de Temporada — sem anúncios, +50 moedas diárias, todos os temas, desfeitos ilimitados (30 dias)
-• Passe Semanal — sem anúncios, +100 moedas diárias, todos os temas, desfeitos ilimitados (7 dias)
+• Pacote Inicial — 100 moedas + 5 desfeitos + 5 vidas + Anúncios Desligados
+• Passe de Temporada — sem anúncios, +100 moedas diárias, todos os temas, desfeitos ilimitados (30 dias, a melhor oferta)
+• Passe Semanal — sem anúncios, +50 moedas diárias, todos os temas, desfeitos ilimitados (7 dias, sem compromisso)
 • Vidas Extras — restaure 5 vidas instantaneamente · Vidas Ilimitadas 1h · Vidas Ilimitadas para sempre
 
-Se você já perseguiu o bloco 2048 antes, este é o que você deve voltar. Se não, comece agora — basta um deslizar para entender a atração.
+Se você já perseguiu o azulejo 2048 antes, este é o jogo para voltar. Se não, comece agora — basta um deslize para entender a atração.
 </pt-BR>
 
 <tr-TR>
-SÜRÜKLE. BİRLEŞTİR. TIRMAN. Tek elle telefonla oynamaya uygun klasik 2048 tahtası.
+SÜRAKET. BİRLEŞTİR. TIRMAN. Tek elle telefonla oynama için ayarlanmış kanonik 2048 tahtası.
 
-Kısa süreli ödüllerle günlük meydan okumalar. Haftalık turnuva eşleşmeleri. Saf strateji — şans yok, bekleme yok.
+Seri ödülleri ile günlük zorluk. Haftalık turnuva çeyrekleri. Tamamen strateji — şans yok, bekleme yok.
 
-Her sürükleme tahtayı hareket ettirir; eşleşen karolar bir sonrakine birleşir; bir harcanan hamle en yüksek karonu yanlış köşeye hapseder. Tek rakibin son kaydındır.
+Her sürgü tahta hareket ettirir; eşleşen karolar bir sonraki 2'nin kuvvetine birleşir; kaybedilen bir hamle en yüksek karonuzu yanlış köşeye hapseder. Tek rakibiniz kendi önceki kaydınızdır.
 
-İçerik:
-• Ücretsiz oynama — tam oyun, sürpriz ödeme yok
-• Akıcı sürükleme kontrolleriyle klasik 4×4 2048 tahtası
-• Köşeye sıkıştığında güçlendiriciler: Geri Al, Sihirli Birleşim (otomatik birleşim), Karoyu Kaldır (sıkışan bir karoyu sil)
-• Günlük Meydan Okuma, seriler takip edilir ve bonus paralar kazanılır
-• Haftalık Turnuva — bu hafta en yüksek puanın seni bir eşleşmeye yerleştirir; ilk %25 para kazanır
-• Mevsimsel etkinlikler — Cadılar Bayramı, Kış ve Bahar 1.5× hafta getirir
-• Ücretsiz Paralar butonu — her birkaç saatte bir kısa bir reklam izleyerek 25 para kazan
-• Devam et · mevcut oyun — menüden son tahtanı direkt al
-• 7 günlük giriş serisi — art arda oynadıkça büyük ödüller
-• Tema koleksiyonu — daha fazla oyun oynadıkça yeni karo paletlerini aç
-• Yüksek Skorlar: en yüksek puan, en yüksek karo, günlük dizi
-• Cömert yenilenme ile hayatlar sistemi
-• Kaybedilen bir oyunu hızlı bir ödüllü reklam izleyerek devam ettir
-• Tamamen çevrimdışı oynanır, internet gerekmez — kayıtlar otomatik kaydedilir
+İçeride neler var
+• Ücretsiz oyna — tam oyun, sürpriz ödeme duvarı yok
+• Düzgün sürgü kontrolleri ile klasik 4×4 2048 tahtası
+• Köşeye sıkıştığınızda destekleyiciler: Geri Al, Sihirli Birleştir (otomatik birleşim), Karo Çıkar (takılmış bir karoyu sil)
+• Seri takibi ve bonus paralarla Günlük Zorluk
+• Haftalık Turnuva — bu hafta en yüksek puanınız sizi bir çeyreğe yerleştirir; ilk %25 para kazanır
+• Mevsimsel etkinlikler — Cadılar Bayramı, Kış ve Bahar 1.5× haftası getirir
+• Ücretsiz Paralar butonu — her birkaç saatte kısa bir reklam izleyerek 25 para kazanın
+• Devam et · mevcut oyun — menüden son tahtanızı alın
+• 7 günlük giriş serisi — arka arkaya oynadıkça daha büyük ödüller
+• Tema koleksiyonu — daha fazla oyun oynadıkça yeni karo paletlerini açın
+• Yüksek Skorlar: en yüksek puan, en yüksek karo, günlük seri
+• Cömert yenilenme ile yaşam sistemi
+• Kayıp bir oyunu hızlı bir ödüllü reklam izleyerek devam ettirin
+• Tamamen çevrimdışı oynar, internet gerekli değil — kayıtlar otomatik kaydedilir
 
 🏅 HAFTALIK TURNUVA
-Her hafta en yüksek puanın seni bir eşleşmeye yerleştirir — önde %10 / %25 / %50 / %75. Haftayı önde bitirirsen paralar uygulamayı bir sonraki açışında gelir. Yenileme Pazartesi.
+Her hafta en yüksek puanınız sizi bir çeyreğe yerleştirir — önde %10 / %25 / %50 / %75. Haftayı ilk çeyrekte bitirin ve paralar, uygulamayı bir sonraki açtığınızda hesabınıza düşer. Yenileme Pazartesi günü.
 
 🎨 TEMALAR & MEVSİMSEL ETKİNLİKLER
-Oyun sayısını artırdıkça yeni karo paletlerini aç. Ekim, Aralık ve Şubat'ta mevsimsel bir etkinlik 1.5× haftası düzenlenir.
+Oyun sayınızı artırdıkça yeni karo paletlerini açın. Ekim, Aralık ve Şubat'ta mevsimsel etkinlikler 1.5× haftası düzenler.
 
 🛒 DÜKKAN
-• Reklamları Kaldır — kesintisiz deneyimin tadını çıkar
-• Para Paketi S — 100 para · Para Paketi M — 600 para · Para Paketi L — 500 para (dolar başına en fazla) · Para Paketi XL — 1400 para
-• Geri Al Paketi — 10 geri alma
-• Başlangıç Paketi — 100 para + 5 geri alma + 5 hayat + Reklamsız
-• Sezon Pass — reklamsız, günde +50 para, tüm temalar, sınırsız geri alma (30 gün)
-• Haftalık Pass — reklamsız, günde +100 para, tüm temalar, sınırsız geri alma (7 gün)
-• Ekstra Hayatlar — anında 5 hayat yeniden kazan · Sınırsız Hayatlar 1s · Sınırsız Hayatlar sonsuza dek
+• Reklamları Kaldır — kesintisiz bir deneyim için sonsuza dek keyfini çıkarın
+• Para Paketi S — 100 para · Para Paketi M — 400 para · Para Paketi L — 800 para · Para Paketi XL — 2000 para (dolar başına en fazla)
+• Geri Alma Paketi — 10 geri alma
+• Başlangıç Paketi — 100 para + 5 geri alma + 5 yaşam + Reklam Yok
+• Sezon Pass — reklamsız, günde +100 para, tüm temalar, sınırsız geri alma (30 gün, daha iyi teklif)
+• Haftalık Pass — reklamsız, günde +50 para, tüm temalar, sınırsız geri alma (7 gün, taahhüt yok)
+• Ekstra Yaşamlar — 5 yaşamı anında geri yükle · Sınırsız Yaşam 1s · Sonsuza kadar Sınırsız Yaşamlar
 
-Eğer daha önce 2048 karosunu kovaladıysan, geri dönülecek olan budur. Eğer kovaladıysan, şimdi başla — çekimi anlamak için bir sürükleme yeter.
+Eğer daha önce 2048 karosunu peşinden koştuysanız, geri dönülecek olan budur. Eğer daha önce denemediyseniz, şimdi başlayın — çekimi anlamak için tek bir kaydırma yeter.
 </tr-TR>
 
 <uk>
-Проведіть пальцем. Злийте. Підіймайтеся. Класична гра 2048, адаптована для гри однією рукою на телефоні.
+Проведи. Зливай. Підіймайся. Канонічне поле 2048, налаштоване для гри однією рукою.
 
-Щоденний виклик з нагородами за серії. Щотижневий турнір. Чиста стратегія — ні удачі, ні очікування.
+Щоденний виклик з бонусами за серії. Щотижневий турнір. Чиста стратегія — без удачі, без очікування.
 
-Кожен жест змінює дошку; відповідні плитки об'єднуються в наступну силу двійки; один невдалий хід може заблокувати вашу найбільшу плитку у неправильному кутку. Вашим єдиним супротивником є ваше власне минуле досягнення.
+Кожен свайп зміщує поле; плитки, що відповідають одна одній, зливаються у наступну силу двійки; один невдалий хід може заховати твою найвищу плитку в неправильному куточку. Твоїм єдиним суперником є твій останній рекорд.
 
 Що всередині
-• Безкоштовна гра — повна версія, без дивних платних бар'єрів
-• Класична дошка 4×4 2048 з плавним управлінням через проведення пальцем
-• Бустери, коли ви застрягли: Відміна, Чарівне злиття (автоматичне злиття за один раз), Видалити плитку (стерти застряглу плитку)
+• Грати безкоштовно — повна гра, без несподіваних плат за доступ
+• Класичне поле 4×4 2048 із плавним керуванням свайпами
+• Підсилення, коли ти опинився у пастці: Скасування, Чарівне Злиття (автоматичне злиття за один прохід), Видалення плитки (видалити застарілу плитку)
 • Щоденний виклик з відстеженням серій та бонусними монетами
-• Щотижневий турнір — ваш найвищий рахунок цього тижня поміщає вас у графік; провідні 25% отримують монети
-• Сезонні події — Хелловін, Зима і Весна приносять тиждень із множником 1.5×
-• Кнопка безкоштовних монет — перегляньте коротке оголошення для отримання 25 монет кожні кілька годин
-• Продовжити · поточний раунд — підберіть останню дошку прямо з меню
-• 7-добова серія входів — більші нагороди, чим довше ви граєте без перерви
-• Колекція тем — відкривайте нові палітри плиток, граючи більше
-• Рейтинги: найвищий рахунок, найвища плитка, щоденна серія
-• Система життів з щедрим відновленням
-• Продовжити програний раунд, переглядаючи коротке рекламне оголошення з нагородою
-• Гра повністю без Інтернету, збереження ігор автоматичне
+• Щотижневий турнір — твій найвищий бал цього тижня потрапляє до групи; провідні 25% отримують монети
+• Сезонні події — Хелловін, Зима та Весна приносять 1.5× тиждень
+• Кнопка Безкоштовні Монети — переглянь коротку рекламу за 25 монет кожні кілька годин
+• Продовжити · поточний пробіг — підбери своє останнє поле прямо з меню
+• 7-денною серією входів — більші винагороди чим довше ти граєш поспіль
+• Колекція тем — відкривай нові палітри плиток, граючи більше ігор
+• Найвищі очки: найвищий бал, найвища плитка, щоденна серія
+• Система життів з щедрою регенерацією
+• Продовжити програну гру, переглянувши коротку рекламу з винагородою
+• Грає повністю офлайн, інтернет не є обов’язковим — збереження прогресу автоматичне
 
 🏅 ЩОТИЖНЕВИЙ ТУРНІР
-Щотижня ваш найвищий рахунок потрапляє в графік — провідні 10% / 25% / 50% / 75%. Завершивши тиждень у провідному кварталі, монети з’являться, коли ви знову відкриєте додаток. Скидається в понеділок.
+Щотижня твій найвищий бал потрапляє до групи — провідні 10% / 25% / 50% / 75%. Завершуй тиждень у провідній чверті, і монети з'являться наступного разу, коли ти відкриєш додаток. Скидається в понеділок.
 
-🎨 ТЕМИ І СЕЗОННІ ПОДІЇ
-Відкривайте нові палітри плиток, накопичуючи ігри. У жовтні, грудні та лютому проходять сезонні події з множником 1.5×.
+🎨 ТЕМИ ТА СЕЗОННІ ПОДІЇ
+Відкривай нові палітри плиток, накопичуючи ігри. У жовтні, грудні та лютому проходять сезонні події з 1.5× тижнем.
 
 🛒 МАГАЗИН
-• Видалити рекламу — насолоджуйтеся безперервним досвідом назавжди
-• Пакет монет S — 100 монет · Пакет монет M — 600 монет · Пакет монет L — 500 монет (найбільше за долар) · Пакет монет XL — 1400 монет
-• Пакет відміни — 10 відмін
-• Стартовий пакет — 100 монет + 5 відмін + 5 життів + без реклами
-• Сезонний пропуск — без реклами, +50 монет щодня, всі теми, безлімітні відміни (30 днів)
-• Щотижневий пропуск — без реклами, +100 монет щодня, всі теми, безлімітні відміни (7 днів)
-• Додаткові житті — відновити 5 життів миттєво · Безлімітні життя на 1 год · Безлімітні життя назавжди
+• Видалити рекламу — насолоджуйся безперервним досвідом назавжди
+• Пакет монет S — 100 монет · Пакет монет M — 400 монет · Пакет монет L — 800 монет · Пакет монет XL — 2000 монет (найбільше за долар)
+• Пакет скасувань — 10 скасувань
+• Стартовий пакет — 100 монет + 5 скасувань + 5 життів + без реклами
+• Сезонний пропуск — без реклами, +100 монет щодня, всі теми, необмежено скасувань (30 днів, вигідніша угода)
+• Щотижневий пропуск — без реклами, +50 монет щодня, всі теми, необмежено скасувань (7 днів, без зобов'язань)
+• Додаткові життя — віднови 5 життів миттєво · Безмежні життя 1 год · Безмежні життя назавжди
 
-Якщо ви раніше переслідували плитку 2048, це гра, до якої варто повернутися. Якщо ні, починайте зараз — один жест, щоб зрозуміти її притяжіння.
+Якщо ти вже грав у плитку 2048, це те, до чого варто повертатися. Якщо ні, починай зараз — один свайп, щоб зрозуміти, чому це так затягує.
 </uk>
 
 <zh-CN>
-滑动。合并。攀登。经典 2048 棋盘，为单手手机游戏而调校。
+滑动。合并。攀爬。经典的2048棋盘，为单手手机游戏优化。
 
 每日挑战与连胜奖励。每周锦标赛。纯策略——没有运气，没有等待。
 
-每次滑动都会移动棋盘；匹配的方块融合成下一个 2 的幂；一次浪费的移动可能会让你的最高方块被困在错误的角落。你唯一的对手是你自己的记录。
+每一次滑动都在移动棋盘；匹配的方块融合成下一个二的幂；一个错误的移动可能会把你最高的方块困在错误的角落。你唯一的对手是你自己之前的记录。
 
-内容介绍
-• 免费游玩——完整游戏，无意外付费墙
-• 经典 4×4 2048 棋盘，流畅的滑动控制
-• 当你被困时的增强道具：撤销、魔法合并（一次性自动合并）、移除方块（删除被卡住的方块）
-• 每日挑战，连胜追踪和奖励金币
-• 每周锦标赛——本周的最高分将进入赛段；前 25% 可获得金币
-• 季节性活动——万圣节、冬季和春季会带来 1.5 倍周
-• 免费金币按钮——每隔几个小时观看短广告可获得 25 个金币
-• 继续 · 当前游戏——直接从菜单继续上一次的棋盘
-• 7 天登录连胜——连续游戏时间越长，奖励越丰厚
-• 主题收集——随着游戏的进行解锁新的方块调色板
-• 高分：最高分，最高方块，每日连胜
+内容包含
+• 免费游戏——完整游戏，没有意外收费
+• 经典4×4 2048棋盘，流畅的滑动操作
+• 被困时的助推器：撤销、魔法合并（一次性自动合并）、移除方块（删除被卡住的方块）
+• 每日挑战，有连胜追踪和额外金币
+• 每周锦标赛——本周你的最高得分将决定你的名次；领先的25%可以获得金币
+• 季节性活动——万圣节、冬季和春季带来1.5倍周奖励
+• 免费金币按钮——每几小时观看短广告获得25金币
+• 继续·当前游戏——从菜单直接继续上一次的棋盘
+• 7天登录连胜——连续游戏越久，奖励越丰厚
+• 主题收集——随着游戏进程解锁新方块调色板
+• 最高分数：最高得分，最高方块，日连胜
 • 生命系统，慷慨再生
-• 通过观看短广告继续失去的游戏
-• 完全离线游玩，无需互联网——游戏进度自动保存
+• 通过观看短广告继续未完成的游戏
+• 完全离线玩，无需互联网——游戏会自动保存
 
 🏅 每周锦标赛
-每周你的最高分将进入赛段——前 10% / 25% / 50% / 75%。如果在这一周结束时处于领先四分之一，金币将在下次打开应用时到账。周一重置。
+每周你的最高得分将决定你的名次——领先的10% / 25% / 50% / 75%。在领先的四分之一内结束这一周，金币将在你下次打开应用时到账。每周一重置。
 
 🎨 主题与季节性活动
-随着游戏的进行解锁新的方块调色板。在十月、十二月和二月会有季节性活动，进行 1.5 倍周。
+随着游戏的增加解锁新的方块调色板。在10月、12月和2月会举办季节性活动，享受1.5倍奖励周。
 
 🛒 商店
-• 移除广告——享受永无中断的体验
-• 硬币包 S——100 硬币 · 硬币包 M——600 硬币 · 硬币包 L——500 硬币（每美元最多） · 硬币包 XL——1400 硬币
-• 撤销包——10 次撤销
-• 入门包——100 硬币 + 5 次撤销 + 5 生命 + 关闭广告
-• 赛季通行证——无广告，每日 +50 硬币，所有主题，无限撤销（30 天）
-• 每周通行证——无广告，每日 +100 硬币，所有主题，无限撤销（7 天）
-• 额外生命——立即恢复 5 生命 · 无限生命 1 小时 · 永久无限生命
+• 去广告——享受永无干扰的体验
+• 硬币包S——100金币 · 硬币包M——400金币 · 硬币包L——800金币 · 硬币包XL——2000金币（每美元最多）
+• 撤销包——10次撤销
+• 启动包——100金币 + 5次撤销 + 5条命 + 去广告
+• 赛季通行证——无广告，每天+100金币，所有主题，无限制撤销（30天，超值选择）
+• 每周通行证——无广告，每天+50金币，所有主题，无限制撤销（7天，无需承诺）
+• 额外生命——立即恢复5条命 · 1小时无限生命 · 永久无限生命
 
-如果你以前追过 2048 方块，这就是回归的游戏。如果你还没玩过，赶紧开始——只需一次滑动就能理解它的魅力。
+如果你曾追逐过2048方块，这是值得回归的选择。如果你还没有，现在就开始吧——只需一次滑动即可感受到它的魅力。
 </zh-CN>
 
 ---
@@ -761,19 +774,19 @@ Classic 4×4 number-merge
 </en-US>
 
 <ar>
-دمج أرقام 4×4 كلاسيكي
+دمج أرقام كلاسيكي 4×4
 </ar>
 
 <de-DE>
-Klassisches 4×4 Zahlen-Merge
+KLASSISCHES 4×4 ZAHLEN-MERGE
 </de-DE>
 
 <es-419>
-Fusión clásica 4×4 de números
+¡NUMEROS CLÁSICOS 4×4!
 </es-419>
 
 <fr-FR>
-Fusion classique 4×4
+Classique 4x4 numérique
 </fr-FR>
 
 <hi-IN>
@@ -781,27 +794,27 @@ Fusion classique 4×4
 </hi-IN>
 
 <id>
-Penggabungan angka 4×4 klasik
+GABUNGKAN ANGKA 4×4 KLASIK!
 </id>
 
 <it-IT>
-Fusione 4×4 classica
+NUMERO IN CONTINUA EVOLUZIONE
 </it-IT>
 
 <ja-JP>
-クラシック4×4 数字マージ
+クラシック4×4数字合体
 </ja-JP>
 
 <pt-BR>
-Fusão clássica 4×4 de números
+NÚMEROS CLÁSSICOS 4×4!
 </pt-BR>
 
 <tr-TR>
-Klasik 4×4 sayı birleştirme
+KLASİK 4×4 SAYI BİRLEŞTİR
 </tr-TR>
 
 <uk>
-Класичне 4×4 злиття чисел
+Класичне 4×4 об'єднання чисел
 </uk>
 
 <zh-CN>
@@ -819,51 +832,51 @@ _Apple App Store Connect → Version → Keywords_
 </en-US>
 
 <ar>
-2048، دمج البلاط، لغز الأرقام، لعبة ذهنية، لغز بدون إنترنت، دمج البلاط، كلاسيكي 2048، تحدي يومي
+٢٠٤٨، دمج البلاط، لغز الأرقام، لعبة العقل، لغز غير متصل، دمج البلاط، كلاسيكي ٢٠٤٨، تحدي يومي
 </ar>
 
 <de-DE>
-2048, Plättchen kombinieren, Zahlenrätsel, Denksport, offline Puzzle, tägliche Herausforderung
+2048, Fliesen zusammenführen, Zahlenrätsel, Denkspiel, offline Rätsel, tägliche Herausforderung
 </de-DE>
 
 <es-419>
-2048, juntar fichas, puzzle numérico, juego cerebral, sin conexión, fusión de fichas, reto diario
+2048,junta fichas,puzzle numérico,juego mental,puzzle sin conexión,fusión de fichas,reto diario
 </es-419>
 
 <fr-FR>
-2048, fusionne tuiles, puzzle numérique, jeu de cerveau, défi quotidien
+2048, fusion de tuiles, jeu de cerveau, puzzle hors ligne, défi quotidien
 </fr-FR>
 
 <hi-IN>
-2048,टाइल मिलाना,संख्या पहेली,दिमागी खेल,ऑफ़लाइन पहेली,टाइल संमिलन,क्लासिक 2048,दैनिक चुनौती
+2048,टाइल मिलाएँ,संख्यात्मक पहेली,दिमागी खेल,ऑफलाइन पहेली,टाइल मर्ज,क्लासिक 2048,दैनिक चुनौती
 </hi-IN>
 
 <id>
-2048, gabung ubin, teka-teki angka, permainan otak, tantangan harian
+2048, gabungkan ubin, teka-teki angka, permainan otak, tantangan harian
 </id>
 
 <it-IT>
-2048, unisci tessere, puzzle numerico, gioco di mente, sfida giornaliera, puzzle offline
+2048, unisci tessere, puzzle numerico, gioco offline, fusione tessere, sfida quotidiana
 </it-IT>
 
 <ja-JP>
-2048,タイル Merge,数字パズル,脳トレ,オフラインパズル,タイル合体,クラシック2048,デイリー挑戦
+2048,タイルの合体,数字パズル,頭脳ゲーム,オフラインパズル,タイルマージ,クラシック2048,日替わりチャレンジ
 </ja-JP>
 
 <pt-BR>
-2048,juntar peças,jogo de números,jogo cerebral,puzzle offline,mesclar peças,desafio diário
+2048, junte peças, puzzle numérico, jogo de raciocínio, offline, classic 2048, desafio diário
 </pt-BR>
 
 <tr-TR>
-2048, karo birleştirme, sayı bulmaca, zeka oyunu, çevrimdışı, klasik 2048, meydan okuma
+2048, taş birleştirme, sayı bulmacası, zihin oyunu, çevrimdışı, karo birleştirme, klasik 2048
 </tr-TR>
 
 <uk>
-2048, злиття плиток, числова головоломка, логічна гра, офлайн, класичний 2048, щоденний виклик
+2048,злиття тайлів,числовий пазл,гbrain гра,офлайн пазл,злиття тайлів,класичний 2048,щоденний виклик
 </uk>
 
 <zh-CN>
-2048,合并方块,数字益智,脑力游戏,离线拼图,拼块合成,经典2048,每日挑战
+2048, 合并方块, 数字益智, 脑力游戏, 离线拼图, 方块合并, 经典2048, 每日挑战
 </zh-CN>
 
 ---
@@ -877,52 +890,53 @@ Daily Challenge streaks and arcade-style merge feedback. Swipe, merge, climb the
 </en-US>
 
 <ar>
-تحديات يومية وملاحظات دمج بأسلوب الأركيد. اسحب، دمج، وارتقِ على قائمة المتصدرين لجولتك الأخيرة. استراتيجية خالصة، بدون حظ.
+تحديات يومية ونتائج دمج بأسلوب آركيد! اسحب وادمج، ارتقِ في قائمة المتصدرين لآخر جولة لك. استراتيجية خالصة، لا مجال للحظ!
 </ar>
 
 <de-DE>
-TÄGLICHE HERAUSFORDERUNGEN UND ARCADA-STIL-TEAM-REAKTIONEN! WISCH, MISCHE, STEIGE IN DER RANGLISTE DEINER LETZTEN RUN! REINE STRATEGIE, KEIN GLÜCK!
+TÄGLICHE CHALLENGE-STRÄNGE UND ARCADE-MERGE-ERLEBNISSE! WISCHEN, MENGEN, DIE LEADERBOARD-HOCHSTEFTE DEINER LETZTEN RUNS! REINE STRATEGIE, KEIN GLÜCK!
 </de-DE>
 
 <es-419>
-¡DESAFÍOS DIARIOS Y FUSIONES AL ESTILO ARCADE! DESLIZA, FUSIONA Y ESCALA EN LA TABLA DE PUNTUACIONES. ¡PURO ESTRATEGIA, SIN SUERTE!
+¡RETOS DIARIOS Y RETROALIMENTACIÓN AL ESTILO ARCADE! DESLIZA, UNE Y ESCALA EN LA TABLA DE CLASIFICACIONES. PURA ESTRATEGIA, ¡SIN SUERTE!
 </es-419>
 
 <fr-FR>
-DES DEFIS QUOTIDIENS, DES RETOURS DE JEU EN STYLE ARCADE ! GLISSEZ, FUSIONNEZ, GRIMPEZ DANS LE CLASSEMENT DE VOTRE DERNIERE PARTIE. PUR STRATEGIE, PAS DE CHANCE !
+DES DEFIS QUOTIDIENS ET DES RETOURS DE JEU STYLE ARCADE ! GLISSEZ, REGROUPEZ, MONTEZ DANS LE CLASSEMENT DE VOTRE DERNIÈRE COURSE. STRATÉGIE PURE, PAS DE HASARD !
 </fr-FR>
 
 <hi-IN>
-दैनिक चुनौती की निरंतरता और आर्केड-शैली का मर्ज फीडबैक। स्वाइप करें, मर्ज करें, अपनी पिछली रन की लीडरबोर्ड में चढ़ें। शुद्ध रणनीति, कोई भाग्य नहीं।
+डेली चैलेंज की लकीरें और आर्केड-स्टाइल मर्ज फीडबैक। स्वाइप करें, मर्ज करें, अपनी पिछली दौड़ की लीडरबोर्ड पर चढ़ें। शुद्ध रणनीति, भाग्य नहीं।
 </hi-IN>
 
 <id>
-SALURAN TANTANGAN HARIAN DAN UMPAN BALIK ARCADE! SERET, GABUNG, DAN CAPAI PANGGUNG KEPIMPINAN DARI PERMAINAN TERAKHIRMU. STRATEGI MURNI, TANPA KESEMPATAN!
+TERUSKAN STREAK HARIAN DAN DAPATKAN UMPAN BALIK MERGE GAYA ARCADE. SLIIP, GABUNG, DAN CAPAI PUNCAK LEADERBOARD! MURNI STRATEGI, TANPA KEBAHAGIAAN.
 </id>
 
 <it-IT>
-SFIDE GIORNALIERE E RITORNI IN STILE ARCADE! SCORRI, UNISCI E SCALI LA CLASSIFICA DELLA TUA ULTIMA PARTITA. PURA STRATEGIA, NESSUNA FORTUNA!
+SFIDE GIORNALIERE E FEEDBACK IN STILE ARCADE! FAI SWIPE, UNISCI, E SALI IN CLASSIFICA! SOLO STRATEGIA, NESSUNA FORTUNA!
 </it-IT>
 
 <ja-JP>
-デイリーチャレンジのストリークとアーケードスタイルの合成フィードバック。スワイプして合成、最後のランのリーダーボードを登ろう。戦略のみ、運はなし！
+デイリーチャレンジのストリークとアーケードスタイルの合成フィードバック！  
+スワイプして合成、リーダーボードを駆け上がれ！  
+戦略だけ、運はなし！
 </ja-JP>
 
 <pt-BR>
-DESAFIOS DIÁRIOS E FEEDBACK DE MESCLAGEM EM ESTILO ARCADE! DESLIZE, MESCLE E ESCALONE NO RANKING DA SUA ÚLTIMA JOGADA. PURO ESTILO!
+DESAFIOS DIÁRIOS, FUSÕES IMPACTANTES! DESLIZE, FUSE, CONQUISTE O TOPO DO RANKING! ESTRATÉGIA PURA, SEM SORTE! DIVERTIMENTO GARANTIDO!
 </pt-BR>
 
 <tr-TR>
-GÜNLÜK ZORLUK SERİLERİ VE ARCADE STİLİ BİRLEŞTİRME GERİBİLDİRİMİ!  
-Kaydır, birleştir, son koşuna göre liderlik tablosunda yüksel! TAM STRATEJİ, ŞANŞ YOK!
+GÜNLÜK GÖREVLERİ YARAT VE ARKADAŞLARINLA YARIŞ! KAYDIR, BİRLEŞTİR, PUAN TABELASINDA ZİRVEYE ÇIK! TAM STRateji, ŞANS YOK!
 </tr-TR>
 
 <uk>
-Щоденні виклики, аркадний стиль злиття! Проведіть, зливайте, піднімайтеся в турнірній таблиці вашого останнього заїзду. Чиста стратегія, без удачі!
+ЩОДЕННІ ВИКЛИКИ, СТРИБКИ ТА АРКАДНИЙ СТИЛЬ! Проведи, об'єднуй, піднімайся у лідерах свого останнього туру. Чиста стратегія, без удачі!
 </uk>
 
 <zh-CN>
-每日挑战连胜和街机风格的合并反馈。滑动、合并，提升自己的过去记录排行榜。纯策略，无运气。
+每日挑战连胜和街机风格的合并反馈。滑动、合并，攀登你的排名。纯策略，无需运气。
 </zh-CN>
 
 ---

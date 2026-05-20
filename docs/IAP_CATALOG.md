@@ -69,9 +69,9 @@ in `MainActivity.java` `VALID_PRODUCTS` and in `iaps.json`.
 |---|---|---|---|---|---|
 | 1 | `remove_ads` | Non-consumable | $2.99 | Remove Ads | Permanently removes all banner and interstitial ads. Rewarded ads remain available so you can still earn free coins and lives. |
 | 2 | `coins_small` | Consumable | $0.99 | 100 Coins | Adds 100 coins to your wallet. Spend coins on hints, extra moves, and unlocking new themes. |
-| 2b | `coins_medium` | Consumable | $4.99 | 600 Coins | Adds 600 coins to your wallet. Spend coins on hints, boosters, and unlocking new themes. |
-| 3 | `coins_large` | Consumable | $2.99 | 500 Coins | Adds 500 coins to your wallet. Best value coin pack — spend on hints, extra moves, and unlocking new themes. |
-| 3b | `coins_mega` | Consumable | $9.99 | 1400 Coins | Adds 1400 coins to your wallet. Our largest coin pack — spend on hints, boosters, and unlocking new themes. |
+| 2b | `coins_medium` | Consumable | $2.99 | 400 Coins | Adds 400 coins to your wallet. Spend coins on hints, boosters, and unlocking new themes. |
+| 3 | `coins_large` | Consumable | $4.99 | 800 Coins | Adds 800 coins to your wallet. Great value coin pack — spend on hints, extra moves, and unlocking new themes. |
+| 3b | `coins_mega` | Consumable | $9.99 | 2000 Coins | Adds 2000 coins to your wallet. Our largest coin pack and best value — spend on hints, boosters, and unlocking new themes. |
 | 4 | `five_lives` | Consumable | $0.99 | 5 Lives | Instantly refills your hearts to the maximum so you can keep playing without waiting for them to recharge. |
 | 5 | `unlimited_lives_1h` | Consumable | $1.99 | 1 Hour Unlimited Lives | Play with unlimited lives for one full hour. Perfect for a long puzzle session without any interruption. |
 | 6 | `unlimited_lives_forever` | Non-consumable | $4.99 | Unlimited Lives Forever | Never run out of lives again. Play as many levels as you want, whenever you want, with no waiting. |
@@ -90,8 +90,8 @@ and at least one offer.
 
 | # | Product ID | Name (≤55) | Description (≤200) | Billing period | Grace period | Price (USD) |
 |---|---|---|---|---|---|---|
-| 1 | `season_pass_monthly` | Season Pass | Monthly pass: ad-free play, +50 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play. | 1 month (P1M) | 3 days | $1.99 |
-| 2 | `weekly_pass` | Weekly Pass | Weekly pass: ad-free play, +100 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play. | 1 week (P1W) | 3 days | $4.99 |
+| 1 | `season_pass_monthly` | Season Pass | Monthly pass: ad-free play, +100 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play. | 1 month (P1M) | 3 days | $4.99 |
+| 2 | `weekly_pass` | Weekly Pass | Weekly pass: ad-free play, +50 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play. | 1 week (P1W) | 3 days | $1.99 |
 
 > Note: the `starter_pack` and pass descriptions are deliberately
 > genre-neutral ("5 hints (or 5 undos)", "unlimited boosters") so the
@@ -115,7 +115,7 @@ and at least one offer.
 | Pause | optional, off |
 | Resubscribe | on |
 | Availability | All regions |
-| Price | $1.99 USD (Play converts) |
+| Price | $4.99 USD (Play converts) — `weekly_pass` is the cheaper $1.99/wk plan |
 
 ---
 
@@ -127,13 +127,19 @@ must match what the app's `game.html` shop offers and what
 
 ### Flagship games
 
+A game that sells **any** coin pack must sell the complete four-tier
+ladder (`coins_small/medium/large/mega` — `check_coin_tier_ladder`),
+so every flagship below ships all four. `iaps.json` is never filtered:
+restore-purchase must work for every SKU even on archetypes that hide
+some from the shop UI.
+
 | App | One-time product IDs | Subscriptions |
 |---|---|---|
-| **WaterSort** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `unlimited_lives_forever`, `unlimited_undos`, `hint_pack`, `starter_pack` | `season_pass_monthly` |
-| **Nonogram** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `hint_pack`, `starter_pack` | `season_pass_monthly` |
-| **PipeConnect** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `hint_pack`, `starter_pack` | `season_pass_monthly` |
-| **Puzzle2048** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `hint_pack`, `starter_pack` | `season_pass_monthly` |
-| **UnblockPuzzle** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `hint_pack`, `starter_pack` | `season_pass_monthly` |
+| **WaterSort** | `remove_ads`, `coins_small`, `coins_medium`, `coins_large`, `coins_mega`, `five_lives`, `unlimited_lives_1h`, `unlimited_lives_forever`, `unlimited_undos`, `hint_pack`, `starter_pack` | `season_pass_monthly`, `weekly_pass` |
+| **Nonogram** | `remove_ads`, `coins_small`, `coins_medium`, `coins_large`, `coins_mega`, `five_lives`, `unlimited_lives_1h`, `unlimited_lives_forever`, `hint_pack`, `starter_pack` | `season_pass_monthly`, `weekly_pass` |
+| **Puzzle2048** | `remove_ads`, `coins_small`, `coins_medium`, `coins_large`, `coins_mega`, `five_lives`, `unlimited_lives_1h`, `unlimited_lives_forever`, `undo_pack`, `starter_pack` | `season_pass_monthly`, `weekly_pass` |
+| **PipeConnect** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `unlimited_lives_forever`, `hint_pack`, `starter_pack` *(metadata pass pending — needs `coins_medium`/`coins_mega` + `weekly_pass` added before ship)* | `season_pass_monthly` |
+| **UnblockPuzzle** | `remove_ads`, `coins_small`, `coins_large`, `five_lives`, `unlimited_lives_1h`, `unlimited_lives_forever`, `hint_pack`, `starter_pack` *(metadata pass pending — needs `coins_medium`/`coins_mega` + `weekly_pass` added before ship)* | `season_pass_monthly` |
 
 > Before shipping any app, run:
 > ```

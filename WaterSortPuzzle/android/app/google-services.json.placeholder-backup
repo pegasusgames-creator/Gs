@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "225819574531",
+    "project_id": "pegasusgames-d243d",
+    "storage_bucket": "pegasusgames-d243d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225819574531:android:daa5d76e3f9550fcce2936",
+        "android_client_info": {
+          "package_name": "com.pegasusgames.watersortpuzzle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGFhOl5cKZLWBCVIP1K_fKPTOhk_Jt1Rw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

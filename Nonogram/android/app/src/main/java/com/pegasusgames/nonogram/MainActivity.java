@@ -63,6 +63,18 @@ import java.util.Set;
 
 public class MainActivity extends Activity {
 
+    // ── Cross-promo allowlist ─────────────────────────────────────────────────
+    // Restricts isAppInstalled() to portfolio packages so JS can't probe
+    // arbitrary installed apps via the bridge. Mirror in WaterSortPuzzle.
+    private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(
+        "com.pegasusgames.ballsort",
+        "com.pegasusgames.nonogram",
+        "com.pegasusgames.pipeconnect",
+        "com.pegasusgames.puzzle2048",
+        "com.pegasusgames.unblock",
+        "com.pegasusgames.watersortpuzzle"
+    ));
+
     // ── AppLovin MAX ──────────────────────────────────────────────────────────
     // Disabled until this developer is approved on AppLovin. The app ships
     // AdMob-only for now. To re-enable when the SDK key is provided:
@@ -261,6 +273,18 @@ public class MainActivity extends Activity {
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     private void initAdMob() {
+        // Register the emulator as a test device so production unit IDs serve
+        // test ads in dev builds (otherwise live IDs return "no fill").
+        boolean isDebuggable = (getApplicationInfo().flags
+            & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        if (isDebuggable) {
+            com.google.android.gms.ads.RequestConfiguration cfg =
+                new com.google.android.gms.ads.RequestConfiguration.Builder()
+                    .setTestDeviceIds(java.util.Arrays.asList(
+                        com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR))
+                    .build();
+            MobileAds.setRequestConfiguration(cfg);
+        }
         MobileAds.initialize(this, s -> runOnUiThread(() -> {
             loadAdmobBanner(); loadAdmobInterstitial(); loadAdmobRewarded();
         }));
@@ -487,6 +511,15 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void hideBannerAd()                  { hideBanner(); }
         @JavascriptInterface public void showBannerAd()                  { showBanner(); }
         @JavascriptInterface public void log(String msg)                 { /* disabled in release */ }
+
+        // Restricted to CROSS_PROMO_PACKAGES to prevent JS from probing
+        // arbitrary installed apps via this bridge.
+        @JavascriptInterface
+        public boolean isAppInstalled(String pkg) {
+            if (pkg == null || !CROSS_PROMO_PACKAGES.contains(pkg)) return false;
+            try { getPackageManager().getPackageInfo(pkg, 0); return true; }
+            catch (PackageManager.NameNotFoundException e) { return false; }
+        }
 
         @JavascriptInterface
         public void scheduleNotification(String title, String body, long delayMs) {

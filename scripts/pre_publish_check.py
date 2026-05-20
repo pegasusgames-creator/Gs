@@ -468,9 +468,9 @@ def check_json_file(apps, relpath, required_keys, label):
 IAP_CANONICAL_DESCRIPTIONS = {
     "remove_ads": "Permanently removes all banner and interstitial ads. Rewarded ads remain available so you can still earn free coins and lives.",
     "coins_small": "Adds 100 coins to your wallet. Spend coins on hints, extra moves, and unlocking new themes.",
-    "coins_medium": "Adds 600 coins to your wallet. Spend coins on hints, boosters, and unlocking new themes.",
-    "coins_large": "Adds 500 coins to your wallet. Best value coin pack — spend on hints, extra moves, and unlocking new themes.",
-    "coins_mega": "Adds 1400 coins to your wallet. Our largest coin pack — spend on hints, boosters, and unlocking new themes.",
+    "coins_medium": "Adds 400 coins to your wallet. Spend coins on hints, boosters, and unlocking new themes.",
+    "coins_large": "Adds 800 coins to your wallet. Great value coin pack — spend on hints, extra moves, and unlocking new themes.",
+    "coins_mega": "Adds 2000 coins to your wallet. Our largest coin pack and best value — spend on hints, boosters, and unlocking new themes.",
     "five_lives": "Instantly refills your hearts to the maximum so you can keep playing without waiting for them to recharge.",
     "unlimited_lives_1h": "Play with unlimited lives for one full hour. Perfect for a long puzzle session without any interruption.",
     "unlimited_lives_forever": "Never run out of lives again. Play as many levels as you want, whenever you want, with no waiting.",
@@ -478,8 +478,8 @@ IAP_CANONICAL_DESCRIPTIONS = {
     "undo_pack": "Adds 10 undos to your account. Take back any move at any time so one mistake never costs you a level.",
     "hint_pack": "Adds 10 hints to your account. Each hint reveals the next correct move on any level where you are stuck.",
     "starter_pack": "100 coins + 5 hints (or 5 undos) + 5 lives + Ads Off, bundled for new players. One-time purchase.",
-    "season_pass_monthly": "Monthly pass: ad-free play, +50 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play.",
-    "weekly_pass": "Weekly pass: ad-free play, +100 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play.",
+    "season_pass_monthly": "Monthly pass: ad-free play, +100 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play.",
+    "weekly_pass": "Weekly pass: ad-free play, +50 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play.",
 }
 IAP_DESC_MAX = 200
 
@@ -1390,11 +1390,10 @@ def check_keystore_present(apps):
 
         if expected_sha1:
             # Read storeFile + storePassword from keystore.properties so the
-            # check works against per-app random passwords AND against the
-            # two-keystore PEPK layout (keystore.jks = app-signing key,
-            # upload-keystore.jks = the UPLOAD key gradle actually signs
-            # with — and `upload_key_sha1` is the upload key's fingerprint).
-            # Falls back to keystore.jks + "android" if properties unreadable.
+            # check works against per-app random passwords. Under the
+            # single-keystore-per-app model storeFile MUST equal
+            # keystore.jks — any other value is a misconfiguration and we
+            # warn so it doesn't get silently shipped with the wrong key.
             storepass = "android"
             verify_path = keystore_path
             try:
@@ -1404,6 +1403,16 @@ def check_keystore_present(apps):
                             storepass = line.split("=", 1)[1].strip()
                         elif line.startswith("storeFile="):
                             sf = line.split("=", 1)[1].strip()
+                            if os.path.basename(sf) != "keystore.jks":
+                                # Every app — including Puzzle2048 — keeps
+                                # its signing key at <App>/android/keystore.jks
+                                # under a uniform file/name/place convention.
+                                blocking.append(
+                                    f"{app}: keystore.properties storeFile = "
+                                    f"{sf!r} but every app's keystore must "
+                                    f"be named keystore.jks. Rename the file "
+                                    f"and edit keystore.properties."
+                                )
                             cand = sf if os.path.isabs(sf) else os.path.join(
                                 BASE, app, "android", sf)
                             if os.path.exists(cand):
@@ -1650,6 +1659,126 @@ def check_screenshot_completeness(apps):
     return blocking, warnings
 
 
+def check_screenshot_headline_similarity(apps):
+    """Headline TEXT drawn on the wrapped screenshots must be distinct.
+
+    The wrapper scripts vary the background and headline placement per
+    slot, but the *words* still come from the per-app headline JSON. Two
+    ways that goes wrong:
+
+      1. Two slots on the same surface carry the same big headline — the
+         wrapped shots read as templated and a listing slot is wasted.
+      2. A tablet headlines file duplicates the phone one.
+         wrap_tablet_screenshots.py falls back to the phone headlines
+         when the tablet file is missing (CLAUDE.md "Things to flag"),
+         so an absent/copied tablet file silently ships phone copy on
+         the tablet listing.
+
+    Exact duplicates block; merely-similar headlines warn.
+    """
+    blocking = []
+    warnings = []
+
+    SURFACES = [
+        ("phone",     "metadata/screenshot_headlines.json"),
+        ("tablet_7",  "metadata/screenshot_headlines_tablet_7.json"),
+        ("tablet_10", "metadata/screenshot_headlines_tablet_10.json"),
+    ]
+
+    def norm(s):
+        return " ".join(str(s or "").upper().split())
+
+    def headline_key(entry):
+        return norm(entry.get("line1", "") + " " + entry.get("line2", ""))
+
+    for app in apps:
+        surfaces = {}
+        for name, relpath in SURFACES:
+            path = os.path.join(BASE, app, relpath)
+            if not os.path.exists(path):
+                continue
+            try:
+                with open(path) as f:
+                    data = json.load(f)
+            except (IOError, ValueError):
+                continue
+            if isinstance(data, list) and data:
+                surfaces[name] = data
+        if "phone" not in surfaces:
+            continue  # headlines not authored yet — nothing to compare
+
+        # 1. within-surface duplicate / near-duplicate headlines
+        for name, entries in surfaces.items():
+            seen_head, seen_sub = {}, {}
+            for i, entry in enumerate(entries):
+                hk = headline_key(entry)
+                sk = norm(entry.get("subtitle", ""))
+                if hk and hk in seen_head:
+                    blocking.append(
+                        f"{app}: {name} headlines — slot {i+1} and slot "
+                        f"{seen_head[hk]+1} both read {hk!r}. Each "
+                        f"wrapped screenshot needs a distinct headline.")
+                elif hk:
+                    seen_head[hk] = i
+                if sk and sk in seen_sub:
+                    blocking.append(
+                        f"{app}: {name} headlines — slot {i+1} and slot "
+                        f"{seen_sub[sk]+1} share the same subtitle. Vary "
+                        f"the supporting line too.")
+                elif sk:
+                    seen_sub[sk] = i
+
+            keys = [headline_key(e) for e in entries]
+            for i in range(len(keys)):
+                for j in range(i + 1, len(keys)):
+                    a = set(keys[i].split())
+                    b = set(keys[j].split())
+                    if not a or not b or keys[i] == keys[j]:
+                        continue
+                    if len(a & b) / len(a | b) >= 0.6:
+                        warnings.append(
+                            f"{app}: {name} headlines — slot {i+1} "
+                            f"({keys[i]!r}) and slot {j+1} ({keys[j]!r}) "
+                            f"are very similar. Reword one.")
+
+        # 2. cross-surface duplicate / near-duplicate headlines.
+        #    Each screenshot surface (phone / tablet_7 / tablet_10) is
+        #    its own store listing, so no headline may be reused on
+        #    another surface — including tablet_7 vs tablet_10. A tablet
+        #    file that is just a copy of the phone file (the fallback
+        #    wrap_tablet_screenshots.py uses when a tablet file is
+        #    missing) shows up here as a pile of shared keys.
+        surf_keys = {name: [headline_key(e) for e in entries]
+                     for name, entries in surfaces.items()}
+        order = [s for s in ("phone", "tablet_7", "tablet_10")
+                 if s in surf_keys]
+        for ai in range(len(order)):
+            for bi in range(ai + 1, len(order)):
+                s1, s2 = order[ai], order[bi]
+                for i, k1 in enumerate(surf_keys[s1]):
+                    if not k1:
+                        continue
+                    for j, k2 in enumerate(surf_keys[s2]):
+                        if not k2:
+                            continue
+                        if k1 == k2:
+                            blocking.append(
+                                f"{app}: {s1} slot {i+1} and {s2} slot "
+                                f"{j+1} share the headline {k1!r}. Each "
+                                f"screenshot surface is a separate store "
+                                f"listing and needs its own headlines.")
+                        else:
+                            a = set(k1.split())
+                            b = set(k2.split())
+                            if a and b and len(a & b) / len(a | b) >= 0.5:
+                                warnings.append(
+                                    f"{app}: {s1} slot {i+1} ({k1!r}) and "
+                                    f"{s2} slot {j+1} ({k2!r}) read very "
+                                    f"similarly across surfaces. Reword one.")
+
+    return blocking, warnings
+
+
 # ---------- main -------------------------------------------------------------
 
 def main():
@@ -1700,6 +1829,7 @@ def main():
     section("code",  "screenshot template reuse",  check_screenshot_template_reuse, apps)
     section("store", "screenshot uniqueness",       check_screenshot_uniqueness, apps)
     section("store", "screenshot completeness",     check_screenshot_completeness, apps)
+    section("store", "screenshot headline similarity", check_screenshot_headline_similarity, apps)
     section("code",  "listing copy uniqueness",    check_listing_copy_uniqueness, apps)
     section("code",  "archetype presence",         check_archetype_presence, apps)
     section("code",  "translations present",       check_translations_present, apps)

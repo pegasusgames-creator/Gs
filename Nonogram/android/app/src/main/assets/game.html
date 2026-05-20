@@ -42,32 +42,39 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 24px;
+    box-sizing: border-box;
   }
+  #screen-game { overflow: hidden !important; padding-bottom: 0; }
   .screen.active { display: flex; }
 
   /* ===== MENU ===== */
   #screen-menu {
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: 28px;
+    padding-bottom: 16px;
     background: radial-gradient(ellipse at center, #ebe4d3 0%, #f5f0e6 100%);
+    overflow: hidden !important;
   }
   .menu-logo {
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 3rem;
+    font-size: 2.4rem;
     font-weight: 700;
-    letter-spacing: -1.5px;
+    letter-spacing: -1px;
     color: var(--accent);
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.2rem;
   }
   .menu-tagline {
     font-family: Georgia, "Times New Roman", serif;
     font-style: italic;
     color: var(--text-muted);
-    font-size: 1rem;
-    margin-bottom: 2.5rem;
+    font-size: 0.92rem;
+    margin-bottom: 0.6rem;
     letter-spacing: 0.2px;
   }
-  .menu-buttons { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; width: 240px; }
+  .menu-buttons { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; width: 240px; padding: 0.8rem 0 1rem; flex: 1; justify-content: space-around; }
   .btn {
     display: flex; align-items: center; justify-content: center;
     padding: 0.85rem 1.5rem;
@@ -160,21 +167,27 @@
     margin-top: 0.6rem;
   }
   .menu-icon-btn {
-    width: 44px;
-    height: 44px;
+    width: 64px;
+    min-height: 60px;
     border-radius: 10px;
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--text-muted);
     display: inline-flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 3px;
     cursor: pointer;
     font-family: inherit;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
     transition: color 0.15s, border-color 0.15s, transform 0.1s;
     outline: none;
-    padding: 0;
+    padding: 6px 4px;
   }
+  .menu-icon-btn .menu-icon-label { font-size: 10px; line-height: 1; }
   .menu-icon-btn:active { transform: scale(0.94); }
   .menu-icon-btn:hover { color: var(--accent); border-color: var(--accent); }
 
@@ -192,15 +205,19 @@
     flex-shrink: 0;
   }
   .header-back {
-    width: 36px; height: 36px;
-    display: flex; align-items: center; justify-content: center;
+    min-width: 36px; height: 36px;
+    padding: 0 12px;
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 4px;
     background: var(--surface2);
     border-radius: 8px;
     border: 1px solid var(--border);
     cursor: pointer;
-    font-size: 1.1rem;
+    font-size: 0.92rem;
+    font-weight: 700;
     color: var(--text);
     transition: border-color 0.2s;
+    white-space: nowrap;
   }
   .header-back:hover { border-color: var(--accent); color: var(--accent); }
   .header-title {
@@ -250,12 +267,12 @@
   .game-footer {
     width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 0.5rem 0.5rem;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 0.5rem 0.4rem calc(0.8rem + env(safe-area-inset-bottom, 0px));
     background: var(--surface);
     border-top: 1px solid var(--border);
-    gap: 0.4rem;
+    gap: 0.35rem;
     flex-shrink: 0;
   }
   .footer-btn {
@@ -643,12 +660,15 @@
     <div class="menu-icon-row">
       <button class="menu-icon-btn" onclick="showScreen('moregames')" aria-label="More Games">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="12" rx="4"/><line x1="7" y1="11" x2="11" y2="11"/><line x1="9" y1="9" x2="9" y2="13"/><circle cx="16" cy="11" r="1" fill="currentColor"/><circle cx="18" cy="13" r="1" fill="currentColor"/></svg>
+        <span class="menu-icon-label">GAMES</span>
       </button>
       <button class="menu-icon-btn" onclick="showScreen('shop')" aria-label="Shop">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16l-1.4 9.5a2 2 0 0 1-2 1.5H7.4a2 2 0 0 1-2-1.5L4 9z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+        <span class="menu-icon-label">SHOP</span>
       </button>
       <button class="menu-icon-btn" onclick="showScreen('settings')" aria-label="Settings">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span class="menu-icon-label">SETTINGS</span>
       </button>
     </div>
   </div>
@@ -657,7 +677,7 @@
 <!-- ========== GAME ========== -->
 <div id="screen-game" class="screen">
   <div class="game-header">
-    <div class="header-back" onclick="backFromGame()">←</div>
+    <div class="header-back" onclick="backFromGame()">← Menu</div>
     <div class="header-title">
       <span id="header-level-text">Level 1</span>
       <span class="timer-display" id="header-timer">0:00</span>
@@ -753,7 +773,7 @@
 <!-- ========== LEVEL SELECT ========== -->
 <div id="screen-levelselect" class="screen">
   <div class="levelselect-header">
-    <div class="header-back" onclick="showScreen('menu')">←</div>
+    <div class="header-back" onclick="showScreen('menu')">← Back</div>
     <div class="levelselect-title">Select Level</div>
     <div style="width:36px"></div>
   </div>
@@ -763,11 +783,35 @@
 <!-- ========== SHOP ========== -->
 <div id="screen-shop" class="screen">
   <div class="shop-header">
-    <div class="header-back" onclick="showScreen('menu')">←</div>
+    <div class="header-back" onclick="showScreen('menu')">← Back</div>
     <div class="levelselect-title">Shop</div>
     <div style="width:36px"></div>
   </div>
   <div class="shop-scroll">
+    <div class="shop-item">
+      <div class="shop-item-icon">🎁</div>
+      <div class="shop-item-info">
+        <div class="shop-item-name">Starter Pack</div>
+        <div class="shop-item-desc">100 coins + 5 hints + 5 lives + Ads Off</div>
+      </div>
+      <button class="shop-item-price" onclick="safePurchase('starter_pack')">$0.99</button>
+    </div>
+    <div class="shop-item">
+      <div class="shop-item-icon">🧩</div>
+      <div class="shop-item-info">
+        <div class="shop-item-name">Season Pass</div>
+        <div class="shop-item-desc">Ad-free + 100 daily coins + all themes + unlimited hints</div>
+      </div>
+      <button class="shop-item-price" onclick="safePurchase('season_pass_monthly')">$4.99/mo</button>
+    </div>
+    <div class="shop-item">
+      <div class="shop-item-icon">🗓️</div>
+      <div class="shop-item-info">
+        <div class="shop-item-name">Weekly Pass</div>
+        <div class="shop-item-desc">Ad-free + 50 daily coins for 7 days</div>
+      </div>
+      <button class="shop-item-price" onclick="safePurchase('weekly_pass')">$1.99/wk</button>
+    </div>
     <div class="shop-item">
       <div class="shop-item-icon">🚫</div>
       <div class="shop-item-info">
@@ -779,18 +823,34 @@
     <div class="shop-item">
       <div class="shop-item-icon">🪙</div>
       <div class="shop-item-info">
-        <div class="shop-item-name">50 Coins</div>
+        <div class="shop-item-name">100 Coins</div>
         <div class="shop-item-desc">Small coin pack</div>
       </div>
       <button class="shop-item-price" onclick="safePurchase('coins_small')">$0.99</button>
     </div>
     <div class="shop-item">
-      <div class="shop-item-icon">🪙</div>
+      <div class="shop-item-icon">💰</div>
       <div class="shop-item-info">
-        <div class="shop-item-name">200 Coins</div>
+        <div class="shop-item-name">400 Coins</div>
+        <div class="shop-item-desc">Medium coin pack</div>
+      </div>
+      <button class="shop-item-price" onclick="safePurchase('coins_medium')">$2.99</button>
+    </div>
+    <div class="shop-item">
+      <div class="shop-item-icon">💰</div>
+      <div class="shop-item-info">
+        <div class="shop-item-name">800 Coins</div>
+        <div class="shop-item-desc">Large coin pack</div>
+      </div>
+      <button class="shop-item-price" onclick="safePurchase('coins_large')">$4.99</button>
+    </div>
+    <div class="shop-item">
+      <div class="shop-item-icon">💎</div>
+      <div class="shop-item-info">
+        <div class="shop-item-name">2000 Coins</div>
         <div class="shop-item-desc">Best value coin pack</div>
       </div>
-      <button class="shop-item-price" onclick="safePurchase('coins_large')">$2.99</button>
+      <button class="shop-item-price" onclick="safePurchase('coins_mega')">$9.99</button>
     </div>
     <div class="shop-item">
       <div class="shop-item-icon">💡</div>
@@ -809,15 +869,15 @@
       <button class="shop-item-price" onclick="safePurchase('five_lives')">$0.99</button>
     </div>
     <div class="shop-item">
-      <div class="shop-item-icon">♾</div>
+      <div class="shop-item-icon">⏱️</div>
       <div class="shop-item-info">
         <div class="shop-item-name">1 Hour Unlimited Lives</div>
         <div class="shop-item-desc">Never lose a life for 1 hour</div>
       </div>
-      <button class="shop-item-price" onclick="safePurchase('unlimited_lives_1h')">$0.99</button>
+      <button class="shop-item-price" onclick="safePurchase('unlimited_lives_1h')">$1.99</button>
     </div>
     <div class="shop-item">
-      <div class="shop-item-icon">👑</div>
+      <div class="shop-item-icon">♾</div>
       <div class="shop-item-info">
         <div class="shop-item-name">Unlimited Lives Forever</div>
         <div class="shop-item-desc">Never worry about lives again</div>
@@ -830,23 +890,19 @@
 <!-- ========== MORE GAMES ========== -->
 <div id="screen-moregames" class="screen">
   <div class="shop-header">
-    <div class="header-back" onclick="showScreen('menu')">←</div>
+    <div class="header-back" onclick="showScreen('menu')">← Back</div>
     <div class="levelselect-title">More Games</div>
     <div style="width:36px"></div>
   </div>
   <div class="shop-scroll">
-    <div style="padding:48px 24px;text-align:center;color:var(--text-muted);background:var(--surface);border:1.5px dashed var(--border);border-radius:18px;margin:24px 16px;">
-      <div style="font-size:48px;margin-bottom:12px">🧩</div>
-      <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px">More games coming soon</div>
-      <div style="font-size:13px;line-height:1.5">We're polishing more cozy puzzles to share with you.<br>Check back after the next update.</div>
-    </div>
+    <div id="moreGamesGrid" style="padding:16px;display:flex;flex-direction:column;gap:12px"></div>
   </div>
 </div>
 
 <!-- ========== THEMES ========== -->
 <div id="screen-themes" class="screen">
   <div class="shop-header">
-    <div class="header-back" onclick="showScreen('menu')">←</div>
+    <div class="header-back" onclick="showScreen('menu')">← Back</div>
     <div class="levelselect-title">Themes</div>
     <div style="width:36px"></div>
   </div>
@@ -856,7 +912,7 @@
 <!-- ========== STATS ========== -->
 <div id="screen-stats" class="screen">
   <div class="shop-header">
-    <div class="header-back" onclick="showScreen('menu')">←</div>
+    <div class="header-back" onclick="showScreen('menu')">← Back</div>
     <div class="levelselect-title">Statistics</div>
     <div style="width:36px"></div>
   </div>
@@ -866,7 +922,7 @@
 <!-- ========== MISSIONS ========== -->
 <div id="screen-missions" class="screen">
   <div class="shop-header">
-    <div class="header-back" onclick="showScreen('menu')">←</div>
+    <div class="header-back" onclick="showScreen('menu')">← Back</div>
     <div class="levelselect-title">Missions</div>
     <div style="width:36px"></div>
   </div>
@@ -876,7 +932,7 @@
 <!-- ========== SETTINGS ========== -->
 <div id="screen-settings" class="screen">
   <div class="settings-header">
-    <div class="header-back" onclick="showScreen('menu')">←</div>
+    <div class="header-back" onclick="showScreen('menu')">← Back</div>
     <div class="levelselect-title" style="flex:1;text-align:center">Settings</div>
     <div style="width:36px"></div>
   </div>
@@ -994,11 +1050,11 @@ window.onPurchaseComplete = function(productId) {
   } else if (productId === 'coins_small') {
     state.coins += 100;
   } else if (productId === 'coins_large') {
-    state.coins += 500;
+    state.coins += 800;
   } else if (productId === 'coins_medium') {
-    state.coins += 600;
+    state.coins += 400;
   } else if (productId === 'coins_mega') {
-    state.coins += 1400;
+    state.coins += 2000;
   } else if (productId === 'hint_pack') {
     state.hintPack += 10;
   } else if (productId === 'starter_pack') {
@@ -2281,12 +2337,12 @@ function nonoBoosterChooser(title, emoji, desc, coinCost, adType, onGrant) {
 function revealCell() {
   playClick();
   if (!currentLevelData) return;
-  nonoBoosterChooser('Reveal Cell', '🔍', 'Fills one provably-correct cell for you.', 100, 'reveal_cell', function(){ executeHint(); });
+  nonoBoosterChooser('Reveal Cell', '🔍', 'Fills one provably-correct cell for you.', 200, 'reveal_cell', function(){ executeHint(); });
 }
 function revealRow() {
   playClick();
   if (!currentLevelData) return;
-  nonoBoosterChooser('Reveal Row', '📏', 'Solves an entire row for you.', 200, 'reveal_row', function(){
+  nonoBoosterChooser('Reveal Row', '📏', 'Solves an entire row for you.', 400, 'reveal_row', function(){
     var solution = currentLevelData.solution, size = currentLevelData.size;
     var bestRow = 0, bestWrong = -1;
     for (var r = 0; r < size; r++) { var w = 0; for (var c = 0; c < size; c++) { var i = r*size+c; if ((currentGrid[i] === 1 ? 1 : 0) !== solution[i]) w++; } if (w > bestWrong) { bestWrong = w; bestRow = r; } }
@@ -3963,23 +4019,9 @@ function getWeeklyLevels(){
 }
 
 function updateWeeklyBanner(){
-  var b=document.getElementById('weeklyEventBanner');
-  if(!b) return;
-  var week=getWeekNum();
-  var count=parseInt(G.flag('xweekly_'+week)||'0');
-  var claimed=G.flag('xweekly_claimed_'+week);
-  if(claimed){
-    b.textContent='✅ Weekly Challenge Done! Come back next week';
-    b.style.opacity='0.6';
-    b.style.cursor='default';
-    b.onclick=null;
-  } else {
-    var levels=getWeeklyLevels();
-    b.innerHTML='⚡ Weekly: Play any 5 levels · '+count+'/5 · Earn 50 🪙';
-    b.onclick=function(){
-      xToast('Play any 5 levels this week to earn 50 🪙!');
-    };
-  }
+  // Legacy weekly-event content superseded by the xTournamentBanner
+  // synthetic-bracket strip. No-op to avoid duplicate menu rows.
+  return;
 }
 
 function injectWeeklyBanner(){
@@ -4092,12 +4134,17 @@ function injectDragonTheme(){
 
 // ── SEASON PASS IN SHOP ───────────────────────────────────────────
 function injectSeasonPassShop(){
-  document.querySelectorAll('.shop-scroll,.shop-list').forEach(function(scroll){
+  // Scope to the actual shop screen so we don't inject into More Games etc.
+  var shopRoot = document.getElementById('screen-shop') || document.getElementById('shopScreen');
+  if (!shopRoot) return;
+  // Skip injection if a static Season Pass card already exists.
+  if (shopRoot.querySelector('[onclick*="season_pass_monthly"]')) return;
+  shopRoot.querySelectorAll('.shop-scroll,.shop-list,.shop-grid').forEach(function(scroll){
     if(scroll.querySelector('#x-season-pass-item')) return;
     var div=document.createElement('div');
     div.id='x-season-pass-item';
     div.className='shop-item';
-    var btnTxt=isSeasonActive()?'✅ Active':'$1.99/month';
+    var btnTxt=isSeasonActive()?'✅ Active':'$4.99/month';
     div.innerHTML=
       '<div class="shop-item-icon">🌟</div>'+
       '<div class="shop-item-info x-season-badge-target">'+
@@ -4286,7 +4333,7 @@ window.addEventListener('load',function(){
   function injectFree(){
     var host=document.querySelector('#screen-menu .menu-buttons'); if(!host||$('xFreeCoins')) return;
     var b=document.createElement('button'); b.id='xFreeCoins'; b.type='button';
-    b.style.cssText='margin-top:10px;background:linear-gradient(135deg,#d29922,#bb8009);color:#1c1300;border:none;border-radius:12px;padding:9px 14px;font-weight:700;font-size:0.9rem;cursor:pointer;width:100%';
+    b.style.cssText='margin-top:10px;background:linear-gradient(135deg,#d29922,#bb8009);color:#1c1300;border:none;border-radius:12px;padding:9px 14px;font-weight:700;font-size:0.9rem;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px;text-align:center;';
     b.onclick=claimFree; host.appendChild(b); refreshFree();
   }
   function refreshFree(){ var b=$('xFreeCoins'); if(!b) return; var r=readyAt()-Date.now(); if(r>0){ b.textContent='🪙 Free Coins in '+fmt(r); b.disabled=true; b.style.opacity='0.55'; } else { b.textContent='🪙 Free Coins (+'+AMT+')'; b.disabled=false; b.style.opacity='1'; } }
@@ -4374,6 +4421,32 @@ window.addEventListener('load',function(){
     if(!b){ var anchor=document.querySelector('#screen-menu .menu-buttons'); if(!anchor) return; b=document.createElement('div'); b.id='xTournamentBanner'; b.style.cssText='margin-top:8px;background:rgba(255,255,255,0.06);border-radius:10px;padding:6px 10px;text-align:center;color:#e6edf3;font-size:0.8rem'; anchor.insertBefore(b, anchor.firstChild.nextSibling); }
     b.innerHTML='🏆 This week — Level '+(d.best||1)+' · Top '+p+'% <span style="opacity:.7">· resets Monday</span>'; b.style.display='';
   }
+  function injectPassPromo(){
+    var anchor=document.querySelector('#screen-menu .menu-buttons'); if(!anchor) return;
+    var s=S(); if(!s) return;
+    var existing=$('xPassPromo'); if(existing) existing.remove();
+    var seasonActive=(typeof isSeasonActive==='function')&&isSeasonActive();
+    var weeklyActive=(typeof isWeeklyActive==='function')&&isWeeklyActive();
+    var box=document.createElement('div');
+    box.id='xPassPromo';
+    box.style.cssText='margin-top:10px;display:flex;gap:8px;width:100%;max-width:300px;padding:0 4px;box-sizing:border-box;';
+    function card(emoji,label,price,active,sku,bg,fg){
+      return '<button onclick="xBuyPass(\''+sku+'\')" style="flex:1;background:'+bg+';border:1.5px solid '+fg+';border-radius:10px;padding:8px 4px;cursor:pointer;text-align:center;color:'+fg+';font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.1;">'+
+        '<div style="font-size:20px;line-height:1">'+emoji+'</div>'+
+        '<div style="font-size:10px;font-weight:800;letter-spacing:0.3px">'+(active?'✓ ACTIVE':label)+'</div>'+
+        '<div style="font-size:9px;opacity:0.85;font-weight:600;min-height:11px">'+(active?'':price)+'</div></button>';
+    }
+    box.innerHTML=
+      card('🧩','SEASON PASS','$4.99/mo',seasonActive,'season_pass_monthly','rgba(216,82,82,0.14)','#d85252')+
+      card('🗓️','WEEKLY PASS','$1.99/wk',weeklyActive,'weekly_pass','rgba(255,167,38,0.14)','#ffa726');
+    anchor.insertBefore(box, anchor.firstChild.nextSibling);
+  }
+  window.xBuyPass=function(sku){
+    if(sku==='season_pass_monthly' && (typeof isSeasonActive==='function') && isSeasonActive()){ toast('Season Pass already active!'); return; }
+    if(sku==='weekly_pass' && (typeof isWeeklyActive==='function') && isWeeklyActive()){ toast('Weekly Pass already active!'); return; }
+    if(window.Android&&window.Android.purchase) window.Android.purchase(sku);
+    else if(typeof showScreen==='function') showScreen('shop');
+  };
 
   // ── D2: seasonal events ──
   var SEASONAL=[ {month:10,name:'Halloween',id:'halloween',colors:['#ff6600','#9d4dbb','#1a0a1a','#3a1d3a','#000000']},{month:12,name:'Winter',id:'winter',colors:['#a8d8ea','#ffffff','#e8f4f8','#cfe8f0','#4a90e2']},{month:2,name:'Spring',id:'spring',colors:['#ffb6c1','#a7d49b','#ffe066','#fdf0d5','#7bb661']} ];
@@ -4410,8 +4483,8 @@ window.addEventListener('load',function(){
   // ── daily pass bonus on menu ──
   function passDaily(){
     var s=S(); if(!s) return; var t=todayStr();
-    if(s.seasonPassUntil&&Date.now()<s.seasonPassUntil&&s.lastSeasonGrantDate!==t){ s.lastSeasonGrantDate=t; s.coins=(s.coins||0)+50; refresh(); toast('🧩 Season Pass bonus: +50 coins!'); }
-    if(s.weeklyPassUntil&&Date.now()<s.weeklyPassUntil&&s.lastWeeklyGrantDate!==t){ s.lastWeeklyGrantDate=t; s.coins=(s.coins||0)+100; refresh(); toast('🗓️ Weekly Pass bonus: +100 coins!'); }
+    if(s.seasonPassUntil&&Date.now()<s.seasonPassUntil&&s.lastSeasonGrantDate!==t){ s.lastSeasonGrantDate=t; s.coins=(s.coins||0)+100; refresh(); toast('🧩 Season Pass bonus: +100 coins!'); }
+    if(s.weeklyPassUntil&&Date.now()<s.weeklyPassUntil&&s.lastWeeklyGrantDate!==t){ s.lastWeeklyGrantDate=t; s.coins=(s.coins||0)+50; refresh(); toast('🗓️ Weekly Pass bonus: +50 coins!'); }
   }
 
   function boot(){
@@ -4423,14 +4496,129 @@ window.addEventListener('load',function(){
     try{ injectSettings(); }catch(e){}
     try{ injectNoLivesCTAs(); }catch(e){}
     try{ updateTournamentBanner(); }catch(e){}
+    try{ injectPassPromo(); }catch(e){}
     try{ hideLegacy(); ladderTick(); passDaily(); }catch(e){}
     if(typeof showScreen==='function' && !window.__xNonoWrapped){
       var orig=showScreen; window.__xNonoWrapped=true;
-      window.showScreen=function(id){ orig(id); try{ if(id==='menu'||id==='screen-menu'){ injectFree(); refreshFree(); injectStrip(); updateTournamentBanner(); passDaily(); } if(id==='settings'||id==='screen-settings'){ injectSettings(); } if(id==='game'||id==='screen-game'){ injectBoosterBtns(); injectNoLivesCTAs(); } }catch(e){} };
+      window.showScreen=function(id){ orig(id); try{ if(id==='menu'||id==='screen-menu'){ injectFree(); refreshFree(); injectStrip(); updateTournamentBanner(); injectPassPromo(); passDaily(); } if(id==='settings'||id==='screen-settings'){ injectSettings(); } if(id==='game'||id==='screen-game'){ injectBoosterBtns(); injectNoLivesCTAs(); } }catch(e){} };
     }
   }
   if(document.readyState==='loading') window.addEventListener('DOMContentLoaded', function(){ setTimeout(boot,1100); });
   else setTimeout(boot,1100);
+})();
+</script>
+
+<!-- ════════ CROSS-PROMO — install-detected coin rewards (200 🪙 per install, one-time).
+     Renders the More Games panel from PROMO_GAMES and auto-grants on app open.
+     Java bridge: window.Android.isAppInstalled(pkg). ════════ -->
+<script>
+(function(){
+  var PROMO_GAMES = [
+    { id:'puzzle2048', pkg:'com.pegasusgames.puzzle2048',      emoji:'🔢', name:'2048 Puzzle',  desc:'Merge tiles to reach 2048!',         installReward:200 },
+    { id:'watersort',  pkg:'com.pegasusgames.watersortpuzzle', emoji:'💧', name:'Water Sort',   desc:'Pour colored water into flasks!',    installReward:200 }
+  ];
+  function xCpKey(pkg){ return 'xCrossPromoRewarded_'+pkg; }
+  function xCpRewarded(pkg){ return localStorage.getItem(xCpKey(pkg))==='1'; }
+  function isInst(pkg){
+    try { return !!(window.Android && typeof window.Android.isAppInstalled==='function' && window.Android.isAppInstalled(pkg)); }
+    catch(e){ return false; }
+  }
+  function S(){ return (typeof state!=='undefined')?state:null; }
+  function toast(m){ if(typeof showToast==='function') showToast(m); }
+  function persistAndRefresh(){
+    try{ if(typeof saveState==='function') saveState(); }catch(e){}
+    try{ if(typeof updateUI==='function') updateUI(); }catch(e){}
+    try{ if(typeof updateMenuUI==='function') updateMenuUI(); }catch(e){}
+  }
+
+  function renderMoreGames(){
+    var grid = document.getElementById('moreGamesGrid'); if(!grid) return;
+    grid.innerHTML = '';
+    PROMO_GAMES.forEach(function(g){
+      var installed = isInst(g.pkg);
+      var rewarded  = xCpRewarded(g.pkg);
+      var btnLabel, btnDisabled = false, btnBg = '#f7c948', btnColor = '#3a2e0a';
+      if (rewarded)      { btnLabel = '✅ +'+g.installReward+' Claimed'; btnDisabled = true; btnBg = '#2a2a2a'; btnColor = '#9aa0a6'; }
+      else if (installed){ btnLabel = '🎁 Claim +'+g.installReward+' 🪙'; }
+      else               { btnLabel = '📥 Install — +'+g.installReward+' 🪙'; }
+      var card = document.createElement('div');
+      card.style.cssText = 'display:flex;align-items:center;gap:12px;padding:14px;background:var(--surface,#1a1a1a);border:1.5px solid var(--border,#333);border-radius:14px';
+      card.innerHTML =
+        '<div style="font-size:42px;line-height:1;flex:none">'+g.emoji+'</div>'+
+        '<div style="flex:1;min-width:0">'+
+          '<div style="font-size:15px;font-weight:800;color:var(--text,#fff);margin-bottom:4px">'+g.name+'</div>'+
+          '<div style="font-size:12px;color:var(--text-muted,#9aa0a6);line-height:1.4">'+g.desc+'</div>'+
+        '</div>'+
+        '<button '+(btnDisabled?'disabled ':'')+'style="flex:none;background:'+btnBg+';color:'+btnColor+';border:none;border-radius:10px;padding:10px 12px;font-weight:800;font-size:12px;cursor:'+(btnDisabled?'default':'pointer')+';max-width:130px;white-space:normal;line-height:1.2">'+btnLabel+'</button>';
+      if (!btnDisabled) {
+        card.querySelector('button').addEventListener('click', function(){ claimPromo(g.id, g.pkg); });
+      }
+      grid.appendChild(card);
+    });
+  }
+
+  function claimPromo(id, pkg){
+    var game = PROMO_GAMES.find(function(g){ return g.id===id; });
+    if (!game) return;
+    if (isInst(pkg) && !xCpRewarded(pkg)) {
+      localStorage.setItem(xCpKey(pkg), '1');
+      var s = S(); if (s) { s.coins = (s.coins||0) + game.installReward; }
+      persistAndRefresh();
+      toast('+'+game.installReward+' 🪙 Cross-promo reward!');
+      renderMoreGames();
+      return;
+    }
+    var url = 'https://play.google.com/store/apps/details?id=' + pkg;
+    if (window.Android && typeof window.Android.openUrl === 'function') {
+      try { window.Android.openUrl(url); } catch(e) { window.open(url, '_blank'); }
+    } else {
+      window.open(url, '_blank');
+    }
+  }
+
+  function checkCrossPromoInstalls(){
+    if (!(window.Android && typeof window.Android.isAppInstalled==='function')) return;
+    var s = S(); if (!s) return;
+    var granted = 0;
+    PROMO_GAMES.forEach(function(g){
+      if (!g.installReward) return;
+      if (xCpRewarded(g.pkg)) return;
+      if (!isInst(g.pkg)) return;
+      localStorage.setItem(xCpKey(g.pkg), '1');
+      s.coins = (s.coins||0) + g.installReward;
+      granted += g.installReward;
+    });
+    if (granted > 0) {
+      persistAndRefresh();
+      toast('🎉 +'+granted+' 🪙 for installing our other games!');
+      renderMoreGames();
+    }
+  }
+
+  // Expose for capture/debug.
+  window.renderMoreGames = renderMoreGames;
+  window.claimPromo = claimPromo;
+  window.checkCrossPromoInstalls = checkCrossPromoInstalls;
+
+  function boot(){
+    try { renderMoreGames(); } catch(e) {}
+    try { checkCrossPromoInstalls(); } catch(e) {}
+    if (typeof showScreen === 'function' && !window.__xNonoCpWrapped) {
+      var orig = window.showScreen;
+      window.__xNonoCpWrapped = true;
+      window.showScreen = function(id){
+        orig(id);
+        try { if (id==='moregames' || id==='screen-moregames') { renderMoreGames(); checkCrossPromoInstalls(); } } catch(e){}
+      };
+    }
+    document.addEventListener('visibilitychange', function(){
+      if (document.visibilityState === 'visible') {
+        try { checkCrossPromoInstalls(); } catch(e){}
+      }
+    });
+  }
+  if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 1200); });
+  else setTimeout(boot, 1200);
 })();
 </script>
 

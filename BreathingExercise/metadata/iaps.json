@@ -14,9 +14,9 @@
     },
     {
       "id": "coins_large",
-      "title": "500 Coins",
-      "price_usd": 2.99,
-      "description": "Adds 500 coins to your wallet. Best value coin pack — spend on hints, extra moves, and unlocking new themes."
+      "title": "800 Coins",
+      "price_usd": 4.99,
+      "description": "Adds 800 coins to your wallet. Great value coin pack — spend on hints, extra moves, and unlocking new themes."
     },
     {
       "id": "five_lives",
@@ -53,10 +53,10 @@
     {
       "id": "season_pass_monthly",
       "title": "Season Pass",
-      "price_usd": 1.99,
+      "price_usd": 4.99,
       "billing_period": "P1M",
       "grace_period_days": 3,
-      "description": "Monthly pass: ad-free play, +50 daily coins, exclusive themes, and unlimited hints. Cancel anytime in Google Play."
+      "description": "Monthly pass: ad-free play, +100 coins every day, all themes unlocked, and unlimited boosters. Cancel anytime in Google Play."
     }
   ]
 }

@@ -21,7 +21,9 @@ body {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 #gameContainer { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
-.screen { position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px); display: none; flex-direction: column; align-items: center; overflow: hidden; }
+.screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; overflow-y: auto; overflow-x: hidden; padding-bottom: 24px; box-sizing: border-box; }
+#gameScreen { overflow: hidden !important; padding-bottom: 0; }
+body.has-html-ad .screen { height: calc(100% - 60px); }
 .screen.active { display: flex; }
 
 /* ===== MENU SCREEN ===== */
@@ -29,6 +31,7 @@ body {
   background: linear-gradient(160deg, #1a1a18 0%, #2c2b27 50%, #1a1a18 100%);
   justify-content: flex-start;
   padding-top: 0;
+  overflow: hidden !important;
 }
 .menu-header {
   width: 100%; padding: 16px 20px 10px;
@@ -51,42 +54,43 @@ body {
   width: 42px; height: 42px; font-size: 20px; cursor: pointer;
   color: white; display: flex; align-items: center; justify-content: center;
 }
-.game-title { text-align: center; padding: 10px 0 16px; }
+.game-title { text-align: center; padding: 4px 0 6px; }
 .game-title h1 {
-  font-size: clamp(48px, 13vw, 80px); font-weight: 800;
+  font-size: clamp(32px, 8vw, 52px); font-weight: 800;
   background: linear-gradient(135deg, #edc22e, #f2b179, #edc22e);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text; line-height: 1.0;
+  margin: 0;
   text-shadow: none;
   filter: drop-shadow(0 2px 12px rgba(237,194,46,0.4));
 }
-.game-title p { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 4px; }
+.game-title p { color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 2px; }
 
 /* Mini grid preview */
-.mini-grid-wrap { margin: 0 0 16px; }
+.mini-grid-wrap { margin: 0 0 6px; }
 .mini-grid {
   display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 5px; background: #2c2b27; border-radius: 10px;
-  padding: 8px; width: 180px;
+  gap: 4px; background: #2c2b27; border-radius: 10px;
+  padding: 6px; width: 140px;
 }
 .mini-cell {
-  width: 36px; height: 36px; border-radius: 5px;
+  width: 28px; height: 28px; border-radius: 4px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 700; color: white;
+  font-size: 9px; font-weight: 700; color: white;
 }
 
 .menu-scores {
-  display: flex; gap: 20px; margin-bottom: 16px;
+  display: flex; gap: 14px; margin-bottom: 8px;
 }
 .score-box {
   background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px; padding: 8px 20px; text-align: center; min-width: 100px;
+  border-radius: 10px; padding: 5px 16px; text-align: center; min-width: 90px;
 }
-.score-box .label { color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-.score-box .value { color: white; font-size: 22px; font-weight: 800; }
+.score-box .label { color: rgba(255,255,255,0.5); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.score-box .value { color: white; font-size: 18px; font-weight: 800; }
 
-.menu-buttons { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 300px; padding: 0 20px; align-items: center; }
-.btn { border: none; border-radius: 14px; padding: 14px 28px; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.15s; width: 100%; }
+.menu-buttons { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px; padding: 12px 16px 18px; align-items: center; flex: 1; justify-content: space-around; }
+.btn { border: none; border-radius: 14px; padding: 11px 24px; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.15s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; text-align: center; }
 .btn:active { transform: scale(0.96); }
 .btn.btn-pressed { transform: scale(0.96); }
 .game-btn.btn-pressed { transform: scale(0.94); }
@@ -96,13 +100,14 @@ body {
 .btn-gold { background: linear-gradient(135deg, #ffd700, #f39c12); color: #1a1a18; box-shadow: 0 6px 20px rgba(255,215,0,0.3); }
 .btn-danger { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
 /* §3.1 menu hierarchy: V6 ARCADE CAPS + T8 brutalist — sharp tiles, no rounded edges. */
-.menu-tile-primary { width: 280px; padding: 20px 0; border: 2px solid #edc22e; border-radius: 0; background: #edc22e; color: #1a1a18; font-family: 'Poppins', system-ui, sans-serif; font-size: 1.25rem; font-weight: 900; letter-spacing: 4px; cursor: pointer; box-shadow: 0 6px 0 #b88e0e; transition: transform 0.08s, box-shadow 0.08s; }
+.menu-tile-primary { width: 280px; padding: 14px 0; border: 2px solid #edc22e; border-radius: 0; background: #edc22e; color: #1a1a18; font-family: 'Poppins', system-ui, sans-serif; font-size: 1.1rem; font-weight: 900; letter-spacing: 4px; cursor: pointer; box-shadow: 0 6px 0 #b88e0e; transition: transform 0.08s, box-shadow 0.08s; display: flex; align-items: center; justify-content: center; text-align: center; }
 .menu-tile-primary:active { transform: translateY(3px); box-shadow: 0 3px 0 #b88e0e; }
-.menu-tile-row { display: flex; gap: 10px; width: 280px; margin-top: 12px; }
-.menu-tile-pair { flex: 1; padding: 14px 0; border: 2px solid rgba(255,255,255,0.18); border-radius: 0; background: #1a1a18; color: #f3eecf; font-family: 'Poppins', system-ui, sans-serif; font-size: 0.92rem; font-weight: 800; letter-spacing: 2.5px; cursor: pointer; transition: border-color 0.1s, color 0.1s, transform 0.08s; }
+.menu-tile-row { display: flex; gap: 10px; width: 280px; margin-top: 6px; }
+.menu-tile-pair { flex: 1; padding: 10px 0; border: 2px solid rgba(255,255,255,0.18); border-radius: 0; background: #1a1a18; color: #f3eecf; font-family: 'Poppins', system-ui, sans-serif; font-size: 0.88rem; font-weight: 800; letter-spacing: 2.5px; cursor: pointer; transition: border-color 0.1s, color 0.1s, transform 0.08s; display: flex; align-items: center; justify-content: center; text-align: center; }
 .menu-tile-pair:active { transform: scale(0.97); border-color: #edc22e; color: #edc22e; }
-.menu-icon-row { display: flex; gap: 14px; margin-top: 16px; }
-.menu-icon-btn { width: 48px; height: 48px; border-radius: 0; border: 2px solid rgba(255,255,255,0.18); background: #1a1a18; color: #f3eecf; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; transition: color 0.1s, border-color 0.1s, transform 0.08s; }
+.menu-icon-row { display: flex; gap: 12px; margin-top: 8px; }
+.menu-icon-btn { width: 60px; height: 60px; border-radius: 0; border: 2px solid rgba(255,255,255,0.18); background: #1a1a18; color: #f3eecf; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; padding: 6px 4px; transition: color 0.1s, border-color 0.1s, transform 0.08s; font-family: inherit; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; }
+.menu-icon-btn .menu-icon-label { font-size: 10px; line-height: 1; }
 .menu-icon-btn:hover, .menu-icon-btn:active { border-color: #edc22e; color: #edc22e; }
 .menu-icon-btn:active { transform: scale(0.94); }
 
@@ -129,15 +134,18 @@ body {
 
 #gridCanvas { flex: 1; width: 100%; touch-action: none; display: block; }
 .game-footer {
-  width: 100%; padding: 8px 16px 10px;
-  display: flex; justify-content: space-between; align-items: center;
-  background: rgba(0,0,0,0.2); flex-shrink: 0;
+  width: 100%;
+  padding: 10px 6px calc(20px + env(safe-area-inset-bottom, 0px));
+  display: flex; justify-content: space-between; align-items: stretch;
+  gap: 4px;
+  background: rgba(0,0,0,0.25); flex-shrink: 0;
 }
 .game-btn {
   background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 12px; padding: 10px 18px; color: white;
-  font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600;
-  cursor: pointer; display: flex; align-items: center; gap: 6px;
+  border-radius: 12px; padding: 8px 4px; color: white;
+  font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600;
+  cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  flex: 1; min-width: 0; text-align: center; line-height: 1.15;
 }
 .game-btn:active { transform: scale(0.94); }
 .game-btn.undo-btn { background: rgba(237,194,46,0.12); border-color: rgba(237,194,46,0.35); color: #edc22e; }
@@ -169,7 +177,8 @@ body {
   border-radius: 16px; padding: 16px; margin-bottom: 16px; text-align: center;
 }
 .daily-streak h3 { color: #f65e3b; font-size: 16px; font-weight: 700; }
-.daily-streak .streak-num { font-size: 40px; font-weight: 800; color: white; }
+.daily-streak .streak-num { font-size: 40px; font-weight: 800; color: white; margin: 4px 0; }
+.daily-streak p { color: rgba(255,255,255,0.6); font-size: 13px; margin: 0; }
 
 /* ===== SHOP SCREEN ===== */
 #shopScreen { background: #1a1a18; }
@@ -264,7 +273,7 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
 #admob-banner {
   position: fixed; bottom: 0; left: 0; right: 0; height: 60px;
   background: rgba(0,0,0,0.4); border-top: 1px solid rgba(255,255,255,0.08);
-  display: flex; align-items: center; justify-content: center; z-index: 200;
+  display: none; align-items: center; justify-content: center; z-index: 200;
 }
 #admob-banner span { color: rgba(255,255,255,0.25); font-size: 11px; }
 
@@ -335,12 +344,15 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
       <div class="menu-icon-row">
         <button class="menu-icon-btn" onclick="Game.showScreen('shopScreen')" aria-label="Shop">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M4 8h16l-1 11H5L4 8z"/><path d="M9 8V5h6v3"/></svg>
+          <span class="menu-icon-label">SHOP</span>
         </button>
         <button class="menu-icon-btn" onclick="Game.showScreen('settingsScreen')" aria-label="Settings">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="9" y="9" width="6" height="6"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2 2M16.4 16.4l2 2M5.6 18.4l2-2M16.4 7.6l2-2"/></svg>
+          <span class="menu-icon-label">SETTINGS</span>
         </button>
         <button class="menu-icon-btn" onclick="Game.showScreen('moreGamesScreen')" aria-label="More games">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          <span class="menu-icon-label">GAMES</span>
         </button>
       </div>
     </div>
@@ -413,12 +425,36 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
     </div>
     <div class="shop-grid">
       <div class="shop-card">
+        <div class="shop-icon">🎁</div>
+        <div class="shop-info">
+          <h3>Starter Pack</h3>
+          <p>100 coins + 5 undos + 5 lives + Ads Off</p>
+        </div>
+        <button class="shop-price-btn" onclick="Game.purchase('starter_pack')">$0.99</button>
+      </div>
+      <div class="shop-card">
+        <div class="shop-icon">🌟</div>
+        <div class="shop-info">
+          <h3>Season Pass</h3>
+          <p>Ad-free + 100 daily coins + all themes + unlimited undos</p>
+        </div>
+        <button class="shop-price-btn" onclick="Game.purchase('season_pass_monthly')">$4.99/mo</button>
+      </div>
+      <div class="shop-card">
+        <div class="shop-icon">🗓️</div>
+        <div class="shop-info">
+          <h3>Weekly Pass</h3>
+          <p>Ad-free + 50 daily coins for 7 days</p>
+        </div>
+        <button class="shop-price-btn" onclick="Game.purchase('weekly_pass')">$1.99/wk</button>
+      </div>
+      <div class="shop-card">
         <div class="shop-icon">🚫</div>
         <div class="shop-info">
           <h3>Remove Ads</h3>
           <p>Enjoy 2048 ad-free forever</p>
         </div>
-        <button class="shop-price-btn" id="btnRemoveAds" onclick="Game.purchase('remove_ads')">$1.99</button>
+        <button class="shop-price-btn" id="btnRemoveAds" onclick="Game.purchase('remove_ads')">$2.99</button>
       </div>
       <div class="shop-card">
         <div class="shop-icon">🪙</div>
@@ -431,10 +467,26 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
       <div class="shop-card">
         <div class="shop-icon">💰</div>
         <div class="shop-info">
-          <h3>500 Coins</h3>
+          <h3>400 Coins</h3>
+          <p>Medium coin pack</p>
+        </div>
+        <button class="shop-price-btn" onclick="Game.purchase('coins_medium')">$2.99</button>
+      </div>
+      <div class="shop-card">
+        <div class="shop-icon">💰</div>
+        <div class="shop-info">
+          <h3>800 Coins</h3>
+          <p>Large coin pack</p>
+        </div>
+        <button class="shop-price-btn" onclick="Game.purchase('coins_large')">$4.99</button>
+      </div>
+      <div class="shop-card">
+        <div class="shop-icon">💎</div>
+        <div class="shop-info">
+          <h3>2000 Coins</h3>
           <p>Best value coin pack</p>
         </div>
-        <button class="shop-price-btn" onclick="Game.purchase('coins_large')">$3.99</button>
+        <button class="shop-price-btn" onclick="Game.purchase('coins_mega')">$9.99</button>
       </div>
       <div class="shop-card">
         <div class="shop-icon">↩</div>
@@ -453,15 +505,15 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
         <button class="shop-price-btn" onclick="Game.purchase('five_lives')">$0.99</button>
       </div>
       <div class="shop-card">
-        <div class="shop-icon">♾️</div>
+        <div class="shop-icon">⏱️</div>
         <div class="shop-info">
           <h3>Unlimited Lives (1h)</h3>
           <p>Play freely for 1 hour</p>
         </div>
-        <button class="shop-price-btn" onclick="Game.purchase('unlimited_lives_1h')">$1.49</button>
+        <button class="shop-price-btn" onclick="Game.purchase('unlimited_lives_1h')">$1.99</button>
       </div>
       <div class="shop-card">
-        <div class="shop-icon">👑</div>
+        <div class="shop-icon">♾️</div>
         <div class="shop-info">
           <h3>Unlimited Lives Forever</h3>
           <p>Never run out of lives again</p>
@@ -1258,10 +1310,11 @@ let isDailyMode = false;
 const PROMO_GAMES = [
   {
     id: 'watersort',
-    pkg: 'com.pegasusgames.watersort',
+    pkg: 'com.pegasusgames.watersortpuzzle',
     icon: '💧',
     title: 'Water Sort',
     desc: 'Pour colored water into flasks!',
+    installReward: 200,
   },
   {
     id: 'nonogram',
@@ -1269,55 +1322,75 @@ const PROMO_GAMES = [
     icon: '🖼️',
     title: 'Nonogram',
     desc: 'Solve pixel art grid puzzles!',
-  },
-  {
-    id: 'pipeconnect',
-    pkg: 'com.pegasusgames.pipeconnect',
-    icon: '🔧',
-    title: 'Pipe Connect',
-    desc: 'Connect matching colored pipes!',
-  },
-  {
-    id: 'unblock',
-    pkg: 'com.pegasusgames.unblock',
-    icon: '🧩',
-    title: 'Unblock Puzzle',
-    desc: 'Slide blocks to free the red piece!',
+    installReward: 200,
   },
 ];
 
 function promoKey(id) { return 'promo_claimed_' + id; }
 function isPromoClaimed(id) { return !!localStorage.getItem(promoKey(id)); }
 
+function xCrossPromoKey(pkg) { return 'xCrossPromoRewarded_' + pkg; }
+function xCrossPromoRewarded(pkg) { return localStorage.getItem(xCrossPromoKey(pkg)) === '1'; }
+function xIsInstalled(pkg) {
+  try { return !!(window.Android && typeof window.Android.isAppInstalled === 'function' && window.Android.isAppInstalled(pkg)); }
+  catch (e) { return false; }
+}
+
 function renderMoreGames() {
   const grid = document.getElementById('moreGamesGrid');
   grid.innerHTML = '';
   PROMO_GAMES.forEach(g => {
-    const claimed = isPromoClaimed(g.id);
     const card = document.createElement('div');
     card.className = 'promo-card';
+    let btnLabel, btnClass = '';
+    if (g.installReward) {
+      const installed = xIsInstalled(g.pkg);
+      const rewarded  = xCrossPromoRewarded(g.pkg);
+      if (rewarded)        { btnLabel = '✅ +' + g.installReward + ' Claimed'; btnClass = ' claimed'; }
+      else if (installed)  { btnLabel = '🎁 Claim +' + g.installReward + ' 🪙'; }
+      else                 { btnLabel = '📥 Install\n+' + g.installReward + ' 🪙'; }
+    } else {
+      const claimed = isPromoClaimed(g.id);
+      btnLabel = claimed ? '✅ Claimed' : 'Download\n& Get 50 🪙';
+      btnClass = claimed ? ' claimed' : '';
+    }
     card.innerHTML = `
       <div class="promo-icon">${g.icon}</div>
       <div class="promo-info">
         <h3>${g.icon} ${g.title}</h3>
         <p>${g.desc}</p>
       </div>
-      <button class="promo-btn${claimed ? ' claimed' : ''}" id="promo-btn-${g.id}"
-        onclick="claimPromo('${g.id}','${g.pkg}')">
-        ${claimed ? '✅ Claimed' : 'Download\n& Get 50 🪙'}
-      </button>`;
+      <button class="promo-btn${btnClass}" id="promo-btn-${g.id}"
+        onclick="claimPromo('${g.id}','${g.pkg}')">${btnLabel}</button>`;
     grid.appendChild(card);
   });
 }
 
 function claimPromo(id, pkg) {
+  const game = PROMO_GAMES.find(g => g.id === id);
+  if (game && game.installReward) {
+    // Install-based reward. If already installed and not yet rewarded,
+    // grant immediately; otherwise just send to Play Store.
+    if (xIsInstalled(pkg) && !xCrossPromoRewarded(pkg)) {
+      localStorage.setItem(xCrossPromoKey(pkg), '1');
+      State.coins += game.installReward;
+      saveState();
+      showToast('+' + game.installReward + ' 🪙 Cross-promo reward!');
+      renderMoreGames();
+      return;
+    }
+    const url = 'https://play.google.com/store/apps/details?id=' + pkg;
+    if (window.Android && typeof window.Android.openUrl === 'function') window.Android.openUrl(url);
+    else window.open(url, '_blank');
+    return;
+  }
+  // Legacy tap-claim path (50 coins, no install check).
   const alreadyClaimed = isPromoClaimed(id);
   if (!alreadyClaimed) {
     localStorage.setItem(promoKey(id), '1');
     State.coins += 50;
     saveState();
     showToast('+50 🪙 Coins! Thanks for trying our game!');
-    // Update button immediately
     const btn = document.getElementById('promo-btn-' + id);
     if (btn) {
       btn.textContent = '✅ Claimed';
@@ -1332,10 +1405,39 @@ function claimPromo(id, pkg) {
   }
 }
 
+// Auto-detect installs on app open / menu show. Grants 200 coins once per
+// referenced package; idempotent thanks to xCrossPromoRewarded() check.
+function checkCrossPromoInstalls() {
+  if (!window.Android || typeof window.Android.isAppInstalled !== 'function') return;
+  let granted = 0;
+  PROMO_GAMES.forEach(g => {
+    if (!g.installReward) return;
+    if (xCrossPromoRewarded(g.pkg)) return;
+    if (!xIsInstalled(g.pkg)) return;
+    localStorage.setItem(xCrossPromoKey(g.pkg), '1');
+    State.coins += g.installReward;
+    granted += g.installReward;
+  });
+  if (granted > 0) {
+    saveState();
+    if (typeof Game !== 'undefined' && Game.updateUI) Game.updateUI();
+    showToast('🎉 +' + granted + ' 🪙 for installing our other games!');
+  }
+}
+
 const Game = {
 
   init() {
     loadState();
+    // Web preview only: show the in-WebView ad placeholder and shrink the
+    // screen by 60px. On Android the native AdView sits below the WebView
+    // (RelativeLayout.ABOVE rule), so the placeholder is redundant and
+    // would clip bottom UI.
+    if (!window.Android && !adsRemoved()) {
+      document.body.classList.add('has-html-ad');
+      var banner = document.getElementById('admob-banner');
+      if (banner) banner.style.display = 'flex';
+    }
     regenLives();
     this.updateUI();
     this.setupTouch();
@@ -1476,7 +1578,7 @@ this.hideOverlays();
       saveState(); self.updateUI(); drawGrid(); renderMiniGrid();
       showToast('✨ Magic Merge! +' + gained);
     };
-    boosterChooser2048('Magic Merge', '✨', 'Auto-combines every matching adjacent pair, once.', 200, 'magic_merge', grant);
+    boosterChooser2048('Magic Merge', '✨', 'Auto-combines every matching adjacent pair, once.', 400, 'magic_merge', grant);
   },
 
   // ── C4: Remove Tile — tap a tile to delete it (unblocks corner traps) ──
@@ -1506,7 +1608,7 @@ this.hideOverlays();
         });
       }
     };
-    boosterChooser2048('Remove Tile', '🧹', 'Tap any tile to delete it from the board.', 100, 'remove_tile', grant);
+    boosterChooser2048('Remove Tile', '🧹', 'Tap any tile to delete it from the board.', 200, 'remove_tile', grant);
   },
 
   startDailyChallenge() {
@@ -1831,20 +1933,20 @@ window.onPurchaseComplete = function(productId) {
       showToast('+100 Coins!');
       break;
     case 'coins_large':
-      State.coins += 500;
-      showToast('+500 Coins!');
+      State.coins += 800;
+      showToast('+800 Coins!');
       break;
     case 'undo_pack':
       State.undoPack = (State.undoPack || 0) + 10;
       showToast('+10 Undos!');
       break;
     case 'coins_medium':
-      State.coins += 600;
-      showToast('+600 Coins!');
+      State.coins += 400;
+      showToast('+400 Coins!');
       break;
     case 'coins_mega':
-      State.coins += 1400;
-      showToast('+1400 Coins!');
+      State.coins += 2000;
+      showToast('+2000 Coins!');
       break;
     case 'starter_pack':
       State.coins += 100;
@@ -2727,13 +2829,27 @@ window.renderStats2048=function(){
 (function(){
   var THEMES=[
     {id:'default',name:'Classic',emoji:'🎨',unlockLevel:0,palette:{2:'#eee4da',4:'#ede0c8',8:'#f2b179',16:'#f59563',32:'#f67c5f',64:'#f65e3b',128:'#edcf72',256:'#edcc61',512:'#edc850',1024:'#edc53f',2048:'#edc22e'}},
-    {id:'neon',name:'Neon',emoji:'⚡',unlockLevel:10,palette:{2:'#00f5ff',4:'#39ff14',8:'#ffff00',16:'#ff6600',32:'#ff073a',64:'#bf00ff',128:'#00ffcc',256:'#ff69b4',512:'#7fff00',1024:'#ff1493',2048:'#ffd700'}},
+    {id:'neon',name:'Neon',emoji:'⚡',unlockLevel:10,palette:{2:'#1f6feb',4:'#1158c7',8:'#ff5db1',16:'#ff3d8a',32:'#e0306e',64:'#b224ff',128:'#9024ff',256:'#7024ff',512:'#5524ff',1024:'#3b00d4',2048:'#2a009c'}},
     {id:'pastel',name:'Pastel',emoji:'🌸',unlockLevel:20,palette:{2:'#bae1ff',4:'#b5ead7',8:'#ffffba',16:'#ffdfba',32:'#ffb3ba',64:'#e0b3ff',128:'#b3fff0',256:'#c4ffc4',512:'#fff9b3',1024:'#ffd1dc',2048:'#ffe4b5'}},
-    {id:'ocean',name:'Ocean',emoji:'🌊',unlockLevel:30,palette:{2:'#b2ebf2',4:'#80deea',8:'#4dd0e1',16:'#26c6da',32:'#00bcd4',64:'#00acc1',128:'#0097a7',256:'#00838f',512:'#006064',1024:'#004d56',2048:'#003540'}},
-    {id:'fire',name:'Inferno',emoji:'🔥',unlockLevel:50,palette:{2:'#ffccbc',4:'#ffab91',8:'#ff8a65',16:'#ff7043',32:'#ff5722',64:'#f4511e',128:'#e64a19',256:'#d84315',512:'#bf360c',1024:'#bf2200',2048:'#8b0000'}},
-    {id:'galaxy',name:'Galaxy',emoji:'🌌',unlockLevel:100,palette:{2:'#e8d5f5',4:'#c39bd3',8:'#9b59b6',16:'#7d3c98',32:'#6c3483',64:'#512e5f',128:'#3498db',256:'#1a5276',512:'#0e4d6e',1024:'#1abc9c',2048:'#0e6655'}},
+    {id:'ocean',name:'Ocean',emoji:'🌊',unlockLevel:30,palette:{2:'#2196f3',4:'#1e88e5',8:'#1976d2',16:'#1565c0',32:'#0d47a1',64:'#0a3d8e',128:'#073575',256:'#062c63',512:'#052351',1024:'#031a40',2048:'#011230'}},
+    {id:'fire',name:'Inferno',emoji:'🔥',unlockLevel:50,palette:{2:'#ff5722',4:'#f4511e',8:'#e64a19',16:'#d84315',32:'#c33910',64:'#a82908',128:'#8b0000',256:'#6e0000',512:'#520000',1024:'#380000',2048:'#1f0000'}},
+    {id:'galaxy',name:'Galaxy',emoji:'🌌',unlockLevel:100,palette:{2:'#9575cd',4:'#7e57c2',8:'#673ab7',16:'#5e35b1',32:'#512da8',64:'#4527a0',128:'#311b92',256:'#26168a',512:'#1a1080',1024:'#100a5e',2048:'#070538'}},
   ];
-  window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel};});
+  window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel,palette:t.palette};});
+  // Map of theme id → palette so external code (audit addendum) can also
+  // switch the active palette when changing themes from outside this IIFE.
+  window._THEME_PALETTES=THEMES.reduce(function(m,t){m[t.id]=t.palette;return m;},{});
+  window.setActiveTheme=function(id){
+    var t=THEMES.find(function(x){return x.id===id;});
+    if(!t)return false;
+    State.activeTheme=id;
+    window._activePalette=t.palette;
+    if(typeof saveState==='function') saveState();
+    if(typeof drawGrid==='function') drawGrid();
+    if(typeof renderMiniGrid==='function') renderMiniGrid();
+    if(typeof window.renderThemes==='function') window.renderThemes();
+    return true;
+  };
 
   window.renderThemes=function(){
     var grid=document.getElementById('themesGrid'); if(!grid) return;
@@ -2761,10 +2877,25 @@ window.renderStats2048=function(){
   };
 
   // Override getTileColor to use active theme
+  // Auto-contrast tile text color: pick light or dark text based on
+  // the background's perceptual luminance. Keeps text readable on any
+  // theme palette (dark Inferno reds, deep Galaxy purples, light Pastels).
+  function _textColorForBg(hex){
+    if(!hex || hex.charAt(0)!=='#') return '#776e65';
+    var c = hex.replace('#','');
+    if(c.length===3) c = c.split('').map(function(x){return x+x;}).join('');
+    var r = parseInt(c.substr(0,2),16);
+    var g = parseInt(c.substr(2,2),16);
+    var b = parseInt(c.substr(4,2),16);
+    // ITU-R BT.601 luma
+    var lum = (0.299*r + 0.587*g + 0.114*b) / 255;
+    return lum > 0.55 ? '#1a1a18' : '#f9f6f2';
+  }
+  window._tileTextForBg = _textColorForBg;
   var _origGetTileColor=window.getTileColor;
   window.getTileColor=function(value){
     var tp=window._activePalette;
-    if(tp&&tp[value]) return {bg:tp[value],text:value>=8?'#f9f6f2':'#776e65'};
+    if(tp&&tp[value]) return {bg:tp[value], text:_textColorForBg(tp[value])};
     return _origGetTileColor?_origGetTileColor(value):{bg:'#eee4da',text:'#776e65'};
   };
 
@@ -2859,12 +2990,9 @@ window.renderStats2048=function(){
 .starter-skip { background:transparent;color:#8b949e;border:none;font-size:0.82rem;cursor:pointer; }
 
 #weeklyEventBanner {
-  margin-top:0.7rem;padding:0.55rem 1rem;
-  background:linear-gradient(135deg,#3a1f00,#0d1117);
-  border:1px solid #ff6b35;border-radius:16px;
-  color:#ff6b35;font-size:0.78rem;font-weight:600;
-  cursor:pointer;text-align:center;width:220px;max-width:90vw;
-  animation:xPulseOrange 2.5s infinite;
+  /* Superseded by #xTournamentBanner2048 (synthetic bracket strip).
+     Kept in DOM for backward compatibility but visually hidden. */
+  display: none !important;
 }
 @keyframes xPulseOrange {
   0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,0.3);}
@@ -3051,23 +3179,10 @@ function getWeeklyLevels(){
 }
 
 function updateWeeklyBanner(){
-  var b=document.getElementById('weeklyEventBanner');
-  if(!b) return;
-  var week=getWeekNum();
-  var count=parseInt(G.flag('xweekly_'+week)||'0');
-  var claimed=G.flag('xweekly_claimed_'+week);
-  if(claimed){
-    b.textContent='✅ Weekly Challenge Done! Come back next week';
-    b.style.opacity='0.6';
-    b.style.cursor='default';
-    b.onclick=null;
-  } else {
-    var levels=getWeeklyLevels();
-    b.innerHTML='⚡ Weekly: Play any 5 levels · '+count+'/5 · Earn 50 🪙';
-    b.onclick=function(){
-      xToast('Play any 5 levels this week to earn 50 🪙!');
-    };
-  }
+  // Legacy weekly-event content superseded by the xTournamentBanner2048
+  // synthetic-bracket strip. Keep the function as a no-op so callers still
+  // resolve, but don't render duplicate text on the menu.
+  return;
 }
 
 function injectWeeklyBanner(){
@@ -3180,12 +3295,18 @@ function injectDragonTheme(){
 
 // ── SEASON PASS IN SHOP ───────────────────────────────────────────
 function injectSeasonPassShop(){
-  document.querySelectorAll('.shop-scroll,.shop-list').forEach(function(scroll){
+  // Scope to the actual shop screen so we don't inject into More Games etc.
+  var shopRoot = document.getElementById('screen-shop') || document.getElementById('shopScreen');
+  if (!shopRoot) return;
+  // Skip injection if a static Season Pass card already exists. Detection:
+  // any existing shop card whose onclick mentions 'season_pass_monthly'.
+  if (shopRoot.querySelector('[onclick*="season_pass_monthly"]')) return;
+  shopRoot.querySelectorAll('.shop-scroll,.shop-list,.shop-grid').forEach(function(scroll){
     if(scroll.querySelector('#x-season-pass-item')) return;
     var div=document.createElement('div');
     div.id='x-season-pass-item';
     div.className='shop-item';
-    var btnTxt=isSeasonActive()?'✅ Active':'$1.99/month';
+    var btnTxt=isSeasonActive()?'✅ Active':'$4.99/month';
     div.innerHTML=
       '<div class="shop-item-icon">🌟</div>'+
       '<div class="shop-item-info x-season-badge-target">'+
@@ -3363,7 +3484,7 @@ window.addEventListener('load',function(){
   function injectFree(){
     var host=document.querySelector('#menuScreen .menu-buttons'); if(!host||$('xFreeCoins2048')) return;
     var b=document.createElement('button'); b.id='xFreeCoins2048'; b.type='button';
-    b.style.cssText='margin-top:10px;background:linear-gradient(135deg,#edc22e,#b88e0e);color:#1a1a18;border:none;border-radius:8px;padding:10px 14px;font-weight:800;font-size:0.9rem;letter-spacing:1px;cursor:pointer;width:280px;max-width:90%';
+    b.style.cssText='margin-top:10px;background:linear-gradient(135deg,#edc22e,#b88e0e);color:#1a1a18;border:none;border-radius:8px;padding:10px 14px;font-weight:800;font-size:0.9rem;letter-spacing:1px;cursor:pointer;width:280px;max-width:90%;display:flex;align-items:center;justify-content:center;gap:6px;text-align:center;';
     b.onclick=claimFree; host.appendChild(b); refreshFree();
   }
   function refreshFree(){ var b=$('xFreeCoins2048'); if(!b) return; var r=readyAt()-Date.now(); if(r>0){ b.textContent='🪙 FREE COINS IN '+fmt(r); b.disabled=true; b.style.opacity='0.55'; } else { b.textContent='🪙 FREE COINS (+'+AMT+')'; b.disabled=false; b.style.opacity='1'; } }
@@ -3400,7 +3521,17 @@ window.addEventListener('load',function(){
       '<div style="font-size:0.95rem;color:#a89f8e;margin-bottom:14px">'+(t.emoji||'')+' '+t.name+'</div>'+(chips?('<div style="margin-bottom:16px">'+chips+'</div>'):'')+
       '<button id="xTc2Try" style="display:block;width:100%;background:#edc22e;color:#1a1a18;border:none;border-radius:8px;padding:11px;font-weight:800;margin-bottom:8px;cursor:pointer">USE IT NOW</button>'+
       '<button id="xTc2No" style="display:block;width:100%;background:transparent;color:#a89f8e;border:none;padding:8px;cursor:pointer">Keep current</button></div>';
-    $('xTc2Try').onclick=function(){ var s=S(); if(s){ s.activeTheme=t.id; refresh(); } if(typeof window.renderThemes==='function') window.renderThemes(); if(typeof drawGrid==='function') drawGrid(); m.style.display='none'; toast('Theme: '+t.name); };
+    $('xTc2Try').onclick=function(){
+      if(typeof window.setActiveTheme==='function'){
+        window.setActiveTheme(t.id);
+      } else {
+        var s=S(); if(s){ s.activeTheme=t.id; refresh(); }
+        if(window._THEME_PALETTES && window._THEME_PALETTES[t.id]) window._activePalette=window._THEME_PALETTES[t.id];
+        if(typeof window.renderThemes==='function') window.renderThemes();
+        if(typeof drawGrid==='function') drawGrid();
+      }
+      m.style.display='none'; toast('Theme: '+t.name);
+    };
     $('xTc2No').onclick=function(){ m.style.display='none'; };
     m.style.display='flex';
   }
@@ -3449,11 +3580,67 @@ window.addEventListener('load',function(){
     if(data.week!==wk){ if(data.week&&!localStorage.getItem('xWeeklyAward2048_'+data.week)){ var p=bracketFor(data.best||0); if(p<=10){ s.coins=(s.coins||0)+250; refresh(); toast('🏆 Last week: top 10% — +250 coins!'); } else if(p<=25){ s.coins=(s.coins||0)+100; refresh(); toast('🏆 Last week: top 25% — +100 coins!'); } localStorage.setItem('xWeeklyAward2048_'+data.week,'1'); } data={week:wk,best:best}; } else { data.best=Math.max(data.best||0,best); }
     localStorage.setItem('xWeekly2048',JSON.stringify(data)); return data;
   }
+  function injectPassPromo(){
+    var anchor=document.querySelector('#menuScreen .menu-buttons'); if(!anchor) return;
+    var s=S(); if(!s) return;
+    var existing=$('xPassPromo2048'); if(existing) existing.remove();
+    var seasonActive=(typeof isSeasonActive==='function')&&isSeasonActive();
+    var weeklyActive=(typeof isWeeklyActive==='function')&&isWeeklyActive();
+    var box=document.createElement('div');
+    box.id='xPassPromo2048';
+    box.style.cssText='margin-top:10px;display:flex;gap:8px;width:100%;max-width:300px;padding:0 4px;box-sizing:border-box;';
+    function card(emoji,label,price,active,sku,bg,fg){
+      return '<button onclick="xBuyPass(\''+sku+'\')" style="flex:1;background:'+bg+';border:1.5px solid '+fg+';border-radius:10px;padding:8px 4px;cursor:pointer;text-align:center;color:'+fg+';font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.1;">'+
+        '<div style="font-size:20px;line-height:1">'+emoji+'</div>'+
+        '<div style="font-size:10px;font-weight:800;letter-spacing:0.3px">'+(active?'✓ ACTIVE':label)+'</div>'+
+        '<div style="font-size:9px;opacity:0.85;font-weight:600;min-height:11px">'+(active?'':price)+'</div></button>';
+    }
+    box.innerHTML=
+      card('🌟','SEASON PASS','$4.99/mo',seasonActive,'season_pass_monthly','rgba(237,194,46,0.14)','#edc22e')+
+      card('🗓️','WEEKLY PASS','$1.99/wk',weeklyActive,'weekly_pass','rgba(127,201,127,0.14)','#7fc97f');
+    anchor.insertBefore(box, anchor.firstChild.nextSibling);
+  }
+  window.xBuyPass=function(sku){
+    if(sku==='season_pass_monthly' && (typeof isSeasonActive==='function') && isSeasonActive()){ toast('Season Pass already active!'); return; }
+    if(sku==='weekly_pass' && (typeof isWeeklyActive==='function') && isWeeklyActive()){ toast('Weekly Pass already active!'); return; }
+    if(window.Android&&window.Android.purchase) window.Android.purchase(sku);
+    else if(typeof Game!=='undefined' && Game.showScreen) Game.showScreen('shopScreen');
+  };
+
   function updateTournamentBanner(){
     var d=tournament(); if(!d) return; var p=bracketFor(d.best||0);
     var b=$('xTournamentBanner2048');
-    if(!b){ var anchor=document.querySelector('#menuScreen .menu-buttons'); if(!anchor) return; b=document.createElement('div'); b.id='xTournamentBanner2048'; b.style.cssText='margin-top:8px;background:rgba(237,194,46,0.12);border:1px solid rgba(237,194,46,0.3);border-radius:8px;padding:6px 10px;text-align:center;color:#f7f3ec;font-size:0.78rem;width:280px;max-width:90%'; anchor.insertBefore(b, anchor.firstChild.nextSibling); }
-    b.innerHTML='🏆 THIS WEEK · '+(d.best||0)+' pts · Top '+p+'% <span style="opacity:.7">· resets Mon</span>'; b.style.display='';
+    if(!b){ var anchor=document.querySelector('#menuScreen .menu-buttons'); if(!anchor) return; b=document.createElement('div'); b.id='xTournamentBanner2048'; b.style.cssText='margin-top:8px;background:rgba(237,194,46,0.12);border:1px solid rgba(237,194,46,0.3);border-radius:8px;padding:6px 10px;text-align:center;color:#f7f3ec;font-size:0.78rem;width:280px;max-width:90%;cursor:pointer'; anchor.insertBefore(b, anchor.firstChild.nextSibling); b.onclick=showTournamentModal; }
+    b.innerHTML='🏆 THIS WEEK · '+(d.best||0)+' pts · Top '+p+'% <span style="opacity:.7">· tap for bracket</span>'; b.style.display='';
+  }
+  function showTournamentModal(){
+    var d=tournament(); if(!d) return; var p=bracketFor(d.best||0);
+    var m=$('xWeeklyTournamentModal2048');
+    if(!m){ m=document.createElement('div'); m.id='xWeeklyTournamentModal2048'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index:99998;padding:20px'; document.body.appendChild(m); }
+    var tiers=[
+      {label:'TOP 10%', need:8000, reward:'+250 🪙', active:p<=10},
+      {label:'TOP 25%', need:3000, reward:'+100 🪙', active:p>10&&p<=25},
+      {label:'TOP 50%', need:1000, reward:'no coins', active:p>25&&p<=50},
+      {label:'TOP 75%', need:1,    reward:'no coins', active:p>50}
+    ];
+    var rows=tiers.map(function(t){
+      var bg=t.active?'background:rgba(237,194,46,0.22);border:1.5px solid rgba(237,194,46,0.6)':'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)';
+      var col=t.active?'#edc22e':'#a89f8e';
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:10px;margin-bottom:6px;'+bg+'">'+
+        '<div><div style="font-weight:800;font-size:0.95rem;color:'+(t.active?'#edc22e':'#f7f3ec')+'">'+t.label+'</div>'+
+        '<div style="font-size:0.72rem;color:#a89f8e">'+t.need+'+ pts</div></div>'+
+        '<div style="font-weight:700;color:'+col+'">'+t.reward+'</div></div>';
+    }).join('');
+    m.innerHTML='<div style="background:#1c1a17;border:2px solid rgba(237,194,46,0.5);border-radius:18px;padding:22px;max-width:340px;width:100%;color:#f7f3ec;box-shadow:0 16px 50px rgba(0,0,0,0.7)">'+
+      '<div style="text-align:center;font-size:1.15rem;font-weight:800;color:#edc22e;margin-bottom:4px">🏆 Weekly Tournament</div>'+
+      '<div style="text-align:center;font-size:0.78rem;color:#a89f8e;margin-bottom:14px">Your best score this week</div>'+
+      '<div style="text-align:center;font-size:2.4rem;font-weight:800;color:#fff;line-height:1;margin-bottom:4px">'+(d.best||0).toLocaleString()+'</div>'+
+      '<div style="text-align:center;font-size:0.92rem;color:#edc22e;font-weight:700;margin-bottom:16px">You are in TOP '+p+'%</div>'+
+      rows+
+      '<div style="text-align:center;font-size:0.7rem;color:#a89f8e;margin-top:10px">Resets every Monday · 00:00</div>'+
+      '<button id="xTourClose2048" style="margin-top:14px;width:100%;background:#edc22e;color:#1c1a17;border:none;border-radius:10px;padding:11px;font-weight:800;cursor:pointer">CLOSE</button></div>';
+    m.style.display='flex';
+    var c=$('xTourClose2048'); if(c) c.onclick=function(){ m.style.display='none'; };
   }
 
   // ── D2: seasonal events — 7-day 1.5× coin/score multiplier + theme ──
@@ -3491,8 +3678,8 @@ window.addEventListener('load',function(){
   // ── daily pass bonus on menu ──
   function passDaily(){
     var s=S(); if(!s) return; var t=todayStr();
-    if(s.seasonPassUntil&&Date.now()<s.seasonPassUntil&&s.lastSeasonGrantDate!==t){ s.lastSeasonGrantDate=t; s.coins=(s.coins||0)+50; refresh(); toast('🎮 Season Pass bonus: +50 coins!'); }
-    if(s.weeklyPassUntil&&Date.now()<s.weeklyPassUntil&&s.lastWeeklyGrantDate!==t){ s.lastWeeklyGrantDate=t; s.coins=(s.coins||0)+100; refresh(); toast('🗓️ Weekly Pass bonus: +100 coins!'); }
+    if(s.seasonPassUntil&&Date.now()<s.seasonPassUntil&&s.lastSeasonGrantDate!==t){ s.lastSeasonGrantDate=t; s.coins=(s.coins||0)+100; refresh(); toast('🎮 Season Pass bonus: +100 coins!'); }
+    if(s.weeklyPassUntil&&Date.now()<s.weeklyPassUntil&&s.lastWeeklyGrantDate!==t){ s.lastWeeklyGrantDate=t; s.coins=(s.coins||0)+50; refresh(); toast('🗓️ Weekly Pass bonus: +50 coins!'); }
   }
 
   function boot(){
@@ -3503,10 +3690,12 @@ window.addEventListener('load',function(){
     try{ injectSettings(); }catch(e){}
     try{ injectNoLivesCTAs(); }catch(e){}
     try{ updateTournamentBanner(); }catch(e){}
+    try{ injectPassPromo(); }catch(e){}
     try{ hideLegacy(); ladderTick(); passDaily(); }catch(e){}
+    try{ if(typeof checkCrossPromoInstalls==='function') checkCrossPromoInstalls(); }catch(e){}
     if(typeof Game!=='undefined' && Game.showScreen && !Game.__x2Wrapped){
       var orig=Game.showScreen.bind(Game); Game.__x2Wrapped=true;
-      Game.showScreen=function(id){ orig(id); try{ if(id==='menuScreen'){ injectFree(); refreshFree(); updatePlayLabel(); injectStrip(); updateTournamentBanner(); passDaily(); } if(id==='settingsScreen'){ injectSettings(); } if(id==='gameScreen'){ injectNoLivesCTAs(); } }catch(e){} };
+      Game.showScreen=function(id){ orig(id); try{ if(id==='menuScreen'){ injectFree(); refreshFree(); updatePlayLabel(); injectStrip(); updateTournamentBanner(); injectPassPromo(); passDaily(); if(typeof checkCrossPromoInstalls==='function') checkCrossPromoInstalls(); } if(id==='settingsScreen'){ injectSettings(); } if(id==='gameScreen'){ injectNoLivesCTAs(); } }catch(e){} };
     }
     // hook startNewGame for theme-unlock + magic-merge tokens
     if(typeof Game!=='undefined' && Game.startNewGame && !Game.__x2NgWrapped){
