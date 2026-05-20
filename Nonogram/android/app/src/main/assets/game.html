@@ -7,6 +7,17 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
+  /* z-index scale: layers, not values (audit 2026-05-15 C1) —
+     replaces ad-hoc literal z-index values scattered through the file. */
+  --z-base: 1;
+  --z-overlay-dim: 100;
+  --z-banner-ad: 200;
+  --z-toast: 300;
+  --z-confirm: 400;
+  --z-tutorial: 500;
+  --z-promo-overlay: 600;
+  --z-modal: 700;
+  --z-critical-error: 800;
     --bg: #f5f0e6;
     --surface: #ebe4d3;
     --surface2: #dcd3bd;
@@ -306,7 +317,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 100;
+    z-index: var(--z-overlay-dim);
     padding: 1.5rem;
     backdrop-filter: blur(4px);
   }
@@ -598,7 +609,7 @@
     opacity: 0;
     transition: opacity 0.3s, transform 0.3s;
     pointer-events: none;
-    z-index: 200;
+    z-index: var(--z-banner-ad);
     white-space: nowrap;
   }
   #toast.show {
@@ -960,6 +971,13 @@
       <div class="settings-item" style="cursor:pointer;" onclick="showScreen('stats')">
         <span class="settings-item-label">📊 Statistics</span>
         <span style="color:var(--accent);font-size:0.85rem">View ›</span>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-section-title">Purchases</div>
+      <div class="settings-item" style="cursor:pointer;" onclick="if(window.Android&&window.Android.restorePurchases){try{Android.restorePurchases();}catch(e){}}">
+        <span class="settings-item-label">↻ Restore Purchases</span>
+        <span style="color:var(--accent);font-size:0.85rem">Restore ›</span>
       </div>
     </div>
     <div class="settings-section">
@@ -2693,7 +2711,7 @@ function useHint() {
 // ── B6: Reveal Cell / Reveal Row boosters ──
 function nonoBoosterChooser(title, emoji, desc, coinCost, adType, onGrant) {
   var m = document.getElementById('xNonoBoosterModal');
-  if (!m) { m = document.createElement('div'); m.id = 'xNonoBoosterModal'; m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);display:none;align-items:center;justify-content:center;z-index:99998'; document.body.appendChild(m); }
+  if (!m) { m = document.createElement('div'); m.id = 'xNonoBoosterModal'; m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);display:none;align-items:center;justify-content:center;z-index: var(--z-modal)'; document.body.appendChild(m); }
   m.innerHTML = '<div style="background:#161b22;border:1px solid #30363d;border-radius:16px;padding:22px;max-width:300px;width:88%;text-align:center;color:#e6edf3">' +
     '<div style="font-size:1.05rem;font-weight:700;margin-bottom:4px">'+emoji+' '+title+'</div>' +
     '<div style="font-size:0.85rem;color:#8b949e;margin-bottom:16px">'+desc+'</div>' +
@@ -3219,7 +3237,7 @@ window.__nonoFillSolution = function(ratio) {
 @keyframes ls-card-in { from{transform:scale(0.85) translateY(30px);opacity:0} to{transform:none;opacity:1} }
 #ls-overlay {
   position:fixed; inset:0; background:rgba(40,35,30,0.45);
-  z-index:9999; display:none; align-items:center; justify-content:center;
+  z-index: var(--z-modal); display:none; align-items:center; justify-content:center;
   backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
 }
 #ls-card {
@@ -3257,7 +3275,7 @@ window.__nonoFillSolution = function(ratio) {
   position:fixed; top:72px; left:50%; transform:translateX(-50%) translateY(-24px);
   background:#28231e; color:#fffaf0;
   padding:10px 22px; border-radius:30px; font-size:13px; font-weight:600;
-  opacity:0; transition:all 0.4s; z-index:10000;
+  opacity:0; transition:all 0.4s; z-index: var(--z-modal);
   pointer-events:none; white-space:nowrap; box-shadow:0 4px 16px rgba(40,35,30,0.35);
 }
 #ls-ach-toast.ls-show { opacity:1; transform:translateX(-50%) translateY(0); }
@@ -3928,7 +3946,7 @@ window.addEventListener('load', function() { window.i18n.init(); });
 .tut-overlay {
   position:absolute; inset:0; background:rgba(245, 240, 230,0.82);
   display:flex; align-items:center; justify-content:center;
-  z-index:200; padding:1.5rem; backdrop-filter:blur(4px);
+  z-index: var(--z-banner-ad); padding:1.5rem; backdrop-filter:blur(4px);
 }
 .tut-bubble {
   background:var(--surface); border:1px solid var(--border); border-radius:18px;
@@ -4177,7 +4195,7 @@ window.renderNonoStats = function() {
 #starterPackModal {
   position:fixed;inset:0;background:rgba(245, 240, 230,0.92);
   display:none;flex-direction:column;align-items:center;justify-content:center;
-  z-index:9999;padding:1.5rem;backdrop-filter:blur(6px);
+  z-index: var(--z-modal);padding:1.5rem;backdrop-filter:blur(6px);
 }
 .starter-card {
   background:linear-gradient(135deg,#1a3a5c,#f5f0e6);
@@ -4267,7 +4285,7 @@ function xToast(msg){
   t.textContent=msg;
   t.style.cssText='position:fixed;bottom:20%;left:50%;transform:translateX(-50%);' +
     'background:rgba(0,0,0,0.88);color:#fff;padding:10px 22px;border-radius:20px;' +
-    'z-index:99999;font-size:0.9rem;font-weight:600;pointer-events:none;';
+    'z-index: var(--z-modal);font-size:0.9rem;font-weight:600;pointer-events:none;';
   document.body.appendChild(t);
   setTimeout(function(){t.remove();},2500);
 }
@@ -4482,7 +4500,9 @@ function injectDragonTheme(){
     };
   }
 
-  // Patch renderThemes to show coin cost on Dragon card
+  // MONKEY-PATCH: wraps the renderThemes defined at line ~4024 to add the
+  // Dragon-theme coin-gate UI without modifying the original. If you
+  // refactor renderThemes, update this wrapper too. (Audit 2026-05-15 C3.)
   var origRT=window.renderThemes;
   if(typeof origRT==='function'){
     window.renderThemes=function(){
@@ -4730,7 +4750,7 @@ window.addEventListener('load',function(){
 
   // ── B10: theme-unlock celebration card ──
   function unlockCard(t){
-    var m=$('xThemeCard'); if(!m){ m=document.createElement('div'); m.id='xThemeCard'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index:99997'; document.body.appendChild(m); }
+    var m=$('xThemeCard'); if(!m){ m=document.createElement('div'); m.id='xThemeCard'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index: var(--z-modal)'; document.body.appendChild(m); }
     var chips=(t.colors||[]).slice(0,6).map(function(c){ return '<span style="display:inline-block;width:26px;height:26px;border-radius:6px;margin:3px;background:'+c+'"></span>'; }).join('');
     m.innerHTML='<div style="background:#161b22;border:1px solid #30363d;border-radius:18px;padding:24px;max-width:320px;width:90%;text-align:center;color:#e6edf3">'+
       '<div style="font-size:1.15rem;font-weight:800;margin-bottom:6px">🎉 New theme unlocked!</div>'+
@@ -4767,7 +4787,7 @@ window.addEventListener('load',function(){
     refresh(); showPanel(day,r);
   }
   function showPanel(day,r){
-    var m=$('xLoginPanel'); if(!m){ m=document.createElement('div'); m.id='xLoginPanel'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index:99996'; document.body.appendChild(m); }
+    var m=$('xLoginPanel'); if(!m){ m=document.createElement('div'); m.id='xLoginPanel'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index: var(--z-modal)'; document.body.appendChild(m); }
     var row=LADDER.map(function(x,i){ var on=(i+1)<=day; return '<div style="flex:1;text-align:center;padding:4px 2px;border-radius:8px;font-size:0.62rem;background:'+(on?'#1f6feb':'#21262d')+';color:'+(on?'#fff':'#9aa0a6')+'">D'+(i+1)+'<br>'+(i+1===day?'★':'')+'</div>'; }).join('');
     m.innerHTML='<div style="background:#161b22;border:1px solid #30363d;border-radius:18px;padding:22px;max-width:340px;width:92%;text-align:center;color:#e6edf3">'+
       '<div style="font-size:1.1rem;font-weight:800;margin-bottom:4px">🔥 Day '+day+' streak!</div>'+

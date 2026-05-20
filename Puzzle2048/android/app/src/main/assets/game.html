@@ -6,6 +6,19 @@
 <title>2048 Puzzle</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
+:root {
+  /* z-index scale: layers, not values (audit 2026-05-15 C1) —
+     replaces ad-hoc literal z-index values scattered through the file. */
+  --z-base: 1;
+  --z-overlay-dim: 100;
+  --z-banner-ad: 200;
+  --z-toast: 300;
+  --z-confirm: 400;
+  --z-tutorial: 500;
+  --z-promo-overlay: 600;
+  --z-modal: 700;
+  --z-critical-error: 800;
+}
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body {
   background: #1a1a18;
@@ -254,7 +267,7 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
 .overlay {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   display: none; align-items: center; justify-content: center;
-  background: rgba(0,0,0,0.82); z-index: 100; backdrop-filter: blur(5px);
+  background: rgba(0,0,0,0.82); z-index: var(--z-overlay-dim); backdrop-filter: blur(5px);
 }
 .overlay.active { display: flex; }
 .overlay-card {
@@ -273,7 +286,7 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
 #admob-banner {
   position: fixed; bottom: 0; left: 0; right: 0; height: 60px;
   background: rgba(0,0,0,0.4); border-top: 1px solid rgba(255,255,255,0.08);
-  display: none; align-items: center; justify-content: center; z-index: 200;
+  display: none; align-items: center; justify-content: center; z-index: var(--z-banner-ad);
 }
 #admob-banner span { color: rgba(255,255,255,0.25); font-size: 11px; }
 
@@ -282,14 +295,14 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
   position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%) translateY(20px);
   background: rgba(0,0,0,0.85); color: white; padding: 10px 20px;
   border-radius: 20px; font-size: 13px; opacity: 0; transition: all 0.3s;
-  z-index: 300; pointer-events: none; white-space: nowrap;
+  z-index: var(--z-toast); pointer-events: none; white-space: nowrap;
 }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* Confirm dialog */
 .confirm-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.75); z-index: 400; display: none;
+  background: rgba(0,0,0,0.75); z-index: var(--z-confirm); display: none;
   align-items: center; justify-content: center;
 }
 .confirm-overlay.active { display: flex; }
@@ -378,7 +391,7 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
       <button class="game-btn" onclick="Game.removeTileMode()">🧹 Remove</button>
       <button class="game-btn" onclick="Game.confirmNewGame()">↺ New</button>
     </div>
-    <div id="tutorialOverlay" style="display:none;position:absolute;bottom:90px;left:0;right:0;justify-content:center;pointer-events:none;z-index:50">
+    <div id="tutorialOverlay" style="display:none;position:absolute;bottom:90px;left:0;right:0;justify-content:center;pointer-events:none;z-index: var(--z-overlay-dim)">
       <div style="background:rgba(26,26,24,0.96);border:1.5px solid rgba(237,194,46,0.55);border-radius:18px;padding:16px 22px;max-width:280px;text-align:center;pointer-events:all">
         <div style="color:#edc22e;font-size:15px;font-weight:800;margin-bottom:6px">✨ How to Play</div>
         <div style="color:rgba(255,255,255,0.8);font-size:13px;line-height:1.4">Swipe or use arrow keys to move all tiles. When two tiles with the same number collide, they merge. Reach 2048!</div>
@@ -697,7 +710,7 @@ function safeShowRewardedCb(rewardType, cb) {
 // Generic booster chooser: spend coins / watch ad / cancel.
 function boosterChooser2048(title, emoji, desc, coinCost, rewardType, onGrant) {
   var m = document.getElementById('xBoosterModal2048');
-  if (!m) { m = document.createElement('div'); m.id = 'xBoosterModal2048'; m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);display:none;align-items:center;justify-content:center;z-index:99998'; document.body.appendChild(m); }
+  if (!m) { m = document.createElement('div'); m.id = 'xBoosterModal2048'; m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);display:none;align-items:center;justify-content:center;z-index: var(--z-modal)'; document.body.appendChild(m); }
   m.innerHTML = '<div style="background:#1c1a17;border:1px solid #3a352d;border-radius:16px;padding:22px;max-width:300px;width:88%;text-align:center;color:#f7f3ec">' +
     '<div style="font-size:1.05rem;font-weight:700;margin-bottom:4px">'+emoji+' '+title+'</div>' +
     '<div style="font-size:0.85rem;color:#a89f8e;margin-bottom:16px">'+desc+'</div>' +
@@ -2113,7 +2126,7 @@ window.addEventListener('DOMContentLoaded', () => {
 @keyframes ls-card-in { from{transform:scale(0.85) translateY(30px);opacity:0} to{transform:none;opacity:1} }
 #ls-overlay {
   position:fixed; inset:0; background:rgba(0,0,0,0.88);
-  z-index:9999; display:none; align-items:center; justify-content:center;
+  z-index: var(--z-modal); display:none; align-items:center; justify-content:center;
   backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
 }
 #ls-card {
@@ -2150,7 +2163,7 @@ window.addEventListener('DOMContentLoaded', () => {
   position:fixed; top:72px; left:50%; transform:translateX(-50%) translateY(-24px);
   background:linear-gradient(135deg,#6c5ce7,#a29bfe); color:#fff;
   padding:10px 22px; border-radius:50px; font-size:13px; font-weight:700;
-  opacity:0; transition:all 0.4s; z-index:10000;
+  opacity:0; transition:all 0.4s; z-index: var(--z-modal);
   pointer-events:none; white-space:nowrap; box-shadow:0 4px 20px rgba(108,92,231,0.5);
 }
 #ls-ach-toast.ls-show { opacity:1; transform:translateX(-50%) translateY(0); }
@@ -2977,7 +2990,7 @@ window.renderStats2048=function(){
 #starterPackModal {
   position:fixed;inset:0;background:rgba(13,17,23,0.92);
   display:none;flex-direction:column;align-items:center;justify-content:center;
-  z-index:9999;padding:1.5rem;backdrop-filter:blur(6px);
+  z-index: var(--z-modal);padding:1.5rem;backdrop-filter:blur(6px);
 }
 .starter-card {
   background:linear-gradient(135deg,#1a3a5c,#0d1117);
@@ -3063,7 +3076,7 @@ function xToast(msg){
   t.textContent=msg;
   t.style.cssText='position:fixed;bottom:20%;left:50%;transform:translateX(-50%);' +
     'background:rgba(0,0,0,0.88);color:#fff;padding:10px 22px;border-radius:20px;' +
-    'z-index:99999;font-size:0.9rem;font-weight:600;pointer-events:none;';
+    'z-index: var(--z-modal);font-size:0.9rem;font-weight:600;pointer-events:none;';
   document.body.appendChild(t);
   setTimeout(function(){t.remove();},2500);
 }
@@ -3279,7 +3292,9 @@ function injectDragonTheme(){
     };
   }
 
-  // Patch renderThemes to show coin cost on Dragon card
+  // MONKEY-PATCH: wraps the renderThemes defined at line ~2878 to add the
+  // Dragon-theme coin-gate UI without modifying the original. If you
+  // refactor renderThemes, update this wrapper too. (Audit 2026-05-15 C3.)
   var origRT=window.renderThemes;
   if(typeof origRT==='function'){
     window.renderThemes=function(){
@@ -3524,7 +3539,7 @@ window.addEventListener('load',function(){
 
   // ── C8: theme-unlock celebration card ──
   function unlockCard(t){
-    var m=$('xThemeCard2048'); if(!m){ m=document.createElement('div'); m.id='xThemeCard2048'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index:99997'; document.body.appendChild(m); }
+    var m=$('xThemeCard2048'); if(!m){ m=document.createElement('div'); m.id='xThemeCard2048'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index: var(--z-modal)'; document.body.appendChild(m); }
     var pal=t.palette||(window.__themePalettes&&window.__themePalettes[t.id])||{};
     var chips=Object.values(pal).slice(0,6).map(function(c){ return '<span style="display:inline-block;width:26px;height:26px;border-radius:4px;margin:3px;background:'+c+'"></span>'; }).join('');
     m.innerHTML='<div style="background:#1c1a17;border:1px solid #3a352d;border-radius:14px;padding:24px;max-width:320px;width:90%;text-align:center;color:#f7f3ec">'+
@@ -3568,7 +3583,7 @@ window.addEventListener('load',function(){
     refresh(); showPanel(day,r);
   }
   function showPanel(day,r){
-    var m=$('xLoginPanel2048'); if(!m){ m=document.createElement('div'); m.id='xLoginPanel2048'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index:99996'; document.body.appendChild(m); }
+    var m=$('xLoginPanel2048'); if(!m){ m=document.createElement('div'); m.id='xLoginPanel2048'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index: var(--z-modal)'; document.body.appendChild(m); }
     var row=LADDER.map(function(x,i){ var on=(i+1)<=day; return '<div style="flex:1;text-align:center;padding:4px 2px;border-radius:6px;font-size:0.62rem;background:'+(on?'#edc22e':'#2a2823')+';color:'+(on?'#1a1a18':'#a89f8e')+'">D'+(i+1)+'<br>'+(i+1===day?'★':'')+'</div>'; }).join('');
     m.innerHTML='<div style="background:#1c1a17;border:1px solid #3a352d;border-radius:14px;padding:22px;max-width:340px;width:92%;text-align:center;color:#f7f3ec">'+
       '<div style="font-size:1.1rem;font-weight:800;margin-bottom:4px">🔥 Day '+day+' streak!</div>'+
@@ -3627,7 +3642,7 @@ window.addEventListener('load',function(){
   function showTournamentModal(){
     var d=tournament(); if(!d) return; var p=bracketFor(d.best||0);
     var m=$('xWeeklyTournamentModal2048');
-    if(!m){ m=document.createElement('div'); m.id='xWeeklyTournamentModal2048'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index:99998;padding:20px'; document.body.appendChild(m); }
+    if(!m){ m=document.createElement('div'); m.id='xWeeklyTournamentModal2048'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index: var(--z-modal);padding:20px'; document.body.appendChild(m); }
     var tiers=[
       {label:'TOP 10%', need:8000, reward:'+250 🪙', active:p<=10},
       {label:'TOP 25%', need:3000, reward:'+100 🪙', active:p>10&&p<=25},

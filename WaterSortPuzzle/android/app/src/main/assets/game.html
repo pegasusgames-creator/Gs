@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Water Sort Puzzle</title>
 <style>
+:root {
+  /* z-index scale: layers, not values (audit 2026-05-15 C1) —
+     replaces ad-hoc literal z-index values scattered through the file. */
+  --z-base: 1;
+  --z-overlay-dim: 100;
+  --z-banner-ad: 200;
+  --z-toast: 300;
+  --z-confirm: 400;
+  --z-tutorial: 500;
+  --z-promo-overlay: 600;
+  --z-modal: 700;
+  --z-critical-error: 800;
+}
 @font-face { font-family:'Poppins'; font-style:normal; font-weight:400; font-display:swap; src:url('fonts/Poppins-400.woff2') format('woff2'); }
 @font-face { font-family:'Poppins'; font-style:normal; font-weight:600; font-display:swap; src:url('fonts/Poppins-600.woff2') format('woff2'); }
 @font-face { font-family:'Poppins'; font-style:normal; font-weight:700; font-display:swap; src:url('fonts/Poppins-700.woff2') format('woff2'); }
@@ -33,7 +46,7 @@ canvas { display: block; }
 
 /* Main Menu */
 #menuScreen { background: linear-gradient(160deg, #0a1628 0%, #0d2137 50%, #0a3050 100%); justify-content: flex-start; padding-top: 72px; padding-bottom: 12px; overflow: hidden !important; }
-.menu-header { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 14px; z-index: 5; }
+.menu-header { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 14px; z-index: var(--z-overlay-dim); }
 .coin-display { display: flex; align-items: center; gap: 6px; background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.4); border-radius: 20px; padding: 5px 12px; }
 .coin-display span { color: #ffd700; font-weight: 700; font-size: 14px; }
 .lives-display { display: flex; align-items: center; gap: 6px; background: rgba(255,100,100,0.15); border: 1px solid rgba(255,100,100,0.4); border-radius: 20px; padding: 5px 12px; }
@@ -121,8 +134,8 @@ canvas { display: block; }
   border-color: rgba(255,255,255,0.07);
   box-shadow: none;
 }
-.level-bubble span { font-size: clamp(11px, 3vw, 15px); font-weight: 800; color: white; text-shadow: 0 1px 4px rgba(0,0,0,0.6); z-index: 1; }
-.level-stars { font-size: 9px; position: absolute; bottom: 5px; display: flex; gap: 0; z-index: 1; letter-spacing: -1px; }
+.level-bubble span { font-size: clamp(11px, 3vw, 15px); font-weight: 800; color: white; text-shadow: 0 1px 4px rgba(0,0,0,0.6); z-index: var(--z-base); }
+.level-stars { font-size: 9px; position: absolute; bottom: 5px; display: flex; gap: 0; z-index: var(--z-base); letter-spacing: -1px; }
 @keyframes pulseLevel {
   0%,100% { box-shadow: 0 3px 16px rgba(41,182,246,0.7), inset 0 -2px 6px rgba(0,0,0,0.2); }
   50%      { box-shadow: 0 3px 26px rgba(41,182,246,1); transform: scale(1.06); }
@@ -173,7 +186,7 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
 .btn-danger { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
 
 /* Overlays */
-.overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); z-index: 100; backdrop-filter: blur(4px); }
+.overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); z-index: var(--z-overlay-dim); backdrop-filter: blur(4px); }
 .overlay.active { display: flex; }
 .overlay-card { background: linear-gradient(135deg, #0d1f35, #0a3050); border: 1px solid rgba(79,195,247,0.2); border-radius: 24px; padding: 32px; max-width: 360px; width: 90%; text-align: center; }
 .overlay-card h2 { color: white; font-size: 28px; font-weight: 800; margin-bottom: 12px; }
@@ -183,13 +196,13 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
 .no-lives-heart { font-size: 72px; animation: heartPulse 1s infinite; display: block; margin: 16px 0; }
 
 /* Ad Banner — fixed at very bottom */
-#admob-banner { position: fixed; bottom: 0; left: 0; right: 0; height: 60px; background: rgba(0,0,0,0.5); border-top: 1px solid rgba(255,255,255,0.1); display: none; align-items: center; justify-content: center; z-index: 200; }
+#admob-banner { position: fixed; bottom: 0; left: 0; right: 0; height: 60px; background: rgba(0,0,0,0.5); border-top: 1px solid rgba(255,255,255,0.1); display: none; align-items: center; justify-content: center; z-index: var(--z-banner-ad); }
 #admob-banner span { color: rgba(255,255,255,0.3); font-size: 12px; }
 body.has-html-ad .screen { height: calc(100% - 60px) !important; }
 .level-trail, .shop-grid, .settings-list { padding-bottom: 12px; }
 
 /* Toast */
-#toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: rgba(10,22,40,0.92); border: 1px solid rgba(79,195,247,0.3); color: white; padding: 10px 20px; border-radius: 20px; font-size: 14px; opacity: 0; transition: all 0.3s; z-index: 300; pointer-events: none; white-space: nowrap; }
+#toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: rgba(10,22,40,0.92); border: 1px solid rgba(79,195,247,0.3); color: white; padding: 10px 20px; border-radius: 20px; font-size: 14px; opacity: 0; transition: all 0.3s; z-index: var(--z-toast); pointer-events: none; white-space: nowrap; }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* More Games Screen */
@@ -204,7 +217,7 @@ body.has-html-ad .screen { height: calc(100% - 60px) !important; }
 .promo-btn.claimed { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); cursor: default; }
 
 /* Confirmation dialog */
-.confirm-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 400; display: none; align-items: center; justify-content: center; }
+.confirm-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: var(--z-confirm); display: none; align-items: center; justify-content: center; }
 .confirm-overlay.active { display: flex; }
 .confirm-card { background: #0d1f35; border-radius: 20px; padding: 28px; max-width: 300px; width: 90%; text-align: center; border: 1px solid rgba(79,195,247,0.2); }
 .confirm-card h3 { color: white; font-size: 20px; font-weight: 700; margin-bottom: 12px; }
@@ -2043,8 +2056,16 @@ function showRewardedAd(type, callback) {
   // Security whitelist
   const validTypes = ['undo', 'skip', 'life', 'hint', 'extra_tube', 'magic_wand', 'free_coins'];
   if (!validTypes.includes(type)) return;
+  // C2 (audit 2026-05-15): a rewarded ad is already in flight — ignore the
+  // new trigger. This single chokepoint disables every rewarded-ad button
+  // while _pendingAdCallbacks is non-empty (guards the race, not just
+  // handles it).
+  if (window._pendingAdCallbacks && window._pendingAdCallbacks.length > 0) return;
   if (window.Android) {
-    window._pendingAdCallback = callback;
+    // Queue callbacks instead of overwriting a single _pendingAdCallback,
+    // so a reward is never dropped on the floor when two requests race.
+    window._pendingAdCallbacks = window._pendingAdCallbacks || [];
+    window._pendingAdCallbacks.push(callback);
     try { Android.showRewarded(type); } catch(e) {}
   }
 }
@@ -2055,7 +2076,7 @@ function boosterChooser(title, emoji, desc, coinCost, adType, onGrant) {
   if (!m) {
     m = document.createElement('div');
     m.id = 'boosterChooserModal';
-    m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);display:none;align-items:center;justify-content:center;z-index:99998;';
+    m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);display:none;align-items:center;justify-content:center;z-index: var(--z-modal);';
     document.body.appendChild(m);
   }
   m.innerHTML =
@@ -2977,9 +2998,10 @@ setInterval(() => {
 // Called by MainActivity via evaluateJavascript()
 // ============================================================
 window.onAdReward = function(type) {
-  if (window._pendingAdCallback) {
-    window._pendingAdCallback();
-    window._pendingAdCallback = null;
+  // C2 (audit 2026-05-15): drain the whole pending-callback queue.
+  while (window._pendingAdCallbacks && window._pendingAdCallbacks.length > 0) {
+    var cb = window._pendingAdCallbacks.shift();
+    try { cb(); } catch(e) {}
   }
 };
 
@@ -2988,9 +3010,8 @@ window.onPurchaseComplete = function(productId) {
 };
 
 window.onAdNotReady = function() {
-  if (window._pendingAdCallback) {
-    window._pendingAdCallback = null;
-  }
+  // C2 (audit 2026-05-15): ad failed/unavailable — drop all pending callbacks.
+  window._pendingAdCallbacks = [];
 };
 
 window.onBackPressed = function() {
@@ -3210,7 +3231,7 @@ document.addEventListener('visibilitychange',function(){
 @keyframes ls-card-in { from{transform:scale(0.85) translateY(30px);opacity:0} to{transform:none;opacity:1} }
 #ls-overlay {
   position:fixed; inset:0; background:rgba(0,0,0,0.88);
-  z-index:9999; display:none; align-items:center; justify-content:center;
+  z-index: var(--z-modal); display:none; align-items:center; justify-content:center;
   backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
 }
 #ls-card {
@@ -3247,7 +3268,7 @@ document.addEventListener('visibilitychange',function(){
   position:fixed; top:72px; left:50%; transform:translateX(-50%) translateY(-24px);
   background:linear-gradient(135deg,#6c5ce7,#a29bfe); color:#fff;
   padding:10px 22px; border-radius:50px; font-size:13px; font-weight:700;
-  opacity:0; transition:all 0.4s; z-index:10000;
+  opacity:0; transition:all 0.4s; z-index: var(--z-modal);
   pointer-events:none; white-space:nowrap; box-shadow:0 4px 20px rgba(108,92,231,0.5);
 }
 #ls-ach-toast.ls-show { opacity:1; transform:translateX(-50%) translateY(0); }
@@ -3874,7 +3895,7 @@ window.addEventListener('load', function() { window.i18n.init(); });
 
 /* Missions Overlay */
 #ws-missions-overlay {
-  position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:5000;
+  position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index: var(--z-confirm);
   display:none; align-items:center; justify-content:center;
   backdrop-filter:blur(6px);
 }
@@ -3910,7 +3931,7 @@ window.addEventListener('load', function() { window.i18n.init(); });
 
 /* Stats Overlay */
 #ws-stats-overlay {
-  position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:5001;
+  position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index: var(--z-confirm);
   display:none; align-items:center; justify-content:center;
   backdrop-filter:blur(6px);
 }
@@ -4435,7 +4456,7 @@ setTimeout(function() { wsUpdateMissionsBadge(); }, 1500);
 .active-badge { background:rgba(79,195,247,0.2); color:#4fc3f7; }
 .locked-badge { background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.3); }
 /* Tutorial */
-.tut-overlay { position:absolute; bottom:90px; left:0; right:0; display:flex; justify-content:center; pointer-events:none; z-index:50; }
+.tut-overlay { position:absolute; bottom:90px; left:0; right:0; display:flex; justify-content:center; pointer-events:none; z-index: var(--z-overlay-dim); }
 .tut-bubble { background:rgba(10,22,40,0.96); border:1.5px solid rgba(79,195,247,0.55); border-radius:18px; padding:16px 22px; max-width:280px; text-align:center; pointer-events:all; animation:tutPop 0.3s ease; }
 @keyframes tutPop { from{transform:scale(0.88) translateY(10px);opacity:0} to{transform:none;opacity:1} }
 .tut-bubble h4 { color:#4fc3f7; font-size:15px; font-weight:800; margin-bottom:6px; }
@@ -4529,11 +4550,11 @@ setTimeout(function() { wsUpdateMissionsBadge(); }, 1500);
   // Inject hand SVG + styles.
   var css = document.createElement('style');
   css.textContent =
-    '.tut-hand{position:fixed;z-index:9998;width:64px;height:64px;pointer-events:none;' +
+    '.tut-hand{position:fixed;z-index: var(--z-modal);width:64px;height:64px;pointer-events:none;' +
     'filter:drop-shadow(0 4px 10px rgba(0,0,0,0.6));opacity:0;transition:opacity 0.35s,left 0.65s cubic-bezier(.4,0,.2,1),top 0.65s cubic-bezier(.4,0,.2,1),transform 0.18s;}' +
     '.tut-hand.show{opacity:0.92;}' +
     '.tut-hand.tap{transform:scale(0.85);}' +
-    '.tut-pulse{position:fixed;z-index:9997;border:3px solid #4fc3f7;border-radius:16px;pointer-events:none;opacity:0;transition:opacity 0.2s;box-shadow:0 0 24px rgba(79,195,247,0.7);}' +
+    '.tut-pulse{position:fixed;z-index: var(--z-modal);border:3px solid #4fc3f7;border-radius:16px;pointer-events:none;opacity:0;transition:opacity 0.2s;box-shadow:0 0 24px rgba(79,195,247,0.7);}' +
     '.tut-pulse.on{opacity:1;animation:tutPulse 0.8s ease-out;}' +
     '@keyframes tutPulse{0%{transform:scale(0.95)}50%{transform:scale(1.08)}100%{transform:scale(1)}}';
   document.head.appendChild(css);
@@ -4666,7 +4687,7 @@ setTimeout(function() { wsUpdateMissionsBadge(); }, 1500);
 #starterPackModal {
   position:fixed;inset:0;background:rgba(13,17,23,0.92);
   display:none;flex-direction:column;align-items:center;justify-content:center;
-  z-index:9999;padding:1.5rem;backdrop-filter:blur(6px);
+  z-index: var(--z-modal);padding:1.5rem;backdrop-filter:blur(6px);
 }
 .starter-card {
   background:linear-gradient(135deg,#1a3a5c,#0d1117);
@@ -4758,7 +4779,7 @@ function xToast(msg){
   t.textContent=msg;
   t.style.cssText='position:fixed;bottom:20%;left:50%;transform:translateX(-50%);' +
     'background:rgba(0,0,0,0.88);color:#fff;padding:10px 22px;border-radius:20px;' +
-    'z-index:99999;font-size:0.9rem;font-weight:600;pointer-events:none;';
+    'z-index: var(--z-modal);font-size:0.9rem;font-weight:600;pointer-events:none;';
   document.body.appendChild(t);
   setTimeout(function(){t.remove();},2500);
 }
@@ -4971,7 +4992,9 @@ function injectDragonTheme(){
     };
   }
 
-  // Patch renderThemes to show coin cost on Dragon card
+  // MONKEY-PATCH: wraps the renderThemes defined at line ~4494 to add the
+  // Dragon-theme coin-gate UI without modifying the original. If you
+  // refactor renderThemes, update this wrapper too. (Audit 2026-05-15 C3.)
   var origRT=window.renderThemes;
   if(typeof origRT==='function'){
     window.renderThemes=function(){
@@ -5173,7 +5196,7 @@ window.addEventListener('load',function(){
   #notifPrePrompt {
     position: fixed; inset: 0; background: rgba(10, 22, 40, 0.86);
     display: none; align-items: center; justify-content: center;
-    z-index: 10000; padding: 20px; backdrop-filter: blur(6px);
+    z-index: var(--z-modal); padding: 20px; backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
   }
   #notifPrePrompt .np-card {
@@ -5291,7 +5314,7 @@ window.addEventListener('load',function(){
   // ── A15: theme-unlock celebration card ──
   function showThemeUnlockCard(theme){
     var m=$('xThemeUnlockCard');
-    if(!m){ m=document.createElement('div'); m.id='xThemeUnlockCard'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index:99997'; document.body.appendChild(m); }
+    if(!m){ m=document.createElement('div'); m.id='xThemeUnlockCard'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index: var(--z-modal)'; document.body.appendChild(m); }
     var chips=themePalette(theme.id).map(function(c){ return '<span style="display:inline-block;width:26px;height:26px;border-radius:6px;margin:3px;background:'+c+'"></span>'; }).join('');
     m.innerHTML='<div style="background:#161b22;border:1px solid #30363d;border-radius:18px;padding:24px;max-width:320px;width:90%;text-align:center;color:#e6edf3">'+
       '<div style="font-size:1.15rem;font-weight:800;margin-bottom:6px">🎉 New theme unlocked!</div>'+
@@ -5345,7 +5368,7 @@ window.addEventListener('load',function(){
   }
   function showLoginPanel(day,r){
     var m=$('xLoginPanel');
-    if(!m){ m=document.createElement('div'); m.id='xLoginPanel'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index:99996'; document.body.appendChild(m); }
+    if(!m){ m=document.createElement('div'); m.id='xLoginPanel'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index: var(--z-modal)'; document.body.appendChild(m); }
     var ladder=LOGIN_LADDER.map(function(x,i){ var on=(i+1)<=day; return '<div style="flex:1;text-align:center;padding:4px 2px;border-radius:8px;font-size:0.62rem;background:'+(on?'#1f6feb':'#21262d')+';color:'+(on?'#fff':'#8b949e')+'">D'+(i+1)+'<br>'+(i+1===day?'★':'')+'</div>'; }).join('');
     m.innerHTML='<div style="background:#161b22;border:1px solid #30363d;border-radius:18px;padding:22px;max-width:340px;width:92%;text-align:center;color:#e6edf3">'+
       '<div style="font-size:1.1rem;font-weight:800;margin-bottom:4px">🔥 Day '+day+' streak!</div>'+
