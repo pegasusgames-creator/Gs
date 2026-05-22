@@ -974,6 +974,12 @@ The new checks added recently:
   present. `python3 scripts/check_menu_completeness.py`
 - `seasonal events present` — `SEASONAL_EVENTS` constant covering Oct/Dec/Feb.
   `python3 scripts/check_seasonal_events.py`
+- `puzzle solvability` — for any logic-puzzle game, every level is
+  BFS-solver-verified solvable and its stored optimal/par equals the
+  solver's true minimum. Blocks unsolvable levels and hand-guessed move
+  counts. Covers sliding-block (UnblockPuzzle-style) today; nonogram and
+  sort-puzzle genres fold into the same gate as their solvers are added.
+  `python3 scripts/check_unblock_solvable.py`
 - `IAP price string parity` — `game.html` `PRODUCTS` price strings match
   `iaps.json` `price_usd` to the cent.
   `python3 scripts/check_price_string_parity.py`

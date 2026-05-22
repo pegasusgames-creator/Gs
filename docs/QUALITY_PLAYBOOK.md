@@ -1747,9 +1747,14 @@ called for "§8".)
 
 1. **Price-string parity** — `game.html` `PRODUCTS` price strings must
    equal `iaps.json` `price_usd` to the cent. `check_price_string_parity`.
-2. **Generated-puzzle solvability** — procedurally generated boards must
-   be verified solvable / uniquely determined before ship; bake offline
-   if runtime validation is too slow.
+2. **Generated-puzzle solvability** — every level in a logic/puzzle game
+   ships solver-verified solvable, with optimal/par values computed by
+   the solver. No hand-authored level set is trusted without a full
+   solver pass — hand-guessed move counts are forbidden. No level ships
+   where the win condition is structurally impossible (e.g., a permanent
+   wall in the goal lane). Bake the solver result offline if runtime
+   validation is too slow. The `puzzle solvability` pre-publish gate
+   (`check_unblock_solvable`) enforces this for sliding-block games.
 3. **Screenshot headline ↔ content match** — a headline naming a screen
    must sit over a capture of that screen. `check_screenshot_headline_match`.
 4. **IAP display-name table** — every `RELEASE_HANDOFF.md` IAP row has a

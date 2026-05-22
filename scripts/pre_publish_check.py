@@ -570,6 +570,10 @@ check_coin_tier_ladder     = _delegated_check("check_coin_tier_ladder")
 check_booster_catalog      = _delegated_check("check_booster_catalog")
 check_menu_completeness    = _delegated_check("check_menu_completeness")
 check_seasonal_events      = _delegated_check("check_seasonal_events")
+# puzzle_solvability — BFS-solver gate: blocks any puzzle game shipping a
+# level that is unsolvable or carries a wrong optimal/par (added after the
+# 2026-05-15 UnblockPuzzle audit found 35/150 unsolvable, 114/150 mislabelled).
+check_puzzle_solvability   = _delegated_check("check_unblock_solvable")
 
 # Audit 2026-05-15 — slip-prevention checks (G2-G6): price-string parity,
 # restore-purchases UI, interstitial cadence, IAP display-name table,
@@ -1906,6 +1910,7 @@ def main():
     section("code",  "booster catalog",             check_booster_catalog, apps)
     section("code",  "menu completeness",           check_menu_completeness, apps)
     section("code",  "seasonal events present",     check_seasonal_events, apps)
+    section("code",  "puzzle solvability",           check_puzzle_solvability, apps)
     # Audit 2026-05-15 slip-prevention checks (G2-G6).
     section("meta",  "IAP price string parity",     check_price_string_parity, apps)
     section("code",  "restore purchases UI",        check_restore_purchases_ui, apps)

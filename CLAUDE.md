@@ -723,7 +723,14 @@ Each line is now enforced by a `pre_publish_check.py` check.
 - **Procedurally generated puzzles MUST be validated solvable / uniquely
   determined before shipping** — never trust the generator without a
   solver pass. If runtime validation is too slow for startup, validate
-  offline and bake the result (Nonogram levels 151-500).
+  offline and bake the result (Nonogram levels 151-500). For Rush Hour /
+  unblock games: a non-red horizontal block on the red car's exit row can
+  never clear and permanently walls the exit. The generator must forbid
+  horizontal blocks on the exit row. The UnblockPuzzle May 2026 incident
+  shipped 35/150 unsolvable levels from this exact mistake. The stored
+  `optimal` move count MUST come from the solver, never a hand-guess —
+  114/150 were wrong. The `puzzle solvability` pre-publish gate
+  (`check_unblock_solvable.py`) blocks both failure modes.
 - **Screenshot headlines MUST match screenshot content.** A "Daily
   Missions" headline over a plain gameplay board is a Play policy red
   flag. `check_screenshot_headline_match` enforces.
