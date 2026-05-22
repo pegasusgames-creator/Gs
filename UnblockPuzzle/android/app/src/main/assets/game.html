@@ -241,6 +241,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--app-bg);font-f
 .btn-menu-back{background:var(--btn-neutral-bg);color:var(--btn-neutral-fg);}
 .btn-hint{background:var(--g-hint);color:var(--hint-fg);}
 .btn-reset{background:var(--btn-neutral-bg);color:var(--btn-neutral-fg);}
+.btn-undo{background:var(--btn-neutral-bg);color:var(--btn-neutral-fg);}
 .hint-count{font-size:0.75rem;opacity:0.8;}
 
 /* LEVEL SELECT */
@@ -401,6 +402,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--app-bg);font-f
   <div class="game-footer">
     <button class="foot-btn btn-menu-back" onclick="goToMenu()">← Menu</button>
     <button class="foot-btn btn-hint" onclick="useHint()">💡 Hint <span class="hint-count" id="hintCount"></span></button>
+    <button class="foot-btn btn-undo" onclick="undoMove()">↶ Undo</button>
     <button class="foot-btn btn-reset" onclick="resetLevel()">↺ Reset</button>
   </div>
   <div id="tutorialOverlay" style="display:none;position:absolute;bottom:90px;left:0;right:0;display:none;justify-content:center;pointer-events:none;z-index:50">
@@ -928,6 +930,7 @@ function defaultState(){
     soundEnabled:true,
     musicEnabled:false,
     unlimitedLivesUntil:0,
+    unlimitedLivesForever:false,
     activeTheme:'default',
     uiTheme:'light',
     uiThemeOwned:{},
@@ -956,8 +959,13 @@ function saveState(){
 const MAX_LIVES = 5;
 const LIFE_REGEN_MS = 30 * 60 * 1000;
 
+// Unlimited lives — either a permanent purchase or a timed pass.
+function hasUnlimitedLives(){
+  return state.unlimitedLivesForever === true || state.unlimitedLivesUntil > Date.now();
+}
+
 function getLives(){
-  if(state.unlimitedLivesUntil > Date.now()) return 99;
+  if(hasUnlimitedLives()) return 99;
   const elapsed = Date.now() - state.lastLifeTime;
   const regen = Math.floor(elapsed / LIFE_REGEN_MS);
   if(regen > 0){
@@ -969,7 +977,7 @@ function getLives(){
 }
 
 function useLife(){
-  if(state.unlimitedLivesUntil > Date.now()) return true;
+  if(hasUnlimitedLives()) return true;
   if(state.lives <= 0) return false;
   state.lives--;
   if(state.lives === MAX_LIVES - 1) state.lastLifeTime = Date.now();
@@ -984,7 +992,7 @@ function addLife(n){
 }
 
 function lifeRegenCountdown(){
-  if(state.unlimitedLivesUntil > Date.now()) return 'Unlimited!';
+  if(hasUnlimitedLives()) return 'Unlimited!';
   if(state.lives >= MAX_LIVES) return 'Full';
   const next = state.lastLifeTime + LIFE_REGEN_MS - Date.now();
   if(next <= 0) return 'Soon';
@@ -1069,6 +1077,7 @@ let BOARD_THEME = (document.documentElement.getAttribute('data-theme')==='midnig
 let currentLevelIdx = 0;
 let blocks = [];
 let moveCount = 0;
+let undoStack = [];
 let hintUsedCount = 0;
 let freeHints = 3;
 let isDailyMode = false;
@@ -1102,6 +1111,7 @@ function initGame(levelIdx, isDaily){
   // Deep copy blocks
   blocks = lvl.blocks.map((b,i)=>({...b, colorIdx:b.isRed?-1:i}));
   moveCount = 0;
+  undoStack = [];
   hintUsedCount = 0;
   freeHints = 3;
   dragBlock = null;
@@ -1477,6 +1487,7 @@ function onPointerUp(e){
 
   // Count move if position changed
   if(dragBlock.x !== dragOrigCol || dragBlock.y !== dragOrigRow){
+    undoStack.push({index: blocks.indexOf(dragBlock), x: dragOrigCol, y: dragOrigRow});
     moveCount++;
     updateHUD();
     playSound('slide');
@@ -1677,6 +1688,19 @@ function resetLevel(){
     return;
   }
   initGame(currentLevelIdx, isDailyMode);
+}
+
+// Undo the last committed block move. Free — it's a core control, not a
+// booster — so no coin/ad gate. initGame() clears the stack.
+function undoMove(){
+  if(undoStack.length === 0){ showToast('Nothing to undo'); return; }
+  const snap = undoStack.pop();
+  const b = blocks[snap.index];
+  if(b){ b.x = snap.x; b.y = snap.y; }
+  moveCount = Math.max(0, moveCount - 1);
+  updateHUD();
+  render();
+  playSound('slide');
 }
 
 function showNoLivesOverlay(){
@@ -2052,7 +2076,7 @@ window.onPurchaseComplete = function(productId){
   } else if(productId==='unlimited_lives_1h'){
     state.unlimitedLivesUntil = Date.now() + 3600000;
   } else if(productId==='unlimited_lives_forever'){
-    state.unlimitedLivesUntil = Date.now() + 1e13;
+    state.unlimitedLivesForever = true;
   } else if(productId==='season_pass_monthly'){
     state.seasonPassUntil = Date.now() + 30 * 86400 * 1000;
     state.removeAds = true;
@@ -2065,6 +2089,10 @@ window.onPurchaseComplete = function(productId){
     state.lastWeeklyGrantDate = '';
     if(window.Android && window.Android.hideBannerAd) window.Android.hideBannerAd();
     var _ab3 = document.getElementById('admob-banner'); if(_ab3) _ab3.style.display = 'none';
+  } else {
+    // Unknown SKU — defer for replay rather than dropping it silently.
+    if (typeof window.iapDeferGrant === 'function') window.iapDeferGrant(productId);
+    if (typeof window.iapThanksToast === 'function') window.iapThanksToast();
   }
   saveState();
   updateHUD();
