@@ -625,6 +625,13 @@ wait for the user. Do NOT write a "Known gaps" section and proceed.
   retroactively to WaterSortPuzzle/Nonogram/Puzzle2048 — their menu
   screenshots were removed 2026-05-20 (now 6 phone / 6 tablet-7 / 5
   tablet-10 gameplay slots); no more grandfathering of those three.
+- **Screenshot set that doesn't show every theme.** If the app has a
+  theme system (block/tile palettes and/or light-vs-dark UI themes),
+  the screenshots MUST showcase ALL of them — cycle a different theme
+  through the board slots and include at least one shot of each UI
+  theme. Configure it in `<App>/test/screenshot_taps.json` via the
+  app's theme hooks (`setActiveTheme` / `applyUITheme`), the same way
+  WaterSortPuzzle/Nonogram/Puzzle2048 do. See `SHIP_GAME.md` Step 3.3.
 - Phone, tablet 7", tablet 10" reusing same raw page, wrapper, or
   headline. **Each of the 3 surfaces = fully distinct listing**, AND
   every wrapped screenshot within a surface has unique raw + unique

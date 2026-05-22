@@ -285,9 +285,23 @@ def force_stop_and_launch(package_name, readiness_expr=None):
     undefined. The explicit navigate forces CDP to bind to the real page.
     """
     run(["adb", "shell", "am", "force-stop", package_name], check=False)
-    time.sleep(0.6)
-    run(["adb", "shell", "am", "start", "-n",
-         f"{package_name}/.MainActivity"], check=False)
+    # force-stop is async — wait until the process is actually gone, else
+    # the launch below races the dying instance ("intent delivered to
+    # currently running top-most instance") and the app never comes up.
+    for _ in range(25):
+        if not _get_app_pid(package_name):
+            break
+        time.sleep(0.2)
+    time.sleep(0.4)
+    # Cold-start via the LAUNCHER intent. `am start -n pkg/.MainActivity`
+    # proved unreliable on some emulators (delivers to a stale task record
+    # and the activity self-finishes); monkey's LAUNCHER launch is robust.
+    run(["adb", "shell", "monkey", "-p", package_name,
+         "-c", "android.intent.category.LAUNCHER", "1"], check=False)
+    for _ in range(25):
+        if _get_app_pid(package_name):
+            break
+        time.sleep(0.2)
     time.sleep(3.5)  # let MainActivity.loadUrl finish; skip _force_cdp_navigate
     # The MainActivity already loadUrl()s file:///android_asset/game.html;
     # forcing another Page.navigate via CDP can leave the icon row in a
@@ -376,7 +390,15 @@ def _devtools_ws_url(package_name):
             req = urllib.request.Request("http://127.0.0.1:9229/json")
             with urllib.request.urlopen(req, timeout=2) as resp:
                 pages = _json.loads(resp.read().decode("utf-8"))
-            for p in pages:
+            # Prefer the app's own WebView page (file:///android_asset/
+            # game.html) over AdMob/ad-network iframe pages, which also
+            # expose a CDP target and otherwise sort first.
+            def _is_game(pg):
+                u = pg.get("url") or ""
+                return ("android_asset" in u or "game.html" in u
+                        or u.startswith("file://"))
+            ordered = sorted(pages, key=lambda pg: 0 if _is_game(pg) else 1)
+            for p in ordered:
                 if p.get("type") in ("page", "webview") and p.get("webSocketDebuggerUrl"):
                     return p["webSocketDebuggerUrl"]
         except Exception:
@@ -556,6 +578,11 @@ def main():
     if not args.no_reinstall:
         if not install_apk(app_dir):
             sys.exit(1)
+
+    # Grant POST_NOTIFICATIONS so the Android 13+ runtime-permission
+    # dialog doesn't pop over the WebView and land in the screenshot.
+    run(["adb", "shell", "pm", "grant", package,
+         "android.permission.POST_NOTIFICATIONS"], check=False)
 
     taps = load_per_app_taps(app_dir, args.target) or DEFAULT_TAPS
     # If the per-app tap file has tablet_<N>_<slot> keys for this target,

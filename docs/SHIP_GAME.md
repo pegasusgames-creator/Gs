@@ -485,6 +485,17 @@ flag", QUALITY_PLAYBOOK §7.1):
 | 05 | Daily missions panel (3 active objectives) or stats screen |
 | 06 | A different mid-game board (different palette, different layout) |
 
+**Showcase every theme.** If the app has a theme system (block/tile
+color palettes and/or light-vs-dark UI themes), the screenshot set
+MUST display *all* of them — cycle a different theme through the board
+slots and include at least one shot of each UI theme, so the listing
+advertises the full visual range. This is how the shipped apps
+(WaterSortPuzzle, Nonogram, Puzzle2048) are configured: every
+`screenshot_taps.json` slot calls the theme switcher before
+navigating. Drive it from `<App>/test/screenshot_taps.json` via the
+app's theme hooks (`setActiveTheme`, `applyUITheme`, …) — never ship a
+screenshot set that only shows the default theme.
+
 These are starting points — the rule is "no menu, no shop, no
 more-games, no settings, no two duplicates," not a rigid template.
 Pick what shows the app at its best. `wrap_screenshots.py` wraps
