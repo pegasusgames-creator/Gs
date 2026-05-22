@@ -79,16 +79,16 @@ public class MainActivity extends Activity {
     // NOTE: these are stale IDs from a prior account (publisher 2759523698880843).
     // Replace with real IDs from the canonical Pegasus Games AdMob account
     // (publisher 5695494884863768) per RELEASE_HANDOFF.md before shipping.
-    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-3940256099942544/6300978111";
-    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
-    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-3940256099942544/5224354917";
+    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-5695494884863768/9906792093";
+    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-5695494884863768/8593710424";
+    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-5695494884863768/5121369274";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
     // Paste the app's base64 RSA public key from:
     //   Play Console → Monetize setup → Licensing → "Base64-encoded RSA public key"
     // While the placeholder remains, signature verification is SKIPPED.
     // Replace before shipping (see RELEASE_HANDOFF.md).
-    private static final String LICENSE_PUBLIC_KEY = "PASTE_LICENSE_KEY_FROM_PLAY_CONSOLE_MONETIZE_LICENSING";
+    private static final String LICENSE_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArr5f+v0PHkW2KccsK3aG9dVJBhJ8YVrtq1UjSsFbIs/aanSEVP+CIPhUFP6Ufb4bvOgJaA2ClwnRv7EppsQ+jD807CqfvsYE+zEIyy9IrJkbsrZ9OGYF6qMlbULSAkFAY+OuYOVl8xJVdB4BMVdn0J3xQi1nvwvZ3USthcdAqMO/JTz7deGURDX5+LFQ8NfxTgh/KxChG43/hlZI9Wcz5E7rgh4yJJQGGpD/6fJE2qfCyc/OwkPlVHqbTx7Qs53lMVAtB3Pi5rat2vwB9FwFLqIsf8G20Q7AJ7zDlID5BHn9LmqVooatmsdRECAEdT89Tt4kmNhGYhSz5o9CagjFMwIDAQAB";
 
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
         "coins_small", "coins_medium", "coins_large", "coins_mega",
