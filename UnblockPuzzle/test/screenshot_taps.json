@@ -1,5 +1,5 @@
 {
-  "_comment": "UnblockPuzzle screenshot capture — 18 fully distinct slots. NO screen type repeats across phone/tablet_7/tablet_10: the five non-gameplay screens (win, daily, stats, missions, level-select) each appear exactly ONCE across the whole set; the other 13 slots are gameplay boards at 13 distinct levels. All 6 block themes (default/neon/pastel/fire/ocean/galaxy) and both UI themes (Daylight + Midnight) are showcased across the board slots. Block theme via window.setActiveTheme; UI theme via window.applyUITheme.",
+  "_comment": "UnblockPuzzle screenshot capture — 18 fully distinct slots. NO screen type repeats across phone/tablet_7/tablet_10: the four non-gameplay screens (win, stats, missions, level-select) each appear exactly ONCE across the whole set; the other 14 slots are gameplay boards at 14 distinct levels. All 6 block themes (default/neon/pastel/fire/ocean/galaxy) and both UI themes (Daylight + Midnight) are showcased across the board slots. Block theme via window.setActiveTheme; UI theme via window.applyUITheme.",
   "_readiness_expr": "typeof state !== 'undefined' && typeof initGame === 'function' && typeof showScreen === 'function' && typeof window.setActiveTheme === 'function' && typeof window.applyUITheme === 'function'",
 
   "_setup_taps": [
@@ -11,7 +11,7 @@
   "03_level_complete": [["js", "applyUITheme('light');window.setActiveTheme('ocean');showScreen('gameScreen');initGame(42,false);'ok';", 2400]],
   "04_missions_panel": [["js", "applyUITheme('light');window.setActiveTheme('pastel');showScreen('gameScreen');initGame(25,false);'ok';", 2400]],
   "05_stats":          [["js", "applyUITheme('light');window.setActiveTheme('fire');showScreen('gameScreen');initGame(60,false);setTimeout(function(){var ov=document.getElementById('winOverlay');if(ov)ov.classList.add('active');},500);'ok';", 2800]],
-  "06_levels_grid":    [["js", "applyUITheme('midnight');showScreen('dailyScreen');if(typeof initDailyScreen==='function')initDailyScreen();'ok';", 2200]],
+  "06_levels_grid":    [["js", "applyUITheme('midnight');window.setActiveTheme('ocean');showScreen('gameScreen');initGame(104,false);'ok';", 2400]],
 
   "tablet_7_01_deep_gameplay":  [["js", "applyUITheme('light');window.setActiveTheme('fire');showScreen('gameScreen');initGame(95,false);'ok';", 2400]],
   "tablet_7_02_early_gameplay": [["js", "applyUITheme('midnight');window.setActiveTheme('neon');showScreen('gameScreen');initGame(33,false);'ok';", 2400]],
