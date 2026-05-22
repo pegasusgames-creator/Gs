@@ -24,55 +24,55 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-Initial release.
+Fresh launch — 150 hand-tuned sliding-block puzzles, every one solver-verified solvable. Slide, escape, repeat.
 </en-US>
 
 <ar>
-الإصدار الأول.
+إطلاق جديد — 150 لغز انزلاق كتل مضبوطة يدويًا، كل لغز تم التحقق من قابليته للحل بواسطة محلّل. اسحب، اهرب، كرّر.
 </ar>
 
 <de-DE>
-Erstveröffentlichung.
+Frischer Start — 150 handfein abgestimmte Schiebeblock-Rätsel, jedes per Solver als lösbar bestätigt. Schieben, entkommen, wiederholen.
 </de-DE>
 
 <es-419>
-Lanzamiento inicial.
+Lanzamiento nuevo — 150 rompecabezas de bloques deslizantes ajustados a mano, cada uno verificado como resoluble por un solucionador. Desliza, escapa, repite.
 </es-419>
 
 <fr-FR>
-Lancement initial.
+Nouveau lancement — 150 puzzles de blocs coulissants réglés à la main, chacun vérifié comme résoluble par un solveur. Glissez, échappez-vous, recommencez.
 </fr-FR>
 
 <hi-IN>
-प्रारंभिक रिलीज़।
+नया लॉन्च — 150 हाथ से ट्यून की गई स्लाइडिंग-ब्लॉक पहेलियाँ, हर एक सॉल्वर द्वारा हल करने योग्य सत्यापित। खिसकाएँ, बचें, दोहराएँ।
 </hi-IN>
 
 <id>
-Rilis awal.
+Peluncuran baru — 150 teka-teki blok geser yang disetel dengan tangan, setiap teka-teki diverifikasi dapat diselesaikan oleh solver. Geser, lolos, ulangi.
 </id>
 
 <it-IT>
-Rilascio iniziale.
+Nuovo lancio — 150 puzzle a blocchi scorrevoli rifiniti a mano, ognuno verificato risolvibile da un solver. Scorri, fuggi, ripeti.
 </it-IT>
 
 <ja-JP>
-初回リリース。
+新登場 — 手作業で調整した150のスライドブロックパズル、すべてソルバーで解けることを確認済み。スライドして、脱出して、繰り返そう。
 </ja-JP>
 
 <pt-BR>
-Lançamento inicial.
+Novo lançamento — 150 quebra-cabeças de blocos deslizantes ajustados à mão, cada um verificado como solucionável por um solver. Deslize, escape, repita.
 </pt-BR>
 
 <tr-TR>
-İlk sürüm.
+Yeni çıkış — elle ayarlanmış 150 kaydırmalı blok bulmacası, her biri çözücüyle çözülebilir olarak doğrulandı. Kaydır, kaç, tekrarla.
 </tr-TR>
 
 <uk>
-Перший реліз.
+Свіжий запуск — 150 вручну налаштованих головоломок із посувними блоками, кожну перевірено розв'язувачем на розв'язність. Посувай, тікай, повторюй.
 </uk>
 
 <zh-CN>
-初始版本。
+全新上线 —— 150 个手工调校的滑块谜题，每个都经求解器验证可解。滑动、脱困、再来一局。
 </zh-CN>
 
 ---
@@ -82,7 +82,7 @@ Lançamento inicial.
 _Grow → Store presence → Main store listing → Short description_
 
 <en-US>
-Slide blocks to free the red piece! Classic addictive sliding puzzle.
+Slide blocks aside to clear the red piece's path! Classic sliding puzzle.
 </en-US>
 
 <ar>
@@ -143,7 +143,7 @@ _Grow → Store presence → Main store listing → Full description_
 Slide one piece, then another, until the last lane opens and the red block slips out — that quiet click of release you can chase across 150 hand-crafted puzzles.
 
 🧠 BRAIN-BENDING LOGIC
-From a five-move warm-up to a thirty-move tangle, every board has exactly one solution and exactly one elegant path through it.
+From a five-move warm-up to a thirty-move tangle, every board has at least one clean solution, and the tougher boards reward planning several moves ahead.
 
 ✨ THE FEEL
 • Smooth, satisfying block-slide animations — relaxing for evening play
@@ -173,7 +173,7 @@ The board is a quiet little knot. You undo it one move at a time.
 ادفع قطعة واحدة، ثم أخرى، حتى يفتح الممر الأخير وينزلق المربع الأحمر — ذلك النقر الهادئ للإفراج يمكنك مطاردته عبر 150 لغزًا مصممًا يدويًا.
 
 🧠 منطق معقد
-من تدفئة بخمس خطوات إلى تشابك ثلاثين خطوة، كل لوحة لها حل واحد فقط وطريق أنيق واحد عبرها.
+من تدفئة بخمس خطوات إلى تشابك ثلاثين خطوة، كل لوحة لها حل واضح واحد على الأقل، واللوحات الأصعب تكافئ التخطيط لعدة خطوات مقبلة.
 
 ✨ الإحساس
 • رسوم متحركة سلسة ومريحة لتمرير الكتل — مريحة للعب في المساء
@@ -203,7 +203,7 @@ The board is a quiet little knot. You undo it one move at a time.
 Einen Block verschieben, dann einen weiteren, bis die letzte Bahn sich öffnet und der rote Block herausgleitet — das leise Klicken der Freigabe kannst du über 150 handgefertigte Rätsel hinweg verfolgen.
 
 🧠 GRAUENHAFTES LOGISCHES DENKEN  
-Von einer fünf Züge umfassenden Aufwärmübung bis zu einem 30-Züge-Wirrwar hat jedes Brett genau eine Lösung und genau einen eleganten Weg dorthin.
+Von einer fünf Züge umfassenden Aufwärmübung bis zu einem 30-Züge-Wirrwar hat jedes Brett mindestens eine saubere Lösung, und die schwierigeren Bretter belohnen vorausschauendes Planen über mehrere Züge.
 
 ✨ DAS GEFÜHL  
 • Glatte, befriedigende Block-Verschiebungsanimationen — entspannend für das Spielen am Abend  
@@ -233,7 +233,7 @@ Das Brett ist ein kleines, ruhiges Knoten. Du entschlüsselst es Zug für Zug.
 Desliza una pieza, luego otra, hasta que la última línea se abra y el bloque rojo salga — ese tranquilo clic de liberación que puedes perseguir a través de 150 rompecabezas hechos a mano.
 
 🧠 LÓGICA QUE RETUERCE EL CEREBRO
-Desde un calentamiento de cinco movimientos hasta un enredo de treinta, cada tablero tiene exactamente una solución y exactamente un camino elegante para llegar a ella.
+Desde un calentamiento de cinco movimientos hasta un enredo de treinta, cada tablero tiene al menos una solución clara, y los tableros más difíciles recompensan planear varios movimientos por adelantado.
 
 ✨ LA SENSACIÓN
 • Animaciones de deslizamiento de bloques suaves y satisfactorias — relajante para jugar por la noche
@@ -263,7 +263,7 @@ El tablero es un pequeño nudo silencioso. Lo deshaces un movimiento a la vez.
 Faites glisser une pièce, puis une autre, jusqu'à ce que la dernière voie s'ouvre et que le bloc rouge glisse — ce clic silencieux de libération que vous pouvez poursuivre à travers 150 puzzles faits à la main.
 
 🧠 LOGIQUE QUI FAIT TRAVAILLER L'ESPRIT
-D'un échauffement de cinq mouvements à un enchevêtrement de trente mouvements, chaque plateau a exactement une solution et un chemin élégant à travers celui-ci.
+D'un échauffement de cinq mouvements à un enchevêtrement de trente mouvements, chaque plateau a au moins une solution claire, et les plateaux les plus difficiles récompensent l'anticipation de plusieurs coups.
 
 ✨ LA SENSATION
 • Animations de glissement de blocs fluides et satisfaisantes — relaxantes pour une partie du soir
@@ -293,7 +293,7 @@ Le plateau est un petit nœud silencieux. Vous le dénouez un mouvement à la fo
 एक एक करके एक टुकड़ा खिसकाएँ, फिर दूसरा, जब तक अंतिम लेन खुल न जाए और लाल ब्लॉक बाहर न निकले — उस शांति से भरे क्लिक को महसूस करें जो आपको 150 हस्तनिर्मित पहेलियों के बीच दौड़ने पर मजबूर करेगा।
 
 🧠 मस्तिष्क के लिए चुनौतीपूर्ण तर्क
-पाँच चालों के वार्म-अप से लेकर तीस चालों तक के उलझाव तक, हर बोर्ड में केवल एक ही समाधान और एक ही सुंदर मार्ग होता है।
+पाँच चालों के वार्म-अप से लेकर तीस चालों तक के उलझाव तक, हर बोर्ड में कम से कम एक स्पष्ट समाधान होता है, और कठिन बोर्ड कई चालों की पहले से योजना बनाने पर इनाम देते हैं।
 
 ✨ अनुभव
 • चिकनी, संतोषजनक ब्लॉक-खिसकाने की एनीमेशन — शाम की खेलने के लिए आरामदायक
@@ -323,7 +323,7 @@ Le plateau est un petit nœud silencieux. Vous le dénouez un mouvement à la fo
 Geser satu blok, lalu satu lagi, sampai jalur terakhir terbuka dan blok merah meluncur keluar — suara klik lembut saat melepaskannya bisa kamu kejar di 150 teka-teki yang dirancang dengan tangan.
 
 🧠 LOGIKA YANG MEMBENGKANGKAN OTAK
-Dari pemanasan lima gerakan hingga kusut tiga puluh gerakan, setiap papan memiliki satu solusi dan satu jalur elegan yang tepat.
+Dari pemanasan lima gerakan hingga kusut tiga puluh gerakan, setiap papan memiliki setidaknya satu solusi yang jelas, dan papan yang lebih sulit menghargai perencanaan beberapa langkah ke depan.
 
 ✨ PERASAANNYA
 • Animasi geser blok yang halus dan memuaskan — menyenangkan untuk bermain di malam hari
@@ -353,7 +353,7 @@ Papan itu adalah simpul kecil yang tenang. Kamu membongkarnya satu gerakan pada 
 Scivola un pezzo, poi un altro, fino a quando l'ultima corsia si apre e il blocco rosso scivola fuori — quel silenzioso clic di rilascio che puoi inseguire attraverso 150 puzzle artigianali.
 
 🧠 LOGICA CHE FA LAVORARE IL CERVELLO
-Da un riscaldamento di cinque mosse a un intrico di trenta mosse, ogni tavola ha esattamente una soluzione e esattamente un elegante percorso attraverso di essa.
+Da un riscaldamento di cinque mosse a un intrico di trenta mosse, ogni tavola ha almeno una soluzione pulita, e le tavole più difficili premiano la pianificazione di diverse mosse in anticipo.
 
 ✨ LA SENSAZIONE
 • Animazioni di scorrimento dei blocchi fluide e soddisfacenti — rilassanti per il gioco serale
@@ -383,7 +383,7 @@ La tavola è un piccolo nodo silenzioso. Lo disfi una mossa alla volta.
 一つのブロックをスライドして、また別のブロックをスライドさせ、最後のレーンが開くと赤いブロックが滑り出る — 手作りの150のパズルを通して追いかけるその静かなクリック音。
 
 🧠 脳をひねらせるロジック
-5手のウォームアップから30手の絡まりまで、すべてのボードにはちょうど1つの解法と、それを通る優雅な道があります。
+5手のウォームアップから30手の絡まりまで、すべてのボードに少なくとも1つの明快な解法があり、難しいボードほど数手先を読む計画が報われます。
 
 ✨ このゲームの魅力
 • 滑らかで満足感のあるブロックスライドアニメーション — 夜のプレイにリラックス
@@ -413,7 +413,7 @@ La tavola è un piccolo nodo silenzioso. Lo disfi una mossa alla volta.
 Deslize um bloco, depois outro, até que a última pista se abra e o bloco vermelho deslize para fora — aquele clique silencioso de liberação que você pode perseguir em 150 quebra-cabeças feitos à mão.
 
 🧠 LÓGICA DESAFIADORA
-Desde um aquecimento de cinco movimentos até um emaranhado de trinta movimentos, cada tabuleiro tem exatamente uma solução e um caminho elegante para isso.
+Desde um aquecimento de cinco movimentos até um emaranhado de trinta movimentos, cada tabuleiro tem pelo menos uma solução clara, e os tabuleiros mais difíceis recompensam planejar vários movimentos à frente.
 
 ✨ A SENSAÇÃO
 • Animações de deslizar blocos suaves e satisfatórias — relaxante para jogar à noite
@@ -443,7 +443,7 @@ O tabuleiro é um pequeno nó silencioso. Você o desfaz um movimento de cada ve
 Bir parça kaydır, sonra diğerini, ta ki son geçit açılana ve kırmızı blok dışarı kayıp gitmesine — bu sakin salıverme tıklamasını 150 el yapımı bulmacada takip edebilirsin.
 
 🧠 BEYİN YAKAN LOJİK
-Beş hareketle başlayan bir ısınmadan otuz hareketlik bir karmaşaya, her tahtanın tam olarak bir çözümü ve ona giden bir şık yolu var.
+Beş hareketle başlayan bir ısınmadan otuz hareketlik bir karmaşaya, her tahtanın en az bir net çözümü var ve daha zor tahtalar birkaç hamle önceden plan yapmayı ödüllendirir.
 
 ✨ HİSSET
 • Pürüzsüz, tatmin edici blok kaydırma animasyonları — akşam oyunları için rahatlatıcı
@@ -473,7 +473,7 @@ Tahta, sessiz bir düğüm gibi. Her seferinde bir hareketle açarsın.
 Слайд один блок, потім інший, поки не відкриється остання смуга і червоний блок не вислизне — те тихе клацання вивільнення, яке ви можете переслідувати через 150 майстерно створених головоломок.
 
 🧠 ЛОГІКА, ЩО ЗВИВКИ
-Від п'ятиходового розігріву до тридцятиходового заплутування, кожна дошка має точно одне рішення і точно один елегантний шлях через неї.
+Від п'ятиходового розігріву до тридцятиходового заплутування, кожна дошка має щонайменше одне чисте рішення, а складніші дошки винагороджують планування на кілька ходів уперед.
 
 ✨ ВІДЧУТТЯ
 • Плавна, задовільна анімація при переміщенні блоків — розслаблююча для вечірньої гри
@@ -503,7 +503,7 @@ Tahta, sessiz bir düğüm gibi. Her seferinde bir hareketle açarsın.
 滑动一个方块，然后再滑动一个，直到最后一个通道打开，红色方块溜出来——那轻轻一声释放的咔嗒声，你可以在150个手工制作的谜题中追寻。
 
 🧠 扭曲思维的逻辑
-从五步热身到三十步纠结，每个棋盘都有确切的一个解决方案和一个优雅的解决路径。
+从五步热身到三十步纠结，每个棋盘都至少有一个清晰的解法，越难的棋盘越能奖励提前数步的规划。
 
 ✨ 感觉如何
 • 光滑且令人满意的方块滑动动画——让人放松，适合晚上玩耍
