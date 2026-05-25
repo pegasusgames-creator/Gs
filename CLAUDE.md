@@ -739,6 +739,31 @@ Each line is now enforced by a `pre_publish_check.py` check.
   was 4-floor / 7-aspirational before). 6/6/6 is the standard; counts
   below it block pre-ship apps and warn on already-shipped apps.
   `check_screenshot_completeness` enforces.
+- **Each non-gameplay screen type may appear AT MOST ONCE across the
+  18-slot screenshot set** (phone + tablet_7 + tablet_10 combined).
+  The other 14+ slots are gameplay at different levels — never the
+  same screen captured twice across surfaces, even with different
+  themes. Example: if Stats lives in phone slot 6, tablet_7 + tablet_10
+  must NOT also include a Stats slot. Same for Level Complete overlay,
+  Themes panel, Level Select grid, Missions, Daily Challenge.
+  (User policy 2026-05-25 — old approach reused Stats / Themes / Level
+  Complete on each of the 3 surfaces, which read as visual filler.)
+- **Every theme sold in the shop MUST appear in the screenshot set.**
+  Locked themes (e.g. Inferno at level 150, Galaxy at level 200) get
+  unlocked via `_setup_taps` save-state seeding so the screenshots can
+  showcase them. Showcasing only a subset reads as "the rest aren't
+  worth showing." (User policy 2026-05-25.)
+- **No dark default themes — light, eye-pleasing design by default.**
+  Every app's on-install UI MUST use a light/cream background, soft
+  pastel accents, and dark text on light surfaces. Dark UIs ship as a
+  **coin-purchased unlockable** named "Midnight" — bought with the
+  in-game soft currency the player already farms (not as a paid IAP).
+  Dark-on-install looks unfinished in the first 5 seconds, ASO
+  thumbnails read as low-contrast, and dark+colorful palettes are
+  fatiguing for the long sessions casual puzzle players actually run.
+  Follow the UnblockPuzzle pattern: light pastel default + Midnight
+  coin unlock. Applies to every NEW app and to any app being
+  re-themed. (User policy 2026-05-25.)
 - **Screenshot headlines MUST match screenshot content.** A "Daily
   Missions" headline over a plain gameplay board is a Play policy red
   flag. `check_screenshot_headline_match` enforces.
