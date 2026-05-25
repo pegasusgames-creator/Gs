@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import androidx.core.content.ContextCompat;
 
 // AppLovin MAX SDK
 import com.applovin.mediation.MaxAd;
@@ -63,16 +64,13 @@ import java.util.Set;
 
 public class MainActivity extends Activity {
 
-    // ── Cross-promo allowlist ─────────────────────────────────────────────────
-    // Restricts isAppInstalled() to portfolio packages so JS can't probe
-    // arbitrary installed apps via the bridge. Mirror in WaterSortPuzzle.
+        // Cross-promo install verification — must match CROSS_PROMO list in game.html
+    // and the <queries> entries in AndroidManifest.xml. Targets are LIVE Play
+    // Store apps only. Pre-release siblings (UnblockPuzzle, PipeConnect) added
+    // here ONLY after they have Play links.
     private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(
-        "com.pegasusgames.ballsort",
-        "com.pegasusgames.nonogram",
-        "com.pegasusgames.pipeconnect",
-        "com.pegasusgames.puzzle2048",
-        "com.pegasusgames.unblock",
-        "com.pegasusgames.watersortpuzzle"
+        "com.pegasusgames.watersortpuzzle",
+        "com.pegasusgames.puzzle2048"
     ));
 
     // ── AppLovin MAX ──────────────────────────────────────────────────────────
@@ -125,6 +123,21 @@ public class MainActivity extends Activity {
     ));
 
     private static final int WEBVIEW_BG_COLOR = 0xFF0d1117;
+
+    // ── Notification scheduling (NOTIFICATIONS_IMPL.md §1) ────────────────────
+    private static final int REQ_DAILY_REMINDER       = 1001;
+    private static final int REQ_STREAK_AT_RISK       = 1002;
+    private static final int REQ_LIVES_REFILLED       = 1003;
+    private static final int REQ_RETURN_AFTER_ABSENCE = 1004;
+    // Win-back chain — d3 / d7 / d14 / d30 fire if the user goes dark.
+    private static final int REQ_WIN_BACK_D3          = 1005;
+    private static final int REQ_WIN_BACK_D7          = 1006;
+    private static final int REQ_WIN_BACK_D14         = 1007;
+    private static final int REQ_WIN_BACK_D30         = 1008;
+    private static final String PREF_NOTIFS_ENABLED   = "notifications_enabled";
+    private static final String PREF_LAST_PLAYED      = "last_played_ts";
+    private static final int NOTIF_CAP_PER_DAY        = 2;
+    private static final int POST_NOTIFS_REQUEST_CODE = 9001;
 
     // AppLovin MAX objects
     private MaxAdView         bannerAd;
@@ -543,6 +556,118 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface
+        public boolean hasNotificationPermission() {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true;
+            return ContextCompat.checkSelfPermission(
+                MainActivity.this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED;
+        }
+
+        @JavascriptInterface
+        public void scheduleDailyReminder(int hourOfDay, int minute) {
+            cancelScheduledAlarm(REQ_DAILY_REMINDER);
+            if (!getSharedPreferences("game", MODE_PRIVATE)
+                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
+
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.set(java.util.Calendar.HOUR_OF_DAY, hourOfDay);
+            cal.set(java.util.Calendar.MINUTE, minute);
+            cal.set(java.util.Calendar.SECOND, 0);
+            if (cal.getTimeInMillis() <= System.currentTimeMillis()) {
+                cal.add(java.util.Calendar.DAY_OF_YEAR, 1);
+            }
+            scheduleAlarm(
+                REQ_DAILY_REMINDER, cal.getTimeInMillis(),
+                "daily_reminder",
+                getDailyReminderTitle(), getDailyReminderBody());
+        }
+
+        @JavascriptInterface
+        public void scheduleStreakAtRisk(int streakDays) {
+            cancelScheduledAlarm(REQ_STREAK_AT_RISK);
+            if (streakDays < 3) return;
+            if (!getSharedPreferences("game", MODE_PRIVATE)
+                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.set(java.util.Calendar.HOUR_OF_DAY, 20);
+            cal.set(java.util.Calendar.MINUTE, 30);
+            cal.set(java.util.Calendar.SECOND, 0);
+            if (cal.getTimeInMillis() <= System.currentTimeMillis()) {
+                cal.add(java.util.Calendar.DAY_OF_YEAR, 1);
+            }
+            String body = "Your " + streakDays + "-day streak ends in 4 hours — keep it alive! 🔥";
+            scheduleAlarm(REQ_STREAK_AT_RISK, cal.getTimeInMillis(),
+                "streak_at_risk", "Don't break your streak!", body);
+        }
+
+        @JavascriptInterface
+        public void scheduleLivesRefilled(long whenMillis) {
+            cancelScheduledAlarm(REQ_LIVES_REFILLED);
+            if (!getSharedPreferences("game", MODE_PRIVATE)
+                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
+            if (whenMillis <= System.currentTimeMillis()) return;
+            scheduleAlarm(REQ_LIVES_REFILLED, whenMillis,
+                "lives_refilled", "Your lives are back!", "Ready for another round? ❤️");
+        }
+
+        @JavascriptInterface
+        public void scheduleWinBack(int dayOffset, String title, String body) {
+            if (title == null || body == null) return;
+            if (!getSharedPreferences("game", MODE_PRIVATE)
+                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
+            int req;
+            switch (dayOffset) {
+                case 3:  req = REQ_WIN_BACK_D3;  break;
+                case 7:  req = REQ_WIN_BACK_D7;  break;
+                case 14: req = REQ_WIN_BACK_D14; break;
+                case 30: req = REQ_WIN_BACK_D30; break;
+                default: return;
+            }
+            cancelScheduledAlarm(req);
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.add(java.util.Calendar.DAY_OF_YEAR, dayOffset);
+            cal.set(java.util.Calendar.HOUR_OF_DAY, 12);
+            cal.set(java.util.Calendar.MINUTE, 0);
+            cal.set(java.util.Calendar.SECOND, 0);
+            scheduleAlarm(req, cal.getTimeInMillis(),
+                "win_back_d" + dayOffset, title, body);
+        }
+
+        @JavascriptInterface
+        public void cancelAllNotifications() {
+            cancelScheduledAlarm(REQ_DAILY_REMINDER);
+            cancelScheduledAlarm(REQ_STREAK_AT_RISK);
+            cancelScheduledAlarm(REQ_LIVES_REFILLED);
+            cancelScheduledAlarm(REQ_RETURN_AFTER_ABSENCE);
+            cancelScheduledAlarm(REQ_WIN_BACK_D3);
+            cancelScheduledAlarm(REQ_WIN_BACK_D7);
+            cancelScheduledAlarm(REQ_WIN_BACK_D14);
+            cancelScheduledAlarm(REQ_WIN_BACK_D30);
+        }
+
+        @JavascriptInterface
+        public void setNotificationsEnabled(boolean enabled) {
+            getSharedPreferences("game", MODE_PRIVATE).edit()
+                .putBoolean(PREF_NOTIFS_ENABLED, enabled).apply();
+            if (!enabled) cancelAllNotifications();
+        }
+
+        @JavascriptInterface
+        public boolean getNotificationsEnabled() {
+            return getSharedPreferences("game", MODE_PRIVATE)
+                .getBoolean(PREF_NOTIFS_ENABLED, true);
+        }
+
+        @JavascriptInterface
+        public void recordLastPlayed() {
+            getSharedPreferences("game", MODE_PRIVATE).edit()
+                .putLong(PREF_LAST_PLAYED, System.currentTimeMillis()).apply();
+            cancelScheduledAlarm(REQ_DAILY_REMINDER);
+        }
+
+
+        @JavascriptInterface
         public void logEvent(String eventName, String params) {
             if (firebaseAnalytics == null) return;
             if (!eventName.matches("[a-zA-Z0-9_]{1,40}")) return;
@@ -628,4 +753,61 @@ public class MainActivity extends Activity {
     private int dpToPx(int dp) {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
+
+    // ── Notifications helpers (NOTIFICATIONS_IMPL.md §3) ──────────────────────
+    private void scheduleAlarm(int requestCode, long triggerAtMillis,
+                                String type, String title, String body) {
+        android.content.Intent intent = new android.content.Intent(this, NotificationReceiver.class);
+        intent.putExtra("type", type);
+        intent.putExtra("title", title);
+        intent.putExtra("body", body);
+        intent.putExtra("requestCode", requestCode);
+
+        int flags = android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags |= android.app.PendingIntent.FLAG_IMMUTABLE;
+        }
+        android.app.PendingIntent pi = android.app.PendingIntent.getBroadcast(this, requestCode, intent, flags);
+
+        android.app.AlarmManager am = (android.app.AlarmManager) getSystemService(ALARM_SERVICE);
+        if (am == null) return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            am.setAndAllowWhileIdle(android.app.AlarmManager.RTC_WAKEUP, triggerAtMillis, pi);
+        } else {
+            am.set(android.app.AlarmManager.RTC_WAKEUP, triggerAtMillis, pi);
+        }
+    }
+
+    private void cancelScheduledAlarm(int requestCode) {
+        android.content.Intent intent = new android.content.Intent(this, NotificationReceiver.class);
+        int flags = android.app.PendingIntent.FLAG_NO_CREATE;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags |= android.app.PendingIntent.FLAG_IMMUTABLE;
+        }
+        android.app.PendingIntent pi = android.app.PendingIntent.getBroadcast(this, requestCode, intent, flags);
+        if (pi != null) {
+            android.app.AlarmManager am = (android.app.AlarmManager) getSystemService(ALARM_SERVICE);
+            if (am != null) am.cancel(pi);
+            pi.cancel();
+        }
+    }
+
+    private String getDailyReminderTitle() { return "Nonogram"; }
+    private String getDailyReminderBody()  { return "Your daily nonogram challenge is ready!"; }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                            int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == POST_NOTIFS_REQUEST_CODE) {
+            boolean granted = grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+            webView.evaluateJavascript(
+                "window.onNotificationPermissionResult && "
+                + "window.onNotificationPermissionResult(" + granted + ");",
+                null
+            );
+        }
+    }
+
 }

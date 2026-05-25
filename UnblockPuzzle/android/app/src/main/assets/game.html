@@ -3921,5 +3921,211 @@ window.addEventListener('load',function(){
 })();
 </script>
 
+<!-- Growth shim — Part A (notifications). Idempotent: keyed by data-growth-shim="A".
+     Appended to game.html in WaterSort / Nonogram / Puzzle2048 / UnblockPuzzle.
+     Behaviorally wires notifications without touching each app's clear/win code:
+       - On app open + visibilitychange: cancelAllNotifications then reschedule
+         the win-back chain (d3/d7/d14/d30), the daily reminder at the user's
+         rolling-average play hour, and the streak-at-risk ping (if streak ≥ 3).
+       - First level cleared (detected via localStorage save inspection) →
+         single-shot permission pre-prompt + schedule.
+       - On Day-7 win-back fire: pendingWinBackReward flag set; granted as 100
+         coins on next open.
+       - Settings panel: a "🔔 Notifications" toggle row appended at runtime
+         (DOM scan; covers every per-app Settings markup variant).
+       - Exposed for per-app integration when game logic wants to opt in:
+           window.gScheduleLivesRefilled(refillAtMillis)
+           window.gOnAnyClear()
+           window.gOnDailyDone()
+-->
+<script data-growth-shim="A">
+(function(){
+  if (window.__growthShimA) return;
+  window.__growthShimA = true;
+
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v=LS.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { LS.setItem(k,v); } catch(e){} }
+  function hasAndroid(){ return !!(window.Android); }
+  function api(name){ return hasAndroid() && typeof window.Android[name]==='function'; }
+  function safe(fn){ try { fn(); } catch(e){} }
+
+  // ── 1. Play-hour tracker — rolling EMA. Default 19:00 if no history.
+  function recordPlayHour(){
+    var h = new Date().getHours();
+    var prev = parseFloat(lsGet('_phRoll', h));
+    if (isNaN(prev)) prev = h;
+    var next = prev * 0.8 + h * 0.2;
+    lsSet('_phRoll', next.toFixed(2));
+    lsSet('usualPlayHour', String(Math.round(next)));
+    if (api('recordLastPlayed')) safe(function(){ Android.recordLastPlayed(); });
+  }
+  function getPlayHour(){
+    var h = parseInt(lsGet('usualPlayHour','19'),10);
+    return (isNaN(h) || h<0 || h>23) ? 19 : h;
+  }
+
+  // ── 2. Win-back coin pickup (Day 7).
+  function grantPendingWinBack(){
+    if (lsGet('pendingWinBackReward','0') !== '1') return;
+    lsSet('pendingWinBackReward','0');
+    // Try the conventional save shapes (WaterSort: state, Nonogram/UB: save).
+    var keys = ['save','state','gameState','progress'];
+    for (var i=0;i<keys.length;i++){
+      var raw = lsGet(keys[i], null);
+      if (!raw) continue;
+      try {
+        var o = JSON.parse(raw);
+        if (typeof o.coins === 'number') {
+          o.coins += 100;
+          lsSet(keys[i], JSON.stringify(o));
+          if (window.showToast) safe(function(){ showToast('🎁 Welcome back! +100 coins'); });
+          break;
+        }
+      } catch(e){}
+    }
+  }
+
+  // ── 3. Streak read — common keys across games.
+  function readStreak(){
+    var k = ['dailyChallengeStreak','loginStreak','streak'];
+    for (var i=0;i<k.length;i++){
+      var v = parseInt(lsGet(k[i],'0'),10);
+      if (!isNaN(v) && v>0) return v;
+    }
+    return 0;
+  }
+
+  // ── 4. First-clear detection — used to gate the permission pre-prompt.
+  function hasClearedFirstLevel(){
+    var keys = ['save','state','gameState','progress'];
+    for (var i=0;i<keys.length;i++){
+      var raw = lsGet(keys[i], null);
+      if (!raw) continue;
+      try {
+        var o = JSON.parse(raw);
+        // completedLevels array, currentLevel > 0, or stars object — any wins.
+        if (Array.isArray(o.completedLevels) && o.completedLevels.length > 0) return true;
+        if (typeof o.currentLevel === 'number' && o.currentLevel > 0) return true;
+        if (typeof o.levelsCompleted === 'number' && o.levelsCompleted > 0) return true;
+        if (o.levelStars && Object.keys(o.levelStars).length > 0) return true;
+      } catch(e){}
+    }
+    return false;
+  }
+
+  function maybeAskNotifPerm(){
+    if (lsGet('notifPrePromptShown','0') === '1') return;
+    if (!hasClearedFirstLevel()) return;
+    if (!hasAndroid()) return;
+    if (api('hasNotificationPermission') && Android.hasNotificationPermission()) {
+      lsSet('notifPrePromptShown','1');
+      return;
+    }
+    // Soft pre-prompt — confirm() respects the user; if they say no, we don't
+    // hit the system dialog at all.
+    var ok = false;
+    try { ok = window.confirm("Get a daily reminder so you don't miss your streak?"); }
+    catch(e){ ok = false; }
+    lsSet('notifPrePromptShown','1');
+    if (ok && api('requestNotificationPermission')) {
+      safe(function(){ Android.requestNotificationPermission(); });
+    }
+  }
+
+  // ── 5. Reschedule the full chain.
+  function rescheduleAll(){
+    if (!hasAndroid()) return;
+    if (api('getNotificationsEnabled') && !Android.getNotificationsEnabled()) return;
+    safe(function(){ Android.cancelAllNotifications(); });
+    if (api('scheduleDailyReminder')) safe(function(){ Android.scheduleDailyReminder(getPlayHour(), 0); });
+    if (api('scheduleWinBack')) {
+      safe(function(){ Android.scheduleWinBack(3,  "Your puzzles miss you", "Pick up right where you left off."); });
+      safe(function(){ Android.scheduleWinBack(7,  "Come back for 100 coins", "A welcome-back gift is waiting."); });
+      safe(function(){ Android.scheduleWinBack(14, "New themes await", "Unlocks are ready to claim."); });
+      safe(function(){ Android.scheduleWinBack(30, "We saved everything", "Your progress and streak shield are still here."); });
+      // Mark the Day-7 reward as pending so the next-open path will pay out 100c.
+      lsSet('pendingWinBackReward','1');
+    }
+    var streak = readStreak();
+    if (streak >= 3 && api('scheduleStreakAtRisk')) {
+      safe(function(){ Android.scheduleStreakAtRisk(streak); });
+    }
+  }
+
+  // ── 6. Public hooks for per-app integration when game wants to opt in.
+  window.gScheduleLivesRefilled = function(refillAtMillis){
+    if (api('scheduleLivesRefilled')) safe(function(){ Android.scheduleLivesRefilled(refillAtMillis); });
+  };
+  window.gOnAnyClear = function(){
+    recordPlayHour();
+    maybeAskNotifPerm();
+    rescheduleAll();
+  };
+  window.gOnDailyDone = function(){
+    recordPlayHour();
+    rescheduleAll();
+  };
+  window.onNotificationPermissionResult = function(granted){
+    if (granted) rescheduleAll();
+  };
+
+  // ── 7. Settings toggle — runtime DOM injection so we don't need to hand-patch
+  // each app's Settings panel HTML. Periodic scan keyed by data-growth-notif-toggle.
+  function injectNotifToggle(){
+    var candidates = [
+      '#screen-settings .settings-scroll',
+      '#screen-settings',
+      '#settingsScreen',
+      '[id$="ettings"]',
+    ];
+    var host = null;
+    for (var i=0;i<candidates.length;i++){
+      host = document.querySelector(candidates[i]);
+      if (host) break;
+    }
+    if (!host) return;
+    if (host.querySelector('[data-growth-notif-toggle]')) return;
+    var enabled = (api('getNotificationsEnabled')) ? Android.getNotificationsEnabled() : true;
+    var row = document.createElement('div');
+    row.setAttribute('data-growth-notif-toggle','1');
+    row.style.cssText =
+      'background:#ffffff;border:1px solid rgba(0,0,0,0.08);border-radius:14px;padding:14px 16px;margin:10px 0;' +
+      'display:flex;align-items:center;justify-content:space-between;font-family:inherit;';
+    row.innerHTML =
+      '<span style="font-weight:600;color:inherit;">🔔 Notifications</span>' +
+      '<button data-growth-notif-btn style="border:none;padding:6px 16px;border-radius:14px;cursor:pointer;font-weight:800;letter-spacing:0.5px;' +
+        'background:' + (enabled ? '#3b6db8' : '#bbb') + ';color:#fff;">' +
+        (enabled ? 'ON' : 'OFF') + '</button>';
+    host.appendChild(row);
+    row.querySelector('[data-growth-notif-btn]').addEventListener('click', function(){
+      var cur = (api('getNotificationsEnabled')) ? Android.getNotificationsEnabled() : true;
+      var next = !cur;
+      if (api('setNotificationsEnabled')) safe(function(){ Android.setNotificationsEnabled(next); });
+      this.textContent = next ? 'ON' : 'OFF';
+      this.style.background = next ? '#3b6db8' : '#bbb';
+      if (next) rescheduleAll();
+    });
+  }
+  setInterval(injectNotifToggle, 1500);
+
+  // ── 8. Boot path: schedule on first load + on every return-to-foreground.
+  function onAppOpen(){
+    grantPendingWinBack();
+    recordPlayHour();
+    maybeAskNotifPerm();
+    rescheduleAll();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(onAppOpen, 400); });
+  } else {
+    setTimeout(onAppOpen, 400);
+  }
+  document.addEventListener('visibilitychange', function(){
+    if (document.visibilityState === 'visible') setTimeout(onAppOpen, 200);
+  });
+})();
+</script>
+
 </body>
 </html>

@@ -142,12 +142,13 @@ public class MainActivity extends Activity {
 
     // Cross-promo install verification — must match PROMO_GAMES in game.html
     // and the <queries> entries in AndroidManifest.xml.
+    // Targets are LIVE Play Store apps only. UnblockPuzzle + PipeConnect added
+    // here ONLY after they have Play links (currently both pre-release/in-review).
     private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(
-        "com.pegasusgames.ballsort",
         "com.pegasusgames.nonogram",
-        "com.pegasusgames.pipeconnect",
-        "com.pegasusgames.puzzle2048",
-        "com.pegasusgames.unblock"
+        "com.pegasusgames.puzzle2048"
+        // TODO post-release: "com.pegasusgames.unblockpuzzle" once it has a Play link
+        // TODO post-release: "com.pegasusgames.pipeconnect" once it has a Play link
     ));
     private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
         "undo", "skip", "life"
@@ -160,8 +161,16 @@ public class MainActivity extends Activity {
     private static final int REQ_STREAK_AT_RISK       = 1002;
     private static final int REQ_LIVES_REFILLED       = 1003;
     private static final int REQ_RETURN_AFTER_ABSENCE = 1004;
+    // Win-back chain — d3 / d7 / d14 / d30 fire if the user goes dark.
+    private static final int REQ_WIN_BACK_D3          = 1005;
+    private static final int REQ_WIN_BACK_D7          = 1006;
+    private static final int REQ_WIN_BACK_D14         = 1007;
+    private static final int REQ_WIN_BACK_D30         = 1008;
     private static final String PREF_NOTIFS_ENABLED   = "notifications_enabled";
     private static final String PREF_LAST_PLAYED      = "last_played_ts";
+    private static final String PREF_SCHED_COUNT_DAY  = "sched_count_day";
+    private static final String PREF_SCHED_COUNT_DATE = "sched_count_date";
+    private static final int NOTIF_CAP_PER_DAY        = 2;
     private static final int POST_NOTIFS_REQUEST_CODE = 9001;
 
     // AppLovin MAX objects
@@ -681,6 +690,39 @@ public class MainActivity extends Activity {
             cancelScheduledAlarm(REQ_STREAK_AT_RISK);
             cancelScheduledAlarm(REQ_LIVES_REFILLED);
             cancelScheduledAlarm(REQ_RETURN_AFTER_ABSENCE);
+            cancelScheduledAlarm(REQ_WIN_BACK_D3);
+            cancelScheduledAlarm(REQ_WIN_BACK_D7);
+            cancelScheduledAlarm(REQ_WIN_BACK_D14);
+            cancelScheduledAlarm(REQ_WIN_BACK_D30);
+        }
+
+        // Schedule one entry in the win-back chain. Caller passes the day
+        // offset (3/7/14/30); we map to a dedicated request code so the
+        // chain can be cancelled atomically when the user returns.
+        @JavascriptInterface
+        public void scheduleWinBack(int dayOffset, String title, String body) {
+            if (title == null || body == null) return;
+            if (!getSharedPreferences("game", MODE_PRIVATE)
+                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
+
+            int req;
+            switch (dayOffset) {
+                case 3:  req = REQ_WIN_BACK_D3;  break;
+                case 7:  req = REQ_WIN_BACK_D7;  break;
+                case 14: req = REQ_WIN_BACK_D14; break;
+                case 30: req = REQ_WIN_BACK_D30; break;
+                default: return;
+            }
+            cancelScheduledAlarm(req);
+
+            // Fire at noon local on the target day so it doesn't collide with
+            // the streak-at-risk evening slot or the daily-ready morning slot.
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_YEAR, dayOffset);
+            cal.set(Calendar.HOUR_OF_DAY, 12);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            scheduleAlarm(req, cal.getTimeInMillis(), "win_back_d" + dayOffset, title, body);
         }
 
         @JavascriptInterface
