@@ -346,7 +346,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--app-bg);font-f
 .btn-more-games{background:var(--g-more);color:var(--on-accent);box-shadow:0 4px 16px rgba(0,0,0,0.14);}
 </style>
 </head>
-<body>
+<body data-growth-coachmark="unblock">
 <canvas id="particleCanvas"></canvas>
 
 <!-- MENU -->
@@ -4531,6 +4531,170 @@ window.addEventListener('load',function(){
   document.addEventListener('visibilitychange', function(){
     if (document.visibilityState === 'visible') setTimeout(onAppOpen, 200);
   });
+})();
+</script>
+
+<!-- Growth shim — Part E (first-session retention). Idempotent: data-growth-shim="E".
+     - No interstitial on the first 3 clears: wraps Android.showInterstitial
+       and swallows the first 3 calls while still incrementing the cumulative
+       "clears since launch" counter. After 3, original behavior resumes.
+     - Loud first-clear celebration: emoji-confetti overlay on the first
+       detected clear (subsequent clears use the app's normal flow).
+     - First-session retention hook: when session 1 ends with currentLevel>=3
+       AND tutorialDone, fire a "Come back tomorrow for your daily bonus"
+       toast and schedule the daily reminder (already wired in Part A).
+     - 3-step coachmark for Nonogram + UnblockPuzzle: opt-in by setting
+       a body attribute data-growth-coachmark="nono" or ="unblock". The
+       per-app injection script below opts those two in.
+-->
+<script data-growth-shim="E">
+(function(){
+  if (window.__growthShimE) return;
+  window.__growthShimE = true;
+
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v=LS.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { LS.setItem(k,v); } catch(e){} }
+  function safe(fn){ try { return fn(); } catch(e){} }
+
+  // ── 1. First-3-clears interstitial suppression. Cumulative across sessions.
+  var clearsCount = parseInt(lsGet('_growthClearsTotal','0'),10) || 0;
+  if (window.Android && typeof window.Android.showInterstitial === 'function') {
+    var orig = window.Android.showInterstitial.bind(window.Android);
+    window.Android.showInterstitial = function(){
+      var c = parseInt(lsGet('_growthClearsTotal','0'),10) || 0;
+      if (c < 3) return; // swallow on first 3 clears
+      return orig();
+    };
+  }
+
+  // ── 2. Clear-count tracker (same pattern as Part B). Fires:
+  //   (a) confetti on the FIRST clear ever,
+  //   (b) increments _growthClearsTotal so suppression de-arms,
+  //   (c) at session-1 end (≥3 clears + tutorialDone), shows the day-2 nudge.
+  var SAVE_KEYS = ['save','state','gameState','progress'];
+  function readClearCount(){
+    for (var i=0;i<SAVE_KEYS.length;i++){
+      var raw = lsGet(SAVE_KEYS[i],null);
+      if (!raw) continue;
+      try {
+        var o = JSON.parse(raw);
+        if (Array.isArray(o.completedLevels)) return o.completedLevels.length;
+        if (typeof o.levelsCompleted === 'number') return o.levelsCompleted;
+        if (typeof o.totalSolves === 'number') return o.totalSolves;
+        if (typeof o.currentLevel === 'number') return o.currentLevel;
+      } catch(e){}
+    }
+    return null;
+  }
+  var lastSeen = -1;
+  function showConfetti(){
+    var ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;font-family:inherit;';
+    var emojis = ['🎉','✨','⭐','🎊','💫'];
+    for (var i=0;i<24;i++){
+      var span = document.createElement('span');
+      span.textContent = emojis[i % emojis.length];
+      span.style.cssText = 'position:absolute;top:-40px;left:' + (Math.random()*100) + '%;' +
+        'font-size:' + (24 + Math.random()*16) + 'px;' +
+        'transform:rotate(' + (Math.random()*360) + 'deg);' +
+        'transition:transform 2.4s ease-in,top 2.4s ease-in,opacity 2.4s;';
+      ov.appendChild(span);
+      setTimeout((function(s){return function(){
+        s.style.top = (60 + Math.random()*30) + '%';
+        s.style.transform = 'rotate(' + (Math.random()*720) + 'deg)';
+        s.style.opacity = '0';
+      };})(span), 50 + i*40);
+    }
+    document.body.appendChild(ov);
+    setTimeout(function(){ ov.remove(); }, 2700);
+
+    var msg = document.createElement('div');
+    msg.style.cssText = 'position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);' +
+      'background:#ffffff;color:#1e3a5f;border:1px solid #d4e2ec;border-radius:18px;padding:18px 22px;' +
+      'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index:9999;font-family:inherit;';
+    msg.innerHTML = "🎉 You've got this!<br><span style='font-weight:600;font-size:0.9rem;color:#5a7390;'>499 more puzzles to go.</span>";
+    document.body.appendChild(msg);
+    setTimeout(function(){ msg.remove(); }, 2400);
+  }
+
+  function maybeDay2Nudge(){
+    var alreadyShown = lsGet('_growthDay2NudgeShown','0');
+    if (alreadyShown === '1') return;
+    var c = parseInt(lsGet('_growthClearsTotal','0'),10) || 0;
+    var tutorialDone = lsGet('tutorialDone','0') === '1';
+    if (c < 3) return;
+    if (!tutorialDone) return;
+    lsSet('_growthDay2NudgeShown','1');
+    if (window.showToast) safe(function(){ showToast('Come back tomorrow for your daily bonus 🔥'); });
+  }
+
+  setInterval(function(){
+    var c = readClearCount();
+    if (c == null) return;
+    if (lastSeen < 0) { lastSeen = c; return; }
+    if (c > lastSeen) {
+      var firstEver = (parseInt(lsGet('_growthClearsTotal','0'),10) || 0) === 0;
+      lastSeen = c;
+      var total = (parseInt(lsGet('_growthClearsTotal','0'),10) || 0) + 1;
+      lsSet('_growthClearsTotal', String(total));
+      if (firstEver) setTimeout(showConfetti, 300);
+      setTimeout(maybeDay2Nudge, 1200);
+    }
+  }, 1200);
+
+  // ── 3. Coachmark — opt-in via document.body data attribute.
+  // The per-app injection layer below sets data-growth-coachmark for Nonogram
+  // + UnblockPuzzle. Triggered once per install (tutorialDone gate).
+  function runCoachmark(){
+    if (lsGet('tutorialDone','0') === '1') return;
+    var kind = document.body && document.body.getAttribute('data-growth-coachmark');
+    if (!kind) return;
+    var steps;
+    if (kind === 'nono') {
+      steps = [
+        { title:'Find the picture', body:'Numbers show how many filled squares are in each row + column.' },
+        { title:'Tap to fill', body:'Tap a cell to fill. Long-press marks it empty (a guaranteed blank).' },
+        { title:'Solve the row', body:'When a row matches its numbers, it locks in. Clear them all to win.' },
+      ];
+    } else if (kind === 'unblock') {
+      steps = [
+        { title:'Find the red car', body:'Your goal: slide the red car out the right edge.' },
+        { title:'Drag to slide', body:'Blocks slide along their long axis only. Drag, don\'t tap.' },
+        { title:'Clear the path', body:'Move the other blocks out of the way. Fewer moves = more stars.' },
+      ];
+    } else {
+      return;
+    }
+    function showStep(i){
+      var bg = document.createElement('div');
+      bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
+      var card = document.createElement('div');
+      card.style.cssText = 'background:#ffffff;color:#1e3a5f;border-radius:18px;padding:22px;max-width:320px;width:88%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
+      var s = steps[i];
+      card.innerHTML =
+        '<div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#5a7390;margin-bottom:6px;">STEP ' + (i+1) + ' / ' + steps.length + '</div>' +
+        '<div style="font-size:1.2rem;font-weight:800;margin-bottom:6px;">' + s.title + '</div>' +
+        '<div style="font-size:0.95rem;color:#5a7390;margin-bottom:14px;">' + s.body + '</div>' +
+        '<button data-cm-next style="border:none;padding:10px 18px;background:linear-gradient(135deg,#3b6db8,#5cb3d8);color:#fff;border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">' +
+          (i+1 < steps.length ? 'Next →' : 'Got it') +
+        '</button>';
+      bg.appendChild(card);
+      card.querySelector('[data-cm-next]').addEventListener('click', function(){
+        bg.remove();
+        if (i+1 < steps.length) showStep(i+1);
+        else lsSet('tutorialDone','1');
+      });
+      document.body.appendChild(bg);
+    }
+    showStep(0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(runCoachmark, 800); });
+  } else {
+    setTimeout(runCoachmark, 800);
+  }
 })();
 </script>
 
