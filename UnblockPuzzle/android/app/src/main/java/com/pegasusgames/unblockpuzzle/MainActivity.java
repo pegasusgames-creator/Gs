@@ -684,6 +684,58 @@ public class MainActivity extends Activity {
                 }
             });
         }
+        // ── Play Games Services bridge (PGS v2) ───────────────────────────────
+        // All three methods are defensive — they no-op when PGS isn't yet
+        // configured (placeholder games_app_id in strings.xml, or PGS
+        // initialization fails). The synthetic weekly-tournament fallback in
+        // game.html stays active until real leaderboards are wired in Play
+        // Console. See scripts/growth_open_items.md §B.
+        @JavascriptInterface
+        public void submitScore(String leaderboardId, long score) {
+            if (leaderboardId == null || leaderboardId.isEmpty()) return;
+            if (leaderboardId.startsWith("TODO_")) return;
+            try {
+                com.google.android.gms.games.PlayGames.getLeaderboardsClient(MainActivity.this)
+                    .submitScore(leaderboardId, score);
+            } catch (Throwable e) { Log.d("PGS", "submitScore no-op: " + e.getMessage()); }
+        }
+
+        @JavascriptInterface
+        public void showLeaderboard(String leaderboardId) {
+            if (leaderboardId == null || leaderboardId.isEmpty()) return;
+            if (leaderboardId.startsWith("TODO_")) return;
+            try {
+                com.google.android.gms.games.PlayGames.getLeaderboardsClient(MainActivity.this)
+                    .getLeaderboardIntent(leaderboardId)
+                    .addOnSuccessListener(intent -> runOnUiThread(() -> {
+                        try { startActivityForResult(intent, 9991); }
+                        catch (Throwable e) { Log.w("PGS", "leaderboard intent failed", e); }
+                    }));
+            } catch (Throwable e) { Log.d("PGS", "showLeaderboard no-op: " + e.getMessage()); }
+        }
+
+        @JavascriptInterface
+        public boolean signInPlayGames() {
+            try {
+                com.google.android.gms.games.PlayGames.getGamesSignInClient(MainActivity.this).signIn();
+                return true;
+            } catch (Throwable e) {
+                Log.d("PGS", "signInPlayGames no-op: " + e.getMessage());
+                return false;
+            }
+        }
+
+        @JavascriptInterface
+        public boolean isPlayGamesAuthenticated() {
+            try {
+                com.google.android.gms.tasks.Task<com.google.android.gms.games.AuthenticationResult> t =
+                    com.google.android.gms.games.PlayGames.getGamesSignInClient(MainActivity.this).isAuthenticated();
+                // We cannot block here; return false synchronously and rely on the JS
+                // side to call signInPlayGames() to attempt + retry on next call.
+                return t != null && t.isComplete() && t.getResult() != null && t.getResult().isAuthenticated();
+            } catch (Throwable e) { return false; }
+        }
+
 
 
 

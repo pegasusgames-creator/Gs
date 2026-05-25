@@ -25,6 +25,12 @@
         android:theme="@style/Theme.Puzzle2048"
         android:hardwareAccelerated="true"
         android:pageSizeCompat="enabled">
+        <!-- Play Games Services APP_ID — replace games_app_id in
+             res/values/strings.xml with the numeric ID from Play Console →
+             Grow → Play Games Services. See scripts/growth_open_items.md §B. -->
+        <meta-data android:name="com.google.android.gms.games.APP_ID"
+                   android:value="@string/games_app_id" />
+
         <!-- Resolve AdMob vs Firebase Analytics conflict over AD_SERVICES_CONFIG -->
         <property
             android:name="android.adservices.AD_SERVICES_CONFIG"
