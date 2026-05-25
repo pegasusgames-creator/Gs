@@ -4926,5 +4926,297 @@ window.addEventListener('load',function(){
 })();
 </script>
 
+<!-- Growth shim — Menu hierarchy (2026-05-25). Idempotent: data-growth-shim="MENU".
+     Restructures the main menu into the three-tier hierarchy mandated by
+     CLAUDE.md "Main-menu information hierarchy". Behavioral wiring on top
+     of the existing audit-addendum inject points — no app-specific code
+     edits needed beyond the shim itself.
+
+     Tier 1: ONE dominant button — "Continue · Level N" if state has
+             resumable progress, else "Play".
+     Tier 2: Daily Challenge with the streak baked into the label.
+     Tier 3: existing icon row (Levels / Shop / Games / Settings).
+
+     Glanceable hooks: full-width banners are SUPPRESSED on the menu and
+     re-rendered as TOP-BAR icons instead (Free Coins coin-pile, 🏆
+     Tournament). They keep their existing handlers — only the host
+     element changes. Theme strip + pass promo are relocated to deeper
+     screens (Themes, Shop, no-lives overlay) and skipped on the menu.
+
+     Each app's inject* functions stay in place — the shim simply wraps
+     them so menu-side calls no-op while non-menu-side calls (e.g. from
+     showScreen('themesScreen')) keep working. Zero feature loss.
+-->
+<script data-growth-shim="MENU">
+(function(){
+  if (window.__growthShimMenu) return;
+  window.__growthShimMenu = true;
+
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v=LS.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function safe(fn){ try { return fn(); } catch(e){} }
+  function $(id){ return document.getElementById(id); }
+
+  function readSave(){
+    var keys = ['save','state','gameState','progress','State'];
+    for (var i=0;i<keys.length;i++){
+      var raw = lsGet(keys[i], null);
+      if (!raw) continue;
+      try { return JSON.parse(raw); } catch(e){}
+    }
+    // Some games keep state on window.State (object reference).
+    if (window.State && typeof window.State === 'object') return window.State;
+    return {};
+  }
+
+  function getStreak(){
+    var s = readSave();
+    return s.dailyChallengeStreak || s.loginStreak || s.streak || 0;
+  }
+
+  function hasResumableProgress(){
+    var s = readSave();
+    if (s.lastLevelProgress) return true;
+    if (s.boardState || s.gameBoard) {
+      // 2048-style mid-game: board present + not game-over
+      var go = s.gameOver === true || s.isGameOver === true;
+      if (!go) return true;
+    }
+    return false;
+  }
+
+  function progressLabel(){
+    var s = readSave();
+    // Title-based heuristic to pick the right "Continue · …" suffix.
+    var t = (document.title||'').toLowerCase();
+    if (t.indexOf('2048') >= 0) {
+      var sc = s.score || s.currentScore || 0;
+      return 'Continue · ' + sc;
+    }
+    var n = (s.lastLevelProgress && s.lastLevelProgress.level)
+         || s.currentLevel
+         || (Array.isArray(s.completedLevels) ? s.completedLevels.length + 1 : 1);
+    return 'Continue · Level ' + n;
+  }
+
+  // ── 1. Suppress the four full-width menu banners. Each inject function
+  // is wrapped; if it tries to append to a menu host, we redirect or noop.
+  // Non-menu callers (shop, themes, no-lives overlay) still work normally.
+  var SUPPRESSED_ON_MENU = [
+    // [function name, banner element id once injected]
+    ['injectFreeCoins',       'xFreeCoinsBtn'],
+    ['injectFreeCoinsBtn',    'xFreeCoinsBtn'],
+    ['injectThemeStrip',      'xThemeStrip'],
+    ['injectPassPromo',       'xPassPromo'],
+    ['updateTournamentBanner', null], // updates content of weeklyEventBanner — handled separately
+  ];
+
+  function wrapInject(fnName, bannerId){
+    if (typeof window[fnName] !== 'function') return;
+    if (window[fnName].__menuWrapped) return;
+    var orig = window[fnName];
+    window[fnName] = function(){
+      // If the banner was already injected, just hide it on menu.
+      var existing = bannerId ? $(bannerId) : null;
+      var onMenu = !!$('menuScreen') && $('menuScreen').classList.contains('active');
+      if (existing && onMenu) {
+        existing.style.display = 'none';
+      }
+      // Call the original — for non-menu callers (deeper screens) it'll
+      // still inject / update where it belongs. We then re-hide on menu.
+      var r = orig.apply(this, arguments);
+      if (onMenu) {
+        var el = bannerId ? $(bannerId) : null;
+        if (el) el.style.display = 'none';
+        // updateTournamentBanner has no fixed banner id; hide weeklyEventBanner.
+        var wb = $('weeklyEventBanner');
+        if (wb && fnName === 'updateTournamentBanner') wb.style.display = 'none';
+      }
+      return r;
+    };
+    window[fnName].__menuWrapped = true;
+  }
+  function wrapAll(){
+    SUPPRESSED_ON_MENU.forEach(function(p){ wrapInject(p[0], p[1]); });
+  }
+  // Wrap repeatedly — the audit-addendum scripts define these functions
+  // late in game.html so we may run before they exist.
+  setInterval(wrapAll, 800);
+
+  // ── 2. Top-bar icons — Free Coins coin-pile + 🏆 Tournament. Inject once;
+  // states refresh on the existing setInterval poll.
+  var FREE_COINS_AMOUNT = 25, FREE_COINS_COOLDOWN_MS = 4*60*60*1000;
+  function freeCoinsReadyAt(){
+    var t = parseInt(lsGet('lastFreeCoinsAt','0'),10);
+    return t ? t + FREE_COINS_COOLDOWN_MS : 0;
+  }
+  function fmtCountdown(ms){
+    if (ms <= 0) return '';
+    var s = Math.ceil(ms/1000);
+    var h = Math.floor(s/3600); s %= 3600;
+    var m = Math.floor(s/60);
+    return (h>0?h+'h ':'')+m+'m';
+  }
+  function injectTopBarIcons(){
+    var header = document.querySelector('#menuScreen .menu-header');
+    if (!header) return;
+    if (header.querySelector('[data-menu-icons]')) return;
+    var wrap = document.createElement('div');
+    wrap.setAttribute('data-menu-icons','1');
+    wrap.style.cssText = 'display:flex;align-items:center;gap:6px;margin-left:auto;margin-right:8px;';
+    wrap.innerHTML =
+      '<button data-menu-icon="freecoins" aria-label="Free coins" ' +
+      'style="position:relative;background:rgba(255,215,100,0.14);border:1px solid rgba(255,215,100,0.36);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:18px;line-height:1;padding:0;font-family:inherit;">' +
+        '🪙' +
+        '<span data-menu-icon-badge="freecoins" style="position:absolute;top:-4px;right:-4px;background:#2ea043;color:#fff;border-radius:9px;padding:0 5px;font-size:9px;font-weight:800;display:none;">+' + FREE_COINS_AMOUNT + '</span>' +
+      '</button>' +
+      '<button data-menu-icon="tournament" aria-label="Tournament" ' +
+      'style="background:rgba(120,170,255,0.14);border:1px solid rgba(120,170,255,0.36);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:16px;line-height:1;padding:0;font-family:inherit;">🏆</button>';
+    // Insert AFTER the settings button so order reads: lives · coins · 🪙 · 🏆 · ⚙
+    header.appendChild(wrap);
+    // Click handlers — re-use the existing audit-addendum functions where
+    // they exist, fall back to a no-op toast otherwise.
+    wrap.querySelector('[data-menu-icon="freecoins"]').addEventListener('click', function(){
+      if (typeof window.claimFreeCoins === 'function') { safe(function(){ window.claimFreeCoins(); }); return; }
+      if (typeof window.xClaimFreeCoins === 'function') { safe(function(){ window.xClaimFreeCoins(); }); return; }
+      // Direct rewarded-ad fallback.
+      if (typeof window.showRewardedAd === 'function') {
+        safe(function(){ window.showRewardedAd('free_coins', function(){
+          var s = readSave();
+          if (typeof s.coins === 'number') { s.coins += FREE_COINS_AMOUNT; }
+          try { lsSet('lastFreeCoinsAt', String(Date.now())); } catch(e){}
+          // Best-effort persist for common shapes; window.State.save() exists in most apps.
+          if (window.State && typeof window.State.save === 'function') safe(function(){ window.State.save(); });
+        }); });
+      }
+    });
+    wrap.querySelector('[data-menu-icon="tournament"]').addEventListener('click', function(){
+      // Existing handlers: WaterSort uses showWeeklyEventInfo / xShowTournament.
+      var candidates = ['showTournament','xShowTournament','showWeeklyEventInfo','openTournament'];
+      for (var i=0;i<candidates.length;i++){
+        if (typeof window[candidates[i]] === 'function') { safe(window[candidates[i]]); return; }
+      }
+      // Fallback: click the existing banner if it's still in the DOM.
+      var wb = $('weeklyEventBanner');
+      if (wb) { wb.style.display = 'block'; safe(function(){ wb.click(); }); return; }
+      if (window.showToast) safe(function(){ window.showToast('Tournament coming soon'); });
+    });
+  }
+  function refreshTopBarIcons(){
+    var fc = document.querySelector('[data-menu-icon="freecoins"]');
+    if (!fc) return;
+    var badge = document.querySelector('[data-menu-icon-badge="freecoins"]');
+    var rem = freeCoinsReadyAt() - Date.now();
+    if (rem > 0) {
+      fc.style.opacity = '0.5';
+      fc.title = 'Free coins in ' + fmtCountdown(rem);
+      if (badge) badge.style.display = 'none';
+    } else {
+      fc.style.opacity = '1';
+      fc.title = 'Claim ' + FREE_COINS_AMOUNT + ' free coins';
+      if (badge) badge.style.display = 'inline-block';
+    }
+  }
+  setInterval(function(){ injectTopBarIcons(); refreshTopBarIcons(); }, 1500);
+
+  // ── 3. Tier 1 + Tier 2 label patching.
+  function patchMenuButtons(){
+    var menu = $('menuScreen');
+    if (!menu) return;
+    var play = $('menuPlayBtn') ||
+               document.querySelector('#menuScreen .btn-primary, #menuScreen .menu-primary');
+    if (play) {
+      var label = play.querySelector('#menuPlayLabel') || play;
+      var has = hasResumableProgress();
+      var newLabel = has ? progressLabel() : 'Play';
+      if (label !== play) {
+        if (label.textContent !== newLabel) label.textContent = newLabel;
+      } else {
+        // Avoid clobbering SVG children — only set textContent on a span if possible.
+        var span = play.querySelector('span:not(.ico):not(.icon)');
+        if (span && span.textContent !== newLabel) span.textContent = newLabel;
+        else if (!span && play.childNodes.length === 1) play.textContent = newLabel;
+      }
+    }
+    var daily = $('dailyChallengeBtn') ||
+                document.querySelector('#menuScreen [onclick*="DailyChallenge"], #menuScreen [onclick*="daily"]');
+    if (daily) {
+      var streak = getStreak();
+      // Strip any prior streak badge then re-apply.
+      var lbl = daily.getAttribute('data-base-label');
+      if (!lbl) {
+        lbl = (daily.textContent || '').replace(/\s*🔥\s*\d+\s*$/, '').trim() || 'Daily Challenge';
+        daily.setAttribute('data-base-label', lbl);
+      }
+      // Find the text node to update without clobbering inline SVG.
+      var textNode = null;
+      for (var i=0;i<daily.childNodes.length;i++){
+        if (daily.childNodes[i].nodeType === 3) { textNode = daily.childNodes[i]; break; }
+      }
+      var newTxt = lbl + (streak > 0 ? '  🔥' + streak : '');
+      if (textNode) { if (textNode.nodeValue.trim() !== newTxt) textNode.nodeValue = newTxt; }
+      else if (daily.querySelector('span:not(.ico):not(.icon)')) {
+        var s2 = daily.querySelector('span:not(.ico):not(.icon)');
+        if (s2.textContent !== newTxt) s2.textContent = newTxt;
+      } else {
+        if (daily.textContent !== newTxt) daily.textContent = newTxt;
+      }
+    }
+  }
+  setInterval(patchMenuButtons, 1200);
+
+  // ── 4. Seasonal banner — slim it down to a one-line ribbon under the title.
+  function slimSeasonBanner(){
+    var b = $('xSeasonBanner');
+    if (!b) return;
+    if (b.getAttribute('data-slimmed') === '1') return;
+    b.setAttribute('data-slimmed','1');
+    b.style.cssText = 'margin:6px auto 0;font-size:0.72rem;color:#e6edf3;background:rgba(255,255,255,0.08);' +
+      'border-radius:8px;padding:3px 10px;text-align:center;max-width:260px;letter-spacing:0.5px;';
+  }
+  setInterval(slimSeasonBanner, 1500);
+
+  // ── 5. Themes screen — when active, re-render the relocated theme strip.
+  // The existing injectThemeStrip is wrapped above; we call it directly when
+  // the user navigates into themesScreen so the strip appears at the top of
+  // THAT screen, not the menu.
+  function relocateThemeStrip(){
+    var hosts = ['themesScreen','themeScreen','screen-themes','xThemesScreen'];
+    var on = null;
+    for (var i=0;i<hosts.length;i++){
+      var el = document.getElementById(hosts[i]);
+      if (el && (el.classList.contains('active') || el.style.display==='flex' || el.style.display==='block')) { on = el; break; }
+    }
+    if (!on) return;
+    // Unhide the existing strip if it was suppressed.
+    var strip = $('xThemeStrip') || $('xThemeStrip2048');
+    if (strip) {
+      strip.style.display = '';
+      if (strip.parentNode !== on) on.insertBefore(strip, on.firstChild);
+    }
+  }
+  setInterval(relocateThemeStrip, 1200);
+
+  // ── 6. Pass promo — auto-surface inside shop + on no-lives overlay.
+  // Existing injectPassPromo() is wrapped above (suppressed on menu). Trigger
+  // it manually whenever shop or no-lives become active.
+  function maybeFirePassPromo(){
+    var screens = ['shopScreen','screen-shop','xShopScreen'];
+    var overlays = ['overlay-nolives','noLivesOverlay','overlayNoLives','nolivesOverlay'];
+    function active(id){ var el=$(id); return el && (el.classList.contains('active') || el.style.display==='flex' || el.style.display==='block'); }
+    var fire = false;
+    for (var i=0;i<screens.length;i++) if (active(screens[i])) { fire = true; break; }
+    if (!fire) for (var j=0;j<overlays.length;j++) if (active(overlays[j])) { fire = true; break; }
+    if (!fire) return;
+    // Call the original injectPassPromo via the saved closure (the wrapper
+    // re-calls orig in non-menu contexts). Hosting the result inside shop
+    // or no-lives is the audit-addendum's existing behavior.
+    if (typeof window.injectPassPromo === 'function') safe(window.injectPassPromo);
+  }
+  setInterval(maybeFirePassPromo, 1500);
+
+})();
+</script>
+
 </body>
 </html>
