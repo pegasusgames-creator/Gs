@@ -1921,6 +1921,23 @@ def main():
     section("code",  "thin game.html",             lambda a: ([], check_thin_games(a)), apps)
     section("meta",  "prohibited marketing lang",  lambda a: ([], check_prohibited_language(a)), apps)
 
+    # ---- GROWTH BASELINE (2026-05-25 plan: notifications + cross-promo +
+    # streak freeze + share virality + PGS hooks). Defined in
+    # scripts/check_growth_features.py — imported lazily so a missing import
+    # doesn't break legacy callers of pre_publish_check.
+    try:
+        from check_growth_features import check_app as _growth_check
+        def _growth(apps_subset):
+            b_all, w_all = [], []
+            for a in apps_subset:
+                b, w = _growth_check(a)
+                b_all.extend(b); w_all.extend(w)
+            return b_all, w_all
+        section("code",  "growth baseline",         _growth, apps)
+    except Exception as _e:
+        # Soft-fail — log and continue (the dedicated tool still works).
+        print(f"  growth baseline: skipped ({_e})")
+
     print()
     if blocking:
         print(red(bold(f"BLOCKING ({len(blocking)}):")))

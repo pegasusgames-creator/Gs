@@ -815,3 +815,72 @@ Each line is now enforced by a `pre_publish_check.py` check.
   set, never a hardcoded single-SKU `.equals` (the 2026-05-20
   UnblockPuzzle/PipeConnect `weekly_pass` dead-end).
   `check_subscription_routing` enforces.
+
+---
+
+## Growth/DAU baseline every game ships with
+
+(2026-05-25 — implemented across WaterSort/Nonogram/Puzzle2048/UnblockPuzzle
+as a portfolio standard. New apps must carry the full set before Phase 8.
+`scripts/check_growth_features.py` enforces. JS side is delivered as six
+runtime-injected shims — see `scripts/_growth_shim_[a..g].html` — keyed by
+`data-growth-shim` so re-injection is idempotent.)
+
+**Notifications (Part A).** Every game's MainActivity NativeBridge exposes
+`scheduleDailyReminder(h,m)`, `scheduleStreakAtRisk(streakDays)`,
+`scheduleLivesRefilled(whenMillis)`, `scheduleWinBack(d3/d7/d14/d30, title,
+body)`, `cancelAllNotifications`, `setNotificationsEnabled`,
+`getNotificationsEnabled`, `recordLastPlayed`, `hasNotificationPermission`,
+`requestNotificationPermission`. The JS shim wires:
+- Daily reminder at the user's rolling-average play hour (default 19).
+- Streak-at-risk fires at 20:30 the day BEFORE reset (only when streak ≥ 3).
+- Lives-refilled when the game tells us (`window.gScheduleLivesRefilled`).
+- Win-back chain d3 / d7 / d14 / d30 from session end; cancelled + rescheduled
+  on every app open. Day-7 grants +100 coins via `pendingWinBackReward`.
+- 2/day cap honored; settings toggle adds a Notifications on/off row.
+- Permission pre-prompt fires only AFTER first level clear, never on launch.
+
+**Cross-promo flywheel (Part B).** Each app's `CROSS_PROMO_PACKAGES`
+(MainActivity) / `<queries>` (manifest) / `PROMO_GAMES` (game.html) lists
+the OTHER live portfolio apps only. **Pre-release apps are NEVER cross-promo
+targets** — leave commented TODO markers (`com.pegasusgames.unblockpuzzle`,
+`com.pegasusgames.pipeconnect` are excluded as of 2026-05-25). Install
+reward 200 coins on auto-detect; double-sided welcome bonus 100 coins on
+first launch from a sister portfolio app. Break-point card every 5th clear,
+max once/session, never two sessions in a row. Cross-promo is **additive**
+to the AdMob interstitial cadence, not a replacement.
+
+**Streak freeze + visible milestone (Part D).** `state._streakFreezes`
+default 1; auto-consume on a 1-day miss (restore the streak, toast
+"🛡 Streak shield used"). Refill +1 free every 7 days of maintained streak,
+buyable for 200 coins. Menu shows the next-milestone reward chip:
+day 1=25🪙 · day 3=100🪙 · day 7=🎨 theme · day 14=500🪙 · day 30=🌟 permanent
+theme + 1000🪙 · day 100=🏆 5000🪙. Day 30 must visibly beat day 3.
+
+**First-session retention (Part E).** Levels 1-3 trivially solvable in <30s
+(per-app design audit — flagged in `scripts/growth_open_items.md`). Loud
+first-clear celebration: emoji-confetti + "You've got this! 499 more puzzles
+to go." No interstitial on the first 3 clears (wrap `Android.showInterstitial`).
+For non-obvious genres (Nonogram, Unblock-style), 3-step coachmark on first
+launch behind `tutorialDone`. At end of session 1 (≥3 clears + tutorialDone),
+show "Come back tomorrow for your daily bonus" + schedule the daily reminder.
+
+**Virality (Part F).** Native bridge `shareText(String)` and `shareImage(b64,
+caption)` via `ACTION_SEND`. Share-a-win button injected on 3-star /
+high-score celebration overlays. Wordle-style shareable daily result on
+`overlay-daily` completion: `<Game> Daily YYYY-MM-DD ✅ solved in N moves`
++ Play link for live apps (no link for pre-release apps until they ship).
+
+**Leaderboards (Part G).** Play Games Services v2 — `submitScore`,
+`showLeaderboard`, `signInPlayGames` bridge methods on every NativeBridge.
+Submit on every clear / high-score. Menu "🏆 Leaderboard" button. The
+existing synthetic weekly-tournament bracket stays as the fallback — PGS
+layers on top, never replaces it. The `games_app_id` in `strings.xml` and
+the JS-side `LEADERBOARD_ID` ship as placeholders; real values land via
+Play Console (see `scripts/growth_open_items.md §B`).
+
+**Pre-publish enforcement.** `scripts/check_growth_features.py` runs every
+publish: NativeBridge surface presence, manifest `<queries>`, six growth
+shim markers (`data-growth-shim="A".."G"`), no-pre-release-in-cross-promo,
+and warning on placeholder PGS / `games_app_id`. Wired into
+`pre_publish_check.py` as `[code] growth baseline`.

@@ -1513,3 +1513,28 @@ new manifest requirement, new SDK version), update this file. It is the
 authoritative reference for what "ready for release" means at Pegasus
 Games. Code in `pre_publish_check.py` enforces a subset of these rules;
 this doc is the broader human-readable specification.
+
+---
+
+## Phase 1/2 growth-baseline checklist (2026-05-25)
+
+Every new game must carry the growth/DAU baseline before it can ship.
+Detailed contract lives in `CLAUDE.md` "Growth/DAU baseline every game
+ships with" and is auto-enforced by
+`scripts/check_growth_features.py` (which runs as part of
+`pre_publish_check.py`). At a minimum each Phase 1 build must
+incorporate:
+
+- **Phase 1 (game logic):** call `window.gOnAnyClear()` on every
+  level-complete / win, `window.gScheduleLivesRefilled(refillAtMs)`
+  when lives drop to zero, and `window.gOnDailyDone()` on
+  daily-challenge completion. Expose `state.coins`, a streak field
+  (`dailyChallengeStreak` or `loginStreak`), and a clear-count
+  measurable (`completedLevels[]` or `levelsCompleted`) so the
+  behavioral shims can read them.
+- **Phase 2 (wrapper integration):** copy the latest
+  `_growth_shim_a..g.html` files (idempotent — keyed by
+  `data-growth-shim`), add the per-app `<queries>` block listing only
+  LIVE sibling packages, run `_port_notif_suite.py` to install the
+  notification + share + PGS Java bridge methods. Verify
+  `check_growth_features.py` is clean before moving on.

@@ -1769,3 +1769,37 @@ called for "§8".)
 8. **Native-speaker translation review** — at least the top-3-revenue
    locales reviewed by a native speaker; literal calques depress
    conversion.
+
+---
+
+## 16. Growth surface checklist (2026-05-25)
+
+Mandatory growth-product polish — present in every shipping app
+through the six runtime shims and the matching NativeBridge methods.
+`check_growth_features.py` enforces; `CLAUDE.md` carries the
+authoritative contract.
+
+| Surface | Where it lives | Verification |
+|---|---|---|
+| Daily reminder at user's play hour | `_growth_shim_a` | Toast appears at expected hour after install + ≥1 play day |
+| Streak-at-risk ping (20:30) | `_growth_shim_a` | Notification text "Your N-day streak ends in 4 hours" |
+| Lives-refilled ping | `gScheduleLivesRefilled` | When lives hit 0, ping fires at refill time |
+| Win-back chain d3/d7/d14/d30 | `_growth_shim_a` | Settings → Notifications OFF cancels all four |
+| Settings toggle row | `_growth_shim_a` | Tap toggles `Android.setNotificationsEnabled` |
+| Cross-promo break-point card | `_growth_shim_b` | Every 5th clear; max 1/session; never 2 sessions in a row |
+| Welcome bonus on sibling install | `_growth_shim_b` | First launch with a sister app installed → +100 coins toast |
+| Streak shield (auto-consume) | `_growth_shim_d` | Skip 1 day → streak preserved + toast; freeze count -1 |
+| Next-milestone chip on menu | `_growth_shim_d` | Shows "Day N: <reward>" against the ladder table |
+| First-clear confetti | `_growth_shim_e` | First clear ever → emoji burst + 2.4s message |
+| No interstitial on first 3 clears | `_growth_shim_e` | `showInterstitial` swallowed until `_growthClearsTotal >= 3` |
+| Coachmark (Nono / Unblock) | `_growth_shim_e` | 3-step overlay on first launch; sets `tutorialDone` |
+| Share-a-win on celebration | `_growth_shim_f` | Share button appears on win overlay; composes a one-tap message |
+| Wordle-style daily share | `_growth_shim_f` | Daily-complete overlay → spoiler-free recap line |
+| Leaderboard button on menu | `_growth_shim_g` | Tap calls `signInPlayGames` + `showLeaderboard` (no-ops gracefully until PGS configured) |
+
+**Pre-release packages** (`com.pegasusgames.unblockpuzzle`,
+`com.pegasusgames.pipeconnect` as of 2026-05-25) must NEVER appear as
+cross-promo targets — they only appear as commented TODO markers in
+`CROSS_PROMO_PACKAGES`, `<queries>`, and the shim's `ALL_PROMO`. When
+either app goes live, follow `scripts/growth_open_items.md §A` and
+re-run `pre_publish_check.py` — it'll catch any drift.
