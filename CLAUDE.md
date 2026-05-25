@@ -181,9 +181,9 @@ identical to every other app — only `keyAlias=upload` (vs per-app
 │   ├── feature_graphic_1024x500.png    # 1024×500, no transparency
 │   ├── icon_1024_appstore.png          # 1024×1024, no alpha
 │   └── screenshots/
-│       ├── phone/      raw/ + 01.png...07.png  # 1080×2400
-│       ├── tablet_7/   raw/ + wrapped          # 1200×1920
-│       ├── tablet_10/  raw/ + wrapped          # 1800×2560
+│       ├── phone/      raw/ + 01.png..06.png   # 1080×2400 · 6 distinct
+│       ├── tablet_7/   raw/ + 01.png..06.png   # 1200×1920 · 6 distinct
+│       ├── tablet_10/  raw/ + 01.png..06.png   # 1800×2560 · 6 distinct
 │       └── iphone_6_9/                          # 1320×2868 (Apple req.)
 ├── test/
 │   ├── seed_screenshot_state.js        # localStorage seed
@@ -497,6 +497,12 @@ advance.
   All 13 locales translated; phone + tablet 7"/10" screenshots.
   `pre_publish_check` clean. Next release for each = bump versionCode,
   rebuild the AAB, upload (see each app's `RELEASE_HANDOFF.md`).
+- **In Play review (1):** **UnblockPuzzle** (v1.1.1, versionCode 7) —
+  uploaded 2026-05-25, awaiting Play review. Code clean,
+  `pre_publish_check` clean (modulo iOS surfaces — user is
+  Android-only), all 13 locales, phone + tablet 7"/10" screenshots
+  showcasing all themes, real AdMob IDs + Play license key wired,
+  solver-validated levels, dedicated keystore.
 - **2026-05-12/13 coin/pass overhaul (portfolio-wide):** coin ladder
   rewritten to the four-tier ladder above (was `coins_small $0.99/100`,
   `coins_large $2.99/500` cheap-anchor). Passes swapped:
@@ -514,22 +520,18 @@ advance.
   left as-is on purpose; **do NOT rework**. Every NEW app must give
   each of the 3 surfaces fully distinct raws + headlines + wrapper
   variants (see `SHIP_GAME.md` Phase 3.6).
-- **In ship prep (2):** PipeConnect (v1.7.2), UnblockPuzzle (v1.0.3).
-  Both have full metadata, all 13 locales, phone + tablet screenshots,
-  the four-tier coin ladder, and dedicated keystores (single-keystore
-  model; no PEPK). Both still carry AdMob test-ID placeholders
+- **In ship prep (1):** **PipeConnect** (v1.7.2). Full metadata, all
+  13 locales, phone + tablet screenshots, four-tier coin ladder,
+  dedicated keystore. Carries AdMob test-ID placeholders
   (`ca-app-pub-3940256099942544`) — those clear only when the user
   does the AdMob setup in `RELEASE_HANDOFF.md` Step 1 (Phase 6), so
   they always show as `pre_publish_check` blockers until upload prep.
-  - **UnblockPuzzle** — code clean as of 2026-05-20: Restore Purchases
-    + Privacy Policy wired into Settings, with `restorePurchases()` /
-    `openUrl()` added to the `MainActivity` JS bridge. Release AAB
-    builds clean. Only the AdMob-placeholder blockers remain — ready
-    for the Phase 6 hand-off + upload.
-  - **PipeConnect** — still has 2 unfixed code blockers: no Restore
-    Purchases control in `game.html`, and interstitials aren't gated
-    by a level/game counter (`check_interstitial_cadence`). Fix both
-    before shipping.
+  As of 2026-05-25 also has 3 unfixed code blockers: `weekly_pass`
+  routed through INAPP not SUBS billing
+  (`check_subscription_routing`), no Restore Purchases control in
+  `game.html` (`check_restore_purchases_ui`), and interstitials aren't
+  gated by a level/game counter (`check_interstitial_cadence`). Fix
+  all three before shipping.
 - **Recently deleted:** BallSortPuzzle (2026-04-30 — too similar to
   WaterSortPuzzle, ~zero downloads); removed from working tree, from
   `app_themes.py` / `dedup_similar_apps.py` / `promo.json`.
@@ -731,6 +733,12 @@ Each line is now enforced by a `pre_publish_check.py` check.
   `optimal` move count MUST come from the solver, never a hand-guess —
   114/150 were wrong. The `puzzle solvability` pre-publish gate
   (`check_unblock_solvable.py`) blocks both failure modes.
+- **Every shipping app MUST have 6 distinct screenshots per device
+  surface** — `phone/`, `tablet_7/`, `tablet_10/` each carry exactly 6
+  wrapped slots with distinct raws + headlines (user policy 2026-05-25;
+  was 4-floor / 7-aspirational before). 6/6/6 is the standard; counts
+  below it block pre-ship apps and warn on already-shipped apps.
+  `check_screenshot_completeness` enforces.
 - **Screenshot headlines MUST match screenshot content.** A "Daily
   Missions" headline over a plain gameplay board is a Play policy red
   flag. `check_screenshot_headline_match` enforces.

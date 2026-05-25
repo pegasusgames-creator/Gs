@@ -1,22 +1,29 @@
 {
-  "_comment": "PipeConnect screenshot capture. Uses JS-based showScreen/loadLevel.",
-  "_readiness_expr": "typeof save !== 'undefined' && typeof loadLevel === 'function' && typeof showScreen === 'function'",
+  "_comment": "PipeConnect screenshot capture. 6 slots per surface. Keys MUST match canonical slot names in capture_screenshots.py SLOTS list; content under each key is what we actually capture. Themes applied by writing palette directly to PIPE_COLORS (THEMES array lives in an IIFE).",
+  "_readiness_expr": "typeof save !== 'undefined' && typeof loadLevel === 'function' && typeof showScreen === 'function' && typeof PIPE_COLORS !== 'undefined'",
 
   "_setup_taps": [
-    ["js", "(function(){try{var s={currentLevel:120,completedLevels:Array.from({length:118},function(_,i){return i;}),levelStars:(function(){var x={};for(var i=0;i<118;i++)x[i]=(i%4===0?3:(i%3===0?2:1));return x;})(),coins:247,lives:5,maxLives:5,lastLifeTime:Date.now(),removeAds:false,unlimitedLivesPermanent:false,unlimitedLivesExpiry:0,dailyChallengeDate:'',dailyChallengeStreak:7,soundEnabled:true,musicEnabled:false,activeTheme:'default',lastLevelProgress:null,hintPack:3,hintCount:3,seasonPassUntil:0,weeklyPassUntil:0,lastSeasonGrantDate:'',lastWeeklyGrantDate:''};Object.assign(save,s);if(typeof persist==='function')persist();if(typeof updateAllUI==='function')updateAllUI();}catch(e){}return 'seeded';})()", 400]
+    ["js", "(function(){try{var s={currentLevel:120,completedLevels:Array.from({length:118},function(_,i){return i;}),levelStars:(function(){var x={};for(var i=0;i<118;i++)x[i]=(i%4===0?3:(i%3===0?2:1));return x;})(),coins:247,lives:5,maxLives:5,lastLifeTime:Date.now(),removeAds:false,unlimitedLivesPermanent:false,unlimitedLivesExpiry:0,dailyChallengeDate:'',dailyChallengeStreak:7,soundEnabled:true,musicEnabled:false,activeTheme:'default',lastLevelProgress:null,hintPack:3,hintCount:3,seasonPassUntil:0,weeklyPassUntil:0,lastSeasonGrantDate:'',lastWeeklyGrantDate:''};Object.assign(save,s);if(typeof persist==='function')persist();if(typeof updateAllUI==='function')updateAllUI();window._PALETTES={classic:{red:'#ff5252',blue:'#448aff',green:'#69f0ae',yellow:'#ffd740',purple:'#e040fb',orange:'#ff6d00',pink:'#f48fb1',teal:'#18ffff'},neon:{red:'#ff073a',blue:'#00f5ff',green:'#39ff14',yellow:'#ffff00',purple:'#bf00ff',orange:'#ff6600',pink:'#ff69b4',teal:'#00ffcc'},pastel:{red:'#ffb3ba',blue:'#bae1ff',green:'#b5ead7',yellow:'#ffffba',purple:'#e0b3ff',orange:'#ffdfba',pink:'#ffb3de',teal:'#b3fff0'},ocean:{red:'#e06c75',blue:'#61afef',green:'#98c379',yellow:'#e5c07b',purple:'#c678dd',orange:'#d19a66',pink:'#e06c75',teal:'#56b6c2'}};}catch(e){}return 'seeded';})()", 400]
   ],
 
-  "01_deep_gameplay":   [["js", "showScreen('game');setTimeout(function(){loadLevel(118);},200);'ok';", 2200]],
-  "02_early_gameplay":  [["js", "showScreen('game');setTimeout(function(){loadLevel(5);},200);'ok';", 2200]],
-  "03_level_complete":  [["js", "showScreen('game');setTimeout(function(){loadLevel(60);setTimeout(function(){var ov=document.getElementById('overlay-complete');if(ov){ov.classList.add('active');ov.style.display='flex';}},400);},200);'ok';", 2500]],
-  "04_missions_panel":  [["js", "showScreen('daily');if(typeof initDailyChallenge==='function')initDailyChallenge();'ok';", 2200]],
-  "05_stats":           [["js", "showScreen('stats');if(typeof renderStats==='function')renderStats();setTimeout(function(){if(typeof injectRankCard==='function')injectRankCard();},250);'ok';", 2200]],
-  "06_levels_grid":     [["js", "showScreen('levelselect');if(typeof renderLevelSelect==='function')renderLevelSelect();'ok';", 2200]],
-  "07_menu":            [],
+  "01_deep_gameplay":    [["js", "Object.assign(PIPE_COLORS,window._PALETTES.classic);showScreen('game');setTimeout(function(){loadLevel(118);},200);'ok';", 2200]],
+  "02_early_gameplay":   [["js", "Object.assign(PIPE_COLORS,window._PALETTES.neon);save.activeTheme='neon';persist();showScreen('game');setTimeout(function(){loadLevel(5);},200);'ok';", 2200]],
+  "03_level_complete":   [["js", "Object.assign(PIPE_COLORS,window._PALETTES.pastel);save.activeTheme='pastel';persist();showScreen('game');setTimeout(function(){loadLevel(60);setTimeout(function(){var ov=document.getElementById('overlay-complete');if(ov){ov.classList.add('active');ov.classList.add('show');ov.style.display='flex';}},500);},200);'ok';", 2800]],
+  "04_missions_panel":   [["js", "Object.assign(PIPE_COLORS,window._PALETTES.ocean);save.activeTheme='ocean';persist();showScreen('game');setTimeout(function(){loadLevel(45);},200);'ok';", 2200]],
+  "05_stats":            [["js", "Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('stats');if(typeof renderStats==='function')renderStats();setTimeout(function(){if(typeof injectRankCard==='function')injectRankCard();},250);'ok';", 2200]],
+  "06_levels_grid":      [["js", "showScreen('themes');if(typeof renderThemes==='function')renderThemes();'ok';", 2200]],
 
-  "tablet_7_01_deep_gameplay":  [["js", "showScreen('game');setTimeout(function(){loadLevel(85);},200);'ok';", 2200]],
-  "tablet_7_02_early_gameplay": [["js", "showScreen('game');setTimeout(function(){loadLevel(28);},200);'ok';", 2200]],
+  "tablet_7_01_deep_gameplay":   [["js", "Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('game');setTimeout(function(){loadLevel(85);},200);'ok';", 2200]],
+  "tablet_7_02_early_gameplay":  [["js", "Object.assign(PIPE_COLORS,window._PALETTES.neon);save.activeTheme='neon';persist();showScreen('game');setTimeout(function(){loadLevel(28);},200);'ok';", 2200]],
+  "tablet_7_03_level_complete":  [["js", "Object.assign(PIPE_COLORS,window._PALETTES.pastel);save.activeTheme='pastel';persist();showScreen('game');setTimeout(function(){loadLevel(70);setTimeout(function(){var ov=document.getElementById('overlay-complete');if(ov){ov.classList.add('active');ov.classList.add('show');ov.style.display='flex';}},500);},200);'ok';", 2800]],
+  "tablet_7_04_missions_panel":  [["js", "Object.assign(PIPE_COLORS,window._PALETTES.ocean);save.activeTheme='ocean';persist();showScreen('game');setTimeout(function(){loadLevel(50);},200);'ok';", 2200]],
+  "tablet_7_05_stats":           [["js", "Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('stats');if(typeof renderStats==='function')renderStats();setTimeout(function(){if(typeof injectRankCard==='function')injectRankCard();},250);'ok';", 2200]],
+  "tablet_7_06_levels_grid":     [["js", "save.activeTheme='pastel';persist();showScreen('themes');if(typeof renderThemes==='function')renderThemes();'ok';", 2200]],
 
-  "tablet_10_01_deep_gameplay": [["js", "showScreen('game');setTimeout(function(){loadLevel(140);},200);'ok';", 2200]],
-  "tablet_10_02_early_gameplay":[["js", "showScreen('themes');'ok';", 2000]]
+  "tablet_10_01_deep_gameplay":  [["js", "Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('game');setTimeout(function(){loadLevel(120);},200);'ok';", 2500]],
+  "tablet_10_02_early_gameplay": [["js", "Object.assign(PIPE_COLORS,window._PALETTES.neon);save.activeTheme='neon';persist();showScreen('game');setTimeout(function(){loadLevel(15);},200);'ok';", 2200]],
+  "tablet_10_03_level_complete": [["js", "Object.assign(PIPE_COLORS,window._PALETTES.pastel);save.activeTheme='pastel';persist();showScreen('game');setTimeout(function(){loadLevel(100);setTimeout(function(){var ov=document.getElementById('overlay-complete');if(ov){ov.classList.add('active');ov.classList.add('show');ov.style.display='flex';}},500);},200);'ok';", 2800]],
+  "tablet_10_04_missions_panel": [["js", "Object.assign(PIPE_COLORS,window._PALETTES.ocean);save.activeTheme='ocean';persist();showScreen('game');setTimeout(function(){loadLevel(90);},200);'ok';", 2200]],
+  "tablet_10_05_stats":          [["js", "Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('stats');if(typeof renderStats==='function')renderStats();setTimeout(function(){if(typeof injectRankCard==='function')injectRankCard();},250);'ok';", 2200]],
+  "tablet_10_06_levels_grid":    [["js", "save.activeTheme='ocean';persist();showScreen('themes');if(typeof renderThemes==='function')renderThemes();'ok';", 2200]]
 }

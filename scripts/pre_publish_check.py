@@ -1629,11 +1629,10 @@ def check_screenshot_completeness(apps):
     """
     blocking = []
     warnings = []
-    REQUIRED_MIN = 4  # Pegasus pragmatic floor; Play Console minimum is 2.
-                      # Originally 7 (Pegasus ideal) but icon-row taps
-                      # fail in the capture-script pipeline for some apps
-                      # (May 2026 Puzzle2048 audit) — accepting 4 as floor
-                      # while keeping 7 as the aspirational target.
+    REQUIRED_MIN = 6  # Pegasus standard: 6 distinct screenshots per surface
+                      # (phone + tablet_7 + tablet_10). Set by user policy
+                      # 2026-05-25 — applies to every new app. Already-shipped
+                      # apps get a warning (grandfathered); pre-ship gets blocked.
 
     for app in apps:
         if not os.path.isdir(os.path.join(BASE, app, "android")):
@@ -1663,16 +1662,11 @@ def check_screenshot_completeness(apps):
             wrapped = [f for f in os.listdir(set_dir)
                        if f.endswith(".png") and not f.startswith(".")
                        and f[0:2].isdigit()]
-            if len(wrapped) < 2:
-                msg = (f"{app}: {set_name}/ has only {len(wrapped)} wrapped "
-                       f"screenshot(s). Play Console requires ≥2; Pegasus "
-                       f"standard is 7.")
+            if len(wrapped) < REQUIRED_MIN:
+                msg = (f"{app}: {set_name}/ has {len(wrapped)} wrapped "
+                       f"screenshot(s). Pegasus standard is "
+                       f"{REQUIRED_MIN}/surface (Play Console minimum is 2).")
                 (warnings if is_shipped else blocking).append(msg)
-            elif len(wrapped) < REQUIRED_MIN:
-                warnings.append(
-                    f"{app}: {set_name}/ has {len(wrapped)} wrapped "
-                    f"screenshots (Pegasus standard is {REQUIRED_MIN}). "
-                    f"Below standard but above Play Console minimum.")
 
     return blocking, warnings
 

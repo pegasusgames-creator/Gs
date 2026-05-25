@@ -236,6 +236,14 @@ body{background:#0f1923;color:#fff;font-family:'Poppins',sans-serif;overflow:hid
       <span class="settings-label">🎨 Pipe Theme</span>
       <button onclick="showScreen('themes')" id="themeBtn" style="background:rgba(68,138,255,0.12);border:1px solid rgba(68,138,255,0.3);border-radius:8px;padding:6px 14px;color:#448aff;font-size:13px;font-weight:600;cursor:pointer">Classic</button>
     </div>
+    <div class="settings-item">
+      <span class="settings-label">🔁 Restore Purchases</span>
+      <button class="shop-item-btn" onclick="restorePurchases()">Restore</button>
+    </div>
+    <div class="settings-item">
+      <span class="settings-label">📄 Privacy Policy</span>
+      <button class="shop-item-btn" onclick="openPrivacyPolicy()">View</button>
+    </div>
     <div class="settings-item" style="justify-content:center;">
       <span style="color:#37474f;font-size:0.75rem;">Pipe Connect v1.0 • com.pegasusgames.pipeconnect</span>
     </div>
@@ -1046,7 +1054,7 @@ function requestRewardedAd(type){
   }
 }
 
-function requestInterstitial(){
+function safeShowInterstitial(){
   if(save.removeAds)return;
   if(window.Android){
     window.Android.showInterstitial();
@@ -1450,7 +1458,7 @@ function checkLevelComplete(){
   }
   // Interstitial every 3 levels
   interstitialCounter++;
-  if(interstitialCounter%3===0)requestInterstitial();
+  if(interstitialCounter%3===0)safeShowInterstitial();
   // Show overlay
   const starsStr='★'.repeat(stars)+'☆'.repeat(3-stars);
   document.getElementById('complete-stars').textContent=starsStr;
@@ -1583,6 +1591,22 @@ setTimeout(()=>{
 // SETTINGS
 // ============================================================
 function confirmReset(){showOverlay('overlay-confirm-reset');}
+
+function restorePurchases(){
+  if(window.Android && typeof window.Android.restorePurchases === 'function'){
+    try { window.Android.restorePurchases(); } catch(e) {}
+    showToast && showToast('Restoring purchases…');
+  }
+}
+
+function openPrivacyPolicy(){
+  const url='https://pegasusgames-creator.github.io/privacy.html';
+  if(window.Android && typeof window.Android.openUrl === 'function'){
+    try { window.Android.openUrl(url); } catch(e) { window.open(url,'_blank'); }
+  } else {
+    window.open(url,'_blank');
+  }
+}
 
 function doResetAll(){
   localStorage.removeItem(SAVE_KEY);
