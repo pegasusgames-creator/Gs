@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{background:#faf8f3;color:#2d3a4a;font-family:'Poppins',sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+body{background:#eef4f8;color:#1e3a5f;font-family:'Poppins',sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
 /* Midnight chrome — applied via body.midnight when the Midnight theme is active. */
 body.midnight{background:#161020;color:#e6e2f0;}
 body.midnight #screen-menu,
@@ -25,6 +25,11 @@ body.midnight .settings-item,
 body.midnight .shop-item,
 body.midnight .mg-card,
 body.midnight .modal{background:#1f1733;border-color:#2d2447;}
+body.midnight .game-header,
+body.midnight .game-footer{background:#1f1733;border-color:#2d2447;}
+body.midnight .hdr-level{color:#c7b5ff;}
+body.midnight .menu-sub,
+body.midnight .ls-section-title{color:#a89bc7;}
 body.midnight .btn-levels,
 body.midnight .btn-shop,
 body.midnight .btn-settings,
@@ -39,10 +44,12 @@ body.midnight .menu-coins,
 body.midnight .menu-lives,
 body.midnight .shop-coins-banner{background:#1f1733;color:#c7b5ff;border-color:#2d2447;}
 body.midnight .ls-bubble.locked{color:#5b5170;}
+body.midnight .toggle{background:#3d2f5e;}
+body.midnight .modal p{color:#aa9fc4;}
 #screen-menu,#screen-game,#screen-levelselect,#screen-shop,#screen-settings,#screen-moregames{display:none;flex-direction:column;height:100vh;}
 .active{display:flex!important;}
 /* MENU */
-#screen-menu{align-items:center;justify-content:center;background:#faf8f3;}
+#screen-menu{align-items:center;justify-content:center;background:#eef4f8;}
 .menu-logo{font-size:3rem;font-weight:800;letter-spacing:2px;margin-bottom:8px;background:linear-gradient(135deg,#ff5252,#448aff,#69f0ae);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .menu-sub{color:#607d8b;font-size:0.9rem;margin-bottom:40px;}
 .menu-btn{width:220px;padding:14px 0;border:none;border-radius:30px;font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;margin:8px;transition:transform 0.1s,box-shadow 0.1s;}
@@ -51,79 +58,79 @@ body.midnight .ls-bubble.locked{color:#5b5170;}
 .foot-btn.btn-pressed{transform:scale(0.95);}
 .ls-bubble.btn-pressed{transform:scale(0.92);}
 .btn-play{background:linear-gradient(135deg,#448aff,#69f0ae);color:#0f1923;}
-.btn-levels{background:#e8e2d4;color:#3b6db8;}
-.btn-shop{background:#e8e2d4;color:#ffd740;}
-.btn-settings{background:#e8e2d4;color:#5a6675;}
+.btn-levels{background:#d4e2ec;color:#3b6db8;}
+.btn-shop{background:#d4e2ec;color:#ffd740;}
+.btn-settings{background:#d4e2ec;color:#5a7390;}
 .btn-moregames{background:linear-gradient(135deg,#e040fb,#448aff);color:#fff;}
 /* §3.1 menu hierarchy: V8 minimal + T6 neon — hero Play, secondary pair, glowing tertiary icons. */
 .menu-primary{width:240px;padding:18px 0;border:none;border-radius:32px;font-family:'Poppins',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:2px;cursor:pointer;background:linear-gradient(135deg,#448aff,#69f0ae);color:#0f1923;box-shadow:0 0 24px rgba(105,240,174,0.35),0 0 60px rgba(68,138,255,0.25);transition:transform 0.1s;}
 .menu-primary:active{transform:scale(0.97);}
 .menu-pair-row{display:flex;gap:10px;width:240px;margin-top:14px;}
-.menu-pair{flex:1;padding:12px 0;border:1.5px solid #e8e2d4;border-radius:18px;font-family:'Poppins',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:1.4px;cursor:pointer;background:#f5f0e6;color:#3b6db8;transition:transform 0.1s,border-color 0.1s,color 0.1s;}
+.menu-pair{flex:1;padding:12px 0;border:1.5px solid #d4e2ec;border-radius:18px;font-family:'Poppins',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:1.4px;cursor:pointer;background:#e0ecf3;color:#3b6db8;transition:transform 0.1s,border-color 0.1s,color 0.1s;}
 .menu-pair:active{transform:scale(0.97);border-color:#448aff;color:#69f0ae;}
 .menu-icon-row{display:flex;gap:14px;margin-top:18px;}
-.menu-icon-btn{width:46px;height:46px;border-radius:50%;border:1.5px solid #e8e2d4;background:#f5f0e6;color:#3b6db8;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;transition:color 0.12s,border-color 0.12s,box-shadow 0.12s,transform 0.1s;padding:0;}
+.menu-icon-btn{width:46px;height:46px;border-radius:50%;border:1.5px solid #d4e2ec;background:#e0ecf3;color:#3b6db8;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;transition:color 0.12s,border-color 0.12s,box-shadow 0.12s,transform 0.1s;padding:0;}
 .menu-icon-btn:hover,.menu-icon-btn:active{color:#69f0ae;border-color:#448aff;box-shadow:0 0 14px rgba(68,138,255,0.45);}
 .menu-icon-btn:active{transform:scale(0.94);}
 /* MORE GAMES */
-#screen-moregames{background:#faf8f3;overflow:hidden;}
-.mg-card{background:#ffffff;border:1px solid #e8e2d4;border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;}
+#screen-moregames{background:#eef4f8;overflow:hidden;}
+.mg-card{background:#ffffff;border:1px solid #d4e2ec;border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;}
 .mg-card-icon{font-size:2rem;margin-right:14px;flex-shrink:0;}
 .mg-card-info{flex:1;}
 .mg-card-name{font-size:0.95rem;font-weight:700;}
 .mg-card-desc{font-size:0.75rem;color:#607d8b;margin-top:2px;}
 .mg-card-btn{background:linear-gradient(135deg,#e040fb,#448aff);border:none;color:#fff;font-family:'Poppins',sans-serif;font-size:0.8rem;font-weight:700;padding:8px 14px;border-radius:20px;cursor:pointer;white-space:nowrap;}
-.mg-card-btn.claimed{background:#e8e2d4;color:#69f0ae;cursor:default;}
-.menu-coins{position:absolute;top:20px;right:20px;background:#e8e2d4;border-radius:20px;padding:8px 16px;font-size:0.9rem;color:#ffd740;}
-.menu-lives{position:absolute;top:20px;left:20px;background:#e8e2d4;border-radius:20px;padding:8px 16px;font-size:0.9rem;color:#ff5252;}
+.mg-card-btn.claimed{background:#d4e2ec;color:#69f0ae;cursor:default;}
+.menu-coins{position:absolute;top:20px;right:20px;background:#d4e2ec;border-radius:20px;padding:8px 16px;font-size:0.9rem;color:#ffd740;}
+.menu-lives{position:absolute;top:20px;left:20px;background:#d4e2ec;border-radius:20px;padding:8px 16px;font-size:0.9rem;color:#ff5252;}
 /* GAME */
-#screen-game{background:#faf8f3;}
-.game-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f5f0e6;border-bottom:1px solid #e8e2d4;}
+#screen-game{background:#eef4f8;}
+.game-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#e0ecf3;border-bottom:1px solid #d4e2ec;}
 .hdr-level{font-size:1rem;font-weight:700;color:#3b6db8;}
 .hdr-lives{font-size:0.85rem;color:#ff5252;}
 .hdr-coins{font-size:0.85rem;color:#ffd740;}
 .canvas-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:8px;}
 #gameCanvas{touch-action:none;cursor:pointer;}
-.game-footer{display:flex;align-items:center;justify-content:space-around;padding:12px 8px;background:#f5f0e6;border-top:1px solid #e8e2d4;}
-.foot-btn{background:#e8e2d4;border:none;color:#3b6db8;font-family:'Poppins',sans-serif;font-size:0.8rem;font-weight:600;padding:10px 20px;border-radius:20px;cursor:pointer;transition:transform 0.1s;}
+.game-footer{display:flex;align-items:center;justify-content:space-around;padding:12px 8px;background:#e0ecf3;border-top:1px solid #d4e2ec;}
+.foot-btn{background:#d4e2ec;border:none;color:#3b6db8;font-family:'Poppins',sans-serif;font-size:0.8rem;font-weight:600;padding:10px 20px;border-radius:20px;cursor:pointer;transition:transform 0.1s;}
 .foot-btn:active{transform:scale(0.95);}
 .foot-btn.warn{color:#ff5252;}
-.progress-bar-wrap{height:4px;background:#e8e2d4;}
+.progress-bar-wrap{height:4px;background:#d4e2ec;}
 .progress-bar{height:4px;background:linear-gradient(90deg,#448aff,#69f0ae);transition:width 0.3s;}
 /* LEVEL SELECT */
-#screen-levelselect{background:#faf8f3;overflow:hidden;}
-.ls-header{display:flex;align-items:center;padding:16px;background:#f5f0e6;border-bottom:1px solid #e8e2d4;}
+#screen-levelselect{background:#eef4f8;overflow:hidden;}
+.ls-header{display:flex;align-items:center;padding:16px;background:#e0ecf3;border-bottom:1px solid #d4e2ec;}
 .ls-back{background:none;border:none;color:#3b6db8;font-size:1.4rem;cursor:pointer;margin-right:12px;}
-.ls-title{font-size:1.1rem;font-weight:700;color:#2d3a4a;}
+.ls-title{font-size:1.1rem;font-weight:700;color:#1e3a5f;}
 .ls-scroll{flex:1;overflow-y:auto;padding:16px;}
 .ls-section-title{color:#607d8b;font-size:0.8rem;font-weight:600;letter-spacing:1px;margin:16px 0 8px;text-transform:uppercase;}
 .ls-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:8px;}
 .ls-bubble{aspect-ratio:1;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;cursor:pointer;transition:transform 0.1s;position:relative;}
 .ls-bubble:active{transform:scale(0.92);}
-.ls-bubble.locked{background:#e8e2d4;color:#37474f;}
+.ls-bubble.locked{background:#d4e2ec;color:#37474f;}
 .ls-bubble.completed{background:linear-gradient(135deg,#448aff,#69f0ae);color:#0f1923;}
 .ls-bubble.stars-2{background:linear-gradient(135deg,#448aff,#90caf9);color:#0f1923;}
-.ls-bubble.stars-1{background:#e8d8c4;color:#3b6db8;border:2px solid #448aff;}
+.ls-bubble.stars-1{background:#c8dae6;color:#3b6db8;border:2px solid #448aff;}
 .ls-bubble.current{background:#ff5252;color:#fff;box-shadow:0 0 12px #ff525288;}
-.ls-bubble.available{background:#e8e2d4;color:#3b6db8;border:2px solid #e8e2d4;}
+.ls-bubble.available{background:#d4e2ec;color:#3b6db8;border:2px solid #d4e2ec;}
 .ls-stars{font-size:0.6rem;position:absolute;bottom:4px;}
 /* SHOP */
-#screen-shop{background:#faf8f3;overflow:hidden;}
-.shop-header{display:flex;align-items:center;padding:16px;background:#f5f0e6;border-bottom:1px solid #e8e2d4;}
+#screen-shop{background:#eef4f8;overflow:hidden;}
+.shop-header{display:flex;align-items:center;padding:16px;background:#e0ecf3;border-bottom:1px solid #d4e2ec;}
 .shop-scroll{flex:1;overflow-y:auto;padding:16px;}
-.shop-coins-banner{background:#e8e2d4;border-radius:16px;padding:16px;text-align:center;margin-bottom:20px;}
+.shop-coins-banner{background:#d4e2ec;border-radius:16px;padding:16px;text-align:center;margin-bottom:20px;}
 .shop-coins-banner .big{font-size:2rem;color:#ffd740;}
 .shop-coins-banner .small{font-size:0.8rem;color:#607d8b;}
-.shop-item{background:#ffffff;border:1px solid #e8e2d4;border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;}
+.shop-item{background:#ffffff;border:1px solid #d4e2ec;border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;}
 .shop-item-icon{font-size:2rem;margin-right:14px;}
 .shop-item-info{flex:1;}
 .shop-item-name{font-size:0.95rem;font-weight:700;}
 .shop-item-desc{font-size:0.75rem;color:#607d8b;margin-top:2px;}
 .shop-item-btn{background:linear-gradient(135deg,#ffd740,#ff6d00);border:none;color:#0f1923;font-family:'Poppins',sans-serif;font-size:0.8rem;font-weight:700;padding:8px 14px;border-radius:20px;cursor:pointer;}
 /* SETTINGS */
-#screen-settings{background:#faf8f3;overflow:hidden;}
+#screen-settings{background:#eef4f8;overflow:hidden;}
 .settings-scroll{flex:1;overflow-y:auto;padding:16px;}
-.settings-item{background:#ffffff;border:1px solid #e8e2d4;border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.settings-item{background:#ffffff;border:1px solid #d4e2ec;border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
 .settings-label{font-size:0.95rem;font-weight:600;}
 .toggle{width:48px;height:26px;background:#37474f;border-radius:13px;position:relative;cursor:pointer;transition:background 0.3s;}
 .toggle.on{background:#448aff;}
@@ -132,13 +139,13 @@ body.midnight .ls-bubble.locked{color:#5b5170;}
 /* OVERLAY */
 .overlay{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:100;}
 .overlay.show{display:flex;}
-.modal{background:#ffffff;border:1px solid #e8e2d4;border-radius:24px;padding:28px 24px;width:300px;text-align:center;}
+.modal{background:#ffffff;border:1px solid #d4e2ec;border-radius:24px;padding:28px 24px;width:300px;text-align:center;}
 .modal h2{font-size:1.4rem;font-weight:800;margin-bottom:8px;}
 .modal p{font-size:0.9rem;color:#3b6db8;margin-bottom:20px;}
 .modal-btns{display:flex;flex-direction:column;gap:10px;}
 .modal-btn{border:none;padding:13px;border-radius:20px;font-family:'Poppins',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;}
 .modal-btn.primary{background:linear-gradient(135deg,#448aff,#69f0ae);color:#0f1923;}
-.modal-btn.secondary{background:#e8e2d4;color:#3b6db8;}
+.modal-btn.secondary{background:#d4e2ec;color:#3b6db8;}
 .modal-btn.danger{background:#ff5252;color:#fff;}
 .stars-display{font-size:2rem;margin-bottom:16px;letter-spacing:4px;}
 </style>
@@ -282,7 +289,7 @@ body.midnight .ls-bubble.locked{color:#5b5170;}
 </div>
 
 <!-- THEMES -->
-<div id="screen-themes" style="display:none;flex-direction:column;height:100vh;background:#faf8f3;">
+<div id="screen-themes" style="display:none;flex-direction:column;height:100vh;background:#eef4f8;">
   <div class="shop-header">
     <button class="ls-back" onclick="showScreen('settings')">←</button>
     <div class="ls-title">🎨 Pipe Themes</div>
@@ -291,7 +298,7 @@ body.midnight .ls-bubble.locked{color:#5b5170;}
 </div>
 
 <!-- STATS -->
-<div id="screen-stats" style="display:none;flex-direction:column;height:100vh;background:#faf8f3;">
+<div id="screen-stats" style="display:none;flex-direction:column;height:100vh;background:#eef4f8;">
   <div class="shop-header">
     <button class="ls-back" onclick="showScreen('menu')">←</button>
     <div class="ls-title">📊 Stats</div>
@@ -300,7 +307,7 @@ body.midnight .ls-bubble.locked{color:#5b5170;}
 </div>
 
 <!-- MISSIONS -->
-<div id="screen-missions" style="display:none;flex-direction:column;height:100vh;background:#faf8f3;">
+<div id="screen-missions" style="display:none;flex-direction:column;height:100vh;background:#eef4f8;">
   <div class="shop-header">
     <button class="ls-back" onclick="showScreen('menu')">←</button>
     <div class="ls-title">🎯 Missions</div>
@@ -1180,7 +1187,7 @@ function render(){
   // the Midnight theme.
   const _midnight = document.body && document.body.classList.contains('midnight');
   const _cellFill = _midnight ? '#1f1733' : '#ffffff';
-  const _cellStroke = _midnight ? '#2d2447' : '#e8e2d4';
+  const _cellStroke = _midnight ? '#2d2447' : '#d4e2ec';
   for(let r=0;r<n;r++){
     for(let c=0;c<n;c++){
       ctx2.fillStyle=_cellFill;
@@ -1688,7 +1695,7 @@ window.addEventListener('load', () => { resizeCanvas(); render(); });
   box-shadow:0 24px 64px rgba(0,0,0,0.65); animation:ls-card-in 0.35s ease;
 }
 .ls-fire-icon { font-size:58px; display:block; margin-bottom:6px; animation:ls-fire 1s ease-in-out infinite; }
-.ls-h1 { color:#2d3a4a; font-size:23px; font-weight:800; margin-bottom:3px; }
+.ls-h1 { color:#1e3a5f; font-size:23px; font-weight:800; margin-bottom:3px; }
 .ls-sub { color:rgba(255,255,255,0.45); font-size:12px; margin-bottom:18px; }
 .ls-days-row { display:flex; justify-content:center; gap:5px; margin-bottom:18px; }
 .ls-day-cell { display:flex; flex-direction:column; align-items:center; gap:3px; }
@@ -2359,25 +2366,44 @@ window.addEventListener('load', function() { window.i18n.init(); });
 </script>
 
 <style>
-.theme-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer}
-.theme-card.active{border-color:rgba(68,138,255,0.5);background:rgba(68,138,255,0.07)}
-.theme-card.locked{opacity:0.4;cursor:default}
+/* Light defaults — sky blueprint palette. Midnight overrides at the bottom flip these for the dark unlockable theme. */
+.theme-card{background:#ffffff;border:1px solid #d4e2ec;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.theme-card.active{border-color:#3b6db8;background:#e0ecf3}
+.theme-card.locked{opacity:0.55;cursor:default}
 .theme-balls{display:flex;gap:5px;flex-shrink:0}.theme-ball{width:18px;height:18px;border-radius:50%}
-.theme-info{flex:1}.theme-info h3{color:white;font-size:13px;font-weight:700}
-.theme-info p{color:rgba(255,255,255,0.4);font-size:11px}.theme-badge{font-size:11px;font-weight:700;padding:4px 9px;border-radius:7px;white-space:nowrap}
-.active-badge{background:rgba(68,138,255,0.15);color:#448aff}.locked-badge{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.25)}
-.stat-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.theme-info{flex:1}.theme-info h3{color:#1e3a5f;font-size:13px;font-weight:700}
+.theme-info p{color:#5a7390;font-size:11px}.theme-badge{font-size:11px;font-weight:700;padding:4px 9px;border-radius:7px;white-space:nowrap}
+.active-badge{background:rgba(59,109,184,0.15);color:#3b6db8}.locked-badge{background:#e0ecf3;color:#5a7390}
+.stat-card{background:#ffffff;border:1px solid #d4e2ec;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px}
 .stat-icon{font-size:26px;width:40px;text-align:center;flex-shrink:0}.stat-info{flex:1}
-.stat-info h3{color:white;font-size:13px;font-weight:700}.stat-info p{color:rgba(255,255,255,0.4);font-size:11px}
-.stat-value{color:#ffd740;font-size:20px;font-weight:800;flex-shrink:0}
-.mission-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px;margin-bottom:10px}
+.stat-info h3{color:#1e3a5f;font-size:13px;font-weight:700}.stat-info p{color:#5a7390;font-size:11px}
+.stat-value{color:#c97f00;font-size:20px;font-weight:800;flex-shrink:0}
+.mission-card{background:#ffffff;border:1px solid #d4e2ec;border-radius:14px;padding:14px;margin-bottom:10px}
 .mission-top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
 .mission-icon{font-size:24px;width:36px;text-align:center;flex-shrink:0}
-.mission-info{flex:1}.mission-info h3{color:white;font-size:13px;font-weight:700}
-.mission-info p{color:rgba(255,255,255,0.4);font-size:11px}.mission-reward{color:#ffd740;font-size:13px;font-weight:700;flex-shrink:0}
-.mission-bar-bg{height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden}
-.mission-bar-fill{height:6px;background:linear-gradient(90deg,#448aff,#69f0ae);border-radius:3px;transition:width 0.4s}
-.mission-claim-btn{margin-top:10px;width:100%;padding:10px;border:none;border-radius:10px;background:linear-gradient(135deg,#448aff,#69f0ae);color:#0a1419;font-size:13px;font-weight:700;cursor:pointer}
+.mission-info{flex:1}.mission-info h3{color:#1e3a5f;font-size:13px;font-weight:700}
+.mission-info p{color:#5a7390;font-size:11px}.mission-reward{color:#c97f00;font-size:13px;font-weight:700;flex-shrink:0}
+.mission-bar-bg{height:6px;background:#e0ecf3;border-radius:3px;overflow:hidden}
+.mission-bar-fill{height:6px;background:linear-gradient(90deg,#3b6db8,#5cb3d8);border-radius:3px;transition:width 0.4s}
+.mission-claim-btn{margin-top:10px;width:100%;padding:10px;border:none;border-radius:10px;background:linear-gradient(135deg,#3b6db8,#5cb3d8);color:#ffffff;font-size:13px;font-weight:700;cursor:pointer}
+
+/* Midnight overrides — keep parity with the light defaults above. */
+body.midnight .theme-card,
+body.midnight .stat-card,
+body.midnight .mission-card{background:#1f1733;border-color:#2d2447}
+body.midnight .theme-card.active{background:rgba(177,140,255,0.16);border-color:#b18cff}
+body.midnight .theme-info h3,
+body.midnight .stat-info h3,
+body.midnight .mission-info h3{color:#e6e2f0}
+body.midnight .theme-info p,
+body.midnight .stat-info p,
+body.midnight .mission-info p{color:#aa9fc4}
+body.midnight .active-badge{background:rgba(177,140,255,0.22);color:#c7b5ff}
+body.midnight .locked-badge{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.4)}
+body.midnight .stat-value,
+body.midnight .mission-reward{color:#ffd166}
+body.midnight .mission-bar-bg{background:rgba(255,255,255,0.08)}
+body.midnight .mission-claim-btn{background:linear-gradient(135deg,#b18cff,#5390f5);color:#161020}
 </style>
 
 <script>

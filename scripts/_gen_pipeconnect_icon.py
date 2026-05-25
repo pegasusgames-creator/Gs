@@ -13,9 +13,9 @@ from PIL import Image, ImageDraw, ImageFilter
 REPO = Path(__file__).resolve().parent.parent
 OUT_DIR = REPO / "PipeConnect" / "store"
 
-BG = (250, 248, 243)           # #faf8f3 cream
+BG = (238, 244, 248)           # #eef4f8 sky-pale (PipeConnect blueprint palette)
 GRID_BG = (255, 255, 255)      # white cells
-GRID_BORDER = (232, 226, 212)  # #e8e2d4 warm beige
+GRID_BORDER = (212, 226, 236)  # #d4e2ec sky-tinged
 DOT_CENTER = (255, 255, 255, 230)
 
 # Three pipe routes (red, blue, green) on a 5x5 grid. Each entry is a list

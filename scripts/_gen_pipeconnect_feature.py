@@ -10,12 +10,12 @@ REPO = Path(__file__).resolve().parent.parent
 OUT = REPO / "PipeConnect" / "store" / "feature_graphic_1024x500.png"
 
 W, H = 1024, 500
-BG = (250, 248, 243)
+BG = (238, 244, 248)           # #eef4f8 sky-pale
 CARD_BG = (255, 255, 255)
-GRID_BORDER = (232, 226, 212)
-TEXT_PRIMARY = (45, 58, 74)
-TEXT_SOFT = (90, 102, 117)
-ACCENT_BLUE = (59, 109, 184)
+GRID_BORDER = (212, 226, 236)  # #d4e2ec sky-tinged
+TEXT_PRIMARY = (30, 58, 95)    # #1e3a5f deep ocean blue
+TEXT_SOFT = (90, 115, 144)     # #5a7390
+ACCENT_BLUE = (59, 109, 184)   # #3b6db8
 
 ROUTES = [
     ((237, 87, 87), [(0, 0), (0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 2), (2, 1), (2, 0)]),
@@ -42,10 +42,10 @@ def main():
     img = Image.new("RGB", (W, H), BG)
     d = ImageDraw.Draw(img)
 
-    # Subtle radial accent on the right side
+    # Subtle radial accent on the right side — soft sky-blue glow
     accent = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ad = ImageDraw.Draw(accent)
-    ad.ellipse((W * 0.55, -120, W + 120, H + 120), fill=(255, 226, 196, 70))
+    ad.ellipse((W * 0.55, -120, W + 120, H + 120), fill=(180, 215, 240, 90))
     accent = accent.filter(ImageFilter.GaussianBlur(60))
     img.paste(accent, (0, 0), accent)
     d = ImageDraw.Draw(img)

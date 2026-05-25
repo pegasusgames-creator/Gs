@@ -107,7 +107,7 @@ public class MainActivity extends Activity {
         "undo", "skip", "life"
     ));
 
-    private static final int WEBVIEW_BG_COLOR = 0xFFfaf8f3;
+    private static final int WEBVIEW_BG_COLOR = 0xFFeef4f8;
 
     // AppLovin MAX objects
     private MaxAdView         bannerAd;
