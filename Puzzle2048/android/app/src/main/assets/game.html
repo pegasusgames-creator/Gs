@@ -4512,5 +4512,149 @@ window.addEventListener('load',function(){
 })();
 </script>
 
+<!-- Growth shim — Part F (share virality). Idempotent: data-growth-shim="F".
+     - Share-a-win: when a level-complete / win overlay shows up, inject a
+       "🔁 Share" button. Composes a one-tap message (with Play link for live
+       apps; UnblockPuzzle ships the no-link wording until it goes live).
+     - Wordle-style daily result: same Share button on the daily-completion
+       overlay produces a spoiler-free recap line.
+     - Native bridge: window.Android.shareText. shareImage is best-effort and
+       degrades to text-only — see MainActivity comment.
+-->
+<script data-growth-shim="F">
+(function(){
+  if (window.__growthShimF) return;
+  window.__growthShimF = true;
+
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v=LS.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function safe(fn){ try { return fn(); } catch(e){} }
+  function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
+
+  // Game-name + Play link per package.
+  var GAME_INFO = {
+    'com.pegasusgames.watersortpuzzle': { name:'Water Sort Puzzle', link:'https://play.google.com/store/apps/details?id=com.pegasusgames.watersortpuzzle' },
+    'com.pegasusgames.nonogram':        { name:'Nonogram',           link:'https://play.google.com/store/apps/details?id=com.pegasusgames.nonogram' },
+    'com.pegasusgames.puzzle2048':      { name:'2048 Puzzle',         link:'https://play.google.com/store/apps/details?id=com.pegasusgames.puzzle2048' },
+    // TODO post-release: replace empty link with the real Play URL once UnblockPuzzle is live.
+    'com.pegasusgames.unblockpuzzle':   { name:'Unblock Puzzle',      link:'' },
+    'com.pegasusgames.pipeconnect':     { name:'Pipe Connect',        link:'' },
+  };
+
+  function detectPkg(){
+    var t = (document.title||'').toLowerCase();
+    if (t.indexOf('water') >= 0) return 'com.pegasusgames.watersortpuzzle';
+    if (t.indexOf('nonogram') >= 0) return 'com.pegasusgames.nonogram';
+    if (t.indexOf('2048') >= 0) return 'com.pegasusgames.puzzle2048';
+    if (t.indexOf('unblock') >= 0) return 'com.pegasusgames.unblockpuzzle';
+    if (t.indexOf('pipe') >= 0) return 'com.pegasusgames.pipeconnect';
+    return '';
+  }
+  var PKG = detectPkg();
+  var INFO = GAME_INFO[PKG] || { name:'Pegasus Games', link:'' };
+
+  function readSave(){
+    var keys = ['save','state','gameState','progress'];
+    for (var i=0;i<keys.length;i++){
+      var raw = lsGet(keys[i],null);
+      if (!raw) continue;
+      try { return JSON.parse(raw); } catch(e){}
+    }
+    return {};
+  }
+
+  function composeWin(){
+    var s = readSave();
+    var lvl = s.currentLevel || (Array.isArray(s.completedLevels) ? s.completedLevels.length : 0) || 0;
+    var brag = 'I just solved Level ' + lvl + ' on ' + INFO.name + '! Can you beat me?';
+    return INFO.link
+      ? (brag + ' ' + INFO.link)
+      : (brag + ' — search "' + INFO.name + '" by Pegasus Games on Google Play.');
+  }
+
+  function compose2048Score(){
+    var s = readSave();
+    var score = s.bestScore || s.highScore || s.score || 0;
+    var brag = 'New high score on ' + INFO.name + ': ' + score + '. Beat that!';
+    return INFO.link ? (brag + ' ' + INFO.link) : brag;
+  }
+
+  function composeDaily(){
+    var s = readSave();
+    var date = new Date().toISOString().slice(0,10);
+    var moves = s.lastDailyMoves || s.dailyMoves || '?';
+    var line = INFO.name + ' Daily ' + date + ' ✅  solved in ' + moves + ' moves';
+    return INFO.link ? (line + '\n' + INFO.link) : line;
+  }
+
+  function doShare(text){
+    if (!text) return;
+    if (api('shareText')) { safe(function(){ Android.shareText(text); }); return; }
+    if (navigator.share) {
+      try { navigator.share({ text: text }); return; } catch(e){}
+    }
+    safe(function(){ window.prompt('Copy and share:', text); });
+  }
+
+  function buildShareButton(label, getter){
+    var btn = document.createElement('button');
+    btn.setAttribute('data-growth-share-btn','1');
+    btn.style.cssText =
+      'margin-top:10px;width:100%;padding:11px;border:none;border-radius:12px;' +
+      'background:linear-gradient(135deg,#3b6db8,#5cb3d8);color:#fff;font-weight:800;font-size:0.95rem;cursor:pointer;font-family:inherit;';
+    btn.textContent = label;
+    btn.addEventListener('click', function(){ doShare(getter()); });
+    return btn;
+  }
+
+  // ── Detect level-complete / daily-complete / high-score overlays.
+  // Heuristic: any element with id containing 'overlay-complete', 'win',
+  // 'levelComplete', 'daily', 'highScore', or class containing 'celebration'.
+  var SELECTORS = [
+    '[id*="overlay-complete"]',
+    '[id*="winOverlay"]',
+    '[id*="levelComplete"]',
+    '[id*="daily-complete"]',
+    '[id*="overlay-daily"]',
+    '[id*="highScore"]',
+    '.celebration',
+  ];
+  function isVisible(el){
+    if (!el) return false;
+    var st = window.getComputedStyle(el);
+    if (st.display === 'none' || st.visibility === 'hidden') return false;
+    if (parseFloat(st.opacity) === 0) return false;
+    var r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0;
+  }
+
+  function injectInto(el, getter, label){
+    if (!el) return;
+    if (el.querySelector('[data-growth-share-btn]')) return;
+    var btn = buildShareButton(label, getter);
+    el.appendChild(btn);
+  }
+
+  function scan(){
+    for (var i=0;i<SELECTORS.length;i++){
+      var els = document.querySelectorAll(SELECTORS[i]);
+      for (var j=0;j<els.length;j++){
+        if (!isVisible(els[j])) continue;
+        var id = (els[j].id || '').toLowerCase();
+        if (id.indexOf('daily') >= 0) {
+          injectInto(els[j], composeDaily, '🔁 Share daily result');
+        } else if (id.indexOf('highscore') >= 0 || id.indexOf('high') >= 0) {
+          injectInto(els[j], compose2048Score, '🔁 Share new high score');
+        } else {
+          var getter = (PKG === 'com.pegasusgames.puzzle2048') ? compose2048Score : composeWin;
+          injectInto(els[j], getter, '🔁 Share win');
+        }
+      }
+    }
+  }
+  setInterval(scan, 800);
+})();
+</script>
+
 </body>
 </html>

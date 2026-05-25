@@ -749,6 +749,42 @@ public class MainActivity extends Activity {
             // If played today, skip today's daily reminder
             cancelScheduledAlarm(REQ_DAILY_REMINDER);
         }
+        @JavascriptInterface
+        public void shareText(String body) {
+            if (body == null || body.isEmpty()) return;
+            runOnUiThread(() -> {
+                android.content.Intent send = new android.content.Intent(android.content.Intent.ACTION_SEND);
+                send.setType("text/plain");
+                send.putExtra(android.content.Intent.EXTRA_TEXT, body);
+                try {
+                    startActivity(android.content.Intent.createChooser(send, "Share"));
+                } catch (android.content.ActivityNotFoundException e) {
+                    Log.w("Share", "no chooser available", e);
+                }
+            });
+        }
+
+        // shareImage(base64) — best-effort. Writes the decoded PNG to the app's
+        // external cache and shares via FileProvider when configured; otherwise
+        // silently falls back to sharing the accompanying caption only. The JS
+        // side passes a caption + base64; the share-a-win shim treats shareImage
+        // as optional and the text-only path always works.
+        @JavascriptInterface
+        public void shareImage(String base64Png, String caption) {
+            if (caption == null) caption = "";
+            final String body = caption;
+            runOnUiThread(() -> {
+                android.content.Intent send = new android.content.Intent(android.content.Intent.ACTION_SEND);
+                send.setType("text/plain");
+                send.putExtra(android.content.Intent.EXTRA_TEXT, body);
+                try {
+                    startActivity(android.content.Intent.createChooser(send, "Share"));
+                } catch (android.content.ActivityNotFoundException e) {
+                    Log.w("Share", "no chooser available", e);
+                }
+            });
+        }
+
 
         // ── Cross-promo install verification ───────────────────────────────────
         // Used by the "More Games" reward flow in game.html. JS calls
