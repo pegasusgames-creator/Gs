@@ -8,6 +8,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.android.vending.BILLING" />
 
+    <!-- Android 11+ package visibility for cross-promo install detection.
+         UnblockPuzzle promotes all three live sibling apps. -->
+    <queries>
+        <package android:name="com.pegasusgames.watersortpuzzle" />
+        <package android:name="com.pegasusgames.nonogram" />
+        <package android:name="com.pegasusgames.puzzle2048" />
+    </queries>
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"

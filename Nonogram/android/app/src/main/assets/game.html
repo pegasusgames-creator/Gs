@@ -5223,5 +5223,214 @@ window.addEventListener('load',function(){
 })();
 </script>
 
+<!-- Growth shim — Part B (cross-promo flywheel). Idempotent: keyed by data-growth-shim="B".
+     Appended to game.html in WaterSort / Nonogram / Puzzle2048 / UnblockPuzzle.
+     Behavioral wiring on top of each app's existing PROMO_GAMES / MORE_GAMES list:
+       - Welcome bonus: 100 coins on the FIRST launch if any sister portfolio
+         app is installed (welcomeBonusClaimed gate). Toast credits the source.
+       - Break-point card: every 5th cleared level/score increment we show a
+         lightweight prompt for one promoted game (rotates round-robin).
+         Frequency cap: once per session, never two sessions in a row.
+       - Reuses Android.isAppInstalled / Android.openPlayStore from Part A.
+     The per-app PROMO_GAMES list stays the source of truth; this shim reads
+     window._GROWTH_PROMO_TARGETS if the app exposes it, else falls back to a
+     generic list filtered against the current package (so the current app
+     never promotes itself).
+-->
+<script data-growth-shim="B">
+(function(){
+  if (window.__growthShimB) return;
+  window.__growthShimB = true;
+
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v=LS.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { LS.setItem(k,v); } catch(e){} }
+  function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
+  function safe(fn){ try { return fn(); } catch(e){} }
+
+  // PROMO_TARGETS — per the 2026-05-25 growth spec. UnblockPuzzle + PipeConnect
+  // are explicitly EXCLUDED as targets (pre-release). When either ships, edit
+  // the matching entry's TODO line in this file and uncomment.
+  var ALL_PROMO = [
+    { pkg:'com.pegasusgames.watersortpuzzle', name:'Water Sort Puzzle',
+      tagline:'Pour colors to sort. Calm puzzle bliss.' },
+    { pkg:'com.pegasusgames.nonogram',        name:'Nonogram',
+      tagline:'Pixel-art logic puzzles. 500 levels.' },
+    { pkg:'com.pegasusgames.puzzle2048',      name:'2048 Puzzle',
+      tagline:'Merge tiles. Hit 2048 and beyond.' },
+    // TODO post-release: add UnblockPuzzle once it has a Play link:
+    //   { pkg:'com.pegasusgames.unblockpuzzle', name:'Unblock Puzzle',
+    //     tagline:'Slide blocks to clear the red car.' },
+    // TODO post-release: add PipeConnect once it has a Play link:
+    //   { pkg:'com.pegasusgames.pipeconnect', name:'Pipe Connect',
+    //     tagline:'Route every pipe. Fill every grid.' },
+  ];
+
+  function currentPkg(){
+    var meta = document.querySelector('meta[name="app-package"]');
+    if (meta) return meta.content;
+    // Fall back to a heuristic — title text or hardcoded.
+    var t = (document.title||'').toLowerCase();
+    if (t.indexOf('water') >= 0) return 'com.pegasusgames.watersortpuzzle';
+    if (t.indexOf('nonogram') >= 0) return 'com.pegasusgames.nonogram';
+    if (t.indexOf('2048') >= 0) return 'com.pegasusgames.puzzle2048';
+    if (t.indexOf('unblock') >= 0) return 'com.pegasusgames.unblockpuzzle';
+    if (t.indexOf('pipe') >= 0) return 'com.pegasusgames.pipeconnect';
+    return '';
+  }
+  var CUR = currentPkg();
+  var TARGETS = ALL_PROMO.filter(function(g){ return g.pkg !== CUR; });
+  window._GROWTH_PROMO_TARGETS = TARGETS;
+
+  // ── 1. Welcome bonus on first launch if any sibling app is installed.
+  function checkWelcomeBonus(){
+    if (lsGet('welcomeBonusClaimed','0') === '1') return;
+    if (!api('isAppInstalled')) return;
+    var sourceName = null;
+    for (var i=0;i<TARGETS.length;i++){
+      var t = TARGETS[i];
+      try { if (window.Android.isAppInstalled(t.pkg)) { sourceName = t.name; break; } }
+      catch(e){}
+    }
+    if (!sourceName) return;
+    lsSet('welcomeBonusClaimed','1');
+    // Try to credit common save shapes with +100 coins.
+    var keys = ['save','state','gameState','progress'];
+    for (var j=0;j<keys.length;j++){
+      var raw = lsGet(keys[j],null);
+      if (!raw) continue;
+      try {
+        var o = JSON.parse(raw);
+        if (typeof o.coins === 'number') {
+          o.coins += 100;
+          lsSet(keys[j], JSON.stringify(o));
+          if (window.showToast) safe(function(){ showToast('Welcome from Pegasus Games — +100 🪙'); });
+          else alert('Welcome from Pegasus Games — +100 coins from ' + sourceName + '!');
+          return;
+        }
+      } catch(e){}
+    }
+  }
+
+  // ── 2. Clear-count tracker — polls save state, fires on every increment.
+  var lastSeenClears = -1;
+  function readClearCount(){
+    var keys = ['save','state','gameState','progress'];
+    for (var i=0;i<keys.length;i++){
+      var raw = lsGet(keys[i],null);
+      if (!raw) continue;
+      try {
+        var o = JSON.parse(raw);
+        if (Array.isArray(o.completedLevels)) return o.completedLevels.length;
+        if (typeof o.levelsCompleted === 'number') return o.levelsCompleted;
+        if (typeof o.totalSolves === 'number') return o.totalSolves;
+        if (typeof o.currentLevel === 'number') return o.currentLevel;
+      } catch(e){}
+    }
+    return null;
+  }
+
+  function pickPromoTarget(){
+    if (!TARGETS.length) return null;
+    var idx = parseInt(lsGet('_crossPromoIdx','0'),10) || 0;
+    var t = TARGETS[idx % TARGETS.length];
+    lsSet('_crossPromoIdx', String((idx + 1) % TARGETS.length));
+    return t;
+  }
+
+  // ── 3. Break-point card UI.
+  function buildPromoCard(target){
+    var bg = document.createElement('div');
+    bg.setAttribute('data-growth-promo-card','1');
+    bg.style.cssText =
+      'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
+    var card = document.createElement('div');
+    card.style.cssText =
+      'background:#ffffff;color:#1e3a5f;border-radius:18px;padding:22px 22px 18px;width:88%;max-width:340px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
+    card.innerHTML =
+      '<div style="font-size:11px;letter-spacing:2px;color:#5a7390;font-weight:700;margin-bottom:6px;">FROM PEGASUS GAMES</div>' +
+      '<div style="font-size:1.3rem;font-weight:800;margin-bottom:4px;">' + target.name + '</div>' +
+      '<div style="font-size:0.95rem;color:#5a7390;margin-bottom:14px;">' + target.tagline + '</div>' +
+      '<div style="background:rgba(201,127,0,0.12);color:#c97f00;border:1px solid rgba(201,127,0,0.32);border-radius:12px;padding:8px;margin-bottom:14px;font-weight:700;">' +
+        'Install — get +200 🪙' +
+      '</div>' +
+      '<div style="display:flex;gap:8px;">' +
+        '<button data-growth-promo-later style="flex:1;padding:10px;border:1px solid #d4e2ec;background:#ffffff;color:#5a7390;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;">Maybe Later</button>' +
+        '<button data-growth-promo-install style="flex:1;padding:10px;border:none;background:linear-gradient(135deg,#3b6db8,#5cb3d8);color:#fff;border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">Install</button>' +
+      '</div>';
+    bg.appendChild(card);
+    bg.addEventListener('click', function(ev){ if (ev.target===bg) bg.remove(); });
+    card.querySelector('[data-growth-promo-later]').addEventListener('click', function(){ bg.remove(); });
+    card.querySelector('[data-growth-promo-install]').addEventListener('click', function(){
+      bg.remove();
+      if (api('openPlayStore')) safe(function(){ Android.openPlayStore(target.pkg); });
+      else if (api('openUrl'))   safe(function(){ Android.openUrl('https://play.google.com/store/apps/details?id=' + target.pkg); });
+    });
+    document.body.appendChild(bg);
+  }
+
+  function maybeShowBreakPointPromo(){
+    var sessionId = lsGet('_growthSessionId',null);
+    if (!sessionId) {
+      sessionId = String(Date.now());
+      lsSet('_growthSessionId', sessionId);
+    }
+    // One per session.
+    if (lsGet('lastCrossPromoShownSession','') === sessionId) return;
+    // Skip two-sessions-in-a-row.
+    if (lsGet('lastCrossPromoPrevSession','') === lsGet('_prevSessionId','')) {
+      // Allowed — not the same as the immediate-previous shown session.
+    } else {
+      var prevShown = lsGet('lastCrossPromoShownSession','');
+      var prevSes   = lsGet('_prevSessionId','');
+      if (prevShown && prevShown === prevSes) {
+        return; // already showed in the previous session; skip this one
+      }
+    }
+    var target = pickPromoTarget();
+    if (!target) return;
+    buildPromoCard(target);
+    lsSet('lastCrossPromoShownSession', sessionId);
+  }
+
+  // ── 4. Poll for clear-count increments — fires the break-point card on
+  // every N=5 clears (cumulative). Cheap: 1.5s poll, no DOM mutation needed.
+  setInterval(function(){
+    var c = readClearCount();
+    if (c == null) return;
+    if (lastSeenClears < 0) { lastSeenClears = c; return; }
+    if (c > lastSeenClears) {
+      var deltas = c - lastSeenClears;
+      lastSeenClears = c;
+      // Use a stored "since-last-promo" counter — robust to multi-clear jumps.
+      var since = parseInt(lsGet('_crossPromoSinceLast','0'),10) || 0;
+      since += deltas;
+      if (since >= 5) {
+        since = 0;
+        maybeShowBreakPointPromo();
+      }
+      lsSet('_crossPromoSinceLast', String(since));
+    }
+  }, 1500);
+
+  // ── 5. Session bookkeeping — bump on visibility-change so we don't loop on
+  // a single foreground.
+  function bumpSession(){
+    var cur = lsGet('_growthSessionId','');
+    if (cur) lsSet('_prevSessionId', cur);
+    lsSet('_growthSessionId', String(Date.now()));
+  }
+  // On every page load, treat as a new session.
+  bumpSession();
+
+  // ── 6. Run welcome-bonus check once DOM ready.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(checkWelcomeBonus, 600); });
+  } else {
+    setTimeout(checkWelcomeBonus, 600);
+  }
+})();
+</script>
+
 </body>
 </html>

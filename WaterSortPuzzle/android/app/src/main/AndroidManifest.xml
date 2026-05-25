@@ -10,13 +10,11 @@
     <!-- Android 11+ requires explicit declaration of packages we want to query
          via PackageManager.getPackageInfo. Used for cross-promo install reward
          verification — must match CROSS_PROMO_PACKAGES in MainActivity.java
-         and PROMO_GAMES in game.html. -->
+         and PROMO_GAMES in game.html. LIVE Play Store apps only. -->
     <queries>
-        <package android:name="com.pegasusgames.ballsort" />
         <package android:name="com.pegasusgames.nonogram" />
-        <package android:name="com.pegasusgames.pipeconnect" />
         <package android:name="com.pegasusgames.puzzle2048" />
-        <package android:name="com.pegasusgames.unblock" />
+        <!-- TODO post-release: add unblockpuzzle + pipeconnect once they have Play links. -->
     </queries>
     <application
         android:allowBackup="false"
