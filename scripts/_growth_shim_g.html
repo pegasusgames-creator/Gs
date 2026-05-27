@@ -1,9 +1,8 @@
-<!-- Growth shim — Part G (Play Games Services leaderboards). Idempotent: data-growth-shim="G".
-     - Defines per-package LEADERBOARD_ID (placeholder until Play Console wiring).
-     - Submits to PGS on every detected clear (best-effort; no-ops without setup).
-     - Injects a "🏆 Leaderboard" button on the menu; hidden when sign-in fails.
-     - Preserves the synthetic weekly-tournament bracket already in each game —
-       this layer is purely additive.
+<!-- Growth shim — Part G (Play Games Services). Idempotent: data-growth-shim="G".
+     Behavioral half only — submits the player's clear metric to PGS as
+     they progress. The MENU shim owns the UI side (the 🏆 Ranks icon
+     and the Ranks sheet that opens the leaderboard). See CLAUDE.md
+     "No competing runtime shims" — keep menu rendering in one place.
 -->
 <script data-growth-shim="G">
 (function(){
@@ -14,16 +13,15 @@
   function safe(fn){ try { return fn(); } catch(e){} }
   function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
 
-  // Replace with the real leaderboard ID from Play Console after PGS setup.
   // PER-APP LEADERBOARD IDS (PGS project 225819574531, wired 2026-05-27):
   //   WaterSortPuzzle  CgkIg4KVn8kGEAIQAw
   //   Nonogram         CgkIg4KVn8kGEAIQBA
   //   Puzzle2048       CgkIg4KVn8kGEAIQBQ
   //   UnblockPuzzle    CgkIg4KVn8kGEAIQBg
-  // The literal below is patched in each per-app game.html — if you ever
-  // re-inject this shim wholesale, restore the per-app values afterwards
-  // (or use scripts/wire_leaderboards.py).
+  // The literal below is patched in each per-app game.html — use
+  // scripts/wire_leaderboards.py to (re)apply after a shim re-inject.
   var LEADERBOARD_ID = 'TODO_FROM_PLAY_CONSOLE';
+  // Exported so the MENU shim's Ranks sheet can open the matching leaderboard.
   window._GROWTH_LEADERBOARD_ID = LEADERBOARD_ID;
 
   // ── On every clear, submit the relevant metric to PGS (no-op until configured).
@@ -37,10 +35,8 @@
         var o = JSON.parse(raw);
         var t = (document.title||'').toLowerCase();
         if (t.indexOf('2048') >= 0) {
-          // 2048 leaderboard = best score
           return parseInt(o.bestScore || o.highScore || o.score || 0, 10);
         }
-        // Other games leaderboard = highest level cleared
         if (Array.isArray(o.completedLevels)) return o.completedLevels.length;
         if (typeof o.levelsCompleted === 'number') return o.levelsCompleted;
         if (typeof o.currentLevel === 'number') return o.currentLevel;
@@ -57,34 +53,5 @@
       if (api('submitScore')) safe(function(){ Android.submitScore(LEADERBOARD_ID, m); });
     }
   }, 1500);
-
-  // ── Menu "🏆 Leaderboard" button — injected at runtime.
-  function injectButton(){
-    var menu = document.getElementById('screen-menu')
-            || document.getElementById('menuScreen')
-            || document.querySelector('[id*="menu"]');
-    if (!menu) return;
-    if (menu.querySelector('[data-growth-leaderboard-btn]')) return;
-    var btn = document.createElement('button');
-    btn.setAttribute('data-growth-leaderboard-btn','1');
-    btn.style.cssText =
-      'position:absolute;top:14px;left:50%;transform:translateX(-50%);' +
-      'background:#ffffff;color:#1e3a5f;border:1px solid rgba(0,0,0,0.08);border-radius:14px;' +
-      'padding:7px 14px;font-weight:800;font-size:13px;cursor:pointer;z-index:5;font-family:inherit;';
-    btn.textContent = '🏆 Leaderboard';
-    btn.addEventListener('click', function(){
-      if (api('showLeaderboard')) {
-        // Trigger sign-in first; PGS will pop the chooser if needed.
-        if (api('signInPlayGames')) safe(function(){ Android.signInPlayGames(); });
-        safe(function(){ Android.showLeaderboard(LEADERBOARD_ID); });
-      } else {
-        if (window.showToast) safe(function(){ showToast('Leaderboards coming soon'); });
-      }
-    });
-    menu.appendChild(btn);
-    // Hide gracefully if no Android bridge (web preview).
-    if (!api('showLeaderboard')) btn.style.opacity = '0.5';
-  }
-  setInterval(injectButton, 1500);
 })();
 </script>

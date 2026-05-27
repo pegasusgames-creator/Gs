@@ -1028,3 +1028,41 @@ pre-publish gate. Reverse one of these and the gate blocks the ship.
   `--z-modal: 700`, `--z-critical: 800`. `scripts/zindex_normalize`
   (one-off) collapsed every literal; new code uses `var(--z-modal)`
   etc.
+
+---
+
+## No competing runtime shims
+
+Memorialized from the 2026-05-27 menu regression where shim D's
+`injectMenuChips`, shim G's `injectButton`, and the MENU shim each
+polled the menu DOM on their own `setInterval(..., 1500)`, fighting
+over the top bar. The floating PGS pill landed on top of the settings
+gear; chips overlapped the static Missions/Stats cards; the menu was
+visually broken across all four shipping apps.
+
+**The rule:** menu structure is rendered by ONE function on
+`showScreen('menuScreen')`, never by multiple polling injectors. New
+menu features extend that one render — they do NOT add a new shim
+with its own timer. The render owner is `scripts/_growth_shim_menu.html`
+(`renderMenu`); shim D and shim G keep only their non-menu behavioral
+wiring (streak auto-restore, score submission).
+
+**Absolute positioning is banned in the top bar.** The top bar is an
+in-flow flex row: `[❤ lives] [🪙 coins] → spacer → [🪙 free-coins]
+[🏆 ranks] [⚙ settings]`. Any `position:absolute` child overlaps the
+settings gear at narrow widths (the 2026-05-27 incident).
+
+**One rank entry point.** Leaderboard + synthetic weekly tournament
+merge behind a single 🏆 Ranks icon that opens a two-tab sheet
+("This Week" + "Leaderboard"). No floating PGS pill, no separate
+🥇 medal icon, no `data-growth-leaderboard-btn` element.
+
+**Pre-publish enforcement.** `scripts/check_menu_shims.py` blocks
+publish if any of these regress:
+- a forbidden polling injector (`injectMenuChips`, `injectButton`,
+  `injectFreeCoins`, `injectThemeStrip`, `injectPassPromo`,
+  `updateTournamentBanner`) is wrapped in `setInterval(...)`
+- the rogue `data-growth-leaderboard-btn` element exists anywhere
+- more than two rank-opening UI elements
+- `[data-menu-icons]` carries `position:absolute`
+Wired into `pre_publish_check.py` as `[code] menu shim hygiene`.

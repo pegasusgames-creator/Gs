@@ -1,15 +1,17 @@
-<!-- Growth shim — Part D (streak freeze + visible milestone). Idempotent: data-growth-shim="D".
-     Behavioral wiring on top of each app's existing login-streak ladder:
+<!-- Growth shim — Part D (streak freeze + visible milestone).
+     Idempotent: data-growth-shim="D".
+
+     BEHAVIORAL HALF ONLY (2026-05-27 consolidation, see CLAUDE.md
+     "No competing runtime shims"):
        - state._streakFreezes (default 1). If the app's streak counter drops
-         from N>0 to 0 and exactly 1 day has elapsed since we last saw N,
-         consume a freeze and restore the streak. Refill 1 free freeze every
-         7 days of maintained streak.
-       - Players can buy +1 freeze for 200 coins via a chip injected into
-         the menu next to the streak display.
-       - "Next milestone" chip on the menu shows the upcoming reward in the
-         login-streak ladder. The ladder is defined here and matched against
-         the app's current streak; the visible reward is the next-ladder-step
-         strictly above current.
+         from N>0 to 0 and exactly 1 day has elapsed since the last seen N,
+         consume a freeze and restore the streak.
+       - Refill 1 free freeze every 7 days of maintained streak.
+
+     The menu-render half (chips + buy-shield button + next-milestone label)
+     lives in the MENU shim now, alongside Free Coins / Ranks / Tier-1/2/3
+     patching. The exports below let the MENU shim read state + trigger
+     purchases without re-implementing the bookkeeping.
 -->
 <script data-growth-shim="D">
 (function(){
@@ -69,21 +71,18 @@
     }
     return false;
   }
-  function addCoinsIfFound(delta){
-    var s = readSave(); if (!s) return false;
-    if (typeof s.obj.coins === 'number') {
-      s.obj.coins += delta;
-      writeSave(s);
-      return true;
-    }
-    return false;
-  }
 
   function getFreezes(){ return parseInt(lsGet('_streakFreezes','1'),10) || 0; }
   function setFreezes(n){ lsSet('_streakFreezes', String(Math.max(0,n))); }
+  function nextMilestone(curStreak){
+    for (var i=0;i<LADDER.length;i++){
+      if (LADDER[i].day > curStreak) return LADDER[i];
+    }
+    return null;
+  }
 
   // ── Shield-restore: only if streak just dropped to 0 AND it was exactly
-  // one day since the last seen non-zero streak.
+  // one missed day since the last seen non-zero streak.
   function maybeRestoreStreak(){
     var nowStreak = readStreak();
     var lastSeen  = parseInt(lsGet('_lastSeenStreak','0'),10) || 0;
@@ -94,7 +93,6 @@
       var d2 = new Date(todayStr).getTime();
       var diffDays = Math.round((d2 - d1) / 86400000);
       if (diffDays === 1 || diffDays === 2) {
-        // exactly one missed day ≈ diffDays of 1 (caught same day) or 2 (caught next morning)
         if (getFreezes() > 0) {
           setFreezes(getFreezes() - 1);
           if (writeStreakIfFound(lastSeen)) {
@@ -104,7 +102,6 @@
         }
       }
     }
-    // Refill: 1 free freeze every 7 days of maintained streak.
     var prevRefillStreak = parseInt(lsGet('_streakFreezeRefillAt','0'),10) || 0;
     var curStreak = readStreak();
     if (curStreak > 0 && curStreak >= prevRefillStreak + 7) {
@@ -112,56 +109,21 @@
       setFreezes(getFreezes() + 1);
       if (window.showToast) safe(function(){ showToast('🛡 +1 Streak shield earned!'); });
     }
-    // Snapshot.
     if (curStreak > 0) {
       lsSet('_lastSeenStreak', String(curStreak));
       lsSet('_lastSeenStreakDate', todayStr);
     }
   }
 
-  // ── Menu chips: shield + next milestone.
-  function nextMilestone(curStreak){
-    for (var i=0;i<LADDER.length;i++){
-      if (LADDER[i].day > curStreak) return LADDER[i];
-    }
-    return null;
-  }
-
-  function injectMenuChips(){
-    var menu = document.getElementById('screen-menu')
-            || document.getElementById('menuScreen')
-            || document.querySelector('[id*="menu"]');
-    if (!menu) return;
-    if (menu.querySelector('[data-growth-streak-chips]')) {
-      // Re-render contents — values may have changed.
-      var chips = menu.querySelector('[data-growth-streak-chips]');
-      chips.replaceWith(buildChips());
-      return;
-    }
-    menu.appendChild(buildChips());
-  }
-  function buildChips(){
-    var streak = readStreak();
-    var nm = nextMilestone(streak);
-    var freezes = getFreezes();
-    var wrap = document.createElement('div');
-    wrap.setAttribute('data-growth-streak-chips','1');
-    wrap.style.cssText =
-      'position:absolute;bottom:96px;left:50%;transform:translateX(-50%);' +
-      'display:flex;gap:8px;font-size:12px;font-weight:700;z-index:5;font-family:inherit;';
-    wrap.innerHTML =
-      '<div style="background:rgba(255,255,255,0.92);color:#1e3a5f;border:1px solid rgba(0,0,0,0.08);border-radius:14px;padding:7px 12px;display:flex;align-items:center;gap:6px;">' +
-        '🛡 <span data-growth-shield-count>' + freezes + '</span>' +
-        '<button data-growth-shield-buy style="margin-left:6px;border:none;border-radius:10px;padding:4px 10px;background:#3b6db8;color:#fff;font-weight:800;cursor:pointer;font-family:inherit;">+1 / 200🪙</button>' +
-      '</div>' +
-      (nm
-        ? ('<div style="background:rgba(201,127,0,0.10);color:#c97f00;border:1px solid rgba(201,127,0,0.32);border-radius:14px;padding:7px 12px;">' +
-            '🔥 Day ' + nm.day + ': ' + nm.reward +
-          '</div>')
-        : ('<div style="background:rgba(46,160,67,0.10);color:#2ea043;border:1px solid rgba(46,160,67,0.32);border-radius:14px;padding:7px 12px;">' +
-            '🏆 All ladder rewards earned' +
-          '</div>'));
-    wrap.querySelector('[data-growth-shield-buy]').addEventListener('click', function(){
+  // Public API for the MENU shim (consolidated render path).
+  window._growthD = {
+    readStreak: readStreak,
+    getFreezes: getFreezes,
+    setFreezes: setFreezes,
+    nextMilestone: nextMilestone,
+    readSave: readSave,
+    writeSave: writeSave,
+    buyFreeze: function(cb){
       var s = readSave();
       if (!s || typeof s.obj.coins !== 'number') return;
       if (s.obj.coins < 200) {
@@ -170,17 +132,12 @@
       }
       s.obj.coins -= 200; writeSave(s);
       setFreezes(getFreezes() + 1);
-      injectMenuChips();
       if (window.showToast) safe(function(){ showToast('🛡 +1 Streak shield'); });
-    });
-    return wrap;
-  }
+      if (typeof cb === 'function') cb();
+    }
+  };
 
-  setInterval(injectMenuChips, 1500);
-  function onAppOpen(){
-    maybeRestoreStreak();
-    injectMenuChips();
-  }
+  function onAppOpen(){ maybeRestoreStreak(); }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function(){ setTimeout(onAppOpen, 500); });
   } else {

@@ -1988,6 +1988,11 @@ def main():
         section("meta", "release notes match",      _wrap(_rln), apps)
     except Exception as _e:
         print(f"  release notes match: skipped ({_e})")
+    try:
+        from check_menu_shims import check_app as _ms
+        section("code", "menu shim hygiene",        _wrap(_ms), apps)
+    except Exception as _e:
+        print(f"  menu shim hygiene: skipped ({_e})")
 
     print()
     if blocking:
