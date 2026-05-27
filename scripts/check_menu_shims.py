@@ -31,10 +31,14 @@ FORBIDDEN_POLLERS = [
     "updateTournamentBanner",  # replaced by Ranks sheet
 ]
 
-# Anything that opens a leaderboard or tournament UI.
+# Anything that creates an actual element opening a leaderboard /
+# tournament UI. We restrict to HTML opening tags + JS createElement
+# assignments — CSS selector references in `[...]{...}` blocks don't
+# count.
 RANK_OPENERS = [
-    r'data-growth-leaderboard-btn',
-    r'data-menu-icon="ranks"',
+    r'data-growth-leaderboard-btn=',                # element attr
+    r'<button[^>]*data-menu-icon="ranks"',           # the HTML opener
+    r'setAttribute\([^)]*[\'"]data-menu-icon[\'"]\s*,\s*[\'"]ranks[\'"]',  # JS-created
     r'data-menu-icon="tournament"',
 ]
 
@@ -88,6 +92,40 @@ def check_app(app: str):
         blocking.append(
             f"{app}: top-bar container [data-menu-icons] is position:absolute — must be in-flow flex"
         )
+
+    # 5. Boot-time inject calls that put full-width banners on the menu.
+    # The four pass-promo / theme-strip / tournament-banner / full-width
+    # free-coins entry points must not run at boot — they're materialized
+    # by the MENU shim's showScreen hook at the right screen instead.
+    boot_match = re.search(
+        r"function\s+boot\s*\(\s*\)\s*\{([\s\S]*?)\n\s*\}",
+        src,
+    ) or re.search(
+        r"window\.addEventListener\(\s*['\"]load['\"][\s\S]*?setTimeout\([^,]*\([\s\S]*?\)\s*\{([\s\S]*?)\}\s*,\s*\d+\s*\)",
+        src,
+    )
+    if boot_match:
+        body = boot_match.group(1)
+        forbidden_boot = [
+            "injectPassPromo",
+            "injectThemeStrip",
+            "updateTournamentBanner",
+            "injectFreeCoins",
+            "injectFreeCoinsBtn",
+            "injectStrip",      # Nonogram alias
+            "injectFree",       # Puzzle2048 alias
+            "injectWeeklyBanner",
+        ]
+        leaked = []
+        for name in forbidden_boot:
+            if re.search(r"\b" + re.escape(name) + r"\s*\(\s*\)", body):
+                leaked.append(name)
+        if leaked:
+            blocking.append(
+                f"{app}: boot() still calls full-width menu injectors: {leaked} — "
+                "remove from boot; the MENU shim renders them in their destination "
+                "screens (Shop, Themes, Ranks sheet, top-bar icon)"
+            )
 
     return blocking, warnings
 

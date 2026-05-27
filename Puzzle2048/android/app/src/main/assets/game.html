@@ -3722,14 +3722,15 @@ window.addEventListener('load',function(){
   }
 
   function boot(){
-    try{ injectFree(); }catch(e){}
+    // injectFree / injectStrip / updateTournamentBanner / injectPassPromo
+    // removed from boot (2026-05-27 menu consolidation round 2). Their
+    // content lives in: free-coins top-bar icon, Themes screen, Ranks
+    // sheet, Shop / no-lives — never the menu. The MENU shim triggers
+    // each at the right time via the showScreen hook.
     try{ updatePlayLabel(); }catch(e){}
-    try{ injectStrip(); }catch(e){}
     try{ applyEvent(); }catch(e){}
     try{ injectSettings(); }catch(e){}
     try{ injectNoLivesCTAs(); }catch(e){}
-    try{ updateTournamentBanner(); }catch(e){}
-    try{ injectPassPromo(); }catch(e){}
     try{ hideLegacy(); ladderTick(); passDaily(); }catch(e){}
     try{ if(typeof checkCrossPromoInstalls==='function') checkCrossPromoInstalls(); }catch(e){}
     if(typeof Game!=='undefined' && Game.showScreen && !Game.__x2Wrapped){
@@ -4750,9 +4751,23 @@ window.addEventListener('load',function(){
         'padding:12px 8px !important;'+
       '}'+
       '#menuScreen .menu-buttons, #screen-menu .menu-buttons{ gap:8px !important; }'+
-      // Top-bar icons — never absolute, always in-flow flex.
-      '[data-menu-icons]{display:flex !important;align-items:center !important;gap:6px !important;margin-left:auto !important;}'+
-      '[data-menu-icons] button{position:static !important;}'+
+      // Top-bar icons — never absolute, always in-flow flex. The
+      // freecoins button keeps position:relative so the +25 badge can
+      // sit on it; the wrapper itself is in-flow.
+      '[data-menu-icons]{display:flex !important;align-items:center !important;gap:6px !important;margin-left:auto !important;position:static !important;}'+
+      '[data-menu-icon="freecoins"]{position:relative !important;}'+
+      '[data-menu-icon="ranks"]{position:relative !important;}'+
+      // Belt-and-braces: any legacy widget that ends up inside the
+      // menu screen gets hidden by CSS, regardless of when it was
+      // created. The init-time calls are removed in game.html, but
+      // this guards future regressions.
+      '#menuScreen #xPassPromo, #screen-menu #xPassPromo,'+
+      '#menuScreen #xFreeCoinsBtn, #screen-menu #xFreeCoinsBtn,'+
+      '#menuScreen #weeklyEventBanner, #screen-menu #weeklyEventBanner,'+
+      '#menuScreen #xThemeStrip, #screen-menu #xThemeStrip,'+
+      '#menuScreen #xThemeStrip2048, #screen-menu #xThemeStrip2048,'+
+      '#menuScreen #xSeasonPassPromo, #screen-menu #xSeasonPassPromo,'+
+      '#menuScreen #xWeeklyPassPromo, #screen-menu #xWeeklyPassPromo{ display:none !important; }'+
       // Narrow-viewport guard for the top-bar icons.
       '@media (max-width: 380px){'+
         '[data-menu-icons] button{width:32px !important;height:32px !important;font-size:15px !important;}'+
@@ -4984,6 +4999,11 @@ window.addEventListener('load',function(){
         b.addEventListener('click', function(){ switchRanksTab(b.getAttribute('data-ranks-tab')); });
       });
     }
+    // Populate the synthetic-bracket source data before rendering the
+    // "This Week" tab. updateTournamentBanner only mutates the existing
+    // weeklyEventBanner if it's in the DOM — if not, our fallback in
+    // renderWeekTab computes a basic line from save state.
+    ensureTournamentData();
     sheet.style.display = 'flex';
     switchRanksTab('week');
   }
@@ -5211,7 +5231,16 @@ window.addEventListener('load',function(){
     slimSeasonBanner();
     renderChips();
   }
-  // Wrap showScreen so any navigation back to the menu re-renders.
+  // Wrap showScreen so navigating to each screen triggers the right
+  // late-binding render. Theme strip + tournament banner + pass promo
+  // are no longer created at boot; they're materialized here on demand.
+  function ensureThemeStrip(){
+    if (typeof window.injectThemeStrip === 'function') safe(function(){ window.injectThemeStrip(); });
+    relocateThemeStripPermanent();
+  }
+  function ensureTournamentData(){
+    if (typeof window.updateTournamentBanner === 'function') safe(function(){ window.updateTournamentBanner(); });
+  }
   function hookShowScreen(){
     if (window.__menuShowScreenHooked) return;
     var fns = [];
@@ -5225,7 +5254,7 @@ window.addEventListener('load',function(){
         var r = orig.apply(this, arguments);
         var s = (id || '').toString();
         if (s.indexOf('menu') >= 0)   setTimeout(renderMenu, 0);
-        if (s.indexOf('theme') >= 0)  setTimeout(relocateThemeStripPermanent, 0);
+        if (s.indexOf('theme') >= 0)  setTimeout(ensureThemeStrip, 0);
         if (s.indexOf('shop') >= 0 || s.indexOf('nolives') >= 0) setTimeout(maybeFirePassPromo, 0);
         return r;
       };

@@ -1066,3 +1066,41 @@ publish if any of these regress:
 - more than two rank-opening UI elements
 - `[data-menu-icons]` carries `position:absolute`
 Wired into `pre_publish_check.py` as `[code] menu shim hygiene`.
+
+---
+
+## Menu monetization placement
+
+Memorialized 2026-05-27 round-2 fix. The main menu must surface ONLY
+primary gameplay actions, never paid offers or full-width
+advertising banners. Specifically:
+
+- **No subscription / pass sales card on the main menu.** Season Pass
+  and Weekly Pass cards live in the Shop screen (where purchase
+  intent is) and as a compact CTA on the no-lives overlay. The MENU
+  shim's `maybeFirePassPromo` triggers `injectPassPromo` on those
+  screens only.
+- **No theme strip on the main menu.** The "Next theme: <name> at
+  level <N>" line renders on the Themes screen instead — the MENU
+  shim materializes it on `showScreen('themesScreen' | 'screen-themes')`
+  via `ensureThemeStrip` (calls the app's existing `injectThemeStrip`
+  then relocates the element).
+- **No tournament banner on the main menu.** The synthetic weekly
+  bracket content moves into the "This Week" tab of the 🏆 Ranks
+  sheet that opens from the top-bar icon. The MENU shim calls
+  `updateTournamentBanner` from `openRanksSheet` so the data is
+  fresh when the user opens it.
+- **No full-width Free Coins button on the main menu.** Free Coins
+  is the top-bar 🪙 icon with a `+25` badge (greyed + countdown
+  when on cooldown).
+- **No medal / second leaderboard icon.** Exactly two icons on the
+  right side: `[🪙 free-coins] [🏆 ranks]` then `[⚙ settings]`.
+
+**The four offending calls must not appear in any app's `boot()`
+function or the `showScreen('menuScreen')` branch** — they're
+materialized via the MENU shim at the right screen instead. CSS
+inside the MENU shim hides any element with id `xPassPromo`,
+`xFreeCoinsBtn`, `weeklyEventBanner`, `xThemeStrip`,
+`xThemeStrip2048`, `xSeasonPassPromo`, or `xWeeklyPassPromo` that
+ends up inside the menu container, as belt-and-braces against future
+regressions.
