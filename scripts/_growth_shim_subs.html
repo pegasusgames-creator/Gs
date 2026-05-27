@@ -116,11 +116,34 @@
     return sku === 'season_pass_monthly' ? '$4.99' : '$1.99';
   }
 
+  // Skip injection for buttons inside the main-menu container. Disclosures
+  // belong in Shop / no-lives only; menu cards are de-emphasized.
+  function isInMenu(el){
+    var ids = ['menuScreen','screen-menu'];
+    for (var n = el; n; n = n.parentNode){
+      if (n.id && ids.indexOf(n.id) >= 0) return true;
+    }
+    return false;
+  }
+  // Tag the button itself + scan parent siblings for the duplicate guard.
+  function alreadyDisclosed(sku, button){
+    if (button.getAttribute && button.getAttribute('data-subs-disclosed') === sku) return true;
+    var parent = button.parentNode;
+    if (!parent) return false;
+    // Look at the next ~4 siblings after the parent — covers every layout.
+    var n = parent.nextSibling, hops = 0;
+    while (n && hops < 6){
+      if (n.nodeType === 1 && n.getAttribute && n.getAttribute('data-subs-disclosure') === sku) return true;
+      n = n.nextSibling; hops++;
+    }
+    // Or it might have been appended inside the parent (fallback path).
+    var inside = parent.querySelector ? parent.querySelector('[data-subs-disclosure="' + sku + '"]') : null;
+    return !!inside;
+  }
   function ensureDisclosure(sku, button){
-    // Idempotent — never inject twice next to the same button.
     if (!button) return;
-    if (button.nextSibling && button.nextSibling.getAttribute &&
-        button.nextSibling.getAttribute('data-subs-disclosure') === sku) return;
+    if (isInMenu(button)) return;            // never on menu
+    if (alreadyDisclosed(sku, button)) return;
     var loc = detectLocale();
     var key = sku === 'season_pass_monthly' ? 'season' : 'weekly';
     var tpl = (STRINGS[loc] && STRINGS[loc][key]) || STRINGS['en-US'][key];
@@ -136,16 +159,28 @@
     if (parent && parent.nextSibling) parent.parentNode.insertBefore(p, parent.nextSibling);
     else if (parent) parent.appendChild(p);
     else button.insertAdjacentElement('afterend', p);
+    // Tag the button itself so we cheaply detect "already done" on next poll.
+    if (button.setAttribute) button.setAttribute('data-subs-disclosed', sku);
   }
   function placeDisclosures(){
-    // Every shop UI has its own shape; pick by attribute, not by global ID.
     document.querySelectorAll('[onclick]').forEach(function(el){
       var s = el.getAttribute('onclick') || '';
       if (s.indexOf('season_pass_monthly') >= 0) ensureDisclosure('season_pass_monthly', el);
       else if (s.indexOf('weekly_pass') >= 0) ensureDisclosure('weekly_pass', el);
     });
   }
-  setInterval(placeDisclosures, 1500);
+  // ── Sweep any disclosures that ended up on the menu (defensive — handles
+  // the case where the menu was active when an earlier poll fired before
+  // isInMenu() was guarded).
+  function sweepStaleDisclosures(){
+    var menus = ['menuScreen','screen-menu'];
+    menus.forEach(function(id){
+      var host = document.getElementById(id);
+      if (!host) return;
+      host.querySelectorAll('[data-subs-disclosure]').forEach(function(n){ n.parentNode.removeChild(n); });
+    });
+  }
+  setInterval(function(){ sweepStaleDisclosures(); placeDisclosures(); }, 1500);
 
   // ── Manage subscriptions row in Settings ───────────────────────────
   function openSubs(){
