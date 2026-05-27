@@ -773,10 +773,20 @@ Each line is now enforced by a `pre_publish_check.py` check.
   Content risk. Current allocations:
   | App | Base bg | Family | Accent |
   |---|---|---|---|
-  | UnblockPuzzle | `#ece6f3` | lavender/peach | pink+coral |
-  | PipeConnect | `#eef4f8` | sky-blueprint | sky-blue+red |
-  (User policy 2026-05-25, after PipeConnect first ship reused the
-  UnblockPuzzle cream/beige look.)
+  | WaterSortPuzzle | `#0a1628` (deep navy) | water-blue | sky-cyan + colored liquids |
+  | Nonogram | `#f5f0e6` | cream/paper | warm coral red `#c83838` |
+  | Puzzle2048 | `#f3ecd9` (daylight 2026-05-27) | warm cream / sand | gold `#edc22e` + `#f2a500` |
+  | UnblockPuzzle | `#e3efe5` (mint 2026-05-27 rebrand) | mint / sage | forest green `#4a8a5e` + red exit `#ec5f6e` |
+  | PipeConnect | `#eef4f8` | sky-blueprint | sky-blue + red |
+  WaterSort is the only app whose default palette is NOT light — the
+  deep-navy water aesthetic is the brand identity (matches the title,
+  the icon, the liquid-pour gameplay) and is exempt from the
+  "light-by-default" rule. Every other app ships Daylight as default
+  and offers Midnight as a coin-purchased shop unlock.
+  (User policy 2026-05-27 round-5: UnblockPuzzle swapped off lavender
+  because it clashed with Nonogram's pink/coral family. Puzzle2048
+  swapped from dark-default-with-gold to warm cream that keeps the
+  gold tile gradients.)
 - **Light-mode CSS must cover EVERY screen, including stats, game
   header, and game footer.** When refactoring a dark→light theme,
   audit any element whose color is `color:white` / `rgba(255,255,255,…)`

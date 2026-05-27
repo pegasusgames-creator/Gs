@@ -229,6 +229,30 @@ body.has-html-ad .screen { height: calc(100% - 60px) !important; }
 .icon-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .icon-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.14); }
 .icon-btn span { line-height: 1; }
+
+/* ============ 2026-05-27 Daylight tuning ============
+   WaterSort keeps its blue water identity (the title/icon/game match)
+   but the default lightens slightly so Midnight has room to be darker.
+   Midnight restores the original deep #0a1628 navy as the paid unlock. */
+body { background:#15264a; }
+#menuScreen { background:linear-gradient(160deg,#15264a 0%,#1a3162 50%,#22458a 100%); }
+#gameScreen, #shopScreen, #settingsScreen, #moreGamesScreen, #scoresScreen,
+#themeScreen, #achievementsScreen, #missionsScreen, #levelScreen { background:linear-gradient(180deg,#15264a 0%,#1c3260 100%); }
+#levelScreen { background:linear-gradient(160deg,#0d1c3a 0%,#15264a 40%,#1c3260 100%); }
+.btn-gold { color:#0a1628; }
+.shop-price-btn.coin-price { color:#0a1628; }
+
+html[data-theme="midnight"] body { background:#0a1628; }
+html[data-theme="midnight"] #menuScreen { background:linear-gradient(160deg,#0a1628 0%,#0d2137 50%,#0a3050 100%); }
+html[data-theme="midnight"] #gameScreen,
+html[data-theme="midnight"] #shopScreen,
+html[data-theme="midnight"] #settingsScreen,
+html[data-theme="midnight"] #moreGamesScreen,
+html[data-theme="midnight"] #scoresScreen,
+html[data-theme="midnight"] #themeScreen,
+html[data-theme="midnight"] #achievementsScreen,
+html[data-theme="midnight"] #missionsScreen { background:linear-gradient(180deg,#0a1628 0%,#0d2137 100%); }
+html[data-theme="midnight"] #levelScreen { background:linear-gradient(160deg,#050e1a 0%,#0a1628 40%,#0d2137 100%); }
 </style>
 </head>
 <body>

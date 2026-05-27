@@ -12,27 +12,30 @@
 /* :root = Daylight (light pastel) — the default theme on first launch.
    html[data-theme="midnight"] = the original deep-dark look (unlockable). */
 :root {
-  --app-bg:#ece6f3;
-  --menu-bg:linear-gradient(160deg,#fcf8ff 0%,#f1ebf8 58%,#e7ddf0 100%);
-  --text:#3a2f48;
-  --text-head:#4a3866;
-  /* WCAG AA fix 2026-05-27: muted tokens raised against --app-bg #ece6f3.
-     Old: 3.74:1 / 2.65:1 / 1.76:1 (all FAIL).
-     New: 6.88:1 / 5.92:1 / 4.89:1 (PASS body 4.5:1). */
-  --text-soft:#574766;
-  --text-mute:#604f7b;
-  --text-faint:#6c5b8c;
+  /* 2026-05-27 palette rebrand: Daylight = mint/sage. Distinct from
+     Nonogram's pink/cream family — the portfolio rule says each
+     shipping app uses a different default color family. Midnight
+     theme stays as the coin-purchased unlock.
+     All --text-* tokens audited for WCAG AA 4.5:1 against --app-bg
+     #e3efe5 (ratios 12.16 / 8.43 / 6.44 / 5.26 / 4.77). */
+  --app-bg:#e3efe5;
+  --menu-bg:linear-gradient(160deg,#f0f9f3 0%,#e3efe5 58%,#cfe3d5 100%);
+  --text:#1a2e23;
+  --text-head:#2a4936;
+  --text-soft:#3d5a48;
+  --text-mute:#4f6657;
+  --text-faint:#586c5e;
   --surface:#ffffff;
   --surface-2:rgba(255,255,255,0.62);
-  --surface-3:#f2ecf8;
-  --border:rgba(74,56,102,0.13);
-  --border-soft:rgba(74,56,102,0.08);
-  --scrim:rgba(46,34,64,0.45);
-  --overlay-bg:linear-gradient(160deg,#ffffff,#f4eefb);
-  --overlay-border:rgba(74,56,102,0.14);
-  --title-grad:linear-gradient(135deg,#ff8fa3,#ff6f91,#ffa07a);
-  --g-play:linear-gradient(135deg,#ff7a93,#ff9a78);
-  --g-play-sh:rgba(255,122,147,0.40);
+  --surface-3:#eaf3ec;
+  --border:rgba(42,73,54,0.13);
+  --border-soft:rgba(42,73,54,0.08);
+  --scrim:rgba(26,46,35,0.45);
+  --overlay-bg:linear-gradient(160deg,#ffffff,#eef7f1);
+  --overlay-border:rgba(42,73,54,0.14);
+  --title-grad:linear-gradient(135deg,#4a8a5e,#3d7d52,#5fa873);
+  --g-play:linear-gradient(135deg,#4a8a5e,#5fa873);
+  --g-play-sh:rgba(74,138,94,0.40);
   --g-levels:linear-gradient(135deg,#9d8ff0,#b3a4f5);
   --g-levels-sh:rgba(157,143,240,0.32);
   --g-daily:linear-gradient(135deg,#3fc196,#5fd0a3);
@@ -43,14 +46,14 @@
   --g-watch:linear-gradient(135deg,#7fd1f5,#4cb3e8);
   --g-more:linear-gradient(135deg,#7fb8f0,#5d97e0);
   --on-accent:#ffffff;
-  --primary-btn-bg:linear-gradient(180deg,#ff97ab 0%,#fb7d97 100%);
+  --primary-btn-bg:linear-gradient(180deg,#5fb578 0%,#4a8a5e 100%);
   --primary-btn-fg:#ffffff;
-  --primary-btn-sh:inset 0 1px 0 rgba(255,255,255,0.55),inset 0 -3px 0 rgba(214,77,109,0.40),0 6px 20px rgba(251,125,151,0.42);
-  --chip-bg:linear-gradient(180deg,#ffffff 0%,#f4eef9 100%);
-  --chip-border:rgba(74,56,102,0.16);
-  --chip-fg:#6b5b86;
-  --chip-active-border:#ff8fa3;
-  --chip-active-fg:#e8607e;
+  --primary-btn-sh:inset 0 1px 0 rgba(255,255,255,0.55),inset 0 -3px 0 rgba(58,108,72,0.40),0 6px 20px rgba(74,138,94,0.42);
+  --chip-bg:linear-gradient(180deg,#ffffff 0%,#eef7f1 100%);
+  --chip-border:rgba(42,73,54,0.16);
+  --chip-fg:#3d5a48;
+  --chip-active-border:#4a8a5e;
+  --chip-active-fg:#2d6e44;
   --gold:#c97f00;
   --gold-bright:#e8a317;
   --gold-soft-bg:rgba(201,127,0,0.13);
@@ -66,8 +69,8 @@
   --track-bg:rgba(74,56,102,0.10);
   --toggle-off:#cdc3da;
   --toggle-on:#ec5f6e;
-  --win-box:linear-gradient(160deg,#fff4f1,#ffe7ea);
-  --win-border:rgba(255,122,147,0.45);
+  --win-box:linear-gradient(160deg,#f1faf3,#dff0e5);
+  --win-border:rgba(74,138,94,0.45);
   --hero-grad:linear-gradient(135deg,rgba(201,127,0,0.16),rgba(255,140,0,0.08));
   --hero-border:rgba(201,127,0,0.32);
   --weekly-grad:linear-gradient(135deg,rgba(79,170,235,0.16),rgba(63,193,150,0.10));
@@ -1067,7 +1070,7 @@ let BLOCK_COLORS = ['#4fc3f7','#69f0ae','#ffd740','#e040fb','#ff7043','#80cbc4',
 
 // Canvas board palette — follows the active UI theme (see applyUITheme).
 const BOARD_THEMES = {
-  light:    { bg:'#ece6f3', gridBg:'#ffffff', gridLine:'#e3dbef', exit:'#ec5f6e' },
+  light:    { bg:'#e3efe5', gridBg:'#ffffff', gridLine:'#d0e3d6', exit:'#ec5f6e' },
   midnight: { bg:'#161020', gridBg:'#1e1630', gridLine:'#2a2040', exit:'#ff3d3d' }
 };
 let BOARD_THEME = (document.documentElement.getAttribute('data-theme')==='midnight')

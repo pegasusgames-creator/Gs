@@ -326,6 +326,121 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
   40%  { transform: scale(1.2); }
   100% { transform: scale(1); }
 }
+
+/* ============ 2026-05-27 Daylight default conversion ============
+   Puzzle2048 originally shipped a dark-by-default surface (#1a1a18 /
+   #2c2b27 with white text). Portfolio rule: every shipping app's
+   default theme must be LIGHT, with a paid "Midnight" unlock for
+   players who prefer dark. The gold tile gradients (#edc22e / #f2a500
+   / #ffd700) stay — they're the game identity. Cream/sand palette
+   plays naturally with the warm gold. AA contrast against #f3ecd9:
+     #2a2620 → 12.7:1 ✓ (primary text)
+     rgba(42,38,32,0.70) → ~5.6:1 ✓ (muted)
+*/
+body { background:#f3ecd9; }
+#menuScreen { background:linear-gradient(160deg,#f8f1de 0%,#ebe1c4 50%,#f3ecd9 100%); }
+#gameScreen, #scoresScreen, #shopScreen, #moreGamesScreen, #settingsScreen,
+#themeScreen, #achievementsScreen, #missionsScreen { background:#f3ecd9; }
+.mini-grid { background:#e6dcc0; }
+.score-tile { background:#e6dcc0; }
+.score-tile .stl { color:rgba(42,38,32,0.70); }
+.score-tile .stv { color:#2a2620; }
+.game-header { background:rgba(0,0,0,0.04); }
+.game-footer { background:rgba(0,0,0,0.05); }
+.score-box { background:rgba(0,0,0,0.05); border:1px solid rgba(0,0,0,0.10); }
+.score-box .label { color:rgba(42,38,32,0.70); }
+.score-box .value { color:#2a2620; }
+.btn-secondary { background:rgba(0,0,0,0.05); color:#2a2620; border:1px solid rgba(0,0,0,0.15); }
+.menu-tile-pair { border-color:rgba(0,0,0,0.18); background:#ffffff; color:#2a2620; }
+.menu-tile-pair:active { border-color:#edc22e; color:#a87400; }
+.menu-icon-btn { background:#ffffff; border-color:rgba(0,0,0,0.18); color:#2a2620; }
+.menu-icon-btn:hover, .menu-icon-btn:active { border-color:#edc22e; color:#a87400; }
+.game-title p { color:rgba(42,38,32,0.70); }
+.settings-btn { background:rgba(0,0,0,0.08); color:#2a2620; }
+.game-btn { background:rgba(0,0,0,0.05); border:1px solid rgba(0,0,0,0.15); color:#2a2620; }
+.game-btn.undo-btn { background:rgba(237,194,46,0.20); border-color:rgba(237,194,46,0.50); color:#a87400; }
+.screen-header { background:rgba(0,0,0,0.05); }
+.screen-header h2 { color:#2a2620; }
+.back-btn { background:rgba(0,0,0,0.08); color:#2a2620; }
+.shop-card, .promo-card { background:rgba(0,0,0,0.04); border:1px solid rgba(0,0,0,0.10); }
+.shop-info h3, .promo-info h3 { color:#2a2620; }
+.shop-info p, .promo-info p { color:rgba(42,38,32,0.70); }
+.shop-icon, .promo-icon { background:rgba(0,0,0,0.04); }
+.shop-price-btn.owned { background:rgba(0,0,0,0.08); color:rgba(42,38,32,0.55); }
+.achievement-card { background:rgba(0,0,0,0.05); border:1px solid rgba(0,0,0,0.10); }
+.achievement-card h3 { color:#a87400; }
+.achievement-card p { color:rgba(42,38,32,0.70); }
+.big-score { color:#2a2620; }
+.daily-streak { background:linear-gradient(135deg,rgba(246,94,59,0.16),rgba(246,124,95,0.06)); border-color:rgba(246,94,59,0.36); }
+.daily-streak h3 { color:#c83814; }
+.daily-streak .streak-num { color:#2a2620; }
+.daily-streak p { color:rgba(42,38,32,0.70); }
+.coin-display { background:rgba(255,200,0,0.22); border-color:rgba(255,160,0,0.45); }
+.coin-display span { color:#a87400; }
+.lives-display { background:rgba(220,70,70,0.18); border-color:rgba(220,70,70,0.42); }
+.lives-display span { color:#b3372f; }
+/* Settings page (#settingsScreen) — light-theme defaults. */
+.setting-row { background:rgba(0,0,0,0.05); border:1px solid rgba(0,0,0,0.08); }
+.setting-label { color:#2a2620; }
+.about-meta { color:rgba(42,38,32,0.70); }
+
+/* ============ Midnight override (the original dark look) ============
+   Players who buy "Midnight" in the shop get this restored. Selector
+   html[data-theme="midnight"] mirrors the convention used by
+   UnblockPuzzle / Nonogram. */
+html[data-theme="midnight"] body,
+html[data-theme="midnight"] #gameScreen,
+html[data-theme="midnight"] #scoresScreen,
+html[data-theme="midnight"] #shopScreen,
+html[data-theme="midnight"] #moreGamesScreen,
+html[data-theme="midnight"] #settingsScreen,
+html[data-theme="midnight"] #themeScreen,
+html[data-theme="midnight"] #achievementsScreen,
+html[data-theme="midnight"] #missionsScreen { background:#1a1a18; }
+html[data-theme="midnight"] #menuScreen { background:linear-gradient(160deg,#1a1a18 0%,#2c2b27 50%,#1a1a18 100%); }
+html[data-theme="midnight"] .mini-grid,
+html[data-theme="midnight"] .score-tile { background:#2c2b27; }
+html[data-theme="midnight"] .score-tile .stl { color:rgba(255,255,255,0.55); }
+html[data-theme="midnight"] .score-tile .stv { color:#ffffff; }
+html[data-theme="midnight"] .game-header,
+html[data-theme="midnight"] .game-footer { background:rgba(0,0,0,0.25); }
+html[data-theme="midnight"] .score-box { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.10); }
+html[data-theme="midnight"] .score-box .label { color:rgba(255,255,255,0.50); }
+html[data-theme="midnight"] .score-box .value { color:#ffffff; }
+html[data-theme="midnight"] .btn-secondary { background:rgba(255,255,255,0.08); color:#ffffff; border-color:rgba(255,255,255,0.15); }
+html[data-theme="midnight"] .menu-tile-pair { border-color:rgba(255,255,255,0.18); background:#1a1a18; color:#f3eecf; }
+html[data-theme="midnight"] .menu-icon-btn { background:#1a1a18; border-color:rgba(255,255,255,0.18); color:#f3eecf; }
+html[data-theme="midnight"] .game-title p { color:rgba(255,255,255,0.50); }
+html[data-theme="midnight"] .settings-btn { background:rgba(255,255,255,0.08); color:#ffffff; }
+html[data-theme="midnight"] .game-btn { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15); color:#ffffff; }
+html[data-theme="midnight"] .game-btn.undo-btn { background:rgba(237,194,46,0.12); border-color:rgba(237,194,46,0.35); color:#edc22e; }
+html[data-theme="midnight"] .screen-header { background:rgba(0,0,0,0.30); }
+html[data-theme="midnight"] .screen-header h2 { color:#ffffff; }
+html[data-theme="midnight"] .back-btn { background:rgba(255,255,255,0.10); color:#ffffff; }
+html[data-theme="midnight"] .shop-card,
+html[data-theme="midnight"] .promo-card { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.10); }
+html[data-theme="midnight"] .shop-info h3,
+html[data-theme="midnight"] .promo-info h3 { color:#ffffff; }
+html[data-theme="midnight"] .shop-info p,
+html[data-theme="midnight"] .promo-info p { color:rgba(255,255,255,0.45); }
+html[data-theme="midnight"] .shop-icon,
+html[data-theme="midnight"] .promo-icon { background:rgba(255,255,255,0.05); }
+html[data-theme="midnight"] .shop-price-btn.owned { background:rgba(255,255,255,0.10); color:rgba(255,255,255,0.45); }
+html[data-theme="midnight"] .achievement-card { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.10); }
+html[data-theme="midnight"] .achievement-card h3 { color:#edc22e; }
+html[data-theme="midnight"] .achievement-card p { color:rgba(255,255,255,0.60); }
+html[data-theme="midnight"] .big-score { color:#ffffff; }
+html[data-theme="midnight"] .daily-streak { background:linear-gradient(135deg,rgba(246,94,59,0.15),rgba(246,124,95,0.05)); border-color:rgba(246,94,59,0.30); }
+html[data-theme="midnight"] .daily-streak h3 { color:#f65e3b; }
+html[data-theme="midnight"] .daily-streak .streak-num { color:#ffffff; }
+html[data-theme="midnight"] .daily-streak p { color:rgba(255,255,255,0.60); }
+html[data-theme="midnight"] .coin-display { background:rgba(255,215,0,0.12); border-color:rgba(255,215,0,0.35); }
+html[data-theme="midnight"] .coin-display span { color:#ffd700; }
+html[data-theme="midnight"] .lives-display { background:rgba(255,100,100,0.12); border-color:rgba(255,100,100,0.35); }
+html[data-theme="midnight"] .lives-display span { color:#ff6b6b; }
+html[data-theme="midnight"] .setting-row { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.10); }
+html[data-theme="midnight"] .setting-label { color:#ffffff; }
+html[data-theme="midnight"] .about-meta { color:rgba(255,255,255,0.45); }
 </style>
 </head>
 <body>
@@ -580,7 +695,7 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
       </div>
       <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:6px">
         <span class="setting-label">About</span>
-        <p style="color:rgba(255,255,255,0.4);font-size:12px">2048 Puzzle v1.0<br>© 2024 Pegasus Games</p>
+        <p class="about-meta" style="font-size:12px">2048 Puzzle v1.0<br>© 2026 Pegasus Games</p>
       </div>
     </div>
   </div>
