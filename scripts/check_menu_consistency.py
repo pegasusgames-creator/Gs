@@ -11,7 +11,10 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-CANONICAL_ICONS = ['freecoins', 'ranks', 'settings']
+# Canonical top-bar icon set (2026-05-27 round-4): Settings is NOT a
+# top-bar icon — it lives in each app's Tier-3 icon row (one location
+# per app, no duplication).
+CANONICAL_ICONS = ['freecoins', 'ranks']
 
 
 def _is_app(app):

@@ -6499,51 +6499,24 @@ window.addEventListener('load',function(){
     var st = document.createElement('style');
     st.id = 'menu-shim-css';
     st.textContent =
-      // Tier-1 Play / Continue — fills the canvas.
-      '#menuScreen .btn-primary, #menuScreen .menu-primary, #menuScreen .menu-tile-primary, #menuScreen #menuPlayBtn,'+
-      '#screen-menu .btn-primary, #screen-menu .menu-primary, #screen-menu .menu-tile-primary, #screen-menu #menuPlayBtn{'+
-        'min-height:64px !important;font-size:1.18rem !important;'+
-        'padding:18px 22px !important;margin:10px 16px !important;'+
-        'border-radius:18px !important;'+
-      '}'+
-      // Tier-2 Daily — generous tap area.
-      '#menuScreen #dailyChallengeBtn, #menuScreen #dailyBtn, #menuScreen [onclick*="DailyChallenge"], #menuScreen [onclick*="startDailyChallenge"],'+
-      '#screen-menu #dailyChallengeBtn, #screen-menu #dailyBtn, #screen-menu [onclick*="DailyChallenge"], #screen-menu [onclick*="startDailyChallenge"]{'+
-        'min-height:54px !important;font-size:1.02rem !important;'+
-        'padding:14px 18px !important;margin:6px 16px !important;'+
-        'border-radius:14px !important;'+
-      '}'+
-      // Tier-3 icon row — 84px tiles.
-      '#menuScreen .menu-icon-row, #screen-menu .menu-icon-row,'+
-      '#menuScreen .menu-pair-row, #screen-menu .menu-pair-row,'+
-      '#menuScreen .menu-tile-row, #screen-menu .menu-tile-row{'+
-        'gap:10px !important;margin-top:14px !important;padding:0 16px !important;'+
-      '}'+
-      '#menuScreen .menu-icon-btn, #screen-menu .menu-icon-btn,'+
-      '#menuScreen .menu-tile-pair, #screen-menu .menu-tile-pair,'+
-      '#menuScreen .menu-pair, #screen-menu .menu-pair{'+
-        'min-height:84px !important;border-radius:18px !important;'+
-        'padding:12px 8px !important;'+
-      '}'+
-      // Standardized .menu-buttons stack — centered column, max-width
-      // 420px, identical vertical rhythm across all four apps.
-      '#menuScreen .menu-buttons, #screen-menu .menu-buttons{'+
-        'gap:10px !important;display:flex !important;flex-direction:column !important;'+
-        'align-items:stretch !important;max-width:420px !important;'+
-        'margin-left:auto !important;margin-right:auto !important;'+
-      '}'+
-      // Center the icon row(s). Equal left/right margins, no drift.
+      // The MENU shim does NOT override button widths/padding/margins
+      // anymore — each app's static CSS already sizes these correctly
+      // for its theme; overriding caused box-sizing overflow that
+      // pushed the menu off-screen. Centering happens via the apps'
+      // own .menu-buttons styles plus the box-sizing safety net below.
+      // Safety: every menu button respects border-box so explicit
+      // padding never overflows.
+      '#menuScreen *, #screen-menu *{ box-sizing:border-box; }'+
+      // Center the icon row(s) horizontally without changing widths.
       '#menuScreen .menu-icon-row, #screen-menu .menu-icon-row,'+
       '#menuScreen .menu-pair-row, #screen-menu .menu-pair-row,'+
       '#menuScreen .menu-tile-row, #screen-menu .menu-tile-row{'+
         'justify-content:center !important;'+
       '}'+
-      // Top-bar icons — never absolute, always in-flow flex. The
-      // freecoins button keeps position:relative so the +25 badge can
-      // sit on it; the wrapper itself is in-flow.
-      '[data-menu-icons]{display:flex !important;align-items:center !important;gap:6px !important;margin-left:auto !important;position:static !important;}'+
+      // Top-bar icons — flat, transparent, no circles. Freecoins keeps
+      // position:relative for the +25 badge.
+      '[data-menu-stats]{position:static !important;}'+
       '[data-menu-icon="freecoins"]{position:relative !important;}'+
-      '[data-menu-icon="ranks"]{position:relative !important;}'+
       // Belt-and-braces: any legacy widget that ends up inside the
       // menu screen gets hidden by CSS, regardless of when it was
       // created. The init-time calls are removed in game.html, but
@@ -6615,6 +6588,14 @@ window.addEventListener('load',function(){
       var go = s.gameOver === true || s.isGameOver === true;
       if (!go) return true;
     }
+    // Any level cleared OR currentLevel > 1 counts as progress —
+    // we want "Continue · Level N" the moment the player has played
+    // anything, not just when they have a mid-level save.
+    if (typeof s.currentLevel === 'number' && s.currentLevel > 1) return true;
+    if (Array.isArray(s.completedLevels) && s.completedLevels.length > 0) return true;
+    if (typeof s.levelsCompleted === 'number' && s.levelsCompleted > 0) return true;
+    // 2048: any non-zero best score counts as progress.
+    if (typeof s.bestScore === 'number' && s.bestScore > 0) return true;
     return false;
   }
   function progressLabel(){
@@ -6700,52 +6681,95 @@ window.addEventListener('load',function(){
     syn = document.createElement('div');
     syn.setAttribute('data-synth-menu-header','1');
     syn.style.cssText =
-      // In-flow row at the top of the menu container — no position:absolute.
-      'display:flex;align-items:center;justify-content:space-between;' +
-      'padding:8px 12px 0;gap:8px;';
+      // In-flow row at the TOP-RIGHT of the menu container. flex-end so
+      // a single child (icons-only case, e.g. UnblockPuzzle) hugs the
+      // right; left-side stats use margin-right:auto to push themselves
+      // to the start. 18px bottom-margin gives breathing room under
+      // the row before the title (round-3 fix).
+      'display:flex;align-items:center;justify-content:flex-end;' +
+      'padding:14px 14px 4px;margin-bottom:14px;gap:8px;';
     if (menu.firstChild) menu.insertBefore(syn, menu.firstChild);
     else menu.appendChild(syn);
     return syn;
   }
 
-  // ── Lives + coins stats. Show them on the LEFT of the top bar for
-  // apps whose menu doesn't already carry lives/coins markup
-  // (Nonogram). For apps that already do (WaterSort, P2048, UB), the
-  // existing static .menu-coins / .menu-lives renders unchanged.
+  // ── Top bar — ONE unified row across all four apps. Layout:
+  //   LEFT:  [❤ lives] [🪙 coins] [🪙 +25 free-coins]
+  //   RIGHT: [🏆 ranks]
+  // Settings is NOT in the top bar — it lives in the app's existing
+  // Tier-3 icon row (per-app static menu). Round-4 (2026-05-27): the
+  // earlier round-3 settings gear caused "two settings buttons" on
+  // every app, since every app's Tier-3 row already has one.
   function readLivesCoins(){
     var s = readSave();
-    var lives = (typeof s.lives === 'number') ? s.lives
-              : (typeof s.maxLives === 'number' ? s.maxLives : null);
+    var lives = (typeof s.lives === 'number') ? s.lives : null;
     var coins = (typeof s.coins === 'number') ? s.coins
               : (typeof s.currency === 'number' ? s.currency : null);
     return { lives: lives, coins: coins };
   }
-  function menuHasNativeStats(){
-    var menu = menuEl(); if (!menu) return true;
-    return !!(menu.querySelector('.menu-coins, .menu-lives, .coin-display, .lives-display, #menuCoins, #menuLives'));
+  // Hide every native lives/coins/menu-header surface on the menu so
+  // the unified synth top-bar isn't visually duplicated. Native ones
+  // come back when navigating to gameScreen etc. — only suppressed
+  // while the menu is the active screen.
+  function hideNativeTopBarOnMenu(){
+    var menu = menuEl(); if (!menu) return;
+    // .menu-header (WaterSort, Puzzle2048) lives only on menu, hide it.
+    menu.querySelectorAll('.menu-header').forEach(function(el){
+      if (el.hasAttribute('data-synth-menu-header')) return;
+      el.style.display = 'none';
+    });
+    // Standalone .menu-coins / .menu-lives chips (UnblockPuzzle).
+    ['menu-coins','menu-lives','coin-display','lives-display'].forEach(function(cls){
+      menu.querySelectorAll('.' + cls).forEach(function(el){
+        // Don't hide if it's already inside our synth header.
+        if (el.closest('[data-synth-menu-header]')) return;
+        el.style.display = 'none';
+      });
+    });
   }
-  function ensureLeftStats(){
+  function ensureTopBarIcons(){
     var header = ensureMenuHeader();
     if (!header) return;
+    // Wipe and re-render — idempotent and lets values refresh.
     if (header.querySelector('[data-menu-stats]')) {
       refreshLeftStats();
-      return;
+    } else {
+      var lc = readLivesCoins();
+      var left = document.createElement('div');
+      left.setAttribute('data-menu-stats','1');
+      // Left cluster: lives + coins + free-coins. margin-right:auto
+      // pushes the RIGHT cluster to the far right.
+      left.style.cssText = 'display:flex;align-items:center;gap:14px;margin-right:auto;font-weight:700;';
+      left.innerHTML =
+        // Stats — flat, no pill backgrounds (matches user "no circles"
+        // and "consistent with rest of UI" feedback). Color inherits.
+        (lc.lives != null
+          ? '<span data-stat="lives" style="display:inline-flex;align-items:center;gap:4px;font-size:0.95rem;">❤<span data-stat-lives style="font-variant-numeric:tabular-nums;">' + lc.lives + '</span></span>'
+          : '') +
+        (lc.coins != null
+          ? '<span data-stat="coins" style="display:inline-flex;align-items:center;gap:4px;font-size:0.95rem;">🪙<span data-stat-coins style="font-variant-numeric:tabular-nums;">' + lc.coins + '</span></span>'
+          : '') +
+        // Free-coins icon — same flat treatment, with +25 badge.
+        '<button data-menu-icon="freecoins" aria-label="Free coins" ' +
+        'style="position:relative;background:transparent;border:none;cursor:pointer;' +
+        'font-size:1.25rem;line-height:1;padding:0 2px;font-family:inherit;color:inherit;">' +
+          '🪙' +
+          '<span data-menu-icon-badge="freecoins" style="position:absolute;top:-6px;right:-12px;background:#2ea043;color:#fff;border-radius:9px;padding:1px 5px;font-size:9px;font-weight:800;display:none;line-height:1;">+' + FREE_COINS_AMOUNT + '</span>' +
+        '</button>';
+      header.appendChild(left);
+      left.querySelector('[data-menu-icon="freecoins"]').addEventListener('click', onFreeCoinsClick);
     }
-    if (menuHasNativeStats()) return; // app already renders them in static markup
-    var lc = readLivesCoins();
-    if (lc.lives == null && lc.coins == null) return;
-    var node = document.createElement('div');
-    node.setAttribute('data-menu-stats','1');
-    node.style.cssText = 'display:flex;align-items:center;gap:8px;font-size:0.92rem;font-weight:700;';
-    node.innerHTML =
-      (lc.lives != null
-        ? '<span data-stat="lives" style="display:inline-flex;align-items:center;gap:4px;background:rgba(220,80,80,0.14);border:1px solid rgba(220,80,80,0.32);border-radius:14px;padding:4px 10px;">❤ <span data-stat-lives>' + lc.lives + '</span></span>'
-        : '') +
-      (lc.coins != null
-        ? '<span data-stat="coins" style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,200,80,0.14);border:1px solid rgba(255,200,80,0.32);border-radius:14px;padding:4px 10px;">🪙 <span data-stat-coins>' + lc.coins + '</span></span>'
-        : '');
-    // Place at the start of the header (left side).
-    header.insertBefore(node, header.firstChild);
+    if (!header.querySelector('[data-menu-icon="ranks"]')) {
+      var ranks = document.createElement('button');
+      ranks.setAttribute('data-menu-icon','ranks');
+      ranks.setAttribute('aria-label','Ranks');
+      ranks.style.cssText =
+        'background:transparent;border:none;cursor:pointer;' +
+        'font-size:1.35rem;line-height:1;padding:0 2px;font-family:inherit;color:inherit;';
+      ranks.textContent = '🏆';
+      ranks.addEventListener('click', openRanksSheet);
+      header.appendChild(ranks);
+    }
   }
   function refreshLeftStats(){
     var lc = readLivesCoins();
@@ -6753,43 +6777,6 @@ window.addEventListener('load',function(){
     var c = document.querySelector('[data-stat-coins]');
     if (l && lc.lives != null) l.textContent = lc.lives;
     if (c && lc.coins != null) c.textContent = lc.coins;
-  }
-  function ensureTopBarIcons(){
-    var header = ensureMenuHeader();
-    if (!header) return;
-    if (header.querySelector('[data-menu-icons]')) return;
-    var wrap = document.createElement('div');
-    wrap.setAttribute('data-menu-icons','1');
-    wrap.innerHTML =
-      // Free Coins
-      '<button data-menu-icon="freecoins" aria-label="Free coins" ' +
-      'style="position:relative;background:rgba(255,215,100,0.14);border:1px solid rgba(255,215,100,0.36);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:18px;line-height:1;padding:0;font-family:inherit;">' +
-        '🪙' +
-        '<span data-menu-icon-badge="freecoins" style="position:absolute;top:-4px;right:-4px;background:#2ea043;color:#fff;border-radius:9px;padding:0 5px;font-size:9px;font-weight:800;display:none;">+' + FREE_COINS_AMOUNT + '</span>' +
-      '</button>' +
-      // Ranks (tournament + leaderboard merged)
-      '<button data-menu-icon="ranks" aria-label="Ranks" ' +
-      'style="background:rgba(120,170,255,0.14);border:1px solid rgba(120,170,255,0.36);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:16px;line-height:1;padding:0;font-family:inherit;">🏆</button>' +
-      // Settings (consolidated entry point — Settings is here, never an icon-row tile)
-      '<button data-menu-icon="settings" aria-label="Settings" ' +
-      'style="background:rgba(180,180,200,0.14);border:1px solid rgba(180,180,200,0.36);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:16px;line-height:1;padding:0;font-family:inherit;">⚙</button>';
-    header.appendChild(wrap);
-
-    wrap.querySelector('[data-menu-icon="freecoins"]').addEventListener('click', onFreeCoinsClick);
-    wrap.querySelector('[data-menu-icon="ranks"]').addEventListener('click', openRanksSheet);
-    wrap.querySelector('[data-menu-icon="settings"]').addEventListener('click', openSettings);
-  }
-  function openSettings(){
-    // Each app's settings screen has a different ID; try the common ones.
-    if (window.Game && typeof window.Game.showScreen === 'function') {
-      safe(function(){ window.Game.showScreen('settingsScreen'); });
-      return;
-    }
-    if (typeof window.showScreen === 'function') {
-      safe(function(){ window.showScreen('settingsScreen'); });
-      safe(function(){ window.showScreen('settings'); });
-      safe(function(){ window.showScreen('screen-settings'); });
-    }
   }
   function refreshTopBarIconState(){
     var fc = document.querySelector('[data-menu-icon="freecoins"]');
@@ -6829,7 +6816,11 @@ window.addEventListener('load',function(){
         'display:flex;align-items:flex-end;justify-content:center;' +
         'z-index: var(--z-modal, 700);font-family:inherit;';
       sheet.innerHTML =
-        '<div style="background:var(--bg, #161b22);color:var(--text, #e6edf3);'+
+        // Theme-aware surface: prefer the app's own surface tokens so
+        // the sheet doesn't look like an alien dark slab on a pink/
+        // cream theme. Falls back through --surface → --app-bg → --bg.
+        '<div style="background:var(--surface, var(--app-bg, var(--bg, #161b22)));'+
+        'color:var(--text, #e6edf3);'+
         'border-top-left-radius:18px;border-top-right-radius:18px;'+
         'width:100%;max-width:480px;padding:18px;box-shadow:0 -8px 32px rgba(0,0,0,0.32);">'+
           '<div style="display:flex;gap:10px;margin-bottom:14px;border-bottom:1px solid rgba(127,127,127,0.25);">'+
@@ -6898,14 +6889,68 @@ window.addEventListener('load',function(){
   // around the player. Same week-seed approach as the synthetic
   // tournament — the list is stable for the week and refreshes Monday.
   // Copy says "Weekly Standings" — never "global", "live", "real-time".
-  var NAME_POOL = [
-    'Alex','Maya','Yuki','Diego','Aisha','Noah','Mei','Omar','Ana','Sven',
-    'Priya','Kai','Lara','Hugo','Iris','Tariq','Sofia','Lukas','Reema','Akira',
-    'Nina','Mateo','Zara','Felix','Jana','Hiro','Ivan','Camila','Aki','Bilal',
-    'Lena','Theo','Yara','Maks','Rin','Idris','Ema','Nikolai','Sara','Toru',
-    'Adam','Mira','Leon','Anya','Kenji','Lila','Ravi','Ines','Otto','Saskia',
-    'Tomek','Yui','Pablo','Karim','Anika','Eli','Mila','Joon','Maja','Cyrus'
-  ];
+  // Per-app username pools — feel like real players, not bots. Real
+  // usernames mix CamelCase, all-lowercase, underscores, numbers, and
+  // short adjective+noun combos. We keep them family-friendly and
+  // region-varied. Each app uses a DISTINCT pool so two of our games
+  // don't show the same list of "rivals" side by side.
+  var NAME_POOLS = {
+    watersort: [
+      'aqua_99','RiverRun','TidalPour','deepblue22','SunSplash','wave_rider',
+      'cascadeLena','BluePuddle84','pour_master','MissAqua','splashking','Coral_K',
+      'driftwood7','OceanSoul','BluePine','rinse.maja','tealtide','Bobbi_R',
+      'MaybeRain','glassflow','dewdropZ','blueheron','aquanaut42','Marisol_O',
+      'CalmCurrent','RainRiver','PourSlow','Murky_Hugo','sapphire','splash_dance',
+      'TideOnTime','quietpond','blueagain','Hydra13','liquidLena','Saltsoul_F',
+      'PondHopper','fizzpop','BlueAki','wash_n_go','TealOtter','riverbend88',
+      'PetalRain','dripfest','MarineNoah','LucidLake','SoftRipple','watercress',
+      'BlueBay','EbbAndFlo','SkyPond','seafoamA','curlyWave','tidepool99',
+      'BluestKai','rinseRiri','aqualisa','SoapAndSea','PourPro','tidalrush'
+    ],
+    nonogram: [
+      'PixelMaja','gridhunter','paint_by_n','LogicLena','miramosaic','CrosswiseAki',
+      'inkblot42','clue_keeper','NonoFan99','LineUpFelix','BlockEcho','pixie.k',
+      'gridcraft','MoonGrid','tilt_logic','LeoLogic','grid_a_day','MariaP',
+      'crossKai','PaintByNoah','Pixel_R','squareplot','RowOrCol','HintMaster',
+      'logician7','Mira_DN','ClueHopper','GridNerd','linesOnly','penpaper42',
+      'IsabelN','BlankIsBlack','PolinaP','dot_drawer','Marin_O','clue_chaser',
+      'painterNoah','MichGrid','sketchKenji','RowMaster','pixel_yuki','NonoTomek',
+      'NonoNoa','Riku_RX','LumiPaint','HopperJ','pencilJana','GridhandSaskia',
+      'idris_grid','MoraNono','nonomeli','tilemap_x','PaintBob','quiklogic',
+      'MalkaP','LineWalker','CrossGrid88','MichaA','gridmonk','SonjaPx'
+    ],
+    puzzle2048: [
+      'merge_priya','2048Master','n0ah_tile','tileSwap','MathMira','MergeKing',
+      'cipher.k','FibonacciF','int_lover','powerOf2','SumFreak','Bitwise_Sven',
+      'fourFour','SkyMath','HiroMath','LogarithMika','prime_lee','exponent_x',
+      'MergeQueen','SaraMath','EmaShift','SwipeRight','BigT_K','byteByte',
+      'NumberOmar','GeoMike','LinAlge','MalachiM','TileNoa','BigTwoO',
+      'KennyMath','TonyNumeric','AlexBaseTwo','tilemastr','Jana_99','MergeMaja',
+      'AdditiveAida','EvenEmilia','SwipeBilal','tilewizard','combo_K','factorialK',
+      'Daria_X','reach2048','PixiePows','tileShift','SwirlingFelix','BinaryBert',
+      'numberninja','squareUp','SwipeWiseSeb','primeP','MergeMate','jamMath',
+      'tile_lord','EmiCalc','BBytes','jumpHugo','SasaSums','rookmath'
+    ],
+    unblock: [
+      'red_block_42','EscapeArtist','slider_pro','GridLock99','RushHourX','BlockBust',
+      'KingPin','tetro_rama','mazerunner','path_finder','LaneClearer','BloxRider',
+      'unblock_em','redhot_run','traffix','car_swap','jamBuster','grid_genie',
+      'slip_thru','easy_exit','blockyJune','sneakyShove','LucidEscape','clearLane',
+      'shuntKing','MaxSlide','red42','escape_velocity','Mira_x','sliderJ',
+      'mover_max','PathPriya','glideKai','TomekJam','quickEscape','EsmeShift',
+      'no_jam_z','steerStraight','jam_clears','GapHunter','out_the_gap','LineUp_n',
+      'JammerJani','slide_n_go','MaxRed','RushQueen','tagOmar','escape_kit',
+      'lineFelix','out_now','Mirasolve','SlideShow','BoxBard','reverseRev',
+      'JamMaker','clearstreet','slip_aki','redroute','traffic.dax','escape_io'
+    ]
+  };
+  function pickNamePool(){
+    var t = (document.title||'').toLowerCase();
+    if (t.indexOf('2048') >= 0)   return NAME_POOLS.puzzle2048;
+    if (t.indexOf('nono') >= 0)   return NAME_POOLS.nonogram;
+    if (t.indexOf('unblock') >= 0)return NAME_POOLS.unblock;
+    return NAME_POOLS.watersort;
+  }
   function mulberry32(seed){
     return function(){
       seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
@@ -6957,8 +7002,27 @@ window.addEventListener('load',function(){
     var total = 5000 + Math.floor((100 - pct) * 100);
     var rank = Math.max(1, Math.floor(total * pct / 100));
     var week = isoWeekNumber();
-    var rng = mulberry32(week * 7919 + (m.is2048 ? 1 : 0));
-    function pickName(){ return NAME_POOL[Math.floor(rng() * NAME_POOL.length)]; }
+    // App-distinct seed offsets so two of our games never roll the
+    // same standings side by side.
+    var t = (document.title||'').toLowerCase();
+    var appOffset = (t.indexOf('2048') >= 0) ? 13
+                  : (t.indexOf('nono') >= 0) ? 29
+                  : (t.indexOf('unblock') >= 0) ? 47
+                  :                              71;
+    var rng = mulberry32(week * 7919 + appOffset);
+    var pool = pickNamePool();
+    var used = {};
+    function pickName(){
+      // Reroll on collision so every row has a unique handle.
+      for (var attempt = 0; attempt < 24; attempt++){
+        var n = pool[Math.floor(rng() * pool.length)];
+        if (!used[n]) { used[n] = 1; return n; }
+      }
+      // Pool exhausted (shouldn't happen with ~60 entries and 11 rows) —
+      // fall back to first-unused.
+      for (var i = 0; i < pool.length; i++){ if (!used[pool[i]]) { used[pool[i]] = 1; return pool[i]; } }
+      return pool[0];
+    }
     // Score-delta scale: 2048 uses bigger steps; levels use smaller.
     var stepBase = m.is2048 ? Math.max(8, Math.round(m.value * 0.012)) : 1;
     var rows = [];
@@ -7141,23 +7205,32 @@ window.addEventListener('load',function(){
     }
     var daily = tier2Btn();
     if (daily) {
-      var streak = getStreak();
-      var lbl = daily.getAttribute('data-base-label');
-      if (!lbl) {
-        lbl = (daily.textContent || '').replace(/\s*🔥\s*\d+\s*$/, '').trim() || 'Daily Challenge';
-        daily.setAttribute('data-base-label', lbl);
-      }
-      var textNode = null;
-      for (var i=0;i<daily.childNodes.length;i++){
-        if (daily.childNodes[i].nodeType === 3) { textNode = daily.childNodes[i]; break; }
-      }
-      var newTxt = lbl + (streak > 0 ? '  🔥' + streak : '');
-      if (textNode) { if (textNode.nodeValue.trim() !== newTxt) textNode.nodeValue = newTxt; }
-      else if (daily.querySelector('span:not(.ico):not(.icon)')) {
-        var s2 = daily.querySelector('span:not(.ico):not(.icon)');
-        if (s2.textContent !== newTxt) s2.textContent = newTxt;
-      } else {
-        if (daily.textContent !== newTxt) daily.textContent = newTxt;
+      // If the app already has its own streak display inside the button
+      // (a child with class menu-streak / streak-badge / etc.), DON'T
+      // touch the label — appending streak via my patch creates the
+      // "Daily · 11 Daily 11" duplication seen in Nonogram.
+      var hasNativeStreak = !!daily.querySelector(
+        '.menu-streak, .daily-streak, [class*="streak"], #menu-streak'
+      );
+      if (!hasNativeStreak) {
+        var streak = getStreak();
+        var lbl = daily.getAttribute('data-base-label');
+        if (!lbl) {
+          lbl = (daily.textContent || '').replace(/\s*🔥\s*\d+\s*$/, '').trim() || 'Daily Challenge';
+          daily.setAttribute('data-base-label', lbl);
+        }
+        var textNode = null;
+        for (var i=0;i<daily.childNodes.length;i++){
+          if (daily.childNodes[i].nodeType === 3) { textNode = daily.childNodes[i]; break; }
+        }
+        var newTxt = lbl + (streak > 0 ? '  🔥' + streak : '');
+        if (textNode) { if (textNode.nodeValue.trim() !== newTxt) textNode.nodeValue = newTxt; }
+        else if (daily.querySelector('span:not(.ico):not(.icon)')) {
+          var s2 = daily.querySelector('span:not(.ico):not(.icon)');
+          if (s2.textContent !== newTxt) s2.textContent = newTxt;
+        } else {
+          if (daily.textContent !== newTxt) daily.textContent = newTxt;
+        }
       }
     }
   }
@@ -7188,9 +7261,9 @@ window.addEventListener('load',function(){
   function renderMenu(){
     SUPPRESSED.forEach(wrapInject);
     hideLegacyOnMenu();
+    hideNativeTopBarOnMenu();
     relocateThemeStripPermanent();
     ensureTopBarIcons();
-    ensureLeftStats();
     refreshTopBarIconState();
     patchMenuButtons();
     slimSeasonBanner();

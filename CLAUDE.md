@@ -1171,3 +1171,116 @@ relative-luminance ratio for every (text, bg) pair. Blocks publish on
 any < 4.5:1. Skipped (warn) for apps whose :root carries no hex bg
 token — those use inline body styles and need a manual audit. Wired
 into pre_publish_check as `[code] text contrast`.
+
+---
+
+## Menu UI rules — lessons from the 2026-05-27 rounds
+
+Memorialized after four rounds of iteration where the same patterns
+kept regressing. Future edits MUST follow these.
+
+### Top bar (every shipping app, mandatory layout)
+
+```
+[❤ lives] [🪙 coins] [🪙 +25 free-coins]   ←spacer→   [🏆 ranks]
+```
+
+- LEFT cluster only: lives, coins, free-coins icon.
+- RIGHT cluster only: ranks icon (the 🏆 trophy opens the 2-tab Ranks
+  sheet with This Week + Leaderboard).
+- **Settings is NEVER in the top bar.** Settings lives as a tile in
+  the app's Tier-3 icon row, exactly one location per app.
+- **Icons are FLAT** — `background:transparent; border:none`. No
+  circles, no pill backgrounds. The emoji glyph is the visual
+  affordance. Round-3's circle styling was rejected by the user as
+  "looks off from all other elements."
+- The synth header HIDES every native `.menu-header` /
+  `.menu-coins` / `.menu-lives` / `.coin-display` / `.lives-display`
+  on the menu screen — they would otherwise duplicate the unified
+  cluster.
+- The synth header has `padding:14px 14px 4px; margin-bottom:14px` —
+  enough breathing room before the title. Previous packings looked
+  cramped against the screen edge.
+
+### One Settings entry point — never two
+
+Audit the app's Tier-3 icon row to find Settings (it's always there).
+The MENU shim does NOT add a top-bar Settings gear. If a screenshot
+shows two settings icons, the shim is wrong; remove the shim copy.
+
+### No competing pink/cream/whatever palettes — each app must be visually distinct
+
+The 2026-05-27 audit caught UnblockPuzzle defaulting to pink — the
+same family as Nonogram. Rule: every app picks a distinct default
+palette family that no other shipping app uses. Per-app allocations
+are tracked in CLAUDE.md "Distinct light palette per app"; cross-check
+that table before re-themeing any app.
+
+### Light default themes, Midnight as paid unlockable
+
+Every shipping app's DEFAULT theme is light, eye-pleasing. Dark UIs
+ship only as the coin-purchased "Midnight" theme (or genre-specific
+night palette). Apps currently defaulting to dark (Puzzle2048,
+WaterSort) need a light-default conversion — tracked in
+`scripts/full_review_open_items.md`.
+
+### When a bug is reported in one app, check all four
+
+The user repeatedly pointed out: "if i point to bugs check all other
+apps for the same bug and fix everywhere." Every fix lands across
+WaterSortPuzzle, Nonogram, Puzzle2048, UnblockPuzzle. The MENU shim
+helps (one source, four targets via `scripts/_growth_shim_menu.html`
++ reinject), but app-specific code (game.html init, per-app CSS)
+still needs grep-all-four discipline.
+
+### Continue label must show whenever progress exists
+
+`hasResumableProgress()` returns true on any of:
+- `state.lastLevelProgress` set
+- `state.boardState` / `state.gameBoard` and not gameOver
+- `state.currentLevel > 1`
+- `state.completedLevels.length > 0`
+- `state.levelsCompleted > 0`
+- `state.bestScore > 0`
+Showing "Play" when the player has cleared levels is the regression
+to avoid.
+
+### Daily Challenge label — don't append streak when native shows it
+
+If the daily-challenge button has a child with class matching
+`menu-streak / daily-streak / [class*="streak"]` or id `menu-streak`,
+the app already renders the streak — the MENU shim's `patchMenuButtons`
+SKIPS the streak suffix. Otherwise it appends ` 🔥N`. The 2026-05-27
+"Daily · 11 Daily 11" duplication came from blindly writing the
+suffix to a button whose first span already held the streak.
+
+### Standings list — every row unique
+
+The 2026-05-27 leaderboard rendered `jumpHugo` twice. The shim now
+tracks used names with a `used{}` map and rerolls on collision. With
+~60 entries per pool and 12 rows, collisions are rare but the guard
+is required.
+
+### Per-app name pools, week + app-offset seeded
+
+The synthetic-leaderboard names live in `NAME_POOLS.{watersort,
+nonogram, puzzle2048, unblock}`, each ~60 entries, distinct theme
+flavor (water/grid/math/cars). The seed is
+`isoWeek * 7919 + appOffset` so two of our games NEVER render the
+same standings side by side. Bot-feel reduced by mixing case styles:
+`CamelCase`, `lowercase_with_underscores`, `Name42` numbers,
+`adj_noun` combos.
+
+### Each overlay/sheet uses the app's theme tokens
+
+The Ranks sheet, Streak Shield overlay, etc. background colors are
+`var(--surface, var(--app-bg, var(--bg, #161b22)))` and text
+`var(--text, #e6edf3)`. **No hardcoded dark slabs.** The 2026-05-27
+audit caught the Ranks sheet showing a dark slab on UnblockPuzzle's
+pink theme — fixed via the var fallback chain.
+
+### One menu render path, never multiple polling shims
+
+See "No competing runtime shims" above. The MENU shim is the
+SINGLE owner of menu render. New menu features extend that single
+function — they do NOT add a new shim with its own `setInterval`.
