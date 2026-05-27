@@ -255,6 +255,46 @@ html[data-theme="midnight"] #themeScreen,
 html[data-theme="midnight"] #achievementsScreen,
 html[data-theme="midnight"] #missionsScreen { background:linear-gradient(180deg,#0a1628 0%,#0d2137 100%); }
 html[data-theme="midnight"] #levelScreen { background:linear-gradient(160deg,#050e1a 0%,#0a1628 40%,#0d2137 100%); }
+
+/* ============ 2026-05-27 round-7: adaptive sizing via clamp() ============
+   Element sizes scale smoothly with viewport. The padding-bottom on
+   .game-footer reserves room for the AdMob banner so buttons stay
+   visible above it on every form factor. */
+.menu-buttons {
+  max-width: clamp(280px, 70vw, 460px) !important;
+  padding: clamp(10px, 2vw, 22px) 0 clamp(14px, 2.5vw, 28px) !important;
+}
+.btn {
+  padding: clamp(10px, 2vw, 18px) clamp(18px, 4vw, 32px) !important;
+  font-size: clamp(14px, 2.8vw, 20px) !important;
+  border-radius: clamp(12px, 1.8vw, 18px) !important;
+}
+.game-header {
+  padding: clamp(10px, 1.6vw, 18px) clamp(14px, 2vw, 24px) !important;
+}
+.game-footer {
+  padding: clamp(8px, 1.4vw, 16px) clamp(6px, 1.1vw, 14px)
+           calc(clamp(80px, 9vh, 180px) + env(safe-area-inset-bottom, 0px)) !important;
+  gap: clamp(4px, 0.9vw, 10px) !important;
+}
+.game-footer .game-btn {
+  padding: clamp(8px, 1.4vw, 14px) clamp(4px, 1vw, 10px) !important;
+  font-size: clamp(11px, 2.4vw, 16px) !important;
+  gap: clamp(4px, 0.9vw, 8px) !important;
+  border-radius: clamp(10px, 1.5vw, 14px) !important;
+}
+.game-footer .game-btn .ico {
+  width: clamp(20px, 4vw, 30px) !important;
+  height: clamp(20px, 4vw, 30px) !important;
+}
+.menu-icon-row { gap: clamp(8px, 1.6vw, 16px) !important; max-width: clamp(280px, 70vw, 460px) !important; }
+.icon-btn {
+  padding: clamp(10px, 1.8vw, 18px) clamp(6px, 1vw, 12px) !important;
+  font-size: clamp(11px, 2.2vw, 15px) !important;
+  gap: clamp(4px, 0.9vw, 8px) !important;
+  border-radius: clamp(10px, 1.6vw, 16px) !important;
+}
+.icon-btn svg { width: clamp(20px, 4vw, 30px) !important; height: clamp(20px, 4vw, 30px) !important; }
 </style>
 </head>
 <body>

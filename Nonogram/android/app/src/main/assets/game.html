@@ -643,6 +643,55 @@
     100% { opacity: 0.6; }
   }
   .shimmer { animation: shimmer 2s ease-in-out infinite; }
+
+  /* ============ 2026-05-27 round-7: adaptive sizing via clamp() ============
+     Element sizes scale smoothly with viewport. Footer padding-bottom
+     reserves room for the AdMob banner. */
+  .menu-buttons {
+    width: clamp(240px, 64vw, 420px) !important;
+    padding: clamp(0.6rem, 1.6vw, 1.4rem) 0 clamp(0.8rem, 2vw, 1.6rem) !important;
+    gap: clamp(0.5rem, 1.2vw, 1rem) !important;
+  }
+  .btn {
+    padding: clamp(0.7rem, 1.6vw, 1.2rem) clamp(1.2rem, 3vw, 2rem) !important;
+    font-size: clamp(0.95rem, 2.4vw, 1.25rem) !important;
+    border-radius: clamp(10px, 1.6vw, 16px) !important;
+  }
+  .btn-play {
+    width: clamp(240px, 64vw, 420px) !important;
+    padding: clamp(0.85rem, 1.8vw, 1.4rem) clamp(1.2rem, 2.6vw, 2rem) clamp(1rem, 1.9vw, 1.5rem) !important;
+    font-size: clamp(1.05rem, 2.8vw, 1.45rem) !important;
+  }
+  .btn-play .play-sub { font-size: clamp(0.7rem, 1.6vw, 0.95rem) !important; }
+  .menu-secondary-row { width: clamp(240px, 64vw, 420px) !important; gap: clamp(0.4rem, 1vw, 0.8rem) !important; }
+  .btn-pair {
+    padding: clamp(0.6rem, 1.4vw, 1rem) clamp(0.6rem, 1vw, 1rem) !important;
+    font-size: clamp(0.85rem, 2vw, 1.05rem) !important;
+    border-radius: clamp(8px, 1.4vw, 14px) !important;
+  }
+  .menu-icon-row {
+    width: clamp(240px, 64vw, 420px) !important;
+    gap: clamp(0.8rem, 2.5vw, 2rem) !important;
+  }
+  .menu-icon-btn {
+    width: clamp(58px, 14vw, 92px) !important;
+    min-height: clamp(54px, 13vw, 88px) !important;
+    font-size: clamp(10px, 1.6vw, 14px) !important;
+    border-radius: clamp(10px, 1.6vw, 14px) !important;
+  }
+  .menu-icon-btn .menu-icon-label { font-size: clamp(10px, 1.5vw, 13px) !important; }
+  .game-footer {
+    padding: clamp(0.4rem, 1vw, 0.8rem) clamp(0.3rem, 0.6vw, 0.6rem)
+             calc(clamp(80px, 9vh, 180px) + env(safe-area-inset-bottom, 0px)) !important;
+    gap: clamp(0.3rem, 0.8vw, 0.6rem) !important;
+  }
+  .footer-btn {
+    padding: clamp(0.5rem, 1vw, 0.9rem) clamp(0.25rem, 0.5vw, 0.5rem) !important;
+    font-size: clamp(0.72rem, 1.7vw, 1rem) !important;
+    max-width: clamp(80px, 16vw, 130px) !important;
+    border-radius: clamp(8px, 1.4vw, 14px) !important;
+  }
+  .footer-btn .footer-icon { font-size: clamp(1rem, 2.2vw, 1.4rem) !important; }
 </style>
 </head>
 <body data-growth-coachmark="nono">
