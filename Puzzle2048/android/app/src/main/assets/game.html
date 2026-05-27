@@ -4766,10 +4766,52 @@ window.addEventListener('load',function(){
   if (window.__growthShimMenu) return;
   window.__growthShimMenu = true;
 
+  // Narrow-viewport guard: at 360px / 320px logical widths the top bar
+  // (lives + coins + 🪙 + 🏆 + ⚙) has to fit on one line. Shrink icon
+  // padding + collapse the lives display to heart+number only.
+  (function injectNarrowCss(){
+    if (document.getElementById('menu-shim-narrow-css')) return;
+    var st = document.createElement('style');
+    st.id = 'menu-shim-narrow-css';
+    st.textContent =
+      '@media (max-width: 380px){'+
+        '[data-menu-icons] button{width:32px !important;height:32px !important;font-size:15px !important;}'+
+        '[data-menu-icons]{gap:4px !important;margin-right:4px !important;}'+
+        '#menuScreen .menu-header .lives-text, #screen-menu .menu-header .lives-text, [data-lives-label]{display:none;}'+
+      '}'+
+      '@media (max-width: 330px){'+
+        '[data-menu-icons] button{width:28px !important;height:28px !important;font-size:13px !important;}'+
+        '#menuScreen .menu-header, #screen-menu .menu-header{padding-left:6px !important;padding-right:6px !important;}'+
+      '}';
+    (document.head || document.documentElement).appendChild(st);
+  })();
+
   var LS = window.localStorage;
   function lsGet(k, d){ try { var v=LS.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { LS.setItem(k, v); } catch(e){} }
   function safe(fn){ try { return fn(); } catch(e){} }
   function $(id){ return document.getElementById(id); }
+
+  // Per-app menu container ID isn't uniform: Nonogram uses `screen-menu`,
+  // every other app uses `menuScreen`. Resolve once + cache.
+  function menuEl(){
+    return $('menuScreen') || $('screen-menu') || document.querySelector('[id*="menu" i].screen.active');
+  }
+  function onMenu(){
+    var m = menuEl();
+    return !!(m && m.classList.contains('active'));
+  }
+  // Tier 1 primary button — selector list covers every variant in the portfolio.
+  function tier1Btn(){
+    var m = menuEl(); if (!m) return null;
+    return m.querySelector('#menuPlayBtn, .btn-primary, .menu-primary, .menu-tile-primary, .btn-play');
+  }
+  // Tier 2 Daily button.
+  function tier2Btn(){
+    var m = menuEl(); if (!m) return null;
+    return $('dailyChallengeBtn') || $('dailyBtn') ||
+           m.querySelector('[onclick*="DailyChallenge"], [onclick*="startDailyChallenge"], [onclick*="dailyChallenge"]');
+  }
 
   function readSave(){
     var keys = ['save','state','gameState','progress','State'];
@@ -4832,14 +4874,14 @@ window.addEventListener('load',function(){
     window[fnName] = function(){
       // If the banner was already injected, just hide it on menu.
       var existing = bannerId ? $(bannerId) : null;
-      var onMenu = !!$('menuScreen') && $('menuScreen').classList.contains('active');
-      if (existing && onMenu) {
+      var here = onMenu();
+      if (existing && here) {
         existing.style.display = 'none';
       }
       // Call the original — for non-menu callers (deeper screens) it'll
       // still inject / update where it belongs. We then re-hide on menu.
       var r = orig.apply(this, arguments);
-      if (onMenu) {
+      if (here) {
         var el = bannerId ? $(bannerId) : null;
         if (el) el.style.display = 'none';
         // updateTournamentBanner has no fixed banner id; hide weeklyEventBanner.
@@ -4871,8 +4913,27 @@ window.addEventListener('load',function(){
     var m = Math.floor(s/60);
     return (h>0?h+'h ':'')+m+'m';
   }
+  function ensureMenuHeader(){
+    var menu = menuEl(); if (!menu) return null;
+    // 1. Use the existing .menu-header inside this menu container.
+    var existing = menu.querySelector('.menu-header');
+    if (existing) return existing;
+    // 2. Already synthesized?
+    var syn = menu.querySelector('[data-synth-menu-header]');
+    if (syn) return syn;
+    // 3. Synthesize a floating top-bar container at the top-right of the menu.
+    syn = document.createElement('div');
+    syn.setAttribute('data-synth-menu-header','1');
+    syn.style.cssText =
+      'position:absolute;top:8px;right:8px;display:flex;align-items:center;gap:6px;z-index:6;';
+    // The menu container needs to be positioned for absolute children to land correctly.
+    var cs = window.getComputedStyle(menu);
+    if (cs.position === 'static') menu.style.position = 'relative';
+    menu.appendChild(syn);
+    return syn;
+  }
   function injectTopBarIcons(){
-    var header = document.querySelector('#menuScreen .menu-header');
+    var header = ensureMenuHeader();
     if (!header) return;
     if (header.querySelector('[data-menu-icons]')) return;
     var wrap = document.createElement('div');
@@ -4935,10 +4996,9 @@ window.addEventListener('load',function(){
 
   // ── 3. Tier 1 + Tier 2 label patching.
   function patchMenuButtons(){
-    var menu = $('menuScreen');
+    var menu = menuEl();
     if (!menu) return;
-    var play = $('menuPlayBtn') ||
-               document.querySelector('#menuScreen .btn-primary, #menuScreen .menu-primary');
+    var play = tier1Btn();
     if (play) {
       var label = play.querySelector('#menuPlayLabel') || play;
       var has = hasResumableProgress();
@@ -4952,8 +5012,7 @@ window.addEventListener('load',function(){
         else if (!span && play.childNodes.length === 1) play.textContent = newLabel;
       }
     }
-    var daily = $('dailyChallengeBtn') ||
-                document.querySelector('#menuScreen [onclick*="DailyChallenge"], #menuScreen [onclick*="daily"]');
+    var daily = tier2Btn();
     if (daily) {
       var streak = getStreak();
       // Strip any prior streak badge then re-apply.

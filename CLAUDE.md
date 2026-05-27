@@ -884,3 +884,77 @@ publish: NativeBridge surface presence, manifest `<queries>`, six growth
 shim markers (`data-growth-shim="A".."G"`), no-pre-release-in-cross-promo,
 and warning on placeholder PGS / `games_app_id`. Wired into
 `pre_publish_check.py` as `[code] growth baseline`.
+
+---
+
+## Main-menu information hierarchy (mandatory)
+
+Every game's main menu MUST collapse to three visual tiers and surface
+glanceable hooks as TOP-BAR ICONS, not full-width promotional banners.
+The 2026-05-25 audit showed `WaterSortPuzzle/Nonogram/Puzzle2048/UnblockPuzzle`
+all had ~11 tappable surfaces on the menu (Free Coins banner + Tournament
+banner + Theme strip + Season Pass banner + 6 buttons) which torched the
+visual hierarchy and pushed Play below the fold. The 2026-05-27 restructure
+lands as a runtime-injected shim — no app-specific edits required.
+
+**Three tiers:**
+1. **Tier 1 — ONE dominant primary button.** Either `Continue · Level N`
+   (or `Continue · <score>` for 2048) when state has resumable progress,
+   else `Play`. Largest element on the menu. Patched by the shim from
+   whichever class the app uses: `#menuPlayBtn` / `.btn-primary` /
+   `.menu-primary` / `.menu-tile-primary` / `.btn-play`.
+2. **Tier 2 — Daily Challenge with streak baked in.** Single secondary
+   button, label format `Daily · 🔥N` when streak > 0. No separate
+   streak chip / banner anywhere on the menu.
+3. **Tier 3 — single icon row.** Levels / Shop / Games / Settings as
+   compact icon-only buttons. Total static tappable count on menu ≤ 6.
+
+**Top-bar icons (replace the old banners):**
+- 🪙 Free Coins (24-pixel circular button, green `+25` badge when ready,
+  greyed + countdown title while on 4-hour cooldown). Click reuses the
+  existing `claimFreeCoins` / `xClaimFreeCoins` handler. Direct
+  `showRewardedAd` fallback.
+- 🏆 Tournament. Click reuses
+  `showTournament` / `xShowTournament` / `showWeeklyEventInfo`. Falls
+  back to clicking the existing `weeklyEventBanner` element when no
+  named handler exists.
+
+The shim auto-mounts these into `.menu-header` if one exists; if the
+game's menu has no header container (UnblockPuzzle, Nonogram), it
+synthesizes a top-right absolute-positioned host. At 380px / 330px
+logical widths the icons shrink + the lives-text label collapses to
+heart+number only — top bar always fits on one line.
+
+**Removed from the menu but NOT removed from the game:**
+- Theme strip — relocated to the Themes screen (shim moves
+  `xThemeStrip` / `xThemeStrip2048` to top of `themesScreen` /
+  `screen-themes` when active).
+- Season Pass promo — auto-surfaces inside Shop and on the no-lives
+  overlay (shim calls `injectPassPromo()` when `shopScreen` / `screen-shop`
+  / `overlay-nolives` becomes active).
+- Seasonal-event banner — slimmed to a one-line ribbon (`xSeasonBanner`
+  styled to ≤30px tall).
+- Weekly Tournament details — still reachable via the top-bar 🏆 icon;
+  no full-width banner on the menu.
+
+**Forbidden on the menu screen markup:**
+- Static `id="xFreeCoinsBtn"` / `id="xThemeStrip"` / `id="xPassPromo"`
+  / `id="weeklyEventBanner"` elements INSIDE the menu container. The
+  shim hides them at runtime, but a static menu-bound copy is harder
+  to remove cleanly and trips `check_menu_hierarchy`.
+- Any additional full-width promotional banner. Stack-ranked goal:
+  user opens app → sees ONE button → taps → in puzzle in <2s.
+
+**Implementation.** Single shim file at
+`scripts/_growth_shim_menu.html` — copy verbatim as
+`<script data-growth-shim="MENU">…</script>` at the bottom of every
+shipping `game.html`. Idempotent (no-op on second injection). New apps
+get it via the SHIP_GAME Phase 1 scaffold. Existing apps re-inject
+when the shim is updated; the `_growth_shim_menu` script in scripts/
+is the source of truth.
+
+**Pre-publish enforcement.** `scripts/check_menu_hierarchy.py` runs
+every publish: shim marker present, no forbidden static banners inside
+the menu container, Tier 1 primary button selector matches at least one
+element, Tier 2 Daily button + Tier 3 icon row reachable. Wired into
+`pre_publish_check.py` as `[code] menu hierarchy`.

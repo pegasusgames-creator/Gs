@@ -198,6 +198,32 @@ buried menu buttons. After dismissing, they return to their regular menu spot.
 The pop-up should auto-dismiss in 3 seconds if untouched, to avoid being
 annoying for returning players who don't care.
 
+**Streak ALWAYS lives on the Daily Challenge button itself** as a `🔥N`
+suffix — never as a separate chip or row. The 2026-05-27 menu-hierarchy
+shim bakes this in automatically (`Daily · 🔥7`); don't reintroduce a
+standalone streak banner.
+
+### 3.3a Glanceable hooks become top-bar icons, not full-width banners [GAMES, P0]
+
+Free Coins and the Weekly Tournament are required to stay one tap away
+from the menu, but they MUST surface as compact top-bar icons
+(🪙 / 🏆) — never as full-width promotional banners. Full-width
+on-menu banners:
+- shove the Play button below the fold on small phones
+- read as "this app is mostly promo and paywall"
+- compete with Tier 1 for attention, destroying the hierarchy
+
+The 2026-05-27 menu-hierarchy shim mounts both icons into a top-right
+host (existing `.menu-header` if present, synthesized container
+otherwise) and reuses the existing `claimFreeCoins` / `showTournament`
+handlers. Theme strip relocates to the Themes screen, Season Pass promo
+auto-surfaces in Shop + on the no-lives overlay — every feature stays
+reachable, none of them sits on the menu.
+
+`scripts/check_menu_hierarchy.py` blocks publish if the menu screen
+markup contains a static `id="xFreeCoinsBtn"` / `id="xThemeStrip"` /
+`id="xPassPromo"` / `id="weeklyEventBanner"` element. Move them out.
+
 ### 3.4 Kill redundant destinations [ALL, P2]
 
 If the Play button takes the player to their current level, a separate

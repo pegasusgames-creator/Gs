@@ -1538,3 +1538,16 @@ incorporate:
   LIVE sibling packages, run `_port_notif_suite.py` to install the
   notification + share + PGS Java bridge methods. Verify
   `check_growth_features.py` is clean before moving on.
+- **Phase 2 (menu hierarchy):** copy
+  `scripts/_growth_shim_menu.html` verbatim as
+  `<script data-growth-shim="MENU">…</script>` at the bottom of
+  `game.html`. The shim restructures the static menu into the
+  three-tier hierarchy mandated by CLAUDE.md "Main-menu information
+  hierarchy" (one dominant Continue/Play button, Daily-with-streak,
+  icon row; Free Coins + Tournament become top-bar icons; theme strip
+  / pass promo / season banner relocate off the menu). It is
+  idempotent and works against any menu container ID
+  (`menuScreen` or `screen-menu`). Verify
+  `check_menu_hierarchy.py` is clean before moving on — every Tier 1
+  primary-button selector must match something on the menu, no static
+  full-width banners may remain inside the menu container.

@@ -1938,6 +1938,20 @@ def main():
         # Soft-fail — log and continue (the dedicated tool still works).
         print(f"  growth baseline: skipped ({_e})")
 
+    # ---- MENU HIERARCHY (2026-05-27 plan: Tier 1 dominant button, Tier 2 Daily,
+    # Tier 3 icon row, top-bar Free Coins + Tournament, no full-width menu banners).
+    try:
+        from check_menu_hierarchy import check_app as _menu_check
+        def _menu(apps_subset):
+            b_all, w_all = [], []
+            for a in apps_subset:
+                b, w = _menu_check(a)
+                b_all.extend(b); w_all.extend(w)
+            return b_all, w_all
+        section("code",  "menu hierarchy",          _menu, apps)
+    except Exception as _e:
+        print(f"  menu hierarchy: skipped ({_e})")
+
     print()
     if blocking:
         print(red(bold(f"BLOCKING ({len(blocking)}):")))
