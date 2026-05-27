@@ -1104,3 +1104,70 @@ inside the MENU shim hides any element with id `xPassPromo`,
 `xThemeStrip2048`, `xSeasonPassPromo`, or `xWeeklyPassPromo` that
 ends up inside the menu container, as belt-and-braces against future
 regressions.
+
+---
+
+## Leaderboard: synthetic standings by default
+
+The 🏆 Ranks sheet "Leaderboard" tab renders an in-game synthetic
+12-row ranked board (player highlighted, week-seeded names from
+`NAME_POOL` of ~60 neutral names, scores plausibly spaced around the
+player's actual metric). This is the default surface — no app switch,
+no sign-in, instant, works fully offline. The standings are stable
+within a week and refresh Monday (same week-seed as the synthetic
+tournament).
+
+`Android.showLeaderboard(LEADERBOARD_ID)` is reachable but only as a
+small "Compare on Play Games →" footer link for signed-in users —
+never the primary action. Copy says **"Weekly Standings"** /
+**"This Week"** — never "global players", "live", or "real-time"
+(Play Misleading-Behavior policy). Implementation lives in
+`scripts/_growth_shim_menu.html` (`buildStandings`,
+`renderLeaderboardTab`).
+
+---
+
+## Menu consistency across the portfolio
+
+A user moving between any two of our games should feel one studio.
+All four shipping apps render the same menu skeleton:
+
+- **Top bar (in-flow flex, no `position:absolute`):**
+  `[❤ lives] [🪙 coins]  →spacer→  [🪙 free-coins +25] [🏆 ranks] [⚙ settings]`
+  Settings lives in the top-bar gear for every app — never as a
+  Tier-3 icon-row tile.
+- **Tier 1:** one dominant `Continue · Level N` / `Play` button.
+- **Tier 2:** Daily Challenge with `🔥N` streak baked into the label.
+- **Chip row:** `🛡 Streak Shield ×N` + `🎁 Claim Day N · +X 🪙`
+  (or `🔥 Tomorrow: …` after claim), centered, one row.
+- **Tier 3:** icon row of Levels · Shop · Games, centered, equal gaps.
+  (2048 has no Levels; its Tier-2 row carries Daily/Best instead.)
+- **Vertical rhythm:** the MENU shim's CSS standardizes
+  `.menu-buttons { display:flex; flex-direction:column; gap:10px;
+  max-width:420px; margin:0 auto; }` across all four apps — same gap
+  between sections, same column width, centered.
+
+`scripts/check_menu_consistency.py` warns when an app's
+[data-menu-icons] doesn't carry the canonical set
+(`freecoins`, `ranks`, `settings`). Wired into pre_publish.
+
+---
+
+## Contrast: WCAG AA 4.5:1 for body text
+
+All visible text must hit at least 4.5:1 contrast against its actual
+background (3:1 for ≥18pt or ≥14pt bold). Muted / subtitle / faint
+tokens are the usual offenders — verify by computed ratio, not by eye.
+The 2026-05-27 audit caught UnblockPuzzle's
+`--text-soft / --text-mute / --text-faint` failing on the lavender
+`#ece6f3` background (3.74 / 2.65 / 1.76 — all FAIL). Raised to
+`#574766 / #604f7b / #6c5b8c` (6.88 / 5.92 / 4.89 — all PASS).
+
+`scripts/check_contrast.py` parses each app's :root color tokens,
+identifies text tokens by name (anything matching `--text*`,
+`--color-text*`, `--fg*`, `--label*`), looks up the canvas background
+(`--app-bg` / `--bg` / `--background` / `--surface`), and computes
+relative-luminance ratio for every (text, bg) pair. Blocks publish on
+any < 4.5:1. Skipped (warn) for apps whose :root carries no hex bg
+token — those use inline body styles and need a manual audit. Wired
+into pre_publish_check as `[code] text contrast`.

@@ -1993,6 +1993,16 @@ def main():
         section("code", "menu shim hygiene",        _wrap(_ms), apps)
     except Exception as _e:
         print(f"  menu shim hygiene: skipped ({_e})")
+    try:
+        from check_contrast import check_app as _ct
+        section("code", "text contrast",            _wrap(_ct), apps)
+    except Exception as _e:
+        print(f"  text contrast: skipped ({_e})")
+    try:
+        from check_menu_consistency import check_app as _mc
+        section("code", "menu consistency",         _wrap(_mc), apps)
+    except Exception as _e:
+        print(f"  menu consistency: skipped ({_e})")
 
     print()
     if blocking:

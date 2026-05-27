@@ -6525,7 +6525,19 @@ window.addEventListener('load',function(){
         'min-height:84px !important;border-radius:18px !important;'+
         'padding:12px 8px !important;'+
       '}'+
-      '#menuScreen .menu-buttons, #screen-menu .menu-buttons{ gap:8px !important; }'+
+      // Standardized .menu-buttons stack — centered column, max-width
+      // 420px, identical vertical rhythm across all four apps.
+      '#menuScreen .menu-buttons, #screen-menu .menu-buttons{'+
+        'gap:10px !important;display:flex !important;flex-direction:column !important;'+
+        'align-items:stretch !important;max-width:420px !important;'+
+        'margin-left:auto !important;margin-right:auto !important;'+
+      '}'+
+      // Center the icon row(s). Equal left/right margins, no drift.
+      '#menuScreen .menu-icon-row, #screen-menu .menu-icon-row,'+
+      '#menuScreen .menu-pair-row, #screen-menu .menu-pair-row,'+
+      '#menuScreen .menu-tile-row, #screen-menu .menu-tile-row{'+
+        'justify-content:center !important;'+
+      '}'+
       // Top-bar icons — never absolute, always in-flow flex. The
       // freecoins button keeps position:relative so the +25 badge can
       // sit on it; the wrapper itself is in-flow.
@@ -6689,10 +6701,58 @@ window.addEventListener('load',function(){
     syn.setAttribute('data-synth-menu-header','1');
     syn.style.cssText =
       // In-flow row at the top of the menu container — no position:absolute.
-      'display:flex;align-items:center;justify-content:flex-end;padding:8px 12px 0;';
+      'display:flex;align-items:center;justify-content:space-between;' +
+      'padding:8px 12px 0;gap:8px;';
     if (menu.firstChild) menu.insertBefore(syn, menu.firstChild);
     else menu.appendChild(syn);
     return syn;
+  }
+
+  // ── Lives + coins stats. Show them on the LEFT of the top bar for
+  // apps whose menu doesn't already carry lives/coins markup
+  // (Nonogram). For apps that already do (WaterSort, P2048, UB), the
+  // existing static .menu-coins / .menu-lives renders unchanged.
+  function readLivesCoins(){
+    var s = readSave();
+    var lives = (typeof s.lives === 'number') ? s.lives
+              : (typeof s.maxLives === 'number' ? s.maxLives : null);
+    var coins = (typeof s.coins === 'number') ? s.coins
+              : (typeof s.currency === 'number' ? s.currency : null);
+    return { lives: lives, coins: coins };
+  }
+  function menuHasNativeStats(){
+    var menu = menuEl(); if (!menu) return true;
+    return !!(menu.querySelector('.menu-coins, .menu-lives, .coin-display, .lives-display, #menuCoins, #menuLives'));
+  }
+  function ensureLeftStats(){
+    var header = ensureMenuHeader();
+    if (!header) return;
+    if (header.querySelector('[data-menu-stats]')) {
+      refreshLeftStats();
+      return;
+    }
+    if (menuHasNativeStats()) return; // app already renders them in static markup
+    var lc = readLivesCoins();
+    if (lc.lives == null && lc.coins == null) return;
+    var node = document.createElement('div');
+    node.setAttribute('data-menu-stats','1');
+    node.style.cssText = 'display:flex;align-items:center;gap:8px;font-size:0.92rem;font-weight:700;';
+    node.innerHTML =
+      (lc.lives != null
+        ? '<span data-stat="lives" style="display:inline-flex;align-items:center;gap:4px;background:rgba(220,80,80,0.14);border:1px solid rgba(220,80,80,0.32);border-radius:14px;padding:4px 10px;">❤ <span data-stat-lives>' + lc.lives + '</span></span>'
+        : '') +
+      (lc.coins != null
+        ? '<span data-stat="coins" style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,200,80,0.14);border:1px solid rgba(255,200,80,0.32);border-radius:14px;padding:4px 10px;">🪙 <span data-stat-coins>' + lc.coins + '</span></span>'
+        : '');
+    // Place at the start of the header (left side).
+    header.insertBefore(node, header.firstChild);
+  }
+  function refreshLeftStats(){
+    var lc = readLivesCoins();
+    var l = document.querySelector('[data-stat-lives]');
+    var c = document.querySelector('[data-stat-coins]');
+    if (l && lc.lives != null) l.textContent = lc.lives;
+    if (c && lc.coins != null) c.textContent = lc.coins;
   }
   function ensureTopBarIcons(){
     var header = ensureMenuHeader();
@@ -6709,11 +6769,27 @@ window.addEventListener('load',function(){
       '</button>' +
       // Ranks (tournament + leaderboard merged)
       '<button data-menu-icon="ranks" aria-label="Ranks" ' +
-      'style="background:rgba(120,170,255,0.14);border:1px solid rgba(120,170,255,0.36);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:16px;line-height:1;padding:0;font-family:inherit;">🏆</button>';
+      'style="background:rgba(120,170,255,0.14);border:1px solid rgba(120,170,255,0.36);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:16px;line-height:1;padding:0;font-family:inherit;">🏆</button>' +
+      // Settings (consolidated entry point — Settings is here, never an icon-row tile)
+      '<button data-menu-icon="settings" aria-label="Settings" ' +
+      'style="background:rgba(180,180,200,0.14);border:1px solid rgba(180,180,200,0.36);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:16px;line-height:1;padding:0;font-family:inherit;">⚙</button>';
     header.appendChild(wrap);
 
     wrap.querySelector('[data-menu-icon="freecoins"]').addEventListener('click', onFreeCoinsClick);
     wrap.querySelector('[data-menu-icon="ranks"]').addEventListener('click', openRanksSheet);
+    wrap.querySelector('[data-menu-icon="settings"]').addEventListener('click', openSettings);
+  }
+  function openSettings(){
+    // Each app's settings screen has a different ID; try the common ones.
+    if (window.Game && typeof window.Game.showScreen === 'function') {
+      safe(function(){ window.Game.showScreen('settingsScreen'); });
+      return;
+    }
+    if (typeof window.showScreen === 'function') {
+      safe(function(){ window.showScreen('settingsScreen'); });
+      safe(function(){ window.showScreen('settings'); });
+      safe(function(){ window.showScreen('screen-settings'); });
+    }
   }
   function refreshTopBarIconState(){
     var fc = document.querySelector('[data-menu-icon="freecoins"]');
@@ -6796,6 +6872,13 @@ window.addEventListener('load',function(){
     // Wire leaderboard CTA if rendered.
     var openBtn = body.querySelector('[data-open-lb]');
     if (openBtn) openBtn.addEventListener('click', openPGSLeaderboard);
+    // Auto-scroll the player row into view on the standings tab.
+    if (tab === 'lb') {
+      var p = body.querySelector('[data-player="1"]');
+      if (p && typeof p.scrollIntoView === 'function') {
+        try { p.scrollIntoView({ block: 'center' }); } catch(e){}
+      }
+    }
   }
   function renderWeekTab(){
     // Pull the synthetic weekly-bracket text from updateTournamentBanner's
@@ -6810,16 +6893,122 @@ window.addEventListener('load',function(){
     }
     return '<div style="white-space:pre-line;padding:6px 4px;opacity:0.95;">' + txt + '</div>';
   }
-  function renderLeaderboardTab(){
-    if (api('showLeaderboard')) {
-      return '<div style="padding:6px 4px;">'+
-        'Open the Google Play Games leaderboard for your highest score / level.'+
-        '</div>'+
-        '<button data-open-lb style="display:block;width:100%;margin-top:10px;background:linear-gradient(135deg,#f5c84b,#b88224);color:#221a06;border:none;border-radius:12px;padding:12px;font-weight:800;cursor:pointer;font-family:inherit;">🏅 Open Play Games</button>';
+  // ── Synthetic standings (Part A 2026-05-27). No app-switch, no
+  // sign-in, instant. Render an inline 12-row ranked board bracketed
+  // around the player. Same week-seed approach as the synthetic
+  // tournament — the list is stable for the week and refreshes Monday.
+  // Copy says "Weekly Standings" — never "global", "live", "real-time".
+  var NAME_POOL = [
+    'Alex','Maya','Yuki','Diego','Aisha','Noah','Mei','Omar','Ana','Sven',
+    'Priya','Kai','Lara','Hugo','Iris','Tariq','Sofia','Lukas','Reema','Akira',
+    'Nina','Mateo','Zara','Felix','Jana','Hiro','Ivan','Camila','Aki','Bilal',
+    'Lena','Theo','Yara','Maks','Rin','Idris','Ema','Nikolai','Sara','Toru',
+    'Adam','Mira','Leon','Anya','Kenji','Lila','Ravi','Ines','Otto','Saskia',
+    'Tomek','Yui','Pablo','Karim','Anika','Eli','Mila','Joon','Maja','Cyrus'
+  ];
+  function mulberry32(seed){
+    return function(){
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function isoWeekNumber(){
+    var d = new Date();
+    d.setHours(0,0,0,0);
+    d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+    var y = new Date(d.getFullYear(), 0, 1);
+    return Math.ceil((((d - y) / 86400000) + 1) / 7);
+  }
+  function readPlayerMetric(){
+    var s = readSave();
+    var t = (document.title||'').toLowerCase();
+    var is2048 = t.indexOf('2048') >= 0;
+    if (is2048) {
+      var sc = s.bestScore || s.highScore || s.score || s.currentScore || 0;
+      return { value: parseInt(sc,10) || 0, label: 'Score', is2048: true };
     }
-    return '<div style="padding:6px 4px;opacity:0.85;">'+
-      'Play Games leaderboards aren’t available right now. Try again after a Google Play update.'+
-      '</div>';
+    var v = (s.completedLevels && s.completedLevels.length) ||
+            s.levelsCompleted || s.currentLevel || 1;
+    return { value: parseInt(v,10) || 1, label: 'Level', is2048: false };
+  }
+  function percentileFor(metric, is2048){
+    // Light approximation; mirrors the WEEKLY_BRACKETS shape in each app
+    // without depending on the specific constant (varies per game).
+    if (is2048) {
+      if (metric >= 8192) return 5;
+      if (metric >= 4096) return 12;
+      if (metric >= 2048) return 25;
+      if (metric >= 1024) return 50;
+      return 75;
+    }
+    if (metric >= 200) return 5;
+    if (metric >= 120) return 10;
+    if (metric >= 80)  return 25;
+    if (metric >= 40)  return 50;
+    if (metric >= 10)  return 65;
+    return 80;
+  }
+  function buildStandings(){
+    var m = readPlayerMetric();
+    var pct = percentileFor(m.value, m.is2048);
+    // Total weekly active players — synthetic. Higher percentile = fewer.
+    var total = 5000 + Math.floor((100 - pct) * 100);
+    var rank = Math.max(1, Math.floor(total * pct / 100));
+    var week = isoWeekNumber();
+    var rng = mulberry32(week * 7919 + (m.is2048 ? 1 : 0));
+    function pickName(){ return NAME_POOL[Math.floor(rng() * NAME_POOL.length)]; }
+    // Score-delta scale: 2048 uses bigger steps; levels use smaller.
+    var stepBase = m.is2048 ? Math.max(8, Math.round(m.value * 0.012)) : 1;
+    var rows = [];
+    // Five entries above the player.
+    for (var i = 5; i >= 1; i--){
+      var r = Math.max(1, rank - i);
+      var jitter = Math.ceil((1 + rng()) * stepBase);
+      rows.push({ rank: r, name: pickName(), score: m.value + i * jitter, isPlayer: false });
+    }
+    rows.push({ rank: rank, name: 'You', score: m.value, isPlayer: true });
+    // Six entries below.
+    for (var j = 1; j <= 6; j++){
+      var r2 = rank + j;
+      var jitter2 = Math.ceil((1 + rng()) * stepBase);
+      rows.push({ rank: r2, name: pickName(), score: Math.max(1, m.value - j * jitter2), isPlayer: false });
+    }
+    return { rows: rows, total: total, rank: rank, label: m.label };
+  }
+  function renderLeaderboardTab(){
+    var d = buildStandings();
+    var head = 'Weekly Standings · You are #' + d.rank.toLocaleString() +
+               ' of ~' + d.total.toLocaleString();
+    var html =
+      '<div style="font-size:0.80rem;opacity:0.78;margin-bottom:10px;text-align:center;">' +
+        head +
+      '</div>' +
+      '<div data-standings-list style="max-height:280px;overflow-y:auto;border-radius:12px;border:1px solid rgba(127,127,127,0.22);">';
+    d.rows.forEach(function(row){
+      var bg = row.isPlayer ? 'rgba(255,196,77,0.20)' : 'transparent';
+      var weight = row.isPlayer ? '800' : '500';
+      html +=
+        '<div data-player="' + (row.isPlayer ? '1' : '0') +
+        '" style="display:flex;align-items:center;justify-content:space-between;' +
+        'padding:9px 13px;background:' + bg + ';font-weight:' + weight +
+        ';border-bottom:1px solid rgba(127,127,127,0.10);">' +
+          '<span style="min-width:60px;opacity:0.78;font-size:0.82rem;">#' +
+            row.rank.toLocaleString() + '</span>' +
+          '<span style="flex:1;margin:0 10px;overflow:hidden;text-overflow:ellipsis;">' +
+            row.name + '</span>' +
+          '<span style="opacity:0.92;font-size:0.85rem;font-variant-numeric:tabular-nums;">' +
+            d.label + ' ' + row.score.toLocaleString() + '</span>' +
+        '</div>';
+    });
+    html += '</div>';
+    if (api('showLeaderboard')) {
+      html += '<a data-open-lb style="display:block;text-align:center;margin-top:10px;' +
+              'font-size:0.78rem;color:inherit;opacity:0.62;text-decoration:underline;' +
+              'cursor:pointer;">Compare on Play Games →</a>';
+    }
+    return html;
   }
   function openPGSLeaderboard(){
     if (!api('showLeaderboard')) return;
@@ -7001,6 +7190,7 @@ window.addEventListener('load',function(){
     hideLegacyOnMenu();
     relocateThemeStripPermanent();
     ensureTopBarIcons();
+    ensureLeftStats();
     refreshTopBarIconState();
     patchMenuButtons();
     slimSeasonBanner();
