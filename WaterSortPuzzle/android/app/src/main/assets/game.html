@@ -230,15 +230,17 @@ body.has-html-ad .screen { height: calc(100% - 60px) !important; }
 .icon-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.14); }
 .icon-btn span { line-height: 1; }
 
-/* ============ 2026-05-27 Daylight tuning ============
+/* ============ 2026-05-27 Daylight tuning (round-6 lighten) ============
    WaterSort keeps its blue water identity (the title/icon/game match)
-   but the default lightens slightly so Midnight has room to be darker.
-   Midnight restores the original deep #0a1628 navy as the paid unlock. */
-body { background:#15264a; }
-#menuScreen { background:linear-gradient(160deg,#15264a 0%,#1a3162 50%,#22458a 100%); }
+   but the default lightens to a clear medium-ocean blue so Midnight
+   can be MUCH darker as the paid unlock. The previous round-5
+   #15264a still read as "dark mode" — bumped to #3d6a9e (medium
+   ocean blue, white text still WCAG AA at 5.0:1). */
+body { background:#3d6a9e; }
+#menuScreen { background:linear-gradient(160deg,#3d6a9e 0%,#4d7fb6 50%,#6094c8 100%); }
 #gameScreen, #shopScreen, #settingsScreen, #moreGamesScreen, #scoresScreen,
-#themeScreen, #achievementsScreen, #missionsScreen, #levelScreen { background:linear-gradient(180deg,#15264a 0%,#1c3260 100%); }
-#levelScreen { background:linear-gradient(160deg,#0d1c3a 0%,#15264a 40%,#1c3260 100%); }
+#themeScreen, #achievementsScreen, #missionsScreen, #levelScreen { background:linear-gradient(180deg,#3d6a9e 0%,#4979ab 100%); }
+#levelScreen { background:linear-gradient(160deg,#2d5689 0%,#3d6a9e 40%,#4979ab 100%); }
 .btn-gold { color:#0a1628; }
 .shop-price-btn.coin-price { color:#0a1628; }
 

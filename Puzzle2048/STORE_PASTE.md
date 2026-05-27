@@ -24,146 +24,159 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-• Bigger coin packs — M 400 · L 800 · XL 2000; Weekly Pass now $1.99/week
-• Starter Pack grants 5 undos and 5 lives
-• Season Pass: +100 daily coins (was +50), all themes, unlimited undos; Weekly +50
-• Magic Merge and Remove Tile boosters
-• Weekly Tournament bracket
-• Seasonal events
-• Free Coins button
-• Continue · current run
+What's new in this update:
+• Cleaner main menu — get into a puzzle faster
+• Continue picks up exactly where you left off
+• Free coins, tournament, and themes are all still one tap away
+• Streak baked into the Daily Challenge button
+• Small fixes and polish
+• Play Games leaderboards — your best run now posts to Google Play Games
+• Bright Daylight theme by default; Midnight available in the Shop
+• Tighter symmetric grid + bigger buttons on tablets
 </en-US>
 
 <ar>
-• حزم العملات أكبر — M 400 · L 800 · XL 2000؛ الاشتراك الأسبوعي الآن 1.99 دولار/الأسبوع  
-• حزمة البداية تمنح 5 تراجع و5 أرواح  
-• بطاقة الموسم: +100 عملة يومية (كانت +50)، جميع الثيمات، تراجعات غير محدودة؛ أسبوعياً +50  
-• تعزيزات الدمج السحري وإزالة البلاط  
-• تصنيف البطولة الأسبوعية  
-• فعاليات موسمية  
-• زر العملات المجانية  
-• متابعة · الجري الحالي
+ما الجديد في هذا التحديث:
+• قائمة رئيسية أنظف — ابدأ اللعب بشكل أسرع
+• «متابعة» يستأنف من حيث توقفت بالضبط
+• العملات المجانية والبطولة والثيمات لا تزال على بُعد نقرة واحدة
+• السلسلة مدمجة في زر التحدي اليومي
+• إصلاحات وتحسينات صغيرة
+• لوحات صدارة Play Games — أفضل نتائجك تُنشر الآن على Google Play Games
+• ثيم Daylight ساطع افتراضيًا؛ ثيم Midnight متاح في المتجر
+• شبكة أكثر تماثلاً وأزرار أكبر على الأجهزة اللوحية
 </ar>
 
 <de-DE>
-• Größere Münzpakete — M 400 · L 800 · XL 2000; Wochenpass jetzt 1,99 $/Woche  
-• Starter-Paket gewährt 5 Rückgängig-Möglichkeiten und 5 Leben  
-• Saisonpass: +100 tägliche Münzen (früher +50), alle Themen, unbegrenzte Rückgängig-Möglichkeiten; Wöchentlich +50  
-• Magic Merge und Remove Tile Booster  
-• Wöchentlicher Turnierbaum  
-• Saisonale Ereignisse  
-• Kostenloser Münzen-Button  
-• Fortsetzen · aktuelle Runde
+Was ist neu in diesem Update:
+• Übersichtlicheres Hauptmenü — schneller ins Rätsel
+• „Fortsetzen" macht genau dort weiter, wo du aufgehört hast
+• Gratis-Münzen, Turnier und Themes sind weiterhin nur einen Tipp entfernt
+• Serie direkt in den Tagesherausforderungs-Button integriert
+• Kleine Fehlerbehebungen und Verbesserungen
+• Play Games-Bestenlisten — dein Bestwert wird jetzt auf Google Play Games veröffentlicht
+• Helles Theme + Midnight im Shop
+• Größere Tablet-Buttons
 </de-DE>
 
 <es-419>
-• Paquetes de monedas más grandes — M 400 · L 800 · XL 2000; Pase semanal ahora $1.99/semana  
-• Paquete inicial otorga 5 deshacer y 5 vidas  
-• Pase de temporada: +100 monedas diarias (antes +50), todos los temas, deshacer ilimitados; Semanal +50  
-• Impulsores de Fusión Mágica y Quitar Losetas  
-• Torneo semanal  
-• Eventos estacionales  
-• Botón de monedas gratis  
-• Continuar · carrera actual
+Novedades de esta actualización:
+• Menú principal más limpio — entra al rompecabezas más rápido
+• «Continuar» retoma justo donde lo dejaste
+• Monedas gratis, torneo y temas siguen a un toque de distancia
+• Racha integrada en el botón de Desafío diario
+• Pequeños arreglos y mejoras
+• Tablas de clasificación de Play Games — tu mejor resultado ahora se publica en Google Play Games
+• Tema Daylight brillante + Midnight en la Tienda
+• Cuadrícula simétrica, botones grandes en tablets
 </es-419>
 
 <fr-FR>
-• Packs de pièces plus grands — M 400 · L 800 · XL 2000 ; Pass hebdomadaire désormais à 1,99 $/semaine  
-• Pack de démarrage offre 5 annulations et 5 vies  
-• Pass saisonnier : +100 pièces quotidiennes (avant +50), tous les thèmes, annulations illimitées ; Hebdomadaire +50  
-• Boosters Fusion magique et Supprimer tuile  
-• Barre de tournoi hebdomadaire  
-• Événements saisonniers  
-• Bouton Pièces gratuites  
-• Continuer · course actuelle
+Quoi de neuf dans cette mise à jour :
+• Menu principal plus net — lancez-vous plus vite
+• « Reprendre » reprend exactement où vous en étiez
+• Pièces gratuites, tournoi et thèmes restent à un clic
+• Série intégrée au bouton Défi quotidien
+• Petits correctifs et améliorations
+• Classements Play Games — votre meilleur score est désormais publié sur Google Play Games
+• Thème Daylight lumineux par défaut ; Midnight disponible en Boutique
+• Grille plus symétrique + boutons plus grands sur tablette
 </fr-FR>
 
 <hi-IN>
-• बड़े सिक्के पैक — M 400 · L 800 · XL 2000; साप्ताहिक पास अब $1.99/सप्ताह  
-• स्टार्टर पैक 5.undo और 5 जीवन प्रदान करता है  
-• सीजन पास: +100 दैनिक सिक्के (पहले +50), सभी थीम, असीमित.undo; साप्ताहिक +50  
-• जादुई मर्ज और टाइल हटाने के बूस्टर  
-• साप्ताहिक टूर्नामेंट ब्रेस्केट  
-• मौसमी कार्यक्रम  
-• मुफ्त सिक्के बटन  
-• जारी रखें · वर्तमान खेल
+इस अपडेट में नया क्या है:
+• साफ-सुथरा मुख्य मेन्यू — पहेली में जल्दी पहुंचें
+• «जारी रखें» बिल्कुल वहीं से शुरू करता है जहां आपने छोड़ा था
+• फ्री सिक्के, टूर्नामेंट और थीम सब अब भी एक टैप दूर हैं
+• स्ट्रीक डेली चैलेंज बटन में ही जुड़ी
+• छोटे सुधार और निखार
+• Play Games लीडरबोर्ड — आपका सर्वश्रेष्ठ रन अब Google Play Games पर पोस्ट होगा
+• डिफ़ॉल्ट रूप से चमकीला डेलाइट थीम; मिडनाइट शॉप में उपलब्ध
+• बेहतर सममित ग्रिड + टैबलेट पर बड़े बटन
 </hi-IN>
 
 <id>
-• Paket koin lebih besar — M 400 · L 800 · XL 2000; Pass Mingguan kini $1.99/minggu  
-• Paket Pemula memberikan 5 undo dan 5 nyawa  
-• Pass Musim: +100 koin harian (sebelumnya +50), semua tema, undo tak terbatas; Mingguan +50  
-• Penguat Magic Merge dan Hapus Ubin  
-• Turnamen Mingguan  
-• Acara musiman  
-• Tombol Koin Gratis  
-• Lanjutkan · jalankan saat ini
+Yang baru di pembaruan ini:
+• Menu utama lebih bersih — masuk ke teka-teki lebih cepat
+• "Lanjutkan" melanjutkan tepat dari tempat kamu berhenti
+• Koin gratis, turnamen, dan tema semuanya tetap satu ketuk saja
+• Beruntun tertanam di tombol Tantangan Harian
+• Perbaikan kecil dan pemolesan
+• Papan peringkat Play Games — pencapaian terbaikmu kini diposting ke Google Play Games
+• Tema Daylight cerah secara default; Midnight tersedia di Toko
+• Kisi lebih simetris + tombol lebih besar di tablet
 </id>
 
 <it-IT>
-• Pacchetti di monete più grandi — M 400 · L 800 · XL 2000; Pass settimanale ora 1,99€/settimana  
-• Pacchetto Iniziale concede 5 annullamenti e 5 vite  
-• Pass Stagionale: +100 monete giornaliere (prima +50), tutti i temi, annullamenti illimitati; Settimanale +50  
-• Potenziamenti Magia Fusione e Rimuovi Piastrella  
-• Tabellone Torneo Settimanale  
-• Eventi stagionali  
-• Pulsante Monete Gratuite  
-• Continua · corsa attuale
+Novità di questo aggiornamento:
+• Menu principale più pulito — entri prima nel puzzle
+• «Continua» riprende esattamente da dove hai lasciato
+• Monete gratis, torneo e temi sono ancora a un solo tocco
+• Serie integrata nel pulsante Sfida giornaliera
+• Piccole correzioni e rifiniture
+• Classifiche di Play Games — il tuo miglior risultato ora viene pubblicato su Google Play Games
+• Tema Daylight luminoso di default; Midnight nel Negozio
+• Griglia più simmetrica + pulsanti più grandi su tablet
 </it-IT>
 
 <ja-JP>
-• コインパックが増加 — M 400 · L 800 · XL 2000; ウィークリーパスが週 $1.99 に！  
-• スターターパックでアン undo 5回とライフ 5個をゲット！  
-• シーズンパス: 毎日 +100 コイン（以前は +50）、全テーマ、無制限 undo; 週間 +50  
-• マジックマージとタイル削除ブースター  
-• ウィークリートーナメントブランケット  
-• シーズナルイベント  
-• 無料コインボタン  
-• 現在のランを続行
+このアップデートの新機能:
+• メインメニューがすっきり — パズルにすばやくジャンプ
+• 「つづきから」で中断した場所からそのまま再開
+• 無料コイン・トーナメント・テーマはどれもワンタップで
+• 連続記録をデイリーチャレンジボタンに統合
+• 細かな修正と調整
+• Play Gamesのリーダーボード — ベスト記録がGoogle Play Gamesに送信されます
+• 標準で明るいデイライトテーマ; ミッドナイトはショップで購入可能
+• より対称なグリッドとタブレット向けの大きなボタン
 </ja-JP>
 
 <pt-BR>
-• Pacotes de moedas maiores — M 400 · L 800 · XL 2000; Pass semanal agora R$ 1,99/semana  
-• Pacote Inicial concede 5 replays e 5 vidas  
-• Passe de Temporada: +100 moedas diárias (era +50), todos os temas, replays ilimitados; Semanal +50  
-• Impulsionadores Mágicos de Combinação e Remoção de Blocos  
-• Chave de Torneio Semanal  
-• Eventos sazonais  
-• Botão de Moedas Grátis  
-• Continue · partida atual
+O que há de novo nesta atualização:
+• Menu principal mais limpo — comece o quebra-cabeça mais rápido
+• «Continuar» retoma exatamente de onde você parou
+• Moedas grátis, torneio e temas continuam a um toque
+• Sequência integrada ao botão Desafio diário
+• Pequenos ajustes e polimento
+• Placares do Play Games — sua melhor jogada agora é postada no Google Play Games
+• Tema Daylight claro por padrão; Midnight disponível na Loja
+• Grade mais simétrica + botões maiores em tablets
 </pt-BR>
 
 <tr-TR>
-• Daha büyük jeton paketleri — M 400 · L 800 · XL 2000; Haftalık Geçiş şimdi 1,99 $/hafta  
-• Başlangıç Paketi 5 geri alma ve 5 yaşam verir  
-• Mevsim Geçişi: +100 günlük jeton (önce +50), tüm temalar, sınırsız geri alma; Haftalık +50  
-• Sihirli Birleştir ve Kaldır Kartları güçlendiricileri  
-• Haftalık Turnuva braketleri  
-• Mevsimsel etkinlikler  
-• Ücretsiz Jeton butonu  
-• Devam et · mevcut oyun
+Bu güncellemede neler yeni:
+• Daha sade ana menü — bulmacaya daha hızlı dal
+• "Devam Et" kaldığın yerden tam olarak başlar
+• Bedava jeton, turnuva ve temalar yine bir dokunuş uzakta
+• Seri, Günlük Mücadele düğmesine yerleşti
+• Küçük düzeltmeler ve iyileştirmeler
+• Play Games skor tabloları — en iyi performansın artık Google Play Games’e gönderiliyor
+• Varsayılan parlak Daylight teması; Midnight Mağaza'da
+• Daha simetrik ızgara + tabletlerde daha büyük düğmeler
 </tr-TR>
 
 <uk>
-• БІЛЬШЕ ПАКЕТІВ MONET — M 400 · L 800 · XL 2000; Тижневий проїзний тепер $1.99/тиждень  
-• Пакет для початківців дає 5 скасувань та 5 життів  
-• Сезонний проїзний: +100 монет щодня (було +50), всі теми, безмежні скасування; Тижневий +50  
-• Чарівне злиття та прискорювач видалення плитки  
-• Тижневий турнір  
-• Сезонні події  
-• Кнопка безкоштовних монет  
-• Продовжити · поточний забіг
+Що нового в цьому оновленні:
+• Чистіше головне меню — швидше переходьте до головоломки
+• «Продовжити» поновлюється саме там, де ви зупинилися
+• Безкоштовні монети, турнір і теми — усе ще в одне натискання
+• Серія тепер вбудована в кнопку «Щоденний виклик»
+• Дрібні виправлення та поліровка
+• Таблиці лідерів Play Games — твій найкращий результат тепер потрапляє в Google Play Games
+• Світла денна тема за замовчуванням; Midnight у Магазині
+• Симетричніша сітка + більші кнопки на планшетах
 </uk>
 
 <zh-CN>
-• 更大的金币包 — M 400 · L 800 · XL 2000；每周通行证现价$1.99/周  
-• 入门包提供5次撤回和5条生命  
-• 季票：每日增加100金币（之前为50），所有主题，无限撤回；每周 +50  
-• 魔力合并和移除方块增益  
-• 每周锦标赛  
-• 季节性活动  
-• 免费金币按钮  
-• 继续 · 当前游戏
+本次更新内容：
+• 主菜单更清爽 — 更快进入谜题
+• "继续"从你离开的位置原样接续
+• 免费金币、锦标赛和主题仍然一键直达
+• 连胜直接嵌入每日挑战按钮
+• 细微修复与打磨
+• Play Games 排行榜 — 你的最佳成绩现在会同步到 Google Play Games
+• 默认明亮日间主题；午夜主题可在商店中获得
+• 网格更对称，平板上按钮更大
 </zh-CN>
 
 ---

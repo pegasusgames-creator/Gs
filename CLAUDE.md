@@ -773,16 +773,21 @@ Each line is now enforced by a `pre_publish_check.py` check.
   Content risk. Current allocations:
   | App | Base bg | Family | Accent |
   |---|---|---|---|
-  | WaterSortPuzzle | `#0a1628` (deep navy) | water-blue | sky-cyan + colored liquids |
+  | WaterSortPuzzle | `#3d6a9e` (medium ocean blue 2026-05-27 round-6) | water-blue | sky-cyan + colored liquids |
   | Nonogram | `#f5f0e6` | cream/paper | warm coral red `#c83838` |
   | Puzzle2048 | `#f3ecd9` (daylight 2026-05-27) | warm cream / sand | gold `#edc22e` + `#f2a500` |
   | UnblockPuzzle | `#e3efe5` (mint 2026-05-27 rebrand) | mint / sage | forest green `#4a8a5e` + red exit `#ec5f6e` |
   | PipeConnect | `#eef4f8` | sky-blueprint | sky-blue + red |
-  WaterSort is the only app whose default palette is NOT light — the
-  deep-navy water aesthetic is the brand identity (matches the title,
-  the icon, the liquid-pour gameplay) and is exempt from the
-  "light-by-default" rule. Every other app ships Daylight as default
-  and offers Midnight as a coin-purchased shop unlock.
+  WaterSort's default is a MEDIUM ocean blue, not deep navy and not
+  near-white. The brand identity is "water" (matches the title, icon,
+  liquid-pour gameplay), so a medium blue reads correctly without
+  fighting the theme. Midnight ships as the coin-purchased darker
+  unlock (#0a1628 / #0d2137). The round-6 lighten (#15264a → #3d6a9e)
+  was driven by user feedback "light doesn't mean pastel-almost-white,
+  but it shouldn't be too dark either — Midnight should be MUCH
+  darker, which isn't possible with a dark default."
+  Every other app ships Daylight as default and Midnight as a paid
+  shop unlock.
   (User policy 2026-05-27 round-5: UnblockPuzzle swapped off lavender
   because it clashed with Nonogram's pink/coral family. Puzzle2048
   swapped from dark-default-with-gold to warm cream that keeps the
@@ -1294,3 +1299,22 @@ pink theme — fixed via the var fallback chain.
 See "No competing runtime shims" above. The MENU shim is the
 SINGLE owner of menu render. New menu features extend that single
 function — they do NOT add a new shim with its own `setInterval`.
+
+### Button & element sizing — proportional to viewport
+
+Bottom-bar buttons (.game-btn, .menu-icon-btn etc.) sized at
+phone-resolution (11-13px font, 6-8px padding) feel tiny on a
+1200×1920 tablet. Add `@media (min-width: 600px)` rules that bump
+font-size, padding, and tap-area widths. A second breakpoint at
+`@media (min-width: 900px)` covers the 10" tablet form factor.
+2026-05-27 round-6 added these breakpoints to Puzzle2048; the other
+apps should follow the same pattern when audited.
+
+Game-canvas drawings (Puzzle2048 grid, etc.) must center their
+internal layout AND ensure the frame/border around the cells has
+equal padding on all four sides. The 2026-05-27 round-6 audit found
+Puzzle2048's grid frame drawn at `(ox - gridPad, oy - gridPad)`
+with the cells' width, leaving 2×cellGap padding on top-left and 0
+on bottom-right. Fixed by drawing the frame at `(ox, oy)` so cells
+get equal cellGap padding from all four edges. Audit canvas
+drawings for similar offset-without-resize bugs.

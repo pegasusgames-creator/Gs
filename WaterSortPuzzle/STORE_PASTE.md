@@ -24,160 +24,146 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-• Color Reveal, Steady Pour, Fresh Start — renamed boosters
-• NEW Extra Tube and Magic Wand boosters
-• Hints use a counter — earn via ads or buy a 10-pack
-• Season Pass +100 daily coins (was +50); Weekly Pass +50
-• Coin packs: M 400 · L 800 · XL 2000; Weekly Pass $1.99/week
-• Weekly Tournament bracket on the menu
-• Seasonal events (Halloween, Winter, Spring)
-• Free Coins — 25 every 4 hours
-• Continue · Level N from the menu
-• 7-day login streak rewards
+What's new in this update:
+• Cleaner main menu — get into a puzzle faster
+• Continue picks up exactly where you left off
+• Free coins, tournament, and themes are all still one tap away
+• Streak baked into the Daily Challenge button
+• Small fixes and polish
+• Play Games leaderboards — your best run now posts to Google Play Games
+• Brighter daylight theme; Midnight available in the Shop
 </en-US>
 
 <ar>
-• إعادة تسمية المحفزات: كشف الألوان، صب ثابت، بداية جديدة  
-• محفزات جديدة: أنبوب إضافي وعصا سحرية  
-• استخدام تلميحات مع عداد — اكسب عبر الإعلانات أو اشترِ حزمة 10  
-• بطاقة الموسم +100 قطعة نقدية يوميًا (كانت +50)؛ بطاقة أسبوعية +50  
-• حزم القطع النقدية: م 400 · ل 800 · إكس 2000؛ البطاقة الأسبوعية $1.99/أسبوع  
-• فعاليات موسمية (عيد الهالوين، الشتاء، الربيع)  
-• قطع نقدية مجانية — 25 كل 4 ساعات  
-• مكافآت لتسجيل الدخول لمدة 7 أيام
+ما الجديد في هذا التحديث:
+• قائمة رئيسية أنظف — ابدأ اللعب بشكل أسرع
+• «متابعة» يستأنف من حيث توقفت بالضبط
+• العملات المجانية والبطولة والثيمات لا تزال على بُعد نقرة واحدة
+• السلسلة مدمجة في زر التحدي اليومي
+• إصلاحات وتحسينات صغيرة
+• لوحات صدارة Play Games — أفضل نتائجك تُنشر الآن على Google Play Games
+• ثيم نهاري أكثر سطوعًا؛ ثيم Midnight متاح في المتجر
 </ar>
 
 <de-DE>
-• Farbenthüllung, gleichmäßige Ausgießung, umbenannte Booster  
-• NEU: Extra-Rohr und Zauberstab-Booster  
-• Tipps nutzen einen Zähler — Verdienen durch Werbung oder Kauf eines 10er-Packs  
-• Saisonpass +100 tägliche Münzen (war +50); Wochenpass +50  
-• Münzpakete: M 400 · L 800 · XL 2000; Wochenpass 1,99 $/Woche  
-• Wöchentliche Turnier-Rangliste im Menü  
-• Saisonale Events (Halloween, Winter, Frühling)  
-• Kostenlose Münzen — 25 alle 4 Stunden  
-• Fortsetzen · Level N im Menü
+Was ist neu in diesem Update:
+• Übersichtlicheres Hauptmenü — schneller ins Rätsel
+• „Fortsetzen" macht genau dort weiter, wo du aufgehört hast
+• Gratis-Münzen, Turnier und Themes sind weiterhin nur einen Tipp entfernt
+• Serie direkt in den Tagesherausforderungs-Button integriert
+• Kleine Fehlerbehebungen und Verbesserungen
+• Play Games-Bestenlisten — dein Bestwert wird jetzt auf Google Play Games veröffentlicht
+• Helleres Daylight-Theme; Midnight im Shop erhältlich
 </de-DE>
 
 <es-419>
-• Revelación de Color, Vertido Constante, Nuevo Comienzo — potenciadores renombrados  
-• NUEVO Extra Tubo y varita mágica  
-• Pistas con contador: gana a través de anuncios o compra un paquete de 10  
-• Pase de Temporada +100 monedas diarias; Pase Semanal +50  
-• Paquetes de monedas: M 400 · L 800 · XL 2000; Pase Semanal $1.99  
-• Torneo Semanal en el menú  
-• Eventos estacionales (Halloween, Invierno, Primavera)  
-• Monedas Gratis — 25 cada 4 horas  
-• Continuar · Nivel N desde el menú
+Novedades de esta actualización:
+• Menú principal más limpio — entra al rompecabezas más rápido
+• «Continuar» retoma justo donde lo dejaste
+• Monedas gratis, torneo y temas siguen a un toque de distancia
+• Racha integrada en el botón de Desafío diario
+• Pequeños arreglos y mejoras
+• Tablas de clasificación de Play Games — tu mejor resultado ahora se publica en Google Play Games
+• Tema Daylight más brillante; Midnight disponible en la Tienda
 </es-419>
 
 <fr-FR>
-• Color Reveal, Steady Pour, Fresh Start — nouveaux boosters  
-• NOUVEAUX boosters Extra Tube et Magic Wand  
-• Les indices avec un compteur — gagnez via des publicités ou achetez un pack de 10  
-• Season Pass +100 pièces quotidiennes (anciennement +50) ; Weekly Pass +50  
-• Packs de pièces : M 400 · L 800 · XL 2000 ; Weekly Pass 1,99 $/semaine  
-• Événements saisonniers (Halloween, Hiver, Printemps)  
-• Pièces gratuites — 25 toutes les 4 heures  
-• Récompenses pour connexions 7 jours
+Quoi de neuf dans cette mise à jour :
+• Menu principal plus net — lancez-vous plus vite
+• « Reprendre » reprend exactement où vous en étiez
+• Pièces gratuites, tournoi et thèmes restent à un clic
+• Série intégrée au bouton Défi quotidien
+• Petits correctifs et améliorations
+• Classements Play Games — votre meilleur score est désormais publié sur Google Play Games
+• Thème Daylight plus lumineux ; Midnight disponible dans la Boutique
 </fr-FR>
 
 <hi-IN>
-• रंग प्रकट करें, स्थिर डालना, ताज़ा शुरुआत — नए नाम लिए बूस्टर  
-• नए अतिरिक्त ट्यूब और जादुई छड़ी बूस्टर  
-• संकेतों का उपयोग काउंटर से करें — विज्ञापनों के जरिए कमाएँ या 10-पैक्स खरीदें  
-• सीजन पास +100 दैनिक सिक्के (पहले +50); वीकली पास +50  
-• सिक्का पैक: M 400 · L 800 · XL 2000; वीकली पास $1.99/सप्ताह  
-• मेनू पर साप्ताहिक प्रतियोगिता ब्रैकेट  
-• मौसमी आयोजन (हैलोवीन, सर्दी, वसंत)  
-• मुफ्त सिक्के — हर 4 घंटे में 25  
-• मेनू से जारी रखें · स्तर N  
-• 7-दिन की लॉगिन श्रृंखला इनाम
+इस अपडेट में नया क्या है:
+• साफ-सुथरा मुख्य मेन्यू — पहेली में जल्दी पहुंचें
+• «जारी रखें» बिल्कुल वहीं से शुरू करता है जहां आपने छोड़ा था
+• फ्री सिक्के, टूर्नामेंट और थीम सब अब भी एक टैप दूर हैं
+• स्ट्रीक डेली चैलेंज बटन में ही जुड़ी
+• छोटे सुधार और निखार
+• Play Games लीडरबोर्ड — आपका सर्वश्रेष्ठ रन अब Google Play Games पर पोस्ट होगा
+• चमकीला डेलाइट थीम; मिडनाइट शॉप में उपलब्ध
 </hi-IN>
 
 <id>
-• Pengungkap Warna, Tuangan Stabil, Awal Segar — penamaan ulang booster  
-• BOOTER Baru Tabung Ekstra dan Tongkat Sihir  
-• Petunjuk menggunakan penghitung — dapatkan melalui iklan atau beli paket 10  
-• Season Pass +100 koin harian (sebelumnya +50); Weekly Pass +50  
-• Paket koin: M 400 · L 800 · XL 2000; Weekly Pass $1,99/minggu  
-• Turnamen Mingguan di menu  
-• Acara musiman (Halloween, Musim Dingin, Musim Semi)  
-• Koin Gratis — 25 setiap 4 jam  
-• Lanjutkan · Level N dari menu
+Yang baru di pembaruan ini:
+• Menu utama lebih bersih — masuk ke teka-teki lebih cepat
+• "Lanjutkan" melanjutkan tepat dari tempat kamu berhenti
+• Koin gratis, turnamen, dan tema semuanya tetap satu ketuk saja
+• Beruntun tertanam di tombol Tantangan Harian
+• Perbaikan kecil dan pemolesan
+• Papan peringkat Play Games — pencapaian terbaikmu kini diposting ke Google Play Games
+• Tema Daylight lebih cerah; Midnight tersedia di Toko
 </id>
 
 <it-IT>
-• Rivelazione Colore, Versamento Stabile, Nuovo Inizio — booster rinominati  
-• Nuovi booster Extra Tubo e Bacchetta Magica  
-• Gli indizi usano un contatore — guadagna tramite annunci o acquista un pacchetto da 10  
-• Pass Stagionale +100 monete quotidiane (prima +50); Pass Settimanale +50  
-• Pacchetti monete: M 400 · L 800 · XL 2000; Pass Settimanale $1.99/settimana  
-• Torneo Settimanale nel menu  
-• Eventi stagionali: Halloween, Inverno, Primavera  
-• Monete Gratuite — 25 ogni 4 ore
+Novità di questo aggiornamento:
+• Menu principale più pulito — entri prima nel puzzle
+• «Continua» riprende esattamente da dove hai lasciato
+• Monete gratis, torneo e temi sono ancora a un solo tocco
+• Serie integrata nel pulsante Sfida giornaliera
+• Piccole correzioni e rifiniture
+• Classifiche di Play Games — il tuo miglior risultato ora viene pubblicato su Google Play Games
+• Tema Daylight più luminoso; Midnight disponibile nel Negozio
 </it-IT>
 
 <ja-JP>
-• カラーレヴェール、スティディポア、フレッシュスタート — 名前変更されたブースター  
-• 新しいエクストラチューブとマジックワンドのブースター  
-• ヒントはカウンターを使用 — 広告で獲得または10パック購入  
-• シーズンパス +100日コイン（以前は+50）；ウィークリーパス +50  
-• コインパック：M 400 · L 800 · XL 2000；ウィークリーパス $1.99/週  
-• メニューにウィークリートーナメントのブランケット  
-• 季節イベント（ハロウィン、冬、春）  
-• 無料コイン — 4時間ごとに25  
-• メニューからレベルNを続行  
-• 7日間のログイン連続報酬
+このアップデートの新機能:
+• メインメニューがすっきり — パズルにすばやくジャンプ
+• 「つづきから」で中断した場所からそのまま再開
+• 無料コイン・トーナメント・テーマはどれもワンタップで
+• 連続記録をデイリーチャレンジボタンに統合
+• 細かな修正と調整
+• Play Gamesのリーダーボード — ベスト記録がGoogle Play Gamesに送信されます
+• 明るいデイライトテーマ; ミッドナイトはショップで購入可能
 </ja-JP>
 
 <pt-BR>
-• Revelação de Cores, Despejo Contínuo, Novo Começo — impulsionadores renomeados  
-• Novo impulso Extra Tube e varinha mágica  
-• Dicas com contador — ganhe por anúncios ou compre pacotes de 10  
-• Passe de Temporada +100 moedas diárias; Passe Semanal +50  
-• Pacotes de moedas: M 400 · L 800 · XL 2000; Passe Semanal R$1,99  
-• Torneio Semanal disponível no menu  
-• Eventos sazonais (Halloween, Inverno, Primavera)  
-• Moedas Grátis — 25 a cada 4 horas  
-• Nível N no menu
+O que há de novo nesta atualização:
+• Menu principal mais limpo — comece o quebra-cabeça mais rápido
+• «Continuar» retoma exatamente de onde você parou
+• Moedas grátis, torneio e temas continuam a um toque
+• Sequência integrada ao botão Desafio diário
+• Pequenos ajustes e polimento
+• Placares do Play Games — sua melhor jogada agora é postada no Google Play Games
+• Tema Daylight mais claro; Midnight disponível na Loja
 </pt-BR>
 
 <tr-TR>
-• Renk Açığa Çıkarma, Dikkatli Dökme, Temiz Başlangıç — yeni güçlendiriciler  
-• YENİ Ekstra Tüp ve Sihirli Değnek güçlendiricileri  
-• İpuçları, reklamlarla kazanma veya 10'lu paket ile kullanılabilir  
-• Sezon Pass +100 jeton; Haftalık Pass +50  
-• Jeton paketleri: M 400 · L 800 · XL 2000; Haftalık $1.99
-• Haftalık Turnuva bölümü eklendi  
-• Mevsimlik etkinlikler (Cadılar Bayramı, Kış, Bahar)  
-• Ücretsiz Jeton — her 4 saatte 25  
-• Menüden Devam et · Seviye N  
-• 7 günlük giriş ödülleri
+Bu güncellemede neler yeni:
+• Daha sade ana menü — bulmacaya daha hızlı dal
+• "Devam Et" kaldığın yerden tam olarak başlar
+• Bedava jeton, turnuva ve temalar yine bir dokunuş uzakta
+• Seri, Günlük Mücadele düğmesine yerleşti
+• Küçük düzeltmeler ve iyileştirmeler
+• Play Games skor tabloları — en iyi performansın artık Google Play Games’e gönderiliyor
+• Daha aydınlık Daylight teması; Midnight Mağaza'da satışta
 </tr-TR>
 
 <uk>
-• Нові назви бустерів: Відкриття кольору, Стійкий вилив, Свіже початок  
-• НОВІ бустери: Додаткова трубка та Магічна паличка  
-• Поради з лічильником — заробляйте через рекламу або купуйте пакет з 10  
-• Сезонний пропуск +100 монет щодня (було +50); Щотижневий пропуск +50  
-• Пакети монет: М 400 · Л 800 · XL 2000; Щотижневий пропуск $1.99/тиждень  
-• Щотижневий турнір в меню  
-• Сезонні події (Хеллоуїн, Зима, Весна)  
-• Безкоштовні монети — 25 кожні 4 години
+Що нового в цьому оновленні:
+• Чистіше головне меню — швидше переходьте до головоломки
+• «Продовжити» поновлюється саме там, де ви зупинилися
+• Безкоштовні монети, турнір і теми — усе ще в одне натискання
+• Серія тепер вбудована в кнопку «Щоденний виклик»
+• Дрібні виправлення та поліровка
+• Таблиці лідерів Play Games — твій найкращий результат тепер потрапляє в Google Play Games
+• Світліша денна тема; Midnight доступна в Магазині
 </uk>
 
 <zh-CN>
-• 颜色揭秘、稳定倾倒、全新开始 — 名称更新的助推器  
-• 新增额外管和魔法棒助推器  
-• 提示使用计数器 — 可通过广告获得或购买10个包  
-• 赛季通行证每日+100金币（之前为+50）；每周通行证+50  
-• 金币包：中 400 · 大 800 · 超大 2000；每周通行证$1.99/周  
-• 菜单上有每周锦标赛的区间  
-• 季节性活动（万圣节、冬季、春季）  
-• 免费金币 — 每4小时获取25个  
-• 从菜单继续 · N关卡  
-• 7天登录连击奖励
+本次更新内容：
+• 主菜单更清爽 — 更快进入谜题
+• "继续"从你离开的位置原样接续
+• 免费金币、锦标赛和主题仍然一键直达
+• 连胜直接嵌入每日挑战按钮
+• 细微修复与打磨
+• Play Games 排行榜 — 你的最佳成绩现在会同步到 Google Play Games
+• 更明亮的日间主题；午夜主题可在商店中获得
 </zh-CN>
 
 ---
@@ -265,7 +251,7 @@ Tap to pour. Watch the colors settle. One satisfying flow at a time.
 • Boosters when you get stuck: Color Reveal (hint), Steady Pour (undo), Fresh Start (restart), Extra Tube, Magic Wand
 • Daily Challenge — a brand-new puzzle every day with streak rewards
 • Daily Missions — 3 fresh objectives each day, earn bonus coins
-• Weekly Tournament — climb a synthetic-bracket leaderboard, the leading 25% earns coins
+• Weekly Tournament — a personal-best challenge each week; beat your own best to earn coins
 • Seasonal events — Halloween, Winter and Spring bring limited-time themes
 • Free Coins button — watch a short ad for 25 coins every few hours
 • Continue button — pick up your last level straight from the menu
@@ -275,7 +261,7 @@ Tap to pour. Watch the colors settle. One satisfying flow at a time.
 • Stats Screen — track levels completed, total pours, daily streak, and more
 • Lives system with generous 30-minute regeneration
 • Works completely offline
-• 20+ languages supported
+• 12 languages supported
 
 🏆 LEVEL PROGRESSION
 Levels gradually increase in difficulty — never a sudden difficulty spike:
@@ -337,7 +323,7 @@ Unlock new color palettes as you climb the level ladder. In October, December an
 • معززات عند التعرض للجمود: كشف اللون (تلميح)، سكب ثابت (تراجع)، بداية جديدة (إعادة تشغيل)، أنبوب إضافي، عصا سحرية
 • تحدي يومي — لغز جديد كل يوم مع مكافآت طويلة
 • مهام يومية — 3 أهداف جديدة كل يوم، اكسب عملات إضافية
-• بطولة أسبوعية — تسلق لائحة تصنيف صناعية، يحصل 25% الأوائل على عملات
+• البطولة الأسبوعية — تحدّ أسبوعي لكسر أفضل نتيجة لك؛ تغلب على رقمك القياسي لتكسب عملات
 • أحداث موسمية — عيد الهالوين، الشتاء والربيع تأتي بمواضيع محددة الوقت
 • زر العملات المجانية — شاهد إعلان قصير للحصول على 25 عملة كل بضع ساعات
 • زر المتابعة — استأنف آخر مستوى لك مباشرة من القائمة
@@ -347,7 +333,7 @@ Unlock new color palettes as you climb the level ladder. In October, December an
 • شاشة الإحصائيات — تتبع المستويات المكتملة، إجمالي السكب، السلسلة اليومية، والمزيد
 • نظام الحياة مع تجديد سخي لمدة 30 دقيقة
 • يعمل بالكامل دون اتصال
-• دعم لأكثر من 20 لغة
+• دعم لـ 12 لغة
 
 🏆 تقدم المستويات
 تزداد مستويات الصعوبة تدريجيًا — لا يوجد ارتفاع مفاجئ في الصعوبة:
@@ -409,7 +395,7 @@ Tippe zum Gießen und beobachte, wie sich die Farben absetzen. Ein erfüllender 
 • Booster für knifflige Stellen: Farbe Enthüllen, Stetiges Gießen, Frischer Start, Extra Röhrchen, Zauberstab.
 • Tägliche Herausforderungen — täglich ein neues Rätsel mit Belohnungen für Serien.
 • Tägliche Missionen — 3 neue Ziele täglich, verdiene Bonusmünzen.
-• Wöchentliches Turnier — steig in der Rangliste auf, die obersten 25 % verdienen Münzen.
+• Wöchentliches Turnier — Bestleistungs-Challenge: schlag deinen eigenen Rekord, um Münzen zu verdienen
 • Saisonale Events — spezielle Themen zu Halloween, Winter und Frühling.
 • Button für kostenlose Münzen — schaue dir eine Werbung für 25 Münzen an.
 • Fortsetzen-Button — spiele direkt aus dem Menü weiter.
@@ -418,7 +404,7 @@ Tippe zum Gießen und beobachte, wie sich die Farben absetzen. Ein erfüllender 
 • Statistiken-Bildschirm — verfolge deine Fortschritte.
 • Lebenssystem mit großzügiger Regeneration von 30 Minuten.
 • Offline spielbar.
-• Unterstützt 20+ Sprachen.
+• Unterstützt 12 Sprachen.
 
 🏆 LEVELFORTSCHRITT
 Die Schwierigkeitsgrade steigen allmählich:
@@ -480,7 +466,7 @@ Toca para verter y observa cómo los colores se asientan. Un flujo satisfactorio
 • Potenciadores cuando te quedas atascado: Revelar Color (pista), Vierte Constantemente (deshacer), Nuevo Comienzo (reiniciar), Tubo Extra, Varita Mágica
 • Reto Diario — un nuevo rompecabezas cada día con recompensas por racha
 • Misiones Diarias — 3 nuevas tareas diarias, gana monedas adicionales
-• Torneo Semanal — sube en el tablón de líderes, el 25% superior gana monedas
+• Torneo Semanal — un desafío semanal de marca personal; supera tu propio récord para ganar monedas
 • Eventos estacionales — temas temporales en Halloween, Invierno y Primavera
 • Botón de Monedas Gratis — mira anuncios cortos para ganar 25 monedas cada pocas horas
 • Botón Continuar — retoma tu último nivel desde el menú
@@ -490,7 +476,7 @@ Toca para verter y observa cómo los colores se asientan. Un flujo satisfactorio
 • Pantalla de Estadísticas — sigue tus logros y progreso
 • Generosa regeneración del sistema de vidas en 30 minutos
 • Funciona completamente offline
-• Soporta más de 20 idiomas
+• Compatible con 12 idiomas
 
 🏆 PROGRESIÓN DE NIVELES
 Los niveles aumentan gradualmente en dificultad:
@@ -562,7 +548,7 @@ Touchez pour verser. Regardez les couleurs se stabiliser dans un flux satisfaisa
 • Écran de statistiques — suivez niveaux complétés, versements et plus
 • Régénération de vies généreuse de 30 minutes
 • Fonctionne entièrement hors ligne
-• Support de 20+ langues
+• Prise en charge de 12 langues
 
 🏆 PROGRESSION DES NIVEAUX
 Les niveaux progressent sans pic de difficulté :
@@ -626,7 +612,7 @@ Débloquez des palettes de couleurs au fur et à mesure. En octobre, décembre e
 • आंकड़ों का स्क्रीन — पूरा किए गए स्तर, कुल डालने, दैनिक स्ट्रीक, और अधिक को ट्रैक करें
 • जीवन प्रणाली जिसमें 30 मिनट की उदार पुनर्जनन
 • पूरी तरह से ऑफ़लाइन कार्य करता है
-• 20+ भाषाओं का समर्थन
+• 12 भाषाओं का समर्थन
 
 🏆 स्तर प्रगति
 स्तर धीरे-धीरे कठिनाई में बढ़ते हैं — कभी भी अचानक कठिनाई में वृद्धि नहीं होती:
@@ -688,7 +674,7 @@ Ketuk untuk menuang. Saksikan warna-warna menetap. Satu aliran memuaskan pada sa
 • Booster saat kamu terjebak: Color Reveal (petunjuk), Steady Pour (batalkan), Fresh Start (mulai ulang), Extra Tube, Magic Wand
 • Tantangan Harian — teka-teki baru setiap hari dengan hadiah berturut-turut
 • Misi Harian — 3 tujuan baru setiap hari, dapatkan koin bonus
-• Turnamen Mingguan — naik papan peringkat dengan braket sintetik, 25% teratas mendapatkan koin
+• Turnamen Mingguan — tantangan rekor pribadi setiap minggu; kalahkan rekor terbaikmu untuk mendapatkan koin
 • Acara Musiman — Halloween, Musim Dingin dan Musim Semi membawa tema terbatas
 • Tombol Koin Gratis — tonton iklan pendek untuk 25 koin setiap beberapa jam
 • Tombol Lanjut — lanjutkan level terakhir langsung dari menu
@@ -698,7 +684,7 @@ Ketuk untuk menuang. Saksikan warna-warna menetap. Satu aliran memuaskan pada sa
 • Layar Statistik — lacak level yang diselesaikan, total menuang, streak harian, dan banyak lagi
 • Sistem kehidupan dengan regenerasi yang murah hati 30 menit
 • Bekerja sepenuhnya offline
-• Mendukung lebih dari 20 bahasa
+• Mendukung 12 bahasa
 
 🏆 PERKEMBANGAN LEVEL
 Level secara bertahap meningkat dalam kesulitan — tidak ada lonjakan kesulitan yang mendadak:
@@ -760,7 +746,7 @@ Tocca per versare e osserva i colori stabilizzarsi. Un flusso soddisfacente alla
 • Boosters quando sei bloccato: Rivelazione Colore, Versamento Costante, Nuovo Inizio, Tubo Extra, Bacchetta Magica
 • Sfida Giornaliera — un nuovo puzzle ogni giorno con premi in serie
 • Missioni Giornalieri — guadagna monete bonus completando 3 obiettivi quotidiani
-• Torneo Settimanale — scala una classifica, il 25% migliore guadagna monete
+• Torneo Settimanale — una sfida settimanale di record personale; batti il tuo miglior risultato per guadagnare monete
 • Eventi stagionali — temi limitati per Halloween, Inverno e Primavera
 • Pulsante Monete Gratuite — guarda un breve annuncio per 25 monete periodicamente
 • Pulsante Continua — riprendi il tuo ultimo livello direttamente dal menu
@@ -769,7 +755,7 @@ Tocca per versare e osserva i colori stabilizzarsi. Un flusso soddisfacente alla
 • Statistiche dettagliate — monitora i tuoi progressi e le statistiche di gioco
 • Vite rigenerabili in 30 minuti
 • Gioco offline totale
-• Supporto per oltre 20 lingue
+• Supporto per 12 lingue
 
 🏆 PROGRESSIONE DEI LIVELLI
 Difficoltà crescente senza brusche impennate:
@@ -830,7 +816,7 @@ Sblocca nuove palette di colori mentre sali di livello. Temi stagionali ad ottob
 • 行き詰まった時のブースター：色のヒント（カラーリビール）、安定した注ぎ（アンドゥ）、新たなスタート（再スタート）、追加チューブ、マジックワンド
 • デイリーチャレンジ — 毎日新しいパズルが出題され、連続クリアで報酬を獲得
 • デイリーミッション — 毎日3つの新しい目標、ボーナスコインを獲得
-• 週間トーナメント — 合成ブラケットリーダーボードに参加し、上位25%がコインを得られる
+・週間トーナメント — 毎週、自己ベスト更新チャレンジ。自分の記録を超えてコインを獲得
 • 季節イベント — ハロウィン、冬、春の限られたテーマが楽しめる
 • 無料コインボタン — 短い広告を見ることで数時間ごとに25コイン獲得
 • 継続ボタン — メニューから最後のレベルをすぐに続行
@@ -840,7 +826,7 @@ Sblocca nuove palette di colori mentre sali di livello. Temi stagionali ad ottob
 • スタッツ画面 — 完了したレベル、合計注ぎ回数、デイリーストリークなどをトラッキング
 • 30分の再生回復をもつライフシステム
 • 完全オフラインで動作
-• 20以上の言語に対応
+• 12言語に対応
 
 🏆 レベル進行
 レベルは徐々に難易度が上がる — 急な難易度の上昇はなし：
@@ -912,7 +898,7 @@ Toque para despejar e observe as cores se acomodarem, um fluxo satisfatório por
 • Tela de Estatísticas — acompanhe seu progresso
 • Sistema de vidas com regeneração a cada 30 minutos
 • Funciona offline
-• Suporte a mais de 20 idiomas
+• Suporte a 12 idiomas
 
 🏆 PROGRESSÃO DE NÍVEIS
 Os níveis aumentam gradualmente em dificuldade:
@@ -970,7 +956,7 @@ Dökmek için dokunun. Renklerin yerleşmesini izleyin. Her seferinde keyif vere
 • Sıkıştığınızda yardımcılar: Renk Açıklama (ipucu), Dikkatli Dökme (geri al), Taze Başlangıç (yeniden başlat), Ekstra Tüp, Sihirli Değnek
 • Günlük Zorluk — her gün yeni bir bulmaca ile yan ödüller
 • Günlük Görevler — her gün 3 yeni hedef, bonus paralar kazanın
-• Haftalık Turnuva — sentetik sıralama liderliğinde tırmanın, en üst %25 para kazanıyor
+• Haftalık Turnuva — her hafta kişisel rekor mücadelesi; kendi rekorunu kır, jeton kazan
 • Mevsimsel etkinlikler — Cadılar Bayramı, Kış ve Bahar sınırlı süreli temalar getirir
 • Ücretsiz Jeton butonu — her birkaç saatte kısa bir reklam izleyerek 25 jeton kazanın
 • Devam butonu — menüden son seviyenizden devam edin
@@ -980,7 +966,7 @@ Dökmek için dokunun. Renklerin yerleşmesini izleyin. Her seferinde keyif vere
 • İstatistikler Ekranı — tamamlanan seviyeleri, toplam dökme sayısını, günlük sırayı ve daha fazlasını takip edin
 • Cömert 30 dakikalık can yenileme sistemi
 • Tamamen çevrimdışı çalışır
-• 20'den fazla dil desteklenir
+• 12 dil desteklenir
 
 🏆 SEVİYE ilerlemesi
 Seviyeler yavaş yavaş zorluk artırır - asla ani bir zorluk füzyonu yok:
@@ -1026,7 +1012,7 @@ Seviye merdivenini tırmandıkça yeni renk paletlerini açın. Ekim, Aralık ve
 
 Натискайте, щоб налити. Спостерігайте, як кольори осідають. Один задовольняючий потік за раз.
 
-500 ретельно налаштованих головоломок, без таймера, без поспіху. Озвучте у навушниках, відключіть розум.
+500 ретельно налаштованих головоломок, без таймера, без поспіху. Увімкни навушники й розслабся.
 
 🌊 ЯК ГРАТИ
 • Натисніть на трубку, щоб підняти верхній шар рідини
@@ -1042,17 +1028,17 @@ Seviye merdivenini tırmandıkça yeni renk paletlerini açın. Ekim, Aralık ve
 • Підсилювачі, коли ви застряєте: Розкриття кольору (підказка), Стабільний налив (скасування), Новий старт (перезапуск), Додаткова трубка, Чарівна паличка
 • Щоденний виклик — нова головоломка щодня з винагородами за серії
 • Щоденні місії — 3 нові завдання щодня, заробляйте бонусні монети
-• Щотижневий турнір — піднімайтеся у синтетичному рейтингу, ведучі 25% отримують монети
+• Щотижневий турнір — тиждень особистих рекордів; побий свій найкращий результат, щоб заробити монети
 • Сезонні події — Геловін, Зима та Весна приносять обмежені тематичні події
 • Кнопка безкоштовних монет — дивіться коротке відео за 25 монет кожні кілька годин
 • Кнопка продовження — продовжте свій останній рівень прямо з меню
 • 7-денна серія входу — більші винагороди, чим довше ви граєте безперервно
 • Колекція тем — відкривайте нові кольорові палітри по мірі проходження
-• Порівняння ходів — переглядайте свою кількість ходів порівняно з паром та вашим рейтинговим місцем
+• Порівняння ходів — стеж за своїми ходами проти цільового мінімуму та своїм місцем у тижневому рейтингу
 • Екран статистики — відстежуйте завершені рівні, загальні наливи, щоденну серію та більше
 • Система життів з щедрою регенерацією 30 хвилин
 • Працює повністю офлайн
-• Підтримується 20+ мов
+• Підтримується 12 мов
 
 🏆 ПРОГРЕС РІВНІВ
 Рівні поступово ускладнюються — ніколи раптові стрибки складності:
@@ -1114,7 +1100,7 @@ Seviye merdivenini tırmandıkça yeni renk paletlerini açın. Ekim, Aralık ve
 • 当您陷入困境时的助推器：颜色揭示（提示）、稳定倾倒（撤销）、全新开始（重启）、额外管道、魔法棒
 • 每日挑战 — 每天一个全新谜题，享有连胜奖励
 • 每日任务 — 每天3个全新目标，赚取额外金币
-• 每周锦标赛 — 在合成分组的排行榜上名列前茅，前25%可获得金币
+• 每周锦标赛 — 个人最佳挑战；打破自己的最佳记录赢取金币
 • 节日活动 — 万圣节、冬季和春季带来限时主题
 • 免费金币按钮 — 每几小时观看短视频可获得25个金币
 • 继续按钮 — 从菜单直接续玩上一个关卡
@@ -1124,7 +1110,7 @@ Seviye merdivenini tırmandıkça yeni renk paletlerini açın. Ekim, Aralık ve
 • 统计屏幕 — 跟踪已完成关卡、总倾倒次数、每日连击等
 • 生命系统，慷慨的30分钟再生
 • 完全离线运作
-• 支持20多种语言
+• 支持12种语言
 
 🏆 级别进展
 关卡难度逐渐提升 — 从不突如其来：
