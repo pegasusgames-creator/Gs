@@ -15,7 +15,14 @@
   function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
 
   // Replace with the real leaderboard ID from Play Console after PGS setup.
-  // See scripts/growth_open_items.md §B.
+  // PER-APP LEADERBOARD IDS (PGS project 225819574531, wired 2026-05-27):
+  //   WaterSortPuzzle  CgkIg4KVn8kGEAIQAw
+  //   Nonogram         CgkIg4KVn8kGEAIQBA
+  //   Puzzle2048       CgkIg4KVn8kGEAIQBQ
+  //   UnblockPuzzle    CgkIg4KVn8kGEAIQBg
+  // The literal below is patched in each per-app game.html — if you ever
+  // re-inject this shim wholesale, restore the per-app values afterwards
+  // (or use scripts/wire_leaderboards.py).
   var LEADERBOARD_ID = 'TODO_FROM_PLAY_CONSOLE';
   window._GROWTH_LEADERBOARD_ID = LEADERBOARD_ID;
 
