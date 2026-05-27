@@ -999,6 +999,22 @@ The new checks added recently:
   `iaps.json` is routed to the SUBS billing flow in `launchPurchase()`,
   not the one-time INAPP path (the `weekly_pass` dead-end bug).
   `python3 scripts/check_subscription_routing.py`
+- `nonogram uniqueness` (Nonogram only) — every shipped level has
+  exactly one solution. `python3 scripts/check_nonogram_unique.py`
+- `reward type parity` — every `Android.showRewarded('X')` either has
+  a matching `onAdReward` branch or routes through a queue-style
+  callback wrapper. `python3 scripts/check_reward_type_parity.py`
+- `subscription disclosure` — every Season Pass / Weekly Pass UI
+  carries Google-mandated auto-renew disclosure (via the SUBS shim).
+  `python3 scripts/check_subscription_disclosure.py`
+- `description claims` (WARN) — no "global rank" / "leaderboard" for
+  the synthetic bracket, no "unique solution" without solver
+  verification, language counts match locale-dir count.
+  `python3 scripts/check_description_claims.py`
+- `release notes match` (WARN) — if `en-US/release_notes.txt`
+  promises a cleaner menu, the `showScreen('menuScreen')` branch
+  cannot still call the relocated inject functions.
+  `python3 scripts/check_release_notes_match.py`
 
 All of the above block the build on a `BLOCKER` and warn on a `WARNING`.
 

@@ -586,6 +586,21 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void hideBannerAd()                  { hideBanner(); }
         @JavascriptInterface public void showBannerAd()                  { showBanner(); }
         @JavascriptInterface public void log(String msg)                 { /* disabled in release */ }
+        // Open an arbitrary https URL in the system browser. Used for
+        // the Manage Subscriptions deep link and the privacy policy.
+        @JavascriptInterface
+        public void openUrl(String url) {
+            if (url == null || url.length() == 0) return;
+            try {
+                android.content.Intent i = new android.content.Intent(
+                    android.content.Intent.ACTION_VIEW,
+                    android.net.Uri.parse(url));
+                i.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            } catch (Exception e) {
+                /* no-op — JS will fall back to window.open */
+            }
+        }
 
         @JavascriptInterface
         public void scheduleNotification(String title, String body, long delayMs) {

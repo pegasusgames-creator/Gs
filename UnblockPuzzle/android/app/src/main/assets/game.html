@@ -11,7 +11,7 @@
 /* ============ UI THEME TOKENS ============ */
 /* :root = Daylight (light pastel) — the default theme on first launch.
    html[data-theme="midnight"] = the original deep-dark look (unlockable). */
-:root{
+:root {
   --app-bg:#ece6f3;
   --menu-bg:linear-gradient(160deg,#fcf8ff 0%,#f1ebf8 58%,#e7ddf0 100%);
   --text:#3a2f48;
@@ -100,7 +100,14 @@
   --strip-gold-fg:#a87400;
   --starter-grad:linear-gradient(135deg,#ffffff,#eef6ef);
   --starter-accent:#2ea043;
-}
+  --z-overlay-dim: 100;
+  --z-banner: 200;
+  --z-toast: 300;
+  --z-confirm: 400;
+  --z-tutorial: 500;
+  --z-modal: 700;
+  --z-critical: 800;
+  }
 html[data-theme="midnight"]{
   --app-bg:#161020;
   --menu-bg:linear-gradient(160deg,#1a0f2e 0%,#161020 60%,#0d0820 100%);
@@ -261,10 +268,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--app-bg);font-f
 .ls-section{grid-column:1/-1;font-size:0.75rem;color:var(--text-mute);text-transform:uppercase;letter-spacing:2px;padding:4px 0 2px;}
 
 /* OVERLAYS */
-.overlay{position:fixed;top:0;left:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;z-index:100;}
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;z-index: var(--z-banner);}
 .overlay.active{display:flex;}
 .overlay-bg{position:absolute;top:0;left:0;width:100%;height:100%;background:var(--scrim);backdrop-filter:blur(4px);}
-.overlay-box{position:relative;background:var(--overlay-bg);border:1px solid var(--overlay-border);border-radius:20px;padding:28px 24px;width:90%;max-width:340px;text-align:center;z-index:1;}
+.overlay-box{position:relative;background:var(--overlay-bg);border:1px solid var(--overlay-border);border-radius:20px;padding:28px 24px;width:90%;max-width:340px;text-align:center;z-index: var(--z-banner);}
 .ov-title{font-size:1.5rem;font-weight:900;margin-bottom:8px;color:var(--text-head);}
 .ov-stars{font-size:2rem;margin:12px 0;}
 .ov-info{color:var(--text-soft);font-size:0.9rem;margin-bottom:20px;}
@@ -322,7 +329,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--app-bg);font-f
 .toggle.on::after{left:26px;}
 
 /* CANVAS PARTICLES */
-#particleCanvas{position:fixed;top:0;left:0;pointer-events:none;z-index:50;}
+#particleCanvas{position:fixed;top:0;left:0;pointer-events:none;z-index: var(--z-banner);}
 
 /* NO ADS BANNER */
 .remove-ads-bar{width:100%;text-align:center;padding:4px;background:var(--danger-soft-bg);font-size:0.78rem;color:var(--danger);display:none;}
@@ -393,7 +400,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--app-bg);font-f
     <button class="foot-btn btn-undo" onclick="undoMove()">↶ Undo</button>
     <button class="foot-btn btn-reset" onclick="resetLevel()">↺ Reset</button>
   </div>
-  <div id="tutorialOverlay" style="display:none;position:absolute;bottom:90px;left:0;right:0;display:none;justify-content:center;pointer-events:none;z-index:50">
+  <div id="tutorialOverlay" style="display:none;position:absolute;bottom:90px;left:0;right:0;display:none;justify-content:center;pointer-events:none;z-index: var(--z-banner)">
     <div style="background:var(--overlay-bg);border:1.5px solid var(--gold-soft-border);border-radius:18px;padding:16px 22px;max-width:280px;text-align:center;pointer-events:all;box-shadow:0 8px 28px rgba(0,0,0,0.22)">
       <div style="color:var(--gold);font-size:15px;font-weight:800;margin-bottom:6px">🧩 How to Play</div>
       <div style="color:var(--text);font-size:13px;line-height:1.4">Slide blocks left/right or up/down to free the red block. Move it to the right exit!</div>
@@ -2019,7 +2026,7 @@ function playSound(type){
 function _showMsg(msg){
   const el=document.createElement('div');
   el.textContent=msg;
-  el.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;z-index:9999;pointer-events:none;';
+  el.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;z-index: var(--z-critical);pointer-events:none;';
   document.body.appendChild(el);
   setTimeout(()=>el.remove(),2500);
 }
@@ -2035,6 +2042,12 @@ window.onAdReward = function(type){
     _showMsg('Life added!');
   } else if(type==='skip'){
     nextLevel();
+  } else if(type==='free_coins'){
+    // Reward parity (2026-05-27): the menu-shim "🪙 Free Coins" icon
+    // and the Free Coins button both fire Android.showRewarded('free_coins').
+    addCoins(25);
+    updateHUD();
+    _showMsg('+25 🪙');
   }
 };
 
@@ -2176,7 +2189,7 @@ window.addEventListener('load', ()=>{
 @keyframes ls-card-in { from{transform:scale(0.85) translateY(30px);opacity:0} to{transform:none;opacity:1} }
 #ls-overlay {
   position:fixed; inset:0; background:var(--scrim);
-  z-index:9999; display:none; align-items:center; justify-content:center;
+  z-index: var(--z-critical); display:none; align-items:center; justify-content:center;
   backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
 }
 #ls-card {
@@ -2213,7 +2226,7 @@ window.addEventListener('load', ()=>{
   position:fixed; top:72px; left:50%; transform:translateX(-50%) translateY(-24px);
   background:linear-gradient(135deg,#6c5ce7,#a29bfe); color:#fff;
   padding:10px 22px; border-radius:50px; font-size:13px; font-weight:700;
-  opacity:0; transition:all 0.4s; z-index:10000;
+  opacity:0; transition:all 0.4s; z-index: var(--z-critical);
   pointer-events:none; white-space:nowrap; box-shadow:0 4px 20px rgba(108,92,231,0.5);
 }
 #ls-ach-toast.ls-show { opacity:1; transform:translateX(-50%) translateY(0); }
@@ -3218,7 +3231,7 @@ function renderMissionsExtras(){
 #starterPackModal {
   position:fixed;inset:0;background:var(--scrim);
   display:none;flex-direction:column;align-items:center;justify-content:center;
-  z-index:9999;padding:1.5rem;backdrop-filter:blur(6px);
+  z-index: var(--z-critical);padding:1.5rem;backdrop-filter:blur(6px);
 }
 .starter-card {
   background:var(--starter-grad);
@@ -3307,7 +3320,7 @@ function xToast(msg){
   t.textContent=msg;
   t.style.cssText='position:fixed;bottom:20%;left:50%;transform:translateX(-50%);' +
     'background:rgba(0,0,0,0.88);color:#fff;padding:10px 22px;border-radius:20px;' +
-    'z-index:99999;font-size:0.9rem;font-weight:600;pointer-events:none;';
+    'z-index: var(--z-critical);font-size:0.9rem;font-weight:600;pointer-events:none;';
   document.body.appendChild(t);
   setTimeout(function(){t.remove();},2500);
 }
@@ -3393,7 +3406,10 @@ window.xContinueCoins=function(){
 };
 window.xContinueAd=function(){
   closeNoLivesOverlay();
-  if(window.Android&&window.Android.showRewarded) window.Android.showRewarded('extra_life');
+  // 'life' (not 'extra_life') matches the onAdReward 'life' branch above —
+  // any string the Java side reflects back here must already be wired in
+  // window.onAdReward, otherwise the user watches an ad and gets nothing.
+  if(window.Android&&window.Android.showRewarded) window.Android.showRewarded('life');
   else{ G.addLives(1); xToast('❤ +1 Life!'); }
 };
 
@@ -3905,9 +3921,11 @@ window.addEventListener('load',function(){
   setTimeout(function(){
     injectStarterModal();
     injectMenuShortcuts();
-    injectWeeklyBanner();
-    injectFreeCoinsBtn();
-    injectThemeStrip();
+    /* E (2026-05-27): full-width injectWeeklyBanner / injectFreeCoinsBtn /
+       injectThemeStrip dropped from the menu inject chain. MENU shim now
+       owns the top-bar Free Coins + Tournament icons; Themes screen owns
+       the theme strip; injectSeasonalBanner stays — it's a slim one-line
+       ribbon, not a full-width promo. */
     injectSeasonalBanner();
     injectContinueBtns();
     hookWinOverlay();
@@ -4251,7 +4269,7 @@ window.addEventListener('load',function(){
     var bg = document.createElement('div');
     bg.setAttribute('data-growth-promo-card','1');
     bg.style.cssText =
-      'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
+      'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index: var(--z-critical);font-family:inherit;';
     var card = document.createElement('div');
     card.style.cssText =
       'background:#ffffff;color:#1e3a5f;border-radius:18px;padding:22px 22px 18px;width:88%;max-width:340px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
@@ -4490,7 +4508,7 @@ window.addEventListener('load',function(){
     wrap.setAttribute('data-growth-streak-chips','1');
     wrap.style.cssText =
       'position:absolute;bottom:96px;left:50%;transform:translateX(-50%);' +
-      'display:flex;gap:8px;font-size:12px;font-weight:700;z-index:5;font-family:inherit;';
+      'display:flex;gap:8px;font-size:12px;font-weight:700;z-index: var(--z-banner);font-family:inherit;';
     wrap.innerHTML =
       '<div style="background:rgba(255,255,255,0.92);color:#1e3a5f;border:1px solid rgba(0,0,0,0.08);border-radius:14px;padding:7px 12px;display:flex;align-items:center;gap:6px;">' +
         '🛡 <span data-growth-shield-count>' + freezes + '</span>' +
@@ -4590,7 +4608,7 @@ window.addEventListener('load',function(){
   var lastSeen = -1;
   function showConfetti(){
     var ov = document.createElement('div');
-    ov.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;font-family:inherit;';
+    ov.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index: var(--z-critical);font-family:inherit;';
     var emojis = ['🎉','✨','⭐','🎊','💫'];
     for (var i=0;i<24;i++){
       var span = document.createElement('span');
@@ -4612,7 +4630,7 @@ window.addEventListener('load',function(){
     var msg = document.createElement('div');
     msg.style.cssText = 'position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);' +
       'background:#ffffff;color:#1e3a5f;border:1px solid #d4e2ec;border-radius:18px;padding:18px 22px;' +
-      'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index:9999;font-family:inherit;';
+      'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index: var(--z-critical);font-family:inherit;';
     msg.innerHTML = "🎉 You've got this!<br><span style='font-weight:600;font-size:0.9rem;color:#5a7390;'>499 more puzzles to go.</span>";
     document.body.appendChild(msg);
     setTimeout(function(){ msg.remove(); }, 2400);
@@ -4668,7 +4686,7 @@ window.addEventListener('load',function(){
     }
     function showStep(i){
       var bg = document.createElement('div');
-      bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
+      bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index: var(--z-critical);font-family:inherit;';
       var card = document.createElement('div');
       card.style.cssText = 'background:#ffffff;color:#1e3a5f;border-radius:18px;padding:22px;max-width:320px;width:88%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
       var s = steps[i];
@@ -4907,7 +4925,7 @@ window.addEventListener('load',function(){
     btn.style.cssText =
       'position:absolute;top:14px;left:50%;transform:translateX(-50%);' +
       'background:#ffffff;color:#1e3a5f;border:1px solid rgba(0,0,0,0.08);border-radius:14px;' +
-      'padding:7px 14px;font-weight:800;font-size:13px;cursor:pointer;z-index:5;font-family:inherit;';
+      'padding:7px 14px;font-weight:800;font-size:13px;cursor:pointer;z-index: var(--z-banner);font-family:inherit;';
     btn.textContent = '🏆 Leaderboard';
     btn.addEventListener('click', function(){
       if (api('showLeaderboard')) {
@@ -5111,7 +5129,7 @@ window.addEventListener('load',function(){
     syn = document.createElement('div');
     syn.setAttribute('data-synth-menu-header','1');
     syn.style.cssText =
-      'position:absolute;top:8px;right:8px;display:flex;align-items:center;gap:6px;z-index:6;';
+      'position:absolute;top:8px;right:8px;display:flex;align-items:center;gap:6px;z-index: var(--z-banner);';
     // The menu container needs to be positioned for absolute children to land correctly.
     var cs = window.getComputedStyle(menu);
     if (cs.position === 'static') menu.style.position = 'relative';
@@ -5277,5 +5295,186 @@ window.addEventListener('load',function(){
 })();
 </script>
 
+<!-- Growth shim — Subscription auto-renewal disclosure (Play policy 2026-05).
+     Idempotent: data-growth-shim="SUBS".
+     - Renders disclosure text under each Season Pass / Weekly Pass button
+       in Shop UIs (whatever shape the app uses).
+     - Adds a "Manage subscriptions" row in Settings linking to
+       https://play.google.com/store/account/subscriptions via the
+       Android.openUrl bridge (falls back to window.open).
+     - Pulls the actual price from a PRODUCTS-style array if present;
+       otherwise the canonical portfolio prices ($4.99/mo, $1.99/wk).
+     - Localized across the 13 portfolio locales by detecting
+       document.documentElement.lang / window.currentLocale / state.lang.
+-->
+<script data-growth-shim="SUBS">
+(function(){
+  if (window.__growthShimSubs) return;
+  window.__growthShimSubs = true;
+  function safe(fn){ try { return fn(); } catch(e){} }
+  function $(id){ return document.getElementById(id); }
+
+  // ── i18n strings. Keep accurate, not marketing. Each pair is
+  // {season, weekly} per locale; placeholders {price} are substituted
+  // at render time.
+  var STRINGS = {
+    'en-US': {
+      season: 'Auto-renews at {price}/month until cancelled. Cancel anytime in Google Play > Subscriptions.',
+      weekly: 'Auto-renews at {price}/week until cancelled. Cancel anytime in Google Play > Subscriptions.',
+      manage: 'Manage subscriptions'
+    },
+    'ar': {
+      season: 'يتجدد تلقائيًا بسعر {price}/شهريًا حتى الإلغاء. يمكنك الإلغاء في أي وقت من Google Play > الاشتراكات.',
+      weekly: 'يتجدد تلقائيًا بسعر {price}/أسبوعيًا حتى الإلغاء. يمكنك الإلغاء في أي وقت من Google Play > الاشتراكات.',
+      manage: 'إدارة الاشتراكات'
+    },
+    'de-DE': {
+      season: 'Verlängert sich automatisch für {price}/Monat bis zur Kündigung. Jederzeit in Google Play > Abos kündbar.',
+      weekly: 'Verlängert sich automatisch für {price}/Woche bis zur Kündigung. Jederzeit in Google Play > Abos kündbar.',
+      manage: 'Abos verwalten'
+    },
+    'es-419': {
+      season: 'Se renueva automáticamente a {price}/mes hasta que se cancele. Cancela cuando quieras en Google Play > Suscripciones.',
+      weekly: 'Se renueva automáticamente a {price}/semana hasta que se cancele. Cancela cuando quieras en Google Play > Suscripciones.',
+      manage: 'Administrar suscripciones'
+    },
+    'fr-FR': {
+      season: 'Se renouvelle automatiquement à {price}/mois jusqu’à résiliation. Annulable à tout moment dans Google Play > Abonnements.',
+      weekly: 'Se renouvelle automatiquement à {price}/semaine jusqu’à résiliation. Annulable à tout moment dans Google Play > Abonnements.',
+      manage: 'Gérer les abonnements'
+    },
+    'hi-IN': {
+      season: 'रद्द किए जाने तक {price}/महीना पर अपने आप रिन्यू होगा। Google Play > सदस्यताएं में कभी भी रद्द करें।',
+      weekly: 'रद्द किए जाने तक {price}/सप्ताह पर अपने आप रिन्यू होगा। Google Play > सदस्यताएं में कभी भी रद्द करें।',
+      manage: 'सदस्यताएं प्रबंधित करें'
+    },
+    'id': {
+      season: 'Diperbarui otomatis seharga {price}/bulan hingga dibatalkan. Batalkan kapan saja di Google Play > Langganan.',
+      weekly: 'Diperbarui otomatis seharga {price}/minggu hingga dibatalkan. Batalkan kapan saja di Google Play > Langganan.',
+      manage: 'Kelola langganan'
+    },
+    'it-IT': {
+      season: 'Si rinnova automaticamente a {price}/mese fino all’annullamento. Annulla quando vuoi in Google Play > Abbonamenti.',
+      weekly: 'Si rinnova automaticamente a {price}/settimana fino all’annullamento. Annulla quando vuoi in Google Play > Abbonamenti.',
+      manage: 'Gestisci abbonamenti'
+    },
+    'ja-JP': {
+      season: '解約まで{price}/月で自動更新されます。Google Play > 定期購入 でいつでも解約できます。',
+      weekly: '解約まで{price}/週で自動更新されます。Google Play > 定期購入 でいつでも解約できます。',
+      manage: '定期購入を管理'
+    },
+    'pt-BR': {
+      season: 'Renova automaticamente por {price}/mês até ser cancelado. Cancele quando quiser em Google Play > Assinaturas.',
+      weekly: 'Renova automaticamente por {price}/semana até ser cancelado. Cancele quando quiser em Google Play > Assinaturas.',
+      manage: 'Gerenciar assinaturas'
+    },
+    'tr-TR': {
+      season: 'İptal edilene kadar {price}/ay olarak otomatik yenilenir. Google Play > Abonelikler’den istediğin zaman iptal et.',
+      weekly: 'İptal edilene kadar {price}/hafta olarak otomatik yenilenir. Google Play > Abonelikler’den istediğin zaman iptal et.',
+      manage: 'Abonelikleri yönet'
+    },
+    'uk': {
+      season: 'Автоматично поновлюється за {price}/місяць до скасування. Скасувати можна в будь-який час у Google Play > Підписки.',
+      weekly: 'Автоматично поновлюється за {price}/тиждень до скасування. Скасувати можна в будь-який час у Google Play > Підписки.',
+      manage: 'Керувати підписками'
+    },
+    'zh-CN': {
+      season: '在取消前将以{price}/月自动续订。可随时在 Google Play > 订阅 中取消。',
+      weekly: '在取消前将以{price}/周自动续订。可随时在 Google Play > 订阅 中取消。',
+      manage: '管理订阅'
+    }
+  };
+  function detectLocale(){
+    var s = (window.currentLocale || window.lang ||
+             (window.state && window.state.lang) ||
+             (window.State && window.State.lang) ||
+             document.documentElement.lang ||
+             navigator.language || 'en-US') + '';
+    s = s.replace('_','-');
+    if (STRINGS[s]) return s;
+    // Locale shorthand mapping.
+    var head = s.split('-')[0];
+    var alias = {ar:'ar', de:'de-DE', es:'es-419', fr:'fr-FR', hi:'hi-IN',
+                 id:'id', it:'it-IT', ja:'ja-JP', pt:'pt-BR', tr:'tr-TR',
+                 uk:'uk', zh:'zh-CN', en:'en-US'};
+    return alias[head] || 'en-US';
+  }
+  function priceFor(sku){
+    // Prefer the in-app PRODUCTS array if it exists.
+    var arr = window.PRODUCTS || (window.Game && window.Game.PRODUCTS);
+    if (Array.isArray(arr)){
+      for (var i=0;i<arr.length;i++){
+        if (arr[i] && arr[i].id === sku && arr[i].price){
+          // Strip the period suffix ($4.99/mo → $4.99) so we control "/month".
+          return (arr[i].price + '').split('/')[0];
+        }
+      }
+    }
+    return sku === 'season_pass_monthly' ? '$4.99' : '$1.99';
+  }
+
+  function ensureDisclosure(sku, button){
+    // Idempotent — never inject twice next to the same button.
+    if (!button) return;
+    if (button.nextSibling && button.nextSibling.getAttribute &&
+        button.nextSibling.getAttribute('data-subs-disclosure') === sku) return;
+    var loc = detectLocale();
+    var key = sku === 'season_pass_monthly' ? 'season' : 'weekly';
+    var tpl = (STRINGS[loc] && STRINGS[loc][key]) || STRINGS['en-US'][key];
+    var price = priceFor(sku);
+    var txt = tpl.replace('{price}', price);
+    var p = document.createElement('div');
+    p.setAttribute('data-subs-disclosure', sku);
+    p.style.cssText =
+      'font-size:0.68rem;line-height:1.35;opacity:0.78;margin:4px 8px 8px;' +
+      'text-align:center;max-width:340px;letter-spacing:0.1px;';
+    p.textContent = txt;
+    var parent = button.parentNode;
+    if (parent && parent.nextSibling) parent.parentNode.insertBefore(p, parent.nextSibling);
+    else if (parent) parent.appendChild(p);
+    else button.insertAdjacentElement('afterend', p);
+  }
+  function placeDisclosures(){
+    // Every shop UI has its own shape; pick by attribute, not by global ID.
+    document.querySelectorAll('[onclick]').forEach(function(el){
+      var s = el.getAttribute('onclick') || '';
+      if (s.indexOf('season_pass_monthly') >= 0) ensureDisclosure('season_pass_monthly', el);
+      else if (s.indexOf('weekly_pass') >= 0) ensureDisclosure('weekly_pass', el);
+    });
+  }
+  setInterval(placeDisclosures, 1500);
+
+  // ── Manage subscriptions row in Settings ───────────────────────────
+  function openSubs(){
+    var url = 'https://play.google.com/store/account/subscriptions';
+    if (window.Android && typeof window.Android.openUrl === 'function'){
+      safe(function(){ window.Android.openUrl(url); });
+      return;
+    }
+    safe(function(){ window.open(url, '_blank'); });
+  }
+  function ensureManageRow(){
+    var hosts = ['settingsScreen','screen-settings','xSettingsScreen'];
+    var settings = null;
+    for (var i=0;i<hosts.length;i++){
+      var el = document.getElementById(hosts[i]);
+      if (el) { settings = el; break; }
+    }
+    if (!settings) return;
+    if (settings.querySelector('[data-subs-manage]')) return;
+    var loc = detectLocale();
+    var label = (STRINGS[loc] && STRINGS[loc].manage) || STRINGS['en-US'].manage;
+    var row = document.createElement('div');
+    row.setAttribute('data-subs-manage','1');
+    row.style.cssText =
+      'padding:12px 16px;border-radius:10px;background:rgba(0,0,0,0.05);' +
+      'margin:8px;cursor:pointer;font-weight:600;display:flex;align-items:center;justify-content:space-between;';
+    row.innerHTML = '<span>' + label + '</span><span style="opacity:0.55">›</span>';
+    row.addEventListener('click', openSubs);
+    settings.appendChild(row);
+  }
+  setInterval(ensureManageRow, 1500);
+})();
+</script>
 </body>
 </html>

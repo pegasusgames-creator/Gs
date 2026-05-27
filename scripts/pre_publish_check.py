@@ -1952,6 +1952,43 @@ def main():
     except Exception as _e:
         print(f"  menu hierarchy: skipped ({_e})")
 
+    # ---- FULL REVIEW 2026-05-27 gates: nonogram uniqueness (BLOCK),
+    # reward-type parity (BLOCK), subscription disclosure (BLOCK),
+    # description claims (WARN), release notes promise vs build (WARN).
+    def _wrap(check_app_fn):
+        def runner(apps_subset):
+            b_all, w_all = [], []
+            for a in apps_subset:
+                b, w = check_app_fn(a)
+                b_all.extend(b); w_all.extend(w)
+            return b_all, w_all
+        return runner
+    try:
+        from check_nonogram_unique import check_app as _no_uniq
+        section("code", "nonogram uniqueness",      _wrap(_no_uniq), apps)
+    except Exception as _e:
+        print(f"  nonogram uniqueness: skipped ({_e})")
+    try:
+        from check_reward_type_parity import check_app as _rwd
+        section("code", "reward type parity",       _wrap(_rwd), apps)
+    except Exception as _e:
+        print(f"  reward type parity: skipped ({_e})")
+    try:
+        from check_subscription_disclosure import check_app as _sub
+        section("code", "subscription disclosure",  _wrap(_sub), apps)
+    except Exception as _e:
+        print(f"  subscription disclosure: skipped ({_e})")
+    try:
+        from check_description_claims import check_app as _dsc
+        section("meta", "description claims",       _wrap(_dsc), apps)
+    except Exception as _e:
+        print(f"  description claims: skipped ({_e})")
+    try:
+        from check_release_notes_match import check_app as _rln
+        section("meta", "release notes match",      _wrap(_rln), apps)
+    except Exception as _e:
+        print(f"  release notes match: skipped ({_e})")
+
     print()
     if blocking:
         print(red(bold(f"BLOCKING ({len(blocking)}):")))

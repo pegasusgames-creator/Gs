@@ -1,0 +1,14 @@
+# Per-app signing credentials — repo-root .gitignore already covers these,
+# this is belt-and-braces in case the app is ever cloned out standalone.
+android/keystore.jks
+android/keystore.properties
+android/*.jks
+android/*.keystore
+android/*.pem
+android/*.der
+android/keystore.jks.*
+android/local.properties
+android/app/google-services.json
+android/app/build/
+android/.gradle/
+android/.idea/

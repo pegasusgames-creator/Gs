@@ -1,11 +1,15 @@
-# Signing credentials — never commit
+# Signing credentials — never commit. plaintext password in
+# keystore.properties is gradle-mandated; gitignore enforces never-shared.
 keystore.jks
 keystore.properties
 *.jks
 *.keystore
 *.pfx
 *.p12
+*.pem
+*.der
 keystores/
+local.properties
 *Seed Phrase*
 *seed_phrase*
 *SEED_PHRASE*
@@ -30,6 +34,7 @@ upload_certificate.der
 # Release archives (generated locally, re-creatable)
 *.zip
 _release/
+release_aabs/
 
 # Python build artifacts
 __pycache__/

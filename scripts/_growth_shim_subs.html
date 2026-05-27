@@ -1,0 +1,181 @@
+<!-- Growth shim — Subscription auto-renewal disclosure (Play policy 2026-05).
+     Idempotent: data-growth-shim="SUBS".
+     - Renders disclosure text under each Season Pass / Weekly Pass button
+       in Shop UIs (whatever shape the app uses).
+     - Adds a "Manage subscriptions" row in Settings linking to
+       https://play.google.com/store/account/subscriptions via the
+       Android.openUrl bridge (falls back to window.open).
+     - Pulls the actual price from a PRODUCTS-style array if present;
+       otherwise the canonical portfolio prices ($4.99/mo, $1.99/wk).
+     - Localized across the 13 portfolio locales by detecting
+       document.documentElement.lang / window.currentLocale / state.lang.
+-->
+<script data-growth-shim="SUBS">
+(function(){
+  if (window.__growthShimSubs) return;
+  window.__growthShimSubs = true;
+  function safe(fn){ try { return fn(); } catch(e){} }
+  function $(id){ return document.getElementById(id); }
+
+  // ── i18n strings. Keep accurate, not marketing. Each pair is
+  // {season, weekly} per locale; placeholders {price} are substituted
+  // at render time.
+  var STRINGS = {
+    'en-US': {
+      season: 'Auto-renews at {price}/month until cancelled. Cancel anytime in Google Play > Subscriptions.',
+      weekly: 'Auto-renews at {price}/week until cancelled. Cancel anytime in Google Play > Subscriptions.',
+      manage: 'Manage subscriptions'
+    },
+    'ar': {
+      season: 'يتجدد تلقائيًا بسعر {price}/شهريًا حتى الإلغاء. يمكنك الإلغاء في أي وقت من Google Play > الاشتراكات.',
+      weekly: 'يتجدد تلقائيًا بسعر {price}/أسبوعيًا حتى الإلغاء. يمكنك الإلغاء في أي وقت من Google Play > الاشتراكات.',
+      manage: 'إدارة الاشتراكات'
+    },
+    'de-DE': {
+      season: 'Verlängert sich automatisch für {price}/Monat bis zur Kündigung. Jederzeit in Google Play > Abos kündbar.',
+      weekly: 'Verlängert sich automatisch für {price}/Woche bis zur Kündigung. Jederzeit in Google Play > Abos kündbar.',
+      manage: 'Abos verwalten'
+    },
+    'es-419': {
+      season: 'Se renueva automáticamente a {price}/mes hasta que se cancele. Cancela cuando quieras en Google Play > Suscripciones.',
+      weekly: 'Se renueva automáticamente a {price}/semana hasta que se cancele. Cancela cuando quieras en Google Play > Suscripciones.',
+      manage: 'Administrar suscripciones'
+    },
+    'fr-FR': {
+      season: 'Se renouvelle automatiquement à {price}/mois jusqu’à résiliation. Annulable à tout moment dans Google Play > Abonnements.',
+      weekly: 'Se renouvelle automatiquement à {price}/semaine jusqu’à résiliation. Annulable à tout moment dans Google Play > Abonnements.',
+      manage: 'Gérer les abonnements'
+    },
+    'hi-IN': {
+      season: 'रद्द किए जाने तक {price}/महीना पर अपने आप रिन्यू होगा। Google Play > सदस्यताएं में कभी भी रद्द करें।',
+      weekly: 'रद्द किए जाने तक {price}/सप्ताह पर अपने आप रिन्यू होगा। Google Play > सदस्यताएं में कभी भी रद्द करें।',
+      manage: 'सदस्यताएं प्रबंधित करें'
+    },
+    'id': {
+      season: 'Diperbarui otomatis seharga {price}/bulan hingga dibatalkan. Batalkan kapan saja di Google Play > Langganan.',
+      weekly: 'Diperbarui otomatis seharga {price}/minggu hingga dibatalkan. Batalkan kapan saja di Google Play > Langganan.',
+      manage: 'Kelola langganan'
+    },
+    'it-IT': {
+      season: 'Si rinnova automaticamente a {price}/mese fino all’annullamento. Annulla quando vuoi in Google Play > Abbonamenti.',
+      weekly: 'Si rinnova automaticamente a {price}/settimana fino all’annullamento. Annulla quando vuoi in Google Play > Abbonamenti.',
+      manage: 'Gestisci abbonamenti'
+    },
+    'ja-JP': {
+      season: '解約まで{price}/月で自動更新されます。Google Play > 定期購入 でいつでも解約できます。',
+      weekly: '解約まで{price}/週で自動更新されます。Google Play > 定期購入 でいつでも解約できます。',
+      manage: '定期購入を管理'
+    },
+    'pt-BR': {
+      season: 'Renova automaticamente por {price}/mês até ser cancelado. Cancele quando quiser em Google Play > Assinaturas.',
+      weekly: 'Renova automaticamente por {price}/semana até ser cancelado. Cancele quando quiser em Google Play > Assinaturas.',
+      manage: 'Gerenciar assinaturas'
+    },
+    'tr-TR': {
+      season: 'İptal edilene kadar {price}/ay olarak otomatik yenilenir. Google Play > Abonelikler’den istediğin zaman iptal et.',
+      weekly: 'İptal edilene kadar {price}/hafta olarak otomatik yenilenir. Google Play > Abonelikler’den istediğin zaman iptal et.',
+      manage: 'Abonelikleri yönet'
+    },
+    'uk': {
+      season: 'Автоматично поновлюється за {price}/місяць до скасування. Скасувати можна в будь-який час у Google Play > Підписки.',
+      weekly: 'Автоматично поновлюється за {price}/тиждень до скасування. Скасувати можна в будь-який час у Google Play > Підписки.',
+      manage: 'Керувати підписками'
+    },
+    'zh-CN': {
+      season: '在取消前将以{price}/月自动续订。可随时在 Google Play > 订阅 中取消。',
+      weekly: '在取消前将以{price}/周自动续订。可随时在 Google Play > 订阅 中取消。',
+      manage: '管理订阅'
+    }
+  };
+  function detectLocale(){
+    var s = (window.currentLocale || window.lang ||
+             (window.state && window.state.lang) ||
+             (window.State && window.State.lang) ||
+             document.documentElement.lang ||
+             navigator.language || 'en-US') + '';
+    s = s.replace('_','-');
+    if (STRINGS[s]) return s;
+    // Locale shorthand mapping.
+    var head = s.split('-')[0];
+    var alias = {ar:'ar', de:'de-DE', es:'es-419', fr:'fr-FR', hi:'hi-IN',
+                 id:'id', it:'it-IT', ja:'ja-JP', pt:'pt-BR', tr:'tr-TR',
+                 uk:'uk', zh:'zh-CN', en:'en-US'};
+    return alias[head] || 'en-US';
+  }
+  function priceFor(sku){
+    // Prefer the in-app PRODUCTS array if it exists.
+    var arr = window.PRODUCTS || (window.Game && window.Game.PRODUCTS);
+    if (Array.isArray(arr)){
+      for (var i=0;i<arr.length;i++){
+        if (arr[i] && arr[i].id === sku && arr[i].price){
+          // Strip the period suffix ($4.99/mo → $4.99) so we control "/month".
+          return (arr[i].price + '').split('/')[0];
+        }
+      }
+    }
+    return sku === 'season_pass_monthly' ? '$4.99' : '$1.99';
+  }
+
+  function ensureDisclosure(sku, button){
+    // Idempotent — never inject twice next to the same button.
+    if (!button) return;
+    if (button.nextSibling && button.nextSibling.getAttribute &&
+        button.nextSibling.getAttribute('data-subs-disclosure') === sku) return;
+    var loc = detectLocale();
+    var key = sku === 'season_pass_monthly' ? 'season' : 'weekly';
+    var tpl = (STRINGS[loc] && STRINGS[loc][key]) || STRINGS['en-US'][key];
+    var price = priceFor(sku);
+    var txt = tpl.replace('{price}', price);
+    var p = document.createElement('div');
+    p.setAttribute('data-subs-disclosure', sku);
+    p.style.cssText =
+      'font-size:0.68rem;line-height:1.35;opacity:0.78;margin:4px 8px 8px;' +
+      'text-align:center;max-width:340px;letter-spacing:0.1px;';
+    p.textContent = txt;
+    var parent = button.parentNode;
+    if (parent && parent.nextSibling) parent.parentNode.insertBefore(p, parent.nextSibling);
+    else if (parent) parent.appendChild(p);
+    else button.insertAdjacentElement('afterend', p);
+  }
+  function placeDisclosures(){
+    // Every shop UI has its own shape; pick by attribute, not by global ID.
+    document.querySelectorAll('[onclick]').forEach(function(el){
+      var s = el.getAttribute('onclick') || '';
+      if (s.indexOf('season_pass_monthly') >= 0) ensureDisclosure('season_pass_monthly', el);
+      else if (s.indexOf('weekly_pass') >= 0) ensureDisclosure('weekly_pass', el);
+    });
+  }
+  setInterval(placeDisclosures, 1500);
+
+  // ── Manage subscriptions row in Settings ───────────────────────────
+  function openSubs(){
+    var url = 'https://play.google.com/store/account/subscriptions';
+    if (window.Android && typeof window.Android.openUrl === 'function'){
+      safe(function(){ window.Android.openUrl(url); });
+      return;
+    }
+    safe(function(){ window.open(url, '_blank'); });
+  }
+  function ensureManageRow(){
+    var hosts = ['settingsScreen','screen-settings','xSettingsScreen'];
+    var settings = null;
+    for (var i=0;i<hosts.length;i++){
+      var el = document.getElementById(hosts[i]);
+      if (el) { settings = el; break; }
+    }
+    if (!settings) return;
+    if (settings.querySelector('[data-subs-manage]')) return;
+    var loc = detectLocale();
+    var label = (STRINGS[loc] && STRINGS[loc].manage) || STRINGS['en-US'].manage;
+    var row = document.createElement('div');
+    row.setAttribute('data-subs-manage','1');
+    row.style.cssText =
+      'padding:12px 16px;border-radius:10px;background:rgba(0,0,0,0.05);' +
+      'margin:8px;cursor:pointer;font-weight:600;display:flex;align-items:center;justify-content:space-between;';
+    row.innerHTML = '<span>' + label + '</span><span style="opacity:0.55">›</span>';
+    row.addEventListener('click', openSubs);
+    settings.appendChild(row);
+  }
+  setInterval(ensureManageRow, 1500);
+})();
+</script>

@@ -757,6 +757,41 @@ Text overlays are fine if they clarify the screen, not if they oversell.
 Text should be short (≤4 words), in the app's brand font, placed outside the
 core game area so the actual gameplay is visible.
 
+### 7.3 Truthful capability in store descriptions [ALL, P0]
+
+The store description states only what the build actually does — never
+aspirational. From the 2026-05-27 portfolio review:
+
+- **Language count.** Quote the actual number of locale directories
+  (currently 13 across the portfolio), never "20+" or
+  "supports all languages".
+- **Weekly Tournament.** Our weekly bracket is synthetic — the player
+  is compared against their own history, not other players. Use
+  "personal-best challenge each week" or "beat your own best score" —
+  not "leaderboard", "global rank", "top 25% earn coins".
+- **"Unique solution" / "no guessing".** Only state this for apps in
+  `scripts/check_description_claims.SOLVER_VERIFIED_APPS` (Nonogram).
+  Saying it without the solver pass is a Misleading Behavior risk.
+
+Soft-warned by `scripts/check_description_claims.py` across all 13
+locales.
+
+### 7.4 Subscription disclosure at point of purchase [ALL, P0]
+
+Every Season Pass / Weekly Pass button MUST surface the auto-renew
+terms directly under it:
+
+- Price + period ("$4.99/month", "$1.99/week")
+- The text "Auto-renews … until cancelled"
+- Where to cancel ("Google Play > Subscriptions")
+
+A Settings row "Manage subscriptions" deep-links to
+`https://play.google.com/store/account/subscriptions`. Both are
+provided by `scripts/_growth_shim_subs.html` (idempotent
+`data-growth-shim="SUBS"`) and localized across all 13 portfolio
+locales. Hard-blocked by
+`scripts/check_subscription_disclosure.py`.
+
 ### 7.2.1 Header typography spacing [ALL, P0]
 
 The marketing wrap header has three components stacked vertically:

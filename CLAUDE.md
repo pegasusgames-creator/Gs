@@ -958,3 +958,73 @@ every publish: shim marker present, no forbidden static banners inside
 the menu container, Tier 1 primary button selector matches at least one
 element, Tier 2 Daily button + Tier 3 icon row reachable. Wired into
 `pre_publish_check.py` as `[code] menu hierarchy`.
+
+---
+
+## Review 2026-05 fixes — invariants
+
+Memorialized from the 2026-05-27 full-review pass. Each line is now a
+pre-publish gate. Reverse one of these and the gate blocks the ship.
+
+- **Puzzle win checks validate against CLUES/rules, never a single
+  stored solution.** A player who finds an alternate valid solution
+  must always win. Nonogram `checkPuzzle` / `checkAutoWin` now compare
+  the player's row+column run-length encoding against the level's
+  clues. Stored solutions are kept only as witnesses for the
+  "X errors found" counter.
+- **Every procedurally-generated puzzle level is uniqueness-gated
+  before shipping.** Nonogram ships 80 offline-validated `PREGEN_10`
+  10x10 boards + 150 `PREGEN_15` + 200 `PREGEN_20`; remaining
+  generated boards go through a runtime `_countSolutionsUpTo(...) === 1`
+  gate with a 300-attempt budget and a curated fallback.
+  `scripts/check_nonogram_unique.py` is a hard pre-publish blocker;
+  `scripts/verify_nonogram_pregen.js --fix` regenerates any board that
+  later regresses. The same uniqueness-gate principle applies to Rush
+  Hour / unblock (`check_unblock_solvable.py`) and any future
+  procedural genre.
+- **Rewarded-ad reward type strings in JS must exactly match the
+  `onAdReward` handler branches.** Bare `Android.showRewarded(type)`
+  calls that name a string with no matching `type === 'X'` /
+  `case 'X'` branch (or a queued callback in callback-queue apps) are
+  blocked by `scripts/check_reward_type_parity.py`. A watched ad must
+  always grant.
+- **Subscriptions disclose auto-renew price/period + cancel path at
+  the point of purchase.** Every Season Pass / Weekly Pass button
+  carries renewal disclosure text right under it via
+  `scripts/_growth_shim_subs.html` (idempotent
+  `data-growth-shim="SUBS"`), and Settings carries a Manage
+  Subscriptions row linking
+  https://play.google.com/store/account/subscriptions via the
+  `Android.openUrl` bridge. Localized across 13 locales.
+  `scripts/check_subscription_disclosure.py` blocks publish.
+- **Rewarded-ad callbacks are queue-based, never single-pointer.**
+  WaterSort uses `_pendingAdCallbacks[]`; Nonogram, Puzzle2048 use
+  `_pendingRewardCbs[]`. New triggers no-op while the queue is
+  non-empty (chokepoint disable). `onAdReward` drains the queue in
+  try/catch. `onAdNotReady` / `onAdDismissed` clear the queue. The
+  single-pointer model drops rewards under any concurrency.
+- **Store descriptions state only true capability.** Real language
+  count (not "20+"), no "global rank" / "leaderboard" wording for the
+  synthetic weekly bracket (use "personal-best challenge" instead),
+  and no "unique solution" / "no guessing" unless the app is in
+  `check_description_claims.SOLVER_VERIFIED_APPS`. Soft-warned by
+  `scripts/check_description_claims.py`.
+- **Release notes describe only changes present in the build.**
+  Promising "cleaner main menu" requires the `showScreen('menuScreen')`
+  branch to no longer call `injectFreeCoins` / `injectThemeStrip` /
+  `injectPassPromo` / `updateTournamentBanner` (those relocated to
+  top-bar icons + deeper screens). Warned by
+  `scripts/check_release_notes_match.py`.
+- **Keystores and passwords never committed or shipped in archives.**
+  `*.jks`, `*.keystore`, `keystore.properties`, `*.pem`, `*.der`,
+  `local.properties`, `google-services.json`, and `release_aabs/` are
+  gitignored at both repo root and every per-app root. Any zip
+  shared with a third party MUST exclude `**/keystore.*` and
+  `**/*.pem`. `keystore.properties` stores its password in plaintext
+  (gradle requirement) — gitignore enforces never-shared.
+- **z-index literals are forbidden in `game.html`.** Use the
+  portfolio-wide `:root` scale: `--z-overlay-dim: 100`, `--z-banner:
+  200`, `--z-toast: 300`, `--z-confirm: 400`, `--z-tutorial: 500`,
+  `--z-modal: 700`, `--z-critical: 800`. `scripts/zindex_normalize`
+  (one-off) collapsed every literal; new code uses `var(--z-modal)`
+  etc.
