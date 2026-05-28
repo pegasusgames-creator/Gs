@@ -6606,7 +6606,7 @@ window.addEventListener('load',function(){
       '}'+
       // Streak-chip row (rendered inline above icon row).
       '[data-menu-chips]{display:flex !important;justify-content:center !important;flex-wrap:wrap !important;'+
-        'gap:8px !important;margin:8px 16px 4px !important;font-size:12px !important;font-weight:700 !important;'+
+        'gap:8px !important;margin:14px auto !important;font-size:12px !important;font-weight:700 !important;'+
         'font-family:inherit !important;}'+
       '[data-menu-chip]{padding:7px 12px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:1px solid rgba(120,120,160,0.25);background:rgba(120,120,160,0.10);}'+
       '[data-menu-chip][data-tone="shield"]{background:rgba(96,148,212,0.10);border-color:rgba(96,148,212,0.32);color:#3b6db8;}'+
@@ -6740,19 +6740,16 @@ window.addEventListener('load',function(){
   }
   function ensureMenuHeader(){
     var menu = menuEl(); if (!menu) return null;
-    var existing = menu.querySelector('.menu-header');
-    if (existing) return existing;
+    // Always synthesize — the native .menu-header is hidden by
+    // hideNativeTopBarOnMenu so injecting into it would be invisible.
+    // Round-8 fix: previously returned the native if present, which
+    // landed our icons + stats inside a display:none element.
     var syn = menu.querySelector('[data-synth-menu-header]');
     if (syn) return syn;
     syn = document.createElement('div');
     syn.setAttribute('data-synth-menu-header','1');
     syn.style.cssText =
-      // In-flow row at the TOP-RIGHT of the menu container. flex-end so
-      // a single child (icons-only case, e.g. UnblockPuzzle) hugs the
-      // right; left-side stats use margin-right:auto to push themselves
-      // to the start. 18px bottom-margin gives breathing room under
-      // the row before the title (round-3 fix).
-      'display:flex;align-items:center;justify-content:flex-end;' +
+      'display:flex;align-items:center;justify-content:space-between;' +
       'padding:14px 14px 4px;margin-bottom:14px;gap:8px;';
     if (menu.firstChild) menu.insertBefore(syn, menu.firstChild);
     else menu.appendChild(syn);
@@ -6796,45 +6793,42 @@ window.addEventListener('load',function(){
   function ensureTopBarIcons(){
     var header = ensureMenuHeader();
     if (!header) return;
-    // Wipe and re-render — idempotent and lets values refresh.
+    // LEFT cluster — lives + coins balance only. No buttons here.
     if (header.querySelector('[data-menu-stats]')) {
       refreshLeftStats();
     } else {
       var lc = readLivesCoins();
       var left = document.createElement('div');
       left.setAttribute('data-menu-stats','1');
-      // Left cluster: lives + coins + free-coins. margin-right:auto
-      // pushes the RIGHT cluster to the far right.
-      left.style.cssText = 'display:flex;align-items:center;gap:14px;margin-right:auto;font-weight:700;';
+      left.style.cssText = 'display:flex;align-items:center;gap:12px;font-weight:700;';
       left.innerHTML =
-        // Stats — flat, no pill backgrounds (matches user "no circles"
-        // and "consistent with rest of UI" feedback). Color inherits.
         (lc.lives != null
           ? '<span data-stat="lives" style="display:inline-flex;align-items:center;gap:4px;font-size:0.95rem;">❤<span data-stat-lives style="font-variant-numeric:tabular-nums;">' + lc.lives + '</span></span>'
           : '') +
         (lc.coins != null
           ? '<span data-stat="coins" style="display:inline-flex;align-items:center;gap:4px;font-size:0.95rem;">🪙<span data-stat-coins style="font-variant-numeric:tabular-nums;">' + lc.coins + '</span></span>'
-          : '') +
-        // Free-coins icon — same flat treatment, with +25 badge.
+          : '');
+      header.appendChild(left);
+    }
+    // RIGHT cluster — free-coins icon + ranks icon. User policy 2026-05-27:
+    // both action buttons live in the TOP RIGHT corner, not split.
+    if (!header.querySelector('[data-menu-icons]')) {
+      var right = document.createElement('div');
+      right.setAttribute('data-menu-icons','1');
+      right.style.cssText = 'display:flex;align-items:center;gap:14px;';
+      right.innerHTML =
         '<button data-menu-icon="freecoins" aria-label="Free coins" ' +
         'style="position:relative;background:transparent;border:none;cursor:pointer;' +
-        'font-size:1.25rem;line-height:1;padding:0 2px;font-family:inherit;color:inherit;">' +
+        'font-size:1.35rem;line-height:1;padding:0 2px;font-family:inherit;color:inherit;">' +
           '🪙' +
           '<span data-menu-icon-badge="freecoins" style="position:absolute;top:-6px;right:-12px;background:#2ea043;color:#fff;border-radius:9px;padding:1px 5px;font-size:9px;font-weight:800;display:none;line-height:1;">+' + FREE_COINS_AMOUNT + '</span>' +
-        '</button>';
-      header.appendChild(left);
-      left.querySelector('[data-menu-icon="freecoins"]').addEventListener('click', onFreeCoinsClick);
-    }
-    if (!header.querySelector('[data-menu-icon="ranks"]')) {
-      var ranks = document.createElement('button');
-      ranks.setAttribute('data-menu-icon','ranks');
-      ranks.setAttribute('aria-label','Ranks');
-      ranks.style.cssText =
-        'background:transparent;border:none;cursor:pointer;' +
-        'font-size:1.35rem;line-height:1;padding:0 2px;font-family:inherit;color:inherit;';
-      ranks.textContent = '🏆';
-      ranks.addEventListener('click', openRanksSheet);
-      header.appendChild(ranks);
+        '</button>' +
+        '<button data-menu-icon="ranks" aria-label="Ranks" ' +
+        'style="background:transparent;border:none;cursor:pointer;' +
+        'font-size:1.35rem;line-height:1;padding:0 2px;font-family:inherit;color:inherit;">🏆</button>';
+      header.appendChild(right);
+      right.querySelector('[data-menu-icon="freecoins"]').addEventListener('click', onFreeCoinsClick);
+      right.querySelector('[data-menu-icon="ranks"]').addEventListener('click', openRanksSheet);
     }
   }
   function refreshLeftStats(){
@@ -7243,15 +7237,38 @@ window.addEventListener('load',function(){
     if (!nm) return;
     var save = window._growthD && window._growthD.readSave();
     if (!save) return;
-    // Coins-only branch (most common). Other reward types stay in
-    // the app-native daily flow; we just mark "claimed today" so the
-    // chip flips to "tomorrow" state.
     var m = /([0-9]+)\s*🪙/.exec(nm.reward||'');
     if (m && typeof save.obj.coins === 'number') {
       save.obj.coins += parseInt(m[1],10);
       window._growthD.writeSave(save);
     }
+    // Sync with the per-app login-streak ladder so the native
+    // "Day N streak!" panel doesn't re-pop on the next launch
+    // (round-8: prevents the duplicate-claim popup the user saw).
+    var today = new Date().toISOString().slice(0,10);
+    lsSet('xLoginLast', today);
     if (window.showToast) safe(function(){ showToast('🎁 ' + nm.reward + ' claimed!'); });
+  }
+
+  // ── Hide native level-duplication elements when our Continue label
+  // owns the level number. The user policy: ONE level reference on the
+  // menu, inside the primary button. UB shows ".level-indicator" + a
+  // ".menu-primary-sub" subtitle that duplicate the Continue · Level N
+  // text on the button.
+  function hideNativeLevelLabels(){
+    var menu = menuEl(); if (!menu) return;
+    if (!hasResumableProgress()) return;
+    ['.level-indicator', '.menu-primary-sub'].forEach(function(sel){
+      menu.querySelectorAll(sel).forEach(function(el){
+        // Only hide if it mentions "Level" / "Continue" — leaves pure
+        // flavor text alone if the app puts something non-redundant
+        // (e.g. tagline) there.
+        var t = (el.textContent || '').toLowerCase();
+        if (t.indexOf('level') >= 0 || t.indexOf('continue') >= 0) {
+          el.style.display = 'none';
+        }
+      });
+    });
   }
 
   // ── Tier 1 + Tier 2 label patching.
@@ -7332,9 +7349,24 @@ window.addEventListener('load',function(){
     ensureTopBarIcons();
     refreshTopBarIconState();
     patchMenuButtons();
+    hideNativeLevelLabels();
     slimSeasonBanner();
     renderChips();
   }
+  // Re-run the label-only parts a few times after initial render so we
+  // pick up state that loaded late (per-app code often sets state.coins
+  // / state.currentLevel asynchronously). Cheap — text-only updates,
+  // no layout re-flow.
+  function lateRenderSweep(){
+    if (!onMenu()) return;
+    refreshLeftStats();
+    refreshTopBarIconState();
+    patchMenuButtons();
+    hideNativeLevelLabels();
+  }
+  [400, 900, 1800, 3500].forEach(function(d){
+    setTimeout(function(){ if (onMenu()) lateRenderSweep(); }, d);
+  });
   // Wrap showScreen so navigating to each screen triggers the right
   // late-binding render. Theme strip + tournament banner + pass promo
   // are no longer created at boot; they're materialized here on demand.
