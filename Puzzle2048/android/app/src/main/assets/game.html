@@ -3760,14 +3760,23 @@ window.addEventListener('load',function(){
     refresh(); showPanel(day,r);
   }
   function showPanel(day,r){
-    var m=$('xLoginPanel2048'); if(!m){ m=document.createElement('div'); m.id='xLoginPanel2048'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;z-index: var(--z-modal)'; document.body.appendChild(m); }
-    var row=LADDER.map(function(x,i){ var on=(i+1)<=day; return '<div style="flex:1;text-align:center;padding:4px 2px;border-radius:6px;font-size:0.62rem;background:'+(on?'#edc22e':'#2a2823')+';color:'+(on?'#1a1a18':'#a89f8e')+'">D'+(i+1)+'<br>'+(i+1===day?'★':'')+'</div>'; }).join('');
-    m.innerHTML='<div style="background:#1c1a17;border:1px solid #3a352d;border-radius:14px;padding:22px;max-width:340px;width:92%;text-align:center;color:#f7f3ec">'+
+    // 2026-05-28 themed for warm cream daylight. Dark colors restored
+    // automatically under html[data-theme="midnight"] via the override
+    // block higher up — these literals match the cream palette.
+    var isMidnight = document.documentElement.getAttribute('data-theme')==='midnight';
+    var panelBg   = isMidnight ? '#1c1a17' : '#fbf4e2';
+    var panelText = isMidnight ? '#f7f3ec' : '#2a2620';
+    var panelBord = isMidnight ? '#3a352d' : 'rgba(0,0,0,0.12)';
+    var panelMute = isMidnight ? '#a89f8e' : 'rgba(42,38,32,0.62)';
+    var ladderOff = isMidnight ? '#2a2823' : '#e6dcc0';
+    var m=$('xLoginPanel2048'); if(!m){ m=document.createElement('div'); m.id='xLoginPanel2048'; m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index: var(--z-modal)'; document.body.appendChild(m); }
+    var row=LADDER.map(function(x,i){ var on=(i+1)<=day; return '<div style="flex:1;text-align:center;padding:4px 2px;border-radius:6px;font-size:0.62rem;background:'+(on?'#edc22e':ladderOff)+';color:'+(on?'#1a1a18':panelMute)+'">D'+(i+1)+'<br>'+(i+1===day?'★':'')+'</div>'; }).join('');
+    m.innerHTML='<div style="background:'+panelBg+';border:1px solid '+panelBord+';border-radius:14px;padding:22px;max-width:340px;width:92%;text-align:center;color:'+panelText+'">'+
       '<div style="font-size:1.1rem;font-weight:800;margin-bottom:4px">🔥 Day '+day+' streak!</div>'+
-      '<div style="font-size:0.9rem;color:#7fc97f;font-weight:700;margin-bottom:12px">'+r.label+' claimed</div>'+
+      '<div style="font-size:0.9rem;color:#c83814;font-weight:700;margin-bottom:12px">'+r.label+' claimed</div>'+
       '<div style="display:flex;gap:3px;margin-bottom:14px">'+row+'</div>'+
       (r.seasonCTA?'<button id="xLp2Season" style="display:block;width:100%;background:linear-gradient(135deg,#edc22e,#b88e0e);color:#1a1a18;border:none;border-radius:8px;padding:11px;font-weight:800;margin-bottom:8px;cursor:pointer">🎮 TRY SEASON PASS</button>':'')+
-      '<button id="xLp2Close" style="display:block;width:100%;background:transparent;color:#a89f8e;border:none;padding:8px;cursor:pointer">Close</button></div>';
+      '<button id="xLp2Close" style="display:block;width:100%;background:transparent;color:'+panelMute+';border:none;padding:8px;cursor:pointer">Close</button></div>';
     if($('xLp2Season')) $('xLp2Season').onclick=function(){ m.style.display='none'; if(window.Android&&window.Android.purchase) window.Android.purchase('season_pass_monthly'); };
     $('xLp2Close').onclick=function(){ m.style.display='none'; };
     m.style.display='flex';
@@ -4902,8 +4911,21 @@ window.addEventListener('load',function(){
       '#menuScreen .menu-tile-row, #screen-menu .menu-tile-row{'+
         'justify-content:center !important;'+
       '}'+
-      // Top-bar icons — flat, transparent, no circles. Freecoins keeps
-      // position:relative for the +25 badge.
+      // Vertically center the Tier-1 Play button — middle of the screen,
+      // not high near the top. flex:1 + justify-content:center pushes
+      // the button stack into the middle so the eyes find it instantly.
+      '#menuScreen .menu-buttons, #screen-menu .menu-buttons{'+
+        'flex:1 !important;justify-content:center !important;'+
+      '}'+
+      '#menuScreen, #screen-menu{display:flex !important;flex-direction:column !important;}'+
+      // Top bar pinned to the very top of the menu container. The
+      // synth header is position:absolute so its left/right clusters
+      // hug the screen edges. Each menu adds top padding to clear it.
+      '[data-synth-menu-header]{position:absolute !important;top:0 !important;left:0 !important;right:0 !important;'+
+        'padding:14px 18px !important;margin:0 !important;'+
+        'display:flex !important;align-items:center !important;justify-content:space-between !important;'+
+        'z-index:5 !important;background:transparent !important;}'+
+      '#menuScreen, #screen-menu { padding-top:68px !important; }'+
       '[data-menu-stats]{position:static !important;}'+
       '[data-menu-icon="freecoins"]{position:relative !important;}'+
       // Belt-and-braces: any legacy widget that ends up inside the
@@ -4931,10 +4953,13 @@ window.addEventListener('load',function(){
       '[data-menu-chips]{display:flex !important;justify-content:center !important;flex-wrap:wrap !important;'+
         'gap:8px !important;margin:14px auto !important;font-size:12px !important;font-weight:700 !important;'+
         'font-family:inherit !important;}'+
-      '[data-menu-chip]{padding:7px 12px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:1px solid rgba(120,120,160,0.25);background:rgba(120,120,160,0.10);}'+
-      '[data-menu-chip][data-tone="shield"]{background:rgba(96,148,212,0.10);border-color:rgba(96,148,212,0.32);color:#3b6db8;}'+
-      '[data-menu-chip][data-tone="claim"]{background:rgba(201,127,0,0.10);border-color:rgba(201,127,0,0.32);color:#c97f00;}'+
-      '[data-menu-chip][data-tone="done"]{background:rgba(46,160,67,0.10);border-color:rgba(46,160,67,0.32);color:#2ea043;}';
+      // Chips inherit the menu's text color so they stay readable on
+      // any theme bg (cream / mint / medium-blue / dark). Background
+      // + border use semi-opaque accent tints that read above any bg.
+      '[data-menu-chip]{padding:8px 14px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:inherit;background:rgba(127,127,127,0.18) !important;border:1px solid rgba(127,127,127,0.32) !important;}'+
+      '[data-menu-chip][data-tone="shield"]{background:rgba(80,130,220,0.22) !important;border-color:rgba(80,130,220,0.50) !important;}'+
+      '[data-menu-chip][data-tone="claim"]{background:rgba(220,140,40,0.22) !important;border-color:rgba(220,140,40,0.50) !important;}'+
+      '[data-menu-chip][data-tone="done"]{background:rgba(46,160,67,0.22) !important;border-color:rgba(46,160,67,0.50) !important;}';
     (document.head || document.documentElement).appendChild(st);
   })();
 
