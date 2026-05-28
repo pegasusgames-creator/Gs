@@ -24,55 +24,120 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-Fresh launch — 150 hand-tuned sliding-block puzzles, every one solver-verified solvable. Slide, escape, repeat.
+What's new
+• Lives and coins now show in the top bar on every screen
+• Daily puzzle button shows today's date
+• Ranks sheet matches your color theme and scrolls through 100 players
+• Cleaner Continue/Play hierarchy — no more "Continue · 0" on a fresh run
+• Smoother menu rhythm; chips match the icon-row buttons
 </en-US>
 
 <ar>
-إطلاق جديد — 150 لغز انزلاق كتل مضبوطة يدويًا، كل لغز تم التحقق من قابليته للحل بواسطة محلّل. اسحب، اهرب، كرّر.
+ما الجديد
+• تظهر الأرواح والعملات الآن في الشريط العلوي على كل شاشة
+• زر اللغز اليومي يعرض تاريخ اليوم
+• ورقة الترتيب تطابق ثيم اللون لديك وتمرر عبر 100 لاعب
+• ترتيب أنظف لزر متابعة/تشغيل — لن يظهر "متابعة · 0" بعد الآن
+• إيقاع قائمة أكثر سلاسة؛ الشرائح تطابق أزرار الصف
 </ar>
 
 <de-DE>
-Frischer Start — 150 handfein abgestimmte Schiebeblock-Rätsel, jedes per Solver als lösbar bestätigt. Schieben, entkommen, wiederholen.
+Was ist neu
+• Leben und Münzen erscheinen jetzt in der oberen Leiste auf jedem Bildschirm
+• Tagespuzzle-Button zeigt das heutige Datum
+• Bestenliste passt zum Farbthema und scrollt durch 100 Spieler
+• Aufgeräumtere Weiter/Spiel-Hierarchie — kein "Weiter · 0" mehr
+• Geschmeidigerer Menürhythmus; Chips passen zu den Tier-3-Buttons
 </de-DE>
 
 <es-419>
-Lanzamiento nuevo — 150 rompecabezas de bloques deslizantes ajustados a mano, cada uno verificado como resoluble por un solucionador. Desliza, escapa, repite.
+Novedades
+• Vidas y monedas ahora aparecen en la barra superior en cada pantalla
+• El botón del rompecabezas diario muestra la fecha de hoy
+• La tabla de clasificación coincide con tu tema de color y recorre 100 jugadores
+• Jerarquía Continuar/Jugar más limpia — sin "Continuar · 0"
+• Ritmo del menú más fluido; los chips coinciden con los botones de la fila
 </es-419>
 
 <fr-FR>
-Nouveau lancement — 150 puzzles de blocs coulissants réglés à la main, chacun vérifié comme résoluble par un solveur. Glissez, échappez-vous, recommencez.
+Quoi de neuf
+• La vie et les pièces apparaissent dans la barre supérieure sur chaque écran
+• Le bouton puzzle quotidien affiche la date du jour
+• Le classement s'adapte à votre thème de couleur et défile parmi 100 joueurs
+• Hiérarchie Continuer/Jouer plus claire — plus de « Continuer · 0 »
+• Rythme du menu plus fluide ; les puces correspondent aux boutons
 </fr-FR>
 
 <hi-IN>
-नया लॉन्च — 150 हाथ से ट्यून की गई स्लाइडिंग-ब्लॉक पहेलियाँ, हर एक सॉल्वर द्वारा हल करने योग्य सत्यापित। खिसकाएँ, बचें, दोहराएँ।
+क्या नया है
+• हर स्क्रीन पर शीर्ष बार में जीवन और सिक्के अब दिखते हैं
+• डेली पजल बटन आज की तारीख दिखाता है
+• रैंक शीट आपके रंग थीम से मेल खाती है और 100 खिलाड़ियों के बीच स्क्रॉल करती है
+• स्वच्छ कंटिन्यू/प्ले हाइरार्की — अब "Continue · 0" नहीं
+• आसान मेनू लय; चिप्स पंक्ति के बटनों से मेल खाते हैं
 </hi-IN>
 
 <id>
-Peluncuran baru — 150 teka-teki blok geser yang disetel dengan tangan, setiap teka-teki diverifikasi dapat diselesaikan oleh solver. Geser, lolos, ulangi.
+Yang baru
+• Nyawa dan koin sekarang muncul di bilah atas di setiap layar
+• Tombol teka-teki harian menampilkan tanggal hari ini
+• Lembar peringkat cocok dengan tema warna Anda dan menggulir 100 pemain
+• Hierarki Lanjutkan/Main yang lebih bersih — tidak ada lagi "Lanjutkan · 0"
+• Ritme menu lebih halus; chip cocok dengan tombol baris ikon
 </id>
 
 <it-IT>
-Nuovo lancio — 150 puzzle a blocchi scorrevoli rifiniti a mano, ognuno verificato risolvibile da un solver. Scorri, fuggi, ripeti.
+Novità
+• Vite e monete ora compaiono nella barra superiore in ogni schermata
+• Il pulsante puzzle giornaliero mostra la data di oggi
+• Classifica adattata al tuo tema colore, scorrevole tra 100 giocatori
+• Gerarchia Continua/Gioca più ordinata — niente più "Continua · 0"
+• Ritmo del menu più fluido; i chip combaciano con i pulsanti
 </it-IT>
 
 <ja-JP>
-新登場 — 手作業で調整した150のスライドブロックパズル、すべてソルバーで解けることを確認済み。スライドして、脱出して、繰り返そう。
+新着情報
+• ライフとコインがすべての画面の上部バーに表示されるようになりました
+• デイリーパズルボタンに今日の日付が表示されます
+• ランキングシートがカラーテーマに合わせ、100人のプレイヤーをスクロール
+• よりすっきりした続ける/プレイ階層 — 「続ける · 0」はもう出ません
+• よりなめらかなメニュー；チップがアイコン列と揃います
 </ja-JP>
 
 <pt-BR>
-Novo lançamento — 150 quebra-cabeças de blocos deslizantes ajustados à mão, cada um verificado como solucionável por um solver. Deslize, escape, repita.
+O que há de novo
+• Vidas e moedas agora aparecem na barra superior em todas as telas
+• Botão do quebra-cabeça diário mostra a data de hoje
+• Tabela de classificação combina com seu tema de cor, percorre 100 jogadores
+• Hierarquia Continuar/Jogar mais limpa — sem "Continuar · 0"
+• Ritmo do menu mais suave; chips combinam com os botões da linha
 </pt-BR>
 
 <tr-TR>
-Yeni çıkış — elle ayarlanmış 150 kaydırmalı blok bulmacası, her biri çözücüyle çözülebilir olarak doğrulandı. Kaydır, kaç, tekrarla.
+Yenilikler
+• Canlar ve madeni paralar artık her ekranda üst çubukta görünür
+• Günlük bulmaca düğmesi bugünün tarihini gösterir
+• Sıralama tablosu renk temanızla uyumlu, 100 oyuncu arasında kaydırılabilir
+• Daha temiz Devam/Oyna hiyerarşisi — artık "Devam · 0" yok
+• Daha akıcı menü; çipler simge satırı düğmeleriyle eşleşir
 </tr-TR>
 
 <uk>
-Свіжий запуск — 150 вручну налаштованих головоломок із посувними блоками, кожну перевірено розв'язувачем на розв'язність. Посувай, тікай, повторюй.
+Що нового
+• Життя та монети тепер відображаються у верхній панелі на кожному екрані
+• Кнопка щоденної головоломки показує сьогоднішню дату
+• Аркуш рейтингу відповідає вашій кольоровій темі та прокручується через 100 гравців
+• Чистіша ієрархія Продовжити/Грати — більше ніяких «Продовжити · 0»
+• Плавніший ритм меню; чіпи відповідають кнопкам ряду
 </uk>
 
 <zh-CN>
-全新上线 —— 150 个手工调校的滑块谜题，每个都经求解器验证可解。滑动、脱困、再来一局。
+更新内容
+• 生命与金币现在显示在每个屏幕的顶部栏中
+• 每日谜题按钮显示今天的日期
+• 排行榜与您的颜色主题相匹配，可在100名玩家中滚动浏览
+• 更清晰的继续/开始按钮层级 — 不再出现"继续 · 0"
+• 更流畅的菜单节奏；标签与图标行按钮一致
 </zh-CN>
 
 ---

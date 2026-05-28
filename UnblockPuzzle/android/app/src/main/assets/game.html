@@ -122,7 +122,7 @@ html[data-theme="midnight"]{
   --text-soft:#aaaaaa;
   --text-mute:#8875aa;
   --text-faint:#888888;
-  --surface:rgba(255,255,255,0.05);
+  --surface:#1f1730;
   --surface-2:rgba(0,0,0,0.30);
   --surface-3:rgba(255,255,255,0.10);
   --border:rgba(255,255,255,0.08);
@@ -4971,20 +4971,30 @@ window.addEventListener('load',function(){
       '#menuScreen .menu-tile-row, #screen-menu .menu-tile-row{'+
         'justify-content:center !important;'+
       '}'+
-      // STRUCTURE is universal: centered stack, dominant Tier-1, smaller
-      // title, even rhythm. VISUAL DESIGN (colors, fonts, shapes) stays
-      // per-app. One --menu-gap drives every section spacing — no more
-      // space-around scattering dead gaps.
+      // STRUCTURE is universal: title + buttons sit together as a single
+      // cohesive block vertically centered in the viewport. VISUAL
+      // DESIGN (colors, fonts, shapes) stays per-app. 2026-05-28
+      // round-13: removed the empty gap between title-group and
+      // .menu-buttons after user feedback "no empty space in the middle
+      // of the screen — title should be lower, closer to Play".
       ':root { --menu-gap: 14px; }'+
-      // Menu container: centered stack instead of space-around so the
-      // distance between title → primary → daily → chips → icons is
-      // even and predictable.
-      '#menuScreen, #screen-menu{display:flex !important;flex-direction:column !important;justify-content:center !important;}'+
+      '#menuScreen, #screen-menu{display:flex !important;flex-direction:column !important;justify-content:center !important;align-items:center !important;}'+
+      // Title group + example grid + .menu-buttons all shrink-to-fit so
+      // none of them grabs leftover space and pushes Play to one edge.
+      '#menuScreen > *, #screen-menu > *{flex:0 0 auto !important;}'+
       '#menuScreen .menu-buttons, #screen-menu .menu-buttons{'+
-        'flex:0 1 auto !important;display:flex !important;flex-direction:column !important;'+
-        'align-items:center !important;justify-content:center !important;'+
-        'gap:var(--menu-gap) !important;padding:var(--menu-gap) 0 !important;'+
+        'flex:0 0 auto !important;display:flex !important;flex-direction:column !important;'+
+        'align-items:center !important;justify-content:flex-start !important;'+
+        'gap:var(--menu-gap) !important;padding:0 !important;margin:8px 0 0 !important;'+
       '}'+
+      // Title block sits just above the buttons with a small gap (NOT a
+      // viewport-pushed gap). 2048 example grid / WaterSort tagline /
+      // Nono "Paint by numbers" lines all collapse to ~14px below.
+      '#menuScreen .game-title, #screen-menu .game-title{margin:0 0 12px !important;}'+
+      '#menuScreen .menu-logo, #screen-menu .menu-logo,'+
+      '#menuScreen .menu-title, #screen-menu .menu-title{margin:0 !important;}'+
+      '#menuScreen .menu-tagline, #screen-menu .menu-tagline,'+
+      '#menuScreen .menu-subtitle, #screen-menu .menu-subtitle{margin:4px 0 14px !important;}'+
       // Title — small label, not a hero. Sits above the centered stack.
       '#menuScreen .game-title h1, #menuScreen .menu-title, #screen-menu .menu-logo, #menuScreen .menu-logo, #screen-menu .menu-title{'+
         'font-size:clamp(22px, 5vw, 34px) !important;line-height:1.05 !important;margin:0 0 4px !important;'+
@@ -5012,13 +5022,18 @@ window.addEventListener('load',function(){
       '}'+
       // Chips container — full width, one row, even rhythm.
       '[data-menu-chips]{width:100% !important;max-width:none !important;padding:0 16px !important;margin:0 !important;}'+
-      // Top bar pinned to the very top of the menu container. The
-      // synth header is position:absolute so its left/right clusters
-      // hug the screen edges. Each menu adds top padding to clear it.
+      // Top bar pinned to the very top of the menu container ONLY. The
+      // synth header is a child of menuScreen, so when menuScreen loses
+      // .active it should disappear — but some apps' .screen CSS uses
+      // !important display:flex when toggling. Belt-and-braces: force
+      // hide whenever the host .screen lacks .active. (Round-13 bug
+      // fix: high-scores screen showed the lives/coins/+25/trophy from
+      // the synth header overlapping its native Back+title.)
       '[data-synth-menu-header]{position:absolute !important;top:0 !important;left:0 !important;right:0 !important;'+
         'padding:14px 18px !important;margin:0 !important;'+
         'display:flex !important;align-items:center !important;justify-content:space-between !important;'+
         'z-index:5 !important;background:transparent !important;}'+
+      '.screen:not(.active) [data-synth-menu-header]{display:none !important;}'+
       '#menuScreen, #screen-menu { padding-top:68px !important; }'+
       '[data-menu-stats]{position:static !important;}'+
       '[data-menu-icon="freecoins"]{position:relative !important;}'+
@@ -5060,12 +5075,16 @@ window.addEventListener('load',function(){
       // the button is three references to the same thing.
       '#menuScreen .level-indicator, #screen-menu .level-indicator{display:none !important;}'+
       '#menuScreen .menu-primary-sub, #screen-menu .menu-primary-sub{display:none !important;}'+
-      // Chips inherit the menu text color and use a uniform neutral
-      // box treatment — the SAME look for shield + claim + done, with
-      // a small accent dot via the emoji glyph carrying the difference.
-      // (Earlier multi-tone tints made each chip look like a different
-      // component; user wanted them visually unified.)
-      '[data-menu-chip]{padding:8px 14px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:inherit;background:rgba(127,127,127,0.16) !important;border:1px solid rgba(127,127,127,0.30) !important;font-weight:700;}';
+      // Chips use the SAME look as Tier-3 icon-row buttons (Levels /
+      // Shop / Games / Settings) — same --surface bg, same --border,
+      // same --text color, so the row reads as part of the icon-row
+      // family. Round-13 fix: previously a grey neutral box that user
+      // called out as not matching the rest of the menu.
+      '[data-menu-chip]{padding:8px 14px;border-radius:14px;display:inline-flex;'+
+        'align-items:center;gap:6px;cursor:pointer;font-weight:700;'+
+        'background:var(--surface, rgba(127,127,127,0.16)) !important;'+
+        'color:var(--text, inherit) !important;'+
+        'border:1px solid var(--border, rgba(127,127,127,0.30)) !important;}';
     (document.head || document.documentElement).appendChild(st);
   })();
 
@@ -5094,7 +5113,8 @@ window.addEventListener('load',function(){
     //   Puzzle2048:   puzzle2048_save
     //   UnblockPuzzle: unblock_save
     var keys = ['save','state','gameState','progress','State',
-                'watersort_save','puzzle2048_save','unblock_save','nonogram_save'];
+                'watersort_save','puzzle2048_save','unblock_save',
+                'nonogram_state','nonogram_save'];
     for (var i=0;i<keys.length;i++){
       var raw = lsGet(keys[i], null);
       if (!raw) continue;
@@ -5112,19 +5132,38 @@ window.addEventListener('load',function(){
   }
   function hasResumableProgress(){
     var s = readSave();
+    var t = (document.title||'').toLowerCase();
+    // 2048-style: only "Continue" when there IS a mid-run grid + score.
+    // A fresh game with score=0 should say Play, not "Continue · 0".
+    // Bug fix 2026-05-28 round-13: previously bestScore>0 alone gated
+    // Continue, surfacing "Continue · 0" on screen.
+    if (t.indexOf('2048') >= 0) {
+      var sc = s.score || s.currentScore || 0;
+      var gridHasTile = false;
+      if (Array.isArray(s.grid)) {
+        for (var i=0;i<s.grid.length;i++){
+          var row = s.grid[i];
+          if (!Array.isArray(row)) continue;
+          for (var j=0;j<row.length;j++){
+            if (row[j] && row[j] !== 0) { gridHasTile = true; break; }
+          }
+          if (gridHasTile) break;
+        }
+      }
+      var ended = s.gameOver === true || s.achieved2048 === true;
+      if (ended) return false;
+      return sc > 0 || gridHasTile;
+    }
+    // Level-based games: lastLevelProgress / boardState / currentLevel
+    // / completedLevels all count.
     if (s.lastLevelProgress) return true;
     if (s.boardState || s.gameBoard) {
       var go = s.gameOver === true || s.isGameOver === true;
       if (!go) return true;
     }
-    // Any level cleared OR currentLevel > 1 counts as progress —
-    // we want "Continue · Level N" the moment the player has played
-    // anything, not just when they have a mid-level save.
     if (typeof s.currentLevel === 'number' && s.currentLevel > 1) return true;
     if (Array.isArray(s.completedLevels) && s.completedLevels.length > 0) return true;
     if (typeof s.levelsCompleted === 'number' && s.levelsCompleted > 0) return true;
-    // 2048: any non-zero best score counts as progress.
-    if (typeof s.bestScore === 'number' && s.bestScore > 0) return true;
     return false;
   }
   function progressLabel(){
@@ -5541,23 +5580,35 @@ window.addEventListener('load',function(){
         var n = pool[Math.floor(rng() * pool.length)];
         if (!used[n]) { used[n] = 1; return n; }
       }
-      // Pool exhausted (shouldn't happen with ~60 entries and 11 rows) —
-      // fall back to first-unused.
-      for (var i = 0; i < pool.length; i++){ if (!used[pool[i]]) { used[pool[i]] = 1; return pool[i]; } }
-      return pool[0];
+      // Pool exhausted — pool has ~60 entries and we render ~100 rows,
+      // so this is expected past the 60th unique name. Cycle the pool
+      // with a numeric suffix (PixelMaja → PixelMaja2 → PixelMaja3 …)
+      // so every row is still unique and the suffix reads like a
+      // username variant, not a placeholder.
+      for (var s = 2; s < 12; s++){
+        for (var i = 0; i < pool.length; i++){
+          var cand = pool[i] + s;
+          if (!used[cand]) { used[cand] = 1; return cand; }
+        }
+      }
+      return pool[0] + '_' + Math.floor(rng() * 9999);
     }
     // Score-delta scale: 2048 uses bigger steps; levels use smaller.
     var stepBase = m.is2048 ? Math.max(8, Math.round(m.value * 0.012)) : 1;
     var rows = [];
-    // Five entries above the player.
-    for (var i = 5; i >= 1; i--){
+    // 50 entries above the player and 50 below — full 101-row scrollable
+    // list per user feedback "fully scrollable, not just 10 above/below".
+    // (Round-13.)
+    var ABOVE = 50, BELOW = 50;
+    for (var i = ABOVE; i >= 1; i--){
       var r = Math.max(1, rank - i);
+      // Skip duplicate rank when the player is near the top.
+      if (i > 1 && rank - i + 1 === rank - (i - 1)) continue;
       var jitter = Math.ceil((1 + rng()) * stepBase);
       rows.push({ rank: r, name: pickName(), score: m.value + i * jitter, isPlayer: false });
     }
     rows.push({ rank: rank, name: 'You', score: m.value, isPlayer: true });
-    // Six entries below.
-    for (var j = 1; j <= 6; j++){
+    for (var j = 1; j <= BELOW; j++){
       var r2 = rank + j;
       var jitter2 = Math.ceil((1 + rng()) * stepBase);
       rows.push({ rank: r2, name: pickName(), score: Math.max(1, m.value - j * jitter2), isPlayer: false });
@@ -5572,7 +5623,7 @@ window.addEventListener('load',function(){
       '<div style="font-size:0.80rem;opacity:0.78;margin-bottom:10px;text-align:center;">' +
         head +
       '</div>' +
-      '<div data-standings-list style="max-height:280px;overflow-y:auto;border-radius:12px;border:1px solid rgba(127,127,127,0.22);">';
+      '<div data-standings-list style="max-height:62vh;overflow-y:auto;border-radius:12px;border:1px solid var(--border, rgba(127,127,127,0.22));-webkit-overflow-scrolling:touch;">';
     d.rows.forEach(function(row){
       var bg = row.isPlayer ? 'rgba(255,196,77,0.20)' : 'transparent';
       var weight = row.isPlayer ? '800' : '500';
@@ -5756,32 +5807,21 @@ window.addEventListener('load',function(){
     }
     var daily = tier2Btn();
     if (daily) {
-      // If the app already has its own streak display inside the button
-      // (a child with class menu-streak / streak-badge / etc.), DON'T
-      // touch the label — appending streak via my patch creates the
-      // "Daily · 11 Daily 11" duplication seen in Nonogram.
-      var hasNativeStreak = !!daily.querySelector(
-        '.menu-streak, .daily-streak, [class*="streak"], #menu-streak'
-      );
-      if (!hasNativeStreak) {
-        var streak = getStreak();
-        var lbl = daily.getAttribute('data-base-label');
-        if (!lbl) {
-          lbl = (daily.textContent || '').replace(/\s*🔥\s*\d+\s*$/, '').trim() || 'Daily Challenge';
-          daily.setAttribute('data-base-label', lbl);
-        }
-        // Build streak suffix as HTML so the 🔥 emoji gets an explicit
-        // color span — even if the WebView falls back to a monochrome
-        // glyph (no color emoji font), the orange color carries.
-        // Idempotent via data-streak-html marker.
-        var newHtml = lbl + (streak > 0
-          ? ' <span data-streak-html style="color:#ff8c1a;font-weight:800;">🔥&nbsp;' + streak + '</span>'
-          : '');
-        var prev = daily.getAttribute('data-streak-rendered');
-        if (prev !== newHtml) {
-          daily.innerHTML = newHtml;
-          daily.setAttribute('data-streak-rendered', newHtml);
-        }
+      // 2026-05-28 round-13: button reads "Daily puzzle · <date>" so
+      // it conveys what's actually different about today's puzzle (the
+      // date), not the streak count (which lives on the streak chip
+      // below + as a side-effect inside the Daily Challenge screen).
+      // The native streak badge (.menu-streak / #menu-streak etc.) is
+      // also blown away because the SAME info shouldn't live in two
+      // places in the menu.
+      var now = new Date();
+      var MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var dateLabel = MO[now.getMonth()] + ' ' + now.getDate();
+      var newHtml = 'Daily puzzle <span data-daily-date style="opacity:0.78;font-weight:600;">· ' + dateLabel + '</span>';
+      var prev = daily.getAttribute('data-daily-rendered');
+      if (prev !== newHtml) {
+        daily.innerHTML = newHtml;
+        daily.setAttribute('data-daily-rendered', newHtml);
       }
     }
   }

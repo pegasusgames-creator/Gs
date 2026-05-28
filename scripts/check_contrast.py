@@ -94,18 +94,30 @@ def check_app(app):
         warnings.append(f"{app}: no hex bg token in :root — contrast check skipped")
         return blocking, warnings
     bg_rgb = hex_to_rgb(bg_value)
+    # 2026-05-28 round-13: also accept --text against --surface, since
+    # in growth-shim theming `--text` is conventionally "text on a panel
+    # surface" (cards, sheets, overlays). A token only fails when it
+    # fails contrast against BOTH the page bg AND the panel surface.
+    surface_value = tokens.get('--surface')
+    surface_rgb = hex_to_rgb(surface_value) if surface_value and HEX_RE.match(surface_value) else None
     rows = []
     for name, val in tokens.items():
         if not any(h in name for h in TEXT_HINTS): continue
         if not HEX_RE.match(val): continue   # skip gradients/rgba
         fg = hex_to_rgb(val)
-        r = ratio(fg, bg_rgb)
-        rows.append((name, val, r))
-    failed = [r for r in rows if r[2] < THRESHOLD]
+        r_bg = ratio(fg, bg_rgb)
+        r_surface = ratio(fg, surface_rgb) if surface_rgb else None
+        rows.append((name, val, r_bg, r_surface))
+    failed = []
+    for name, val, r_bg, r_surface in rows:
+        if r_bg >= THRESHOLD: continue
+        if r_surface is not None and r_surface >= THRESHOLD: continue
+        failed.append((name, val, r_bg, r_surface))
     if failed:
-        for name, val, r in failed:
+        for name, val, r_bg, r_surface in failed:
+            extra = f' / surface {surface_value} {r_surface:.2f}:1' if r_surface is not None else ''
             blocking.append(
-                f"{app}: {name}={val} on bg {bg_value}: ratio {r:.2f}:1 < AA 4.5:1"
+                f"{app}: {name}={val} on bg {bg_value} {r_bg:.2f}:1{extra} < AA 4.5:1"
             )
     return blocking, warnings
 

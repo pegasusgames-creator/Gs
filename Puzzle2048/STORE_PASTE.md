@@ -24,159 +24,120 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-What's new in this update:
-• Cleaner main menu — get into a puzzle faster
-• Continue picks up exactly where you left off
-• Free coins, tournament, and themes are all still one tap away
-• Streak baked into the Daily Challenge button
-• Small fixes and polish
-• Play Games leaderboards — your best run now posts to Google Play Games
-• Bright Daylight theme by default; Midnight available in the Shop
-• Tighter symmetric grid + bigger buttons on tablets
+What's new
+• Lives and coins now show in the top bar on every screen
+• Daily puzzle button shows today's date
+• Ranks sheet matches your color theme and scrolls through 100 players
+• Cleaner Continue/Play hierarchy — no more "Continue · 0" on a fresh run
+• Smoother menu rhythm; chips match the icon-row buttons
 </en-US>
 
 <ar>
-ما الجديد في هذا التحديث:
-• قائمة رئيسية أنظف — ابدأ اللعب بشكل أسرع
-• «متابعة» يستأنف من حيث توقفت بالضبط
-• العملات المجانية والبطولة والثيمات لا تزال على بُعد نقرة واحدة
-• السلسلة مدمجة في زر التحدي اليومي
-• إصلاحات وتحسينات صغيرة
-• لوحات صدارة Play Games — أفضل نتائجك تُنشر الآن على Google Play Games
-• ثيم Daylight ساطع افتراضيًا؛ ثيم Midnight متاح في المتجر
-• شبكة أكثر تماثلاً وأزرار أكبر على الأجهزة اللوحية
+ما الجديد
+• تظهر الأرواح والعملات الآن في الشريط العلوي على كل شاشة
+• زر اللغز اليومي يعرض تاريخ اليوم
+• ورقة الترتيب تطابق ثيم اللون لديك وتمرر عبر 100 لاعب
+• ترتيب أنظف لزر متابعة/تشغيل — لن يظهر "متابعة · 0" بعد الآن
+• إيقاع قائمة أكثر سلاسة؛ الشرائح تطابق أزرار الصف
 </ar>
 
 <de-DE>
-Was ist neu in diesem Update:
-• Übersichtlicheres Hauptmenü — schneller ins Rätsel
-• „Fortsetzen" macht genau dort weiter, wo du aufgehört hast
-• Gratis-Münzen, Turnier und Themes sind weiterhin nur einen Tipp entfernt
-• Serie direkt in den Tagesherausforderungs-Button integriert
-• Kleine Fehlerbehebungen und Verbesserungen
-• Play Games-Bestenlisten — dein Bestwert wird jetzt auf Google Play Games veröffentlicht
-• Helles Theme + Midnight im Shop
-• Größere Tablet-Buttons
+Was ist neu
+• Leben und Münzen erscheinen jetzt in der oberen Leiste auf jedem Bildschirm
+• Tagespuzzle-Button zeigt das heutige Datum
+• Bestenliste passt zum Farbthema und scrollt durch 100 Spieler
+• Aufgeräumtere Weiter/Spiel-Hierarchie — kein "Weiter · 0" mehr
+• Geschmeidigerer Menürhythmus; Chips passen zu den Tier-3-Buttons
 </de-DE>
 
 <es-419>
-Novedades de esta actualización:
-• Menú principal más limpio — entra al rompecabezas más rápido
-• «Continuar» retoma justo donde lo dejaste
-• Monedas gratis, torneo y temas siguen a un toque de distancia
-• Racha integrada en el botón de Desafío diario
-• Pequeños arreglos y mejoras
-• Tablas de clasificación de Play Games — tu mejor resultado ahora se publica en Google Play Games
-• Tema Daylight brillante + Midnight en la Tienda
-• Cuadrícula simétrica, botones grandes en tablets
+Novedades
+• Vidas y monedas ahora aparecen en la barra superior en cada pantalla
+• El botón del rompecabezas diario muestra la fecha de hoy
+• La tabla de clasificación coincide con tu tema de color y recorre 100 jugadores
+• Jerarquía Continuar/Jugar más limpia — sin "Continuar · 0"
+• Ritmo del menú más fluido; los chips coinciden con los botones de la fila
 </es-419>
 
 <fr-FR>
-Quoi de neuf dans cette mise à jour :
-• Menu principal plus net — lancez-vous plus vite
-• « Reprendre » reprend exactement où vous en étiez
-• Pièces gratuites, tournoi et thèmes restent à un clic
-• Série intégrée au bouton Défi quotidien
-• Petits correctifs et améliorations
-• Classements Play Games — votre meilleur score est désormais publié sur Google Play Games
-• Thème Daylight lumineux par défaut ; Midnight disponible en Boutique
-• Grille plus symétrique + boutons plus grands sur tablette
+Quoi de neuf
+• La vie et les pièces apparaissent dans la barre supérieure sur chaque écran
+• Le bouton puzzle quotidien affiche la date du jour
+• Le classement s'adapte à votre thème de couleur et défile parmi 100 joueurs
+• Hiérarchie Continuer/Jouer plus claire — plus de « Continuer · 0 »
+• Rythme du menu plus fluide ; les puces correspondent aux boutons
 </fr-FR>
 
 <hi-IN>
-इस अपडेट में नया क्या है:
-• साफ-सुथरा मुख्य मेन्यू — पहेली में जल्दी पहुंचें
-• «जारी रखें» बिल्कुल वहीं से शुरू करता है जहां आपने छोड़ा था
-• फ्री सिक्के, टूर्नामेंट और थीम सब अब भी एक टैप दूर हैं
-• स्ट्रीक डेली चैलेंज बटन में ही जुड़ी
-• छोटे सुधार और निखार
-• Play Games लीडरबोर्ड — आपका सर्वश्रेष्ठ रन अब Google Play Games पर पोस्ट होगा
-• डिफ़ॉल्ट रूप से चमकीला डेलाइट थीम; मिडनाइट शॉप में उपलब्ध
-• बेहतर सममित ग्रिड + टैबलेट पर बड़े बटन
+क्या नया है
+• हर स्क्रीन पर शीर्ष बार में जीवन और सिक्के अब दिखते हैं
+• डेली पजल बटन आज की तारीख दिखाता है
+• रैंक शीट आपके रंग थीम से मेल खाती है और 100 खिलाड़ियों के बीच स्क्रॉल करती है
+• स्वच्छ कंटिन्यू/प्ले हाइरार्की — अब "Continue · 0" नहीं
+• आसान मेनू लय; चिप्स पंक्ति के बटनों से मेल खाते हैं
 </hi-IN>
 
 <id>
-Yang baru di pembaruan ini:
-• Menu utama lebih bersih — masuk ke teka-teki lebih cepat
-• "Lanjutkan" melanjutkan tepat dari tempat kamu berhenti
-• Koin gratis, turnamen, dan tema semuanya tetap satu ketuk saja
-• Beruntun tertanam di tombol Tantangan Harian
-• Perbaikan kecil dan pemolesan
-• Papan peringkat Play Games — pencapaian terbaikmu kini diposting ke Google Play Games
-• Tema Daylight cerah secara default; Midnight tersedia di Toko
-• Kisi lebih simetris + tombol lebih besar di tablet
+Yang baru
+• Nyawa dan koin sekarang muncul di bilah atas di setiap layar
+• Tombol teka-teki harian menampilkan tanggal hari ini
+• Lembar peringkat cocok dengan tema warna Anda dan menggulir 100 pemain
+• Hierarki Lanjutkan/Main yang lebih bersih — tidak ada lagi "Lanjutkan · 0"
+• Ritme menu lebih halus; chip cocok dengan tombol baris ikon
 </id>
 
 <it-IT>
-Novità di questo aggiornamento:
-• Menu principale più pulito — entri prima nel puzzle
-• «Continua» riprende esattamente da dove hai lasciato
-• Monete gratis, torneo e temi sono ancora a un solo tocco
-• Serie integrata nel pulsante Sfida giornaliera
-• Piccole correzioni e rifiniture
-• Classifiche di Play Games — il tuo miglior risultato ora viene pubblicato su Google Play Games
-• Tema Daylight luminoso di default; Midnight nel Negozio
-• Griglia più simmetrica + pulsanti più grandi su tablet
+Novità
+• Vite e monete ora compaiono nella barra superiore in ogni schermata
+• Il pulsante puzzle giornaliero mostra la data di oggi
+• Classifica adattata al tuo tema colore, scorrevole tra 100 giocatori
+• Gerarchia Continua/Gioca più ordinata — niente più "Continua · 0"
+• Ritmo del menu più fluido; i chip combaciano con i pulsanti
 </it-IT>
 
 <ja-JP>
-このアップデートの新機能:
-• メインメニューがすっきり — パズルにすばやくジャンプ
-• 「つづきから」で中断した場所からそのまま再開
-• 無料コイン・トーナメント・テーマはどれもワンタップで
-• 連続記録をデイリーチャレンジボタンに統合
-• 細かな修正と調整
-• Play Gamesのリーダーボード — ベスト記録がGoogle Play Gamesに送信されます
-• 標準で明るいデイライトテーマ; ミッドナイトはショップで購入可能
-• より対称なグリッドとタブレット向けの大きなボタン
+新着情報
+• ライフとコインがすべての画面の上部バーに表示されるようになりました
+• デイリーパズルボタンに今日の日付が表示されます
+• ランキングシートがカラーテーマに合わせ、100人のプレイヤーをスクロール
+• よりすっきりした続ける/プレイ階層 — 「続ける · 0」はもう出ません
+• よりなめらかなメニュー；チップがアイコン列と揃います
 </ja-JP>
 
 <pt-BR>
-O que há de novo nesta atualização:
-• Menu principal mais limpo — comece o quebra-cabeça mais rápido
-• «Continuar» retoma exatamente de onde você parou
-• Moedas grátis, torneio e temas continuam a um toque
-• Sequência integrada ao botão Desafio diário
-• Pequenos ajustes e polimento
-• Placares do Play Games — sua melhor jogada agora é postada no Google Play Games
-• Tema Daylight claro por padrão; Midnight disponível na Loja
-• Grade mais simétrica + botões maiores em tablets
+O que há de novo
+• Vidas e moedas agora aparecem na barra superior em todas as telas
+• Botão do quebra-cabeça diário mostra a data de hoje
+• Tabela de classificação combina com seu tema de cor, percorre 100 jogadores
+• Hierarquia Continuar/Jogar mais limpa — sem "Continuar · 0"
+• Ritmo do menu mais suave; chips combinam com os botões da linha
 </pt-BR>
 
 <tr-TR>
-Bu güncellemede neler yeni:
-• Daha sade ana menü — bulmacaya daha hızlı dal
-• "Devam Et" kaldığın yerden tam olarak başlar
-• Bedava jeton, turnuva ve temalar yine bir dokunuş uzakta
-• Seri, Günlük Mücadele düğmesine yerleşti
-• Küçük düzeltmeler ve iyileştirmeler
-• Play Games skor tabloları — en iyi performansın artık Google Play Games’e gönderiliyor
-• Varsayılan parlak Daylight teması; Midnight Mağaza'da
-• Daha simetrik ızgara + tabletlerde daha büyük düğmeler
+Yenilikler
+• Canlar ve madeni paralar artık her ekranda üst çubukta görünür
+• Günlük bulmaca düğmesi bugünün tarihini gösterir
+• Sıralama tablosu renk temanızla uyumlu, 100 oyuncu arasında kaydırılabilir
+• Daha temiz Devam/Oyna hiyerarşisi — artık "Devam · 0" yok
+• Daha akıcı menü; çipler simge satırı düğmeleriyle eşleşir
 </tr-TR>
 
 <uk>
-Що нового в цьому оновленні:
-• Чистіше головне меню — швидше переходьте до головоломки
-• «Продовжити» поновлюється саме там, де ви зупинилися
-• Безкоштовні монети, турнір і теми — усе ще в одне натискання
-• Серія тепер вбудована в кнопку «Щоденний виклик»
-• Дрібні виправлення та поліровка
-• Таблиці лідерів Play Games — твій найкращий результат тепер потрапляє в Google Play Games
-• Світла денна тема за замовчуванням; Midnight у Магазині
-• Симетричніша сітка + більші кнопки на планшетах
+Що нового
+• Життя та монети тепер відображаються у верхній панелі на кожному екрані
+• Кнопка щоденної головоломки показує сьогоднішню дату
+• Аркуш рейтингу відповідає вашій кольоровій темі та прокручується через 100 гравців
+• Чистіша ієрархія Продовжити/Грати — більше ніяких «Продовжити · 0»
+• Плавніший ритм меню; чіпи відповідають кнопкам ряду
 </uk>
 
 <zh-CN>
-本次更新内容：
-• 主菜单更清爽 — 更快进入谜题
-• "继续"从你离开的位置原样接续
-• 免费金币、锦标赛和主题仍然一键直达
-• 连胜直接嵌入每日挑战按钮
-• 细微修复与打磨
-• Play Games 排行榜 — 你的最佳成绩现在会同步到 Google Play Games
-• 默认明亮日间主题；午夜主题可在商店中获得
-• 网格更对称，平板上按钮更大
+更新内容
+• 生命与金币现在显示在每个屏幕的顶部栏中
+• 每日谜题按钮显示今天的日期
+• 排行榜与您的颜色主题相匹配，可在100名玩家中滚动浏览
+• 更清晰的继续/开始按钮层级 — 不再出现"继续 · 0"
+• 更流畅的菜单节奏；标签与图标行按钮一致
 </zh-CN>
 
 ---

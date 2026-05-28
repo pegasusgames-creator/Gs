@@ -1955,8 +1955,8 @@ def main():
     # ---- THEME TOKENS (2026-05-28: growth shim overlays must use CSS
     # tokens, not hardcoded hex/rgb — only gold coin / heart red / streak
     # orange / badge green / decorative confetti stay literal.)
+    import subprocess as _subprocess
     try:
-        import subprocess as _subprocess
         _r = _subprocess.run(
             ['python3', os.path.join(BASE, 'scripts', 'check_theme_tokens.py')]
             + [a for a in apps if os.path.isdir(os.path.join(BASE, a))],
@@ -1976,7 +1976,6 @@ def main():
     # single Tier 2 Daily, canonical Levels·Shop·Games·Settings icon row,
     # Settings in row not top-bar gear.)
     try:
-        import subprocess as _subprocess
         _r = _subprocess.run(
             ['python3', os.path.join(BASE, 'scripts', 'check_menu_composition.py')]
             + [a for a in apps if os.path.isdir(os.path.join(BASE, a))],
@@ -1991,6 +1990,33 @@ def main():
             section("code",  "menu composition",    lambda _a: ([], []), apps[:1])
     except Exception as _e:
         print(f"  menu composition: skipped ({_e})")
+
+    # ---- ROUND-13 BUG-CLASS GATES (2026-05-28). Each gate blocks a
+    # specific bug the user reported, so the same regression can't ship
+    # again from any app. See CLAUDE.md "Bug-class invariants" section.
+    for _gate, _label in [
+        ('check_synth_header_scope.py',   'synth header scope'),
+        ('check_save_key_probe.py',       'save-key probe'),
+        ('check_solid_surface_token.py',  'solid surface token'),
+        ('check_continue_label.py',       'continue label'),
+        ('check_daily_label.py',          'daily label'),
+        ('check_chip_token_tint.py',      'chip token tint'),
+    ]:
+        try:
+            _r = _subprocess.run(
+                ['python3', os.path.join(BASE, 'scripts', _gate)]
+                + [a for a in apps if os.path.isdir(os.path.join(BASE, a))],
+                capture_output=True, text=True,
+            )
+            if _r.returncode != 0:
+                for line in _r.stdout.splitlines():
+                    if line.strip().startswith('✗'):
+                        print(f'  {_label}: {line.strip()}')
+                section("code", _label, lambda _a, _o=_r.stdout: ([_o.strip() or 'fail'], []), apps[:1])
+            else:
+                section("code", _label, lambda _a: ([], []), apps[:1])
+        except Exception as _e:
+            print(f'  {_label}: skipped ({_e})')
 
     # ---- FULL REVIEW 2026-05-27 gates: nonogram uniqueness (BLOCK),
     # reward-type parity (BLOCK), subscription disclosure (BLOCK),

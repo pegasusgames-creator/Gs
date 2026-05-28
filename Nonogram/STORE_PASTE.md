@@ -24,156 +24,120 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-• Bigger coin packs — M 400 · L 800 · XL 2000; Weekly Pass now $1.99/week
-• Hint Pack now grants the full 10 hints
-• Season Pass now grants +100 daily coins (was +50); Weekly Pass grants +50
-• Reveal Row and Reveal Cell boosters
-• Weekly Tournament bracket
-• Seasonal events (Halloween, Winter, Spring)
-• Free Coins button — 25 every 4 hours
-• Continue from the menu
-• 7-day login streak rewards
+What's new
+• Lives and coins now show in the top bar on every screen
+• Daily puzzle button shows today's date
+• Ranks sheet matches your color theme and scrolls through 100 players
+• Cleaner Continue/Play hierarchy — no more "Continue · 0" on a fresh run
+• Smoother menu rhythm; chips match the icon-row buttons
 </en-US>
 
 <ar>
-• حزم عملات أكبر — م 400 · ل 800 · XL 2000؛ التمرير الأسبوعي الآن 1.99 دولار/أسبوع  
-• حزمة التلميحات تمنح الآن 10 تلميحات كاملة  
-• تمرير الموسم يمنح الآن +100 عملة يومية (كان +50)؛ التمرير الأسبوعي يمنح +50  
-• معززات كشف الصف وكشف الخلية  
-• بطولة أسبوعية  
-• فعاليات موسمية (هالوين، شتاء، ربيع)  
-• زر العملات المجانية — 25 كل 4 ساعات  
-• متابعة من القائمة  
-• مكافآت تسجيل الدخول لمدة 7 أيام
+ما الجديد
+• تظهر الأرواح والعملات الآن في الشريط العلوي على كل شاشة
+• زر اللغز اليومي يعرض تاريخ اليوم
+• ورقة الترتيب تطابق ثيم اللون لديك وتمرر عبر 100 لاعب
+• ترتيب أنظف لزر متابعة/تشغيل — لن يظهر "متابعة · 0" بعد الآن
+• إيقاع قائمة أكثر سلاسة؛ الشرائح تطابق أزرار الصف
 </ar>
 
 <de-DE>
-• Größere Münzpakete — M 400 · L 800 · XL 2000; Wöchentlicher Pass jetzt 1,99 €/Woche  
-• Hinweis-Paket gewährt jetzt die vollen 10 Hinweise  
-• Saisonpass gewährt jetzt +100 tägliche Münzen (vorher +50); Wöchentlicher Pass gewährt +50  
-• Reihen- und Zell-Enthüllungs-Boosts  
-• Wöchentlicher Turnierbaum  
-• Saisonale Events (Halloween, Winter, Frühling)  
-• Kostenlose Münzen-Taste — 25 alle 4 Stunden  
-• Fortsetzen vom Menü  
-• 7-tägige Anmeldebelohnungen
+Was ist neu
+• Leben und Münzen erscheinen jetzt in der oberen Leiste auf jedem Bildschirm
+• Tagespuzzle-Button zeigt das heutige Datum
+• Bestenliste passt zum Farbthema und scrollt durch 100 Spieler
+• Aufgeräumtere Weiter/Spiel-Hierarchie — kein "Weiter · 0" mehr
+• Geschmeidigerer Menürhythmus; Chips passen zu den Tier-3-Buttons
 </de-DE>
 
 <es-419>
-• Paquetes de monedas más grandes: M 400 · L 800 · XL 2000; Pase semanal a $1.99/semana  
-• El paquete de pistas ahora otorga 10 pistas completas  
-• El Pase de temporada otorga +100 monedas diarias (antes +50); el Pase semanal otorga +50  
-• Potenciadores Revelar Fila y Revelar Celda  
-• Torneo semanal  
-• Eventos estacionales (Halloween, Invierno, Primavera)  
-• Botón de Monedas Gratis — 25 cada 4 horas  
-• Continúa desde el menú
+Novedades
+• Vidas y monedas ahora aparecen en la barra superior en cada pantalla
+• El botón del rompecabezas diario muestra la fecha de hoy
+• La tabla de clasificación coincide con tu tema de color y recorre 100 jugadores
+• Jerarquía Continuar/Jugar más limpia — sin "Continuar · 0"
+• Ritmo del menú más fluido; los chips coinciden con los botones de la fila
 </es-419>
 
 <fr-FR>
-• Packs de pièces améliorés : M 400, L 800, XL 2000 ; le Pass Hebdomadaire à 1,99 $/semaine  
-• Le Pack d'Indices accorde 10 indices complets  
-• Le Pass de Saison offre +100 pièces quotidiennes (avant +50) ; le Pass Hebdomadaire accorde +50  
-• Boosters Révéler Rangée et Révéler Cellule  
-• Tableau du Tournoi Hebdomadaire  
-• Événements saisonniers (Halloween, Hiver, Printemps)  
-• Bouton Pièces Gratuites — 25 toutes les 4 heures  
-• Récompenses pour 7 jours de connexion d'affilée
+Quoi de neuf
+• La vie et les pièces apparaissent dans la barre supérieure sur chaque écran
+• Le bouton puzzle quotidien affiche la date du jour
+• Le classement s'adapte à votre thème de couleur et défile parmi 100 joueurs
+• Hiérarchie Continuer/Jouer plus claire — plus de « Continuer · 0 »
+• Rythme du menu plus fluide ; les puces correspondent aux boutons
 </fr-FR>
 
 <hi-IN>
-• बड़ा सिक्का पैक — M 400 · L 800 · XL 2000; साप्ताहिक पास अब $1.99/सप्ताह  
-• हिंट पैक अब पूरे 10 हिंट प्रदान करता है  
-• सीजन पास अब +100 दैनिक सिक्के देता है (पहले +50); साप्ताहिक पास +50 देता है  
-• रिवील रो और रिवील सेल बूस्टर  
-• साप्ताहिक टूर्नामेंट ग्रिड  
-• मौसमी कार्यक्रम (हैलोवीन, सर्दी, वसंत)  
-• मुफ्त सिक्कों का बटन — हर 4 घंटे में 25  
-• मेन्यू से जारी रखें  
-• 7-दिन की लॉगिन स्ट्रीक इनाम
+क्या नया है
+• हर स्क्रीन पर शीर्ष बार में जीवन और सिक्के अब दिखते हैं
+• डेली पजल बटन आज की तारीख दिखाता है
+• रैंक शीट आपके रंग थीम से मेल खाती है और 100 खिलाड़ियों के बीच स्क्रॉल करती है
+• स्वच्छ कंटिन्यू/प्ले हाइरार्की — अब "Continue · 0" नहीं
+• आसान मेनू लय; चिप्स पंक्ति के बटनों से मेल खाते हैं
 </hi-IN>
 
 <id>
-• Paket koin lebih besar — M 400 · L 800 · XL 2000; Pass Mingguan sekarang $1.99/minggu  
-• Paket Petunjuk sekarang memberikan 10 petunjuk penuh  
-• Pass Musiman sekarang memberikan +100 koin harian (sebelumnya +50); Pass Mingguan memberikan +50  
-• Booster Ungkap Baris dan Ungkap Sel  
-• Turnamen Mingguan  
-• Acara musiman (Halloween, Musim Dingin, Musim Semi)  
-• Tombol Koin Gratis — 25 setiap 4 jam  
-• Melanjutkan dari menu  
-• Hadiah streak login 7 hari
+Yang baru
+• Nyawa dan koin sekarang muncul di bilah atas di setiap layar
+• Tombol teka-teki harian menampilkan tanggal hari ini
+• Lembar peringkat cocok dengan tema warna Anda dan menggulir 100 pemain
+• Hierarki Lanjutkan/Main yang lebih bersih — tidak ada lagi "Lanjutkan · 0"
+• Ritme menu lebih halus; chip cocok dengan tombol baris ikon
 </id>
 
 <it-IT>
-• Pacchetti di monete maggiori: M 400 · L 800 · XL 2000; Pass settimanale a €1,99/settimana  
-• Il Pacchetto Suggerimenti fornisce ora 10 suggerimenti completi  
-• Il Pass Stagionale offre +100 monete giornaliere (prima +50); il Pass Settimanale offre +50  
-• Potenziamenti Reveala Riga e Reveala Casella  
-• Tabella Torneo Settimanale  
-• Eventi stagionali (Halloween, Inverno, Primavera)  
-• Pulsante Monete Gratuite — 25 ogni 4 ore  
-• Ricompense per 7 giorni di accesso consecutivo
+Novità
+• Vite e monete ora compaiono nella barra superiore in ogni schermata
+• Il pulsante puzzle giornaliero mostra la data di oggi
+• Classifica adattata al tuo tema colore, scorrevole tra 100 giocatori
+• Gerarchia Continua/Gioca più ordinata — niente più "Continua · 0"
+• Ritmo del menu più fluido; i chip combaciano con i pulsanti
 </it-IT>
 
 <ja-JP>
-・コインパックが大きくなりました — M 400 · L 800 · XL 2000; ウィークリーパスは週$1.99  
-・ヒントパックはフルの10ヒントを提供  
-・シーズンパスは+100コイン（以前は+50）を毎日提供; ウィークリーパスは+50  
-・行とセルを明らかにするブースター  
-・ウィークリートーナメントのブランケット  
-・季節イベント（ハロウィン、冬、春）  
-・無料コインボタン — 4時間ごとに25コイン  
-・メニューから続行  
-・7日間のログインストリーク報酬
+新着情報
+• ライフとコインがすべての画面の上部バーに表示されるようになりました
+• デイリーパズルボタンに今日の日付が表示されます
+• ランキングシートがカラーテーマに合わせ、100人のプレイヤーをスクロール
+• よりすっきりした続ける/プレイ階層 — 「続ける · 0」はもう出ません
+• よりなめらかなメニュー；チップがアイコン列と揃います
 </ja-JP>
 
 <pt-BR>
-• Pacotes de moedas maiores — M 400 · L 800 · XL 2000; Passe Semanal agora R$ 1,99/semana  
-• Pacote de Dicas agora concede 10 dicas completas  
-• Passe de Temporada agora concede +100 moedas diárias (antes +50); Passe Semanal concede +50  
-• Recurso de Revelar Linha e Revelar Célula  
-• Torneio Semanal  
-• Eventos sazonais (Halloween, Inverno, Primavera)  
-• Botão de Moedas Grátis — 25 a cada 4 horas  
-• Continuar pelo menu  
-• Recompensas por 7 dias de login consecutivo
+O que há de novo
+• Vidas e moedas agora aparecem na barra superior em todas as telas
+• Botão do quebra-cabeça diário mostra a data de hoje
+• Tabela de classificação combina com seu tema de cor, percorre 100 jogadores
+• Hierarquia Continuar/Jogar mais limpa — sem "Continuar · 0"
+• Ritmo do menu mais suave; chips combinam com os botões da linha
 </pt-BR>
 
 <tr-TR>
-• Daha büyük jeton paketleri — M 400 · L 800 · XL 2000; Haftalık Geçiş artık 1,99 $/hafta  
-• İpucu Paketi artık toplam 10 ipucu veriyor  
-• Mevsim Geçişi artık günde +100 jeton veriyor (öncesi +50); Haftalık Geçiş +50 veriyor  
-• Satır ve Hücre açma güçlendiricileri  
-• Haftalık Turnuva sırası  
-• Mevsimsel etkinlikler (Cadılar Bayramı, Kış, Bahar)  
-• Ücretsiz Jeton butonu — 4 saatte 25 jeton  
-• Menüden devam et  
-• 7 günlük giriş bonusları
+Yenilikler
+• Canlar ve madeni paralar artık her ekranda üst çubukta görünür
+• Günlük bulmaca düğmesi bugünün tarihini gösterir
+• Sıralama tablosu renk temanızla uyumlu, 100 oyuncu arasında kaydırılabilir
+• Daha temiz Devam/Oyna hiyerarşisi — artık "Devam · 0" yok
+• Daha akıcı menü; çipler simge satırı düğmeleriyle eşleşir
 </tr-TR>
 
 <uk>
-• Більші пакунки монет — M 400 · L 800 · XL 2000; Тижневий пропуск тепер $1.99/тиждень  
-• Пакунки підказок тепер дають всі 10 підказок  
-• Сезонний пропуск тепер дає +100 монет щодня (було +50); Тижневий пропуск дає +50  
-• Бустери Відкрити ряд та Відкрити клітинку  
-• Тижневий турнір  
-• Сезонні події (Хелловін, Зима, Весна)  
-• Кнопка Безкоштовні монети — 25 кожні 4 години  
-• Продовжити з меню  
-• Нагороди за 7-денний вхід
+Що нового
+• Життя та монети тепер відображаються у верхній панелі на кожному екрані
+• Кнопка щоденної головоломки показує сьогоднішню дату
+• Аркуш рейтингу відповідає вашій кольоровій темі та прокручується через 100 гравців
+• Чистіша ієрархія Продовжити/Грати — більше ніяких «Продовжити · 0»
+• Плавніший ритм меню; чіпи відповідають кнопкам ряду
 </uk>
 
 <zh-CN>
-• 更大的金币包 — M 400 · L 800 · XL 2000；周票现为每周 $1.99  
-• 提示包现在提供10个提示  
-• 赛季通行证每日金币+100（之前为+50）；周票+50  
-• 揭示行和揭示单元格助推器  
-• 周度锦标赛  
-• 季节性活动（万圣节、冬季、春季）  
-• 免费金币按钮 — 每4小时25个  
-• 从菜单继续  
-• 7天登录奖励
+更新内容
+• 生命与金币现在显示在每个屏幕的顶部栏中
+• 每日谜题按钮显示今天的日期
+• 排行榜与您的颜色主题相匹配，可在100名玩家中滚动浏览
+• 更清晰的继续/开始按钮层级 — 不再出现"继续 · 0"
+• 更流畅的菜单节奏；标签与图标行按钮一致
 </zh-CN>
 
 ---
@@ -252,7 +216,7 @@ Mark a row. Count a column. Watch a pixel-art picture emerge from a grid of noth
 • Picture-reveal moment when the final cell falls into place
 
 🧠 BRAIN-BENDING LOGIC
-500 hand-crafted brain-teaser puzzles ramping from a 5×5 warm-up to a 20×20 you'll come back to for days. Every clue list resolves to exactly one valid picture — pure deduction, no guessing.
+500 hand-crafted brain-teaser puzzles ramping from a 5×5 warm-up to a 20×20 you'll come back to for days. Every puzzle is solvable by logic — no guessing required.
 
 🎯 WHAT'S IN IT
 • Free to play — every one of the 500 boards included, no paywall
@@ -260,13 +224,13 @@ Mark a row. Count a column. Watch a pixel-art picture emerge from a grid of noth
 • Boosters when you're stuck: Hint, Reveal Cell (auto-fills a provably-correct cell), Reveal Row (solves a whole row)
 • Daily Picross — one fresh nonogram every morning, always solvable
 • Daily missions — three fresh objectives every 24 hours
-• Weekly Tournament — the level you reach this week places you in a bracket; the leading 25% earns coins
+• Weekly Tournament — a personal-best challenge each week; beat your own best to earn coins
 • Seasonal events — Halloween, Winter and Spring bring limited-time themes
 • Free Coins button — watch a short ad for 25 coins every few hours
 • Continue button — pick up your last board straight from the menu
 • 7-day login streak — bigger rewards the longer you play consecutively
 • Theme collection — unlock new color palettes as you progress
-• Stats and global rank — see how you compare
+• Stats — track your solving streak and best times
 • Works fully offline — solve on the train, on a flight, anywhere
 
 🏅 WEEKLY TOURNAMENT
@@ -305,7 +269,7 @@ Also called picross, hanjie, or paint by numbers. Whatever you call it, it's the
 • لحظة كشف الصورة عندما ينزل الخلية الأخيرة في مكانها
 
 🧠 منطق مُحير للعقل
-500 لغز مُعد يدويًا يتراوح من تسخين 5×5 إلى 20×20 ستعود له لأيام. كل قائمة أدلة تُحل إلى صورة واحدة صالحة تمامًا — استنتاج خالص، لا تخمين.
+500 لغز مُعد يدويًا يتراوح من تسخين 5×5 إلى 20×20 ستعود له لأيام. كل لغز قابل للحل بالمنطق — لا حاجة للتخمين.
 
 🎯 ماذا يحتوي
 • مجاني للعب — كل واحدة من 500 لوحة مشمولة، بدون جدار دفع
@@ -313,7 +277,7 @@ Also called picross, hanjie, or paint by numbers. Whatever you call it, it's the
 • معززات عندما تكون عالقًا: تلميح، كشف خلية (يملأ خلية صحيحة بشكل تلقائي)، كشف صف (يحل صفًا كاملًا)
 • بيكروس اليومية — نونوجرام جديد كل صباح، دائمًا قابل للحل
 • المهام اليومية — ثلاثة أهداف جديدة كل 24 ساعة
-• بطولة أسبوعية — المستوى الذي تصل إليه هذا الأسبوع يضعك في مجموعة؛ أفضل 25% يحصلون على عملات
+• البطولة الأسبوعية — تحدّ أسبوعي لكسر أفضل نتيجة لك؛ تغلب على رقمك القياسي لتكسب عملات
 • أحداث موسمية — عيد الهالوين، الشتاء والربيع تقدم ثيمات محدودة الوقت
 • زر العملات المجانية — شاهد إعلانًا قصيرًا للحصول على 25 عملة كل بضع ساعات
 • زر الاستمرار — استأنف آخر لوحة لك مباشرة من القائمة
@@ -358,7 +322,7 @@ Markiere eine Reihe. Zähle eine Spalte. Schau, wie ein Pixel-Art-Bild aus einem
 • Moment der Bildenthüllung, wenn die letzte Zelle ihren Platz findet
 
 🧠 LOGIK, DIE DAS GHIRN VERWIRRT
-500 handgefertigte Denksportaufgaben, die von 5×5 als Aufwärmübung bis zu 20×20 reichen, zu denen du Tag für Tag zurückkommen wirst. Jede Hinweisliste ergibt genau ein gültiges Bild – pure Deduktion, kein Raten.
+500 handgefertigte Denksportaufgaben, die von 5×5 als Aufwärmübung bis zu 20×20 reichen, zu denen du Tag für Tag zurückkommen wirst. Jedes Rätsel lässt sich mit Logik lösen – Raten nicht nötig.
 
 🎯 WAS IST DARIN
 • Kostenlos spielbar – alle 500 Boards enthalten, kein Bezahlschranke
@@ -366,13 +330,13 @@ Markiere eine Reihe. Zähle eine Spalte. Schau, wie ein Pixel-Art-Bild aus einem
 • Booster, wenn du feststeckst: Hinweis, Zelle enthüllen (füllt automatisch eine nachweislich richtige Zelle), Reihe enthüllen (löst eine ganze Reihe)
 • Tägliches Picross – jeden Morgen ein frisches Nonogramm, immer lösbar
 • Tägliche Missionen – drei frische Ziele alle 24 Stunden
-• Wöchentliche Turniere – das Niveau, das du diese Woche erreichst, platziert dich in einer Gruppe; die führenden 25% verdienen Münzen
+• Wöchentliches Turnier — eine Bestleistungs-Challenge pro Woche; schlag deinen eigenen Rekord, um Münzen zu verdienen
 • Saisonale Events – Halloween, Winter und Frühling bringen zeitlich begrenzte Themen
 • Kostenloser Münzen-Button – schaue eine kurze Werbung für 25 Münzen alle paar Stunden
 • Fortsetzen-Button – nimm dein letztes Board direkt aus dem Menü auf
 • 7-Tage-Login-Streak – größere Belohnungen, je länger du am Stück spielst
 • Themenkollektion – schalte neue Farbpaletten im Verlauf frei
-• Statistiken und globaler Rang – sieh, wie du im Vergleich abschneidest
+• Statistiken — verfolge deine Serie und Bestzeiten
 • Vollständig offline spielbar – löse im Zug, im Flugzeug, überall
 
 🏅 WÖCHENTLICHES TURNIER
@@ -411,7 +375,7 @@ Marca una fila. Cuenta una columna. Observa cómo surge una imagen de arte en p�
 • Momento de revelación de la imagen cuando cae la última celda en su lugar
 
 🧠 LÓGICA QUE RETUERCE EL CEREBRO
-500 acertijos hechos a mano, que van desde un calentamiento de 5×5 hasta un 20×20 al que volverás por días. Cada lista de pistas resuelve exactamente una imagen válida — pura deducción, sin adivinanzas.
+500 acertijos hechos a mano, que van desde un calentamiento de 5×5 hasta un 20×20 al que volverás por días. Cada acertijo se resuelve con lógica — sin necesidad de adivinar.
 
 🎯 LO QUE INCLUYE
 • Gratis para jugar — cada uno de los 500 tableros incluidos, sin muros de pago
@@ -419,13 +383,13 @@ Marca una fila. Cuenta una columna. Observa cómo surge una imagen de arte en p�
 • Potenciadores cuando estés atascado: Pista, Revelar Celda (llenar automáticamente una celda comprobablemente correcta), Revelar Fila (resolver toda una fila)
 • Picross diario — un nuevo nonograma cada mañana, siempre resolvible
 • Misiones diarias — tres objetivos frescos cada 24 horas
-• Torneo semanal — el nivel que logres esta semana te coloca en un grupo; el 25% líder gana monedas
+• Torneo Semanal — un desafío semanal de marca personal; supera tu propio récord para ganar monedas
 • Eventos estacionales — Halloween, invierno y primavera traen temas por tiempo limitado
 • Botón de monedas gratis — mira un anuncio corto para 25 monedas cada pocas horas
 • Botón de continuar — retoma tu último tablero directamente desde el menú
 • Racha de inicio de sesión de 7 días — mayores recompensas cuanto más juegues consecutivamente
 • Colección de temas — desbloquea nuevas paletas de colores a medida que avanzas
-• Estadísticas y clasificación global — observa cómo te comparas
+• Estadísticas — sigue tu racha de soluciones y mejores tiempos
 • Funciona completamente sin conexión — resuelve en el tren, en un vuelo, en cualquier lugar
 
 🏅 TORNEO SEMANAL
@@ -464,7 +428,7 @@ Marquez une ligne. Comptez une colonne. Regardez une image en pixel art émerger
 • Moment de révélation de l'image lorsque la dernière case prend sa place
 
 🧠 LOGIQUE DISTRACTRICE
-500 casse-têtes faits à la main allant d'un échauffement de 5×5 à un défi de 20×20 auquel vous reviendrez pendant des jours. Chaque liste d'indices se résout en exactement une image valide — pure déduction, pas de devinette.
+500 casse-têtes faits à la main allant d'un échauffement de 5×5 à un défi de 20×20 auquel vous reviendrez pendant des jours. Chaque puzzle se résout par la logique — aucune supposition nécessaire.
 
 🎯 CE QUI EST INCLUS
 • Gratuit à jouer — chacun des 500 tableaux inclus, pas de mur payant
@@ -472,13 +436,13 @@ Marquez une ligne. Comptez une colonne. Regardez une image en pixel art émerger
 • Boosters quand vous êtes bloqué : Indice, Révéler Cellule (remplit automatiquement une cellule prouvée correcte), Révéler Ligne (résout toute une ligne)
 • Picross quotidien — un nouveau nonogramme chaque matin, toujours solvable
 • Missions quotidiennes — trois nouveaux objectifs toutes les 24 heures
-• Tournoi hebdomadaire — le niveau que vous atteignez cette semaine vous place dans un groupe ; les 25 % meilleurs gagnent des pièces
+• Tournoi Hebdomadaire — un défi de record personnel chaque semaine ; battez votre meilleur score pour gagner des pièces
 • Événements saisonniers — Halloween, Hiver et Printemps apportent des thèmes limités dans le temps
 • Bouton de pièces gratuites — regardez une courte publicité pour 25 pièces toutes les quelques heures
 • Bouton de continuation — reprenez votre dernier tableau directement depuis le menu
 • Chaîne de connexion de 7 jours — plus de récompenses plus vous jouez consécutivement
 • Collection de thèmes — débloquez de nouvelles palettes de couleurs à mesure que vous progressez
-• Stats et classement global — voyez comment vous vous comparez
+• Statistiques — suivez votre série de solutions et meilleurs temps
 • Fonctionne entièrement hors ligne — résolvez dans le train, en vol, partout
 
 🏅 TOURNOI HEBDOMADAIRE
@@ -517,7 +481,7 @@ Débloquez de nouvelles palettes de couleurs à mesure que vous gravissez l'éch
 • जब अंतिम सेल जगह में आता है, तो चित्र प्रकट होने का क्षण
 
 🧠 मस्तिष्क को चुनौती देने वाली तर्कशक्ति
-500 हाथ से बनाए गए पहेलियाँ, 5×5 से प्रारंभ करके 20×20 तक जो आप दिनों तक वापस आएंगे। हर संकेत सूची एक ही वैध चित्र पर समाप्त होती है — पूरी कटौती, कोई अनुमान नहीं।
+500 हाथ से बनाए गए पहेलियाँ, 5×5 से प्रारंभ करके 20×20 तक जो आप दिनों तक वापस आएंगे। हर पहेली तर्क से हल की जा सकती है — अनुमान लगाने की कोई जरूरत नहीं।
 
 🎯 इसमें क्या है
 • खेलने के लिए स्वतंत्र — 500 के सभी बोर्ड शामिल, कोई भुगतान की दीवार नहीं
@@ -525,13 +489,13 @@ Débloquez de nouvelles palettes de couleurs à mesure que vous gravissez l'éch
 • जब आप अटक जाएं तो बूस्टर: हिन्ट, सेल प्रकट करें (एक निश्चित रूप से सही सेल भरता है), पंक्ति प्रकट करें (एक पूरी पंक्ति को हल करता है)
 • दैनिक पिक्रॉस — हर सुबह एक ताजा नोनोग्राम, हमेशा हल करने योग्य
 • दैनिक मिशन — हर 24 घंटों में तीन ताजा उद्देश्य
-• साप्ताहिक प्रतियोगिता — इस सप्ताह आप जो स्तर प्राप्त करते हैं वह आपको ब्रैकेट में रखता है; शीर्ष 25% को सिक्के मिलते हैं
+• साप्ताहिक टूर्नामेंट — हर हफ्ते अपनी बेहतरीन प्रदर्शन को मात देने की चुनौती; सिक्के कमाएं
 • मौसमी कार्यक्रम — हैलोवीन, सर्दी और वसंत सीमित समय के लिए थीम लाते हैं
 • मुफ्त सिक्के का बटन — हर कुछ घंटों में 25 सिक्कों के लिए एक छोटा एड देखें
 • जारी रखने का बटन — मेनू से सीधे अपना अंतिम बोर्ड उठाएं
 • 7-दिवसीय लॉगिन स्ट्रीक — लगातार खेलने पर बड़े इनाम
 • थीम संग्रह — प्रगति के साथ नए रंग पैलेट अनलॉक करें
-• आँकड़े और वैश्विक रैंक — देखें कि आप कैसे तुलना करते हैं
+• आंकड़े — अपनी सुलझाने की लकीर और बेहतरीन समय ट्रैक करें
 • पूरी तरह से ऑफ़लाइन कार्य करता है — ट्रेन पर, उड़ान में, कहीं भी हल करें
 
 🏅 साप्ताहिक प्रतियोगिता
@@ -570,7 +534,7 @@ Tandai satu baris. Hitung satu kolom. Saksikan gambar pixel-art muncul dari kisi
 • Momen pengungkapan gambar saat sel terakhir ditempatkan
 
 🧠 LOGIKA YANG MENANTANG
-500 teka-teki rancang bangun yang dirancang dengan tangan mulai dari 5×5 pemanasan hingga 20×20 yang akan kamu kunjungi berhari-hari. Setiap daftar petunjuk mengarah pada satu gambar yang valid — murni deduksi, tanpa tebak-tebakan.
+500 teka-teki rancang bangun yang dirancang dengan tangan mulai dari 5×5 pemanasan hingga 20×20 yang akan kamu kunjungi berhari-hari. Setiap teka-teki dapat diselesaikan dengan logika — tidak perlu menebak.
 
 🎯 APA YANG ADA DI DALAMNYA
 • Gratis untuk dimainkan — setiap satu dari 500 papan disertakan, tanpa dinding pembayaran
@@ -578,13 +542,13 @@ Tandai satu baris. Hitung satu kolom. Saksikan gambar pixel-art muncul dari kisi
 • Pendorong saat kamu terjebak: Petunjuk, Ungkap Sel (mengisi otomatis sel yang terbukti benar), Ungkap Baris (menyelesaikan satu baris penuh)
 • Picross Harian — satu nonogram baru setiap pagi, selalu dapat dipecahkan
 • Misi Harian — tiga tujuan baru setiap 24 jam
-• Turnamen Mingguan — tingkat yang kamu capai minggu ini menempatkanmu dalam satu grup; 25% teratas mendapatkan koin
+• Turnamen Mingguan — tantangan rekor pribadi setiap minggu; kalahkan rekor terbaikmu untuk mendapatkan koin
 • Acara Musiman — Halloween, Musim Dingin dan Musim Semi membawa tema terbatas
 • Tombol Koin Gratis — tonton iklan pendek untuk mendapatkan 25 koin setiap beberapa jam
 • Tombol Lanjutkan — ambil papan terakhirmu langsung dari menu
 • Rentetan login 7 hari — imbalan lebih besar semakin lama kamu bermain berturut-turut
 • Koleksi tema — buka palet warna baru seiring kemajuanmu
-• Statistik dan peringkat global — lihat bagaimana perbandinganmu
+• Statistik — lacak rangkaian solusimu dan waktu terbaik
 • Berfungsi sepenuhnya offline — selesaikan saat di kereta, saat penerbangan, di mana saja
 
 🏅 TURNAMEN MINGGUAN
@@ -623,7 +587,7 @@ Segna una riga. Conta una colonna. Guarda un’immagine in pixel-art emergere da
 • Momento di rivelazione dell'immagine quando l'ultima cella si posiziona
 
 🧠 LOGICA CHE FA RIFLETTERE
-500 puzzle di logica fatti a mano che vanno da un riscaldamento 5×5 a un 20×20 che ti farà tornare per giorni. Ogni lista di indizi porta a esattamente un'immagine valida — pura deduzione, niente indovinamenti.
+500 puzzle di logica fatti a mano che vanno da un riscaldamento 5×5 a un 20×20 che ti farà tornare per giorni. Ogni puzzle si risolve con la logica — niente tentativi a caso.
 
 🎯 COSA C'È DENTRO
 • Giocabile gratuitamente — tutte le 500 schede incluse, nessun muro di pagamento
@@ -631,13 +595,13 @@ Segna una riga. Conta una colonna. Guarda un’immagine in pixel-art emergere da
 • Potenziamenti quando sei bloccato: Indizio, Rivela Cella (compila automaticamente una cella dimostrabilmente corretta), Rivela Riga (risolve un’intera riga)
 • Picross quotidiano — un nuovo nonogramma ogni mattina, sempre risolvibile
 • Missioni giornaliere — tre nuovi obiettivi ogni 24 ore
-• Torneo settimanale — il livello che raggiungi questa settimana ti posiziona in un bracket; il 25% migliore guadagna monete
+• Torneo Settimanale — una sfida settimanale di record personale; batti il tuo miglior risultato per guadagnare monete
 • Eventi stagionali — Halloween, Inverno e Primavera portano temi a tempo limitato
 • Pulsante Monete Gratuite — guarda un breve annuncio per 25 monete ogni poche ore
 • Pulsante Continua — riprendi l'ultima scheda direttamente dal menu
 • Serie di accesso di 7 giorni — ricompense maggiori più giochi consecutivi fai
 • Collezione di temi — sblocca nuove palette di colori man mano che progredisci
-• Statistiche e classifica globale — vedi come ti confronti
+• Statistiche — segui la tua serie di soluzioni e i migliori tempi
 • Funziona completamente offline — risolvi in treno, in volo, ovunque
 
 🏅 TORNEO SETTIMANALE
@@ -676,7 +640,7 @@ Chiamato anche picross, hanjie o dipingi per numeri. Qualunque cosa tu lo chiami
 ・最後のセルがはまる瞬間に画像が明らかに
 
 🧠 脳をひねる論理
-500の手作りの脳トレパズルが5×5のウォームアップから始まり、20×20まで続きます。すべての手がかりリストは正確に1つの有効な画像に解決されます — 純粋な推論、推測なし。
+500の手作りの脳トレパズルが5×5のウォームアップから始まり、20×20まで続きます。すべてのパズルは論理で解けます — 推測は不要です。
 
 🎯 何が含まれているか
 ・無料プレイ — すべての500ボードが含まれており、支払いは不要
@@ -684,7 +648,7 @@ Chiamato anche picross, hanjie o dipingi per numeri. Qualunque cosa tu lo chiami
 ・行き詰まった時のブースター: ヒント、セルを表示（証明された正しいセルを自動で埋める）、行を表示（全行を解決）
 ・デイリーピクロス — 毎朝新しいノノグラム、常に解ける
 ・デイリーミッション — 24時間ごとに新しい目標が3つ
-・週間トーナメント — 今週到達したレベルでブランケットに入ります。上位25%はコインを獲得
+・週間トーナメント — 毎週、自己ベスト更新チャレンジ。自分の記録を超えてコインを獲得
 ・季節イベント — ハロウィン、冬、春に限定テーマ登場
 ・無料コインボタン — 短い広告を見て数時間ごとに25コイン
 ・続行ボタン — メニューから最後のボードをすぐに再開
@@ -729,7 +693,7 @@ Marque uma linha. Conte uma coluna. Veja uma imagem em pixel-art surgir de uma g
 • Momento de revelação da imagem quando a última célula se encaixa
 
 🧠 LÓGICA DESAFIADORA
-500 quebra-cabeças feitos à mão, aumentando de um aquecimento de 5×5 a um 20×20 que você voltará a jogar por dias. Cada lista de pistas se resolve em exatamente uma imagem válida — pura dedução, sem palpites.
+500 quebra-cabeças feitos à mão, aumentando de um aquecimento de 5×5 a um 20×20 que você voltará a jogar por dias. Cada quebra-cabeça pode ser resolvido com lógica — sem precisar adivinhar.
 
 🎯 O QUE TEM
 • Gratuito para jogar — todos os 500 tabuleiros incluídos, sem bloqueios
@@ -737,7 +701,7 @@ Marque uma linha. Conte uma coluna. Veja uma imagem em pixel-art surgir de uma g
 • Auxiliares quando você está preso: Dica, Revelar Célula (preenche automaticamente uma célula correta), Revelar Linha (soluciona uma linha inteira)
 • Picross Diário — um novo nonograma toda manhã, sempre solucionável
 • Missões diárias — três novos objetivos a cada 24 horas
-• Torneio Semanal — o nível que você alcança esta semana o coloca em uma divisão; os 25% líderes ganham moedas
+• Torneio Semanal — um desafio semanal de recorde pessoal; supere sua melhor marca para ganhar moedas
 • Eventos sazonais — Halloween, Inverno e Primavera trazem temas por tempo limitado
 • Botão de Moedas Grátis — assista a um anúncio curto para 25 moedas a cada poucas horas
 • Botão Continuar — retome seu último tabuleiro diretamente do menu
@@ -782,7 +746,7 @@ Bir satırı işaretle. Bir sütunu say. Hiçbir şeyden oluşan bir ızgaradan 
 • Son hücre yerleştikten sonra resmin açığa çıkma anı
 
 🧠 ZİHİN YORUCU MANTIK
-500 el yapımı beyin jimnastiği bulmacası; 5×5 ısınmadan 20×20'ye kadar, günlerce dönmek isteyeceğiniz bulmacalar. Her ipucu listesi tam olarak bir geçerli resme ulaşır — saf çıkarım, tahmin yok.
+500 el yapımı beyin jimnastiği bulmacası; 5×5 ısınmadan 20×20'ye kadar, günlerce dönmek isteyeceğiniz bulmacalar. Her bulmaca mantıkla çözülebilir — tahmine gerek yok.
 
 🎯 İÇİNDE NELER VAR
 • Ücretsiz oyun — 500 panonun tamamı dahil, ödeme duvarı yok
@@ -790,13 +754,13 @@ Bir satırı işaretle. Bir sütunu say. Hiçbir şeyden oluşan bir ızgaradan 
 • Takıldığında güçlendiriciler: İpucu, Hücre Aç, Satır Aç
 • Günlük Picross — her sabah çözülmesi garanti bir yeni nonogram
 • Günlük görevler — her 24 saatte üç yeni hedef
-• Haftalık Turnuva — bu hafta ulaştığın seviye seni bir kategoride yerleştirir; önde giden %25 madalya kazanır
+• Haftalık Turnuva — her hafta kişisel rekor mücadelesi; kendi rekorunu kır, jeton kazan
 • Mevsimsel etkinlikler — Cadılar Bayramı, Kış ve Bahar sınırlı süreli temalar getirir
 • Ücretsiz Madeni Paralar butonu — her birkaç saatte 25 madeni para için kısa bir reklam izle
 • Devam et butonu — son panonu menüden direkt al
 • 7 günlük giriş serisi — kesintisiz oynadıkça daha büyük ödüller kazan
 • Tema koleksiyonu — ilerledikçe yeni renk paletleri aç
-• İstatistikler ve global sıralama — nasıl karşılaştığını gör
+• İstatistikler — çözüm serini ve en iyi sürelerini takip et
 • Tamamen çevrimdışı çalışır — trende, uçakta, herhangi bir yerde çöz
 
 🏅 HAFTALIK TURNUVA
@@ -835,7 +799,7 @@ Ayrıca picross, hanjie veya sayılarla boyama olarak da bilinir. Her ne dersen 
 • Момент розкриття малюнка, коли остання клітинка стає на місце
 
 🧠 ЛОГІКА, ЩО ЗДИВУЄ
-500 ручноробних головоломок для мозку, від 5×5 для початківців до 20×20, до яких ви повертатиметеся знову і знову. Кожен список підказок веде до точно однієї дійсної картинки — чисте виведення, жодного здогадування.
+500 ручноробних головоломок для мозку, від 5×5 для початківців до 20×20, до яких ви повертатиметеся знову і знову. Кожна головоломка розв'язується логікою — жодних здогадок не потрібно.
 
 🎯 ЩО В ЦЬОМУ
 • Безкоштовно грати — всі 500 дошок включені, без платних бар'єрів
@@ -843,13 +807,13 @@ Ayrıca picross, hanjie veya sayılarla boyama olarak da bilinir. Her ne dersen 
 • Бустери, коли ви застрягли: Підказка, Відкрити клітинку (автоматично заповнює правильну клітинку), Відкрити рядок (вирішує весь рядок)
 • Щоденний Picross — щодня новий нонограм, завжди розв'язуваний
 • Щоденні місії — три нові цілі кожні 24 години
-• Щотижневий турнір — рівень, який ви досягаєте цього тижня, розміщує вас в категорії; провідні 25% отримують монети
+• Щотижневий турнір — тиждень особистих рекордів; побий свій найкращий результат, щоб заробити монети
 • Сезонні події — Хелловін, Зима та Весна приносять тимчасові теми
 • Кнопка безкоштовних монет — дивіться коротку рекламу за 25 монет кожні кілька годин
 • Кнопка продовжити — продовжте свою останню дошку прямо з меню
 • 7-денний безперервний авторизаційний потік — більші нагороди чим довше ви граєте без перерв
 • Колекція тем — відкривайте нові палітри кольорів у міру прогресу
-• Статистика та глобальний рейтинг — з’ясуйте, як ви порівнюєте
+• Статистика — стеж за серією розгадок та найкращим часом
 • Працює повністю офлайн — розв’язуйте в поїзді, на літаку, будь-де
 
 🏅 ЩОТИЖНЕВИЙ ТУРНІР
@@ -888,7 +852,7 @@ Ayrıca picross, hanjie veya sayılarla boyama olarak da bilinir. Her ne dersen 
 • 最后一个单元格填写完毕时的揭示时刻
 
 🧠 挑战思维的逻辑
-500个手工打造的脑筋急转弯谜题，从5×5的热身到你会反复挑战的20×20。每个线索列表都解析出一个有效的图像 — 纯粹推理，没有猜测。
+500个手工打造的脑筋急转弯谜题，从5×5的热身到你会反复挑战的20×20。每个谜题都可以用逻辑解开 — 无需猜测。
 
 🎯 内容介绍
 • 免费游玩 — 所有500个面板均包含，无付费墙
@@ -896,13 +860,13 @@ Ayrıca picross, hanjie veya sayılarla boyama olarak da bilinir. Her ne dersen 
 • 当你卡住时的助推器：提示、揭示单元格（自动填写一个可证明正确的单元格）、揭示行（解决整行）
 • 每日非ogram — 每天早上一个新的非ogram，总是可以解决
 • 每日任务 — 每24小时更新三个新目标
-• 每周锦标赛 — 本周达到的等级将让你进入一个分组；前25%将获得金币
+• 每周锦标赛 — 个人最佳挑战；打破自己的最佳记录赢取金币
 • 季节性活动 — 万圣节、冬季和春季带来限时主题
 • 免费金币按钮 — 每隔几个小时观看短广告获得25个金币
 • 继续按钮 — 直接从菜单继续到上一个面板
 • 7天登录奖励 — 连续游戏越久，奖励越丰厚
 • 主题收集 — 随着进度解锁新的调色板
-• 统计和全球排名 — 了解你的比较情况
+• 统计 — 跟踪你的解题连胜和最佳时间
 • 完全离线使用 — 在火车上、飞行中、任何地方解谜
 
 🏅 每周锦标赛

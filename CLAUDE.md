@@ -482,27 +482,38 @@ advance.
 
 ---
 
-## State of the apps (last audit: 2026-05-15; state updated: 2026-05-20)
+## State of the apps (last audit: 2026-05-28)
 
 - **Hero (1):** **WaterSortPuzzle** — gets meta-loop, live ops, real
   mascot, any "above-baseline" investment. Don't treat as
   just-another-flagship in sprint planning. See
   `COMPETITIVE_BENCHMARK.md` §9-10.
-- **Shipped to Play (3):** **WaterSortPuzzle** (v2.0.3), **Nonogram**
-  (v1.1.3), **Puzzle2048** (v1.1.3) — all live on the Play Store as of
-  2026-05-20. Audited + retention-complete: full coin ladder,
-  Season/Weekly Pass w/ honored benefits, hint/undo counters, genre
-  boosters, Free Coins, Continue, theme strip + unlock card, 7-day
-  login ladder, weekly tournament, seasonal events, Restore/Privacy.
-  All 13 locales translated; phone + tablet 7"/10" screenshots.
-  `pre_publish_check` clean. Next release for each = bump versionCode,
-  rebuild the AAB, upload (see each app's `RELEASE_HANDOFF.md`).
-- **In Play review (1):** **UnblockPuzzle** (v1.1.1, versionCode 7) —
-  uploaded 2026-05-25, awaiting Play review. Code clean,
-  `pre_publish_check` clean (modulo iOS surfaces — user is
-  Android-only), all 13 locales, phone + tablet 7"/10" screenshots
-  showcasing all themes, real AdMob IDs + Play license key wired,
-  solver-validated levels, dedicated keystore.
+- **Shipped to Play (3):** **WaterSortPuzzle** (versionCode 38 /
+  v2.1.15), **Nonogram** (vc 22 / v1.2.14), **Puzzle2048** (vc 24 /
+  v1.2.15) — all live on the Play Store. Audited + retention-complete:
+  full coin ladder, Season/Weekly Pass w/ honored benefits, hint/undo
+  counters, genre boosters, Free Coins, Continue, theme strip + unlock
+  card, 7-day login ladder, weekly tournament, seasonal events,
+  Restore/Privacy. All 13 locales translated; phone + tablet 7"/10"
+  screenshots. `pre_publish_check` clean. Next release for each =
+  bump versionCode, rebuild the AAB, upload (see each app's
+  `RELEASE_HANDOFF.md`).
+- **In Play review (1):** **UnblockPuzzle** (vc 22 / v1.2.14) —
+  Play review pending. Code clean, `pre_publish_check` clean (modulo
+  iOS surfaces — user is Android-only), all 13 locales, phone + tablet
+  7"/10" screenshots showcasing all themes, real AdMob IDs + Play
+  license key wired, solver-validated levels, dedicated keystore.
+- **2026-05-28 round-13 menu polish (portfolio-wide):** lives/coins
+  visible on every menu (per-app `nonogram_state` save key now probed),
+  synth top-bar scoped to active menu screen (no more bleeding to High
+  Scores / Game), Daily button now reads "Daily puzzle · MMM DD"
+  instead of streak count, Continue · 0 regression fixed for 2048-style
+  apps (resume requires non-empty grid OR score > 0), Ranks sheet uses
+  solid `--surface` panel + 100 scrollable rows + theme tokens, chips
+  re-tinted to match Tier-3 icon buttons. New bug-class gates land in
+  `pre_publish_check.py`: synth header scope, save-key probe,
+  solid-surface token, continue label, daily label, chip token tint.
+  See "Bug-class invariants" section.
 - **2026-05-12/13 coin/pass overhaul (portfolio-wide):** coin ladder
   rewritten to the four-tier ladder above (was `coins_small $0.99/100`,
   `coins_large $2.99/500` cheap-anchor). Passes swapped:
@@ -1080,6 +1091,56 @@ the menu block in each app: no `.settings-btn` inside the menu,
 `.menu-icon-row` present with canonical labels, no paired Tier-2 row,
 shim CSS marker (`justify-content:center !important`) present in the
 file. Wired into `pre_publish_check.py` as `[code] menu composition`.
+
+---
+
+## Bug-class invariants — fix-everywhere + permanent gate
+
+(2026-05-28 round-13 — formalized after user feedback: "if I point out
+a fix for one app check all other for the same issues so I don't repeat
+the same issues for each app. Mark in docs fixing bugs everywhere if
+found in one game. Also mark in docs that if some bug is found you
+should remember it and write in docs/scripts to prevent from happening
+anywhere else and have an error/warning check for each one I find.")
+
+**The rule.** A bug reported in any one of the 4 shipping apps must be:
+1. Reproduced and understood in the reporting app.
+2. Fixed in **all 4 apps** in the SAME commit — never wait for the
+   user to re-report it for the next app.
+3. Memorialized as a permanent pre-publish gate in `scripts/` so the
+   bug class cannot ship again from any app in the portfolio.
+
+This compounds — every reported bug becomes a permanent safeguard, and
+the user's review attention isn't burned on repeats.
+
+**Active bug-class gates (each a `scripts/check_*.py` wired into
+`pre_publish_check.py`):**
+
+| Gate file | What it blocks (with one-line origin) |
+|---|---|
+| `check_theme_tokens.py` | Hardcoded hex in growth-shim overlays — broke shim contrast on apps whose palette wasn't the one the shim was written against. |
+| `check_menu_composition.py` | Top-bar Settings gear, paired Tier-2, missing canonical icon-row labels — `Levels · Shop · Games · Settings`. |
+| `check_menu_hierarchy.py` | Static promo banners inside the menu container, missing Tier-1 / Tier-2 / Tier-3 elements. |
+| `check_menu_shims.py` | Forbidden polling injectors, position:absolute children of the top bar, multiple ranks entry points. |
+| `check_menu_consistency.py` | Top-bar icon set deviates from `freecoins · ranks · settings`. |
+| `check_synth_header_scope.py` | Synth `[data-synth-menu-header]` rendering outside `menuScreen` / `screen-menu`. |
+| `check_save_key_probe.py` | MENU shim `readSave` missing a known per-app localStorage key (e.g. `nonogram_state`) — caused lives/coins to vanish from Nono's top bar. |
+| `check_continue_label.py` | Tier-1 `Continue · 0` regression — for 2048-style apps the resume check must require non-empty grid or score>0, not bestScore. |
+| `check_daily_label.py` | Tier-2 Daily button label NOT in `Daily puzzle · MMM DD` form — user wants the date, not the streak count, on the button. |
+| `check_solid_surface_token.py` | `--surface` defined as semi-transparent rgba — shim sheets render as dark slabs over the scrim. |
+| `check_chip_token_tint.py` | `[data-menu-chip]` styled with a non-token background — must use `var(--surface)` so chips match Tier-3 buttons. |
+| `check_pastel_contrast.py` | Per-theme palettes where `--surface` is within 5% luminance of `--bg` — buttons fade into background. |
+
+**How to add a new gate when the user reports a new bug:**
+1. Write `scripts/check_<name>.py` that statically detects the exact
+   class of bug (not just the literal regression). Mirror the
+   `check_theme_tokens.py` shape: `check_app(app)` returns
+   `(blockers, warnings)`.
+2. Wire into `scripts/pre_publish_check.py` (look for the
+   `try / from check_X import check_app` pattern — copy that block).
+3. Add the gate's row to the table above with a one-line origin.
+4. Re-run `pre_publish_check.py` against all 4 flagships to confirm
+   the new check passes on the fixed state.
 
 ---
 
