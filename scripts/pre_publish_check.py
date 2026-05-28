@@ -1952,6 +1952,46 @@ def main():
     except Exception as _e:
         print(f"  menu hierarchy: skipped ({_e})")
 
+    # ---- THEME TOKENS (2026-05-28: growth shim overlays must use CSS
+    # tokens, not hardcoded hex/rgb — only gold coin / heart red / streak
+    # orange / badge green / decorative confetti stay literal.)
+    try:
+        import subprocess as _subprocess
+        _r = _subprocess.run(
+            ['python3', os.path.join(BASE, 'scripts', 'check_theme_tokens.py')]
+            + [a for a in apps if os.path.isdir(os.path.join(BASE, a))],
+            capture_output=True, text=True,
+        )
+        if _r.returncode != 0:
+            for line in _r.stdout.splitlines():
+                if line.strip().startswith('✗') or 'hardcoded' in line:
+                    print(f'  theme tokens: {line.strip()}')
+            section("code",  "theme tokens",        lambda _a: ([_r.stdout.strip() or 'token violations'], []), apps[:1])
+        else:
+            section("code",  "theme tokens",        lambda _a: ([], []), apps[:1])
+    except Exception as _e:
+        print(f"  theme tokens: skipped ({_e})")
+
+    # ---- MENU COMPOSITION (2026-05-28: centered stack, dominant Tier 1,
+    # single Tier 2 Daily, canonical Levels·Shop·Games·Settings icon row,
+    # Settings in row not top-bar gear.)
+    try:
+        import subprocess as _subprocess
+        _r = _subprocess.run(
+            ['python3', os.path.join(BASE, 'scripts', 'check_menu_composition.py')]
+            + [a for a in apps if os.path.isdir(os.path.join(BASE, a))],
+            capture_output=True, text=True,
+        )
+        if _r.returncode != 0:
+            for line in _r.stdout.splitlines():
+                if line.strip().startswith('✗'):
+                    print(f'  menu composition: {line.strip()}')
+            section("code",  "menu composition",    lambda _a: ([_r.stdout.strip() or 'composition issues'], []), apps[:1])
+        else:
+            section("code",  "menu composition",    lambda _a: ([], []), apps[:1])
+    except Exception as _e:
+        print(f"  menu composition: skipped ({_e})")
+
     # ---- FULL REVIEW 2026-05-27 gates: nonogram uniqueness (BLOCK),
     # reward-type parity (BLOCK), subscription disclosure (BLOCK),
     # description claims (WARN), release notes promise vs build (WARN).

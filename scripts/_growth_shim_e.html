@@ -75,9 +75,9 @@
 
     var msg = document.createElement('div');
     msg.style.cssText = 'position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);' +
-      'background:#ffffff;color:#1e3a5f;border:1px solid #d4e2ec;border-radius:18px;padding:18px 22px;' +
+      'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border:1px solid var(--border, #d4e2ec);border-radius:18px;padding:18px 22px;' +
       'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index:9999;font-family:inherit;';
-    msg.innerHTML = "🎉 You've got this!<br><span style='font-weight:600;font-size:0.9rem;color:#5a7390;'>499 more puzzles to go.</span>";
+    msg.innerHTML = "🎉 You've got this!<br><span style='font-weight:600;font-size:0.9rem;color:var(--text-mute, #5a7390);'>499 more puzzles to go.</span>";
     document.body.appendChild(msg);
     setTimeout(function(){ msg.remove(); }, 2400);
   }
@@ -134,13 +134,13 @@
       var bg = document.createElement('div');
       bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
       var card = document.createElement('div');
-      card.style.cssText = 'background:#ffffff;color:#1e3a5f;border-radius:18px;padding:22px;max-width:320px;width:88%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
+      card.style.cssText = 'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border-radius:18px;padding:22px;max-width:320px;width:88%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
       var s = steps[i];
       card.innerHTML =
-        '<div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#5a7390;margin-bottom:6px;">STEP ' + (i+1) + ' / ' + steps.length + '</div>' +
+        '<div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-mute, #5a7390);margin-bottom:6px;">STEP ' + (i+1) + ' / ' + steps.length + '</div>' +
         '<div style="font-size:1.2rem;font-weight:800;margin-bottom:6px;">' + s.title + '</div>' +
-        '<div style="font-size:0.95rem;color:#5a7390;margin-bottom:14px;">' + s.body + '</div>' +
-        '<button data-cm-next style="border:none;padding:10px 18px;background:linear-gradient(135deg,#3b6db8,#5cb3d8);color:#fff;border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">' +
+        '<div style="font-size:0.95rem;color:var(--text-mute, #5a7390);margin-bottom:14px;">' + s.body + '</div>' +
+        '<button data-cm-next style="border:none;padding:10px 18px;background:var(--g-play, linear-gradient(135deg,#3b6db8,#5cb3d8));color:var(--on-accent, #fff);border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">' +
           (i+1 < steps.length ? 'Next →' : 'Got it') +
         '</button>';
       bg.appendChild(card);

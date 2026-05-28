@@ -17,6 +17,26 @@
   --z-promo-overlay: 600;
   --z-modal: 700;
   --z-critical-error: 800;
+  /* Shim/overlay theme tokens (2026-05-28 Part A). Daylight = medium
+     ocean. Midnight reassigns these below. */
+  --text: #e6edf3;
+  --text-mute: rgba(255,255,255,0.72);
+  --surface: rgba(255,255,255,0.10);
+  --border: rgba(255,255,255,0.20);
+  --g-play: linear-gradient(135deg,#4fc3f7,#0288d1);
+  --on-accent: #ffffff;
+  --btn-neutral-bg: rgba(255,255,255,0.18);
+  --bg: #15264a;
+}
+html[data-theme="midnight"] {
+  --text: #e6edf3;
+  --text-mute: rgba(255,255,255,0.62);
+  --surface: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.15);
+  --g-play: linear-gradient(135deg,#4fc3f7,#0288d1);
+  --on-accent: #ffffff;
+  --btn-neutral-bg: rgba(255,255,255,0.10);
+  --bg: #0a1628;
 }
 @font-face { font-family:'Poppins'; font-style:normal; font-weight:400; font-display:swap; src:url('fonts/Poppins-400.woff2') format('woff2'); }
 @font-face { font-family:'Poppins'; font-style:normal; font-weight:600; font-display:swap; src:url('fonts/Poppins-600.woff2') format('woff2'); }
@@ -306,7 +326,6 @@ html[data-theme="midnight"] #levelScreen { background:linear-gradient(160deg,#05
       <div class="lives-display" id="menuLivesDisplay">
         <span id="menuLivesCount">❤️ 5</span>
       </div>
-      <button class="settings-btn" onclick="Game.showScreen('settingsScreen')" aria-label="Settings"><svg class="ico-solo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
       <div class="coin-display">
         <span>🪙</span>
         <span id="menuCoins">0</span>
@@ -331,6 +350,10 @@ html[data-theme="midnight"] #levelScreen { background:linear-gradient(160deg,#05
         <button class="icon-btn" onclick="Game.showScreen('moreGamesScreen')" aria-label="More Games">
           <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="12" rx="4"/><line x1="7" y1="11" x2="11" y2="11"/><line x1="9" y1="9" x2="9" y2="13"/><circle cx="16" cy="11" r="1" fill="currentColor"/><circle cx="18" cy="13" r="1" fill="currentColor"/></svg>
           <span>Games</span>
+        </button>
+        <button class="icon-btn" onclick="Game.showScreen('settingsScreen')" aria-label="Settings">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Settings</span>
         </button>
       </div>
     </div>
@@ -5778,12 +5801,12 @@ window.addEventListener('load',function(){
     var row = document.createElement('div');
     row.setAttribute('data-growth-notif-toggle','1');
     row.style.cssText =
-      'background:#ffffff;border:1px solid rgba(0,0,0,0.08);border-radius:14px;padding:14px 16px;margin:10px 0;' +
+      'background:var(--surface, #ffffff);border:1px solid var(--border, rgba(0,0,0,0.08));border-radius:14px;padding:14px 16px;margin:10px 0;' +
       'display:flex;align-items:center;justify-content:space-between;font-family:inherit;';
     row.innerHTML =
       '<span style="font-weight:600;color:inherit;">🔔 Notifications</span>' +
       '<button data-growth-notif-btn style="border:none;padding:6px 16px;border-radius:14px;cursor:pointer;font-weight:800;letter-spacing:0.5px;' +
-        'background:' + (enabled ? '#3b6db8' : '#bbb') + ';color:#fff;">' +
+        'background:' + (enabled ? 'var(--g-play, #3b6db8)' : 'var(--btn-neutral-bg, #bbb)') + ';color:var(--on-accent, #fff);">' +
         (enabled ? 'ON' : 'OFF') + '</button>';
     host.appendChild(row);
     row.querySelector('[data-growth-notif-btn]').addEventListener('click', function(){
@@ -5791,7 +5814,7 @@ window.addEventListener('load',function(){
       var next = !cur;
       if (api('setNotificationsEnabled')) safe(function(){ Android.setNotificationsEnabled(next); });
       this.textContent = next ? 'ON' : 'OFF';
-      this.style.background = next ? '#3b6db8' : '#bbb';
+      this.style.background = next ? 'var(--g-play, #3b6db8)' : 'var(--btn-neutral-bg, #bbb)';
       if (next) rescheduleAll();
     });
   }
@@ -5935,20 +5958,21 @@ window.addEventListener('load',function(){
     var bg = document.createElement('div');
     bg.setAttribute('data-growth-promo-card','1');
     bg.style.cssText =
-      'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index: var(--z-critical);font-family:inherit;';
+      'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
     var card = document.createElement('div');
     card.style.cssText =
-      'background:#ffffff;color:#1e3a5f;border-radius:18px;padding:22px 22px 18px;width:88%;max-width:340px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
+      'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border-radius:18px;padding:22px 22px 18px;width:88%;max-width:340px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
     card.innerHTML =
-      '<div style="font-size:11px;letter-spacing:2px;color:#5a7390;font-weight:700;margin-bottom:6px;">FROM PEGASUS GAMES</div>' +
+      '<div style="font-size:11px;letter-spacing:2px;color:var(--text-mute, #5a7390);font-weight:700;margin-bottom:6px;">FROM PEGASUS GAMES</div>' +
       '<div style="font-size:1.3rem;font-weight:800;margin-bottom:4px;">' + target.name + '</div>' +
-      '<div style="font-size:0.95rem;color:#5a7390;margin-bottom:14px;">' + target.tagline + '</div>' +
+      '<div style="font-size:0.95rem;color:var(--text-mute, #5a7390);margin-bottom:14px;">' + target.tagline + '</div>' +
+      // Gold-coin reward bar is theme-INDEPENDENT brand color (gold), stays hardcoded.
       '<div style="background:rgba(201,127,0,0.12);color:#c97f00;border:1px solid rgba(201,127,0,0.32);border-radius:12px;padding:8px;margin-bottom:14px;font-weight:700;">' +
         'Install — get +200 🪙' +
       '</div>' +
       '<div style="display:flex;gap:8px;">' +
-        '<button data-growth-promo-later style="flex:1;padding:10px;border:1px solid #d4e2ec;background:#ffffff;color:#5a7390;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;">Maybe Later</button>' +
-        '<button data-growth-promo-install style="flex:1;padding:10px;border:none;background:linear-gradient(135deg,#3b6db8,#5cb3d8);color:#fff;border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">Install</button>' +
+        '<button data-growth-promo-later style="flex:1;padding:10px;border:1px solid var(--border, #d4e2ec);background:var(--surface, #ffffff);color:var(--text-mute, #5a7390);border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;">Maybe Later</button>' +
+        '<button data-growth-promo-install style="flex:1;padding:10px;border:none;background:var(--g-play, linear-gradient(135deg,#3b6db8,#5cb3d8));color:var(--on-accent, #fff);border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">Install</button>' +
       '</div>';
     bg.appendChild(card);
     bg.addEventListener('click', function(ev){ if (ev.target===bg) bg.remove(); });
@@ -6231,7 +6255,7 @@ window.addEventListener('load',function(){
   var lastSeen = -1;
   function showConfetti(){
     var ov = document.createElement('div');
-    ov.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index: var(--z-critical);font-family:inherit;';
+    ov.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;font-family:inherit;';
     var emojis = ['🎉','✨','⭐','🎊','💫'];
     for (var i=0;i<24;i++){
       var span = document.createElement('span');
@@ -6252,9 +6276,9 @@ window.addEventListener('load',function(){
 
     var msg = document.createElement('div');
     msg.style.cssText = 'position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);' +
-      'background:#ffffff;color:#1e3a5f;border:1px solid #d4e2ec;border-radius:18px;padding:18px 22px;' +
-      'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index: var(--z-critical);font-family:inherit;';
-    msg.innerHTML = "🎉 You've got this!<br><span style='font-weight:600;font-size:0.9rem;color:#5a7390;'>499 more puzzles to go.</span>";
+      'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border:1px solid var(--border, #d4e2ec);border-radius:18px;padding:18px 22px;' +
+      'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index:9999;font-family:inherit;';
+    msg.innerHTML = "🎉 You've got this!<br><span style='font-weight:600;font-size:0.9rem;color:var(--text-mute, #5a7390);'>499 more puzzles to go.</span>";
     document.body.appendChild(msg);
     setTimeout(function(){ msg.remove(); }, 2400);
   }
@@ -6309,15 +6333,15 @@ window.addEventListener('load',function(){
     }
     function showStep(i){
       var bg = document.createElement('div');
-      bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index: var(--z-critical);font-family:inherit;';
+      bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
       var card = document.createElement('div');
-      card.style.cssText = 'background:#ffffff;color:#1e3a5f;border-radius:18px;padding:22px;max-width:320px;width:88%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
+      card.style.cssText = 'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border-radius:18px;padding:22px;max-width:320px;width:88%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
       var s = steps[i];
       card.innerHTML =
-        '<div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#5a7390;margin-bottom:6px;">STEP ' + (i+1) + ' / ' + steps.length + '</div>' +
+        '<div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-mute, #5a7390);margin-bottom:6px;">STEP ' + (i+1) + ' / ' + steps.length + '</div>' +
         '<div style="font-size:1.2rem;font-weight:800;margin-bottom:6px;">' + s.title + '</div>' +
-        '<div style="font-size:0.95rem;color:#5a7390;margin-bottom:14px;">' + s.body + '</div>' +
-        '<button data-cm-next style="border:none;padding:10px 18px;background:linear-gradient(135deg,#3b6db8,#5cb3d8);color:#fff;border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">' +
+        '<div style="font-size:0.95rem;color:var(--text-mute, #5a7390);margin-bottom:14px;">' + s.body + '</div>' +
+        '<button data-cm-next style="border:none;padding:10px 18px;background:var(--g-play, linear-gradient(135deg,#3b6db8,#5cb3d8));color:var(--on-accent, #fff);border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">' +
           (i+1 < steps.length ? 'Next →' : 'Got it') +
         '</button>';
       bg.appendChild(card);
@@ -6428,7 +6452,7 @@ window.addEventListener('load',function(){
     btn.setAttribute('data-growth-share-btn','1');
     btn.style.cssText =
       'margin-top:10px;width:100%;padding:11px;border:none;border-radius:12px;' +
-      'background:linear-gradient(135deg,#3b6db8,#5cb3d8);color:#fff;font-weight:800;font-size:0.95rem;cursor:pointer;font-family:inherit;';
+      'background:var(--g-play, linear-gradient(135deg,#3b6db8,#5cb3d8));color:var(--on-accent, #fff);font-weight:800;font-size:0.95rem;cursor:pointer;font-family:inherit;';
     btn.textContent = label;
     btn.addEventListener('click', function(){ doShare(getter()); });
     return btn;
@@ -6594,32 +6618,47 @@ window.addEventListener('load',function(){
       '#menuScreen .menu-tile-row, #screen-menu .menu-tile-row{'+
         'justify-content:center !important;'+
       '}'+
-      // STRUCTURE is universal across apps (per user — Play vertically
-      // centered, Continue biggest button, consistent hierarchy). VISUAL
-      // DESIGN (colors, fonts, shapes) stays per-app. Round-12 restores
-      // the centering that round-10 mistakenly dropped.
-      '#menuScreen, #screen-menu{display:flex !important;flex-direction:column !important;}'+
+      // STRUCTURE is universal: centered stack, dominant Tier-1, smaller
+      // title, even rhythm. VISUAL DESIGN (colors, fonts, shapes) stays
+      // per-app. One --menu-gap drives every section spacing — no more
+      // space-around scattering dead gaps.
+      ':root { --menu-gap: 14px; }'+
+      // Menu container: centered stack instead of space-around so the
+      // distance between title → primary → daily → chips → icons is
+      // even and predictable.
+      '#menuScreen, #screen-menu{display:flex !important;flex-direction:column !important;justify-content:center !important;}'+
       '#menuScreen .menu-buttons, #screen-menu .menu-buttons{'+
-        'flex:1 !important;justify-content:center !important;'+
-        'display:flex !important;flex-direction:column !important;align-items:center !important;'+
+        'flex:0 1 auto !important;display:flex !important;flex-direction:column !important;'+
+        'align-items:center !important;justify-content:center !important;'+
+        'gap:var(--menu-gap) !important;padding:var(--menu-gap) 0 !important;'+
       '}'+
-      // Tier-1 Play/Continue — the LARGEST button on the menu, eye-line.
+      // Title — small label, not a hero. Sits above the centered stack.
+      '#menuScreen .game-title h1, #menuScreen .menu-title, #screen-menu .menu-logo, #menuScreen .menu-logo, #screen-menu .menu-title{'+
+        'font-size:clamp(22px, 5vw, 34px) !important;line-height:1.05 !important;margin:0 0 4px !important;'+
+      '}'+
+      '#menuScreen .game-title p, #menuScreen .menu-tagline, #screen-menu .menu-tagline, #screen-menu .menu-subtitle{'+
+        'margin-top:2px !important;font-size:clamp(0.78rem, 2vw, 0.95rem) !important;opacity:0.78;'+
+      '}'+
+      // Tier-1 Play/Continue — the LARGEST element. min-height 64px,
+      // font 1.25rem, full max-width of the stack.
       '#menuScreen .btn-primary, #menuScreen .menu-primary, #menuScreen .menu-tile-primary, #menuScreen .btn-play, #menuScreen #menuPlayBtn,'+
       '#screen-menu .btn-primary, #screen-menu .menu-primary, #screen-menu .menu-tile-primary, #screen-menu .btn-play, #screen-menu #menuPlayBtn{'+
         'min-height:clamp(64px, 8.5vh, 96px) !important;'+
-        'font-size:clamp(1.15rem, 3vw, 1.55rem) !important;'+
+        'font-size:clamp(1.18rem, 3.1vw, 1.5rem) !important;'+
         'padding:clamp(14px, 2.2vw, 22px) clamp(28px, 5vw, 40px) !important;'+
         'width:clamp(280px, 78vw, 460px) !important;'+
+        'margin:0 !important;'+
       '}'+
-      // Tier-2 Daily Challenge — distinctly smaller than Tier-1.
+      // Tier-2 Daily Challenge — distinctly smaller, never competes.
       '#menuScreen #dailyChallengeBtn, #menuScreen #dailyBtn, #menuScreen [onclick*="DailyChallenge"], #menuScreen [onclick*="startDailyChallenge"],'+
       '#screen-menu #dailyChallengeBtn, #screen-menu #dailyBtn, #screen-menu [onclick*="DailyChallenge"], #screen-menu [onclick*="startDailyChallenge"]{'+
-        'min-height:clamp(44px, 6vh, 64px) !important;'+
-        'font-size:clamp(0.92rem, 2.4vw, 1.15rem) !important;'+
-        'padding:clamp(10px, 1.6vw, 16px) clamp(20px, 4vw, 32px) !important;'+
+        'min-height:clamp(44px, 6vh, 60px) !important;'+
+        'font-size:clamp(0.92rem, 2.4vw, 1.1rem) !important;'+
+        'padding:clamp(10px, 1.6vw, 14px) clamp(20px, 4vw, 32px) !important;'+
+        'margin:0 !important;'+
       '}'+
-      // Chips container — wider so both fit on one row.
-      '[data-menu-chips]{width:100% !important;max-width:none !important;padding:0 16px !important;}'+
+      // Chips container — full width, one row, even rhythm.
+      '[data-menu-chips]{width:100% !important;max-width:none !important;padding:0 16px !important;margin:0 !important;}'+
       // Top bar pinned to the very top of the menu container. The
       // synth header is position:absolute so its left/right clusters
       // hug the screen edges. Each menu adds top padding to clear it.
@@ -7290,10 +7329,10 @@ window.addEventListener('load',function(){
     var coins = (save && typeof save.obj.coins === 'number') ? save.obj.coins : 0;
     var canBuy = coins >= 200;
     ov.innerHTML =
-      '<div style="background:var(--bg,#161b22);color:var(--text,#e6edf3);border-radius:18px;padding:22px;max-width:340px;width:92%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.5);">'+
+      '<div style="background:var(--surface, var(--bg, #161b22));color:var(--text, #e6edf3);border-radius:18px;padding:22px;max-width:340px;width:92%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.5);">'+
         '<div style="font-size:1.1rem;font-weight:800;margin-bottom:6px;">🛡 Streak Shield</div>'+
         '<div style="font-size:0.9rem;opacity:0.85;margin-bottom:14px;">Keeps your streak alive if you miss one day. You have <b>' + freezes + '</b>.</div>'+
-        '<button id="xShieldBuyBtn" '+ (canBuy?'':'disabled') +' style="display:block;width:100%;background:'+ (canBuy?'linear-gradient(135deg,#6094d4,#3b6db8)':'rgba(127,127,127,0.25)') +';color:#fff;border:none;border-radius:12px;padding:12px;font-weight:800;cursor:'+ (canBuy?'pointer':'not-allowed') +';margin-bottom:8px;">'+
+        '<button id="xShieldBuyBtn" '+ (canBuy?'':'disabled') +' style="display:block;width:100%;background:'+ (canBuy?'var(--g-play, linear-gradient(135deg,#6094d4,#3b6db8))':'rgba(127,127,127,0.25)') +';color:var(--on-accent, #fff);border:none;border-radius:12px;padding:12px;font-weight:800;cursor:'+ (canBuy?'pointer':'not-allowed') +';margin-bottom:8px;">'+
           (canBuy ? 'Buy +1 Shield · 200 🪙' : 'Earn 200 🪙 to buy a shield (' + coins + '/200)') +
         '</button>'+
         '<button id="xShieldCloseBtn" style="display:block;width:100%;background:transparent;color:inherit;border:1px solid rgba(127,127,127,0.4);border-radius:12px;padding:10px;font-weight:600;cursor:pointer;">Close</button>'+

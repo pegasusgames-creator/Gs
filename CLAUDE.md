@@ -976,6 +976,113 @@ element, Tier 2 Daily button + Tier 3 icon row reachable. Wired into
 
 ---
 
+## Theme tokens, never hardcoded
+
+(2026-05-28 — every growth shim overlay reads CSS theme tokens so the
+same shim renders correctly on each app's Daylight palette AND on the
+Midnight unlock. Hardcoded hex/rgb in shim source = broken contrast on
+whichever app you didn't write the shim against.)
+
+**Required tokens per app's `:root`:**
+
+| Token | Used by | Daylight value (per app) | Midnight value |
+|---|---|---|---|
+| `--text` | shim body text | dark on light surfaces | light on dark |
+| `--text-mute` | secondary lines, subtitles | 60-70% body | 55-62% body |
+| `--surface` | shim panel / card backgrounds | per-app warm/cool tone | per-app dark tone |
+| `--border` | 1px hairlines | 8-20% on bg | 10-15% on bg |
+| `--g-play` | primary CTA gradient (Install, ON, Buy) | per-app primary | per-app primary |
+| `--on-accent` | text/icon on `--g-play` surfaces | passes 4.5:1 AA | passes 4.5:1 AA |
+| `--btn-neutral-bg` | OFF toggle, disabled CTA | per-app muted | per-app muted |
+
+WaterSort + Puzzle2048 had only z-index tokens before this — both now
+ship the full color-token block plus a `html[data-theme="midnight"]`
+override. Nonogram aliases `--text-mute` to its existing `--text-muted`
+and `--g-play` to its accent. UnblockPuzzle already shipped the full
+set during the May rebrand.
+
+**Whitelist — these colors stay HARDCODED across all shims:**
+
+- Gold coin colors: `#d29922`, `#c97f00`, `#ffd700`, `#fed130`
+- Heart red: `#b8332b`, `#c83838`
+- Streak fire orange: `#ff8c1a`
+- Badge green: `#2ea043`
+- Decorative confetti / particle canvas fills
+- `rgba(0,0,0,*)` modal-backdrop dim layers
+- `rgba(255,255,255,*)` subtle elevation layers
+
+**Source-of-truth shims** (re-inject after editing via
+`/tmp/reinject_all_shims.py`): `scripts/_growth_shim_a.html` (notif
+toggle), `_b.html` (cross-promo card), `_e.html` (first-clear celebration
++ coachmark), `_f.html` (share button), `_menu.html` (Streak Shield
+overlay + top-bar + composition rules). The shim bodies are
+byte-identical across the 4 apps; per-app difference comes only from
+the tokens.
+
+**Pre-publish enforcement.** `scripts/check_theme_tokens.py` greps each
+shim block in each app's `game.html` (plus the shim sources themselves)
+for hex/rgb after stripping `var()` fallbacks; fails on any color
+outside the whitelist. Wired into `pre_publish_check.py` as
+`[code] theme tokens`.
+
+---
+
+## Menu composition (centered stack, dominant Tier-1)
+
+(2026-05-28 — replaces the round-10 mistake where Play could appear
+visually equal to Continue, and where some apps used
+`justify-content:space-around` to scatter sections. STRUCTURE is
+universal across all four apps; VISUAL design — colors, fonts, button
+shapes — remains per-app.)
+
+**Composition rules:**
+
+1. Menu container uses `justify-content:center` with the stack
+   vertically centered — not `flex-start`, not `space-around`. A single
+   `--menu-gap` token (~14px) drives every section gap.
+2. Title shrinks to `clamp(22px, 5vw, 34px)` so it doesn't dominate.
+   Tagline sits beneath at `clamp(0.78rem, 2vw, 0.95rem)`, 78% opacity.
+3. Tier 1 — one and only one primary button (Continue when state has
+   resumable progress, else Play). Sized
+   `min-height: clamp(64px, 8.5vh, 96px)`, font
+   `clamp(1.18rem, 3.1vw, 1.5rem)`, width
+   `clamp(280px, 78vw, 460px)`. Distinctly the largest tappable.
+4. Tier 2 — Daily Challenge as a SINGLE secondary button (never paired
+   with a second button). Label suffix shows the streak when > 0:
+   `Daily · 🔥N`. Sized `min-height: clamp(44px, 6vh, 60px)`.
+5. Tier 3 — single `.menu-icon-row` with canonical order
+   `Levels · Shop · Games · Settings`. Puzzle2048 substitutes Best for
+   Levels in the leftmost slot (since it has no levels). Mixed-case
+   labels everywhere ("Shop", not "SHOP"). Settings is ALWAYS in this
+   row — never a separate top-bar gear.
+6. Chips containers (Streak Shield, login-ladder reward) sit full-width
+   below the icon row, padding `0 16px`, no per-app divergence.
+
+**Forbidden:**
+
+- Two large competing buttons (Continue + Play visible side-by-side).
+- `.settings-btn` / `.settings-gear` element inside the menu screen.
+- `.menu-pair-row` / `.menu-tile-row` containing 2+ buttons (collapse
+  to one Tier-2 Daily; move the second into the icon row or remove).
+- Static, hardcoded "Level X / N" indicator at the top of the menu —
+  the Continue button label already carries that info.
+- App-specific overrides that re-introduce `justify-content:space-around`
+  on the menu.
+
+**Implementation.** All composition CSS lives in
+`scripts/_growth_shim_menu.html` as a single CSS rule block injected
+into every app's game.html at boot. Re-inject after editing with
+`/tmp/reinject_all_shims.py`. Per-app menu HTML changes only when the
+icon-row markup needs to be updated to match the canonical order.
+
+**Pre-publish enforcement.** `scripts/check_menu_composition.py` walks
+the menu block in each app: no `.settings-btn` inside the menu,
+`.menu-icon-row` present with canonical labels, no paired Tier-2 row,
+shim CSS marker (`justify-content:center !important`) present in the
+file. Wired into `pre_publish_check.py` as `[code] menu composition`.
+
+---
+
 ## Review 2026-05 fixes — invariants
 
 Memorialized from the 2026-05-27 full-review pass. Each line is now a

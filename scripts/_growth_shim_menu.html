@@ -51,32 +51,47 @@
       '#menuScreen .menu-tile-row, #screen-menu .menu-tile-row{'+
         'justify-content:center !important;'+
       '}'+
-      // STRUCTURE is universal across apps (per user — Play vertically
-      // centered, Continue biggest button, consistent hierarchy). VISUAL
-      // DESIGN (colors, fonts, shapes) stays per-app. Round-12 restores
-      // the centering that round-10 mistakenly dropped.
-      '#menuScreen, #screen-menu{display:flex !important;flex-direction:column !important;}'+
+      // STRUCTURE is universal: centered stack, dominant Tier-1, smaller
+      // title, even rhythm. VISUAL DESIGN (colors, fonts, shapes) stays
+      // per-app. One --menu-gap drives every section spacing — no more
+      // space-around scattering dead gaps.
+      ':root { --menu-gap: 14px; }'+
+      // Menu container: centered stack instead of space-around so the
+      // distance between title → primary → daily → chips → icons is
+      // even and predictable.
+      '#menuScreen, #screen-menu{display:flex !important;flex-direction:column !important;justify-content:center !important;}'+
       '#menuScreen .menu-buttons, #screen-menu .menu-buttons{'+
-        'flex:1 !important;justify-content:center !important;'+
-        'display:flex !important;flex-direction:column !important;align-items:center !important;'+
+        'flex:0 1 auto !important;display:flex !important;flex-direction:column !important;'+
+        'align-items:center !important;justify-content:center !important;'+
+        'gap:var(--menu-gap) !important;padding:var(--menu-gap) 0 !important;'+
       '}'+
-      // Tier-1 Play/Continue — the LARGEST button on the menu, eye-line.
+      // Title — small label, not a hero. Sits above the centered stack.
+      '#menuScreen .game-title h1, #menuScreen .menu-title, #screen-menu .menu-logo, #menuScreen .menu-logo, #screen-menu .menu-title{'+
+        'font-size:clamp(22px, 5vw, 34px) !important;line-height:1.05 !important;margin:0 0 4px !important;'+
+      '}'+
+      '#menuScreen .game-title p, #menuScreen .menu-tagline, #screen-menu .menu-tagline, #screen-menu .menu-subtitle{'+
+        'margin-top:2px !important;font-size:clamp(0.78rem, 2vw, 0.95rem) !important;opacity:0.78;'+
+      '}'+
+      // Tier-1 Play/Continue — the LARGEST element. min-height 64px,
+      // font 1.25rem, full max-width of the stack.
       '#menuScreen .btn-primary, #menuScreen .menu-primary, #menuScreen .menu-tile-primary, #menuScreen .btn-play, #menuScreen #menuPlayBtn,'+
       '#screen-menu .btn-primary, #screen-menu .menu-primary, #screen-menu .menu-tile-primary, #screen-menu .btn-play, #screen-menu #menuPlayBtn{'+
         'min-height:clamp(64px, 8.5vh, 96px) !important;'+
-        'font-size:clamp(1.15rem, 3vw, 1.55rem) !important;'+
+        'font-size:clamp(1.18rem, 3.1vw, 1.5rem) !important;'+
         'padding:clamp(14px, 2.2vw, 22px) clamp(28px, 5vw, 40px) !important;'+
         'width:clamp(280px, 78vw, 460px) !important;'+
+        'margin:0 !important;'+
       '}'+
-      // Tier-2 Daily Challenge — distinctly smaller than Tier-1.
+      // Tier-2 Daily Challenge — distinctly smaller, never competes.
       '#menuScreen #dailyChallengeBtn, #menuScreen #dailyBtn, #menuScreen [onclick*="DailyChallenge"], #menuScreen [onclick*="startDailyChallenge"],'+
       '#screen-menu #dailyChallengeBtn, #screen-menu #dailyBtn, #screen-menu [onclick*="DailyChallenge"], #screen-menu [onclick*="startDailyChallenge"]{'+
-        'min-height:clamp(44px, 6vh, 64px) !important;'+
-        'font-size:clamp(0.92rem, 2.4vw, 1.15rem) !important;'+
-        'padding:clamp(10px, 1.6vw, 16px) clamp(20px, 4vw, 32px) !important;'+
+        'min-height:clamp(44px, 6vh, 60px) !important;'+
+        'font-size:clamp(0.92rem, 2.4vw, 1.1rem) !important;'+
+        'padding:clamp(10px, 1.6vw, 14px) clamp(20px, 4vw, 32px) !important;'+
+        'margin:0 !important;'+
       '}'+
-      // Chips container — wider so both fit on one row.
-      '[data-menu-chips]{width:100% !important;max-width:none !important;padding:0 16px !important;}'+
+      // Chips container — full width, one row, even rhythm.
+      '[data-menu-chips]{width:100% !important;max-width:none !important;padding:0 16px !important;margin:0 !important;}'+
       // Top bar pinned to the very top of the menu container. The
       // synth header is position:absolute so its left/right clusters
       // hug the screen edges. Each menu adds top padding to clear it.
@@ -747,10 +762,10 @@
     var coins = (save && typeof save.obj.coins === 'number') ? save.obj.coins : 0;
     var canBuy = coins >= 200;
     ov.innerHTML =
-      '<div style="background:var(--bg,#161b22);color:var(--text,#e6edf3);border-radius:18px;padding:22px;max-width:340px;width:92%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.5);">'+
+      '<div style="background:var(--surface, var(--bg, #161b22));color:var(--text, #e6edf3);border-radius:18px;padding:22px;max-width:340px;width:92%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.5);">'+
         '<div style="font-size:1.1rem;font-weight:800;margin-bottom:6px;">🛡 Streak Shield</div>'+
         '<div style="font-size:0.9rem;opacity:0.85;margin-bottom:14px;">Keeps your streak alive if you miss one day. You have <b>' + freezes + '</b>.</div>'+
-        '<button id="xShieldBuyBtn" '+ (canBuy?'':'disabled') +' style="display:block;width:100%;background:'+ (canBuy?'linear-gradient(135deg,#6094d4,#3b6db8)':'rgba(127,127,127,0.25)') +';color:#fff;border:none;border-radius:12px;padding:12px;font-weight:800;cursor:'+ (canBuy?'pointer':'not-allowed') +';margin-bottom:8px;">'+
+        '<button id="xShieldBuyBtn" '+ (canBuy?'':'disabled') +' style="display:block;width:100%;background:'+ (canBuy?'var(--g-play, linear-gradient(135deg,#6094d4,#3b6db8))':'rgba(127,127,127,0.25)') +';color:var(--on-accent, #fff);border:none;border-radius:12px;padding:12px;font-weight:800;cursor:'+ (canBuy?'pointer':'not-allowed') +';margin-bottom:8px;">'+
           (canBuy ? 'Buy +1 Shield · 200 🪙' : 'Earn 200 🪙 to buy a shield (' + coins + '/200)') +
         '</button>'+
         '<button id="xShieldCloseBtn" style="display:block;width:100%;background:transparent;color:inherit;border:1px solid rgba(127,127,127,0.4);border-radius:12px;padding:10px;font-weight:600;cursor:pointer;">Close</button>'+

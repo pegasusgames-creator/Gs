@@ -87,7 +87,7 @@
     btn.setAttribute('data-growth-share-btn','1');
     btn.style.cssText =
       'margin-top:10px;width:100%;padding:11px;border:none;border-radius:12px;' +
-      'background:linear-gradient(135deg,#3b6db8,#5cb3d8);color:#fff;font-weight:800;font-size:0.95rem;cursor:pointer;font-family:inherit;';
+      'background:var(--g-play, linear-gradient(135deg,#3b6db8,#5cb3d8));color:var(--on-accent, #fff);font-weight:800;font-size:0.95rem;cursor:pointer;font-family:inherit;';
     btn.textContent = label;
     btn.addEventListener('click', function(){ doShare(getter()); });
     return btn;

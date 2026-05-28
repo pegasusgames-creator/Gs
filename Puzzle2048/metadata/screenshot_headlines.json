@@ -1,13 +1,8 @@
 [
   {
-    "line1": "REACH",
-    "line2": "BIGGER TILES",
-    "subtitle": "Late-game boards stacked with 256s, 512s, and 1024s."
-  },
-  {
     "line1": "SWIPE TO",
     "line2": "MERGE",
-    "subtitle": "Equal tiles combine into the next power of two."
+    "subtitle": "Reach 2048. Equal tiles combine into the next power of two."
   },
   {
     "line1": "PLAN EACH",
@@ -28,5 +23,10 @@
     "line1": "WEEKLY",
     "line2": "TOURNAMENT",
     "subtitle": "Your best score this week places you in a bracket."
+  },
+  {
+    "line1": "REACH",
+    "line2": "BIGGER TILES",
+    "subtitle": "Late-game boards stacked with 256s, 512s, and 1024s."
   }
 ]

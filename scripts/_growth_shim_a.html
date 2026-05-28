@@ -167,12 +167,12 @@
     var row = document.createElement('div');
     row.setAttribute('data-growth-notif-toggle','1');
     row.style.cssText =
-      'background:#ffffff;border:1px solid rgba(0,0,0,0.08);border-radius:14px;padding:14px 16px;margin:10px 0;' +
+      'background:var(--surface, #ffffff);border:1px solid var(--border, rgba(0,0,0,0.08));border-radius:14px;padding:14px 16px;margin:10px 0;' +
       'display:flex;align-items:center;justify-content:space-between;font-family:inherit;';
     row.innerHTML =
       '<span style="font-weight:600;color:inherit;">🔔 Notifications</span>' +
       '<button data-growth-notif-btn style="border:none;padding:6px 16px;border-radius:14px;cursor:pointer;font-weight:800;letter-spacing:0.5px;' +
-        'background:' + (enabled ? '#3b6db8' : '#bbb') + ';color:#fff;">' +
+        'background:' + (enabled ? 'var(--g-play, #3b6db8)' : 'var(--btn-neutral-bg, #bbb)') + ';color:var(--on-accent, #fff);">' +
         (enabled ? 'ON' : 'OFF') + '</button>';
     host.appendChild(row);
     row.querySelector('[data-growth-notif-btn]').addEventListener('click', function(){
@@ -180,7 +180,7 @@
       var next = !cur;
       if (api('setNotificationsEnabled')) safe(function(){ Android.setNotificationsEnabled(next); });
       this.textContent = next ? 'ON' : 'OFF';
-      this.style.background = next ? '#3b6db8' : '#bbb';
+      this.style.background = next ? 'var(--g-play, #3b6db8)' : 'var(--btn-neutral-bg, #bbb)';
       if (next) rescheduleAll();
     });
   }
