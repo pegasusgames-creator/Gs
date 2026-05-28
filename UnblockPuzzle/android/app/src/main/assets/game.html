@@ -4966,11 +4966,32 @@ window.addEventListener('load',function(){
       '#menuScreen .menu-tile-row, #screen-menu .menu-tile-row{'+
         'justify-content:center !important;'+
       '}'+
-      // Per round-10 user feedback: "UI shouldn't be the same for all
-      // apps". The MENU shim no longer forces vertical centering or
-      // uniform button sizing — each app's native CSS decides those.
-      // The shim only owns: top-bar layout, chips, level-dup hide,
-      // Continue label, ranks sheet, theme-popup wiring.
+      // STRUCTURE is universal across apps (per user — Play vertically
+      // centered, Continue biggest button, consistent hierarchy). VISUAL
+      // DESIGN (colors, fonts, shapes) stays per-app. Round-12 restores
+      // the centering that round-10 mistakenly dropped.
+      '#menuScreen, #screen-menu{display:flex !important;flex-direction:column !important;}'+
+      '#menuScreen .menu-buttons, #screen-menu .menu-buttons{'+
+        'flex:1 !important;justify-content:center !important;'+
+        'display:flex !important;flex-direction:column !important;align-items:center !important;'+
+      '}'+
+      // Tier-1 Play/Continue — the LARGEST button on the menu, eye-line.
+      '#menuScreen .btn-primary, #menuScreen .menu-primary, #menuScreen .menu-tile-primary, #menuScreen .btn-play, #menuScreen #menuPlayBtn,'+
+      '#screen-menu .btn-primary, #screen-menu .menu-primary, #screen-menu .menu-tile-primary, #screen-menu .btn-play, #screen-menu #menuPlayBtn{'+
+        'min-height:clamp(64px, 8.5vh, 96px) !important;'+
+        'font-size:clamp(1.15rem, 3vw, 1.55rem) !important;'+
+        'padding:clamp(14px, 2.2vw, 22px) clamp(28px, 5vw, 40px) !important;'+
+        'width:clamp(280px, 78vw, 460px) !important;'+
+      '}'+
+      // Tier-2 Daily Challenge — distinctly smaller than Tier-1.
+      '#menuScreen #dailyChallengeBtn, #menuScreen #dailyBtn, #menuScreen [onclick*="DailyChallenge"], #menuScreen [onclick*="startDailyChallenge"],'+
+      '#screen-menu #dailyChallengeBtn, #screen-menu #dailyBtn, #screen-menu [onclick*="DailyChallenge"], #screen-menu [onclick*="startDailyChallenge"]{'+
+        'min-height:clamp(44px, 6vh, 64px) !important;'+
+        'font-size:clamp(0.92rem, 2.4vw, 1.15rem) !important;'+
+        'padding:clamp(10px, 1.6vw, 16px) clamp(20px, 4vw, 32px) !important;'+
+      '}'+
+      // Chips container — wider so both fit on one row.
+      '[data-menu-chips]{width:100% !important;max-width:none !important;padding:0 16px !important;}'+
       // Top bar pinned to the very top of the menu container. The
       // synth header is position:absolute so its left/right clusters
       // hug the screen edges. Each menu adds top padding to clear it.
@@ -5592,22 +5613,27 @@ window.addEventListener('load',function(){
     var claimedToday = lsGet(todayClaimedKey, '') === todayStr;
     var html = '';
 
-    // Streak Shield chip — labeled, clear.
+    // Streak Shield chip — short label so both chips fit in one row.
     html += '<div data-menu-chip data-tone="shield" data-chip-id="shield" title="Streak shields restore your daily streak after one missed day.">'+
-              '🛡 Streak Shield ×<span data-chip-shield-count>' + freezes + '</span>'+
+              '🛡 Shield ×<span data-chip-shield-count>' + freezes + '</span>'+
             '</div>';
 
-    // Claim today's login reward — only if unclaimed.
+    // Reward chip — abbreviated to keep both chips inline.
     if (!claimedToday && nm) {
+      var shortReward = (nm.reward || '').replace('Permanent theme + ', '🌟 ')
+                                          .replace('Master badge + ', '🌟 ')
+                                          .replace('Legendary status + ', '🏆 ')
+                                          .replace('Hint x3', 'Hints')
+                                          .replace(' + Hint', '+H');
       html += '<div data-menu-chip data-tone="claim" data-chip-id="claim" title="Claim today’s daily login reward.">'+
-                '🎁 Claim Day ' + nm.day + ' · ' + nm.reward +
+                '🎁 Day ' + nm.day + ' · ' + shortReward +
               '</div>';
     } else if (claimedToday && nm) {
       html += '<div data-menu-chip data-tone="done" data-chip-id="next" title="Tomorrow’s reward.">'+
-                '🔥 Tomorrow: ' + nm.reward +
+                '🔥 Tomorrow' +
               '</div>';
     } else if (!nm) {
-      html += '<div data-menu-chip data-tone="done">🏆 All ladder rewards earned</div>';
+      html += '<div data-menu-chip data-tone="done">🏆 All earned</div>';
     }
     row.innerHTML = html;
 
