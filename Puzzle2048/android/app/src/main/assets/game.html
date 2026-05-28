@@ -342,7 +342,8 @@ body { background:#f3ecd9; }
 #menuScreen { background:linear-gradient(160deg,#f8f1de 0%,#ebe1c4 50%,#f3ecd9 100%); }
 #gameScreen, #scoresScreen, #shopScreen, #moreGamesScreen, #settingsScreen,
 #themeScreen, #achievementsScreen, #missionsScreen { background:#f3ecd9; }
-.mini-grid { background:#e6dcc0; }
+.mini-grid { background:#cabb91 !important; }
+.mini-cell { background:#e6dcc0 !important; color:#2a2620 !important; }
 .score-tile { background:#e6dcc0; }
 .score-tile .stl { color:rgba(42,38,32,0.70); }
 .score-tile .stv { color:#2a2620; }
@@ -399,7 +400,8 @@ html[data-theme="midnight"] #themeScreen,
 html[data-theme="midnight"] #achievementsScreen,
 html[data-theme="midnight"] #missionsScreen { background:#1a1a18; }
 html[data-theme="midnight"] #menuScreen { background:linear-gradient(160deg,#1a1a18 0%,#2c2b27 50%,#1a1a18 100%); }
-html[data-theme="midnight"] .mini-grid,
+html[data-theme="midnight"] .mini-grid { background:#2c2b27 !important; }
+html[data-theme="midnight"] .mini-cell { background:#3c3b37 !important; color:#ffffff !important; }
 html[data-theme="midnight"] .score-tile { background:#2c2b27; }
 html[data-theme="midnight"] .score-tile .stl { color:rgba(255,255,255,0.55); }
 html[data-theme="midnight"] .score-tile .stv { color:#ffffff; }
@@ -1377,11 +1379,12 @@ function drawGrid(mergedCells, spawnedCell, animProgress) {
 
   const {ox, oy, gridW, gridH} = getCellXY(0, 0);
 
-  // Draw grid background. Frame at (ox, oy) so cells have equal cellGap
-  // padding on all four sides (round-6 fix — previous draw at
-  // (ox - gridPad, oy - gridPad) with the same gridW left a 2x gap on
-  // the top-left and 0x gap on the bottom-right, asymmetric grid).
-  ctx.fillStyle = '#2c2b27';
+  // Draw grid background. Frame + empty cell color follow the active
+  // theme — Daylight gets warm tan, Midnight keeps the original dark.
+  const _isMidnight = document.documentElement.getAttribute('data-theme') === 'midnight';
+  const _gridFrame  = _isMidnight ? '#2c2b27' : '#cabb91';
+  const _emptyCell  = _isMidnight ? '#3c3b37' : '#e6dcc0';
+  ctx.fillStyle = _gridFrame;
   roundRect(ctx, ox, oy, gridW, gridH, gridRadius * 1.5);
   ctx.fill();
 
@@ -1390,10 +1393,9 @@ function drawGrid(mergedCells, spawnedCell, animProgress) {
     for (let c = 0; c < GRID_SIZE; c++) {
       const {x, y} = getCellXY(r, c);
       const val = State.grid[r][c];
-      const colors = getTileColor(0);
-
-      // Empty cell background
-      ctx.fillStyle = colors.bg;
+      // Empty cell background — theme-aware (Daylight warm tan,
+      // Midnight original dark warm).
+      ctx.fillStyle = _emptyCell;
       roundRect(ctx, x, y, cellSize, cellSize, gridRadius);
       ctx.fill();
 
@@ -4911,13 +4913,11 @@ window.addEventListener('load',function(){
       '#menuScreen .menu-tile-row, #screen-menu .menu-tile-row{'+
         'justify-content:center !important;'+
       '}'+
-      // Vertically center the Tier-1 Play button — middle of the screen,
-      // not high near the top. flex:1 + justify-content:center pushes
-      // the button stack into the middle so the eyes find it instantly.
-      '#menuScreen .menu-buttons, #screen-menu .menu-buttons{'+
-        'flex:1 !important;justify-content:center !important;'+
-      '}'+
-      '#menuScreen, #screen-menu{display:flex !important;flex-direction:column !important;}'+
+      // Per round-10 user feedback: "UI shouldn't be the same for all
+      // apps". The MENU shim no longer forces vertical centering or
+      // uniform button sizing — each app's native CSS decides those.
+      // The shim only owns: top-bar layout, chips, level-dup hide,
+      // Continue label, ranks sheet, theme-popup wiring.
       // Top bar pinned to the very top of the menu container. The
       // synth header is position:absolute so its left/right clusters
       // hug the screen edges. Each menu adds top padding to clear it.
@@ -4953,6 +4953,15 @@ window.addEventListener('load',function(){
       '[data-menu-chips]{display:flex !important;justify-content:center !important;flex-wrap:wrap !important;'+
         'gap:8px !important;margin:14px auto !important;font-size:12px !important;font-weight:700 !important;'+
         'font-family:inherit !important;}'+
+      // Force chip row to a SINGLE line (no wrap) so streak shield
+      // and claim sit side-by-side on every viewport.
+      '[data-menu-chips]{flex-wrap:nowrap !important;}'+
+      // Hide static level-duplication labels — the Continue / Play
+      // button carries that info, and showing "Level 23 / 150" PLUS
+      // "Continue — Level 23 of 150" PLUS "Continue · Level 23" on
+      // the button is three references to the same thing.
+      '#menuScreen .level-indicator, #screen-menu .level-indicator{display:none !important;}'+
+      '#menuScreen .menu-primary-sub, #screen-menu .menu-primary-sub{display:none !important;}'+
       // Chips inherit the menu's text color so they stay readable on
       // any theme bg (cream / mint / medium-blue / dark). Background
       // + border use semi-opaque accent tints that read above any bg.
@@ -4982,13 +4991,22 @@ window.addEventListener('load',function(){
            m.querySelector('[onclick*="DailyChallenge"], [onclick*="startDailyChallenge"], [onclick*="dailyChallenge"]');
   }
   function readSave(){
-    var keys = ['save','state','gameState','progress','State'];
+    // Per-app localStorage keys (each app uses its own):
+    //   WaterSort:    watersort_save
+    //   Nonogram:     state
+    //   Puzzle2048:   puzzle2048_save
+    //   UnblockPuzzle: unblock_save
+    var keys = ['save','state','gameState','progress','State',
+                'watersort_save','puzzle2048_save','unblock_save','nonogram_save'];
     for (var i=0;i<keys.length;i++){
       var raw = lsGet(keys[i], null);
       if (!raw) continue;
       try { return JSON.parse(raw); } catch(e){}
     }
+    // Live state objects — apps expose them as window.State (caps) or
+    // window.state (lower). Read whichever exists.
     if (window.State && typeof window.State === 'object') return window.State;
+    if (window.state && typeof window.state === 'object') return window.state;
     return {};
   }
   function getStreak(){
@@ -5654,7 +5672,9 @@ window.addEventListener('load',function(){
         for (var i=0;i<daily.childNodes.length;i++){
           if (daily.childNodes[i].nodeType === 3) { textNode = daily.childNodes[i]; break; }
         }
-        var newTxt = lbl + (streak > 0 ? '  🔥' + streak : '');
+        // Use 🔥 + VS-16 selector (U+FE0F) to force emoji-style render
+        // on Android — bare U+1F525 sometimes draws as monochrome glyph.
+        var newTxt = lbl + (streak > 0 ? '  🔥️' + streak : '');
         if (textNode) { if (textNode.nodeValue.trim() !== newTxt) textNode.nodeValue = newTxt; }
         else if (daily.querySelector('span:not(.ico):not(.icon)')) {
           var s2 = daily.querySelector('span:not(.ico):not(.icon)');
