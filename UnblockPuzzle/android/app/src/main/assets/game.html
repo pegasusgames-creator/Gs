@@ -5006,22 +5006,25 @@ window.addEventListener('load',function(){
       '[data-menu-chips]{display:flex !important;justify-content:center !important;flex-wrap:wrap !important;'+
         'gap:8px !important;margin:14px auto !important;font-size:12px !important;font-weight:700 !important;'+
         'font-family:inherit !important;}'+
-      // Force chip row to a SINGLE line (no wrap) so streak shield
-      // and claim sit side-by-side on every viewport.
-      '[data-menu-chips]{flex-wrap:nowrap !important;}'+
+      // Chip row: chips can wrap to a second line if the row gets
+      // too long, but TEXT inside a chip never wraps to two lines —
+      // user feedback: "Streak Shield" splitting onto two lines
+      // looked broken. Wrap below means: chip on its own row, full
+      // text intact.
+      '[data-menu-chips]{flex-wrap:wrap !important;}'+
+      '[data-menu-chip]{white-space:nowrap !important;flex-shrink:0;}'+
       // Hide static level-duplication labels — the Continue / Play
       // button carries that info, and showing "Level 23 / 150" PLUS
       // "Continue — Level 23 of 150" PLUS "Continue · Level 23" on
       // the button is three references to the same thing.
       '#menuScreen .level-indicator, #screen-menu .level-indicator{display:none !important;}'+
       '#menuScreen .menu-primary-sub, #screen-menu .menu-primary-sub{display:none !important;}'+
-      // Chips inherit the menu's text color so they stay readable on
-      // any theme bg (cream / mint / medium-blue / dark). Background
-      // + border use semi-opaque accent tints that read above any bg.
-      '[data-menu-chip]{padding:8px 14px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:inherit;background:rgba(127,127,127,0.18) !important;border:1px solid rgba(127,127,127,0.32) !important;}'+
-      '[data-menu-chip][data-tone="shield"]{background:rgba(80,130,220,0.22) !important;border-color:rgba(80,130,220,0.50) !important;}'+
-      '[data-menu-chip][data-tone="claim"]{background:rgba(220,140,40,0.22) !important;border-color:rgba(220,140,40,0.50) !important;}'+
-      '[data-menu-chip][data-tone="done"]{background:rgba(46,160,67,0.22) !important;border-color:rgba(46,160,67,0.50) !important;}';
+      // Chips inherit the menu text color and use a uniform neutral
+      // box treatment — the SAME look for shield + claim + done, with
+      // a small accent dot via the emoji glyph carrying the difference.
+      // (Earlier multi-tone tints made each chip look like a different
+      // component; user wanted them visually unified.)
+      '[data-menu-chip]{padding:8px 14px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:inherit;background:rgba(127,127,127,0.16) !important;border:1px solid rgba(127,127,127,0.30) !important;font-weight:700;}';
     (document.head || document.documentElement).appendChild(st);
   })();
 
@@ -5721,19 +5724,17 @@ window.addEventListener('load',function(){
           lbl = (daily.textContent || '').replace(/\s*🔥\s*\d+\s*$/, '').trim() || 'Daily Challenge';
           daily.setAttribute('data-base-label', lbl);
         }
-        var textNode = null;
-        for (var i=0;i<daily.childNodes.length;i++){
-          if (daily.childNodes[i].nodeType === 3) { textNode = daily.childNodes[i]; break; }
-        }
-        // Use 🔥 + VS-16 selector (U+FE0F) to force emoji-style render
-        // on Android — bare U+1F525 sometimes draws as monochrome glyph.
-        var newTxt = lbl + (streak > 0 ? '  🔥️' + streak : '');
-        if (textNode) { if (textNode.nodeValue.trim() !== newTxt) textNode.nodeValue = newTxt; }
-        else if (daily.querySelector('span:not(.ico):not(.icon)')) {
-          var s2 = daily.querySelector('span:not(.ico):not(.icon)');
-          if (s2.textContent !== newTxt) s2.textContent = newTxt;
-        } else {
-          if (daily.textContent !== newTxt) daily.textContent = newTxt;
+        // Build streak suffix as HTML so the 🔥 emoji gets an explicit
+        // color span — even if the WebView falls back to a monochrome
+        // glyph (no color emoji font), the orange color carries.
+        // Idempotent via data-streak-html marker.
+        var newHtml = lbl + (streak > 0
+          ? ' <span data-streak-html style="color:#ff8c1a;font-weight:800;">🔥&nbsp;' + streak + '</span>'
+          : '');
+        var prev = daily.getAttribute('data-streak-rendered');
+        if (prev !== newHtml) {
+          daily.innerHTML = newHtml;
+          daily.setAttribute('data-streak-rendered', newHtml);
         }
       }
     }
