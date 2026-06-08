@@ -4775,6 +4775,18 @@ setTimeout(function() { wsUpdateMissionsBadge(); }, 1500);
 .tut-bubble h4 { color:#4fc3f7; font-size:15px; font-weight:800; margin-bottom:6px; }
 .tut-bubble p { color:rgba(255,255,255,0.8); font-size:13px; line-height:1.4; }
 .tut-dismiss { color:rgba(255,255,255,0.35); font-size:11px; margin-top:10px; }
+
+/* Tablet responsiveness (2026-06-08): card padding+font upsize on
+   >=800px viewports so Stats / Themes / Shop / Level Select fill the
+   tablet canvas instead of shrink-wrapping to mobile width. */
+@media (min-width:800px) {
+  .level-trail, .shop-grid, .settings-list { max-width:840px; margin-left:auto; margin-right:auto; padding-left:24px !important; padding-right:24px !important; }
+  .theme-card, .stat-card, .mission-card, .shop-item { padding:20px 24px !important; gap:18px !important; border-radius:18px !important; }
+  .theme-info h3, .stat-info h3, .mission-info h3, .shop-info h3 { font-size:18px !important; }
+  .theme-info p, .stat-info p, .mission-info p, .shop-info p { font-size:14px !important; }
+  .theme-ball { width:28px !important; height:28px !important; }
+  .theme-badge { font-size:14px !important; padding:7px 14px !important; }
+}
 </style>
 
 <script>

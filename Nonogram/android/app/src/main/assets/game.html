@@ -4330,6 +4330,23 @@ window.addEventListener('load', function() { window.i18n.init(); });
 .stat-card-info { flex:1; }
 .stat-card-label { font-size:0.8rem; color:var(--text-muted); }
 .stat-card-value { font-size:1.4rem; font-weight:800; color:var(--accent); }
+
+/* Tablet responsiveness (2026-06-08): Stats / Themes / Missions
+   screens were rendering shrink-wrapped on tablet captures. Inline
+   container widths handle horizontal fill; this @media bumps card
+   padding + font sizes so tablet canvases read as filled. */
+@media (min-width:800px) {
+  .themes-grid { grid-template-columns:repeat(3,1fr) !important; gap:1.2rem !important; }
+  .theme-card { padding:1.4rem !important; }
+  .theme-swatch { width:24px !important; height:24px !important; }
+  .theme-name { font-size:1.05rem !important; }
+  .theme-unlock { font-size:0.85rem !important; }
+  .stat-card { padding:1.4rem 1.6rem !important; gap:1.3rem !important; }
+  .stat-card-icon { font-size:2.2rem !important; }
+  .stat-card-label { font-size:1rem !important; }
+  .stat-card-value { font-size:1.7rem !important; }
+  .mission-item { padding:1.3rem !important; }
+}
 .mission-item {
   background:var(--surface2); border:1px solid var(--border); border-radius:14px;
   padding:1rem; margin-bottom:0.8rem;

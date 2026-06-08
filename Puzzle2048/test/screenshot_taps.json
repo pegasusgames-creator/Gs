@@ -81,7 +81,7 @@
   "tablet_10_02_early_gameplay": [
     [
       "js",
-      "window._hideAllModals();Game.showScreen('scoresScreen');setTimeout(function(){if(typeof Game.updateUI==='function')Game.updateUI();},300);'ok';",
+      "window._hideAllModals();Game.showScreen('missionsScreen');setTimeout(function(){if(typeof window.renderMissions==='function')window.renderMissions();},300);'ok';",
       3000
     ]
   ]

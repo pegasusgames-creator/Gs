@@ -1,8 +1,12 @@
 [
-  {"line1": "SLIDE &", "line2": "COMBINE", "subtitle": "Tiles slide as one — equal pairs combine into bigger ones."},
-  {"line1": "TWO BECOMES", "line2": "FOUR", "subtitle": "Equal tiles slide together into bigger ones."},
-  {"line1": "PERSONAL", "line2": "RECORDS", "subtitle": "Track your best score across every run."},
-  {"line1": "MID-GAME", "line2": "GRIDS", "subtitle": "When the board fills up, planning pays off."},
-  {"line1": "DAILY", "line2": "STREAK", "subtitle": "A fresh start every 24 hours. Streak bonuses stack."},
-  {"line1": "1024+", "line2": "TILES STACKED", "subtitle": "Big-grid late-game where every tile matters."}
+  {
+    "line1": "MID-GAME",
+    "line2": "GRIDS",
+    "subtitle": "512+ stacked, one move from breaking."
+  },
+  {
+    "line1": "DAILY",
+    "line2": "MISSIONS",
+    "subtitle": "Targets resetting at midnight \u2014 earn coins each day."
+  }
 ]
