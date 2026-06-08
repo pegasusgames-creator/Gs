@@ -10,25 +10,29 @@
       "id": "coins_small",
       "title": "100 Coins",
       "price_usd": 0.99,
-      "description": "Adds 100 coins to your wallet. Spend coins on hints, extra moves, and unlocking new themes."
+      "description": "Adds 100 coins to your wallet. Spend coins on hints, extra moves, and unlocking new themes.",
+      "name": "100 Coins"
     },
     {
       "id": "coins_medium",
       "title": "400 Coins",
       "price_usd": 2.99,
-      "description": "Adds 400 coins to your wallet. Spend coins on hints, boosters, and unlocking new themes."
+      "description": "Adds 400 coins to your wallet. Spend coins on hints, boosters, and unlocking new themes.",
+      "name": "400 Coins"
     },
     {
       "id": "coins_large",
       "title": "800 Coins",
       "price_usd": 4.99,
-      "description": "Adds 800 coins to your wallet. Great value coin pack — spend on hints, extra moves, and unlocking new themes."
+      "description": "Adds 800 coins to your wallet. Great value coin pack \u2014 spend on hints, extra moves, and unlocking new themes.",
+      "name": "800 Coins"
     },
     {
       "id": "coins_mega",
       "title": "2000 Coins",
       "price_usd": 9.99,
-      "description": "Adds 2000 coins to your wallet. Our largest coin pack and best value — spend on hints, boosters, and unlocking new themes."
+      "description": "Adds 2000 coins to your wallet. Our largest coin pack and best value \u2014 spend on hints, boosters, and unlocking new themes.",
+      "name": "2000 Coins"
     },
     {
       "id": "five_lives",
