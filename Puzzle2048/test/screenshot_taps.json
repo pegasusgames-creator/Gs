@@ -1,32 +1,88 @@
 {
-  "_comment": "Puzzle2048 screenshot capture — 21 distinct (theme × board × feature) combos so phone/tablet_7/tablet_10 each show 7 different gameplay moments with no repeated raw. Themes used: fire/pastel/galaxy/default/ocean/neon. Phone highlights boosters + tournament + daily; tablets emphasize varied late-game/sparse/win states across every theme. Helper window.setActiveTheme is exposed from the THEMES IIFE in game.html.",
+  "_comment": "Puzzle2048 screenshot capture \u2014 7 phone + 2 tablet_7 + 2 tablet_10 = 11 distinct slots (2026-06-08 policy). Phone highlights boosters + tournament + daily + late-game depth; tablets emphasize varied late-game grid states. Themes used: fire/pastel/galaxy/default/ocean/neon. Helper window.setActiveTheme is exposed from the THEMES IIFE.",
   "_readiness_expr": "typeof Game !== 'undefined' && typeof Game.showScreen === 'function' && typeof saveState === 'function' && typeof drawGrid === 'function' && typeof window.setActiveTheme === 'function'",
-
   "_setup_taps": [
-    ["js", "(function(){var seed={score:247,bestScore:1024,grid:null,highestTile:128,achieved2048:false,coins:580,lives:5,maxLives:5,lastLifeTime:Date.now(),removeAds:true,unlimitedLivesPermanent:false,unlimitedLivesExpiry:0,undoPack:3,dailyChallengeDate:new Date().toISOString().slice(0,10),dailyChallengeStreak:9,dailyChallengeBest:320,soundEnabled:true,musicEnabled:false,isDailyChallenge:false,activeTheme:'default',lastLevelProgress:null,seasonPassUntil:0,seasonPassForever:false,weeklyPassUntil:0,lastSeasonGrantDate:'',lastWeeklyGrantDate:'',loginStreakDay:7,gamesPlayed:42};try{localStorage.setItem('puzzle2048_save',JSON.stringify(seed));localStorage.setItem('ls_v2',JSON.stringify({n:7,d:new Date().toISOString().slice(0,10),ach:[]}));localStorage.setItem('xLoginLast2048',new Date().toLocaleDateString('en-CA'));localStorage.setItem('lastFreeCoinsAt','0');localStorage.setItem('2048_missions_v1',JSON.stringify({date:new Date().toISOString().slice(0,10),progress:{mission_solver:3,mission_dedicated:12,mission_streak:1},claimed:{mission_perfectionist:true}}));}catch(e){}var ov=document.getElementById('ls-overlay');if(ov)ov.style.display='none';if(typeof State==='object'&&State){Object.assign(State,seed);if(typeof updateUI==='function')updateUI();}window._hideAllModals=function(){['xLoginPanel2048','xBoosterModal2048','xWeeklyTournamentModal2048','starterPackModal','xThemeCard2048','winOverlay','gameOverOverlay','noLivesOverlay'].forEach(function(id){var el=document.getElementById(id);if(el){el.style.display='none';el.classList.remove('active');}});};window._showDailyBanner=function(){var b=document.getElementById('xDailyBanner');if(b)b.remove();b=document.createElement('div');b.id='xDailyBanner';b.style.cssText='position:absolute;top:60px;left:50%;transform:translateX(-50%);background:rgba(237,194,46,0.18);border:1.5px solid rgba(237,194,46,0.55);border-radius:12px;padding:6px 14px;color:#edc22e;font-weight:800;z-index:90;font-size:0.85rem;letter-spacing:0.5px;';b.textContent='🔥 DAILY · STREAK '+(State.dailyChallengeStreak||9);document.getElementById('gameScreen').appendChild(b);};return 'seeded';})()", 700]
+    [
+      "js",
+      "/*screenshot-clean-prefix*/try{localStorage.setItem('tutorialDone','1');localStorage.setItem('coachmarkDone','1');if(window.Android&&Android.hideBannerAd)Android.hideBannerAd();}catch(e){}(function(){var seed={score:247,bestScore:1024,grid:null,highestTile:128,achieved2048:false,coins:580,lives:5,maxLives:5,lastLifeTime:Date.now(),removeAds:true,unlimitedLivesPermanent:false,unlimitedLivesExpiry:0,undoPack:3,dailyChallengeDate:new Date().toISOString().slice(0,10),dailyChallengeStreak:9,dailyChallengeBest:320,soundEnabled:true,musicEnabled:false,isDailyChallenge:false,activeTheme:'default',lastLevelProgress:null,seasonPassUntil:0,seasonPassForever:false,weeklyPassUntil:0,lastSeasonGrantDate:'',lastWeeklyGrantDate:'',loginStreakDay:7,gamesPlayed:42};try{localStorage.setItem('puzzle2048_save',JSON.stringify(seed));localStorage.setItem('ls_v2',JSON.stringify({n:7,d:new Date().toISOString().slice(0,10),ach:[]}));localStorage.setItem('xLoginLast2048',new Date().toLocaleDateString('en-CA'));localStorage.setItem('lastFreeCoinsAt','0');localStorage.setItem('2048_missions_v1',JSON.stringify({date:new Date().toISOString().slice(0,10),progress:{mission_solver:3,mission_dedicated:12,mission_streak:1},claimed:{mission_perfectionist:true}}));}catch(e){}var ov=document.getElementById('ls-overlay');if(ov)ov.style.display='none';if(typeof State==='object'&&State){Object.assign(State,seed);if(typeof updateUI==='function')updateUI();}window._hideAllModals=function(){['xLoginPanel2048','xBoosterModal2048','xWeeklyTournamentModal2048','starterPackModal','xThemeCard2048','winOverlay','gameOverOverlay','noLivesOverlay'].forEach(function(id){var el=document.getElementById(id);if(el){el.style.display='none';el.classList.remove('active');}});};window._showDailyBanner=function(){var b=document.getElementById('xDailyBanner');if(b)b.remove();b=document.createElement('div');b.id='xDailyBanner';b.style.cssText='position:absolute;top:60px;left:50%;transform:translateX(-50%);background:rgba(237,194,46,0.18);border:1.5px solid rgba(237,194,46,0.55);border-radius:12px;padding:6px 14px;color:#edc22e;font-weight:800;z-index:90;font-size:0.85rem;letter-spacing:0.5px;';b.textContent='\ud83d\udd25 DAILY \u00b7 STREAK '+(State.dailyChallengeStreak||9);document.getElementById('gameScreen').appendChild(b);};return 'seeded';})()",
+      700
+    ]
   ],
-
-  "01_swipe_to_merge":  [["js", "window._hideAllModals();window.setActiveTheme('default');State.grid=[[0,2,0,0],[4,0,2,0],[0,8,0,4],[2,0,0,2]];State.score=48;State.highestTile=8;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},250);'ok';", 2800]],
-  "02_early_gameplay": [["js", "window._hideAllModals();window.setActiveTheme('pastel');State.grid=[[2,0,0,4],[0,8,0,0],[0,0,16,0],[4,0,0,2]];State.score=84;State.highestTile=16;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},250);'ok';", 2800]],
-  "03_level_complete": [["js", "window._hideAllModals();window.setActiveTheme('pastel');State.grid=[[2048,1024,512,256],[1024,512,256,128],[512,256,128,64],[256,128,64,32]];State.score=24560;State.highestTile=2048;State.achieved2048=true;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();var ov=document.getElementById('winOverlay');if(ov)ov.classList.add('active');},300);'ok';", 3000]],
-  "04_missions_panel": [["js", "window._hideAllModals();window.setActiveTheme('default');State.grid=[[2,4,8,16],[32,64,128,256],[512,1024,2,4],[8,16,32,64]];State.score=8920;State.highestTile=1024;State.coins=580;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();if(typeof Game.magicMerge==='function')Game.magicMerge();},400);'ok';", 3200]],
-  "05_stats":          [["js", "window._hideAllModals();window.setActiveTheme('ocean');State.grid=[[4,2,16,8],[2,8,4,2],[8,4,32,4],[2,16,2,16]];State.score=648;State.highestTile=32;State.isDailyChallenge=true;State.dailyChallengeStreak=9;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();window._showDailyBanner();},350);'ok';", 3000]],
-  "06_late_game_1024": [["js", "window._hideAllModals();window.setActiveTheme('fire');State.grid=[[1024,512,128,32],[256,128,64,16],[64,32,16,8],[16,8,4,2]];State.score=4280;State.highestTile=1024;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},250);'ok';", 2800]],
-  "07_menu":           [["js", "window._hideAllModals();window.setActiveTheme('fire');State.coins=580;State.dailyChallengeStreak=9;State.bestScore=2840;saveState();Game.showScreen('menuScreen');setTimeout(function(){Game.updateUI();},250);'ok';", 2800]],
-
-  "tablet_7_01_swipe_to_merge": [["js", "window._hideAllModals();window.setActiveTheme('default');State.grid=[[2,0,4,0],[0,8,0,2],[4,0,16,0],[0,2,0,4]];State.score=72;State.highestTile=16;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},300);'ok';", 2800]],
-  "tablet_7_02_early_gameplay": [["js", "window._hideAllModals();window.setActiveTheme('galaxy');State.grid=[[0,4,0,0],[8,0,4,16],[0,2,0,0],[0,0,4,2]];State.score=128;State.highestTile=16;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},300);'ok';", 2800]],
-  "tablet_7_03_level_complete": [["js", "window._hideAllModals();window.setActiveTheme('fire');State.grid=[[256,128,64,32],[512,256,128,64],[1024,512,256,128],[2048,1024,512,256]];State.score=22340;State.highestTile=2048;State.achieved2048=true;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();var ov=document.getElementById('winOverlay');if(ov)ov.classList.add('active');},350);'ok';", 3000]],
-  "tablet_7_04_missions_panel": [["js", "window._hideAllModals();window.setActiveTheme('pastel');State.grid=[[4,8,16,32],[64,128,256,512],[1024,256,64,16],[8,4,2,16]];State.score=7180;State.highestTile=1024;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},350);'ok';", 2800]],
-  "tablet_7_05_stats":          [["js", "window._hideAllModals();window.setActiveTheme('neon');State.grid=[[8,2,4,16],[2,32,8,2],[16,4,2,8],[2,8,16,2]];State.score=512;State.highestTile=32;State.isDailyChallenge=true;State.dailyChallengeStreak=12;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();window._showDailyBanner();},350);'ok';", 3000]],
-  "tablet_7_06_late_game_1024": [["js", "window._hideAllModals();window.setActiveTheme('ocean');State.grid=[[1024,256,128,64],[512,128,64,32],[256,64,32,16],[128,32,16,8]];State.score=5120;State.highestTile=1024;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},300);'ok';", 2800]],
-  "tablet_7_07_menu":           [["js", "window._hideAllModals();window.setActiveTheme('galaxy');State.coins=720;State.bestScore=4096;saveState();Game.showScreen('menuScreen');setTimeout(function(){Game.updateUI();},250);'ok';", 2800]],
-
-  "tablet_10_01_swipe_to_merge": [["js", "window._hideAllModals();window.setActiveTheme('default');State.grid=[[4,0,0,2],[0,8,0,0],[2,0,4,16],[0,0,2,0]];State.score=96;State.highestTile=16;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},300);'ok';", 2800]],
-  "tablet_10_02_early_gameplay": [["js", "window._hideAllModals();window.setActiveTheme('neon');State.grid=[[16,0,0,8],[0,4,0,0],[2,0,32,2],[0,8,0,4]];State.score=212;State.highestTile=32;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},300);'ok';", 2800]],
-  "tablet_10_03_level_complete": [["js", "window._hideAllModals();window.setActiveTheme('ocean');State.grid=[[2048,512,128,32],[1024,256,64,16],[512,128,32,8],[256,64,16,4]];State.score=21080;State.highestTile=2048;State.achieved2048=true;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();var ov=document.getElementById('winOverlay');if(ov)ov.classList.add('active');},350);'ok';", 3000]],
-  "tablet_10_04_missions_panel": [["js", "window._hideAllModals();window.setActiveTheme('galaxy');State.grid=[[16,32,64,128],[8,4,2,16],[32,128,8,4],[2,8,4,32]];State.score=6420;State.highestTile=128;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},350);'ok';", 2800]],
-  "tablet_10_05_stats":          [["js", "window._hideAllModals();window.setActiveTheme('fire');State.grid=[[8,16,4,2],[32,4,2,8],[2,64,16,4],[4,2,8,16]];State.score=824;State.highestTile=64;State.isDailyChallenge=true;State.dailyChallengeStreak=14;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();window._showDailyBanner();},350);'ok';", 3000]],
-  "tablet_10_06_late_game_1024": [["js", "window._hideAllModals();window.setActiveTheme('pastel');State.grid=[[512,256,64,16],[1024,128,32,8],[256,64,16,4],[128,32,8,2]];State.score=4620;State.highestTile=1024;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},300);'ok';", 2800]],
-  "tablet_10_07_menu":           [["js", "window._hideAllModals();window.setActiveTheme('neon');State.coins=940;State.bestScore=6480;State.dailyChallengeStreak=14;saveState();Game.showScreen('menuScreen');setTimeout(function(){Game.updateUI();},250);'ok';", 2800]]
+  "01_deep_gameplay": [
+    [
+      "js",
+      "window._hideAllModals();window.setActiveTheme('default');State.grid=[[0,2,0,0],[4,0,2,0],[0,8,0,4],[2,0,0,2]];State.score=48;State.highestTile=8;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},250);'ok';",
+      2800
+    ]
+  ],
+  "02_early_gameplay": [
+    [
+      "js",
+      "window._hideAllModals();window.setActiveTheme('pastel');State.grid=[[2,0,0,4],[0,8,0,0],[0,0,16,0],[4,0,0,2]];State.score=84;State.highestTile=16;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},250);'ok';",
+      2800
+    ]
+  ],
+  "03_level_complete": [
+    [
+      "js",
+      "window._hideAllModals();window.setActiveTheme('pastel');State.grid=[[2048,1024,512,256],[1024,512,256,128],[512,256,128,64],[256,128,64,32]];State.score=24560;State.highestTile=2048;State.achieved2048=true;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();var ov=document.getElementById('winOverlay');if(ov)ov.classList.add('active');},300);'ok';",
+      3000
+    ]
+  ],
+  "04_missions_panel": [
+    [
+      "js",
+      "window._hideAllModals();window.setActiveTheme('default');State.coins=580;State.dailyChallengeStreak=9;if(typeof Game.startDailyChallenge==='function')Game.startDailyChallenge();setTimeout(function(){State.grid=[[2,4,8,16],[0,32,0,64],[128,0,256,0],[0,4,2,8]];State.score=420;State.highestTile=256;State.isDailyChallenge=true;if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();if(typeof window._showDailyBanner==='function')window._showDailyBanner();},500);'ok';",
+      3500
+    ]
+  ],
+  "05_stats": [
+    [
+      "js",
+      "window._hideAllModals();window.setActiveTheme('ocean');State.grid=[[4,2,16,8],[2,8,4,2],[8,4,32,4],[2,16,2,16]];State.score=648;State.highestTile=32;State.isDailyChallenge=true;State.dailyChallengeStreak=9;Game.showScreen('gameScreen');setTimeout(function(){if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();window._showDailyBanner();},350);'ok';",
+      3000
+    ]
+  ],
+  "06_levels_grid": [
+    [
+      "js",
+      "window._hideAllModals();window.setActiveTheme('fire');State.grid=[[1024,512,256,128],[0,0,0,0],[0,0,0,0],[64,8,4,2]];State.score=4280;State.highestTile=1024;State.gameOver=false;Game.showScreen('gameScreen');setTimeout(function(){var ov=document.getElementById('gameOverOverlay');if(ov)ov.classList.remove('active');if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},500);'ok';",
+      3500
+    ]
+  ],
+  "07_depth": [
+    [
+      "js",
+      "window._hideAllModals();window.setActiveTheme('default');Game.showScreen('themeScreen');setTimeout(function(){if(typeof renderThemes==='function')renderThemes();if(typeof updateThemeUI==='function')updateThemeUI();},300);'ok';",
+      3000
+    ]
+  ],
+  "tablet_7_01_deep_gameplay": [
+    [
+      "js",
+      "window._hideAllModals();window.setActiveTheme('galaxy');Game.showScreen('gameScreen');setTimeout(function(){State.grid=[[256,128,32,8],[64,32,16,4],[32,16,8,2],[16,8,4,2]];State.score=2840;State.highestTile=256;State.gameOver=false;if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},400);'ok';",
+      3500
+    ]
+  ],
+  "tablet_7_02_early_gameplay": [
+    [
+      "js",
+      "window._hideAllModals();Game.showScreen('statsScreen');setTimeout(function(){if(typeof window.renderStats2048==='function')window.renderStats2048();},300);'ok';",
+      3000
+    ]
+  ],
+  "tablet_10_01_deep_gameplay": [
+    [
+      "js",
+      "window._hideAllModals();window.setActiveTheme('neon');Game.showScreen('gameScreen');setTimeout(function(){State.grid=[[512,256,64,16],[128,64,32,8],[32,16,8,4],[8,4,2,0]];State.score=3420;State.highestTile=512;State.gameOver=false;if(typeof resizeCanvas==='function')resizeCanvas();drawGrid();Game.updateUI();},400);'ok';",
+      3500
+    ]
+  ],
+  "tablet_10_02_early_gameplay": [
+    [
+      "js",
+      "window._hideAllModals();Game.showScreen('scoresScreen');setTimeout(function(){if(typeof Game.updateUI==='function')Game.updateUI();},300);'ok';",
+      3000
+    ]
+  ]
 }

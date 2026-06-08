@@ -1,32 +1,88 @@
 {
-  "_comment": "Nonogram screenshot capture — 21 distinct (theme × level × feature) combos. Phone/tablet_7/tablet_10 each show 7 different gameplay moments with no repeated level or theme. Helper window.selectTheme is exposed in game.html; we also apply theme directly via state.activeTheme + applyTheme to bypass unlock gates.",
+  "_comment": "Nonogram screenshot capture \u2014 7 phone + 2 tablet_7 + 2 tablet_10 = 11 distinct slots (2026-06-08 policy). Each phone slot shows a different (theme \u00d7 level \u00d7 feature) combo. Helper window.selectTheme exposed in game.html; we apply theme directly via state.activeTheme + applyTheme to bypass unlock gates.",
   "_readiness_expr": "typeof startLevel === 'function' && typeof showScreen === 'function' && typeof state !== 'undefined' && typeof applyTheme === 'function'",
-
   "_setup_taps": [
-    ["js", "(function(){var seed={currentLevel:348,completedLevels:Array.from({length:500},function(_,i){return i+1;}),levelStars:(function(){var s={};for(var i=1;i<=500;i++)s[i]=(i%4===0?3:(i%3===0?2:1));return s;})(),coins:580,lives:5,lastLifeTime:Date.now(),removeAds:true,hintPack:0,soundEnabled:true,musicEnabled:false,dailyChallengeDate:'',dailyChallengeStreak:11,unlimitedLivesUntil:0,unlimitedLivesForever:false,activeTheme:'default',lastLevelProgress:null};try{localStorage.setItem('nonogram_state',JSON.stringify(seed));localStorage.setItem('ls_v2',JSON.stringify({n:7,d:new Date().toISOString().slice(0,10),ach:[]}));localStorage.setItem('xLoginLastNono',new Date().toLocaleDateString('en-CA'));}catch(e){}Object.assign(state,seed);if(typeof updateUI==='function')updateUI();if(typeof updateMenuUI==='function')updateMenuUI();var ov=document.getElementById('ls-overlay');if(ov)ov.style.display='none';window._setTheme=function(id){state.activeTheme=id;saveState();if(typeof applyTheme==='function')applyTheme(id);};window._hideModals=function(){['ls-overlay','xLoginPanel','xBoosterModalNono','xWeeklyTournamentModal'].forEach(function(id){var el=document.getElementById(id);if(el){el.style.display='none';el.classList.remove('active');}});};window._injectDailyChip=function(){var b=document.getElementById('xDailyChipNono');if(b)b.remove();b=document.createElement('div');b.id='xDailyChipNono';b.style.cssText='position:absolute;top:54px;left:50%;transform:translateX(-50%);background:rgba(200,56,56,0.18);border:1.5px solid rgba(200,56,56,0.55);border-radius:12px;padding:5px 12px;color:#c83838;font-weight:800;z-index:90;font-size:0.78rem;letter-spacing:0.5px;';b.textContent='🔥 DAILY · STREAK '+(state.dailyChallengeStreak||11);var s=document.getElementById('screen-game');if(s)s.appendChild(b);};return 'seeded';})()", 500]
+    [
+      "js",
+      "/*screenshot-clean-prefix*/try{localStorage.setItem('tutorialDone','1');localStorage.setItem('coachmarkDone','1');if(window.Android&&Android.hideBannerAd)Android.hideBannerAd();}catch(e){}(function(){var seed={currentLevel:348,completedLevels:Array.from({length:500},function(_,i){return i+1;}),levelStars:(function(){var s={};for(var i=1;i<=500;i++)s[i]=(i%4===0?3:(i%3===0?2:1));return s;})(),coins:580,lives:5,lastLifeTime:Date.now(),removeAds:true,hintPack:0,soundEnabled:true,musicEnabled:false,dailyChallengeDate:'',dailyChallengeStreak:11,unlimitedLivesUntil:0,unlimitedLivesForever:false,activeTheme:'default',lastLevelProgress:null};try{localStorage.setItem('nonogram_state',JSON.stringify(seed));localStorage.setItem('ls_v2',JSON.stringify({n:7,d:new Date().toISOString().slice(0,10),ach:[]}));localStorage.setItem('xLoginLastNono',new Date().toLocaleDateString('en-CA'));}catch(e){}Object.assign(state,seed);if(typeof updateUI==='function')updateUI();if(typeof updateMenuUI==='function')updateMenuUI();var ov=document.getElementById('ls-overlay');if(ov)ov.style.display='none';window._setTheme=function(id){state.activeTheme=id;saveState();if(typeof applyTheme==='function')applyTheme(id);};window._hideModals=function(){['ls-overlay','xLoginPanel','xBoosterModalNono','xWeeklyTournamentModal'].forEach(function(id){var el=document.getElementById(id);if(el){el.style.display='none';el.classList.remove('active');}});};window._injectDailyChip=function(){var b=document.getElementById('xDailyChipNono');if(b)b.remove();b=document.createElement('div');b.id='xDailyChipNono';b.style.cssText='position:absolute;top:54px;left:50%;transform:translateX(-50%);background:rgba(200,56,56,0.18);border:1.5px solid rgba(200,56,56,0.55);border-radius:12px;padding:5px 12px;color:#c83838;font-weight:800;z-index:90;font-size:0.78rem;letter-spacing:0.5px;';b.textContent='\ud83d\udd25 DAILY \u00b7 STREAK '+(state.dailyChallengeStreak||11);var s=document.getElementById('screen-game');if(s)s.appendChild(b);};return 'seeded';})()",
+      500
+    ]
   ],
-
-  "01_approachable_intro": [["js", "window._hideModals();window._setTheme('default');startLevel(12);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.30);},500);'ok';", 2800]],
-  "02_early_gameplay":    [["js", "window._hideModals();window._setTheme('ocean');startLevel(15);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.40);},500);'ok';", 2800]],
-  "03_level_complete":    [["js", "window._hideModals();window._setTheme('fire');startLevel(200);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(1.0);var ov=document.getElementById('win-overlay');if(ov)ov.classList.add('active');},500);'ok';", 3200]],
-  "04_missions_panel":    [["js", "window._hideModals();window._setTheme('galaxy');startLevel(125);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.55);},500);'ok';", 2800]],
-  "05_stats":             [["js", "window._hideModals();window._setTheme('neon');state.isDailyChallenge=true;state.dailyChallengeStreak=11;startLevel(80);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.50);window._injectDailyChip();},550);'ok';", 3000]],
-  "06_late_game_2020":    [["js", "window._hideModals();window._setTheme('default');startLevel(350);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.65);},500);'ok';", 2800]],
-  "07_menu":              [["js", "window._hideModals();window._setTheme('pastel');state.coins=580;state.dailyChallengeStreak=11;saveState();showScreen('menu');setTimeout(function(){if(typeof updateMenuUI==='function')updateMenuUI();},250);'ok';", 2500]],
-
-  "tablet_7_01_approachable_intro": [["js", "window._hideModals();window._setTheme('default');startLevel(8);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.25);},500);'ok';", 2800]],
-  "tablet_7_02_early_gameplay":    [["js", "window._hideModals();window._setTheme('galaxy');startLevel(8);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.35);},500);'ok';", 2800]],
-  "tablet_7_03_level_complete":    [["js", "window._hideModals();window._setTheme('pastel');startLevel(190);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.85);},500);'ok';", 2800]],
-  "tablet_7_04_missions_panel":    [["js", "window._hideModals();window._setTheme('ocean');startLevel(140);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.60);},500);'ok';", 2800]],
-  "tablet_7_05_stats":             [["js", "window._hideModals();window._setTheme('fire');state.isDailyChallenge=true;state.dailyChallengeStreak=14;startLevel(75);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.45);window._injectDailyChip();},550);'ok';", 3000]],
-  "tablet_7_06_late_game_2020":    [["js", "window._hideModals();window._setTheme('neon');startLevel(380);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.70);},500);'ok';", 2800]],
-  "tablet_7_07_menu":              [["js", "window._hideModals();window._setTheme('ocean');state.coins=720;saveState();showScreen('menu');setTimeout(function(){if(typeof updateMenuUI==='function')updateMenuUI();},250);'ok';", 2500]],
-
-  "tablet_10_01_approachable_intro": [["js", "window._hideModals();window._setTheme('default');startLevel(5);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.20);},500);'ok';", 2800]],
-  "tablet_10_02_early_gameplay":   [["js", "window._hideModals();window._setTheme('pastel');startLevel(20);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.25);},500);'ok';", 2800]],
-  "tablet_10_03_level_complete":   [["js", "window._hideModals();window._setTheme('galaxy');startLevel(210);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.90);},500);'ok';", 2800]],
-  "tablet_10_04_missions_panel":   [["js", "window._hideModals();window._setTheme('default');startLevel(150);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.65);},500);'ok';", 2800]],
-  "tablet_10_05_stats":            [["js", "window._hideModals();window._setTheme('ocean');state.isDailyChallenge=true;state.dailyChallengeStreak=21;startLevel(60);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.55);window._injectDailyChip();},550);'ok';", 3000]],
-  "tablet_10_06_late_game_2020":   [["js", "window._hideModals();window._setTheme('fire');startLevel(400);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.75);},500);'ok';", 2800]],
-  "tablet_10_07_menu":             [["js", "window._hideModals();window._setTheme('fire');state.coins=940;saveState();showScreen('menu');setTimeout(function(){if(typeof updateMenuUI==='function')updateMenuUI();},250);'ok';", 2500]]
+  "01_deep_gameplay": [
+    [
+      "js",
+      "window._hideModals();window._setTheme('default');startLevel(25);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.20);},500);'ok';",
+      2800
+    ]
+  ],
+  "02_early_gameplay": [
+    [
+      "js",
+      "window._hideModals();window._setTheme('ocean');startLevel(15);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.40);},500);'ok';",
+      2800
+    ]
+  ],
+  "03_level_complete": [
+    [
+      "js",
+      "window._hideModals();window._setTheme('fire');startLevel(200);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(1.0);var ov=document.getElementById('win-overlay');if(ov)ov.classList.add('active');},500);'ok';",
+      3200
+    ]
+  ],
+  "04_missions_panel": [
+    [
+      "js",
+      "window._hideModals();window._setTheme('galaxy');startLevel(125);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.55);},500);'ok';",
+      2800
+    ]
+  ],
+  "05_stats": [
+    [
+      "js",
+      "window._hideModals();window._setTheme('neon');state.isDailyChallenge=true;state.dailyChallengeStreak=11;startLevel(80);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.50);window._injectDailyChip();},550);'ok';",
+      3000
+    ]
+  ],
+  "06_levels_grid": [
+    [
+      "js",
+      "window._hideModals();window._setTheme('default');state.currentLevel=480;startLevel(480);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.65);},500);'ok';",
+      3000
+    ]
+  ],
+  "07_depth": [
+    [
+      "js",
+      "window._hideModals();window._setTheme('default');showScreen('themes');setTimeout(function(){if(typeof renderThemes==='function')renderThemes();},300);'ok';",
+      3000
+    ]
+  ],
+  "tablet_7_01_deep_gameplay": [
+    [
+      "js",
+      "window._hideModals();window._setTheme('pastel');startLevel(190);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.85);},500);'ok';",
+      3000
+    ]
+  ],
+  "tablet_7_02_early_gameplay": [
+    [
+      "js",
+      "window._hideModals();window._setTheme('default');showScreen('stats');setTimeout(function(){if(typeof renderNonoStats==='function')renderNonoStats();else if(typeof renderStats==='function')renderStats();},300);'ok';",
+      3000
+    ]
+  ],
+  "tablet_10_01_deep_gameplay": [
+    [
+      "js",
+      "window._hideModals();window._setTheme('galaxy');startLevel(450);setTimeout(function(){if(typeof __nonoFillSolution==='function')__nonoFillSolution(0.75);},500);'ok';",
+      3000
+    ]
+  ],
+  "tablet_10_02_early_gameplay": [
+    [
+      "js",
+      "window._hideModals();window._setTheme('default');showScreen('levelselect');'ok';",
+      3000
+    ]
+  ]
 }

@@ -11,10 +11,10 @@ android {
     namespace "com.pegasusgames.watersortpuzzle"
     defaultConfig {
         applicationId "com.pegasusgames.watersortpuzzle"
-        minSdk 23
+        minSdk 24
         targetSdk 36
-        versionCode 38
-        versionName "2.1.15"
+        versionCode 39
+        versionName "2.1.16"
     }
     signingConfigs {
         release {
