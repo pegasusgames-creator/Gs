@@ -44,6 +44,26 @@
     --coin: #8a6818;
     --heart: #b8332b;
   }
+  html[data-theme="midnight"] {
+    --bg: #1a1815;
+    --surface: #2a2520;
+    --surface2: #3a342c;
+    --border: rgba(255,255,255,0.12);
+    --accent: #c83838;
+    --accent-dim: #7a2828;
+    --text: #f3eedc;
+    --text-muted: rgba(243,238,220,0.62);
+    --text-mute: rgba(243,238,220,0.62);
+    --g-play: var(--accent);
+    --on-accent: #f3eedc;
+    --btn-neutral-bg: rgba(255,255,255,0.10);
+    --menu-tile-bg: #2a2520;
+    --menu-tile-border: rgba(255,255,255,0.12);
+    --menu-tile-fg: #f3eedc;
+    --page-fg: #f3eedc;
+    --filled: #c83838;
+    --marked: rgba(255,255,255,0.18);
+  }
   html, body {
     width: 100%; height: 100%;
     background: var(--bg);
@@ -5211,8 +5231,8 @@ window.addEventListener('load',function(){
   };
 
   // ── D2: seasonal events ──
-  var SEASONAL=[ {month:10,name:'Halloween',id:'halloween',colors:['#ff6600','#9d4dbb','#1a0a1a','#3a1d3a','#000000']},{month:12,name:'Winter',id:'winter',colors:['#a8d8ea','#ffffff','#e8f4f8','#cfe8f0','#4a90e2']},{month:2,name:'Spring',id:'spring',colors:['#ffb6c1','#a7d49b','#ffe066','#fdf0d5','#7bb661']} ];
-  function activeEvent(){ var m=new Date().getMonth()+1; for(var i=0;i<SEASONAL.length;i++){ if(SEASONAL[i].month===m) return SEASONAL[i]; } return null; }
+  var SEASONAL_EVENTS=[ {month:10,name:'Halloween',id:'halloween',colors:['#ff6600','#c83838','#1a0a1a','#3a1d3a','#000000']},{month:12,name:'Winter',id:'winter',colors:['#a8d8ea','#ffffff','#e8f4f8','#cfe8f0','#c83838']},{month:2,name:'Spring',id:'spring',colors:['#ffb6c1','#a7d49b','#ffe066','#fdf0d5','#c83838']} ];
+  function activeEvent(){ var m=new Date().getMonth()+1; for(var i=0;i<SEASONAL_EVENTS.length;i++){ if(SEASONAL_EVENTS[i].month===m) return SEASONAL_EVENTS[i]; } return null; }
   function applyEvent(){
     var ev=activeEvent(); if(!ev) return;
     if(window._THEMES_META&&!window._THEMES_META.some(function(t){return t.id===ev.id;})) window._THEMES_META.push({id:ev.id,name:ev.name,unlock:0,colors:ev.colors,seasonal:true});

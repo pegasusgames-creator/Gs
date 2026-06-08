@@ -21,7 +21,7 @@
   /* Shim/overlay theme tokens (2026-05-28 Part A). Daylight = warm
      cream / sand. Midnight reassigns these. */
   --text: #2a2620;
-  --text-mute: rgba(42,38,32,0.70);
+  --text-mute: rgba(42,38,32,0.85);
   --surface: #fbf4e2;
   --border: rgba(0,0,0,0.12);
   --g-play: linear-gradient(135deg,#edc22e,#f2a500);
@@ -3964,8 +3964,8 @@ window.addEventListener('load',function(){
   }
 
   // ── D2: seasonal events — 7-day 1.5× coin/score multiplier + theme ──
-  var SEASONAL=[ {month:10,name:'Halloween',id:'halloween'},{month:12,name:'Winter',id:'winter'},{month:2,name:'Spring',id:'spring'} ];
-  function activeEvent(){ var m=new Date().getMonth()+1; for(var i=0;i<SEASONAL.length;i++){ if(SEASONAL[i].month===m) return SEASONAL[i]; } return null; }
+  var SEASONAL_EVENTS=[ {month:10,name:'Halloween',id:'halloween',palette:['#ff6600','#edc22e','#000000']},{month:12,name:'Winter',id:'winter',palette:['#a8d8ea','#ffffff','#edc22e']},{month:2,name:'Spring',id:'spring',palette:['#ffb6c1','#a7d49b','#edc22e']} ];
+  function activeEvent(){ var m=new Date().getMonth()+1; for(var i=0;i<SEASONAL_EVENTS.length;i++){ if(SEASONAL_EVENTS[i].month===m) return SEASONAL_EVENTS[i]; } return null; }
   function applyEvent(){
     var ev=activeEvent(); if(!ev) return;
     var anchor=document.querySelector('#menuScreen .game-title'); if(anchor&&!$('xSeasonBanner2048')){ var d=document.createElement('div'); d.id='xSeasonBanner2048'; d.style.cssText='margin:4px auto 0;font-size:0.8rem;color:#f7f3ec;background:rgba(237,194,46,0.12);border-radius:8px;padding:6px 10px;text-align:center;max-width:280px'; d.textContent='🎃 '+ev.name+' event live — 1.5× this week!'; anchor.parentNode.insertBefore(d, anchor.nextSibling); }
