@@ -24,120 +24,67 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-What's new
-• Lives and coins now show in the top bar on every screen
-• Daily puzzle button shows today's date
-• Ranks sheet matches your color theme and scrolls through 100 players
-• Cleaner Continue/Play hierarchy — no more "Continue · 0" on a fresh run
-• Smoother menu rhythm; chips match the icon-row buttons
+Polish & fixes.
 </en-US>
 
 <ar>
 ما الجديد
-• تظهر الأرواح والعملات الآن في الشريط العلوي على كل شاشة
-• زر اللغز اليومي يعرض تاريخ اليوم
-• ورقة الترتيب تطابق ثيم اللون لديك وتمرر عبر 100 لاعب
-• ترتيب أنظف لزر متابعة/تشغيل — لن يظهر "متابعة · 0" بعد الآن
-• إيقاع قائمة أكثر سلاسة؛ الشرائح تطابق أزرار الصف
+• لوحة متصدرين أكثر سلاسة مع 1000 لاعب للتفوق عليهم
 </ar>
 
 <de-DE>
-Was ist neu
-• Leben und Münzen erscheinen jetzt in der oberen Leiste auf jedem Bildschirm
-• Tagespuzzle-Button zeigt das heutige Datum
-• Bestenliste passt zum Farbthema und scrollt durch 100 Spieler
-• Aufgeräumtere Weiter/Spiel-Hierarchie — kein "Weiter · 0" mehr
-• Geschmeidigerer Menürhythmus; Chips passen zu den Tier-3-Buttons
+Neu
+• Flüssigere Bestenliste mit 1.000 Spielern zum Überholen
 </de-DE>
 
 <es-419>
 Novedades
-• Vidas y monedas ahora aparecen en la barra superior en cada pantalla
-• El botón del rompecabezas diario muestra la fecha de hoy
-• La tabla de clasificación coincide con tu tema de color y recorre 100 jugadores
-• Jerarquía Continuar/Jugar más limpia — sin "Continuar · 0"
-• Ritmo del menú más fluido; los chips coinciden con los botones de la fila
+• Tabla de clasificación más fluida con 1000 jugadores para superar
 </es-419>
 
 <fr-FR>
-Quoi de neuf
-• La vie et les pièces apparaissent dans la barre supérieure sur chaque écran
-• Le bouton puzzle quotidien affiche la date du jour
-• Le classement s'adapte à votre thème de couleur et défile parmi 100 joueurs
-• Hiérarchie Continuer/Jouer plus claire — plus de « Continuer · 0 »
-• Rythme du menu plus fluide ; les puces correspondent aux boutons
+Nouveautés
+• Classement plus fluide avec 1 000 joueurs à dépasser
 </fr-FR>
 
 <hi-IN>
-क्या नया है
-• हर स्क्रीन पर शीर्ष बार में जीवन और सिक्के अब दिखते हैं
-• डेली पजल बटन आज की तारीख दिखाता है
-• रैंक शीट आपके रंग थीम से मेल खाती है और 100 खिलाड़ियों के बीच स्क्रॉल करती है
-• स्वच्छ कंटिन्यू/प्ले हाइरार्की — अब "Continue · 0" नहीं
-• आसान मेनू लय; चिप्स पंक्ति के बटनों से मेल खाते हैं
+नया क्या है
+• 1,000 खिलाड़ियों के साथ अधिक सहज लीडरबोर्ड
 </hi-IN>
 
 <id>
 Yang baru
-• Nyawa dan koin sekarang muncul di bilah atas di setiap layar
-• Tombol teka-teki harian menampilkan tanggal hari ini
-• Lembar peringkat cocok dengan tema warna Anda dan menggulir 100 pemain
-• Hierarki Lanjutkan/Main yang lebih bersih — tidak ada lagi "Lanjutkan · 0"
-• Ritme menu lebih halus; chip cocok dengan tombol baris ikon
+• Papan peringkat lebih halus dengan 1.000 pemain untuk dilampaui
 </id>
 
 <it-IT>
 Novità
-• Vite e monete ora compaiono nella barra superiore in ogni schermata
-• Il pulsante puzzle giornaliero mostra la data di oggi
-• Classifica adattata al tuo tema colore, scorrevole tra 100 giocatori
-• Gerarchia Continua/Gioca più ordinata — niente più "Continua · 0"
-• Ritmo del menu più fluido; i chip combaciano con i pulsanti
+• Classifica più fluida con 1.000 giocatori da superare
 </it-IT>
 
 <ja-JP>
 新着情報
-• ライフとコインがすべての画面の上部バーに表示されるようになりました
-• デイリーパズルボタンに今日の日付が表示されます
-• ランキングシートがカラーテーマに合わせ、100人のプレイヤーをスクロール
-• よりすっきりした続ける/プレイ階層 — 「続ける · 0」はもう出ません
-• よりなめらかなメニュー；チップがアイコン列と揃います
+• 1,000人のプレイヤーを追い抜けるスムーズなリーダーボード
 </ja-JP>
 
 <pt-BR>
-O que há de novo
-• Vidas e moedas agora aparecem na barra superior em todas as telas
-• Botão do quebra-cabeça diário mostra a data de hoje
-• Tabela de classificação combina com seu tema de cor, percorre 100 jogadores
-• Hierarquia Continuar/Jogar mais limpa — sem "Continuar · 0"
-• Ritmo do menu mais suave; chips combinam com os botões da linha
+Novidades
+• Placar mais fluido com 1.000 jogadores para superar
 </pt-BR>
 
 <tr-TR>
 Yenilikler
-• Canlar ve madeni paralar artık her ekranda üst çubukta görünür
-• Günlük bulmaca düğmesi bugünün tarihini gösterir
-• Sıralama tablosu renk temanızla uyumlu, 100 oyuncu arasında kaydırılabilir
-• Daha temiz Devam/Oyna hiyerarşisi — artık "Devam · 0" yok
-• Daha akıcı menü; çipler simge satırı düğmeleriyle eşleşir
+• 1.000 oyuncuyla daha akıcı liderlik tablosu
 </tr-TR>
 
 <uk>
 Що нового
-• Життя та монети тепер відображаються у верхній панелі на кожному екрані
-• Кнопка щоденної головоломки показує сьогоднішню дату
-• Аркуш рейтингу відповідає вашій кольоровій темі та прокручується через 100 гравців
-• Чистіша ієрархія Продовжити/Грати — більше ніяких «Продовжити · 0»
-• Плавніший ритм меню; чіпи відповідають кнопкам ряду
+• Плавніша таблиця лідерів — 1000 гравців, яких треба обігнати
 </uk>
 
 <zh-CN>
-更新内容
-• 生命与金币现在显示在每个屏幕的顶部栏中
-• 每日谜题按钮显示今天的日期
-• 排行榜与您的颜色主题相匹配，可在100名玩家中滚动浏览
-• 更清晰的继续/开始按钮层级 — 不再出现"继续 · 0"
-• 更流畅的菜单节奏；标签与图标行按钮一致
+新功能
+• 更流畅的排行榜，1000名玩家供你追赶
 </zh-CN>
 
 ---
