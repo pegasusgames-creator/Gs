@@ -19,14 +19,19 @@
   --z-critical-error: 800;
   /* Shim/overlay theme tokens (2026-05-28 Part A; round-13 made
      --surface SOLID so overlays read as bright panels, not transparent
-     wash). Daylight = medium ocean. Midnight reassigns these below. */
-  --text: #0d1f33;
-  --text-mute: rgba(13,31,51,0.72);
-  --surface: #eaf3fb;
-  --border: rgba(13,31,51,0.16);
+     wash). Daylight = medium ocean. Round-16 (2026-06-08): --text
+     flipped from dark-navy to white because WS's medium-blue bg is
+     too dark for dark text — every label that read var(--text) was
+     rendering navy-on-navy unreadable. Surfaces that need a dark-on-
+     light pairing (none currently exist in WS — there are no
+     background:var(--surface) rules) would need to override locally. */
+  --text: #ffffff;
+  --text-mute: rgba(255,255,255,0.72);
+  --surface: #15294a;
+  --border: rgba(255,255,255,0.15);
   --g-play: linear-gradient(135deg,#4fc3f7,#0288d1);
   --on-accent: #ffffff;
-  --btn-neutral-bg: rgba(13,31,51,0.10);
+  --btn-neutral-bg: rgba(255,255,255,0.10);
   --bg: #3d6a9e;
   /* Round-14: menu-tile tokens map to the same look as .icon-btn so
      Missions/Stats + Tier-3 + chips share one visual treatment. */
@@ -233,7 +238,7 @@ canvas { display: block; }
 .shop-icon { font-size: 36px; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; background: rgba(79,195,247,0.08); border-radius: 14px; }
 .shop-info { flex: 1; }
 .shop-info h3 { color: var(--text); font-size: 15px; font-weight: 700; }
-.shop-info p { color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 2px; }
+.shop-info p { color: var(--text); font-size: 12px; font-weight: 500; margin-top: 2px; }
 .shop-price-btn { background: linear-gradient(135deg, #4fc3f7, #0288d1); border: none; border-radius: 10px; padding: 8px 14px; color: white; font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .shop-price-btn.owned { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
 .shop-price-btn.coin-price { background: linear-gradient(135deg, #ffd700, #f39c12); color: #0a1628; }
@@ -278,7 +283,7 @@ body.has-html-ad .screen { height: calc(100% - 60px) !important; }
 .promo-icon { font-size: 36px; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; background: rgba(79,195,247,0.08); border-radius: 14px; flex-shrink: 0; }
 .promo-info { flex: 1; }
 .promo-info h3 { color: var(--text); font-size: 15px; font-weight: 700; }
-.promo-info p { color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 2px; }
+.promo-info p { color: var(--text); font-size: 12px; font-weight: 500; margin-top: 2px; }
 .promo-btn { background: linear-gradient(135deg, #ffd700, #f39c12); border: none; border-radius: 10px; padding: 8px 12px; color: #0a1628; font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 .promo-btn.claimed { background: #2ea043; color: #ffffff; cursor: default; }
 
@@ -496,7 +501,7 @@ html[data-theme="midnight"] #levelScreen { background:linear-gradient(160deg,#05
       <div class="setting-row">
         <span class="setting-label" style="display:flex;flex-direction:column;gap:2px">
           <span>🔔 Daily Reminders</span>
-          <span style="font-size:12px;color:rgba(255,255,255,0.55);font-weight:400">Streak alerts &amp; daily challenge</span>
+          <span style="font-size:12px;color:var(--text);font-weight:500">Streak alerts &amp; daily challenge</span>
         </span>
         <label class="toggle">
           <input type="checkbox" id="notifToggle" onchange="Notifications.setEnabled(this.checked)">
@@ -4764,7 +4769,7 @@ setTimeout(function() { wsUpdateMissionsBadge(); }, 1500);
 .theme-ball { width:20px; height:20px; border-radius:50%; }
 .theme-info { flex:1; }
 .theme-info h3 { color:var(--text); font-size:14px; font-weight:700; }
-.theme-info p { color:rgba(255,255,255,0.45); font-size:11px; margin-top:2px; }
+.theme-info p { color:var(--text); font-size:11px; font-weight:600; margin-top:2px; }
 .theme-badge { font-size:12px; font-weight:700; padding:5px 10px; border-radius:8px; white-space:nowrap; }
 .active-badge { background:rgba(79,195,247,0.2); color:#4fc3f7; }
 .locked-badge { background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.3); }

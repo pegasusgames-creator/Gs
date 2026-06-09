@@ -3149,12 +3149,15 @@ function resizeCanvas() {
   const W = wrap.clientWidth || window.innerWidth;
   const H = wrap.clientHeight || (window.innerHeight - 100);
 
-  // Clue area ratio
+  // Clue area ratio — Round-16: tightened for 20×20 boards so the
+  // playable grid cells get bigger (was 0.38, leaving cells at ~32px
+  // on a 1080-wide phone). At 0.30 the same board gets ~38px cells
+  // and the clue strip is still wide enough for max-5-number rows.
   let clueRatio;
-  if (size <= 5) clueRatio = 0.25;
-  else if (size <= 10) clueRatio = 0.30;
-  else if (size <= 15) clueRatio = 0.35;
-  else clueRatio = 0.38;
+  if (size <= 5) clueRatio = 0.22;
+  else if (size <= 10) clueRatio = 0.26;
+  else if (size <= 15) clueRatio = 0.30;
+  else clueRatio = 0.30;
 
   const availW = W * 0.98;
   const availH = H * 0.98;
@@ -3290,9 +3293,12 @@ function drawCanvas(flashError) {
   ctx2d.moveTo(0, clueH); ctx2d.lineTo(W, clueH);
   ctx2d.stroke();
 
-  // Draw clues
-  const fontSize = Math.max(8, Math.min(cellSize * 0.55, 14));
-  ctx2d.font = `600 ${fontSize}px system-ui, -apple-system, sans-serif`;
+  // Draw clues — Round-16 (2026-06-08): font scales with cellSize so
+  // 20×20 boards (Level 350+) get readable clue numbers. Previous 14px
+  // cap made the numbers tiny when cellSize was ~32-40px; the new floor
+  // of cellSize*0.65 reads clearly while still fitting the clue strip.
+  const fontSize = Math.max(11, Math.min(cellSize * 0.65, 28));
+  ctx2d.font = `700 ${fontSize}px system-ui, -apple-system, sans-serif`;
   ctx2d.textAlign = 'center';
   ctx2d.textBaseline = 'middle';
 
