@@ -28,63 +28,51 @@ Polish & fixes.
 </en-US>
 
 <ar>
-ما الجديد
-• لوحة متصدرين أكثر سلاسة مع 1000 لاعب للتفوق عليهم
+تلميع وإصلاحات.
 </ar>
 
 <de-DE>
-Neu
-• Flüssigere Bestenliste mit 1.000 Spielern zum Überholen
+Politur & Fehlerbehebungen.
 </de-DE>
 
 <es-419>
-Novedades
-• Tabla de clasificación más fluida con 1000 jugadores para superar
+Pulido y correcciones.
 </es-419>
 
 <fr-FR>
-Nouveautés
-• Classement plus fluide avec 1 000 joueurs à dépasser
+Améliorations et corrections.
 </fr-FR>
 
 <hi-IN>
-नया क्या है
-• 1,000 खिलाड़ियों के साथ अधिक सहज लीडरबोर्ड
+सुधार और बग फिक्स।
 </hi-IN>
 
 <id>
-Yang baru
-• Papan peringkat lebih halus dengan 1.000 pemain untuk dilampaui
+Penyempurnaan & perbaikan.
 </id>
 
 <it-IT>
-Novità
-• Classifica più fluida con 1.000 giocatori da superare
+Rifiniture e correzioni.
 </it-IT>
 
 <ja-JP>
-新着情報
-• 1,000人のプレイヤーを追い抜けるスムーズなリーダーボード
+改善とバグ修正。
 </ja-JP>
 
 <pt-BR>
-Novidades
-• Placar mais fluido com 1.000 jogadores para superar
+Polimento e correções.
 </pt-BR>
 
 <tr-TR>
-Yenilikler
-• 1.000 oyuncuyla daha akıcı liderlik tablosu
+İyileştirmeler ve düzeltmeler.
 </tr-TR>
 
 <uk>
-Що нового
-• Плавніша таблиця лідерів — 1000 гравців, яких треба обігнати
+Покращення та виправлення.
 </uk>
 
 <zh-CN>
-新功能
-• 更流畅的排行榜，1000名玩家供你追赶
+优化和错误修复。
 </zh-CN>
 
 ---

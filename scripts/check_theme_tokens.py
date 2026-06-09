@@ -57,15 +57,19 @@ def shim_blocks(text: str):
 
 
 def violations_in(body: str) -> list[str]:
-    cleaned = VAR_RE.sub('', body)
+    # Strip JS line comments and block comments so `// show #1..#100`
+    # doesn't trigger as a CSS hex color.
+    cleaned = re.sub(r'//[^\n]*', '', body)
+    cleaned = re.sub(r'/\*[\s\S]*?\*/', '', cleaned)
+    # Strip <svg>...</svg> blocks — illustration artwork uses per-app
+    # decorative colors that are not theme tokens by design.
+    cleaned = re.sub(r'<svg[\s\S]*?</svg>', '', cleaned)
+    cleaned = VAR_RE.sub('', cleaned)
     bad: list[str] = []
     for color in HEX_RE.findall(cleaned):
         if color.lower() in WHITELIST_HEX:
             continue
         bad.append(color)
-    # rgb()/rgba() rarely a violation since dim layers (0,0,0,*) /
-    # (255,255,255,*) are explicitly OK. Skip these — only hex/named
-    # colors fail.
     return sorted(set(bad))
 
 

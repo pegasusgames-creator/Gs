@@ -36,6 +36,11 @@ upload_certificate.der
 _release/
 release_aabs/
 
+# Gemini AI image-generation artifacts dropped in store/ folders
+# during design exploration. The ship listings use the wrapped
+# 01.png-07.png set; the Gemini images are local-only references.
+Gemini_Generated_Image_*.png
+
 # Python build artifacts
 __pycache__/
 *.pyc

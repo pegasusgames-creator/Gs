@@ -83,9 +83,9 @@ def check_app(app):
                 continue
             trig, expect = triggered[0]
             if not have_ocr:
-                out.append(('WARNING', f"{surf} slot {i + 1} headline claims "
-                            f"'{trig}' — install tesseract to verify the "
-                            f"screenshot actually shows that screen"))
+                # Don't fan out one warning per slot — the message would
+                # repeat for every triggered headline in every app. The
+                # advisory is emitted once at the end of check_app instead.
                 continue
             text = ocr(img)
             if text and not any(w in text for w in expect):

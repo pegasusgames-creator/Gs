@@ -28,75 +28,51 @@ Polish & fixes.
 </en-US>
 
 <ar>
-ما الجديد
-• الأزرار السفلية لم تعد محجوبة بإعلان البانر في بعض الشاشات
-• لوحة المتصدرين تعرض الآن 1000 لاعب للتفوق عليهم
+تلميع وإصلاحات.
 </ar>
 
 <de-DE>
-Neu
-• Die unteren Buttons werden auf einigen Bildschirmen nicht mehr vom Werbebanner abgeschnitten
-• Bestenliste zeigt jetzt 1.000 Spieler zum Überholen
+Politur & Fehlerbehebungen.
 </de-DE>
 
 <es-419>
-Novedades
-• Los botones de abajo ya no quedan cortados por el banner del anuncio en algunas pantallas
-• La tabla de clasificación ahora muestra 1000 jugadores para superar
+Pulido y correcciones.
 </es-419>
 
 <fr-FR>
-Nouveautés
-• Les boutons du bas ne sont plus tronqués par la bannière publicitaire sur certains écrans
-• Le classement affiche maintenant 1 000 joueurs à dépasser
+Améliorations et corrections.
 </fr-FR>
 
 <hi-IN>
-नया क्या है
-• कुछ स्क्रीन पर नीचे के बटन अब विज्ञापन बैनर से नहीं कटते
-• लीडरबोर्ड अब 1,000 खिलाड़ी दिखाता है जिनसे आगे निकलना है
+सुधार और बग फिक्स।
 </hi-IN>
 
 <id>
-Yang baru
-• Tombol bawah tidak lagi terpotong oleh banner iklan di beberapa layar
-• Papan peringkat sekarang menampilkan 1.000 pemain untuk dilampaui
+Penyempurnaan & perbaikan.
 </id>
 
 <it-IT>
-Novità
-• I pulsanti in basso non sono più tagliati dal banner pubblicitario in alcune schermate
-• La classifica ora mostra 1.000 giocatori da superare
+Rifiniture e correzioni.
 </it-IT>
 
 <ja-JP>
-新着情報
-• 一部の画面で下部のボタンが広告バナーに隠れる問題を修正
-• リーダーボードに追い抜くべき1,000人のプレイヤーを表示
+改善とバグ修正。
 </ja-JP>
 
 <pt-BR>
-Novidades
-• Os botões inferiores não são mais cortados pelo banner de anúncio em algumas telas
-• O placar agora mostra 1.000 jogadores para superar
+Polimento e correções.
 </pt-BR>
 
 <tr-TR>
-Yenilikler
-• Alttaki düğmeler bazı ekranlarda reklam afişi tarafından artık kesilmiyor
-• Liderlik tablosu artık geçilecek 1.000 oyuncu gösteriyor
+İyileştirmeler ve düzeltmeler.
 </tr-TR>
 
 <uk>
-Що нового
-• Нижні кнопки більше не обрізаються рекламним банером на деяких екранах
-• Таблиця лідерів тепер показує 1000 гравців, яких треба обігнати
+Покращення та виправлення.
 </uk>
 
 <zh-CN>
-新功能
-• 修复部分屏幕上底部按钮被广告横幅遮挡的问题
-• 排行榜现在显示1000名玩家供你追赶
+优化和错误修复。
 </zh-CN>
 
 ---

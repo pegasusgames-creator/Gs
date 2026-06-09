@@ -1629,10 +1629,12 @@ def check_screenshot_completeness(apps):
     """
     blocking = []
     warnings = []
-    REQUIRED_MIN = 6  # Pegasus standard: 6 distinct screenshots per surface
-                      # (phone + tablet_7 + tablet_10). Set by user policy
-                      # 2026-05-25 — applies to every new app. Already-shipped
-                      # apps get a warning (grandfathered); pre-ship gets blocked.
+    # Pegasus standard (2026-06-08 user policy): 7 phone / 2 tablet_7 /
+    # 2 tablet_10. Phone is the primary listing surface (Play ranking +
+    # most install impressions) so we invest the capture budget there;
+    # tablets get only the 2 most-impactful shots each. Already-shipped
+    # apps get warnings if under (grandfathered); pre-ship gets blocked.
+    REQUIRED = {"phone": 7, "tablet_7": 2, "tablet_10": 2}
 
     for app in apps:
         if not os.path.isdir(os.path.join(BASE, app, "android")):
@@ -1648,7 +1650,7 @@ def check_screenshot_completeness(apps):
             except (IOError, ValueError):
                 pass
 
-        for set_name in ("phone", "tablet_7", "tablet_10"):
+        for set_name, required in REQUIRED.items():
             set_dir = os.path.join(BASE, app, "store", "screenshots", set_name)
             if not os.path.isdir(set_dir):
                 msg = (f"{app}: store/screenshots/{set_name}/ does not exist. "
@@ -1662,11 +1664,16 @@ def check_screenshot_completeness(apps):
             wrapped = [f for f in os.listdir(set_dir)
                        if f.endswith(".png") and not f.startswith(".")
                        and f[0:2].isdigit()]
-            if len(wrapped) < REQUIRED_MIN:
+            if len(wrapped) < required:
                 msg = (f"{app}: {set_name}/ has {len(wrapped)} wrapped "
-                       f"screenshot(s). Pegasus standard is "
-                       f"{REQUIRED_MIN}/surface (Play Console minimum is 2).")
+                       f"screenshot(s). Pegasus standard is exactly "
+                       f"{required}/surface (Play Console minimum is 2).")
                 (warnings if is_shipped else blocking).append(msg)
+            elif len(wrapped) > required:
+                msg = (f"{app}: {set_name}/ has {len(wrapped)} wrapped "
+                       f"screenshot(s) — Pegasus standard is exactly "
+                       f"{required}/surface. Trim extras (keep highest-impact).")
+                warnings.append(msg)
 
     return blocking, warnings
 
@@ -2001,6 +2008,11 @@ def main():
         ('check_continue_label.py',       'continue label'),
         ('check_daily_label.py',          'daily label'),
         ('check_chip_token_tint.py',      'chip token tint'),
+        ('check_screen_active_hide.py',   'screen active hide'),
+        ('check_menu_tile_tokens.py',     'menu tile tokens'),
+        ('check_settings_inject_safe.py', 'settings inject safe'),
+        ('check_footer_clearance.py',     'footer clearance'),
+        ('check_leaderboard_floor.py',    'leaderboard floor'),
     ]:
         try:
             _r = _subprocess.run(

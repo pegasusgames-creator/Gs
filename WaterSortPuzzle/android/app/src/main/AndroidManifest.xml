@@ -14,7 +14,8 @@
     <queries>
         <package android:name="com.pegasusgames.nonogram" />
         <package android:name="com.pegasusgames.puzzle2048" />
-        <!-- TODO post-release: add unblockpuzzle + pipeconnect once they have Play links. -->
+        <package android:name="com.pegasusgames.unblockpuzzle" />
+        <!-- TODO post-release: add pipeconnect once it has a Play link. -->
     </queries>
     <application
         android:allowBackup="false"

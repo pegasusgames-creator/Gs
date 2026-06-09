@@ -636,9 +636,10 @@ RUNS", "ONE FREE UNDO") over visually identical content — every claim
 the headline made was a lie about what the screenshot showed.
 
 `pre_publish_check.py check_screenshot_uniqueness` enforces this:
-perceptual hashes of all 6 phone raws must differ by at least 4
-hamming distance from each other. Identical or near-identical raws
-across slots = blocking.
+perceptual hashes of all 7 phone raws (and the 2 tablet_7 + 2
+tablet_10 raws) must differ by at least 4 hamming distance from each
+other within the surface. Identical or near-identical raws across
+slots = blocking.
 
 When this check fails, `capture_screenshots.py` taps are missing their
 targets. Common causes:

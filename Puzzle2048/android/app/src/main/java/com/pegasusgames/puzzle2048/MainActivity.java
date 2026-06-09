@@ -77,7 +77,8 @@ public class MainActivity extends Activity {
     // here ONLY after they have Play links.
     private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(
         "com.pegasusgames.watersortpuzzle",
-        "com.pegasusgames.nonogram"
+        "com.pegasusgames.nonogram",
+        "com.pegasusgames.unblockpuzzle"
     ));
 
     // ── AppLovin MAX (disabled; using AdMob) ──────────────────────────────────
@@ -127,7 +128,8 @@ public class MainActivity extends Activity {
         "undo", "skip", "life", "continue", "extra_life", "free_coins", "magic_merge", "remove_tile"
     ));
 
-    private static final int WEBVIEW_BG_COLOR = 0xFFfaf8ef;
+    // Daylight default = warm cream/sand. (Midnight unlock is dark.)
+    private static final int WEBVIEW_BG_COLOR = 0xFFf3ecd9;
 
     // ── Notification scheduling (NOTIFICATIONS_IMPL.md §1) ────────────────────
     private static final int REQ_DAILY_REMINDER       = 1001;
@@ -167,20 +169,33 @@ public class MainActivity extends Activity {
         RelativeLayout layout = new RelativeLayout(this);
         setContentView(layout);
 
-        // Banner container at bottom
+        // Banner container at bottom — themed background so empty space
+        // around the ad (when the ad is smaller than the container)
+        // blends with the WebView, not a black bar.
         bannerContainer = new FrameLayout(this);
         bannerContainer.setId(android.view.View.generateViewId());
+        bannerContainer.setBackgroundColor(android.graphics.Color.TRANSPARENT);
         RelativeLayout.LayoutParams bp = new RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT, dpToPx(50));
         bp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         layout.addView(bannerContainer, bp);
+        layout.setBackgroundColor(WEBVIEW_BG_COLOR);
 
-        // WebView above banner
+        // WebView above banner. Explicit ALIGN_PARENT_TOP + ABOVE so the
+        // height is unambiguously (screen - banner) instead of MATCH_PARENT
+        // with a constraint hint. Without this, the WebView occasionally
+        // extends BEHIND the banner area and steals touch from the AdView.
         webView = new WebView(this);
         RelativeLayout.LayoutParams wp = new RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        wp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         wp.addRule(RelativeLayout.ABOVE, bannerContainer.getId());
         layout.addView(webView, wp);
+        bannerContainer.bringToFront();
+        // Kill any transient WebView scroll during cold-start render storm.
+        webView.setVerticalScrollBarEnabled(false);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setOverScrollMode(android.view.View.OVER_SCROLL_NEVER);
 
         if (0 != (getApplicationInfo().flags & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE))
             WebView.setWebContentsDebuggingEnabled(true);
@@ -313,9 +328,12 @@ public class MainActivity extends Activity {
         admobBanner = new com.google.android.gms.ads.AdView(this);
         admobBanner.setAdSize(AdSize.BANNER);
         admobBanner.setAdUnitId(ADMOB_BANNER_UNIT_ID);
-        bannerContainer.addView(admobBanner, new FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT,
-            android.view.Gravity.CENTER));
+        // Fill the container — WRAP_CONTENT lets the AdView re-measure
+        // when the test creative finally fills, causing visible jitter
+        // for the first ~60s while the cache warms.
+        FrameLayout.LayoutParams admobLp = new FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        bannerContainer.addView(admobBanner, admobLp);
         admobBanner.loadAd(new AdRequest.Builder().build());
     }
 
@@ -561,6 +579,16 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void openUrl(String url)             { try { startActivity(new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))); } catch (Exception e) {} }
         @JavascriptInterface public void hideBannerAd()                  { hideBanner(); }
         @JavascriptInterface public void showBannerAd()                  { showBanner(); }
+        @JavascriptInterface
+        public void setLeaderboardSize(int n) {
+          final int v = Math.max(1000, n);
+          runOnUiThread(() -> {
+            if (webView != null) {
+              webView.evaluateJavascript(
+                "window.LEADERBOARD_TOTAL_OVERRIDE = " + v + ";", null);
+            }
+          });
+        }
         @JavascriptInterface public void log(String msg)                 { /* disabled in release */ }
 
         // Restricted to CROSS_PROMO_PACKAGES to prevent JS from probing

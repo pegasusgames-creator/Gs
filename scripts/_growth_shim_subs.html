@@ -204,10 +204,15 @@
     var label = (STRINGS[loc] && STRINGS[loc].manage) || STRINGS['en-US'].manage;
     var row = document.createElement('div');
     row.setAttribute('data-subs-manage','1');
+    row.className = 'setting-row settings-item set-row';
+    // Layout-only; let the per-app .setting-row class own background.
+    // Label color comes from the per-app .setting-label class:
+    //   WaterSort: white (medium-blue bg)
+    //   Nono / 2048 / Unblock: dark (cream / mint bg)
     row.style.cssText =
-      'padding:12px 16px;border-radius:10px;background:rgba(0,0,0,0.05);' +
-      'margin:8px;cursor:pointer;font-weight:600;display:flex;align-items:center;justify-content:space-between;';
-    row.innerHTML = '<span>' + label + '</span><span style="opacity:0.55">›</span>';
+      'margin:8px 0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;';
+    row.innerHTML = '<span class="setting-label settings-item-label set-label" style="font-weight:600;color:var(--page-fg, var(--text, inherit));">' + label + '</span>' +
+      '<span style="opacity:0.55;color:var(--page-fg, var(--text, inherit));">›</span>';
     row.addEventListener('click', openSubs);
     settings.appendChild(row);
   }

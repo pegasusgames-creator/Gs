@@ -26,7 +26,9 @@ SKIP = {"_template", "_release", "release_aabs", "docs", "scripts",
 # anyone else's CROSS_PROMO_PACKAGES set / <queries> / PROMO_GAMES list.
 # Edit this list when a pre-release app goes live.
 PRE_RELEASE = {
-    "com.pegasusgames.unblockpuzzle",
+    # 2026-05-29: UnblockPuzzle is in Play review / shipping — removed
+    # from pre-release exclusion list so the other 3 apps can keep it
+    # in their cross-promo lists.
     "com.pegasusgames.pipeconnect",
 }
 

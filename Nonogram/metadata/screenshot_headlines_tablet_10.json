@@ -1,8 +1,12 @@
 [
-  {"line1": "LOGIC,", "line2": "NOT GUESSING", "subtitle": "Each clue points to a run of filled cells. Find them all."},
-  {"line1": "EVERY CLUE", "line2": "COUNTS", "subtitle": "Numbers tell you where the filled cells must go."},
-  {"line1": "500", "line2": "HAND-CRAFTED", "subtitle": "Four sizes. Endless quiet hours of solving."},
-  {"line1": "WATCH IT", "line2": "EMERGE", "subtitle": "Mid-solve pixel art reveals itself cell by cell."},
-  {"line1": "DAILY", "line2": "STREAK", "subtitle": "Solve today's puzzle. Keep your run alive."},
-  {"line1": "MASTER THE", "line2": "HARDEST BOARDS", "subtitle": "20×20 grids and late-game pixel art."}
+  {
+    "line1": "MASTER THE",
+    "line2": "HARDEST BOARDS",
+    "subtitle": "Twenty-by-twenty boards at the end of 500."
+  },
+  {
+    "line1": "PICK A",
+    "line2": "PUZZLE",
+    "subtitle": "500 stages \u2014 start anywhere."
+  }
 ]

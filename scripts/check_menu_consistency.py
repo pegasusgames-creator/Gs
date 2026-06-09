@@ -11,10 +11,13 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-# Canonical top-bar icon set (2026-05-27 round-4): Settings is NOT a
-# top-bar icon — it lives in each app's Tier-3 icon row (one location
-# per app, no duplication).
-CANONICAL_ICONS = ['freecoins', 'ranks']
+# Canonical top-bar icon set (2026-05-28 round-15): the top bar carries
+# Free Coins only; Ranks moved DOWN into the Tier-3 icon row alongside
+# Levels · Shop · Games · Settings, and is declared via the
+# [data-menu-tier3-ranks] attribute by the MENU shim's
+# injectRanksIntoTier3 helper. Settings has never been a top-bar icon.
+CANONICAL_TOP_BAR_ICONS = ['freecoins']
+TIER3_RANKS_ATTR = 'data-menu-tier3-ranks'
 
 
 def _is_app(app):
@@ -27,16 +30,21 @@ def check_app(app):
     if not game.exists():
         return blocking, warnings
     src = game.read_text(encoding="utf-8", errors="replace")
-    # Find each top-bar icon by its data-menu-icon attribute.
-    found = []
-    for icon in CANONICAL_ICONS:
+    # Top-bar icons live under [data-menu-icons] and carry data-menu-icon="<name>".
+    found_top = []
+    for icon in CANONICAL_TOP_BAR_ICONS:
         pat = r'data-menu-icon="' + icon + r'"'
         if re.search(pat, src):
-            found.append(icon)
-    missing = [i for i in CANONICAL_ICONS if i not in found]
-    if missing:
+            found_top.append(icon)
+    missing_top = [i for i in CANONICAL_TOP_BAR_ICONS if i not in found_top]
+    if missing_top:
         warnings.append(
-            f"{app}: top-bar missing icon(s): {missing} — MENU shim should declare all of {CANONICAL_ICONS}"
+            f"{app}: top-bar missing icon(s): {missing_top} — MENU shim should declare all of {CANONICAL_TOP_BAR_ICONS}"
+        )
+    # Tier-3 Ranks tile (Round-15+) — must be injected by the MENU shim.
+    if TIER3_RANKS_ATTR not in src:
+        warnings.append(
+            f"{app}: Tier-3 row missing Ranks tile ([{TIER3_RANKS_ATTR}]) — MENU shim's injectRanksIntoTier3 should run"
         )
     return blocking, warnings
 

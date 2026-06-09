@@ -1,29 +1,88 @@
 {
-  "_comment": "UnblockPuzzle screenshot capture — 18 fully distinct slots. NO screen type repeats across phone/tablet_7/tablet_10: the four non-gameplay screens (win, stats, missions, level-select) each appear exactly ONCE across the whole set; the other 14 slots are gameplay boards at 14 distinct levels. All 6 block themes (default/neon/pastel/fire/ocean/galaxy) and both UI themes (Daylight + Midnight) are showcased across the board slots. Block theme via window.setActiveTheme; UI theme via window.applyUITheme.",
+  "_comment": "UnblockPuzzle screenshot capture \u2014 7 phone + 2 tablet_7 + 2 tablet_10 = 11 distinct slots (2026-06-08 policy). Phone highlights gameplay + themes + stats + daily + depth; tablets get a roomy board + a distinguishing surface. All 6 block themes + both UI themes appear across the set. Block theme via window.setActiveTheme; UI theme via window.applyUITheme.",
   "_readiness_expr": "typeof state !== 'undefined' && typeof initGame === 'function' && typeof showScreen === 'function' && typeof window.setActiveTheme === 'function' && typeof window.applyUITheme === 'function'",
-
   "_setup_taps": [
-    ["js", "(function(){try{localStorage.setItem('xstarter_seen','1');localStorage.setItem('ls_v2',JSON.stringify({n:7,d:new Date().toISOString().slice(0,10),ach:[]}));}catch(e){}try{var s={coins:247,lives:5,currentLevel:120,completedLevels:Array.from({length:118},function(_,i){return i+1;}),levelStars:(function(){var x={};for(var i=1;i<=118;i++)x[i]=(i%4===0?3:(i%3===0?2:1));return x;})(),removeAds:true,activeTheme:'default',hintPack:0,seasonPassUntil:0,weeklyPassUntil:0,lastSeasonGrantDate:'',lastWeeklyGrantDate:'',unlimitedLivesUntil:0,lastLifeTime:Date.now(),dailyChallengeDate:'',dailyChallengeStreak:7,soundEnabled:true,musicEnabled:false,hapticsEnabled:true,lastLevelProgress:null};Object.assign(state,s);if(typeof saveState==='function')saveState();if(typeof updateHUD==='function')updateHUD();if(typeof updateMenuScreen==='function')updateMenuScreen();}catch(e){}return 'seeded';})()", 400]
+    [
+      "js",
+      "/*screenshot-clean-prefix*/try{localStorage.setItem('tutorialDone','1');localStorage.setItem('coachmarkDone','1');if(window.Android&&Android.hideBannerAd)Android.hideBannerAd();}catch(e){}(function(){try{localStorage.setItem('xstarter_seen','1');localStorage.setItem('ls_v2',JSON.stringify({n:7,d:new Date().toISOString().slice(0,10),ach:[]}));}catch(e){}try{var s={coins:247,lives:5,currentLevel:120,completedLevels:Array.from({length:118},function(_,i){return i+1;}),levelStars:(function(){var x={};for(var i=1;i<=118;i++)x[i]=(i%4===0?3:(i%3===0?2:1));return x;})(),removeAds:true,activeTheme:'default',hintPack:0,seasonPassUntil:0,weeklyPassUntil:0,lastSeasonGrantDate:'',lastWeeklyGrantDate:'',unlimitedLivesUntil:0,lastLifeTime:Date.now(),dailyChallengeDate:'',dailyChallengeStreak:7,soundEnabled:true,musicEnabled:false,hapticsEnabled:true,lastLevelProgress:null};Object.assign(state,s);if(typeof saveState==='function')saveState();if(typeof updateHUD==='function')updateHUD();if(typeof updateMenuScreen==='function')updateMenuScreen();}catch(e){}return 'seeded';})()",
+      400
+    ]
   ],
-
-  "01_deep_gameplay":  [["js", "applyUITheme('light');window.setActiveTheme('neon');showScreen('gameScreen');initGame(7,false);'ok';", 2400]],
-  "02_early_gameplay": [["js", "applyUITheme('midnight');window.setActiveTheme('galaxy');showScreen('gameScreen');initGame(118,false);'ok';", 2400]],
-  "03_level_complete": [["js", "applyUITheme('light');window.setActiveTheme('ocean');showScreen('gameScreen');initGame(42,false);'ok';", 2400]],
-  "04_missions_panel": [["js", "applyUITheme('light');window.setActiveTheme('pastel');showScreen('gameScreen');initGame(25,false);'ok';", 2400]],
-  "05_stats":          [["js", "applyUITheme('light');window.setActiveTheme('fire');showScreen('gameScreen');initGame(60,false);setTimeout(function(){var ov=document.getElementById('winOverlay');if(ov)ov.classList.add('active');},500);'ok';", 2800]],
-  "06_levels_grid":    [["js", "applyUITheme('midnight');window.setActiveTheme('ocean');showScreen('gameScreen');initGame(104,false);'ok';", 2400]],
-
-  "tablet_7_01_deep_gameplay":  [["js", "applyUITheme('light');window.setActiveTheme('fire');showScreen('gameScreen');initGame(95,false);'ok';", 2400]],
-  "tablet_7_02_early_gameplay": [["js", "applyUITheme('midnight');window.setActiveTheme('neon');showScreen('gameScreen');initGame(33,false);'ok';", 2400]],
-  "tablet_7_03_level_complete": [["js", "applyUITheme('light');window.setActiveTheme('galaxy');showScreen('gameScreen');initGame(112,false);'ok';", 2400]],
-  "tablet_7_04_missions_panel": [["js", "applyUITheme('light');window.setActiveTheme('default');showScreen('gameScreen');initGame(15,false);'ok';", 2400]],
-  "tablet_7_05_stats":          [["js", "applyUITheme('midnight');window.setActiveTheme('ocean');showScreen('gameScreen');initGame(78,false);'ok';", 2400]],
-  "tablet_7_06_levels_grid":    [["js", "applyUITheme('light');showScreen('statsScreen');if(typeof renderStats==='function')renderStats();'ok';", 2200]],
-
-  "tablet_10_01_deep_gameplay":  [["js", "applyUITheme('light');window.setActiveTheme('pastel');showScreen('gameScreen');initGame(50,false);'ok';", 2400]],
-  "tablet_10_02_early_gameplay": [["js", "applyUITheme('light');window.setActiveTheme('default');showScreen('gameScreen');initGame(130,false);'ok';", 2400]],
-  "tablet_10_03_level_complete": [["js", "applyUITheme('midnight');window.setActiveTheme('fire');showScreen('gameScreen');initGame(88,false);'ok';", 2400]],
-  "tablet_10_04_missions_panel": [["js", "applyUITheme('light');window.setActiveTheme('galaxy');showScreen('gameScreen');initGame(145,false);'ok';", 2400]],
-  "tablet_10_05_stats":          [["js", "applyUITheme('midnight');showScreen('missionsScreen');if(typeof renderMissions==='function')renderMissions();if(typeof renderMissionsExtras==='function')renderMissionsExtras();'ok';", 2400]],
-  "tablet_10_06_levels_grid":    [["js", "applyUITheme('light');showScreen('levelScreen');'ok';", 2200]]
+  "01_deep_gameplay": [
+    [
+      "js",
+      "applyUITheme('light');window.setActiveTheme('neon');showScreen('gameScreen');initGame(7,false);'ok';",
+      2400
+    ]
+  ],
+  "02_early_gameplay": [
+    [
+      "js",
+      "applyUITheme('midnight');window.setActiveTheme('galaxy');showScreen('gameScreen');initGame(118,false);'ok';",
+      2400
+    ]
+  ],
+  "03_level_complete": [
+    [
+      "js",
+      "applyUITheme('light');window.setActiveTheme('ocean');showScreen('gameScreen');initGame(42,false);'ok';",
+      2400
+    ]
+  ],
+  "04_missions_panel": [
+    [
+      "js",
+      "applyUITheme('light');window.setActiveTheme('pastel');showScreen('gameScreen');initGame(25,false);'ok';",
+      2400
+    ]
+  ],
+  "05_stats": [
+    [
+      "js",
+      "applyUITheme('light');window.setActiveTheme('fire');showScreen('gameScreen');initGame(60,false);setTimeout(function(){var ov=document.getElementById('winOverlay');if(ov)ov.classList.add('active');},500);'ok';",
+      2800
+    ]
+  ],
+  "06_levels_grid": [
+    [
+      "js",
+      "applyUITheme('midnight');window.setActiveTheme('ocean');showScreen('gameScreen');initGame(104,false);'ok';",
+      2400
+    ]
+  ],
+  "07_depth": [
+    [
+      "js",
+      "applyUITheme('light');window.setActiveTheme('default');showScreen('themeScreen');setTimeout(function(){if(typeof renderThemes==='function')renderThemes();},300);'ok';",
+      2800
+    ]
+  ],
+  "tablet_7_01_deep_gameplay": [
+    [
+      "js",
+      "applyUITheme('light');window.setActiveTheme('fire');showScreen('gameScreen');initGame(95,false);'ok';",
+      3000
+    ]
+  ],
+  "tablet_7_02_early_gameplay": [
+    [
+      "js",
+      "applyUITheme('light');showScreen('statsScreen');setTimeout(function(){if(typeof renderStats==='function')renderStats();},300);'ok';",
+      3000
+    ]
+  ],
+  "tablet_10_01_deep_gameplay": [
+    [
+      "js",
+      "applyUITheme('light');window.setActiveTheme('pastel');showScreen('gameScreen');initGame(50,false);'ok';",
+      3000
+    ]
+  ],
+  "tablet_10_02_early_gameplay": [
+    [
+      "js",
+      "applyUITheme('light');showScreen('levelScreen');'ok';",
+      3000
+    ]
+  ]
 }

@@ -117,8 +117,19 @@
   function injectInto(el, getter, label){
     if (!el) return;
     if (el.querySelector('[data-growth-share-btn]')) return;
+    // Round-15.20: append to the INNER card. Each app names its modal
+    // card differently — broad pattern match covers all known ones.
+    // If `el` itself looks like a card (small fixed-width container,
+    // not a full-screen overlay), use it directly.
+    var card = el.querySelector(
+      '.overlay-box, .overlay-card, .overlay-content, ' +
+      '.win-card, .win-box, .modal-card, .modal-content, ' +
+      '.card, .modal, .ls-card, .confirm-card, ' +
+      '[class*="-card"], [class*="-content"], [class*="overlay-box"]'
+    );
+    var target = card || el;
     var btn = buildShareButton(label, getter);
-    el.appendChild(btn);
+    target.appendChild(btn);
   }
 
   function scan(){

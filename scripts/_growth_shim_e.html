@@ -123,35 +123,71 @@
       ];
     } else if (kind === 'unblock') {
       steps = [
-        { title:'Find the red car', body:'Your goal: slide the red car out the right edge.' },
+        { title:'Find the red block', body:'Your goal: slide the red block out the right edge.' },
         { title:'Drag to slide', body:'Blocks slide along their long axis only. Drag, don\'t tap.' },
         { title:'Clear the path', body:'Move the other blocks out of the way. Fewer moves = more stars.' },
+      ];
+    } else if (kind === 'watersort') {
+      steps = [
+        { title:'Sort the colors', body:'Each tube can hold 4 layers. Win when every tube is one color (or empty).' },
+        { title:'Tap to pour', body:'Tap a tube to lift it. Tap another to pour. Liquid only pours onto the same color (or into an empty tube).' },
+        { title:'Boosters help', body:'Out of moves? Use Hint, Undo, Restart, +Tube, or Wand at the bottom.' },
+      ];
+    } else if (kind === 'puzzle2048') {
+      steps = [
+        { title:'Merge to grow', body:'Swipe to slide all tiles. Two tiles with the same number merge into one — bigger.' },
+        { title:'Reach 2048', body:'Keep merging: 2 → 4 → 8 → 16 → … all the way to 2048 (and beyond if you can).' },
+        { title:'Plan ahead', body:'The board fills up fast. Keep your highest tile in a corner and chain merges toward it.' },
       ];
     } else {
       return;
     }
-    function showStep(i){
-      var bg = document.createElement('div');
-      bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
-      var card = document.createElement('div');
-      card.style.cssText = 'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border-radius:18px;padding:22px;max-width:320px;width:88%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
-      var s = steps[i];
-      card.innerHTML =
-        '<div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-mute, #5a7390);margin-bottom:6px;">STEP ' + (i+1) + ' / ' + steps.length + '</div>' +
-        '<div style="font-size:1.2rem;font-weight:800;margin-bottom:6px;">' + s.title + '</div>' +
-        '<div style="font-size:0.95rem;color:var(--text-mute, #5a7390);margin-bottom:14px;">' + s.body + '</div>' +
-        '<button data-cm-next style="border:none;padding:10px 18px;background:var(--g-play, linear-gradient(135deg,#3b6db8,#5cb3d8));color:var(--on-accent, #fff);border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">' +
-          (i+1 < steps.length ? 'Next →' : 'Got it') +
-        '</button>';
-      bg.appendChild(card);
-      card.querySelector('[data-cm-next]').addEventListener('click', function(){
-        bg.remove();
-        if (i+1 < steps.length) showStep(i+1);
-        else lsSet('tutorialDone','1');
-      });
-      document.body.appendChild(bg);
+    // Round-15: mark tutorial as SEEN the moment the first step renders.
+    // Previously tutorialDone was only set after the last step, so any
+    // mid-tutorial app-close re-triggered the whole flow on next launch.
+    // The user explicitly wants this overlay to appear only on the very
+    // first launch ever.
+    lsSet('tutorialDone','1');
+    // Round-15.12: WHOLE tutorial = ONE queue entry. Don't release the
+    // queue's done() until all 3 steps have been dismissed. This
+    // guarantees the daily-streak popup (queued separately at ~1400ms)
+    // can NEVER interleave between tutorial steps. User reported the
+    // streak appearing between step 1 and step 2 — that was per-step
+    // queueing letting other entries jump the line.
+    function runStepsSerially(allDoneCb){
+      var i = 0;
+      function next(){
+        if (i >= steps.length) { allDoneCb(); return; }
+        var bg = document.createElement('div');
+        bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
+        var card = document.createElement('div');
+        card.style.cssText = 'background:var(--bg, var(--surface, #ffffff));color:var(--page-fg, var(--text, #1e3a5f));border-radius:18px;padding:22px;max-width:320px;width:88%;text-align:center;border:1px solid var(--menu-tile-border, var(--border, rgba(255,255,255,0.18)));box-shadow:0 14px 44px rgba(0,0,0,0.4);';
+        var s = steps[i];
+        var idx = i;
+        card.innerHTML =
+          '<div style="font-size:11px;font-weight:700;letter-spacing:2px;opacity:0.62;margin-bottom:6px;">STEP ' + (idx+1) + ' / ' + steps.length + '</div>' +
+          '<div style="font-size:1.2rem;font-weight:800;margin-bottom:6px;">' + s.title + '</div>' +
+          '<div style="font-size:0.95rem;opacity:0.78;margin-bottom:14px;">' + s.body + '</div>' +
+          '<button data-cm-next type="button" style="border:none;padding:10px 18px;background:var(--g-play, #3b6db8);color:var(--on-accent, #fff);border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">' +
+            (idx+1 < steps.length ? 'Next →' : 'Got it') +
+          '</button>';
+        bg.appendChild(card);
+        function close(advance){
+          bg.remove();
+          if (advance) { i++; next(); }
+          else { allDoneCb(); }
+        }
+        card.querySelector('[data-cm-next]').addEventListener('click', function(){ close(true); });
+        bg.addEventListener('click', function(ev){ if (ev.target === bg) close(false); });
+        document.body.appendChild(bg);
+      }
+      next();
     }
-    showStep(0);
+    if (window.gPopupQueue && typeof window.gPopupQueue.enqueue === 'function') {
+      window.gPopupQueue.enqueue(function(done){ runStepsSerially(done); });
+    } else {
+      runStepsSerially(function(){});
+    }
   }
 
   if (document.readyState === 'loading') {

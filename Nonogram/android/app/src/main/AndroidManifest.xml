@@ -15,6 +15,7 @@
     <queries>
         <package android:name="com.pegasusgames.watersortpuzzle" />
         <package android:name="com.pegasusgames.puzzle2048" />
+        <package android:name="com.pegasusgames.unblockpuzzle" />
     </queries>
 
     <application

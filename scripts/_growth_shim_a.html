@@ -110,6 +110,37 @@
     }
   }
 
+  // Round-15: auto-schedule a "lives are full" ping by reading the
+  // current save state. Every shipping app uses the same shape:
+  // { lives, maxLives (default 5), lastLifeTime }. Per-app save keys
+  // differ, so probe the known set.
+  function scheduleLivesIfBelowMax(){
+    if (!api('scheduleLivesRefilled')) return;
+    var SAVE_KEYS = [
+      'unblock_save','watersort_save','puzzle2048_save','nonogram_state',
+      'save','state','gameState','progress'
+    ];
+    var REGEN_MS = 30 * 60 * 1000; // every shipping game uses 30 min
+    for (var i=0;i<SAVE_KEYS.length;i++){
+      var raw = lsGet(SAVE_KEYS[i], null);
+      if (!raw) continue;
+      try {
+        var s = JSON.parse(raw);
+        var inner = (s && s.state) ? s.state : s;
+        var lives    = (inner.lives != null)    ? inner.lives    : null;
+        var maxLives = (inner.maxLives != null) ? inner.maxLives : 5;
+        var lastLife = inner.lastLifeTime || inner.lastLifeMs || inner.lifeRegenAt || 0;
+        if (lives == null || lastLife <= 0) continue;
+        if (lives >= maxLives) return; // already full, nothing to schedule
+        var needed = maxLives - lives;
+        var refillAt = lastLife + needed * REGEN_MS;
+        if (refillAt <= Date.now()) return; // would've already refilled
+        safe(function(){ Android.scheduleLivesRefilled(refillAt); });
+        return;
+      } catch(e){}
+    }
+  }
+
   // ── 5. Reschedule the full chain.
   function rescheduleAll(){
     if (!hasAndroid()) return;
@@ -124,13 +155,93 @@
       // Mark the Day-7 reward as pending so the next-open path will pay out 100c.
       lsSet('pendingWinBackReward','1');
     }
+    // Round-15: schedule streak-at-risk from day 1+ (was day 3+). Even
+    // a one-day streak is worth not losing — and reward keeps growing
+    // with the chain anyway, so an early reminder still pays off.
     var streak = readStreak();
-    if (streak >= 3 && api('scheduleStreakAtRisk')) {
+    if (streak >= 1 && api('scheduleStreakAtRisk')) {
       safe(function(){ Android.scheduleStreakAtRisk(streak); });
     }
+    // Round-15: schedule lives-refilled if any life slot is regenerating.
+    scheduleLivesIfBelowMax();
   }
 
-  // ── 6. Public hooks for per-app integration when game wants to opt in.
+  // ── 6a. SERIAL POPUP QUEUE — round-15.1 fix.
+  // User complaint: "popups with daily streak and tutorial just closed
+  // each other with overriding while next popup should only appear
+  // after user manually taps". Every modal that shows on first launch
+  // of the day (login streak, starter pack, coachmark, cross-promo,
+  // welcome bonus) should opt into this queue. The queue shows ONE at
+  // a time and only proceeds when the previous popup is dismissed.
+  //
+  // Usage from per-app or shim code:
+  //   gPopupQueue.enqueue(function(done){
+  //     showMyPopup();
+  //     wireDismissHandler(done);  // call done() when user dismisses
+  //   });
+  //
+  // Also: a polling helper for popups that don't have an explicit
+  // dismiss hook. Pass a `selector` whose visibility tracks the popup
+  // (display !== 'none'), and the queue auto-detects dismissal.
+  window.gPopupQueue = (function(){
+    var queue = [];
+    var active = false;
+    function next(){
+      if (active) return;
+      var entry = queue.shift();
+      if (!entry) return;
+      active = true;
+      try {
+        entry.show(function done(){
+          active = false;
+          // Defer next show by 250ms so the user sees a beat
+          // between popups rather than instant flicker.
+          setTimeout(next, 250);
+        });
+      } catch (e){
+        active = false;
+        setTimeout(next, 250);
+      }
+    }
+    function enqueue(showFn){
+      queue.push({show: showFn});
+      next();
+    }
+    function enqueueWithSelector(selector, showFn){
+      queue.push({show: function(done){
+        showFn();
+        // Poll for visibility going false → call done().
+        // Round-15.4 fix: position:fixed elements have offsetParent
+        // === null even when visible — must use computed display.
+        // Also wait at least 500ms before first check so the show
+        // has actually taken effect.
+        var started = false;
+        var startAt = Date.now();
+        var poll = setInterval(function(){
+          var el = document.querySelector(selector);
+          if (!el) {
+            if (Date.now() - startAt > 600) { clearInterval(poll); done(); }
+            return;
+          }
+          var cs = window.getComputedStyle(el);
+          var visible = cs.display !== 'none' && cs.visibility !== 'hidden' && parseFloat(cs.opacity || '1') > 0.01;
+          if (visible) { started = true; return; }
+          if (!started) {
+            // Hasn't shown yet — give it up to ~1.2s before bailing.
+            if (Date.now() - startAt > 1200) { clearInterval(poll); done(); }
+            return;
+          }
+          // It WAS visible and now isn't → dismissed.
+          clearInterval(poll);
+          done();
+        }, 200);
+      }});
+      next();
+    }
+    return { enqueue: enqueue, enqueueWithSelector: enqueueWithSelector };
+  })();
+
+  // ── 6b. Public hooks for per-app integration when game wants to opt in.
   window.gScheduleLivesRefilled = function(refillAtMillis){
     if (api('scheduleLivesRefilled')) safe(function(){ Android.scheduleLivesRefilled(refillAtMillis); });
   };
@@ -150,28 +261,30 @@
   // ── 7. Settings toggle — runtime DOM injection so we don't need to hand-patch
   // each app's Settings panel HTML. Periodic scan keyed by data-growth-notif-toggle.
   function injectNotifToggle(){
-    var candidates = [
-      '#screen-settings .settings-scroll',
-      '#screen-settings',
-      '#settingsScreen',
-      '[id$="ettings"]',
-    ];
-    var host = null;
-    for (var i=0;i<candidates.length;i++){
-      host = document.querySelector(candidates[i]);
-      if (host) break;
-    }
+    // 2026-05-28 round-14: prefer the inner .settings-list / .settings-scroll
+    // so the notif row becomes a normal list item, not a floating panel
+    // tacked onto the end of the screen container. ON/OFF button also
+    // gets explicit padding so the text isn't cramped.
+    var host = document.querySelector('#screen-settings .settings-list')
+            || document.querySelector('#settingsScreen .settings-list')
+            || document.querySelector('#screen-settings .settings-scroll')
+            || document.querySelector('#settingsScreen .settings-scroll')
+            || document.querySelector('#screen-settings')
+            || document.querySelector('#settingsScreen');
     if (!host) return;
     if (host.querySelector('[data-growth-notif-toggle]')) return;
     var enabled = (api('getNotificationsEnabled')) ? Android.getNotificationsEnabled() : true;
     var row = document.createElement('div');
     row.setAttribute('data-growth-notif-toggle','1');
+    // Round-15.5: BOXED — match native settings rows. Don't override
+    // background/border/padding — let the .setting-row class own those.
+    // Only set layout (flex + gap) inline.
+    row.className = 'setting-row settings-item set-row';
     row.style.cssText =
-      'background:var(--surface, #ffffff);border:1px solid var(--border, rgba(0,0,0,0.08));border-radius:14px;padding:14px 16px;margin:10px 0;' +
-      'display:flex;align-items:center;justify-content:space-between;font-family:inherit;';
+      'display:flex;align-items:center;justify-content:space-between;gap:14px;font-family:inherit;';
     row.innerHTML =
-      '<span style="font-weight:600;color:inherit;">🔔 Notifications</span>' +
-      '<button data-growth-notif-btn style="border:none;padding:6px 16px;border-radius:14px;cursor:pointer;font-weight:800;letter-spacing:0.5px;' +
+      '<span class="setting-label settings-item-label set-label" style="flex:1;font-weight:600;font-size:16px;color:var(--page-fg, var(--text, inherit));">🔔 Notifications</span>' +
+      '<button data-growth-notif-btn type="button" style="border:none;padding:7px 18px;border-radius:14px;cursor:pointer;font-weight:800;letter-spacing:0.5px;min-width:60px;text-align:center;flex:0 0 auto;font-family:inherit;' +
         'background:' + (enabled ? 'var(--g-play, #3b6db8)' : 'var(--btn-neutral-bg, #bbb)') + ';color:var(--on-accent, #fff);">' +
         (enabled ? 'ON' : 'OFF') + '</button>';
     host.appendChild(row);

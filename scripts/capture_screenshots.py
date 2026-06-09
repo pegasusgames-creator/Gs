@@ -590,14 +590,33 @@ def main():
     out_dir = app_dir / "store" / "screenshots" / args.target / "raw"
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    SLOTS = [
-        ("01", "01_deep_gameplay"),
-        ("02", "02_early_gameplay"),
-        ("03", "03_level_complete"),
-        ("04", "04_missions_panel"),
-        ("05", "05_stats"),
-        ("06", "06_levels_grid"),
-    ]
+    # Per-target slot list (2026-06-08 user policy: 7 phone / 2 tablet_7 /
+    # 2 tablet_10). Phone is the primary listing surface, tablets get the
+    # 2 most-impactful shots each. The 7th phone slot ("07_depth") is a
+    # late-game / meta-loop content shot — never the menu (per QUALITY_PLAYBOOK
+    # §7.1 + CLAUDE.md "Things to flag"). Each app picks its own 07_*
+    # named slot in test/screenshot_taps.json (e.g., 07_themes_grid,
+    # 07_weekly_tournament, 07_daily_challenge).
+    SLOTS_BY_TARGET = {
+        "phone": [
+            ("01", "01_deep_gameplay"),
+            ("02", "02_early_gameplay"),
+            ("03", "03_level_complete"),
+            ("04", "04_missions_panel"),
+            ("05", "05_stats"),
+            ("06", "06_levels_grid"),
+            ("07", "07_depth"),
+        ],
+        "tablet_7": [
+            ("01", "01_deep_gameplay"),
+            ("02", "02_early_gameplay"),
+        ],
+        "tablet_10": [
+            ("01", "01_deep_gameplay"),
+            ("02", "02_early_gameplay"),
+        ],
+    }
+    SLOTS = SLOTS_BY_TARGET.get(args.target, SLOTS_BY_TARGET["phone"])
     if args.slot:
         SLOTS = [s for s in SLOTS if s[0] == args.slot]
         if not SLOTS:
