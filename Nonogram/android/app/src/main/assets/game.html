@@ -3163,12 +3163,15 @@ function resizeCanvas() {
   const availW = W * 0.98;
   const availH = H * 0.98;
 
-  // Each clue slot is treated as ~0.5 of a cell wide/tall — clue
-  // numbers don't need a full cell of room since they're single-digit
-  // most of the time. Computes cellSize so clueW + size*cellSize
-  // exactly fills availW (same for height). Round-17 dropped this
-  // from 0.75 -> 0.5 to give cells more room.
-  const CLUE_SLOT = 0.5;
+  // Each clue slot is ~0.8 of a cell wide/tall. Must stay > the
+  // font-ratio (0.55) so adjacent clue numbers in the same stack don't
+  // overlap vertically (e.g. a column with 5 clues at 0.5*cellSize per
+  // slot at fontSize 0.55*cellSize would crash into each other).
+  // Round-17 first tried 0.5, then 0.8 (round-17b) after the screenshot
+  // showed clues smashed together. Round-17b leaves 0.25*cellSize of
+  // breathing space between numbers while still keeping the clue strip
+  // tight enough to give the grid 75-80% of the canvas.
+  const CLUE_SLOT = 0.8;
   const maxCellW = availW / (size + maxRowClues * CLUE_SLOT);
   const maxCellH = availH / (size + maxColClues * CLUE_SLOT);
   // No artificial cap — let cells fill whatever portrait/landscape
@@ -3296,10 +3299,9 @@ function drawCanvas(flashError) {
   ctx2d.moveTo(0, clueH); ctx2d.lineTo(W, clueH);
   ctx2d.stroke();
 
-  // Draw clues — Round-17 (2026-06-09): font scales with cellSize.
-  // Cap raised to 40px so small boards (5×5 / 10×10) where cells can
-  // grow to 100-160px get appropriately sized clue numbers.
-  const fontSize = Math.max(12, Math.min(cellSize * 0.55, 40));
+  // Draw clues — Round-17b: scale with cellSize, capped at 36 so the
+  // clue strip stays readable but not oversized on big-cell boards.
+  const fontSize = Math.max(12, Math.min(cellSize * 0.55, 36));
   ctx2d.font = `700 ${fontSize}px system-ui, -apple-system, sans-serif`;
   ctx2d.textAlign = 'center';
   ctx2d.textBaseline = 'middle';
