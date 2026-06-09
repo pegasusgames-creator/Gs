@@ -3109,19 +3109,8 @@ function renderStats(){
     {icon:'👣',label:'Total Moves',sub:'blocks slid across all levels',value:totalMoves},
     {icon:'🪙',label:'Coin Balance',sub:'spend on hints & themes',value:state.coins||0},
   ];
-  // Achievements: 4 medals based on completed-level milestones
-  var achievements=[
-    {icon:'🥉',label:'First 10',unlock:10},
-    {icon:'🥈',label:'50 Solved',unlock:50},
-    {icon:'🥇',label:'100 Solved',unlock:100},
-    {icon:'🏆',label:'All 150',unlock:150},
-  ];
-  var medalsHtml='<div class="up-section-label">Achievements</div>'+
-    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px">'+
-    achievements.map(function(a){
-      var on=completed>=a.unlock;
-      return '<div class="medal'+(on?' unlocked':'')+'"><div class="medal-icon">'+a.icon+'</div><div class="medal-label">'+a.label+'</div></div>';
-    }).join('')+'</div>';
+  // Achievements live on the Missions screen via renderMissionsExtras;
+  // removed from Stats to avoid duplicating the same medal row.
   // Best solves: top 3 levels with lowest move counts
   var moves=state.levelMoves||{};
   var bestEntries=Object.keys(moves).filter(function(k){return moves[k];}).map(function(k){return {idx:parseInt(k,10),moves:moves[k]};}).sort(function(a,b){return a.moves-b.moves;}).slice(0,3);
@@ -3134,7 +3123,7 @@ function renderStats(){
   }
   list.innerHTML=hero+rows.map(function(s){
     return '<div class="stat-card"><div class="stat-icon">'+s.icon+'</div><div class="stat-info"><h3>'+s.label+'</h3><p>'+s.sub+'</p></div><div class="stat-value">'+s.value+'</div></div>';
-  }).join('')+medalsHtml+bestHtml;
+  }).join('')+bestHtml;
 }
 /* Weekly bonus + achievements on Missions screen */
 function renderMissionsExtras(){
