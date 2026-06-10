@@ -2013,6 +2013,7 @@ def main():
         ('check_settings_inject_safe.py', 'settings inject safe'),
         ('check_footer_clearance.py',     'footer clearance'),
         ('check_leaderboard_floor.py',    'leaderboard floor'),
+        ('check_games_app_id.py',         'games app id'),
     ]:
         try:
             _r = _subprocess.run(
