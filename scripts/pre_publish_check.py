@@ -2014,6 +2014,7 @@ def main():
         ('check_footer_clearance.py',     'footer clearance'),
         ('check_leaderboard_floor.py',    'leaderboard floor'),
         ('check_games_app_id.py',         'games app id'),
+        ('check_ad_network_switch.py',    'ad network switch'),
     ]:
         try:
             _r = _subprocess.run(
