@@ -49,6 +49,7 @@ Insert this block **once per app**, at the very end of the **first `<style>` hea
   --m-bg-top: var(--surface);
   --m-vignette: rgba(0,0,0,0.16);
   --m-motif: none;                 /* CSS gradients or 1 inline-SVG data-URI */
+  --m-motif-size: cover;           /* set e.g. 300px 300px to tile at native size */
   --m-grain-opacity: 0.05;
   --m-glow: rgba(0,0,0,0.18);      /* halo behind the illustration/emblem */
   --m-cta-grad: linear-gradient(135deg, var(--accent, #888), var(--accent-dim, var(--accent, #666)));
@@ -66,7 +67,7 @@ Insert this block **once per app**, at the very end of the **first `<style>` hea
   background:
     var(--m-motif),
     radial-gradient(125% 85% at 50% 16%, var(--m-bg-top) 0%, var(--bg) 72%) !important;
-  background-size: cover, cover;
+  background-size: var(--m-motif-size, cover), cover;
   background-position: center;
 }
 #screen-menu::before, #menuScreen::before,

@@ -1071,7 +1071,7 @@
   function hideNativeLevelLabels(){
     var menu = menuEl(); if (!menu) return;
     if (!hasResumableProgress()) return;
-    ['.level-indicator', '.menu-primary-sub'].forEach(function(sel){
+    ['.level-indicator', '.menu-primary-sub', '.play-sub'].forEach(function(sel){
       menu.querySelectorAll(sel).forEach(function(el){
         // Only hide if it mentions "Level" / "Continue" — leaves pure
         // flavor text alone if the app puts something non-redundant

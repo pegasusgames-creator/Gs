@@ -72,6 +72,7 @@ html[data-theme="midnight"] {
   --m-bg-top: var(--surface);
   --m-vignette: rgba(0,0,0,0.16);
   --m-motif: none;                 /* CSS gradients or 1 inline-SVG data-URI */
+  --m-motif-size: cover;           /* set e.g. 300px 300px to tile at native size */
   --m-grain-opacity: 0.05;
   --m-glow: rgba(0,0,0,0.18);      /* halo behind the illustration/emblem */
   --m-cta-grad: linear-gradient(135deg, var(--accent, #888), var(--accent-dim, var(--accent, #666)));
@@ -89,7 +90,7 @@ html[data-theme="midnight"] {
   background:
     var(--m-motif),
     radial-gradient(125% 85% at 50% 16%, var(--m-bg-top) 0%, var(--bg) 72%) !important;
-  background-size: cover, cover;
+  background-size: var(--m-motif-size, cover), cover;
   background-position: center;
 }
 #screen-menu::before, #menuScreen::before,
@@ -8152,7 +8153,7 @@ window.addEventListener('load',function(){
   function hideNativeLevelLabels(){
     var menu = menuEl(); if (!menu) return;
     if (!hasResumableProgress()) return;
-    ['.level-indicator', '.menu-primary-sub'].forEach(function(sel){
+    ['.level-indicator', '.menu-primary-sub', '.play-sub'].forEach(function(sel){
       menu.querySelectorAll(sel).forEach(function(el){
         // Only hide if it mentions "Level" / "Continue" — leaves pure
         // flavor text alone if the app puts something non-redundant
