@@ -19,6 +19,7 @@ IDS = {
     'Nonogram':        'CgkIg4KVn8kGEAIQBA',
     'Puzzle2048':      'CgkIg4KVn8kGEAIQBQ',
     'UnblockPuzzle':   'CgkIg4KVn8kGEAIQBg',
+    'PipeConnect':     'CgkIg4KVn8kGEAIQCA',
 }
 LINE_RE = re.compile(r"var LEADERBOARD_ID = '[^']*';")
 

@@ -64,9 +64,9 @@ import java.util.Set;
 
 public class MainActivity extends Activity {
 
-        // Cross-promo install verification — must match CROSS_PROMO list in game.html
+    // Cross-promo install verification — must match CROSS_PROMO list in game.html
     // and the <queries> entries in AndroidManifest.xml. Targets are LIVE Play
-    // Store apps only. Pre-release siblings (UnblockPuzzle, PipeConnect) added
+    // Store apps only. Pre-release siblings (PipeConnect) added
     // here ONLY after they have Play links.
     private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(
         "com.pegasusgames.watersortpuzzle",
@@ -160,6 +160,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Play Games Services v2 must be initialized before any PlayGames.*
+        // client call; without this every PGS bridge method throws and no-ops.
+        try { com.google.android.gms.games.PlayGamesSdk.initialize(this); }
+        catch (Throwable e) { Log.d("PGS", "PlayGamesSdk.initialize no-op: " + e.getMessage()); }
+
 
         RelativeLayout layout = new RelativeLayout(this);
         setContentView(layout);

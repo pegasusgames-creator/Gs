@@ -26,29 +26,34 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 
-# Per the 2026-05-25 spec — never include pre-release apps as cross-promo targets.
+# Cross-promo targets are LIVE Play Store apps only (UnblockPuzzle went live
+# 2026-05-29). Pre-release apps (PipeConnect) are valid SOURCES but never targets.
 PROMO = {
-    "Nonogram":      ['com.pegasusgames.watersortpuzzle', 'com.pegasusgames.puzzle2048'],
-    "Puzzle2048":    ['com.pegasusgames.watersortpuzzle', 'com.pegasusgames.nonogram'],
+    "Nonogram":      ['com.pegasusgames.watersortpuzzle', 'com.pegasusgames.puzzle2048', 'com.pegasusgames.unblockpuzzle'],
+    "Puzzle2048":    ['com.pegasusgames.watersortpuzzle', 'com.pegasusgames.nonogram', 'com.pegasusgames.unblockpuzzle'],
     "UnblockPuzzle": ['com.pegasusgames.watersortpuzzle', 'com.pegasusgames.nonogram', 'com.pegasusgames.puzzle2048'],
+    "PipeConnect":   ['com.pegasusgames.watersortpuzzle', 'com.pegasusgames.nonogram', 'com.pegasusgames.puzzle2048', 'com.pegasusgames.unblockpuzzle'],
 }
 
 APP_PKG = {
     "Nonogram":      "com.pegasusgames.nonogram",
     "Puzzle2048":    "com.pegasusgames.puzzle2048",
     "UnblockPuzzle": "com.pegasusgames.unblockpuzzle",
+    "PipeConnect":   "com.pegasusgames.pipeconnect",
 }
 
 APP_TITLE = {
     "Nonogram":      "Nonogram",
     "Puzzle2048":    "Puzzle 2048",
     "UnblockPuzzle": "Unblock Puzzle",
+    "PipeConnect":   "Pipe Connect",
 }
 
 APP_DAILY_BODY = {
     "Nonogram":      "Your daily nonogram challenge is ready!",
     "Puzzle2048":    "Your daily 2048 challenge is ready!",
     "UnblockPuzzle": "Your daily unblock challenge is ready!",
+    "PipeConnect":   "Your daily pipe puzzle is ready!",
 }
 
 
@@ -359,7 +364,7 @@ def port_one(app: str) -> dict:
     block = (
         "    // Cross-promo install verification — must match CROSS_PROMO list in game.html\n"
         "    // and the <queries> entries in AndroidManifest.xml. Targets are LIVE Play\n"
-        "    // Store apps only. Pre-release siblings (UnblockPuzzle, PipeConnect) added\n"
+        "    // Store apps only. Pre-release siblings (PipeConnect) added\n"
         "    // here ONLY after they have Play links.\n"
         "    private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(\n"
         f"        {promo_lines}\n"
@@ -368,7 +373,7 @@ def port_one(app: str) -> dict:
     if "CROSS_PROMO_PACKAGES" in src:
         # Replace existing list — supports both single-line and multi-line forms.
         new = re.sub(
-            r"(?ms)//[^\n]*Cross-promo[^\n]*\n(?:\s*//[^\n]*\n)*\s*private static final Set<String> CROSS_PROMO_PACKAGES\s*=\s*new HashSet<>\(Arrays\.asList\([^)]*\)\);",
+            r"(?ms)^[ \t]*//[^\n]*Cross-promo[^\n]*\n(?:\s*//[^\n]*\n)*\s*private static final Set<String> CROSS_PROMO_PACKAGES\s*=\s*new HashSet<>\(Arrays\.asList\([^)]*\)\);",
             block, src, count=1,
         )
         if new != src:
@@ -439,7 +444,13 @@ def port_one(app: str) -> dict:
 
 
 def main():
-    for app in ("Nonogram", "Puzzle2048", "UnblockPuzzle"):
+    targets = [a for a in sys.argv[1:] if not a.startswith('-')]
+    if not targets:
+        targets = sorted(PROMO)
+    for app in targets:
+        if app not in PROMO:
+            print(f"{app}: unknown target (add to PROMO/APP_PKG/APP_TITLE/APP_DAILY_BODY first)")
+            continue
         r = port_one(app)
         print(f"{app}: {', '.join(r['changes']) if r['changes'] else 'no changes (idempotent)'}")
 

@@ -194,6 +194,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Play Games Services v2 must be initialized before any PlayGames.*
+        // client call; without this every PGS bridge method throws and no-ops.
+        try { com.google.android.gms.games.PlayGamesSdk.initialize(this); }
+        catch (Throwable e) { Log.d("PGS", "PlayGamesSdk.initialize no-op: " + e.getMessage()); }
+
+
         RelativeLayout layout = new RelativeLayout(this);
         setContentView(layout);
 
