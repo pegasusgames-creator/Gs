@@ -443,6 +443,43 @@ IMPLEMENTATION TEMPLATE
 7. Build release APK, sign, upload
 
 ================================================================================
+DAILY-LOGIC WAVE BRAINSTORM (2026-06-10) — dedup-checked adds
+================================================================================
+Schema: Daily = daily-seeded puzzle + shareable emoji result grid.
+Solver = needs unique-solution / no-guess generator (quality moat).
+Build = Claude-Code effort 1-5 (5 hardest). Tier 1 = proven + underserved;
+Tier 2 = fresher, higher upside. Aliases listed are DEDUP KEYS — keep them
+current so future brainstorm adds don't duplicate.
+Trademark note: these are mechanics, not brands — never ship under "Tango",
+"Queens", "Genius Square" etc.; keep the generic working names.
+
+TIER 1:
+[3] Crown Clash                       - One crown per row/col/colored region, none touching (Star Battle)
+                                        Daily:Y Solver:Y slug:crownclash
+                                        aliases: queens, star battle, n-queens, region queens
+[3] Rail Lay                          - Lay rail entry->exit matching row/col edge counts (Train Tracks)
+                                        Daily:Y Solver:Y slug:raillay
+                                        aliases: train tracks, tracks, rail puzzle
+
+TIER 2:
+[2] Ring Align                        - Twist concentric rings to align a path / color order
+                                        Daily:Y Solver:N slug:ringalign
+                                        aliases: rotate rings, concentric, roto, ring align
+[3] Beam                              - Place optics to route lasers onto colored targets; color-mixing
+                                        Daily:Y Solver:partial slug:beam
+                                        aliases: laser, mirrors, lazors, optics, light routing
+
+REVIEW (possible dupes — NOT added; confirm to force-add):
+  One Line (zip/hamiltonian path)  ~ "Dot Connect" (line ~148: draw one line
+    through all dots) + Pipe Connect fill-every-cell path family
+  Light Up (akari)                 ~ LightsOut/ repo (different mechanic but
+    near-identical store name; Repetitive-Content optics)
+  Fit Grid (polyomino packing)     ~ Tangram idea (line ~76) + BlockPuzzle/ repo
+    (packing family)
+  Gravity Well (attractor physics) ~ "Gravity Ball" idea (line ~163) +
+    "Particle Galaxy" (line ~190)
+
+================================================================================
 FASTEST WINS — START HERE (each < 1 day to build)
 ================================================================================
 TIER 1 — Under 2 hours:
