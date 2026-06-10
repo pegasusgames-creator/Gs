@@ -1,0 +1,46 @@
+[
+  {
+    "original": "01.png",
+    "gemini": "Gemini_Generated_Image_5vgs0m5vgs0m5vgs.png",
+    "aspect": 1.4,
+    "ssim": 0.984,
+    "rect_original": {
+      "x": 0,
+      "y": 0,
+      "w": 1800,
+      "h": 2560,
+      "corner_radius": 0
+    },
+    "rect_gemini": {
+      "x": 9,
+      "y": 5,
+      "w": 846,
+      "h": 1203,
+      "corner_radius": 0,
+      "_tm_score": 0.447,
+      "_tm_scale": 0.47
+    }
+  },
+  {
+    "original": "02.png",
+    "gemini": "Gemini_Generated_Image_bztuaxbztuaxbztu.png",
+    "aspect": 1.4,
+    "ssim": 0.9754,
+    "rect_original": {
+      "x": 0,
+      "y": 0,
+      "w": 1800,
+      "h": 2560,
+      "corner_radius": 0
+    },
+    "rect_gemini": {
+      "x": 10,
+      "y": 20,
+      "w": 846,
+      "h": 1203,
+      "corner_radius": 0,
+      "_tm_score": 0.404,
+      "_tm_scale": 0.47
+    }
+  }
+]
