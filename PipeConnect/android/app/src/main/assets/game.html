@@ -95,7 +95,7 @@ body.midnight{
 .mg-card-name{font-size:0.95rem;font-weight:700;}
 .mg-card-desc{font-size:0.75rem;color:#607d8b;margin-top:2px;}
 .mg-card-btn{background:linear-gradient(135deg,#e040fb,#448aff);border:none;color:#fff;font-family:'Poppins',sans-serif;font-size:0.8rem;font-weight:700;padding:8px 14px;border-radius:20px;cursor:pointer;white-space:nowrap;}
-.mg-card-btn.claimed{background:#d4e2ec;color:#69f0ae;cursor:default;}
+.mg-card-btn.claimed{background:#2ea043;color:#ffffff;cursor:default;}
 .menu-coins{position:absolute;top:20px;right:20px;background:#d4e2ec;border-radius:20px;padding:8px 16px;font-size:0.9rem;color:#ffd740;}
 .menu-lives{position:absolute;top:20px;left:20px;background:#d4e2ec;border-radius:20px;padding:8px 16px;font-size:0.9rem;color:#ff5252;}
 /* GAME */
@@ -134,7 +134,7 @@ body.midnight{
 .shop-header{display:flex;align-items:center;padding:16px;background:#e0ecf3;border-bottom:1px solid #d4e2ec;}
 .shop-scroll{flex:1;overflow-y:auto;padding:16px;}
 .shop-coins-banner{background:#d4e2ec;border-radius:16px;padding:16px;text-align:center;margin-bottom:20px;}
-.shop-coins-banner .big{font-size:2rem;color:#ffd740;}
+.shop-coins-banner .big{font-size:2rem;color:var(--text,#1c2a33);}
 .shop-coins-banner .small{font-size:0.8rem;color:#607d8b;}
 .shop-item{background:#ffffff;border:1px solid #d4e2ec;border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;}
 .shop-item-icon{font-size:2rem;margin-right:14px;}
@@ -261,10 +261,6 @@ body.midnight{
     <div style="margin-left:auto;color:#ffd740;font-size:0.85rem;" id="shop-coins">🪙 0</div>
   </div>
   <div class="shop-scroll">
-    <div class="shop-coins-banner">
-      <div class="big" id="shop-coins-big">🪙 0</div>
-      <div class="small">Your coin balance</div>
-    </div>
     <div id="shop-items"></div>
   </div>
 </div>
@@ -278,7 +274,7 @@ body.midnight{
   <div class="shop-scroll">
     <div class="shop-coins-banner" style="margin-bottom:20px;">
       <div class="big" style="font-size:1.2rem;margin-bottom:4px;">Try our other games!</div>
-      <div class="small">Download &amp; earn 50 🪙 for each one</div>
+      <div class="small">Install &amp; earn 200 🪙 for each one</div>
     </div>
     <div id="moregames-list"></div>
   </div>
@@ -298,14 +294,6 @@ body.midnight{
     <div class="settings-item">
       <span class="settings-label">🎵 Music</span>
       <div class="toggle" id="toggle-music" onclick="toggleSetting('musicEnabled','toggle-music')"></div>
-    </div>
-    <div class="settings-item">
-      <span class="settings-label">📅 Daily Challenge</span>
-      <button class="shop-item-btn" onclick="startDailyChallenge()">Play Today</button>
-    </div>
-    <div class="settings-item" style="flex-direction:column;align-items:flex-start;gap:6px;">
-      <span class="settings-label">Daily Streak</span>
-      <span style="color:#ffd740;font-size:1.2rem;" id="streak-display">🔥 0</span>
     </div>
     <div class="settings-item" style="flex-direction:column;align-items:flex-start;gap:6px;">
       <span class="settings-label">Reset Progress</span>
@@ -353,7 +341,7 @@ body.midnight{
     <button class="ls-back" onclick="showScreen('menu')">←</button>
     <div class="ls-title">🎯 Missions</div>
   </div>
-  <div style="padding:6px 16px;color:rgba(255,255,255,0.4);font-size:11px;text-transform:uppercase;letter-spacing:1px">Daily — resets at midnight</div>
+  <div style="padding:6px 16px;color:var(--text-mute,#54677a);font-size:11px;text-transform:uppercase;letter-spacing:1px">Daily — resets at midnight</div>
   <div id="missionsList" style="flex:1;overflow-y:auto;padding:0 16px 16px"></div>
 </div>
 
@@ -439,18 +427,20 @@ const VALID_PRODUCTS = new Set([
 ]);
 const VALID_REWARD_TYPES = new Set(['hint','skip','life','extra_life','free_coins']);
 
+// Canonical shop order (CLAUDE.md "Shop ordering"): Spend Your Coins →
+// Coin packs → Subscriptions (Season Pass injected after coins_mega) → IAPs.
 const SHOP_PRODUCTS = [
-  {id:'starter_pack',     icon:'🎁', name:'Starter Pack',         desc:'100🪙 + 5 hints + 5 lives + Ads Off',   price:'$0.99'},
-  {id:'remove_ads',       icon:'🚫', name:'Remove Ads',           desc:'Enjoy ad-free gameplay forever',         price:'$2.99'},
+  {id:'lives_5_coins',    icon:'🪙', name:'5 Lives (Coins)',       desc:'Spend 30 coins for 5 lives',            price:'30 🪙', coinCost:30},
   {id:'coins_small',      icon:'🪙', name:'100 Coins',            desc:'Small coin pack',                        price:'$0.99'},
   {id:'coins_medium',     icon:'💵', name:'400 Coins',            desc:'Medium coin pack',                       price:'$2.99'},
   {id:'coins_large',      icon:'💰', name:'800 Coins',            desc:'Great value coin pack',                  price:'$4.99'},
   {id:'coins_mega',       icon:'🏆', name:'2000 Coins',           desc:'Mega coin pack — best value',            price:'$9.99'},
+  {id:'starter_pack',     icon:'🎁', name:'Starter Pack',         desc:'100🪙 + 5 hints + 5 lives + Ads Off',   price:'$0.99'},
+  {id:'remove_ads',       icon:'🚫', name:'Remove Ads',           desc:'Enjoy ad-free gameplay forever',         price:'$2.99'},
   {id:'hint_pack',        icon:'💡', name:'10 Hints',             desc:'Pack of 10 hint tokens',                 price:'$1.99'},
   {id:'five_lives',       icon:'❤️', name:'5 Extra Lives',        desc:'Refill your lives instantly',            price:'$0.99'},
   {id:'unlimited_lives_1h',icon:'⚡',name:'Unlimited Lives 1hr',  desc:'Play without limits for 1 hour',         price:'$1.99'},
-  {id:'unlimited_lives_forever',icon:'♾️',name:'Unlimited Lives Forever',desc:'Never run out of lives again',   price:'$4.99'},
-  {id:'lives_5_coins',    icon:'🪙', name:'5 Lives (Coins)',       desc:'Spend 30 coins for 5 lives',            price:'30 🪙', coinCost:30}
+  {id:'unlimited_lives_forever',icon:'♾️',name:'Unlimited Lives Forever',desc:'Never run out of lives again',   price:'$4.99'}
 ];
 
 // ============================================================
@@ -811,8 +801,6 @@ function updateAllUI(){
   document.getElementById('hdr-coins').textContent=coinsStr;
   document.getElementById('ls-coins').textContent=coinsStr;
   document.getElementById('shop-coins').textContent=coinsStr;
-  document.getElementById('shop-coins-big').textContent='🪙 '+save.coins;
-  document.getElementById('streak-display').textContent='🔥 '+save.dailyChallengeStreak;
   // toggles
   const st=document.getElementById('toggle-sound');
   const mt=document.getElementById('toggle-music');
@@ -901,6 +889,7 @@ function buildLevelSelect(){
 // ============================================================
 function showShop(){
   buildShop();
+  if(typeof injectSeasonPassShop==='function')injectSeasonPassShop();
   showScreen('shop');
 }
 
@@ -923,11 +912,12 @@ function buildShop(){
 // ============================================================
 // MORE GAMES
 // ============================================================
+const MG_COIN_REWARD = 200;
 const MORE_GAMES = [
-  {id:'watersort',   pkg:'com.pegasusgames.watersort',   icon:'💧', name:'Water Sort',          desc:'Pour colored water into flasks!'},
-  {id:'nonogram',    pkg:'com.pegasusgames.nonogram',    icon:'🖼️', name:'Nonogram',            desc:'Solve pixel art grid puzzles!'},
-  {id:'puzzle2048',  pkg:'com.pegasusgames.puzzle2048',  icon:'✨', name:'2048 Puzzle',         desc:'Merge tiles to reach 2048!'},
-  {id:'unblock',     pkg:'com.pegasusgames.unblock',     icon:'🧩', name:'Unblock Puzzle',      desc:'Slide blocks to free the red piece!'}
+  {id:'watersort',   pkg:'com.pegasusgames.watersortpuzzle', icon:'💧', name:'Water Sort',          desc:'Pour colored water into flasks!'},
+  {id:'nonogram',    pkg:'com.pegasusgames.nonogram',        icon:'🖼️', name:'Nonogram',            desc:'Solve pixel art grid puzzles!'},
+  {id:'puzzle2048',  pkg:'com.pegasusgames.puzzle2048',      icon:'✨', name:'2048 Puzzle',         desc:'Merge tiles to reach 2048!'},
+  {id:'unblock',     pkg:'com.pegasusgames.unblockpuzzle',   icon:'🧩', name:'Unblock Puzzle',      desc:'Slide blocks to free the red piece!'}
 ];
 
 function showMoreGames(){
@@ -935,11 +925,34 @@ function showMoreGames(){
   showScreen('moregames');
 }
 
+function isMgInstalled(pkg){
+  try {
+    return !!(window.Android && typeof Android.isAppInstalled === 'function' && Android.isAppInstalled(pkg));
+  } catch (e) { return false; }
+}
+
+// Auto-grant the install reward for any sister app that's installed but
+// not yet claimed. Silent credit — runs on every More Games entry.
+function autoClaimInstalledPromos(){
+  MORE_GAMES.forEach(function(g){
+    if(localStorage.getItem('promo_claimed_' + g.id)) return;
+    if(!isMgInstalled(g.pkg)) return;
+    localStorage.setItem('promo_claimed_' + g.id, '1');
+    save.coins += MG_COIN_REWARD;
+    persist();
+    updateAllUI();
+    _showMsg('🎁 +' + MG_COIN_REWARD + ' 🪙 for ' + g.name + ' — already installed!');
+  });
+}
+
 function buildMoreGames(){
+  autoClaimInstalledPromos();
   const list = document.getElementById('moregames-list');
   list.innerHTML = '';
   MORE_GAMES.forEach(g => {
     const claimed = !!localStorage.getItem('promo_claimed_' + g.id);
+    const label = claimed ? ('✅ +' + MG_COIN_REWARD + ' Claimed')
+                          : ('Install & Get +' + MG_COIN_REWARD + ' 🪙');
     const card = document.createElement('div');
     card.className = 'mg-card';
     card.innerHTML = `<div class="mg-card-icon">${g.icon}</div>
@@ -947,25 +960,29 @@ function buildMoreGames(){
         <div class="mg-card-name">${g.name}</div>
         <div class="mg-card-desc">${g.desc}</div>
       </div>
-      <button class="mg-card-btn${claimed?' claimed':''}" onclick="claimMoreGame('${g.id}','${g.pkg}',this)">${claimed?'✅ Claimed':'Download & Get 50 🪙'}</button>`;
+      <button class="mg-card-btn${claimed?' claimed':''}" onclick="claimMoreGame('${g.id}','${g.pkg}',this)">${label}</button>`;
     list.appendChild(card);
   });
 }
 
 function claimMoreGame(gameId, pkg, btn){
   if(localStorage.getItem('promo_claimed_' + gameId)){
-    // already claimed, just open store
     _openStore(pkg);
     return;
   }
-  // Give coins
-  save.coins += 50;
-  persist();
-  updateAllUI();
-  localStorage.setItem('promo_claimed_' + gameId, '1');
-  btn.textContent = '✅ Claimed';
-  btn.classList.add('claimed');
-  _showMsg('+50 🪙 Coins! Enjoy the game!');
+  if(isMgInstalled(pkg)){
+    // Installed but not yet credited (race with auto-claim) — grant now.
+    localStorage.setItem('promo_claimed_' + gameId, '1');
+    save.coins += MG_COIN_REWARD;
+    persist();
+    updateAllUI();
+    btn.textContent = '✅ +' + MG_COIN_REWARD + ' Claimed';
+    btn.classList.add('claimed');
+    _showMsg('+' + MG_COIN_REWARD + ' 🪙 Coins! Enjoy the game!');
+    return;
+  }
+  // Not installed: open the store; the reward is credited automatically
+  // next time More Games opens with the app installed.
   _openStore(pkg);
 }
 
@@ -1737,27 +1754,27 @@ window.addEventListener('load', () => { resizeCanvas(); render(); });
   backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
 }
 #ls-card {
-  background:linear-gradient(145deg,#1e1b4b 0%,#1a1a2e 100%);
-  border:1px solid rgba(255,215,0,0.25); border-radius:26px;
+  background:var(--surface,#ffffff);
+  border:1px solid var(--border,#d4e2ec); border-radius:26px;
   padding:30px 24px; max-width:320px; width:88%; text-align:center;
-  box-shadow:0 24px 64px rgba(0,0,0,0.65); animation:ls-card-in 0.35s ease;
+  box-shadow:0 24px 64px rgba(0,0,0,0.25); animation:ls-card-in 0.35s ease;
 }
 .ls-fire-icon { font-size:58px; display:block; margin-bottom:6px; animation:ls-fire 1s ease-in-out infinite; }
-.ls-h1 { color:#1e3a5f; font-size:23px; font-weight:800; margin-bottom:3px; }
-.ls-sub { color:rgba(255,255,255,0.45); font-size:12px; margin-bottom:18px; }
+.ls-h1 { color:var(--text,#1c2a33); font-size:23px; font-weight:800; margin-bottom:3px; }
+.ls-sub { color:var(--text-mute,#54677a); font-size:12px; margin-bottom:18px; }
 .ls-days-row { display:flex; justify-content:center; gap:5px; margin-bottom:18px; }
 .ls-day-cell { display:flex; flex-direction:column; align-items:center; gap:3px; }
 .ls-day-dot {
   width:36px; height:36px; border-radius:50%;
   display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;
 }
-.ls-day-lbl { font-size:8px; color:rgba(255,255,255,0.35); }
+.ls-day-lbl { font-size:8px; color:var(--text-mute,#54677a); }
 .ls-reward-box {
   background:rgba(255,215,0,0.07); border:1px solid rgba(255,215,0,0.22);
   border-radius:14px; padding:14px; margin-bottom:20px;
 }
-.ls-reward-lbl { color:rgba(255,255,255,0.45); font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
-.ls-reward-amount { color:#ffd700; font-size:36px; font-weight:800; line-height:1; }
+.ls-reward-lbl { color:var(--text-mute,#54677a); font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+.ls-reward-amount { color:#c97f00; font-size:36px; font-weight:800; line-height:1; }
 .ls-claim-btn {
   width:100%; padding:15px; border:none; border-radius:15px;
   background:linear-gradient(135deg,#ffd700,#f39c12);
@@ -1838,8 +1855,8 @@ window.addEventListener('load', () => { resizeCanvas(); render(); });
     for (var i = 1; i <= 7; i++) {
       var past    = i < pos;
       var current = i === pos;
-      var bg  = current ? '#ffd700' : past ? '#4ecdc4' : 'rgba(255,255,255,0.1)';
-      var fg  = (current || past) ? '#1a1a1a' : 'rgba(255,255,255,0.35)';
+      var bg  = current ? '#ffd700' : past ? '#4ecdc4' : 'var(--btn-neutral-bg,#d4e2ec)';
+      var fg  = (current || past) ? '#1a1a1a' : 'var(--text-mute,#54677a)';
       var ico = current ? '⭐' : past ? '✓' : i;
       html += '<div class="ls-day-cell">'
             + '<div class="ls-day-dot" style="background:' + bg + ';color:' + fg + '">' + ico + '</div>'
@@ -2590,7 +2607,7 @@ window.renderPipeStats=function(){
       var card=document.createElement('div'); card.className='mission-card';
       card.innerHTML='<div class="mission-top"><div class="mission-icon">'+m.icon+'</div><div class="mission-info"><h3>'+m.desc+'</h3><p>'+prog+' / '+m.goal+'</p></div><div class="mission-reward">+'+m.reward+' 🪙</div></div><div class="mission-bar-bg"><div class="mission-bar-fill" style="width:'+pct+'%"></div></div>';
       if(done&&!claimed){var btn=document.createElement('button');btn.className='mission-claim-btn';btn.textContent='Claim Reward!';btn.addEventListener('click',function(){d.claimed[m.id]=true;saveMState(d);save.coins+=m.reward;persist();showToast('+'+m.reward+' 🪙 claimed!');window.renderMissions();_updateMBadge();});card.appendChild(btn);}
-      else if(claimed){var sp=document.createElement('div');sp.style.cssText='margin-top:8px;color:rgba(255,255,255,0.3);font-size:12px;text-align:center';sp.textContent='✓ Claimed';card.appendChild(sp);}
+      else if(claimed){var sp=document.createElement('div');sp.style.cssText='margin-top:8px;color:var(--text-mute,#54677a);font-size:12px;text-align:center';sp.textContent='✓ Claimed';card.appendChild(sp);}
       list.appendChild(card);
     });
   };
@@ -2962,7 +2979,7 @@ function injectDragonTheme(){
 
 // ── SEASON PASS IN SHOP ───────────────────────────────────────────
 function injectSeasonPassShop(){
-  document.querySelectorAll('.shop-scroll,.shop-list').forEach(function(scroll){
+  document.querySelectorAll('#screen-shop .shop-scroll').forEach(function(scroll){
     if(scroll.querySelector('#x-season-pass-item')) return;
     var div=document.createElement('div');
     div.id='x-season-pass-item';
@@ -2975,10 +2992,16 @@ function injectSeasonPassShop(){
         '<div class="shop-item-desc">Ad-free · +100 coins daily · all themes</div>'+
       '</div>'+
       '<button id="x-season-btn" class="shop-item-price" onclick="xBuySeason()">'+btnTxt+'</button>';
-    scroll.insertBefore(div, scroll.firstChild);
+    var anchor = scroll.querySelector('[onclick*="starter_pack"]');
+    var anchorCard = anchor ? anchor.closest('.shop-item') : null;
+    if (anchorCard) anchorCard.parentNode.insertBefore(div, anchorCard);
+    else scroll.appendChild(div);
     updateSeasonBadges();
   });
 }
+
+// Exported: showShop() (global scope) re-injects after each rebuild.
+window.injectSeasonPassShop = injectSeasonPassShop;
 
 window.xBuySeason=function(){
   if(isSeasonActive()){ xToast('Season Pass already active!'); return; }
@@ -3262,17 +3285,51 @@ function injectStarterModal(){
   document.body.appendChild(modal);
 }
 
+
+// ── MENU SHORTCUTS (Stats + Missions runtime tiles, UB pattern) ──
+// Second icon row keeps the static menu at ≤6 tappables while still
+// giving Stats/Missions a navigation path.
+function injectMenuShortcuts(){
+  var menu = document.querySelector('#screen-menu');
+  if(!menu || document.getElementById('xMenuStats')) return;
+  function iconBtn(id, label, svg, onTap){
+    var b = document.createElement('button');
+    b.className = 'menu-icon-btn';
+    b.id = id;
+    b.setAttribute('aria-label', label);
+    b.innerHTML = svg + '<span class="menu-icon-label">'+label+'</span>';
+    b.onclick = onTap;
+    return b;
+  }
+  var statsSvg = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>';
+  var missSvg = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6"/></svg>';
+  var stats = iconBtn('xMenuStats', 'Stats', statsSvg, function(){ showScreen('stats'); });
+  var miss  = iconBtn('xMenuMissions', 'Missions', missSvg, function(){ showScreen('missions'); });
+  var row2 = document.createElement('div');
+  row2.className = 'menu-icon-row';
+  row2.id = 'xMenuExtras';
+  row2.style.marginTop = '10px';
+  row2.appendChild(miss);
+  row2.appendChild(stats);
+  var iconRow = document.querySelector('#screen-menu .menu-icon-row');
+  if(iconRow && iconRow.parentNode){
+    iconRow.parentNode.insertBefore(row2, iconRow.nextSibling);
+  } else {
+    menu.appendChild(row2);
+  }
+}
+
 // ── INIT ──────────────────────────────────────────────────────────
 window.addEventListener('load',function(){
   setTimeout(function(){
     injectStarterModal();
+    injectMenuShortcuts();
     injectWeeklyBanner();
     injectSeasonalBanner();
     injectContinueBtns();
     hookWinOverlay();
     hookNoLivesOverlay();
     injectDragonTheme();
-    injectSeasonPassShop();
     updateWeeklyBanner();
     updateSeasonBadges();
     grantPassDailyBonus();
