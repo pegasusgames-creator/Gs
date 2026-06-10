@@ -404,6 +404,132 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--app-bg);font-f
   font-size: clamp(0.82rem, 2vw, 1.05rem) !important;
   border-radius: clamp(14px, 2vw, 22px) !important;
 }
+
+/* ===================== SHARED MENU SKIN v1 ===================== */
+/* Family look: depth + world + motion. Additive only. Layout owned   */
+/* by data-growth-shim="MENU". Per-app identity = --m-* tokens below.  */
+
+/* ---- skin token defaults (overridden per app in :root) ---- */
+:root{
+  --m-bg-top: var(--surface);
+  --m-vignette: rgba(0,0,0,0.16);
+  --m-motif: none;                 /* CSS gradients or 1 inline-SVG data-URI */
+  --m-grain-opacity: 0.05;
+  --m-glow: rgba(0,0,0,0.18);      /* halo behind the illustration/emblem */
+  --m-cta-grad: linear-gradient(135deg, var(--accent, #888), var(--accent-dim, var(--accent, #666)));
+  --m-cta-glow: rgba(0,0,0,0.35);
+  --m-cta-glyph: "";               /* set "\25B6 " on apps whose CTA lacks one  */
+  --m-tile-grad: var(--menu-tile-bg, var(--surface, rgba(255,255,255,0.08)));
+  --m-tile-icon: var(--accent, currentColor);
+  --m-title-shadow: none;          /* title gradients stay per-app static CSS */
+  --m-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- background: motif + base gradient, then vignette + grain ---- */
+#screen-menu, #menuScreen{
+  position: relative;
+  background:
+    var(--m-motif),
+    radial-gradient(125% 85% at 50% 16%, var(--m-bg-top) 0%, var(--bg) 72%) !important;
+  background-size: cover, cover;
+  background-position: center;
+}
+#screen-menu::before, #menuScreen::before,
+#screen-menu::after,  #menuScreen::after{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+}
+#screen-menu::before, #menuScreen::before{               /* vignette */
+  background: radial-gradient(135% 105% at 50% 38%, transparent 55%, var(--m-vignette) 100%);
+}
+#screen-menu::after, #menuScreen::after{                 /* film grain */
+  background-image: var(--m-grain); background-size: 160px 160px;
+  opacity: var(--m-grain-opacity); mix-blend-mode: overlay;
+}
+/* keep real menu content above the two decorative layers */
+#screen-menu > *, #menuScreen > *{ position: relative; z-index: 1; }
+
+/* ---- title: optional gradient/"logo" treatment ---- */
+#screen-menu .menu-logo, #screen-menu .menu-title,
+#menuScreen .menu-title, #menuScreen .game-title h1, #menuScreen .menu-logo{
+  text-shadow: var(--m-title-shadow);
+}
+/* NOTE: the skin must NOT declare `background` on titles. The background
+   shorthand resets background-clip, and this higher-specificity rule would
+   beat each app's static `-webkit-background-clip:text` — painting a filled
+   gradient box. Title gradients are per-app static CSS (Part B edits them
+   in place); the skin only adds the optional shadow. */
+
+/* ---- mini-preview: halo + gentle idle float ---- */
+#screen-menu [data-menu-illustration], #menuScreen [data-menu-illustration]{
+  filter: drop-shadow(0 8px 22px var(--m-glow));
+  animation: m-float 5.5s ease-in-out infinite;
+}
+@keyframes m-float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+
+/* ---- CTA: hero gradient, depth, slow shine, optional play glyph ---- */
+#screen-menu .btn-primary, #screen-menu .btn-play, #screen-menu .menu-primary, #screen-menu .menu-tile-primary,
+#menuScreen .btn-primary, #menuScreen .btn-play, #menuScreen .menu-primary, #menuScreen .menu-tile-primary{
+  position: relative; overflow: hidden; border: none;
+  background: var(--m-cta-grad) !important;
+  box-shadow: 0 12px 28px -8px var(--m-cta-glow),
+              inset 0 1px 0 rgba(255,255,255,0.28),
+              inset 0 -2px 0 rgba(0,0,0,0.12) !important;
+}
+#screen-menu .btn-primary::before, #menuScreen .btn-primary::before,
+#screen-menu .menu-primary::before, #menuScreen .menu-primary::before,
+#screen-menu .menu-tile-primary::before, #menuScreen .menu-tile-primary::before{
+  content: var(--m-cta-glyph); font-weight: 900; margin-right: .15em;
+}
+#screen-menu .btn-primary::after, #menuScreen .btn-primary::after,
+#screen-menu .menu-primary::after, #menuScreen .menu-primary::after,
+#screen-menu .menu-tile-primary::after, #menuScreen .menu-tile-primary::after{
+  content:""; position:absolute; top:0; left:-65%; width:45%; height:100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.40), transparent);
+  transform: skewX(-18deg); animation: m-shine 4.8s ease-in-out infinite;
+}
+@keyframes m-shine{ 0%,70%{left:-65%} 88%,100%{left:135%} }
+
+/* ---- Tier-3 icons: FILLED tinted tiles (kills the "settings" look) ---- */
+#screen-menu .menu-icon-btn, #menuScreen .menu-icon-btn, #menuScreen .icon-btn{
+  background: var(--m-tile-grad) !important;
+  border: 1px solid var(--menu-tile-border, rgba(255,255,255,0.15)) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 5px 12px -5px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.20);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+#screen-menu .menu-icon-btn svg, #menuScreen .menu-icon-btn svg, #menuScreen .icon-btn svg{
+  color: var(--m-tile-icon); stroke: currentColor; stroke-width: 2.1;
+}
+#screen-menu .menu-icon-btn:active, #menuScreen .menu-icon-btn:active, #menuScreen .icon-btn:active{
+  transform: translateY(1px) scale(.96);
+  box-shadow: 0 2px 6px -3px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.20);
+}
+
+/* ---- resource pills: a little weight ---- */
+#screen-menu .stat-pill, #menuScreen .stat-pill,
+#screen-menu .coin-display, #menuScreen .coin-display{
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 2px 6px -3px rgba(0,0,0,0.25);
+}
+
+@media (prefers-reduced-motion: reduce){
+  #screen-menu *, #menuScreen *{ animation: none !important; }
+}
+/* =================== END SHARED MENU SKIN v1 =================== */
+
+/* ---- UnblockPuzzle identity: one red hero against calm (Part B) ---- */
+:root{
+  --m-bg-top:#e9f3ec; --m-vignette: rgba(30,60,40,0.16); --m-grain-opacity:.04;
+  --m-cta-grad: linear-gradient(135deg,#56a06c,#3c7a52);
+  --m-cta-glow: rgba(60,122,82,.40); --m-glow: rgba(216,64,52,.30); /* red halo */
+  --m-cta-glyph:"▶ "; --m-tile-icon:#4a8a5e;
+  --m-title-shadow:0 1px 0 rgba(0,0,0,.06);
+  /* motif: faint board lattice; the red hero block lives in the illustration */
+  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg stroke='%234a8a5e' stroke-width='2' opacity='0.06'%3E%3Cpath d='M0 60H240M0 120H240M0 180H240M60 0V240M120 0V240M180 0V240'/%3E%3C/g%3E%3C/svg%3E");
+}
+html[data-theme="midnight"]{
+  --m-bg-top:#241a33; --m-cta-grad:linear-gradient(135deg,#ff8a4c,#e0542a);
+  --m-cta-glow:rgba(255,107,53,.45); --m-glow:rgba(255,107,53,.35); --m-tile-icon:#ff8a4c;
+}
 </style>
 </head>
 <body data-growth-coachmark="unblock">
@@ -6423,8 +6549,23 @@ window.addEventListener('load',function(){
           // grid blocks
           '<rect x="10" y="14" width="32" height="12" rx="2" fill="#a8b3d4"/>'+
           '<rect x="14" y="34" width="14" height="26" rx="2" fill="#7c92c0"/>'+
-          '<rect x="34" y="34" width="32" height="12" rx="2" fill="#c83838"/>'+ // red block
+          '<rect x="38" y="34" width="32" height="12" rx="2" fill="#c83838" style="filter:drop-shadow(0 0 6px #d84034)"/>'+ // red hero block, glowing, nudged toward the exit
           '<rect x="46" y="52" width="12" height="22" rx="2" fill="#a8b3d4"/>'+
+        '</svg>';
+    } else if (t.indexOf('pipe') >= 0) {
+      // Interlocking pipe knot; endpoint dots match the in-game palette
+      // and one cyan run reads as the "flow".
+      svg =
+        '<svg viewBox="0 0 96 80" width="132" height="110" xmlns="http://www.w3.org/2000/svg">'+
+          '<g fill="none" stroke-linecap="round">'+
+            '<path d="M12 64 H40 a16 16 0 0 0 16 -16 V16" stroke="currentColor" stroke-width="11" opacity="0.30"/>'+
+            '<path d="M12 16 H56 a16 16 0 0 1 16 16 V64" stroke="currentColor" stroke-width="11" opacity="0.30"/>'+
+            '<path d="M12 16 H56 a16 16 0 0 1 16 16 V64" stroke="#22d3ee" stroke-width="5"/>'+
+          '</g>'+
+          '<circle cx="12" cy="16" r="7" fill="#ec4899"/>'+
+          '<circle cx="72" cy="64" r="7" fill="#22d3ee"/>'+
+          '<circle cx="12" cy="64" r="7" fill="#6366f1"/>'+
+          '<circle cx="56" cy="16" r="7" fill="#6366f1"/>'+
         '</svg>';
     }
     if (!svg) return;
