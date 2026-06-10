@@ -16,8 +16,8 @@ android {
         applicationId "com.pegasusgames.nonogram"
         minSdk 24
         targetSdk 36
-        versionCode 24
-        versionName "1.2.16"
+        versionCode 25
+        versionName "1.2.17"
     }
 
     signingConfigs {
