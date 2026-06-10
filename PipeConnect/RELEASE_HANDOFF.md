@@ -7,60 +7,18 @@ Each step has all values pre-filled — paste, don't type.
 
 ---
 
-## ⚠️ CRITICAL: AdMob IDs are TEST IDs, not real
+## ✅ Step 1 — AdMob: DONE (2026-06-10)
 
-The AAB at
+Real AdMob IDs are wired into the code and baked into the AAB:
+
+- App ID         `ca-app-pub-5695494884863768~3214881924`
+- Banner         `ca-app-pub-5695494884863768/5765562640`
+- Interstitial   `ca-app-pub-5695494884863768/6329006131`
+- Rewarded       `ca-app-pub-5695494884863768/7889499819`
+
+Nothing left to do here. The AAB at
 `PipeConnect/android/app/build/outputs/bundle/release/app-release.aab`
-was built with **Google's official test AdMob IDs** so the app
-launches cleanly for screenshot capture and smoke-testing:
-
-- App ID         `ca-app-pub-3940256099942544~3347511713`
-- Banner         `ca-app-pub-3940256099942544/6300978111`
-- Interstitial   `ca-app-pub-3940256099942544/1033173712`
-- Rewarded       `ca-app-pub-3940256099942544/5224354917`
-
-**DO NOT upload this AAB to Play production.** Test ads pay nothing.
-Follow **Step 1** below to create real IDs, paste them in, then
-rebuild the AAB via **Step 6** before uploading.
-
----
-
-## Step 1 — Create the AdMob app entry (5 min)
-
-URL: https://apps.admob.com/v2/apps/list
-
-Click **Add app** → Android → "No, the app isn't published yet"
-(switch to "Yes" once the Play listing exists).
-
-Fill in:
-- **App name:** `Pipe Connect`
-- **App store:** Google Play (or Not yet listed if pre-publish)
-- **User metrics:** Yes / Yes / Yes (recommended for casual games)
-
-Click **Add**. AdMob will show a new APPLICATION ID like
-`ca-app-pub-5695494884863768~XXXXXXXXXX`. **Copy that.** Then in
-`PipeConnect/android/app/src/main/AndroidManifest.xml`, replace:
-
-```
-ca-app-pub-3940256099942544~3347511713
-```
-
-with your new APPLICATION ID.
-
-Create 3 ad units (Apps → Pipe Connect → Ad units → Add ad unit):
-
-| Name | Type |
-|---|---|
-| `PipeConnect_banner`        | Banner |
-| `PipeConnect_interstitial`  | Interstitial |
-| `PipeConnect_rewarded`      | Rewarded |
-
-Each gives an ad unit ID like `ca-app-pub-…/XXXXXXXXXX`. Paste them
-into
-`PipeConnect/android/app/src/main/java/com/pegasusgames/pipeconnect/MainActivity.java`,
-replacing the three `ca-app-pub-3940256099942544/…` test unit IDs
-(`ADMOB_BANNER_UNIT_ID`, `ADMOB_INTERSTITIAL_UNIT_ID`,
-`ADMOB_REWARDED_UNIT_ID`).
+is the one to upload.
 
 ---
 
@@ -234,22 +192,31 @@ Website: `https://pegasusgames-creator.github.io/`
 
 ---
 
-## Step 6 — Re-build the AAB with real AdMob IDs (3 min)
+## ✅ Step 6 — Rebuild with real AdMob IDs: DONE (2026-06-10)
 
-Now that Step 1 gave you real AdMob IDs and you've pasted them into the
-manifest and MainActivity.java, rebuild:
+The release AAB was rebuilt after the real IDs were pasted in, is
+signed with PipeConnect's dedicated keystore
+(SHA1 `9A:DA:7D:B4:D1:4A:93:C6:4C:D3:85:2D:6D:58:1E:40:0F:E7:A5:36`),
+and contains zero test AdMob IDs:
 
-```
-python3 build_release.py PipeConnect
-```
-
-Output AAB will be at:
 ```
 PipeConnect/android/app/build/outputs/bundle/release/app-release.aab
 ```
 
-The script verifies the AdMob ID is no longer the placeholder and that
-the AAB is signed and complete.
+---
+
+## Step 6.5 — Publish the Play Games leaderboard (2 min)
+
+The leaderboard **"Highest Level Cleared in Pipe Connect"**
+(`CgkIg4KVn8kGEAIQCA`, PGS project `225819574531`) exists but is in
+**Draft**. In Play Console → Grow → Play Games Services →
+Setup and management → Leaderboards, open it and click **Publish**
+(it already shows "ready to publish"). Also confirm the PipeConnect
+credential (`com.pegasusgames.pipeconnect`) is added under
+PGS → Configuration → Credentials, same as the other 4 apps.
+
+Until published, the in-game Ranks sheet just uses the synthetic
+weekly standings (by design), so this is not a launch blocker.
 
 ---
 

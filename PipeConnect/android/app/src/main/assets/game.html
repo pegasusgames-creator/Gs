@@ -63,9 +63,24 @@ body.midnight .modal p{color:#aa9fc4;}
 .btn-settings{background:#d4e2ec;color:#5a7390;}
 .btn-moregames{background:linear-gradient(135deg,#e040fb,#448aff);color:#fff;}
 /* §3.1 menu hierarchy: V8 minimal + T6 neon — hero Play, secondary pair, glowing tertiary icons. */
+:root{
+  --bg:#eef4f8; --app-bg:#eef4f8; --surface:#ffffff;
+  --text:#1c2a33; --text-mute:#54677a;
+  --border:rgba(28,42,51,0.14);
+  --g-play:linear-gradient(135deg,#448aff,#69f0ae); --on-accent:#0f1923;
+  --btn-neutral-bg:#d4e2ec;
+  --menu-tile-bg:#e0ecf3; --menu-tile-border:#d4e2ec; --menu-tile-fg:#3b6db8;
+}
+body.midnight{
+  --bg:#0e1822; --app-bg:#0e1822; --surface:#16242f;
+  --text:#dce8f2; --text-mute:#93a7b8;
+  --border:rgba(220,232,242,0.13);
+  --on-accent:#0f1923;
+  --btn-neutral-bg:#23394a;
+  --menu-tile-bg:#16242f; --menu-tile-border:#23394a; --menu-tile-fg:#7fb3ff;
+}
 .menu-primary{width:240px;padding:18px 0;border:none;border-radius:32px;font-family:'Poppins',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:2px;cursor:pointer;background:linear-gradient(135deg,#448aff,#69f0ae);color:#0f1923;box-shadow:0 0 24px rgba(105,240,174,0.35),0 0 60px rgba(68,138,255,0.25);transition:transform 0.1s;}
 .menu-primary:active{transform:scale(0.97);}
-.menu-pair-row{display:flex;gap:10px;width:240px;margin-top:14px;}
 .menu-pair{flex:1;padding:12px 0;border:1.5px solid #d4e2ec;border-radius:18px;font-family:'Poppins',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:1.4px;cursor:pointer;background:#e0ecf3;color:#3b6db8;transition:transform 0.1s,border-color 0.1s,color 0.1s;}
 .menu-pair:active{transform:scale(0.97);border-color:#448aff;color:#69f0ae;}
 .menu-icon-row{display:flex;gap:14px;margin-top:18px;}
@@ -148,6 +163,28 @@ body.midnight .modal p{color:#aa9fc4;}
 .modal-btn.secondary{background:#d4e2ec;color:#3b6db8;}
 .modal-btn.danger{background:#ff5252;color:#fff;}
 .stars-display{font-size:2rem;margin-bottom:16px;letter-spacing:4px;}
+
+/* ============ 2026-06-10 round-1: adaptive sizing via clamp() ============ */
+.game-footer {
+  /* footer reserves room for the banner: +6px buffer for AdMob adaptive
+     anchor visual overflow — see CLAUDE.md "Game footer + ad banner clearance". */
+  padding: clamp(8px, 1.4vw, 16px) clamp(6px, 1.1vw, 14px)
+           calc(clamp(8px, 1.4vw, 16px) + env(safe-area-inset-bottom, 0px) + 6px) !important;
+  gap: clamp(6px, 1.2vw, 12px) !important;
+}
+.foot-btn {
+  flex: 1 1 0; min-width: 0;
+  min-height: clamp(52px, 7vh, 58px) !important;
+  font-size: clamp(11px, 2.4vw, 14px) !important;
+  padding: clamp(8px, 1.5vw, 14px) clamp(10px, 2.4vw, 20px) !important;
+}
+@media (min-width: 600px) {
+  .menu-icon-row { gap: clamp(14px, 2.4vw, 22px); }
+  .foot-btn { font-size: 15px !important; }
+}
+@media (min-width: 900px) {
+  .foot-btn { font-size: 17px !important; min-height: 64px !important; }
+}
 </style>
 </head>
 <body>
@@ -159,19 +196,23 @@ body.midnight .modal p{color:#aa9fc4;}
   <div class="menu-logo">PIPE CONNECT</div>
   <div class="menu-sub">Connect the dots. Fill the grid.</div>
   <button class="menu-primary" onclick="startGame()">PLAY</button>
-  <div class="menu-pair-row">
-    <button class="menu-pair" onclick="showLevelSelect()">LEVELS</button>
-    <button class="menu-pair" onclick="showShop()">SHOP</button>
-  </div>
+  <button class="menu-pair" id="dailyChallengeBtn" onclick="startDailyChallenge()" style="width:240px;margin-top:14px">Daily puzzle</button>
   <div class="menu-icon-row">
-    <button class="menu-icon-btn" onclick="showScreen('stats')" aria-label="Stats">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M7 20V12"/><path d="M12 20V6"/><path d="M17 20V14"/></svg>
+    <button class="menu-icon-btn" onclick="showLevelSelect()" aria-label="Levels">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span class="menu-icon-label">Levels</span>
+    </button>
+    <button class="menu-icon-btn" onclick="showShop()" aria-label="Shop">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16l-1.4 9.5a2 2 0 0 1-2 1.5H7.4a2 2 0 0 1-2-1.5L4 9z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+      <span class="menu-icon-label">Shop</span>
+    </button>
+    <button class="menu-icon-btn" onclick="showMoreGames()" aria-label="More Games">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      <span class="menu-icon-label">Games</span>
     </button>
     <button class="menu-icon-btn" onclick="showSettings()" aria-label="Settings">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2M12 19v2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M3 12h2M19 12h2M5.6 18.4l1.4-1.4M17 7l1.4-1.4"/></svg>
-    </button>
-    <button class="menu-icon-btn" onclick="showMoreGames()" aria-label="More games">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      <span class="menu-icon-label">Settings</span>
     </button>
   </div>
   <div style="position:absolute;bottom:20px;color:#263238;font-size:0.7rem;">v1.0.0 • com.pegasusgames.pipeconnect</div>
@@ -396,7 +437,7 @@ const VALID_PRODUCTS = new Set([
   'hint_pack','five_lives','unlimited_lives_1h','unlimited_lives_forever',
   'starter_pack','season_pass_monthly','weekly_pass'
 ]);
-const VALID_REWARD_TYPES = new Set(['hint','skip','life']);
+const VALID_REWARD_TYPES = new Set(['hint','skip','life','extra_life','free_coins']);
 
 const SHOP_PRODUCTS = [
   {id:'starter_pack',     icon:'🎁', name:'Starter Pack',         desc:'100🪙 + 5 hints + 5 lives + Ads Off',   price:'$0.99'},
@@ -752,7 +793,7 @@ function showScreen(name){
   if(el){el.classList.add('active');el.style.display='flex';}
   updateAllUI();
   if(name==='menu'){/* Play button resumes lastLevelProgress; comeback banner removed per §3.1 */}
-  if(name==='themes') window.renderThemes&&window.renderThemes();
+  if(name==='themes'){ window.renderThemes&&window.renderThemes(); window.updateThemeProgressStrip&&window.updateThemeProgressStrip(); }
   if(name==='stats') window.renderPipeStats&&window.renderPipeStats();
   if(name==='missions') window.renderMissions&&window.renderMissions();
 }
@@ -1076,6 +1117,8 @@ window.onAdReward=function(rewardType){
     case 'hint': giveHint(); hideOverlay('overlay-hint'); break;
     case 'skip': skipLevel(); break;
     case 'life': addLives(1); hideOverlay('overlay-nolives'); updateAllUI(); break;
+    case 'extra_life': addLives(1); hideOverlay('overlay-nolives'); updateAllUI(); break;
+    case 'free_coins': save.coins+=25; persist(); updateAllUI(); break;
   }
 };
 
@@ -1489,6 +1532,7 @@ function checkLevelComplete(){
   if(save.currentLevel<=levelIndex)save.currentLevel=Math.min(levelIndex+1,LEVELS.length-1);
   save.coins+=stars*5;
   persist();
+  if(window.gOnAnyClear){try{window.gOnAnyClear();}catch(e){}}
   // Daily challenge streak
   if(isDailyChallenge){
     const today=new Date().toISOString().split('T')[0];
@@ -1497,6 +1541,7 @@ function checkLevelComplete(){
       save.dailyChallengeStreak++;
       save.coins+=10*Math.min(save.dailyChallengeStreak,7);
       persist();
+      if(window.gOnDailyDone){try{window.gOnDailyDone();}catch(e){}}
     }
   }
   // Interstitial every 3 levels
@@ -1520,6 +1565,9 @@ function resetLevel(){
     save.lives--;
     persist();
     updateAllUI();
+    if(window.gScheduleLivesRefilled){
+      try{window.gScheduleLivesRefilled(save.lastLifeTime+(save.maxLives-save.lives)*30*60*1000);}catch(e){}
+    }
   }
   firstAttempt=false;
   resetCount++;
@@ -2302,11 +2350,12 @@ window.i18n = {
     var row = document.createElement('div');
     row.id = 'i18n-lang-row';
     row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;' +
-      'background:rgba(255,255,255,0.05);border-radius:14px;padding:14px 16px;margin:8px 0;';
+      'background:var(--surface,#ffffff);border:1px solid var(--menu-tile-border,#d4e2ec);' +
+      'border-radius:16px;padding:16px;margin-bottom:12px;';
     row.innerHTML =
-      '<span style="color:white;font-size:15px;font-weight:600">' + this.t('language') + ' 🌐</span>' +
+      '<span style="color:var(--text,#1c2a33);font-size:15px;font-weight:600">' + this.t('language') + ' 🌐</span>' +
       '<select id="i18n-lang-select" onchange="window.i18n.setLang(this.value)" ' +
-      'style="background:#333;color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;' +
+      'style="background:var(--btn-neutral-bg,#d4e2ec);color:var(--text,#1c2a33);border:1px solid var(--menu-tile-border,#d4e2ec);border-radius:8px;' +
       'padding:6px 10px;font-size:14px;outline:none;max-width:160px">' +
       opts + '</select>';
 
@@ -2321,8 +2370,7 @@ window.i18n = {
     ];
     var container = containers.find(function(c) { return c !== null; });
     if (container) {
-      // Insert before the first child for visibility
-      container.insertBefore(row, container.firstChild);
+      container.appendChild(row);
       document.getElementById('i18n-lang-select').value = self._lang;
     }
   },
@@ -2442,8 +2490,8 @@ window.renderPipeStats=function(){
     {id:'pastel',name:'Pastel',emoji:'🌸',unlockLevel:60,palette:{red:'#ffb3ba',blue:'#bae1ff',green:'#b5ead7',yellow:'#ffffba',purple:'#e0b3ff',orange:'#ffdfba',pink:'#ffb3de',teal:'#b3fff0'}},
     {id:'midnight',name:'Midnight',emoji:'🌙',coinCost:800,palette:{red:'#ff4d6d',blue:'#5390f5',green:'#3ddc97',yellow:'#ffd166',purple:'#b18cff',orange:'#ff9a3c',pink:'#ff70a6',teal:'#4cc9f0'}},
     {id:'ocean',name:'Ocean',emoji:'🌊',unlockLevel:100,palette:{red:'#e06c75',blue:'#61afef',green:'#98c379',yellow:'#e5c07b',purple:'#c678dd',orange:'#d19a66',pink:'#e06c75',teal:'#56b6c2'}},
-    {id:'fire',name:'Inferno',emoji:'🔥',unlockLevel:150,palette:{red:'#ff4500',blue:'#ff8c00',green:'#ffd700',yellow:'#ff6347',purple:'#ff1493',orange:'#ff7f50',pink:'#ff69b4',teal:'#ff6600'}},
-    {id:'galaxy',name:'Galaxy',emoji:'🌌',unlockLevel:200,palette:{red:'#9b59b6',blue:'#3498db',green:'#1abc9c',yellow:'#f1c40f',purple:'#8e44ad',orange:'#e67e22',pink:'#e91e63',teal:'#16a085'}},
+    {id:'fire',name:'Inferno',emoji:'🔥',unlockLevel:110,palette:{red:'#ff4500',blue:'#ff8c00',green:'#ffd700',yellow:'#ff6347',purple:'#ff1493',orange:'#ff7f50',pink:'#ff69b4',teal:'#ff6600'}},
+    {id:'galaxy',name:'Galaxy',emoji:'🌌',unlockLevel:120,palette:{red:'#9b59b6',blue:'#3498db',green:'#1abc9c',yellow:'#f1c40f',purple:'#8e44ad',orange:'#e67e22',pink:'#e91e63',teal:'#16a085'}},
   ];
   window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel,coinCost:t.coinCost};});
 
@@ -2836,7 +2884,7 @@ function scheduleLifeNotif(){
   try{ window.Android.scheduleNotification('Lives Ready!','Your lives are full — come back and play!',delayMs); }catch(e){}
 }
 
-// ── GLOBAL RANK ──────────────────────────────────────────────────
+// ── WEEKLY STANDING (synthetic bracket — copy must never say "global") ──
 function getRank(){
   var c=G.completed();
   if(c>=400) return 1; if(c>=200) return 3; if(c>=100) return 8;
@@ -2848,7 +2896,7 @@ function injectRankCard(){
   if(!container||container.querySelector('.x-rank-card')) return;
   var div=document.createElement('div');
   div.className='x-rank-card stat-card';
-  div.innerHTML='<div class="stat-card-icon">🏆</div><div class="stat-card-info"><div class="stat-card-label">Global Rank</div><div class="stat-card-value">Top '+getRank()+'%</div></div>';
+  div.innerHTML='<div class="stat-card-icon">🏆</div><div class="stat-card-info"><div class="stat-card-label">Weekly Standing</div><div class="stat-card-value">Top '+getRank()+'%</div></div>';
   container.insertBefore(div,container.firstChild);
 }
 
@@ -2919,12 +2967,12 @@ function injectSeasonPassShop(){
     var div=document.createElement('div');
     div.id='x-season-pass-item';
     div.className='shop-item';
-    var btnTxt=isSeasonActive()?'✅ Active':'$1.99/month';
+    var btnTxt=isSeasonActive()?'✅ Active':'$4.99/month';
     div.innerHTML=
       '<div class="shop-item-icon">🌟</div>'+
       '<div class="shop-item-info x-season-badge-target">'+
         '<div class="shop-item-name">Season Pass</div>'+
-        '<div class="shop-item-desc">2× coins on every level for 30 days</div>'+
+        '<div class="shop-item-desc">Ad-free · +100 coins daily · all themes</div>'+
       '</div>'+
       '<button id="x-season-btn" class="shop-item-price" onclick="xBuySeason()">'+btnTxt+'</button>';
     scroll.insertBefore(div, scroll.firstChild);
@@ -3116,16 +3164,12 @@ function injectThemeStrip(){
   } else {
     strip.innerHTML = '🎨 All themes unlocked!';
   }
-  var anchors = [
-    document.getElementById('xFreeCoins'),
-    document.getElementById('weeklyEventBanner'),
-    document.querySelector('#screen-menu .menu-icon-row'),
-    document.querySelector('#screen-menu')
-  ].filter(Boolean);
-  if(anchors.length){
-    var a = anchors[0];
-    if(a.parentNode) a.parentNode.insertBefore(strip, a.nextSibling);
-    else a.appendChild(strip);
+  // Relocated off the menu (2026-06 menu rules): the strip's home is the
+  // top of the Themes screen.
+  var themesScreen = document.getElementById('screen-themes');
+  if(themesScreen){
+    strip.style.margin = '0.55rem auto 0';
+    themesScreen.insertBefore(strip, themesScreen.firstChild);
   } else {
     document.body.appendChild(strip);
   }
@@ -3223,8 +3267,6 @@ window.addEventListener('load',function(){
   setTimeout(function(){
     injectStarterModal();
     injectWeeklyBanner();
-    injectFreeCoinsBtn();
-    injectThemeStrip();
     injectSeasonalBanner();
     injectContinueBtns();
     hookWinOverlay();
@@ -3239,6 +3281,2667 @@ window.addEventListener('load',function(){
   },900);
 });
 
+})();
+</script>
+
+
+<!-- Growth shim — Part A (notifications). Idempotent: keyed by data-growth-shim="A".
+     Appended to game.html in WaterSort / Nonogram / Puzzle2048 / UnblockPuzzle.
+     Behaviorally wires notifications without touching each app's clear/win code:
+       - On app open + visibilitychange: cancelAllNotifications then reschedule
+         the win-back chain (d3/d7/d14/d30), the daily reminder at the user's
+         rolling-average play hour, and the streak-at-risk ping (if streak ≥ 3).
+       - First level cleared (detected via localStorage save inspection) →
+         single-shot permission pre-prompt + schedule.
+       - On Day-7 win-back fire: pendingWinBackReward flag set; granted as 100
+         coins on next open.
+       - Settings panel: a "🔔 Notifications" toggle row appended at runtime
+         (DOM scan; covers every per-app Settings markup variant).
+       - Exposed for per-app integration when game logic wants to opt in:
+           window.gScheduleLivesRefilled(refillAtMillis)
+           window.gOnAnyClear()
+           window.gOnDailyDone()
+-->
+<script data-growth-shim="A">
+(function(){
+  if (window.__growthShimA) return;
+  window.__growthShimA = true;
+
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v=LS.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { LS.setItem(k,v); } catch(e){} }
+  function hasAndroid(){ return !!(window.Android); }
+  function api(name){ return hasAndroid() && typeof window.Android[name]==='function'; }
+  function safe(fn){ try { fn(); } catch(e){} }
+
+  // ── 1. Play-hour tracker — rolling EMA. Default 19:00 if no history.
+  function recordPlayHour(){
+    var h = new Date().getHours();
+    var prev = parseFloat(lsGet('_phRoll', h));
+    if (isNaN(prev)) prev = h;
+    var next = prev * 0.8 + h * 0.2;
+    lsSet('_phRoll', next.toFixed(2));
+    lsSet('usualPlayHour', String(Math.round(next)));
+    if (api('recordLastPlayed')) safe(function(){ Android.recordLastPlayed(); });
+  }
+  function getPlayHour(){
+    var h = parseInt(lsGet('usualPlayHour','19'),10);
+    return (isNaN(h) || h<0 || h>23) ? 19 : h;
+  }
+
+  // ── 2. Win-back coin pickup (Day 7).
+  function grantPendingWinBack(){
+    if (lsGet('pendingWinBackReward','0') !== '1') return;
+    lsSet('pendingWinBackReward','0');
+    // Try the conventional save shapes (WaterSort: state, Nonogram/UB: save).
+    var keys = ['save','state','gameState','progress'];
+    for (var i=0;i<keys.length;i++){
+      var raw = lsGet(keys[i], null);
+      if (!raw) continue;
+      try {
+        var o = JSON.parse(raw);
+        if (typeof o.coins === 'number') {
+          o.coins += 100;
+          lsSet(keys[i], JSON.stringify(o));
+          if (window.showToast) safe(function(){ showToast('🎁 Welcome back! +100 coins'); });
+          break;
+        }
+      } catch(e){}
+    }
+  }
+
+  // ── 3. Streak read — common keys across games.
+  function readStreak(){
+    var k = ['dailyChallengeStreak','loginStreak','streak'];
+    for (var i=0;i<k.length;i++){
+      var v = parseInt(lsGet(k[i],'0'),10);
+      if (!isNaN(v) && v>0) return v;
+    }
+    return 0;
+  }
+
+  // ── 4. First-clear detection — used to gate the permission pre-prompt.
+  function hasClearedFirstLevel(){
+    var keys = ['save','state','gameState','progress'];
+    for (var i=0;i<keys.length;i++){
+      var raw = lsGet(keys[i], null);
+      if (!raw) continue;
+      try {
+        var o = JSON.parse(raw);
+        // completedLevels array, currentLevel > 0, or stars object — any wins.
+        if (Array.isArray(o.completedLevels) && o.completedLevels.length > 0) return true;
+        if (typeof o.currentLevel === 'number' && o.currentLevel > 0) return true;
+        if (typeof o.levelsCompleted === 'number' && o.levelsCompleted > 0) return true;
+        if (o.levelStars && Object.keys(o.levelStars).length > 0) return true;
+      } catch(e){}
+    }
+    return false;
+  }
+
+  function maybeAskNotifPerm(){
+    if (lsGet('notifPrePromptShown','0') === '1') return;
+    if (!hasClearedFirstLevel()) return;
+    if (!hasAndroid()) return;
+    if (api('hasNotificationPermission') && Android.hasNotificationPermission()) {
+      lsSet('notifPrePromptShown','1');
+      return;
+    }
+    // Soft pre-prompt — confirm() respects the user; if they say no, we don't
+    // hit the system dialog at all.
+    var ok = false;
+    try { ok = window.confirm("Get a daily reminder so you don't miss your streak?"); }
+    catch(e){ ok = false; }
+    lsSet('notifPrePromptShown','1');
+    if (ok && api('requestNotificationPermission')) {
+      safe(function(){ Android.requestNotificationPermission(); });
+    }
+  }
+
+  // Round-15: auto-schedule a "lives are full" ping by reading the
+  // current save state. Every shipping app uses the same shape:
+  // { lives, maxLives (default 5), lastLifeTime }. Per-app save keys
+  // differ, so probe the known set.
+  function scheduleLivesIfBelowMax(){
+    if (!api('scheduleLivesRefilled')) return;
+    var SAVE_KEYS = [
+      'unblock_save','watersort_save','puzzle2048_save','nonogram_state',
+      'pipeconnect_save','save','state','gameState','progress'
+    ];
+    var REGEN_MS = 30 * 60 * 1000; // every shipping game uses 30 min
+    for (var i=0;i<SAVE_KEYS.length;i++){
+      var raw = lsGet(SAVE_KEYS[i], null);
+      if (!raw) continue;
+      try {
+        var s = JSON.parse(raw);
+        var inner = (s && s.state) ? s.state : s;
+        var lives    = (inner.lives != null)    ? inner.lives    : null;
+        var maxLives = (inner.maxLives != null) ? inner.maxLives : 5;
+        var lastLife = inner.lastLifeTime || inner.lastLifeMs || inner.lifeRegenAt || 0;
+        if (lives == null || lastLife <= 0) continue;
+        if (lives >= maxLives) return; // already full, nothing to schedule
+        var needed = maxLives - lives;
+        var refillAt = lastLife + needed * REGEN_MS;
+        if (refillAt <= Date.now()) return; // would've already refilled
+        safe(function(){ Android.scheduleLivesRefilled(refillAt); });
+        return;
+      } catch(e){}
+    }
+  }
+
+  // ── 5. Reschedule the full chain.
+  function rescheduleAll(){
+    if (!hasAndroid()) return;
+    if (api('getNotificationsEnabled') && !Android.getNotificationsEnabled()) return;
+    safe(function(){ Android.cancelAllNotifications(); });
+    if (api('scheduleDailyReminder')) safe(function(){ Android.scheduleDailyReminder(getPlayHour(), 0); });
+    if (api('scheduleWinBack')) {
+      safe(function(){ Android.scheduleWinBack(3,  "Your puzzles miss you", "Pick up right where you left off."); });
+      safe(function(){ Android.scheduleWinBack(7,  "Come back for 100 coins", "A welcome-back gift is waiting."); });
+      safe(function(){ Android.scheduleWinBack(14, "New themes await", "Unlocks are ready to claim."); });
+      safe(function(){ Android.scheduleWinBack(30, "We saved everything", "Your progress and streak shield are still here."); });
+      // Mark the Day-7 reward as pending so the next-open path will pay out 100c.
+      lsSet('pendingWinBackReward','1');
+    }
+    // Round-15: schedule streak-at-risk from day 1+ (was day 3+). Even
+    // a one-day streak is worth not losing — and reward keeps growing
+    // with the chain anyway, so an early reminder still pays off.
+    var streak = readStreak();
+    if (streak >= 1 && api('scheduleStreakAtRisk')) {
+      safe(function(){ Android.scheduleStreakAtRisk(streak); });
+    }
+    // Round-15: schedule lives-refilled if any life slot is regenerating.
+    scheduleLivesIfBelowMax();
+  }
+
+  // ── 6a. SERIAL POPUP QUEUE — round-15.1 fix.
+  // User complaint: "popups with daily streak and tutorial just closed
+  // each other with overriding while next popup should only appear
+  // after user manually taps". Every modal that shows on first launch
+  // of the day (login streak, starter pack, coachmark, cross-promo,
+  // welcome bonus) should opt into this queue. The queue shows ONE at
+  // a time and only proceeds when the previous popup is dismissed.
+  //
+  // Usage from per-app or shim code:
+  //   gPopupQueue.enqueue(function(done){
+  //     showMyPopup();
+  //     wireDismissHandler(done);  // call done() when user dismisses
+  //   });
+  //
+  // Also: a polling helper for popups that don't have an explicit
+  // dismiss hook. Pass a `selector` whose visibility tracks the popup
+  // (display !== 'none'), and the queue auto-detects dismissal.
+  window.gPopupQueue = (function(){
+    var queue = [];
+    var active = false;
+    function next(){
+      if (active) return;
+      var entry = queue.shift();
+      if (!entry) return;
+      active = true;
+      try {
+        entry.show(function done(){
+          active = false;
+          // Defer next show by 250ms so the user sees a beat
+          // between popups rather than instant flicker.
+          setTimeout(next, 250);
+        });
+      } catch (e){
+        active = false;
+        setTimeout(next, 250);
+      }
+    }
+    function enqueue(showFn){
+      queue.push({show: showFn});
+      next();
+    }
+    function enqueueWithSelector(selector, showFn){
+      queue.push({show: function(done){
+        showFn();
+        // Poll for visibility going false → call done().
+        // Round-15.4 fix: position:fixed elements have offsetParent
+        // === null even when visible — must use computed display.
+        // Also wait at least 500ms before first check so the show
+        // has actually taken effect.
+        var started = false;
+        var startAt = Date.now();
+        var poll = setInterval(function(){
+          var el = document.querySelector(selector);
+          if (!el) {
+            if (Date.now() - startAt > 600) { clearInterval(poll); done(); }
+            return;
+          }
+          var cs = window.getComputedStyle(el);
+          var visible = cs.display !== 'none' && cs.visibility !== 'hidden' && parseFloat(cs.opacity || '1') > 0.01;
+          if (visible) { started = true; return; }
+          if (!started) {
+            // Hasn't shown yet — give it up to ~1.2s before bailing.
+            if (Date.now() - startAt > 1200) { clearInterval(poll); done(); }
+            return;
+          }
+          // It WAS visible and now isn't → dismissed.
+          clearInterval(poll);
+          done();
+        }, 200);
+      }});
+      next();
+    }
+    return { enqueue: enqueue, enqueueWithSelector: enqueueWithSelector };
+  })();
+
+  // ── 6b. Public hooks for per-app integration when game wants to opt in.
+  window.gScheduleLivesRefilled = function(refillAtMillis){
+    if (api('scheduleLivesRefilled')) safe(function(){ Android.scheduleLivesRefilled(refillAtMillis); });
+  };
+  window.gOnAnyClear = function(){
+    recordPlayHour();
+    maybeAskNotifPerm();
+    rescheduleAll();
+  };
+  window.gOnDailyDone = function(){
+    recordPlayHour();
+    rescheduleAll();
+  };
+  window.onNotificationPermissionResult = function(granted){
+    if (granted) rescheduleAll();
+  };
+
+  // ── 7. Settings toggle — runtime DOM injection so we don't need to hand-patch
+  // each app's Settings panel HTML. Periodic scan keyed by data-growth-notif-toggle.
+  function injectNotifToggle(){
+    // 2026-05-28 round-14: prefer the inner .settings-list / .settings-scroll
+    // so the notif row becomes a normal list item, not a floating panel
+    // tacked onto the end of the screen container. ON/OFF button also
+    // gets explicit padding so the text isn't cramped.
+    var host = document.querySelector('#screen-settings .settings-list')
+            || document.querySelector('#settingsScreen .settings-list')
+            || document.querySelector('#screen-settings .settings-scroll')
+            || document.querySelector('#settingsScreen .settings-scroll')
+            || document.querySelector('#screen-settings')
+            || document.querySelector('#settingsScreen');
+    if (!host) return;
+    if (host.querySelector('[data-growth-notif-toggle]')) return;
+    var enabled = (api('getNotificationsEnabled')) ? Android.getNotificationsEnabled() : true;
+    var row = document.createElement('div');
+    row.setAttribute('data-growth-notif-toggle','1');
+    // Round-15.5: BOXED — match native settings rows. Don't override
+    // background/border/padding — let the .setting-row class own those.
+    // Only set layout (flex + gap) inline.
+    row.className = 'setting-row settings-item set-row';
+    row.style.cssText =
+      'display:flex;align-items:center;justify-content:space-between;gap:14px;font-family:inherit;';
+    row.innerHTML =
+      '<span class="setting-label settings-item-label set-label" style="flex:1;font-weight:600;font-size:16px;color:var(--page-fg, var(--text, inherit));">🔔 Notifications</span>' +
+      '<button data-growth-notif-btn type="button" style="border:none;padding:7px 18px;border-radius:14px;cursor:pointer;font-weight:800;letter-spacing:0.5px;min-width:60px;text-align:center;flex:0 0 auto;font-family:inherit;' +
+        'background:' + (enabled ? 'var(--g-play, #3b6db8)' : 'var(--btn-neutral-bg, #bbb)') + ';color:var(--on-accent, #fff);">' +
+        (enabled ? 'ON' : 'OFF') + '</button>';
+    host.appendChild(row);
+    row.querySelector('[data-growth-notif-btn]').addEventListener('click', function(){
+      var cur = (api('getNotificationsEnabled')) ? Android.getNotificationsEnabled() : true;
+      var next = !cur;
+      if (api('setNotificationsEnabled')) safe(function(){ Android.setNotificationsEnabled(next); });
+      this.textContent = next ? 'ON' : 'OFF';
+      this.style.background = next ? 'var(--g-play, #3b6db8)' : 'var(--btn-neutral-bg, #bbb)';
+      if (next) rescheduleAll();
+    });
+  }
+  setInterval(injectNotifToggle, 1500);
+
+  // ── 8. Boot path: schedule on first load + on every return-to-foreground.
+  function onAppOpen(){
+    grantPendingWinBack();
+    recordPlayHour();
+    maybeAskNotifPerm();
+    rescheduleAll();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(onAppOpen, 400); });
+  } else {
+    setTimeout(onAppOpen, 400);
+  }
+  document.addEventListener('visibilitychange', function(){
+    if (document.visibilityState === 'visible') setTimeout(onAppOpen, 200);
+  });
+})();
+</script>
+
+
+<!-- Growth shim — Part B (cross-promo flywheel). Idempotent: keyed by data-growth-shim="B".
+     Appended to game.html in WaterSort / Nonogram / Puzzle2048 / UnblockPuzzle.
+     Behavioral wiring on top of each app's existing PROMO_GAMES / MORE_GAMES list:
+       - Welcome bonus: 100 coins on the FIRST launch if any sister portfolio
+         app is installed (welcomeBonusClaimed gate). Toast credits the source.
+       - Break-point card: every 5th cleared level/score increment we show a
+         lightweight prompt for one promoted game (rotates round-robin).
+         Frequency cap: once per session, never two sessions in a row.
+       - Reuses Android.isAppInstalled / Android.openPlayStore from Part A.
+     The per-app PROMO_GAMES list stays the source of truth; this shim reads
+     window._GROWTH_PROMO_TARGETS if the app exposes it, else falls back to a
+     generic list filtered against the current package (so the current app
+     never promotes itself).
+-->
+<script data-growth-shim="B">
+(function(){
+  if (window.__growthShimB) return;
+  window.__growthShimB = true;
+
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v=LS.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { LS.setItem(k,v); } catch(e){} }
+  function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
+  function safe(fn){ try { return fn(); } catch(e){} }
+
+  // PROMO_TARGETS — per the 2026-05-25 growth spec. UnblockPuzzle + PipeConnect
+  // are explicitly EXCLUDED as targets (pre-release). When either ships, edit
+  // the matching entry's TODO line in this file and uncomment.
+  var ALL_PROMO = [
+    { pkg:'com.pegasusgames.watersortpuzzle', name:'Water Sort Puzzle',
+      tagline:'Pour colors to sort. Calm puzzle bliss.' },
+    { pkg:'com.pegasusgames.nonogram',        name:'Nonogram',
+      tagline:'Pixel-art logic puzzles. 500 levels.' },
+    { pkg:'com.pegasusgames.puzzle2048',      name:'2048 Puzzle',
+      tagline:'Merge tiles. Hit 2048 and beyond.' },
+    { pkg:'com.pegasusgames.unblockpuzzle',   name:'Unblock Puzzle',
+      tagline:'Slide blocks to clear the red one.' },
+    // TODO post-release: add PipeConnect once it has a Play link:
+    //   { pkg:'com.pegasusgames.pipeconnect', name:'Pipe Connect',
+    //     tagline:'Route every pipe. Fill every grid.' },
+  ];
+
+  function currentPkg(){
+    var meta = document.querySelector('meta[name="app-package"]');
+    if (meta) return meta.content;
+    // Fall back to a heuristic — title text or hardcoded.
+    var t = (document.title||'').toLowerCase();
+    if (t.indexOf('water') >= 0) return 'com.pegasusgames.watersortpuzzle';
+    if (t.indexOf('nonogram') >= 0) return 'com.pegasusgames.nonogram';
+    if (t.indexOf('2048') >= 0) return 'com.pegasusgames.puzzle2048';
+    if (t.indexOf('unblock') >= 0) return 'com.pegasusgames.unblockpuzzle';
+    if (t.indexOf('pipe') >= 0) return 'com.pegasusgames.pipeconnect';
+    return '';
+  }
+  var CUR = currentPkg();
+  var TARGETS = ALL_PROMO.filter(function(g){ return g.pkg !== CUR; });
+  window._GROWTH_PROMO_TARGETS = TARGETS;
+
+  // ── 1. Welcome bonus on first launch if any sibling app is installed.
+  function checkWelcomeBonus(){
+    if (lsGet('welcomeBonusClaimed','0') === '1') return;
+    if (!api('isAppInstalled')) return;
+    var sourceName = null;
+    for (var i=0;i<TARGETS.length;i++){
+      var t = TARGETS[i];
+      try { if (window.Android.isAppInstalled(t.pkg)) { sourceName = t.name; break; } }
+      catch(e){}
+    }
+    if (!sourceName) return;
+    lsSet('welcomeBonusClaimed','1');
+    // Try to credit common save shapes with +100 coins.
+    var keys = ['save','state','gameState','progress'];
+    for (var j=0;j<keys.length;j++){
+      var raw = lsGet(keys[j],null);
+      if (!raw) continue;
+      try {
+        var o = JSON.parse(raw);
+        if (typeof o.coins === 'number') {
+          o.coins += 100;
+          lsSet(keys[j], JSON.stringify(o));
+          if (window.showToast) safe(function(){ showToast('Welcome from Pegasus Games — +100 🪙'); });
+          else alert('Welcome from Pegasus Games — +100 coins from ' + sourceName + '!');
+          return;
+        }
+      } catch(e){}
+    }
+  }
+
+  // ── 2. Clear-count tracker — polls save state, fires on every increment.
+  var lastSeenClears = -1;
+  function readClearCount(){
+    var keys = ['save','state','gameState','progress'];
+    for (var i=0;i<keys.length;i++){
+      var raw = lsGet(keys[i],null);
+      if (!raw) continue;
+      try {
+        var o = JSON.parse(raw);
+        if (Array.isArray(o.completedLevels)) return o.completedLevels.length;
+        if (typeof o.levelsCompleted === 'number') return o.levelsCompleted;
+        if (typeof o.totalSolves === 'number') return o.totalSolves;
+        if (typeof o.currentLevel === 'number') return o.currentLevel;
+      } catch(e){}
+    }
+    return null;
+  }
+
+  function pickPromoTarget(){
+    if (!TARGETS.length) return null;
+    var idx = parseInt(lsGet('_crossPromoIdx','0'),10) || 0;
+    var t = TARGETS[idx % TARGETS.length];
+    lsSet('_crossPromoIdx', String((idx + 1) % TARGETS.length));
+    return t;
+  }
+
+  // ── 3. Break-point card UI.
+  function buildPromoCard(target){
+    var bg = document.createElement('div');
+    bg.setAttribute('data-growth-promo-card','1');
+    bg.style.cssText =
+      'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
+    var card = document.createElement('div');
+    card.style.cssText =
+      'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border-radius:18px;padding:22px 22px 18px;width:88%;max-width:340px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
+    card.innerHTML =
+      '<div style="font-size:11px;letter-spacing:2px;color:var(--text-mute, #5a7390);font-weight:700;margin-bottom:6px;">FROM PEGASUS GAMES</div>' +
+      '<div style="font-size:1.3rem;font-weight:800;margin-bottom:4px;">' + target.name + '</div>' +
+      '<div style="font-size:0.95rem;color:var(--text-mute, #5a7390);margin-bottom:14px;">' + target.tagline + '</div>' +
+      // Gold-coin reward bar is theme-INDEPENDENT brand color (gold), stays hardcoded.
+      '<div style="background:rgba(201,127,0,0.12);color:#c97f00;border:1px solid rgba(201,127,0,0.32);border-radius:12px;padding:8px;margin-bottom:14px;font-weight:700;">' +
+        'Install — get +200 🪙' +
+      '</div>' +
+      '<div style="display:flex;gap:8px;">' +
+        '<button data-growth-promo-later style="flex:1;padding:10px;border:1px solid var(--border, #d4e2ec);background:var(--surface, #ffffff);color:var(--text-mute, #5a7390);border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;">Maybe Later</button>' +
+        '<button data-growth-promo-install style="flex:1;padding:10px;border:none;background:var(--g-play, linear-gradient(135deg,#3b6db8,#5cb3d8));color:var(--on-accent, #fff);border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">Install</button>' +
+      '</div>';
+    bg.appendChild(card);
+    bg.addEventListener('click', function(ev){ if (ev.target===bg) bg.remove(); });
+    card.querySelector('[data-growth-promo-later]').addEventListener('click', function(){ bg.remove(); });
+    card.querySelector('[data-growth-promo-install]').addEventListener('click', function(){
+      bg.remove();
+      if (api('openPlayStore')) safe(function(){ Android.openPlayStore(target.pkg); });
+      else if (api('openUrl'))   safe(function(){ Android.openUrl('https://play.google.com/store/apps/details?id=' + target.pkg); });
+    });
+    document.body.appendChild(bg);
+  }
+
+  function maybeShowBreakPointPromo(){
+    var sessionId = lsGet('_growthSessionId',null);
+    if (!sessionId) {
+      sessionId = String(Date.now());
+      lsSet('_growthSessionId', sessionId);
+    }
+    // One per session.
+    if (lsGet('lastCrossPromoShownSession','') === sessionId) return;
+    // Skip two-sessions-in-a-row.
+    if (lsGet('lastCrossPromoPrevSession','') === lsGet('_prevSessionId','')) {
+      // Allowed — not the same as the immediate-previous shown session.
+    } else {
+      var prevShown = lsGet('lastCrossPromoShownSession','');
+      var prevSes   = lsGet('_prevSessionId','');
+      if (prevShown && prevShown === prevSes) {
+        return; // already showed in the previous session; skip this one
+      }
+    }
+    var target = pickPromoTarget();
+    if (!target) return;
+    buildPromoCard(target);
+    lsSet('lastCrossPromoShownSession', sessionId);
+  }
+
+  // ── 4. Poll for clear-count increments — fires the break-point card on
+  // every N=5 clears (cumulative). Cheap: 1.5s poll, no DOM mutation needed.
+  setInterval(function(){
+    var c = readClearCount();
+    if (c == null) return;
+    if (lastSeenClears < 0) { lastSeenClears = c; return; }
+    if (c > lastSeenClears) {
+      var deltas = c - lastSeenClears;
+      lastSeenClears = c;
+      // Use a stored "since-last-promo" counter — robust to multi-clear jumps.
+      var since = parseInt(lsGet('_crossPromoSinceLast','0'),10) || 0;
+      since += deltas;
+      if (since >= 5) {
+        since = 0;
+        maybeShowBreakPointPromo();
+      }
+      lsSet('_crossPromoSinceLast', String(since));
+    }
+  }, 1500);
+
+  // ── 5. Session bookkeeping — bump on visibility-change so we don't loop on
+  // a single foreground.
+  function bumpSession(){
+    var cur = lsGet('_growthSessionId','');
+    if (cur) lsSet('_prevSessionId', cur);
+    lsSet('_growthSessionId', String(Date.now()));
+  }
+  // On every page load, treat as a new session.
+  bumpSession();
+
+  // ── 6. Run welcome-bonus check once DOM ready.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(checkWelcomeBonus, 600); });
+  } else {
+    setTimeout(checkWelcomeBonus, 600);
+  }
+})();
+</script>
+
+
+<!-- Growth shim — Part D (streak freeze + visible milestone).
+     Idempotent: data-growth-shim="D".
+
+     BEHAVIORAL HALF ONLY (2026-05-27 consolidation, see CLAUDE.md
+     "No competing runtime shims"):
+       - state._streakFreezes (default 1). If the app's streak counter drops
+         from N>0 to 0 and exactly 1 day has elapsed since the last seen N,
+         consume a freeze and restore the streak.
+       - Refill 1 free freeze every 7 days of maintained streak.
+
+     The menu-render half (chips + buy-shield button + next-milestone label)
+     lives in the MENU shim now, alongside Free Coins / Ranks / Tier-1/2/3
+     patching. The exports below let the MENU shim read state + trigger
+     purchases without re-implementing the bookkeeping.
+-->
+<script data-growth-shim="D">
+(function(){
+  if (window.__growthShimD) return;
+  window.__growthShimD = true;
+
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v=LS.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { LS.setItem(k,v); } catch(e){} }
+  function safe(fn){ try { return fn(); } catch(e){} }
+
+  // Escalating ladder — day 30 visibly beats day 3.
+  var LADDER = [
+    { day:1,  reward:'25 🪙'           },
+    { day:2,  reward:'50 🪙'           },
+    { day:3,  reward:'100 🪙'          },
+    { day:5,  reward:'150 🪙 + Hint'   },
+    { day:7,  reward:'🎨 New theme'    },
+    { day:10, reward:'250 🪙'          },
+    { day:14, reward:'500 🪙'          },
+    { day:21, reward:'750 🪙 + Hint x3'},
+    { day:30, reward:'🌟 Permanent theme + 1000 🪙' },
+    { day:60, reward:'🌟 Master badge + 2000 🪙' },
+    { day:100,reward:'🏆 Legendary status + 5000 🪙'},
+  ];
+
+  var SAVE_KEYS = ['save','state','gameState','progress'];
+  function readSave(){
+    for (var i=0;i<SAVE_KEYS.length;i++){
+      var raw = lsGet(SAVE_KEYS[i],null);
+      if (!raw) continue;
+      try { return { key:SAVE_KEYS[i], obj:JSON.parse(raw) }; } catch(e){}
+    }
+    return null;
+  }
+  function writeSave(s){
+    if (!s) return;
+    try { lsSet(s.key, JSON.stringify(s.obj)); } catch(e){}
+  }
+  function readStreak(){
+    var s = readSave(); if (!s) return 0;
+    var keys = ['dailyChallengeStreak','loginStreak','streak'];
+    for (var i=0;i<keys.length;i++){
+      if (typeof s.obj[keys[i]] === 'number' && s.obj[keys[i]] > 0) return s.obj[keys[i]];
+    }
+    return 0;
+  }
+  function writeStreakIfFound(value){
+    var s = readSave(); if (!s) return false;
+    var keys = ['dailyChallengeStreak','loginStreak','streak'];
+    for (var i=0;i<keys.length;i++){
+      if (typeof s.obj[keys[i]] === 'number') {
+        s.obj[keys[i]] = value;
+        writeSave(s);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function getFreezes(){ return parseInt(lsGet('_streakFreezes','1'),10) || 0; }
+  function setFreezes(n){ lsSet('_streakFreezes', String(Math.max(0,n))); }
+  function nextMilestone(curStreak){
+    for (var i=0;i<LADDER.length;i++){
+      if (LADDER[i].day > curStreak) return LADDER[i];
+    }
+    return null;
+  }
+
+  // ── Shield-restore: only if streak just dropped to 0 AND it was exactly
+  // one missed day since the last seen non-zero streak.
+  function maybeRestoreStreak(){
+    var nowStreak = readStreak();
+    var lastSeen  = parseInt(lsGet('_lastSeenStreak','0'),10) || 0;
+    var lastDate  = lsGet('_lastSeenStreakDate', null);
+    var todayStr  = new Date().toISOString().slice(0,10);
+    if (nowStreak === 0 && lastSeen > 0 && lastDate) {
+      var d1 = new Date(lastDate).getTime();
+      var d2 = new Date(todayStr).getTime();
+      var diffDays = Math.round((d2 - d1) / 86400000);
+      if (diffDays === 1 || diffDays === 2) {
+        if (getFreezes() > 0) {
+          setFreezes(getFreezes() - 1);
+          if (writeStreakIfFound(lastSeen)) {
+            if (window.showToast) safe(function(){ showToast('🛡 Streak shield used — your ' + lastSeen + '-day streak is safe!'); });
+            else if (window.alert) safe(function(){ alert('🛡 Streak shield used — your ' + lastSeen + '-day streak is safe!'); });
+          }
+        }
+      }
+    }
+    var prevRefillStreak = parseInt(lsGet('_streakFreezeRefillAt','0'),10) || 0;
+    var curStreak = readStreak();
+    if (curStreak > 0 && curStreak >= prevRefillStreak + 7) {
+      lsSet('_streakFreezeRefillAt', String(curStreak));
+      setFreezes(getFreezes() + 1);
+      if (window.showToast) safe(function(){ showToast('🛡 +1 Streak shield earned!'); });
+    }
+    if (curStreak > 0) {
+      lsSet('_lastSeenStreak', String(curStreak));
+      lsSet('_lastSeenStreakDate', todayStr);
+    }
+  }
+
+  // Public API for the MENU shim (consolidated render path).
+  window._growthD = {
+    readStreak: readStreak,
+    getFreezes: getFreezes,
+    setFreezes: setFreezes,
+    nextMilestone: nextMilestone,
+    readSave: readSave,
+    writeSave: writeSave,
+    buyFreeze: function(cb){
+      var s = readSave();
+      if (!s || typeof s.obj.coins !== 'number') return;
+      if (s.obj.coins < 200) {
+        if (window.showToast) safe(function(){ showToast('Need ' + (200 - s.obj.coins) + ' more 🪙'); });
+        return;
+      }
+      s.obj.coins -= 200; writeSave(s);
+      setFreezes(getFreezes() + 1);
+      if (window.showToast) safe(function(){ showToast('🛡 +1 Streak shield'); });
+      if (typeof cb === 'function') cb();
+    }
+  };
+
+  function onAppOpen(){ maybeRestoreStreak(); }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(onAppOpen, 500); });
+  } else {
+    setTimeout(onAppOpen, 500);
+  }
+  document.addEventListener('visibilitychange', function(){
+    if (document.visibilityState === 'visible') setTimeout(onAppOpen, 200);
+  });
+})();
+</script>
+
+
+<!-- Growth shim — Part E (first-session retention). Idempotent: data-growth-shim="E".
+     - No interstitial on the first 3 clears: wraps Android.showInterstitial
+       and swallows the first 3 calls while still incrementing the cumulative
+       "clears since launch" counter. After 3, original behavior resumes.
+     - Loud first-clear celebration: emoji-confetti overlay on the first
+       detected clear (subsequent clears use the app's normal flow).
+     - First-session retention hook: when session 1 ends with currentLevel>=3
+       AND tutorialDone, fire a "Come back tomorrow for your daily bonus"
+       toast and schedule the daily reminder (already wired in Part A).
+     - 3-step coachmark for Nonogram + UnblockPuzzle: opt-in by setting
+       a body attribute data-growth-coachmark="nono" or ="unblock". The
+       per-app injection script below opts those two in.
+-->
+<script data-growth-shim="E">
+(function(){
+  if (window.__growthShimE) return;
+  window.__growthShimE = true;
+
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v=LS.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { LS.setItem(k,v); } catch(e){} }
+  function safe(fn){ try { return fn(); } catch(e){} }
+
+  // ── 1. First-3-clears interstitial suppression. Cumulative across sessions.
+  var clearsCount = parseInt(lsGet('_growthClearsTotal','0'),10) || 0;
+  if (window.Android && typeof window.Android.showInterstitial === 'function') {
+    var orig = window.Android.showInterstitial.bind(window.Android);
+    window.Android.showInterstitial = function(){
+      var c = parseInt(lsGet('_growthClearsTotal','0'),10) || 0;
+      if (c < 3) return; // swallow on first 3 clears
+      return orig();
+    };
+  }
+
+  // ── 2. Clear-count tracker (same pattern as Part B). Fires:
+  //   (a) confetti on the FIRST clear ever,
+  //   (b) increments _growthClearsTotal so suppression de-arms,
+  //   (c) at session-1 end (≥3 clears + tutorialDone), shows the day-2 nudge.
+  var SAVE_KEYS = ['save','state','gameState','progress'];
+  function readClearCount(){
+    for (var i=0;i<SAVE_KEYS.length;i++){
+      var raw = lsGet(SAVE_KEYS[i],null);
+      if (!raw) continue;
+      try {
+        var o = JSON.parse(raw);
+        if (Array.isArray(o.completedLevels)) return o.completedLevels.length;
+        if (typeof o.levelsCompleted === 'number') return o.levelsCompleted;
+        if (typeof o.totalSolves === 'number') return o.totalSolves;
+        if (typeof o.currentLevel === 'number') return o.currentLevel;
+      } catch(e){}
+    }
+    return null;
+  }
+  var lastSeen = -1;
+  function showConfetti(){
+    var ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;font-family:inherit;';
+    var emojis = ['🎉','✨','⭐','🎊','💫'];
+    for (var i=0;i<24;i++){
+      var span = document.createElement('span');
+      span.textContent = emojis[i % emojis.length];
+      span.style.cssText = 'position:absolute;top:-40px;left:' + (Math.random()*100) + '%;' +
+        'font-size:' + (24 + Math.random()*16) + 'px;' +
+        'transform:rotate(' + (Math.random()*360) + 'deg);' +
+        'transition:transform 2.4s ease-in,top 2.4s ease-in,opacity 2.4s;';
+      ov.appendChild(span);
+      setTimeout((function(s){return function(){
+        s.style.top = (60 + Math.random()*30) + '%';
+        s.style.transform = 'rotate(' + (Math.random()*720) + 'deg)';
+        s.style.opacity = '0';
+      };})(span), 50 + i*40);
+    }
+    document.body.appendChild(ov);
+    setTimeout(function(){ ov.remove(); }, 2700);
+
+    var msg = document.createElement('div');
+    msg.style.cssText = 'position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);' +
+      'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border:1px solid var(--border, #d4e2ec);border-radius:18px;padding:18px 22px;' +
+      'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index:9999;font-family:inherit;';
+    msg.innerHTML = "🎉 You've got this!<br><span style='font-weight:600;font-size:0.9rem;color:var(--text-mute, #5a7390);'>499 more puzzles to go.</span>";
+    document.body.appendChild(msg);
+    setTimeout(function(){ msg.remove(); }, 2400);
+  }
+
+  function maybeDay2Nudge(){
+    var alreadyShown = lsGet('_growthDay2NudgeShown','0');
+    if (alreadyShown === '1') return;
+    var c = parseInt(lsGet('_growthClearsTotal','0'),10) || 0;
+    var tutorialDone = lsGet('tutorialDone','0') === '1';
+    if (c < 3) return;
+    if (!tutorialDone) return;
+    lsSet('_growthDay2NudgeShown','1');
+    if (window.showToast) safe(function(){ showToast('Come back tomorrow for your daily bonus 🔥'); });
+  }
+
+  setInterval(function(){
+    var c = readClearCount();
+    if (c == null) return;
+    if (lastSeen < 0) { lastSeen = c; return; }
+    if (c > lastSeen) {
+      var firstEver = (parseInt(lsGet('_growthClearsTotal','0'),10) || 0) === 0;
+      lastSeen = c;
+      var total = (parseInt(lsGet('_growthClearsTotal','0'),10) || 0) + 1;
+      lsSet('_growthClearsTotal', String(total));
+      if (firstEver) setTimeout(showConfetti, 300);
+      setTimeout(maybeDay2Nudge, 1200);
+    }
+  }, 1200);
+
+  // ── 3. Coachmark — opt-in via document.body data attribute.
+  // The per-app injection layer below sets data-growth-coachmark for Nonogram
+  // + UnblockPuzzle. Triggered once per install (tutorialDone gate).
+  function runCoachmark(){
+    if (lsGet('tutorialDone','0') === '1') return;
+    var kind = document.body && document.body.getAttribute('data-growth-coachmark');
+    if (!kind) return;
+    var steps;
+    if (kind === 'nono') {
+      steps = [
+        { title:'Find the picture', body:'Numbers show how many filled squares are in each row + column.' },
+        { title:'Tap to fill', body:'Tap a cell to fill. Long-press marks it empty (a guaranteed blank).' },
+        { title:'Solve the row', body:'When a row matches its numbers, it locks in. Clear them all to win.' },
+      ];
+    } else if (kind === 'unblock') {
+      steps = [
+        { title:'Find the red block', body:'Your goal: slide the red block out the right edge.' },
+        { title:'Drag to slide', body:'Blocks slide along their long axis only. Drag, don\'t tap.' },
+        { title:'Clear the path', body:'Move the other blocks out of the way. Fewer moves = more stars.' },
+      ];
+    } else if (kind === 'watersort') {
+      steps = [
+        { title:'Sort the colors', body:'Each tube can hold 4 layers. Win when every tube is one color (or empty).' },
+        { title:'Tap to pour', body:'Tap a tube to lift it. Tap another to pour. Liquid only pours onto the same color (or into an empty tube).' },
+        { title:'Boosters help', body:'Out of moves? Use Hint, Undo, Restart, +Tube, or Wand at the bottom.' },
+      ];
+    } else if (kind === 'puzzle2048') {
+      steps = [
+        { title:'Merge to grow', body:'Swipe to slide all tiles. Two tiles with the same number merge into one — bigger.' },
+        { title:'Reach 2048', body:'Keep merging: 2 → 4 → 8 → 16 → … all the way to 2048 (and beyond if you can).' },
+        { title:'Plan ahead', body:'The board fills up fast. Keep your highest tile in a corner and chain merges toward it.' },
+      ];
+    } else {
+      return;
+    }
+    // Round-15: mark tutorial as SEEN the moment the first step renders.
+    // Previously tutorialDone was only set after the last step, so any
+    // mid-tutorial app-close re-triggered the whole flow on next launch.
+    // The user explicitly wants this overlay to appear only on the very
+    // first launch ever.
+    lsSet('tutorialDone','1');
+    // Round-15.12: WHOLE tutorial = ONE queue entry. Don't release the
+    // queue's done() until all 3 steps have been dismissed. This
+    // guarantees the daily-streak popup (queued separately at ~1400ms)
+    // can NEVER interleave between tutorial steps. User reported the
+    // streak appearing between step 1 and step 2 — that was per-step
+    // queueing letting other entries jump the line.
+    function runStepsSerially(allDoneCb){
+      var i = 0;
+      function next(){
+        if (i >= steps.length) { allDoneCb(); return; }
+        var bg = document.createElement('div');
+        bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
+        var card = document.createElement('div');
+        card.style.cssText = 'background:var(--bg, var(--surface, #ffffff));color:var(--page-fg, var(--text, #1e3a5f));border-radius:18px;padding:22px;max-width:320px;width:88%;text-align:center;border:1px solid var(--menu-tile-border, var(--border, rgba(255,255,255,0.18)));box-shadow:0 14px 44px rgba(0,0,0,0.4);';
+        var s = steps[i];
+        var idx = i;
+        card.innerHTML =
+          '<div style="font-size:11px;font-weight:700;letter-spacing:2px;opacity:0.62;margin-bottom:6px;">STEP ' + (idx+1) + ' / ' + steps.length + '</div>' +
+          '<div style="font-size:1.2rem;font-weight:800;margin-bottom:6px;">' + s.title + '</div>' +
+          '<div style="font-size:0.95rem;opacity:0.78;margin-bottom:14px;">' + s.body + '</div>' +
+          '<button data-cm-next type="button" style="border:none;padding:10px 18px;background:var(--g-play, #3b6db8);color:var(--on-accent, #fff);border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">' +
+            (idx+1 < steps.length ? 'Next →' : 'Got it') +
+          '</button>';
+        bg.appendChild(card);
+        function close(advance){
+          bg.remove();
+          if (advance) { i++; next(); }
+          else { allDoneCb(); }
+        }
+        card.querySelector('[data-cm-next]').addEventListener('click', function(){ close(true); });
+        bg.addEventListener('click', function(ev){ if (ev.target === bg) close(false); });
+        document.body.appendChild(bg);
+      }
+      next();
+    }
+    if (window.gPopupQueue && typeof window.gPopupQueue.enqueue === 'function') {
+      window.gPopupQueue.enqueue(function(done){ runStepsSerially(done); });
+    } else {
+      runStepsSerially(function(){});
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(runCoachmark, 800); });
+  } else {
+    setTimeout(runCoachmark, 800);
+  }
+})();
+</script>
+
+
+<!-- Growth shim — Part F (share virality). Idempotent: data-growth-shim="F".
+     - Share-a-win: when a level-complete / win overlay shows up, inject a
+       "🔁 Share" button. Composes a one-tap message (with Play link for live
+       apps; UnblockPuzzle ships the no-link wording until it goes live).
+     - Wordle-style daily result: same Share button on the daily-completion
+       overlay produces a spoiler-free recap line.
+     - Native bridge: window.Android.shareText. shareImage is best-effort and
+       degrades to text-only — see MainActivity comment.
+-->
+<script data-growth-shim="F">
+(function(){
+  if (window.__growthShimF) return;
+  window.__growthShimF = true;
+
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v=LS.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function safe(fn){ try { return fn(); } catch(e){} }
+  function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
+
+  // Game-name + Play link per package.
+  var GAME_INFO = {
+    'com.pegasusgames.watersortpuzzle': { name:'Water Sort Puzzle', link:'https://play.google.com/store/apps/details?id=com.pegasusgames.watersortpuzzle' },
+    'com.pegasusgames.nonogram':        { name:'Nonogram',           link:'https://play.google.com/store/apps/details?id=com.pegasusgames.nonogram' },
+    'com.pegasusgames.puzzle2048':      { name:'2048 Puzzle',         link:'https://play.google.com/store/apps/details?id=com.pegasusgames.puzzle2048' },
+    // TODO post-release: replace empty link with the real Play URL once UnblockPuzzle is live.
+    'com.pegasusgames.unblockpuzzle':   { name:'Unblock Puzzle',      link:'' },
+    'com.pegasusgames.pipeconnect':     { name:'Pipe Connect',        link:'' },
+  };
+
+  function detectPkg(){
+    var t = (document.title||'').toLowerCase();
+    if (t.indexOf('water') >= 0) return 'com.pegasusgames.watersortpuzzle';
+    if (t.indexOf('nonogram') >= 0) return 'com.pegasusgames.nonogram';
+    if (t.indexOf('2048') >= 0) return 'com.pegasusgames.puzzle2048';
+    if (t.indexOf('unblock') >= 0) return 'com.pegasusgames.unblockpuzzle';
+    if (t.indexOf('pipe') >= 0) return 'com.pegasusgames.pipeconnect';
+    return '';
+  }
+  var PKG = detectPkg();
+  var INFO = GAME_INFO[PKG] || { name:'Pegasus Games', link:'' };
+
+  function readSave(){
+    var keys = ['save','state','gameState','progress'];
+    for (var i=0;i<keys.length;i++){
+      var raw = lsGet(keys[i],null);
+      if (!raw) continue;
+      try { return JSON.parse(raw); } catch(e){}
+    }
+    return {};
+  }
+
+  function composeWin(){
+    var s = readSave();
+    var lvl = s.currentLevel || (Array.isArray(s.completedLevels) ? s.completedLevels.length : 0) || 0;
+    var brag = 'I just solved Level ' + lvl + ' on ' + INFO.name + '! Can you beat me?';
+    return INFO.link
+      ? (brag + ' ' + INFO.link)
+      : (brag + ' — search "' + INFO.name + '" by Pegasus Games on Google Play.');
+  }
+
+  function compose2048Score(){
+    var s = readSave();
+    var score = s.bestScore || s.highScore || s.score || 0;
+    var brag = 'New high score on ' + INFO.name + ': ' + score + '. Beat that!';
+    return INFO.link ? (brag + ' ' + INFO.link) : brag;
+  }
+
+  function composeDaily(){
+    var s = readSave();
+    var date = new Date().toISOString().slice(0,10);
+    var moves = s.lastDailyMoves || s.dailyMoves || '?';
+    var line = INFO.name + ' Daily ' + date + ' ✅  solved in ' + moves + ' moves';
+    return INFO.link ? (line + '\n' + INFO.link) : line;
+  }
+
+  function doShare(text){
+    if (!text) return;
+    if (api('shareText')) { safe(function(){ Android.shareText(text); }); return; }
+    if (navigator.share) {
+      try { navigator.share({ text: text }); return; } catch(e){}
+    }
+    safe(function(){ window.prompt('Copy and share:', text); });
+  }
+
+  function buildShareButton(label, getter){
+    var btn = document.createElement('button');
+    btn.setAttribute('data-growth-share-btn','1');
+    btn.style.cssText =
+      'margin-top:10px;width:100%;padding:11px;border:none;border-radius:12px;' +
+      'background:var(--g-play, linear-gradient(135deg,#3b6db8,#5cb3d8));color:var(--on-accent, #fff);font-weight:800;font-size:0.95rem;cursor:pointer;font-family:inherit;';
+    btn.textContent = label;
+    btn.addEventListener('click', function(){ doShare(getter()); });
+    return btn;
+  }
+
+  // ── Detect level-complete / daily-complete / high-score overlays.
+  // Heuristic: any element with id containing 'overlay-complete', 'win',
+  // 'levelComplete', 'daily', 'highScore', or class containing 'celebration'.
+  var SELECTORS = [
+    '[id*="overlay-complete"]',
+    '[id*="winOverlay"]',
+    '[id*="levelComplete"]',
+    '[id*="daily-complete"]',
+    '[id*="overlay-daily"]',
+    '[id*="highScore"]',
+    '.celebration',
+  ];
+  function isVisible(el){
+    if (!el) return false;
+    var st = window.getComputedStyle(el);
+    if (st.display === 'none' || st.visibility === 'hidden') return false;
+    if (parseFloat(st.opacity) === 0) return false;
+    var r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0;
+  }
+
+  function injectInto(el, getter, label){
+    if (!el) return;
+    if (el.querySelector('[data-growth-share-btn]')) return;
+    // Round-15.20: append to the INNER card. Each app names its modal
+    // card differently — broad pattern match covers all known ones.
+    // If `el` itself looks like a card (small fixed-width container,
+    // not a full-screen overlay), use it directly.
+    var card = el.querySelector(
+      '.overlay-box, .overlay-card, .overlay-content, ' +
+      '.win-card, .win-box, .modal-card, .modal-content, ' +
+      '.card, .modal, .ls-card, .confirm-card, ' +
+      '[class*="-card"], [class*="-content"], [class*="overlay-box"]'
+    );
+    var target = card || el;
+    var btn = buildShareButton(label, getter);
+    target.appendChild(btn);
+  }
+
+  function scan(){
+    for (var i=0;i<SELECTORS.length;i++){
+      var els = document.querySelectorAll(SELECTORS[i]);
+      for (var j=0;j<els.length;j++){
+        if (!isVisible(els[j])) continue;
+        var id = (els[j].id || '').toLowerCase();
+        if (id.indexOf('daily') >= 0) {
+          injectInto(els[j], composeDaily, '🔁 Share daily result');
+        } else if (id.indexOf('highscore') >= 0 || id.indexOf('high') >= 0) {
+          injectInto(els[j], compose2048Score, '🔁 Share new high score');
+        } else {
+          var getter = (PKG === 'com.pegasusgames.puzzle2048') ? compose2048Score : composeWin;
+          injectInto(els[j], getter, '🔁 Share win');
+        }
+      }
+    }
+  }
+  setInterval(scan, 800);
+})();
+</script>
+
+
+<!-- Growth shim — Part G (Play Games Services). Idempotent: data-growth-shim="G".
+     Behavioral half only — submits the player's clear metric to PGS as
+     they progress. The MENU shim owns the UI side (the 🏆 Ranks icon
+     and the Ranks sheet that opens the leaderboard). See CLAUDE.md
+     "No competing runtime shims" — keep menu rendering in one place.
+-->
+<script data-growth-shim="G">
+(function(){
+  if (window.__growthShimG) return;
+  window.__growthShimG = true;
+
+  function lsGet(k, d){ try { var v=localStorage.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function safe(fn){ try { return fn(); } catch(e){} }
+  function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
+
+  // PER-APP LEADERBOARD IDS (PGS project 225819574531, wired 2026-05-27):
+  //   WaterSortPuzzle  CgkIg4KVn8kGEAIQAw
+  //   Nonogram         CgkIg4KVn8kGEAIQBA
+  //   Puzzle2048       CgkIg4KVn8kGEAIQBQ
+  //   UnblockPuzzle    CgkIg4KVn8kGEAIQBg
+  // The literal below is patched in each per-app game.html — use
+  // scripts/wire_leaderboards.py to (re)apply after a shim re-inject.
+  var LEADERBOARD_ID = 'CgkIg4KVn8kGEAIQCA';
+  // Exported so the MENU shim's Ranks sheet can open the matching leaderboard.
+  window._GROWTH_LEADERBOARD_ID = LEADERBOARD_ID;
+
+  // ── On every clear, submit the relevant metric to PGS (no-op until configured).
+  var lastSeen = -1;
+  function readClearMetric(){
+    var keys = ['save','state','gameState','progress'];
+    for (var i=0;i<keys.length;i++){
+      var raw = lsGet(keys[i], null);
+      if (!raw) continue;
+      try {
+        var o = JSON.parse(raw);
+        var t = (document.title||'').toLowerCase();
+        if (t.indexOf('2048') >= 0) {
+          return parseInt(o.bestScore || o.highScore || o.score || 0, 10);
+        }
+        if (Array.isArray(o.completedLevels)) return o.completedLevels.length;
+        if (typeof o.levelsCompleted === 'number') return o.levelsCompleted;
+        if (typeof o.currentLevel === 'number') return o.currentLevel;
+      } catch(e){}
+    }
+    return null;
+  }
+  setInterval(function(){
+    var m = readClearMetric();
+    if (m == null) return;
+    if (lastSeen < 0) { lastSeen = m; return; }
+    if (m > lastSeen) {
+      lastSeen = m;
+      if (api('submitScore')) safe(function(){ Android.submitScore(LEADERBOARD_ID, m); });
+    }
+  }, 1500);
+})();
+</script>
+
+
+<!-- Growth shim — Menu (2026-05-27 consolidation). Idempotent: data-growth-shim="MENU".
+     ONE menu-render owner. No competing shims. No setInterval injectors.
+     See CLAUDE.md "No competing runtime shims".
+
+     This shim is the single source of truth for the menu UI:
+       Tier 1 — Continue/Play (label patched from save state)
+       Tier 2 — Daily Challenge with streak baked in (🔥 N)
+       Tier 3 — icon row (unchanged static markup)
+       Top bar (in-flow flex, no absolute positioning):
+         [❤ lives] [🪙 coins]  →flex spacer→  [🪙 free-coins +25] [🏆 ranks] [⚙ settings]
+       Below Tier 2: ONE row of clearly-labeled chips
+         🛡 Streak Shield ×N    🎁 Claim Day N · +XX 🪙   (or hidden when claimed)
+
+     Suppression: legacy banner widgets that fight the menu hierarchy
+     (xPassPromo, xFreeCoinsBtn, weeklyEventBanner, xThemeStrip) are
+     hidden on the menu and the theme strip is permanently re-parented
+     to the Themes screen on first sight.
+
+     Triggers: this render runs on showScreen('menuScreen'),
+     visibility-change, and once at startup. No 1.5-second polling.
+-->
+<script data-growth-shim="MENU">
+(function(){
+  if (window.__growthShimMenu) return;
+  window.__growthShimMenu = true;
+
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v=LS.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { LS.setItem(k, v); } catch(e){} }
+  function safe(fn){ try { return fn(); } catch(e){} }
+  function $(id){ return document.getElementById(id); }
+  function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
+
+  // ── Layout polish: enlarge Tier-1/2/3, tighten gaps, narrow-viewport guard.
+  (function injectMenuCss(){
+    if ($('menu-shim-css')) return;
+    var st = document.createElement('style');
+    st.id = 'menu-shim-css';
+    st.textContent =
+      // The MENU shim does NOT override button widths/padding/margins
+      // anymore — each app's static CSS already sizes these correctly
+      // for its theme; overriding caused box-sizing overflow that
+      // pushed the menu off-screen. Centering happens via the apps'
+      // own .menu-buttons styles plus the box-sizing safety net below.
+      // Safety: every menu button respects border-box so explicit
+      // padding never overflows.
+      '#menuScreen *, #screen-menu *{ box-sizing:border-box; }'+
+      // Center the icon row(s) horizontally without changing widths.
+      '#menuScreen .menu-icon-row, #screen-menu .menu-icon-row,'+
+      '#menuScreen .menu-pair-row, #screen-menu .menu-pair-row,'+
+      '#menuScreen .menu-tile-row, #screen-menu .menu-tile-row{'+
+        'justify-content:center !important;'+
+      '}'+
+      // STRUCTURE is universal: title + buttons sit together as a single
+      // cohesive block vertically centered in the viewport. VISUAL
+      // DESIGN (colors, fonts, shapes) stays per-app. 2026-05-28
+      // round-13: removed the empty gap between title-group and
+      // .menu-buttons after user feedback "no empty space in the middle
+      // of the screen — title should be lower, closer to Play".
+      ':root { --menu-gap: 14px; }'+
+      // CRITICAL: only scope flex to the .active menu. Without this,
+      // `display:flex !important` overrides the .screen:not(.active)
+      // {display:none} rule from each app, so the menu's icon row +
+      // chips bleed into the gameplay / settings / other screens.
+      '#menuScreen.active, #screen-menu.active{display:flex !important;flex-direction:column !important;justify-content:center !important;align-items:center !important;}'+
+      // Belt-and-braces: any .screen WITHOUT .active stays hidden,
+      // even against !important display rules from our own injected
+      // CSS (Round-14 bug fix).
+      '.screen:not(.active){display:none !important;}'+
+      // Title group + example grid + .menu-buttons all shrink-to-fit so
+      // none of them grabs leftover space and pushes Play to one edge.
+      '#menuScreen > *, #screen-menu > *{flex:0 0 auto !important;}'+
+      '#menuScreen .menu-buttons, #screen-menu .menu-buttons{'+
+        'flex:0 0 auto !important;display:flex !important;flex-direction:column !important;'+
+        'align-items:center !important;justify-content:flex-start !important;'+
+        'gap:var(--menu-gap) !important;padding:0 !important;margin:8px 0 0 !important;'+
+      '}'+
+      // Title block sits just above the buttons with a small gap (NOT a
+      // viewport-pushed gap). 2048 example grid / WaterSort tagline /
+      // Nono "Paint by numbers" lines all collapse to ~14px below.
+      '#menuScreen .game-title, #screen-menu .game-title{margin:0 0 12px !important;}'+
+      '#menuScreen .menu-logo, #screen-menu .menu-logo,'+
+      '#menuScreen .menu-title, #screen-menu .menu-title{margin:0 !important;}'+
+      '#menuScreen .menu-tagline, #screen-menu .menu-tagline,'+
+      '#menuScreen .menu-subtitle, #screen-menu .menu-subtitle{margin:4px 0 14px !important;}'+
+      // Title — Round-15 bigger + bolder + tighter spacing for a logo
+      // feel (user feedback: "make title bigger and more interesting").
+      '#menuScreen .game-title h1, #menuScreen .menu-title, #screen-menu .menu-logo, #menuScreen .menu-logo, #screen-menu .menu-title{'+
+        'font-size:clamp(30px, 7.5vw, 48px) !important;line-height:1.05 !important;margin:0 0 4px !important;'+
+        'letter-spacing:0.5px !important;font-weight:900 !important;'+
+      '}'+
+      // Per-app illustration container, filled at runtime by
+      // injectMenuIllustration().
+      '[data-menu-illustration]{display:flex !important;justify-content:center !important;margin:6px 0 12px !important;}'+
+      '#menuScreen .game-title p, #menuScreen .menu-tagline, #screen-menu .menu-tagline, #screen-menu .menu-subtitle{'+
+        'margin-top:2px !important;font-size:clamp(0.78rem, 2vw, 0.95rem) !important;opacity:0.78;'+
+      '}'+
+      // Tier-1 Play/Continue — the LARGEST element. min-height 64px,
+      // font 1.25rem, full max-width of the stack.
+      '#menuScreen .btn-primary, #menuScreen .menu-primary, #menuScreen .menu-tile-primary, #menuScreen .btn-play, #menuScreen #menuPlayBtn,'+
+      '#screen-menu .btn-primary, #screen-menu .menu-primary, #screen-menu .menu-tile-primary, #screen-menu .btn-play, #screen-menu #menuPlayBtn{'+
+        'min-height:clamp(64px, 8.5vh, 96px) !important;'+
+        'font-size:clamp(1.18rem, 3.1vw, 1.5rem) !important;'+
+        'padding:clamp(14px, 2.2vw, 22px) clamp(28px, 5vw, 40px) !important;'+
+        'width:clamp(280px, 78vw, 460px) !important;'+
+        'margin:0 !important;'+
+      '}'+
+      // Tier-2 Daily Challenge — distinctly smaller AND narrower than
+      // Tier-1. Margin-top adds breathing room under Tier-1.
+      '#menuScreen #dailyChallengeBtn, #menuScreen #dailyBtn, #menuScreen [onclick*="DailyChallenge"], #menuScreen [onclick*="startDailyChallenge"],'+
+      '#screen-menu #dailyChallengeBtn, #screen-menu #dailyBtn, #screen-menu [onclick*="DailyChallenge"], #screen-menu [onclick*="startDailyChallenge"]{'+
+        'min-height:clamp(40px, 5.4vh, 52px) !important;'+
+        'font-size:clamp(0.88rem, 2.2vw, 1.0rem) !important;'+
+        'padding:clamp(8px, 1.4vw, 12px) clamp(16px, 3.2vw, 24px) !important;'+
+        'width:clamp(220px, 60vw, 340px) !important;'+
+        'margin:14px 0 0 !important;'+
+      '}'+
+      // Chips container — full width, one row, even rhythm.
+      '[data-menu-chips]{width:100% !important;max-width:none !important;padding:0 16px !important;margin:0 !important;}'+
+      // Tier-3 icon-row buttons — size for icon + label stacked
+      // vertically. UnblockPuzzle\'s native .menu-icon-btn was 46x46
+      // icon-only; the round-12 label addition cramped them. This
+      // overrides each app\'s native sizing to ensure ~64px tap target
+      // with readable label.
+      '#menuScreen .menu-icon-row .menu-icon-btn, #screen-menu .menu-icon-row .menu-icon-btn,'+
+      '#menuScreen .menu-icon-row .icon-btn, #screen-menu .menu-icon-row .icon-btn{'+
+        'min-width:clamp(60px, 16vw, 80px) !important;'+
+        'min-height:clamp(58px, 8vh, 72px) !important;'+
+        'display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;'+
+        'gap:4px !important;padding:8px 6px !important;'+
+        'font-size:clamp(10px, 1.6vw, 12px) !important;'+
+      '}'+
+      '#menuScreen .menu-icon-row .menu-icon-btn svg, #screen-menu .menu-icon-row .menu-icon-btn svg,'+
+      '#menuScreen .menu-icon-row .icon-btn svg, #screen-menu .menu-icon-row .icon-btn svg{'+
+        'width:22px !important;height:22px !important;'+
+      '}'+
+      '#menuScreen .menu-icon-row .menu-icon-btn .menu-icon-label,'+
+      '#screen-menu .menu-icon-row .menu-icon-btn .menu-icon-label{'+
+        'display:block !important;font-size:11px !important;line-height:1 !important;'+
+      '}'+
+      // Top bar pinned to the very top of the menu container ONLY. The
+      // synth header is a child of menuScreen, so when menuScreen loses
+      // .active it should disappear — but some apps' .screen CSS uses
+      // !important display:flex when toggling. Belt-and-braces: force
+      // hide whenever the host .screen lacks .active. (Round-13 bug
+      // fix: high-scores screen showed the lives/coins/+25/trophy from
+      // the synth header overlapping its native Back+title.)
+      '[data-synth-menu-header]{position:absolute !important;top:0 !important;left:0 !important;right:0 !important;'+
+        'padding:14px 18px !important;margin:0 !important;'+
+        'display:flex !important;align-items:center !important;justify-content:space-between !important;'+
+        'z-index:5 !important;background:transparent !important;}'+
+      '.screen:not(.active) [data-synth-menu-header]{display:none !important;}'+
+      '#menuScreen, #screen-menu { padding-top:68px !important; }'+
+      '[data-menu-stats]{position:static !important;}'+
+      '[data-menu-icon="freecoins"]{position:relative !important;}'+
+      // Belt-and-braces: any legacy widget that ends up inside the
+      // menu screen gets hidden by CSS, regardless of when it was
+      // created. The init-time calls are removed in game.html, but
+      // this guards future regressions.
+      '#menuScreen #xPassPromo, #screen-menu #xPassPromo,'+
+      '#menuScreen #xFreeCoinsBtn, #screen-menu #xFreeCoinsBtn,'+
+      '#menuScreen #weeklyEventBanner, #screen-menu #weeklyEventBanner,'+
+      '#menuScreen #xThemeStrip, #screen-menu #xThemeStrip,'+
+      '#menuScreen #xThemeStrip2048, #screen-menu #xThemeStrip2048,'+
+      '#menuScreen #xSeasonPassPromo, #screen-menu #xSeasonPassPromo,'+
+      '#menuScreen #xWeeklyPassPromo, #screen-menu #xWeeklyPassPromo{ display:none !important; }'+
+      // Narrow-viewport guard for the top-bar icons.
+      '@media (max-width: 380px){'+
+        '[data-menu-icons] button{width:32px !important;height:32px !important;font-size:15px !important;}'+
+        '[data-menu-icons]{gap:4px !important;}'+
+        '#menuScreen .menu-header .lives-text, #screen-menu .menu-header .lives-text, [data-lives-label]{display:none;}'+
+      '}'+
+      '@media (max-width: 330px){'+
+        '[data-menu-icons] button{width:28px !important;height:28px !important;font-size:13px !important;}'+
+        '#menuScreen .menu-header, #screen-menu .menu-header{padding-left:6px !important;padding-right:6px !important;}'+
+      '}'+
+      // Streak-chip row (rendered inline above icon row).
+      '[data-menu-chips]{display:flex !important;justify-content:center !important;flex-wrap:wrap !important;'+
+        'gap:8px !important;margin:14px auto !important;font-size:12px !important;font-weight:700 !important;'+
+        'font-family:inherit !important;}'+
+      // Chip row: chips can wrap to a second line if the row gets
+      // too long, but TEXT inside a chip never wraps to two lines —
+      // user feedback: "Streak Shield" splitting onto two lines
+      // looked broken. Wrap below means: chip on its own row, full
+      // text intact.
+      '[data-menu-chips]{flex-wrap:wrap !important;}'+
+      '[data-menu-chip]{white-space:nowrap !important;flex-shrink:0;}'+
+      // Hide static level-duplication labels — the Continue / Play
+      // button carries that info, and showing "Level 23 / 150" PLUS
+      // "Continue — Level 23 of 150" PLUS "Continue · Level 23" on
+      // the button is three references to the same thing.
+      '#menuScreen .level-indicator, #screen-menu .level-indicator{display:none !important;}'+
+      '#menuScreen .menu-primary-sub, #screen-menu .menu-primary-sub{display:none !important;}'+
+      // Chips use the SAME look as Tier-3 icon-row buttons (Levels /
+      // Shop / Games / Settings) AND the WaterSort Missions/Stats
+      // tiles. Driven by --menu-tile-* tokens defined per-app's :root
+      // so the chip background matches whatever each app's icon button
+      // looks like (translucent on WaterSort, solid white on
+      // Puzzle2048 Daylight, solid beige on Nono, etc.). Round-14
+      // unification.
+      '[data-menu-chip]{padding:8px 14px;border-radius:14px;display:inline-flex;'+
+        'align-items:center;gap:6px;cursor:pointer;font-weight:700;'+
+        'background:var(--menu-tile-bg, var(--surface, rgba(127,127,127,0.16))) !important;'+
+        'color:var(--menu-tile-fg, var(--text, inherit)) !important;'+
+        'border:1px solid var(--menu-tile-border, var(--border, rgba(127,127,127,0.30))) !important;}'+
+      // Force WaterSort\'s injected Missions/Stats .icon-btn into the
+      // same look as Tier-3 by overriding inline rgba tints (they
+      // shipped with per-button color tints that broke uniformity).
+      '#menuScreen .menu-icon-row .icon-btn[style*="rgba"]{'+
+        'background:var(--menu-tile-bg) !important;'+
+        'border-color:var(--menu-tile-border) !important;'+
+        'color:var(--menu-tile-fg) !important;}';
+    (document.head || document.documentElement).appendChild(st);
+  })();
+
+  // ── Per-app menu container ID isn't uniform: Nonogram uses `screen-menu`,
+  // others use `menuScreen`. Resolve once + cache.
+  function menuEl(){
+    return $('menuScreen') || $('screen-menu') || document.querySelector('[id*="menu" i].screen.active');
+  }
+  function onMenu(){
+    var m = menuEl();
+    return !!(m && m.classList.contains('active'));
+  }
+  function tier1Btn(){
+    var m = menuEl(); if (!m) return null;
+    return m.querySelector('#menuPlayBtn, .btn-primary, .menu-primary, .menu-tile-primary, .btn-play');
+  }
+  function tier2Btn(){
+    var m = menuEl(); if (!m) return null;
+    return $('dailyChallengeBtn') || $('dailyBtn') ||
+           m.querySelector('[onclick*="DailyChallenge"], [onclick*="startDailyChallenge"], [onclick*="dailyChallenge"]');
+  }
+  function readSave(){
+    // Per-app localStorage keys (each app uses its own):
+    //   WaterSort:    watersort_save
+    //   Nonogram:     state
+    //   Puzzle2048:   puzzle2048_save
+    //   UnblockPuzzle: unblock_save
+    //   PipeConnect:  pipeconnect_save
+    var keys = ['save','state','gameState','progress','State',
+                'watersort_save','puzzle2048_save','unblock_save',
+                'nonogram_state','nonogram_save','pipeconnect_save'];
+    for (var i=0;i<keys.length;i++){
+      var raw = lsGet(keys[i], null);
+      if (!raw) continue;
+      try { return JSON.parse(raw); } catch(e){}
+    }
+    // Live state objects — apps expose them as window.State (caps) or
+    // window.state (lower). Read whichever exists.
+    if (window.State && typeof window.State === 'object') return window.State;
+    if (window.state && typeof window.state === 'object') return window.state;
+    return {};
+  }
+  function getStreak(){
+    var s = readSave();
+    return s.dailyChallengeStreak || s.loginStreak || s.streak || 0;
+  }
+  function hasResumableProgress(){
+    var s = readSave();
+    var t = (document.title||'').toLowerCase();
+    // 2048-style: only "Continue" when score > 0 (player has made at
+    // least one merge). A fresh game with starter tiles placed but no
+    // merges yet has score=0 — must say Play, not "Continue · 0".
+    // Round-14 fix: gridHasTile alone returned true right after
+    // newGame initialized 2 starter tiles, surfacing "Continue · 0".
+    if (t.indexOf('2048') >= 0) {
+      var sc = s.score || s.currentScore || 0;
+      var ended = s.gameOver === true || s.achieved2048 === true;
+      if (ended) return false;
+      return sc > 0;
+    }
+    // Level-based games: lastLevelProgress / boardState / currentLevel
+    // / completedLevels all count.
+    if (s.lastLevelProgress) return true;
+    if (s.boardState || s.gameBoard) {
+      var go = s.gameOver === true || s.isGameOver === true;
+      if (!go) return true;
+    }
+    if (typeof s.currentLevel === 'number' && s.currentLevel > 1) return true;
+    if (Array.isArray(s.completedLevels) && s.completedLevels.length > 0) return true;
+    if (typeof s.levelsCompleted === 'number' && s.levelsCompleted > 0) return true;
+    return false;
+  }
+  function progressLabel(){
+    var s = readSave();
+    var t = (document.title||'').toLowerCase();
+    if (t.indexOf('2048') >= 0) {
+      var sc = s.score || s.currentScore || 0;
+      return 'Continue · ' + sc;
+    }
+    var n = (s.lastLevelProgress && s.lastLevelProgress.level)
+         || s.currentLevel
+         || (Array.isArray(s.completedLevels) ? s.completedLevels.length + 1 : 1);
+    return 'Continue · Level ' + n;
+  }
+
+  // ── Suppress on menu: hide legacy widgets that the menu shouldn't show.
+  // The audit-addendum init can stamp these before any wrap takes effect,
+  // so we permanently hide them when their parent is the menu.
+  function hideLegacyOnMenu(){
+    var menu = menuEl(); if (!menu) return;
+    ['xPassPromo','xFreeCoinsBtn','weeklyEventBanner','xSeasonPassPromo','xWeeklyPassPromo']
+      .forEach(function(id){
+        var el = $(id);
+        if (el && menu.contains(el)) el.style.display = 'none';
+      });
+  }
+
+  // Wrap the inject* functions so future calls also keep the suppression
+  // (some apps refresh them on showScreen).
+  var SUPPRESSED = [
+    'injectFreeCoins','injectFreeCoinsBtn',
+    'injectThemeStrip','injectPassPromo',
+    'updateTournamentBanner'
+  ];
+  function wrapInject(fnName){
+    if (typeof window[fnName] !== 'function') return;
+    if (window[fnName].__menuWrapped) return;
+    var orig = window[fnName];
+    window[fnName] = function(){
+      var r = orig.apply(this, arguments);
+      hideLegacyOnMenu();
+      return r;
+    };
+    window[fnName].__menuWrapped = true;
+  }
+
+  // ── Theme strip: permanently re-parent to the Themes screen on first sight.
+  var THEMES_HOSTS = ['themesScreen','themeScreen','screen-themes','xThemesScreen'];
+  function relocateThemeStripPermanent(){
+    var strip = $('xThemeStrip') || $('xThemeStrip2048');
+    if (!strip) return;
+    if (strip.getAttribute('data-relocated') === '1') return;
+    var target = null;
+    for (var i=0;i<THEMES_HOSTS.length;i++){
+      var el = $(THEMES_HOSTS[i]);
+      if (el) { target = el; break; }
+    }
+    if (!target) return; // Themes screen doesn't exist yet; try again later.
+    strip.style.display = '';
+    target.insertBefore(strip, target.firstChild);
+    strip.setAttribute('data-relocated','1');
+  }
+
+  // ── Top-bar icons (in-flow, no absolute positioning).
+  var FREE_COINS_AMOUNT = 25, FREE_COINS_COOLDOWN_MS = 4*60*60*1000;
+  function freeCoinsReadyAt(){
+    var t = parseInt(lsGet('lastFreeCoinsAt','0'),10);
+    return t ? t + FREE_COINS_COOLDOWN_MS : 0;
+  }
+  function fmtCountdown(ms){
+    if (ms <= 0) return '';
+    var s = Math.ceil(ms/1000);
+    var h = Math.floor(s/3600); s %= 3600;
+    var m = Math.floor(s/60);
+    return (h>0?h+'h ':'')+m+'m';
+  }
+  function ensureMenuHeader(){
+    var menu = menuEl(); if (!menu) return null;
+    // Always synthesize — the native .menu-header is hidden by
+    // hideNativeTopBarOnMenu so injecting into it would be invisible.
+    // Round-8 fix: previously returned the native if present, which
+    // landed our icons + stats inside a display:none element.
+    var syn = menu.querySelector('[data-synth-menu-header]');
+    if (syn) return syn;
+    syn = document.createElement('div');
+    syn.setAttribute('data-synth-menu-header','1');
+    syn.style.cssText =
+      'display:flex;align-items:center;justify-content:space-between;' +
+      'padding:14px 14px 4px;margin-bottom:14px;gap:8px;';
+    if (menu.firstChild) menu.insertBefore(syn, menu.firstChild);
+    else menu.appendChild(syn);
+    return syn;
+  }
+
+  // ── Top bar — ONE unified row across all four apps. Layout
+  // (Round-15 reorg per user spec):
+  //   LEFT:  [❤ lives] [🪙 coins] [🪙 +25 free-coins]   ← free-coins
+  //                                                       lives next to
+  //                                                       the balance,
+  //                                                       it's a coin
+  //                                                       source.
+  //   RIGHT: [⚙ settings]
+  // 🏆 Ranks moves DOWN into the bottom Tier-3 icon row alongside
+  // Levels/Shop/Games. The previous Tier-3 Settings icon is removed
+  // from each app's icon row (the synth top-right gear owns Settings).
+  function readLivesCoins(){
+    var s = readSave();
+    var lives = (typeof s.lives === 'number') ? s.lives : null;
+    var coins = (typeof s.coins === 'number') ? s.coins
+              : (typeof s.currency === 'number' ? s.currency : null);
+    return { lives: lives, coins: coins };
+  }
+  // Hide every native lives/coins/menu-header surface on the menu so
+  // the unified synth top-bar isn't visually duplicated. Native ones
+  // come back when navigating to gameScreen etc. — only suppressed
+  // while the menu is the active screen.
+  function hideNativeTopBarOnMenu(){
+    var menu = menuEl(); if (!menu) return;
+    // .menu-header (WaterSort, Puzzle2048) lives only on menu, hide it.
+    menu.querySelectorAll('.menu-header').forEach(function(el){
+      if (el.hasAttribute('data-synth-menu-header')) return;
+      el.style.display = 'none';
+    });
+    // Standalone .menu-coins / .menu-lives chips (UnblockPuzzle).
+    ['menu-coins','menu-lives','coin-display','lives-display'].forEach(function(cls){
+      menu.querySelectorAll('.' + cls).forEach(function(el){
+        // Don't hide if it's already inside our synth header.
+        if (el.closest('[data-synth-menu-header]')) return;
+        el.style.display = 'none';
+      });
+    });
+  }
+  function ensureTopBarIcons(){
+    var header = ensureMenuHeader();
+    if (!header) return;
+    // LEFT cluster (user spec 2026-05-28 r16.1):
+    //   ❤ Lives · 🪙 Coins · 🪙 +25 Free-coins
+    // Lives ALWAYS render in every app (Puzzle2048 included). Default
+    // 0 if state hasn't loaded yet.
+    if (header.querySelector('[data-menu-stats]')) {
+      refreshLeftStats();
+    } else {
+      var lc = readLivesCoins();
+      var lives = (lc.lives != null) ? lc.lives : 0;
+      var coins = (lc.coins != null) ? lc.coins : 0;
+      var left = document.createElement('div');
+      left.setAttribute('data-menu-stats','1');
+      left.style.cssText = 'display:flex;align-items:center;gap:14px;font-weight:700;color:var(--page-fg, var(--text, #fff));';
+      var livesHtml = '<span data-stat="lives" style="display:inline-flex;align-items:center;gap:4px;font-size:0.95rem;">❤<span data-stat-lives style="font-variant-numeric:tabular-nums;">' + lives + '</span></span>';
+      var coinsHtml = '<span data-stat="coins" style="display:inline-flex;align-items:center;gap:4px;font-size:0.95rem;">🪙<span data-stat-coins style="font-variant-numeric:tabular-nums;">' + coins + '</span></span>';
+      var freeBtnHtml = '<button data-menu-icon="freecoins" aria-label="Free coins" '+
+        'style="position:relative;background:transparent;border:none;cursor:pointer;'+
+        'font-size:1.25rem;line-height:1;padding:0 2px;font-family:inherit;color:inherit;">'+
+          '🪙'+
+          '<span data-menu-icon-badge="freecoins" style="position:absolute;top:-6px;right:-12px;background:#2ea043;color:#fff;border-radius:9px;padding:1px 5px;font-size:9px;font-weight:800;display:none;line-height:1;">+'+FREE_COINS_AMOUNT+'</span>'+
+        '</button>';
+      left.innerHTML = livesHtml + coinsHtml + freeBtnHtml;
+      header.appendChild(left);
+      left.querySelector('[data-menu-icon="freecoins"]').addEventListener('click', onFreeCoinsClick);
+    }
+    // RIGHT cluster — ⚙ Settings only (user spec 2026-05-28 r16.1).
+    // Ranks moved to the Tier-3 row below. Always force the content +
+    // onclick so a stale [data-menu-icons] from a previous round
+    // (which contained Ranks) gets overwritten with Settings.
+    var rightCluster = header.querySelector('[data-menu-icons]');
+    if (!rightCluster) {
+      rightCluster = document.createElement('div');
+      rightCluster.setAttribute('data-menu-icons','1');
+      rightCluster.style.cssText = 'display:flex;align-items:center;gap:14px;color:var(--page-fg, var(--text, #fff));pointer-events:auto;';
+      header.appendChild(rightCluster);
+    } else {
+      rightCluster.style.pointerEvents = 'auto';
+    }
+    if (!rightCluster.querySelector('[data-menu-icon="settings"]')) {
+      rightCluster.innerHTML =
+        '<button data-menu-icon="settings" aria-label="Settings" type="button" '+
+        'style="background:transparent;border:none;cursor:pointer;pointer-events:auto;'+
+        'font-size:1.6rem;line-height:1;padding:0;margin:0;font-family:inherit;color:inherit;'+
+        'min-width:32px;min-height:32px;display:flex;align-items:center;justify-content:center;'+
+        'position:relative;z-index:6;">⚙</button>';
+    }
+    // Always (re)bind via direct onclick AND ontouchend — addEventListener
+    // can drop if the parent innerHTML was reset, and WebView sometimes
+    // routes the first touch through touchend without firing click.
+    var gearBtn = rightCluster.querySelector('[data-menu-icon="settings"]');
+    if (gearBtn) {
+      var triggerSettings = function(ev){
+        if (ev) { try { ev.preventDefault(); ev.stopPropagation(); } catch(e){} }
+        openSettingsScreen();
+        return false;
+      };
+      gearBtn.onclick = triggerSettings;
+      gearBtn.ontouchend = triggerSettings;
+    }
+    // Event delegation safety net — even if the per-button handler ever
+    // drops, the synthesized header itself listens for any tap that
+    // resolves to a [data-menu-icon="settings"] descendant.
+    if (!header.__settingsDelegated) {
+      header.addEventListener('click', function(ev){
+        var t = ev.target;
+        while (t && t !== header){
+          if (t.getAttribute && t.getAttribute('data-menu-icon') === 'settings'){
+            ev.preventDefault(); ev.stopPropagation();
+            openSettingsScreen();
+            return;
+          }
+          t = t.parentNode;
+        }
+      });
+      header.__settingsDelegated = true;
+    }
+    // Strip Settings from each app's Tier-3 row so we don't render
+    // two settings entries. Insert Ranks INTO the Tier-3 row.
+    removeSettingsFromTier3();
+    injectRanksIntoTier3();
+  }
+
+  function openSettingsScreen(){
+    // Per-app showScreen calling-convention differs: Nono uses
+    //   showScreen('settings')  → it prepends 'screen-'
+    // Others (WaterSort, Puzzle2048, UnblockPuzzle) use
+    //   Game.showScreen('settingsScreen') / showScreen('settingsScreen')
+    // Detect by which screen element exists in the DOM and dispatch
+    // the right call. If nothing routes, fall back to direct DOM class
+    // toggle so the gear is NEVER silently dead.
+    var tried = false;
+    if ($('settingsScreen')) {
+      if (window.Game && typeof window.Game.showScreen === 'function') {
+        try { window.Game.showScreen('settingsScreen'); return; } catch(e){ tried = true; }
+      }
+      if (typeof window.showScreen === 'function') {
+        try { window.showScreen('settingsScreen'); return; } catch(e){ tried = true; }
+      }
+    }
+    if ($('screen-settings')) {
+      if (typeof window.showScreen === 'function') {
+        try { window.showScreen('settings'); return; } catch(e){ tried = true; }
+      }
+    }
+    // Hard fallback — direct DOM activate. Removes .active from every
+    // screen and adds it to whichever settings screen exists.
+    var settingsEl = $('settingsScreen') || $('screen-settings');
+    if (settingsEl) {
+      try {
+        document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+        settingsEl.classList.add('active');
+        return;
+      } catch(e){}
+    }
+  }
+  function removeRanksFromTier3(){
+    var rows = document.querySelectorAll('#menuScreen .menu-icon-row, #screen-menu .menu-icon-row');
+    rows.forEach(function(row){
+      row.querySelectorAll('[data-menu-tier3-ranks]').forEach(function(b){ b.remove(); });
+    });
+  }
+  function injectRanksIntoTier3(){
+    var row = document.querySelector('#menuScreen .menu-icon-row, #screen-menu .menu-icon-row');
+    if (!row || row.querySelector('[data-menu-tier3-ranks]')) return;
+    var btn = document.createElement('button');
+    btn.className = 'menu-icon-btn icon-btn';
+    btn.setAttribute('data-menu-tier3-ranks','1');
+    btn.setAttribute('aria-label','Ranks');
+    btn.innerHTML =
+      '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V4h12v5a6 6 0 0 1-12 0z"/><line x1="6" y1="5" x2="2" y2="5"/><line x1="18" y1="5" x2="22" y2="5"/><line x1="12" y1="15" x2="12" y2="19"/><line x1="8" y1="21" x2="16" y2="21"/></svg>'+
+      '<span class="menu-icon-label">Ranks</span>';
+    btn.addEventListener('click', openRanksSheet);
+    row.appendChild(btn);
+  }
+  function removeSettingsFromTier3(){
+    // Round-15: must use .remove() (not display:none) because the MENU
+    // shim's own CSS forces display:flex !important on every
+    // .menu-icon-row .menu-icon-btn, which would beat inline display.
+    var rows = document.querySelectorAll('#menuScreen .menu-icon-row, #screen-menu .menu-icon-row');
+    rows.forEach(function(row){
+      row.querySelectorAll('button').forEach(function(b){
+        var lbl = (b.querySelector('.menu-icon-label, span') || {}).textContent || b.textContent || '';
+        var aria = b.getAttribute('aria-label') || '';
+        if (/^settings$/i.test(lbl.trim()) || /^settings$/i.test(aria.trim())){
+          b.remove();
+        }
+      });
+    });
+  }
+  function refreshLeftStats(){
+    var lc = readLivesCoins();
+    var l = document.querySelector('[data-stat-lives]');
+    var c = document.querySelector('[data-stat-coins]');
+    if (l) l.textContent = (lc.lives != null) ? lc.lives : 0;
+    if (c) c.textContent = (lc.coins != null) ? lc.coins : 0;
+  }
+  function refreshTopBarIconState(){
+    var fc = document.querySelector('[data-menu-icon="freecoins"]');
+    if (!fc) return;
+    var badge = document.querySelector('[data-menu-icon-badge="freecoins"]');
+    var rem = freeCoinsReadyAt() - Date.now();
+    if (rem > 0) {
+      fc.style.opacity = '0.5';
+      fc.title = 'Free coins in ' + fmtCountdown(rem);
+      if (badge) badge.style.display = 'none';
+    } else {
+      fc.style.opacity = '1';
+      fc.title = 'Claim ' + FREE_COINS_AMOUNT + ' free coins';
+      if (badge) badge.style.display = 'inline-block';
+    }
+  }
+  function onFreeCoinsClick(){
+    if (typeof window.claimFreeCoins === 'function') { safe(function(){ window.claimFreeCoins(); }); return; }
+    if (typeof window.xClaimFreeCoins === 'function') { safe(function(){ window.xClaimFreeCoins(); }); return; }
+    if (typeof window.showRewardedAd === 'function') {
+      safe(function(){ window.showRewardedAd('free_coins', function(){
+        try { lsSet('lastFreeCoinsAt', String(Date.now())); } catch(e){}
+        if (window.State && typeof window.State.save === 'function') safe(function(){ window.State.save(); });
+      }); });
+    }
+  }
+
+  // ── Unified Ranks sheet — two tabs: This Week (bracket) + Leaderboard (PGS).
+  function openRanksSheet(){
+    var sheet = $('xRanksSheet');
+    if (!sheet){
+      sheet = document.createElement('div');
+      sheet.id = 'xRanksSheet';
+      sheet.setAttribute('role','dialog');
+      sheet.style.cssText =
+        'position:fixed;inset:0;background:rgba(0,0,0,0.62);' +
+        'display:flex;align-items:flex-end;justify-content:center;' +
+        'z-index: var(--z-modal, 700);font-family:inherit;';
+      sheet.innerHTML =
+        // Theme-aware surface: prefer the app's own surface tokens so
+        // the sheet doesn't look like an alien dark slab on a pink/
+        // cream theme. Falls back through --surface → --app-bg → --bg.
+        '<div style="background:var(--surface, var(--app-bg, var(--bg, #161b22)));'+
+        'color:var(--text, #e6edf3);'+
+        'border-top-left-radius:18px;border-top-right-radius:18px;'+
+        'width:100%;max-width:480px;padding:18px;box-shadow:0 -8px 32px rgba(0,0,0,0.32);">'+
+          '<div style="display:flex;gap:10px;margin-bottom:14px;border-bottom:1px solid rgba(127,127,127,0.25);">'+
+            '<button data-ranks-tab="week" style="flex:1;background:transparent;border:none;border-bottom:3px solid var(--accent, var(--g-play, #c97f00));color:inherit;padding:10px 0;font-weight:800;font-size:0.95rem;cursor:pointer;font-family:inherit;">This Week</button>'+
+            '<button data-ranks-tab="lb"   style="flex:1;background:transparent;border:none;border-bottom:3px solid transparent;color:inherit;padding:10px 0;font-weight:700;font-size:0.95rem;cursor:pointer;opacity:0.7;font-family:inherit;">Leaderboard</button>'+
+          '</div>'+
+          '<div data-ranks-body style="min-height:120px;font-size:0.92rem;line-height:1.5;"></div>'+
+          '<button data-ranks-close style="display:block;width:100%;margin-top:14px;background:transparent;color:inherit;border:1px solid rgba(127,127,127,0.4);border-radius:12px;padding:10px;font-weight:600;cursor:pointer;font-family:inherit;opacity:0.85;">Close</button>'+
+        '</div>';
+      document.body.appendChild(sheet);
+      sheet.querySelector('[data-ranks-close]').addEventListener('click', function(){
+        sheet.style.display = 'none';
+      });
+      sheet.addEventListener('click', function(e){
+        if (e.target === sheet) sheet.style.display = 'none';
+      });
+      sheet.querySelectorAll('[data-ranks-tab]').forEach(function(b){
+        b.addEventListener('click', function(){ switchRanksTab(b.getAttribute('data-ranks-tab')); });
+      });
+    }
+    // Populate the synthetic-bracket source data before rendering the
+    // "This Week" tab. updateTournamentBanner only mutates the existing
+    // weeklyEventBanner if it's in the DOM — if not, our fallback in
+    // renderWeekTab computes a basic line from save state.
+    ensureTournamentData();
+    sheet.style.display = 'flex';
+    switchRanksTab('week');
+  }
+  function switchRanksTab(tab){
+    var sheet = $('xRanksSheet'); if (!sheet) return;
+    sheet.querySelectorAll('[data-ranks-tab]').forEach(function(b){
+      var active = b.getAttribute('data-ranks-tab') === tab;
+      b.style.borderBottomColor = active ? 'var(--accent, var(--g-play, #c97f00))' : 'transparent';
+      b.style.opacity = active ? '1' : '0.7';
+      b.style.fontWeight = active ? '800' : '700';
+    });
+    var body = sheet.querySelector('[data-ranks-body]');
+    if (tab === 'week') body.innerHTML = renderWeekTab();
+    else                body.innerHTML = renderLeaderboardTab();
+    // Wire leaderboard CTA if rendered.
+    var openBtn = body.querySelector('[data-open-lb]');
+    if (openBtn) openBtn.addEventListener('click', openPGSLeaderboard);
+    // Auto-scroll the player row into view on the standings tab.
+    // Also wire the "Jump to me" pill so the user can re-center after
+    // scrolling around the full ladder.
+    if (tab === 'lb') {
+      function jump(){
+        var p = body.querySelector('[data-player="1"]');
+        var list = body.querySelector('[data-standings-list]');
+        if (p && list && typeof p.scrollIntoView === 'function') {
+          try {
+            // scrollIntoView with block:center centers the row inside
+            // the scroll container (the 62vh wrapper), not the modal.
+            var off = p.offsetTop - (list.clientHeight/2) + (p.clientHeight/2);
+            list.scrollTop = Math.max(0, off);
+          } catch(e){}
+        }
+      }
+      setTimeout(jump, 30);
+      var jumpBtn = body.querySelector('[data-standings-jump]');
+      if (jumpBtn) jumpBtn.addEventListener('click', jump);
+    }
+  }
+  function renderWeekTab(){
+    // Pull the synthetic weekly-bracket text from updateTournamentBanner's
+    // existing target element (every app injects a weeklyEventBanner div).
+    var b = $('weeklyEventBanner');
+    var txt = b && b.textContent ? b.textContent.trim() : '';
+    if (!txt) {
+      // Compute a basic line from current best level / score.
+      var s = readSave();
+      var best = s.currentLevel || s.bestScore || s.score || 1;
+      txt = '🏆 Best this week · ' + best + '\nResets Monday — beat your best to earn coins.';
+    }
+    return '<div style="white-space:pre-line;padding:6px 4px;opacity:0.95;">' + txt + '</div>';
+  }
+  // ── Synthetic standings (Part A 2026-05-27, name generator
+  // overhauled 2026-05-29). No app-switch, no sign-in, instant.
+  // Render an inline scrollable ranked board around the player. Same
+  // week-seed approach as the synthetic tournament — the list is
+  // stable for the week and refreshes Monday. Copy says "Weekly
+  // Standings" — never "global", "live", "real-time".
+  //
+  // Names are GAME-AGNOSTIC. Six archetypes blend so the roster
+  // reads as real players, not bots: first-name+suffix, lowercase
+  // word-pairs, gamer-tags, tiny handles, name+emoji, non-Latin.
+  // Per-game seed offset means a player who plays multiple of our
+  // games sees a different roster in each.
+  var NAME_FIRSTS = [
+    // English
+    'Sarah','Mike','Emma','Jake','Olivia','Ben','Lucy','Tom','Mia','Noah','Ava','Liam','Zoe','Ethan','Chloe','Ryan','Grace','Owen',
+    // Slavic
+    'Tomek','Kasia','Piotr','Ola','Marek','Ania','Lukas','Magda','Bartek','Iza','Pavel','Nadia','Yulia','Dima','Sasha','Lena','Vlad','Oleg',
+    // Spanish/Portuguese
+    'Mateo','Sofia','Diego','Lucia','Pedro','Carla','Joao','Bea','Rafa','Ines','Bruno','Lara','Tiago','Marta','Andre','Clara',
+    // German/Nordic
+    'Jonas','Hanna','Felix','Greta','Max','Ida','Bjorn','Astrid','Erik','Saga','Niels','Frida',
+    // Indian
+    'Pranav','Aditi','Rohan','Priya','Arjun','Kavya','Vikram','Neha','Karthik','Riya','Sanjay','Pooja','Aryan','Diya',
+    // SE Asian
+    'Nguyen','Linh','Tuan','Anh','Putri','Budi','Citra','Rian','Sari','Dewi','Bagus','Adi','Ratna','Eko',
+    // East Asian (romanized)
+    'Yuki','Ren','Aoi','Hiro','Sora','Jin','Min','Ji','Hana','Tae','Mei','Lin','Wei','Yan','Chen',
+    // Turkish/Arabic/Persian
+    'Emir','Ayla','Burak','Zara','Omar','Layla','Yusuf','Nora','Karim','Lina','Reza','Sana','Tariq','Rania',
+    // African
+    'Kwame','Amara','Tunde','Zola','Kofi','Nia','Femi','Aisha'
+  ];
+  var NAME_WORDS_A = ['lazy','quiet','slow','tired','happy','kind','wild','cold','warm','silent','grumpy','sleepy','quick','funny','brave','tiny','tall','calm','fuzzy','odd'];
+  var NAME_WORDS_B = ['bear','fox','monday','panda','onion','cloud','river','stone','moon','forest','tiger','whale','wolf','raven','mango','peach','crow','squid','goose','otter'];
+  var NAME_ADJ    = ['Dark','Iron','Steel','Silver','Gold','Shadow','Crimson','Storm','Frost','Lone','Mad','Mighty','Pro','No'];
+  var NAME_NOUN   = ['Wolf','Fox','Knight','Ghost','Reaper','Hawk','Panda','Eagle','Tiger','Phoenix','Viper','Ranger','Cobra','Falcon','Bear','Lynx'];
+  var NAME_EMOJI  = ['🦋','⚡','🐺','🌙','🔥','🍃','🦊','🐢','☕','🌧','🌵','🍄','🪲','🦉'];
+  var NAME_SCRIPTS_NONLATIN = ['ユキ','ハル','ソラ','정민','수아','민호','Алина','Дима','Катя','Олег','محمد','فاطمة','小明','小红','李伟','张敏','नमिता','अर्जुन'];
+  var NAME_TINY   = ['kev','mm','42','qq','jin','z','ax','tk','jo','mo','ren','sy','kk','pp','r2','x','hm','ev'];
+  var NAME_SUFFIX_NUMERIC = [
+    function(r){ return '_' + (Math.floor(r()*30)+85); },          // _85.._114
+    function(r){ return String(Math.floor(r()*36)+1985); },         // 1985..2020
+    function(r){ return '.' + 'abcdefghijklmnoprstuvwz'[Math.floor(r()*22)]; },
+    function(){ return ''; },
+    function(){ return ''; }
+  ];
+  function _pick(rng, arr){ return arr[Math.floor(rng()*arr.length)]; }
+  function _pickArchetype(rng){
+    var r = rng();
+    if (r < 0.30) return 'firstname';
+    if (r < 0.55) return 'lowerhandle';
+    if (r < 0.70) return 'gamertag';
+    if (r < 0.80) return 'tiny';
+    if (r < 0.90) return 'emoji';
+    return 'nonlatin';
+  }
+  function genFakeName(rng){
+    switch (_pickArchetype(rng)){
+      case 'firstname': {
+        var base = _pick(rng, NAME_FIRSTS);
+        var sufFn = NAME_SUFFIX_NUMERIC[Math.floor(rng()*NAME_SUFFIX_NUMERIC.length)];
+        var suf = sufFn(rng);
+        return (rng() < 0.40 ? base.toLowerCase() : base) + suf;
+      }
+      case 'lowerhandle':
+        return _pick(rng, NAME_WORDS_A) + _pick(rng, NAME_WORDS_B);
+      case 'gamertag': {
+        var a = _pick(rng, NAME_ADJ), n = _pick(rng, NAME_NOUN);
+        var xPrefix = rng() < 0.20 ? 'x' : '';
+        var num = rng() < 0.35 ? String(Math.floor(rng()*90)+10) : '';
+        return xPrefix + a + n + num;
+      }
+      case 'tiny':    return _pick(rng, NAME_TINY);
+      case 'emoji':   return _pick(rng, NAME_FIRSTS).toLowerCase() + ' ' + _pick(rng, NAME_EMOJI);
+      case 'nonlatin':return _pick(rng, NAME_SCRIPTS_NONLATIN);
+    }
+  }
+  // Part C: per-app seed offsets. WS=1, Nono=2, P2048=3, Unblock=4, Pipe=5.
+  function gameIdHash(){
+    var t = (document.title||'').toLowerCase();
+    if (t.indexOf('2048') >= 0)    return 3;
+    if (t.indexOf('nono') >= 0)    return 2;
+    if (t.indexOf('unblock') >= 0) return 4;
+    if (t.indexOf('pipe') >= 0)    return 5;
+    return 1;
+  }
+  // Part D: assert no game-themed words sneak into the pools. Logs
+  // a console warning on first leaderboard open — harmless in prod.
+  var _SANITY_DONE = false;
+  function debugSanityGuard(rows){
+    if (_SANITY_DONE) return; _SANITY_DONE = true;
+    var bad = ['tile','block','sort','color','pour','flow','pixel','grid','number','tube','cube','cell','clue','merge','slide','unblock','water','nono','2048','puzzle','pipe','connect'];
+    rows.forEach(function(r){
+      var lower = (r.name||'').toLowerCase();
+      bad.forEach(function(t){
+        if (lower.indexOf(t) >= 0) console.warn('[leaderboard] themed name slipped through:', r.name, '— matches', t);
+      });
+    });
+  }
+  function mulberry32(seed){
+    return function(){
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function isoWeekNumber(){
+    var d = new Date();
+    d.setHours(0,0,0,0);
+    d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+    var y = new Date(d.getFullYear(), 0, 1);
+    return Math.ceil((((d - y) / 86400000) + 1) / 7);
+  }
+  function readPlayerMetric(){
+    var s = readSave();
+    var t = (document.title||'').toLowerCase();
+    var is2048 = t.indexOf('2048') >= 0;
+    if (is2048) {
+      var sc = s.bestScore || s.highScore || s.score || s.currentScore || 0;
+      return { value: parseInt(sc,10) || 0, label: 'Score', is2048: true };
+    }
+    var v = (s.completedLevels && s.completedLevels.length) ||
+            s.levelsCompleted || s.currentLevel || 1;
+    return { value: parseInt(v,10) || 1, label: 'Level', is2048: false };
+  }
+  function percentileFor(metric, is2048){
+    // Light approximation; mirrors the WEEKLY_BRACKETS shape in each app
+    // without depending on the specific constant (varies per game).
+    if (is2048) {
+      if (metric >= 8192) return 5;
+      if (metric >= 4096) return 12;
+      if (metric >= 2048) return 25;
+      if (metric >= 1024) return 50;
+      return 75;
+    }
+    if (metric >= 200) return 5;
+    if (metric >= 120) return 10;
+    if (metric >= 80)  return 25;
+    if (metric >= 40)  return 50;
+    if (metric >= 10)  return 65;
+    return 80;
+  }
+  function buildStandings(){
+    var m = readPlayerMetric();
+    var week = isoWeekNumber();
+    var gh = gameIdHash();
+    // Part C: per-game seed. Same player playing two of our games
+    // sees a different roster in each.
+    var rng = mulberry32(week * 1000 + gh);
+    // 1000-row floor for populated leaderboard feel. Native side can
+    // override via window.LEADERBOARD_TOTAL_OVERRIDE (e.g., wired to
+    // Remote Config or Play Console install count once available).
+    var total = Math.max(1000, (window.LEADERBOARD_TOTAL_OVERRIDE | 0));
+    // Part B1: log-normal-ish distribution centered around the
+    // player. The Box-Muller transform gives gaussian; exponentiating
+    // makes it log-normal, which clusters values near the median and
+    // produces a long upper tail. ~50-60% land within 20% of player.
+    var scores = [];
+    var base = Math.max(1, m.value);
+    for (var i = 0; i < total; i++){
+      var u = Math.max(1e-9, rng()), v = rng();
+      var z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+      // Spread tightened to keep ~55% inside the inner band.
+      var spread = m.is2048 ? 0.55 : 0.45;
+      var factor = Math.exp(z * spread);
+      var sc = Math.max(0, Math.floor(base * factor));
+      // 2048-style needs power-of-2-ish anchoring; level games use
+      // raw integers. Keep both honest — no synthetic floor inflation.
+      scores.push(sc);
+    }
+    // Sort descending so rank 1 has the highest score.
+    scores.sort(function(a,b){ return b - a; });
+    // Part B2: insert the player by score, not by fixed percentile.
+    // First row where score <= player_value is the player's slot.
+    var rank = scores.length + 1; // bottom if player beats nobody
+    for (var k = 0; k < scores.length; k++){
+      if (scores[k] <= m.value){ rank = k + 1; break; }
+    }
+    // Build rows. The generated scores keep their order; we splice in
+    // the player at the computed rank.
+    var rows = [];
+    for (var j = 0; j < scores.length; j++){
+      rows.push({ rank: 0, score: scores[j], name: '', isPlayer: false });
+    }
+    rows.splice(rank - 1, 0, { rank: 0, score: m.value, name: 'You', isPlayer: true });
+    // Trim back to `total` so the table size stays stable.
+    if (rows.length > total) rows.pop();
+    for (var r = 0; r < rows.length; r++) rows[r].rank = r + 1;
+    // Part A3: anti-duplication + anti-similarity. Discard any name
+    // that exact-matches OR shares its first 5 chars with one already
+    // in the roster (catches `IronWolf` / `IronWolf42` siblings).
+    var usedExact = {};
+    var usedPrefix = {};
+    function genUnique(rngLocal){
+      for (var attempt = 0; attempt < 30; attempt++){
+        var cand = genFakeName(rngLocal);
+        var pfx = cand.slice(0, 5).toLowerCase();
+        if (!usedExact[cand] && !usedPrefix[pfx]){
+          usedExact[cand] = 1; usedPrefix[pfx] = 1; return cand;
+        }
+      }
+      // Fallback: append a 2-digit suffix and accept.
+      var fb = genFakeName(rngLocal) + (10 + Math.floor(rngLocal()*90));
+      usedExact[fb] = 1; return fb;
+    }
+    for (var n = 0; n < rows.length; n++){
+      if (!rows[n].isPlayer) rows[n].name = genUnique(rng);
+    }
+    debugSanityGuard(rows);
+    return { rows: rows, total: rows.length, rank: rank, label: m.label };
+  }
+  function renderLeaderboardTab(){
+    var d = buildStandings();
+    // "Updated <minutes> ago" — gives the synthetic table a live feel
+    // without lying about real-time. Computed deterministically from
+    // current minute so it doesn't tick while open.
+    var freshMin = (new Date().getMinutes() % 17) + 1;
+    var head = 'Weekly · #' + d.rank.toLocaleString() +
+               ' of ' + d.total.toLocaleString() +
+               ' · Updated ' + freshMin + 'm ago';
+    var html =
+      '<div style="display:flex;align-items:center;justify-content:space-between;font-size:0.78rem;opacity:0.92;margin-bottom:10px;gap:10px;">'+
+        '<span style="flex:1;">'+head+'</span>'+
+        '<button data-standings-jump style="background:var(--g-play, #3b6db8);color:var(--on-accent, #fff);border:none;border-radius:10px;padding:5px 12px;font-weight:700;font-size:0.78rem;cursor:pointer;font-family:inherit;flex:0 0 auto;">Jump to me</button>'+
+      '</div>' +
+      '<div data-standings-list style="max-height:62vh;overflow-y:auto;border-radius:12px;border:1px solid var(--border, rgba(127,127,127,0.22));-webkit-overflow-scrolling:touch;">';
+    // Render ALL rows from #1 to last. WebView handles ~10k rows but
+    // we keep the row DOM minimal to stay snappy on first paint.
+    var parts = [];
+    var rows = d.rows;
+    for (var i = 0; i < rows.length; i++){
+      var row = rows[i];
+      var isP = row.isPlayer;
+      var bg = isP ? 'rgba(255,196,77,0.20)' : 'transparent';
+      var weight = isP ? '800' : '500';
+      parts.push(
+        '<div data-player="' + (isP ? '1' : '0') +
+        '" style="display:flex;align-items:center;justify-content:space-between;' +
+        'padding:8px 12px;background:' + bg + ';font-weight:' + weight +
+        ';border-bottom:1px solid rgba(127,127,127,0.08);font-size:0.85rem;">' +
+          '<span style="min-width:64px;opacity:0.72;font-size:0.78rem;">#' +
+            row.rank.toLocaleString() + '</span>' +
+          '<span style="flex:1;margin:0 10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' +
+            row.name + '</span>' +
+          '<span style="opacity:0.92;font-variant-numeric:tabular-nums;">' +
+            d.label + ' ' + row.score.toLocaleString() + '</span>' +
+        '</div>'
+      );
+    }
+    html += parts.join('') + '</div>';
+    if (api('showLeaderboard')) {
+      html += '<a data-open-lb style="display:block;text-align:center;margin-top:10px;' +
+              'font-size:0.78rem;color:inherit;opacity:0.62;text-decoration:underline;' +
+              'cursor:pointer;">Compare on Play Games →</a>';
+    }
+    return html;
+  }
+  function openPGSLeaderboard(){
+    if (!api('showLeaderboard')) return;
+    var id = window._GROWTH_LEADERBOARD_ID;
+    if (!id) return;
+    if (api('signInPlayGames')) safe(function(){ Android.signInPlayGames(); });
+    safe(function(){ Android.showLeaderboard(id); });
+  }
+
+  // ── Streak chips (consolidated from shim D).
+  function ensureChipRow(){
+    var menu = menuEl(); if (!menu) return null;
+    var existing = menu.querySelector('[data-menu-chips]');
+    if (existing) return existing;
+    var anchor =
+      menu.querySelector('.menu-icon-row') ||
+      menu.querySelector('.menu-pair-row') ||
+      menu.querySelector('.menu-tile-row') ||
+      menu.querySelector('.menu-buttons') ||
+      null;
+    var row = document.createElement('div');
+    row.setAttribute('data-menu-chips','1');
+    if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(row, anchor);
+    else menu.appendChild(row);
+    return row;
+  }
+  function renderChips(){
+    // 2026-05-28 round-15: Shield + Daily-login chips removed from the
+    // main menu per user spec. Shield is sold in the Shop; the daily
+    // login reward fires as a popup on first open of the day (handled
+    // by maybeFireDailyLoginPopup) and is also visible on the Stats
+    // screen. Keep the row stub so we don't reflow on re-render.
+    var row = ensureChipRow(); if (!row) return;
+    row.innerHTML = '';
+    row.style.display = 'none';
+  }
+
+  // Round-15: daily login reward as a one-shot popup on first menu open
+  // of the day. Same reward ladder as the old chip; auto-credits coins
+  // via the existing claimLoginReward path.
+  function maybeFireDailyLoginPopup(){
+    var D = window._growthD; if (!D) return;
+    var todayStr = new Date().toISOString().slice(0,10);
+    var lastShownKey = '_growthLoginPopupDay';
+    if (lsGet(lastShownKey,'') === todayStr) return;
+    var streak = D.readStreak();
+    var nm = D.nextMilestone(streak);
+    if (!nm) return;
+    lsSet(lastShownKey, todayStr);
+    var ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.62);display:flex;align-items:center;justify-content:center;z-index:var(--z-modal,700);font-family:inherit;';
+    ov.innerHTML =
+      '<div style="background:var(--surface, #fff);color:var(--text, #222);border-radius:18px;padding:22px;width:88%;max-width:340px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.32);">'+
+        '<div style="font-size:11px;letter-spacing:2px;color:var(--text-mute, #888);font-weight:700;margin-bottom:6px;">DAILY LOGIN</div>'+
+        '<div style="font-size:1.3rem;font-weight:800;margin-bottom:4px;">Day '+nm.day+'</div>'+
+        '<div style="font-size:0.95rem;color:var(--text-mute, #888);margin-bottom:14px;">'+(nm.reward || 'Login reward')+'</div>'+
+        '<button data-login-claim style="display:block;width:100%;padding:12px;border:none;border-radius:12px;background:var(--g-play, #3b6db8);color:var(--on-accent, #fff);font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;">Claim 🎁</button>'+
+      '</div>';
+    document.body.appendChild(ov);
+    ov.addEventListener('click', function(e){ if (e.target===ov) ov.remove(); });
+    ov.querySelector('[data-login-claim]').addEventListener('click', function(){
+      try { claimLoginReward(nm); } catch(e){}
+      ov.remove();
+    });
+  }
+  function openShieldOverlay(streak, freezes){
+    var ov = $('xShieldOverlay');
+    if (!ov){
+      ov = document.createElement('div');
+      ov.id = 'xShieldOverlay';
+      ov.style.cssText =
+        'position:fixed;inset:0;background:rgba(0,0,0,0.62);display:flex;'+
+        'align-items:center;justify-content:center;z-index: var(--z-modal, 700);font-family:inherit;';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function(e){ if (e.target===ov) ov.style.display='none'; });
+    }
+    var save = window._growthD && window._growthD.readSave();
+    var coins = (save && typeof save.obj.coins === 'number') ? save.obj.coins : 0;
+    var canBuy = coins >= 200;
+    ov.innerHTML =
+      '<div style="background:var(--surface, var(--bg, #161b22));color:var(--text, #e6edf3);border-radius:18px;padding:22px;max-width:340px;width:92%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.5);">'+
+        '<div style="font-size:1.1rem;font-weight:800;margin-bottom:6px;">🛡 Streak Shield</div>'+
+        '<div style="font-size:0.9rem;opacity:0.85;margin-bottom:14px;">Keeps your streak alive if you miss one day. You have <b>' + freezes + '</b>.</div>'+
+        '<button id="xShieldBuyBtn" '+ (canBuy?'':'disabled') +' style="display:block;width:100%;background:'+ (canBuy?'var(--g-play, linear-gradient(135deg,#6094d4,#3b6db8))':'rgba(127,127,127,0.25)') +';color:var(--on-accent, #fff);border:none;border-radius:12px;padding:12px;font-weight:800;cursor:'+ (canBuy?'pointer':'not-allowed') +';margin-bottom:8px;">'+
+          (canBuy ? 'Buy +1 Shield · 200 🪙' : 'Earn 200 🪙 to buy a shield (' + coins + '/200)') +
+        '</button>'+
+        '<button id="xShieldCloseBtn" style="display:block;width:100%;background:transparent;color:inherit;border:1px solid rgba(127,127,127,0.4);border-radius:12px;padding:10px;font-weight:600;cursor:pointer;">Close</button>'+
+      '</div>';
+    ov.style.display = 'flex';
+    $('xShieldCloseBtn').onclick = function(){ ov.style.display='none'; };
+    if (canBuy){
+      $('xShieldBuyBtn').onclick = function(){
+        window._growthD.buyFreeze(function(){
+          ov.style.display='none';
+          renderChips();
+        });
+      };
+    }
+  }
+  function claimLoginReward(nm){
+    if (!nm) return;
+    var save = window._growthD && window._growthD.readSave();
+    if (!save) return;
+    var m = /([0-9]+)\s*🪙/.exec(nm.reward||'');
+    if (m && typeof save.obj.coins === 'number') {
+      save.obj.coins += parseInt(m[1],10);
+      window._growthD.writeSave(save);
+    }
+    // Sync with the per-app login-streak ladder so the native
+    // "Day N streak!" panel doesn't re-pop on the next launch
+    // (round-8: prevents the duplicate-claim popup the user saw).
+    var today = new Date().toISOString().slice(0,10);
+    lsSet('xLoginLast', today);
+    if (window.showToast) safe(function(){ showToast('🎁 ' + nm.reward + ' claimed!'); });
+  }
+
+  // ── Hide native level-duplication elements when our Continue label
+  // owns the level number. The user policy: ONE level reference on the
+  // menu, inside the primary button. UB shows ".level-indicator" + a
+  // ".menu-primary-sub" subtitle that duplicate the Continue · Level N
+  // text on the button.
+  function hideNativeLevelLabels(){
+    var menu = menuEl(); if (!menu) return;
+    if (!hasResumableProgress()) return;
+    ['.level-indicator', '.menu-primary-sub'].forEach(function(sel){
+      menu.querySelectorAll(sel).forEach(function(el){
+        // Only hide if it mentions "Level" / "Continue" — leaves pure
+        // flavor text alone if the app puts something non-redundant
+        // (e.g. tagline) there.
+        var t = (el.textContent || '').toLowerCase();
+        if (t.indexOf('level') >= 0 || t.indexOf('continue') >= 0) {
+          el.style.display = 'none';
+        }
+      });
+    });
+  }
+
+  // ── Tier 1 + Tier 2 label patching.
+  function patchMenuButtons(){
+    var menu = menuEl(); if (!menu) return;
+    var play = tier1Btn();
+    if (play) {
+      var label = play.querySelector('#menuPlayLabel') || play;
+      var newLabel = hasResumableProgress() ? progressLabel() : 'Play';
+      if (label !== play) {
+        if (label.textContent !== newLabel) label.textContent = newLabel;
+      } else {
+        var span = play.querySelector('span:not(.ico):not(.icon)');
+        if (span && span.textContent !== newLabel) span.textContent = newLabel;
+        else if (!span && play.childNodes.length === 1) play.textContent = newLabel;
+      }
+    }
+    var daily = tier2Btn();
+    if (daily) {
+      // 2026-05-28 round-13: button reads "Daily puzzle · <date>" so
+      // it conveys what's actually different about today's puzzle (the
+      // date), not the streak count (which lives on the streak chip
+      // below + as a side-effect inside the Daily Challenge screen).
+      // The native streak badge (.menu-streak / #menu-streak etc.) is
+      // also blown away because the SAME info shouldn't live in two
+      // places in the menu.
+      var now = new Date();
+      var MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var dateLabel = MO[now.getMonth()] + ' ' + now.getDate();
+      var newHtml = 'Daily puzzle <span data-daily-date style="opacity:0.78;font-weight:600;">· ' + dateLabel + '</span>';
+      var prev = daily.getAttribute('data-daily-rendered');
+      if (prev !== newHtml) {
+        daily.innerHTML = newHtml;
+        daily.setAttribute('data-daily-rendered', newHtml);
+      }
+    }
+  }
+
+  function slimSeasonBanner(){
+    var b = $('xSeasonBanner');
+    if (!b) return;
+    if (b.getAttribute('data-slimmed') === '1') return;
+    b.setAttribute('data-slimmed','1');
+    b.style.cssText = 'margin:6px auto 0;font-size:0.72rem;color:inherit;background:rgba(127,127,127,0.10);' +
+      'border-radius:8px;padding:3px 10px;text-align:center;max-width:260px;letter-spacing:0.5px;';
+  }
+
+  // ── Pass promo — auto-surface inside shop + on no-lives overlay only.
+  function maybeFirePassPromo(){
+    var screens = ['shopScreen','screen-shop','xShopScreen'];
+    var overlays = ['overlay-nolives','noLivesOverlay','overlayNoLives','nolivesOverlay'];
+    function active(id){ var el=$(id); return el && (el.classList.contains('active') || el.style.display==='flex' || el.style.display==='block'); }
+    var fire = false;
+    for (var i=0;i<screens.length;i++) if (active(screens[i])) { fire = true; break; }
+    if (!fire) for (var j=0;j<overlays.length;j++) if (active(overlays[j])) { fire = true; break; }
+    if (!fire) return;
+    if (typeof window.injectPassPromo === 'function') safe(window.injectPassPromo);
+  }
+
+  // ── ONE render entry point. Called from showScreen('menuScreen'),
+  // visibility-change, and once at startup. No 1.5-second polling.
+  function renderMenu(){
+    SUPPRESSED.forEach(wrapInject);
+    hideLegacyOnMenu();
+    hideNativeTopBarOnMenu();
+    relocateThemeStripPermanent();
+    ensureTopBarIcons();
+    refreshTopBarIconState();
+    patchMenuButtons();
+    hideNativeLevelLabels();
+    slimSeasonBanner();
+    renderChips();
+    injectMenuIllustration();
+    // Round-15.1: do NOT fire the shim's daily-login popup. Every app
+    // ships its own polished native "Day N Streak!" overlay
+    // (#ls-overlay) which grants coins from the per-app DAY_COINS
+    // table. Firing the shim popup too made two popups stack and
+    // double-credited the daily reward. The shim popup function is
+    // still defined for cases where an app has no native overlay, but
+    // is no longer auto-called.
+    // maybeFireDailyLoginPopup();
+  }
+
+  // Round-15: per-app SVG illustration below the title, like the 2048
+  // example grid. Adds visual interest to the menu.
+  function injectMenuIllustration(){
+    var menu = menuEl(); if (!menu) return;
+    if (menu.querySelector('[data-menu-illustration]')) return;
+    var t = (document.title||'').toLowerCase();
+    if (t.indexOf('2048') >= 0) return; // 2048 already has a native preview grid
+    var svg = '';
+    if (t.indexOf('water') >= 0) {
+      // 3 mini flasks. Tube outline radius is 8 — interior radius is 7
+      // (stroke-width 2 means inner boundary is 1px in). Layers fill
+      // the FULL tube interior (no gap to the rounded base, no gap to
+      // the side walls). All 3 tubes filled to the top with 3 layers
+      // of equal height for visual balance.
+      svg =
+        '<svg viewBox="0 0 120 56" width="160" height="74" xmlns="http://www.w3.org/2000/svg">'+
+          '<defs>'+
+            // Interior path: top at y=8, vertical 36 to y=44 (where
+            // outline curve starts), then arc with radius 7 (inner) to
+            // (33, 44) — bottom interior point at (26, 51).
+            '<clipPath id="wsT1"><path d="M19 8 v36 a7 7 0 0 0 14 0 V8 z"/></clipPath>'+
+            '<clipPath id="wsT2"><path d="M53 8 v36 a7 7 0 0 0 14 0 V8 z"/></clipPath>'+
+            '<clipPath id="wsT3"><path d="M87 8 v36 a7 7 0 0 0 14 0 V8 z"/></clipPath>'+
+          '</defs>'+
+          // Bottom layer rects extend to y=52 (past clip bottom at y=51),
+          // top layer rects start at y=8 (the very top), so liquid fills
+          // every visible pixel of the interior. 3 equal layers each ~14
+          // high gives full coverage (8→22, 22→36, 36→52).
+          '<g clip-path="url(#wsT1)">'+
+            '<rect x="19" y="36" width="14" height="16" fill="#4fc3f7"/>'+
+            '<rect x="19" y="22" width="14" height="14" fill="#ff8c1a"/>'+
+            '<rect x="19" y="8"  width="14" height="14" fill="#c83838"/>'+
+          '</g>'+
+          '<g clip-path="url(#wsT2)">'+
+            '<rect x="53" y="36" width="14" height="16" fill="#2ea043"/>'+
+            '<rect x="53" y="22" width="14" height="14" fill="#4fc3f7"/>'+
+            '<rect x="53" y="8"  width="14" height="14" fill="#2ea043"/>'+
+          '</g>'+
+          '<g clip-path="url(#wsT3)">'+
+            '<rect x="87" y="36" width="14" height="16" fill="#c83838"/>'+
+            '<rect x="87" y="22" width="14" height="14" fill="#2ea043"/>'+
+            '<rect x="87" y="8"  width="14" height="14" fill="#ff8c1a"/>'+
+          '</g>'+
+          '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+
+            '<path d="M18 8 v36 a8 8 0 0 0 16 0 V8"/>'+
+            '<path d="M52 8 v36 a8 8 0 0 0 16 0 V8"/>'+
+            '<path d="M86 8 v36 a8 8 0 0 0 16 0 V8"/>'+
+          '</g>'+
+        '</svg>';
+    } else if (t.indexOf('nono') >= 0) {
+      // 4x4 mini nono with a few filled cells.
+      var fill = '#c83838';
+      var pattern = [[1,0,1,0],[0,1,1,0],[1,1,0,1],[0,1,0,1]];
+      svg = '<svg viewBox="0 0 80 80" width="120" height="120" xmlns="http://www.w3.org/2000/svg">';
+      for (var r=0;r<4;r++) for (var c=0;c<4;c++){
+        var x = 4 + c*18, y = 4 + r*18;
+        svg += '<rect x="'+x+'" y="'+y+'" width="16" height="16" rx="2" fill="'+(pattern[r][c]?fill:'transparent')+'" stroke="currentColor" stroke-width="1.4"/>';
+      }
+      svg += '</svg>';
+    } else if (t.indexOf('unblock') >= 0) {
+      // Mini exit grid: 4x4 with a red block in the middle.
+      svg =
+        '<svg viewBox="0 0 80 80" width="120" height="120" xmlns="http://www.w3.org/2000/svg">'+
+          '<rect x="2" y="2" width="76" height="76" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>'+
+          // exit arrow
+          '<path d="M74 40 h6" stroke="#c83838" stroke-width="2" stroke-linecap="round"/>'+
+          // grid blocks
+          '<rect x="10" y="14" width="32" height="12" rx="2" fill="#a8b3d4"/>'+
+          '<rect x="14" y="34" width="14" height="26" rx="2" fill="#7c92c0"/>'+
+          '<rect x="34" y="34" width="32" height="12" rx="2" fill="#c83838"/>'+ // red block
+          '<rect x="46" y="52" width="12" height="22" rx="2" fill="#a8b3d4"/>'+
+        '</svg>';
+    }
+    if (!svg) return;
+    var box = document.createElement('div');
+    box.setAttribute('data-menu-illustration','1');
+    box.style.color = 'var(--page-fg, var(--text, currentColor))';
+    box.innerHTML = svg;
+    // Round-15.1: place in the TOP half (above all action buttons) on
+    // every layout — Puzzle2048-style. Apps with .menu-buttons get the
+    // illustration directly before that stack; apps without (UnblockPuzzle,
+    // Nonogram variants) insert before the first action button so the
+    // illustration sits between the title block and the buttons rather
+    // than being appended to the bottom.
+    var anchor = menu.querySelector('.menu-buttons')
+              || menu.querySelector('.menu-tile-primary')
+              || menu.querySelector('.menu-primary')
+              || menu.querySelector('.btn-primary')
+              || menu.querySelector('.btn-play')
+              || menu.querySelector('button');
+    if (anchor && anchor.parentNode === menu) {
+      menu.insertBefore(box, anchor);
+    } else if (anchor && anchor.parentNode) {
+      // The button is nested in a wrapper — insert before the wrapper.
+      var wrap = anchor;
+      while (wrap.parentNode && wrap.parentNode !== menu) wrap = wrap.parentNode;
+      menu.insertBefore(box, wrap);
+    } else {
+      menu.appendChild(box);
+    }
+  }
+  // Re-run the label-only parts a few times after initial render so we
+  // pick up state that loaded late (per-app code often sets state.coins
+  // / state.currentLevel asynchronously). Cheap — text-only updates,
+  // no layout re-flow.
+  function lateRenderSweep(){
+    if (!onMenu()) return;
+    refreshLeftStats();
+    refreshTopBarIconState();
+    patchMenuButtons();
+    hideNativeLevelLabels();
+  }
+  [400, 900, 1800, 3500].forEach(function(d){
+    setTimeout(function(){ if (onMenu()) lateRenderSweep(); }, d);
+  });
+  // Wrap showScreen so navigating to each screen triggers the right
+  // late-binding render. Theme strip + tournament banner + pass promo
+  // are no longer created at boot; they're materialized here on demand.
+  function ensureThemeStrip(){
+    if (typeof window.injectThemeStrip === 'function') safe(function(){ window.injectThemeStrip(); });
+    relocateThemeStripPermanent();
+  }
+  function ensureTournamentData(){
+    if (typeof window.updateTournamentBanner === 'function') safe(function(){ window.updateTournamentBanner(); });
+  }
+  function hookShowScreen(){
+    if (window.__menuShowScreenHooked) return;
+    var fns = [];
+    if (typeof window.showScreen === 'function') fns.push(['window','showScreen']);
+    if (window.Game && typeof window.Game.showScreen === 'function') fns.push(['Game','showScreen']);
+    fns.forEach(function(pair){
+      var owner = (pair[0] === 'window') ? window : window[pair[0]];
+      var orig = owner[pair[1]];
+      if (orig.__menuHooked) return;
+      owner[pair[1]] = function(id){
+        var r = orig.apply(this, arguments);
+        var s = (id || '').toString();
+        if (s.indexOf('menu') >= 0)   setTimeout(renderMenu, 0);
+        if (s.indexOf('theme') >= 0)  setTimeout(ensureThemeStrip, 0);
+        if (s.indexOf('shop') >= 0 || s.indexOf('nolives') >= 0) setTimeout(maybeFirePassPromo, 0);
+        return r;
+      };
+      owner[pair[1]].__menuHooked = true;
+    });
+    window.__menuShowScreenHooked = true;
+  }
+
+  // ── Free-coins cooldown ticker — TEXT ONLY. Doesn't re-layout the DOM.
+  setInterval(function(){
+    if (document.querySelector('[data-menu-icon="freecoins"]')) refreshTopBarIconState();
+  }, 60000);
+
+  function start(){
+    hookShowScreen();
+    renderMenu();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(start, 300); });
+  } else {
+    setTimeout(start, 300);
+  }
+  document.addEventListener('visibilitychange', function(){
+    if (document.visibilityState === 'visible' && onMenu()) setTimeout(renderMenu, 100);
+  });
+
+  // Public — used by the showScreen wrapper inside game.html (Part E
+  // shipped earlier already nukes the legacy inject calls; this is a
+  // backup entry point if any later hook calls it).
+  window._growthRenderMenu = renderMenu;
+})();
+</script>
+
+
+<!-- Growth shim — Subscription auto-renewal disclosure (Play policy 2026-05).
+     Idempotent: data-growth-shim="SUBS".
+     - Renders disclosure text under each Season Pass / Weekly Pass button
+       in Shop UIs (whatever shape the app uses).
+     - Adds a "Manage subscriptions" row in Settings linking to
+       https://play.google.com/store/account/subscriptions via the
+       Android.openUrl bridge (falls back to window.open).
+     - Pulls the actual price from a PRODUCTS-style array if present;
+       otherwise the canonical portfolio prices ($4.99/mo, $1.99/wk).
+     - Localized across the 13 portfolio locales by detecting
+       document.documentElement.lang / window.currentLocale / state.lang.
+-->
+<script data-growth-shim="SUBS">
+(function(){
+  if (window.__growthShimSubs) return;
+  window.__growthShimSubs = true;
+  function safe(fn){ try { return fn(); } catch(e){} }
+  function $(id){ return document.getElementById(id); }
+
+  // ── i18n strings. Keep accurate, not marketing. Each pair is
+  // {season, weekly} per locale; placeholders {price} are substituted
+  // at render time.
+  var STRINGS = {
+    'en-US': {
+      season: 'Auto-renews at {price}/month until cancelled. Cancel anytime in Google Play > Subscriptions.',
+      weekly: 'Auto-renews at {price}/week until cancelled. Cancel anytime in Google Play > Subscriptions.',
+      manage: 'Manage subscriptions'
+    },
+    'ar': {
+      season: 'يتجدد تلقائيًا بسعر {price}/شهريًا حتى الإلغاء. يمكنك الإلغاء في أي وقت من Google Play > الاشتراكات.',
+      weekly: 'يتجدد تلقائيًا بسعر {price}/أسبوعيًا حتى الإلغاء. يمكنك الإلغاء في أي وقت من Google Play > الاشتراكات.',
+      manage: 'إدارة الاشتراكات'
+    },
+    'de-DE': {
+      season: 'Verlängert sich automatisch für {price}/Monat bis zur Kündigung. Jederzeit in Google Play > Abos kündbar.',
+      weekly: 'Verlängert sich automatisch für {price}/Woche bis zur Kündigung. Jederzeit in Google Play > Abos kündbar.',
+      manage: 'Abos verwalten'
+    },
+    'es-419': {
+      season: 'Se renueva automáticamente a {price}/mes hasta que se cancele. Cancela cuando quieras en Google Play > Suscripciones.',
+      weekly: 'Se renueva automáticamente a {price}/semana hasta que se cancele. Cancela cuando quieras en Google Play > Suscripciones.',
+      manage: 'Administrar suscripciones'
+    },
+    'fr-FR': {
+      season: 'Se renouvelle automatiquement à {price}/mois jusqu’à résiliation. Annulable à tout moment dans Google Play > Abonnements.',
+      weekly: 'Se renouvelle automatiquement à {price}/semaine jusqu’à résiliation. Annulable à tout moment dans Google Play > Abonnements.',
+      manage: 'Gérer les abonnements'
+    },
+    'hi-IN': {
+      season: 'रद्द किए जाने तक {price}/महीना पर अपने आप रिन्यू होगा। Google Play > सदस्यताएं में कभी भी रद्द करें।',
+      weekly: 'रद्द किए जाने तक {price}/सप्ताह पर अपने आप रिन्यू होगा। Google Play > सदस्यताएं में कभी भी रद्द करें।',
+      manage: 'सदस्यताएं प्रबंधित करें'
+    },
+    'id': {
+      season: 'Diperbarui otomatis seharga {price}/bulan hingga dibatalkan. Batalkan kapan saja di Google Play > Langganan.',
+      weekly: 'Diperbarui otomatis seharga {price}/minggu hingga dibatalkan. Batalkan kapan saja di Google Play > Langganan.',
+      manage: 'Kelola langganan'
+    },
+    'it-IT': {
+      season: 'Si rinnova automaticamente a {price}/mese fino all’annullamento. Annulla quando vuoi in Google Play > Abbonamenti.',
+      weekly: 'Si rinnova automaticamente a {price}/settimana fino all’annullamento. Annulla quando vuoi in Google Play > Abbonamenti.',
+      manage: 'Gestisci abbonamenti'
+    },
+    'ja-JP': {
+      season: '解約まで{price}/月で自動更新されます。Google Play > 定期購入 でいつでも解約できます。',
+      weekly: '解約まで{price}/週で自動更新されます。Google Play > 定期購入 でいつでも解約できます。',
+      manage: '定期購入を管理'
+    },
+    'pt-BR': {
+      season: 'Renova automaticamente por {price}/mês até ser cancelado. Cancele quando quiser em Google Play > Assinaturas.',
+      weekly: 'Renova automaticamente por {price}/semana até ser cancelado. Cancele quando quiser em Google Play > Assinaturas.',
+      manage: 'Gerenciar assinaturas'
+    },
+    'tr-TR': {
+      season: 'İptal edilene kadar {price}/ay olarak otomatik yenilenir. Google Play > Abonelikler’den istediğin zaman iptal et.',
+      weekly: 'İptal edilene kadar {price}/hafta olarak otomatik yenilenir. Google Play > Abonelikler’den istediğin zaman iptal et.',
+      manage: 'Abonelikleri yönet'
+    },
+    'uk': {
+      season: 'Автоматично поновлюється за {price}/місяць до скасування. Скасувати можна в будь-який час у Google Play > Підписки.',
+      weekly: 'Автоматично поновлюється за {price}/тиждень до скасування. Скасувати можна в будь-який час у Google Play > Підписки.',
+      manage: 'Керувати підписками'
+    },
+    'zh-CN': {
+      season: '在取消前将以{price}/月自动续订。可随时在 Google Play > 订阅 中取消。',
+      weekly: '在取消前将以{price}/周自动续订。可随时在 Google Play > 订阅 中取消。',
+      manage: '管理订阅'
+    }
+  };
+  function detectLocale(){
+    var s = (window.currentLocale || window.lang ||
+             (window.state && window.state.lang) ||
+             (window.State && window.State.lang) ||
+             document.documentElement.lang ||
+             navigator.language || 'en-US') + '';
+    s = s.replace('_','-');
+    if (STRINGS[s]) return s;
+    // Locale shorthand mapping.
+    var head = s.split('-')[0];
+    var alias = {ar:'ar', de:'de-DE', es:'es-419', fr:'fr-FR', hi:'hi-IN',
+                 id:'id', it:'it-IT', ja:'ja-JP', pt:'pt-BR', tr:'tr-TR',
+                 uk:'uk', zh:'zh-CN', en:'en-US'};
+    return alias[head] || 'en-US';
+  }
+  function priceFor(sku){
+    // Prefer the in-app PRODUCTS array if it exists.
+    var arr = window.PRODUCTS || (window.Game && window.Game.PRODUCTS);
+    if (Array.isArray(arr)){
+      for (var i=0;i<arr.length;i++){
+        if (arr[i] && arr[i].id === sku && arr[i].price){
+          // Strip the period suffix ($4.99/mo → $4.99) so we control "/month".
+          return (arr[i].price + '').split('/')[0];
+        }
+      }
+    }
+    return sku === 'season_pass_monthly' ? '$4.99' : '$1.99';
+  }
+
+  // Skip injection for buttons inside the main-menu container. Disclosures
+  // belong in Shop / no-lives only; menu cards are de-emphasized.
+  function isInMenu(el){
+    var ids = ['menuScreen','screen-menu'];
+    for (var n = el; n; n = n.parentNode){
+      if (n.id && ids.indexOf(n.id) >= 0) return true;
+    }
+    return false;
+  }
+  // Tag the button itself + scan parent siblings for the duplicate guard.
+  function alreadyDisclosed(sku, button){
+    if (button.getAttribute && button.getAttribute('data-subs-disclosed') === sku) return true;
+    var parent = button.parentNode;
+    if (!parent) return false;
+    // Look at the next ~4 siblings after the parent — covers every layout.
+    var n = parent.nextSibling, hops = 0;
+    while (n && hops < 6){
+      if (n.nodeType === 1 && n.getAttribute && n.getAttribute('data-subs-disclosure') === sku) return true;
+      n = n.nextSibling; hops++;
+    }
+    // Or it might have been appended inside the parent (fallback path).
+    var inside = parent.querySelector ? parent.querySelector('[data-subs-disclosure="' + sku + '"]') : null;
+    return !!inside;
+  }
+  function ensureDisclosure(sku, button){
+    if (!button) return;
+    if (isInMenu(button)) return;            // never on menu
+    if (alreadyDisclosed(sku, button)) return;
+    var loc = detectLocale();
+    var key = sku === 'season_pass_monthly' ? 'season' : 'weekly';
+    var tpl = (STRINGS[loc] && STRINGS[loc][key]) || STRINGS['en-US'][key];
+    var price = priceFor(sku);
+    var txt = tpl.replace('{price}', price);
+    var p = document.createElement('div');
+    p.setAttribute('data-subs-disclosure', sku);
+    p.style.cssText =
+      'font-size:0.68rem;line-height:1.35;opacity:0.78;margin:4px 8px 8px;' +
+      'text-align:center;max-width:340px;letter-spacing:0.1px;';
+    p.textContent = txt;
+    var parent = button.parentNode;
+    if (parent && parent.nextSibling) parent.parentNode.insertBefore(p, parent.nextSibling);
+    else if (parent) parent.appendChild(p);
+    else button.insertAdjacentElement('afterend', p);
+    // Tag the button itself so we cheaply detect "already done" on next poll.
+    if (button.setAttribute) button.setAttribute('data-subs-disclosed', sku);
+  }
+  function placeDisclosures(){
+    document.querySelectorAll('[onclick]').forEach(function(el){
+      var s = el.getAttribute('onclick') || '';
+      if (s.indexOf('season_pass_monthly') >= 0) ensureDisclosure('season_pass_monthly', el);
+      else if (s.indexOf('weekly_pass') >= 0) ensureDisclosure('weekly_pass', el);
+    });
+  }
+  // ── Sweep any disclosures that ended up on the menu (defensive — handles
+  // the case where the menu was active when an earlier poll fired before
+  // isInMenu() was guarded).
+  function sweepStaleDisclosures(){
+    var menus = ['menuScreen','screen-menu'];
+    menus.forEach(function(id){
+      var host = document.getElementById(id);
+      if (!host) return;
+      host.querySelectorAll('[data-subs-disclosure]').forEach(function(n){ n.parentNode.removeChild(n); });
+    });
+  }
+  setInterval(function(){ sweepStaleDisclosures(); placeDisclosures(); }, 1500);
+
+  // ── Manage subscriptions row in Settings ───────────────────────────
+  function openSubs(){
+    var url = 'https://play.google.com/store/account/subscriptions';
+    if (window.Android && typeof window.Android.openUrl === 'function'){
+      safe(function(){ window.Android.openUrl(url); });
+      return;
+    }
+    safe(function(){ window.open(url, '_blank'); });
+  }
+  function ensureManageRow(){
+    var hosts = ['settingsScreen','screen-settings','xSettingsScreen'];
+    var settings = null;
+    for (var i=0;i<hosts.length;i++){
+      var el = document.getElementById(hosts[i]);
+      if (el) { settings = el; break; }
+    }
+    if (!settings) return;
+    if (settings.querySelector('[data-subs-manage]')) return;
+    var loc = detectLocale();
+    var label = (STRINGS[loc] && STRINGS[loc].manage) || STRINGS['en-US'].manage;
+    var row = document.createElement('div');
+    row.setAttribute('data-subs-manage','1');
+    row.className = 'setting-row settings-item set-row';
+    // Layout-only; let the per-app .setting-row class own background.
+    // Label color comes from the per-app .setting-label class:
+    //   WaterSort: white (medium-blue bg)
+    //   Nono / 2048 / Unblock: dark (cream / mint bg)
+    row.style.cssText =
+      'margin:8px 0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;';
+    row.innerHTML = '<span class="setting-label settings-item-label set-label" style="font-weight:600;color:var(--page-fg, var(--text, inherit));">' + label + '</span>' +
+      '<span style="opacity:0.55;color:var(--page-fg, var(--text, inherit));">›</span>';
+    row.addEventListener('click', openSubs);
+    settings.appendChild(row);
+  }
+  setInterval(ensureManageRow, 1500);
 })();
 </script>
 
