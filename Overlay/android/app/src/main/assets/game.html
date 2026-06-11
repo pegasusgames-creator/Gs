@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Pipe Connect</title>
+<title>Overlay</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:#eef4f8;color:#1e3a5f;font-family:'Poppins',sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
 /* Midnight chrome — applied via body.midnight when the Midnight theme is active. */
-body.midnight{background:#161020;color:#e6e2f0;}
+body.midnight{background:#0c0b10;color:#efeaf6;}
 body.midnight #screen-menu,
 body.midnight #screen-game,
 body.midnight #screen-levelselect,
@@ -18,18 +18,18 @@ body.midnight #screen-settings,
 body.midnight #screen-moregames,
 body.midnight #screen-themes,
 body.midnight #screen-stats,
-body.midnight #screen-missions{background:#161020;}
+body.midnight #screen-missions{background:#0c0b10;}
 body.midnight .ls-title,
-body.midnight .ls-h1{color:#e6e2f0;}
+body.midnight .ls-h1{color:#efeaf6;}
 body.midnight .settings-item,
 body.midnight .shop-item,
 body.midnight .mg-card,
-body.midnight .modal{background:#1f1733;border-color:#2d2447;}
+body.midnight .modal{background:#16141d;border-color:#272336;}
 body.midnight .game-header,
-body.midnight .game-footer{background:#1f1733;border-color:#2d2447;}
-body.midnight .hdr-level{color:#c7b5ff;}
+body.midnight .game-footer{background:#131118;border-color:#272336;}
+body.midnight .hdr-level{color:#b7aed4;}
 body.midnight .menu-sub,
-body.midnight .ls-section-title{color:#a89bc7;}
+body.midnight .ls-section-title{color:#8a83a3;}
 body.midnight .btn-levels,
 body.midnight .btn-shop,
 body.midnight .btn-settings,
@@ -42,15 +42,15 @@ body.midnight .modal-btn.secondary,
 body.midnight .progress-bar-wrap,
 body.midnight .menu-coins,
 body.midnight .menu-lives,
-body.midnight .shop-coins-banner{background:#1f1733;color:#c7b5ff;border-color:#2d2447;}
-body.midnight .ls-bubble.locked{color:#5b5170;}
-body.midnight .toggle{background:#3d2f5e;}
-body.midnight .modal p{color:#aa9fc4;}
+body.midnight .shop-coins-banner{background:#16141d;color:#b7aed4;border-color:#272336;}
+body.midnight .ls-bubble.locked{color:#544e6b;}
+body.midnight .toggle{background:#272336;}
+body.midnight .modal p{color:#8a83a3;}
 #screen-menu,#screen-game,#screen-levelselect,#screen-shop,#screen-settings,#screen-moregames{display:none;flex-direction:column;height:100vh;}
 .active{display:flex!important;}
 /* MENU */
-#screen-menu{align-items:center;justify-content:center;background:#eef4f8;}
-.menu-logo{font-size:3rem;font-weight:800;letter-spacing:2px;margin-bottom:8px;background:linear-gradient(90deg,#ec4899,#6366f1,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+#screen-menu{align-items:center;justify-content:center;background:var(--bg,#e9eef7);}
+.menu-logo{font-size:3rem;font-weight:800;letter-spacing:2px;margin-bottom:8px;background:linear-gradient(90deg,#e8447e,#0fa89b,#dd9a10);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .menu-sub{color:#607d8b;font-size:0.9rem;margin-bottom:40px;}
 .menu-btn{width:220px;padding:14px 0;border:none;border-radius:30px;font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;margin:8px;transition:transform 0.1s,box-shadow 0.1s;}
 .menu-btn:active{transform:scale(0.96);}
@@ -64,20 +64,28 @@ body.midnight .modal p{color:#aa9fc4;}
 .btn-moregames{background:linear-gradient(135deg,#e040fb,#448aff);color:#fff;}
 /* §3.1 menu hierarchy: V8 minimal + T6 neon — hero Play, secondary pair, glowing tertiary icons. */
 :root{
-  --bg:#eef4f8; --app-bg:#eef4f8; --surface:#ffffff;
-  --text:#1c2a33; --text-mute:#54677a;
-  --border:rgba(28,42,51,0.14);
-  --g-play:linear-gradient(135deg,#448aff,#69f0ae); --on-accent:#0f1923;
-  --btn-neutral-bg:#d4e2ec;
-  --menu-tile-bg:#e0ecf3; --menu-tile-border:#d4e2ec; --menu-tile-fg:#3b6db8;
+  /* Daylight = the lightbox: a photographer's light table. White surface,
+     saturated gels. (Portfolio rule: no dark defaults — the spec's darkroom
+     mood ships as Midnight below.) */
+  --bg:#f5f4f7; --app-bg:#f5f4f7; --surface:#ffffff;
+  --text:#211d2b; --text-mute:#6e6783;
+  --border:rgba(33,29,43,0.13);
+  --g-play:linear-gradient(135deg,#33d6c8,#1f8f86); --on-accent:#04221f;
+  --btn-neutral-bg:#e4e1ea;
+  --menu-tile-bg:#efedf3; --menu-tile-border:#dcd8e4; --menu-tile-fg:#4a3f63;
+  --board-bg:#ffffff; --board-line:#dcd8e4; --cellbg:#f1eff5; --cellline:#e4e1ea;
+  --c1:#e8447e; --c2:#0fa89b; --c3:#dd9a10;
 }
 body.midnight{
-  --bg:#0e1822; --app-bg:#0e1822; --surface:#16242f;
-  --text:#dce8f2; --text-mute:#93a7b8;
-  --border:rgba(220,232,242,0.13);
-  --on-accent:#0f1923;
-  --btn-neutral-bg:#23394a;
-  --menu-tile-bg:#16242f; --menu-tile-border:#23394a; --menu-tile-fg:#7fb3ff;
+  /* the prototype's darkroom, verbatim */
+  --bg:#0c0b10; --app-bg:#0c0b10; --surface:#16141d;
+  --text:#efeaf6; --text-mute:#8a83a3;
+  --border:rgba(239,234,246,0.12);
+  --on-accent:#042a27;
+  --btn-neutral-bg:#272336;
+  --menu-tile-bg:#16141d; --menu-tile-border:#272336; --menu-tile-fg:#b7aed4;
+  --board-bg:#16141d; --board-line:#272336; --cellbg:#0e0d14; --cellline:#1d1a28;
+  --c1:#ff5d8f; --c2:#33d6c8; --c3:#ffc24b;
 }
 .menu-primary{width:240px;padding:18px 0;border:none;border-radius:32px;font-family:'Poppins',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:2px;cursor:pointer;background:linear-gradient(135deg,#448aff,#69f0ae);color:#0f1923;box-shadow:0 0 24px rgba(105,240,174,0.35),0 0 60px rgba(68,138,255,0.25);transition:transform 0.1s;}
 .menu-primary:active{transform:scale(0.97);}
@@ -163,6 +171,37 @@ body.midnight{
 .modal-btn.secondary{background:#d4e2ec;color:#3b6db8;}
 .modal-btn.danger{background:#ff5252;color:#fff;}
 .stars-display{font-size:2rem;margin-bottom:16px;letter-spacing:4px;}
+
+/* ── Overlay lightbox board ───────────────────────────────────── */
+.board-zone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:4px 14px;}
+.boards{display:flex;gap:18px;align-items:flex-start;}
+.bcol{display:flex;flex-direction:column;align-items:center;gap:7px;}
+.cap{color:var(--text-mute);font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;}
+.grid{display:grid;gap:3px;background:var(--board-bg);border:1px solid var(--board-line);border-radius:12px;padding:6px;box-shadow:0 10px 26px -16px rgba(20,15,35,0.4);}
+.gc{border-radius:5px;background:var(--cellbg);border:1px solid var(--cellline);position:relative;}
+.gc[data-c="1"]{background:var(--c1);border-color:transparent;box-shadow:0 0 8px -2px var(--c1);}
+.gc[data-c="2"]{background:var(--c2);border-color:transparent;box-shadow:0 0 8px -2px var(--c2);}
+.gc[data-c="3"]{background:var(--c3);border-color:transparent;box-shadow:0 0 8px -2px var(--c3);}
+.gc .cb{position:absolute;inset:0;display:grid;place-items:center;font-size:0.6em;font-weight:900;color:rgba(255,255,255,0.85);pointer-events:none;}
+body.no-shapes .gc .cb{display:none;}
+#resultGrid .gc.ghost::after{content:"";position:absolute;inset:0;border-radius:5px;border:1.5px dashed var(--text-mute);opacity:.5;pointer-events:none;}
+#resultWrap.win .grid{box-shadow:0 0 26px -2px var(--c2);border-color:var(--c2);}
+@keyframes develop{0%{filter:saturate(0.4) brightness(1.15);}100%{filter:none;}}
+#resultWrap.win .gc[data-c]{animation:develop .7s ease;}
+.progress{color:var(--text-mute);font-size:.74rem;}
+.progress b,.progress span{color:var(--text);font-weight:700;}
+.sheets{display:flex;gap:12px;}
+.sheet{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.frame{position:relative;border-radius:12px;border:1px dashed var(--board-line);overflow:hidden;
+  background:repeating-linear-gradient(45deg,var(--cellbg) 0 6px,var(--board-bg) 6px 12px);cursor:grab;touch-action:none;}
+.frame:active{cursor:grabbing;border-color:var(--c2);}
+.sgrid{position:absolute;display:grid;transition:transform .06s linear;}
+.sc{border-radius:3px;position:relative;}
+.sc[data-c="1"]{background:var(--c1);} .sc[data-c="2"]{background:var(--c2);} .sc[data-c="3"]{background:var(--c3);}
+.sname{color:var(--text-mute);font-size:.66rem;letter-spacing:1px;}
+.sname b{color:var(--text);}
+@media (min-width:600px){.boards{gap:26px;}.sheets{gap:18px;}}
+@media (prefers-reduced-motion:reduce){.sgrid{transition:none!important;}#resultWrap.win .gc[data-c]{animation:none!important;}}
 
 /* ============ 2026-06-10 round-1: adaptive sizing via clamp() ============ */
 .game-footer {
@@ -298,19 +337,20 @@ body.midnight{
 }
 /* =================== END SHARED MENU SKIN v1 =================== */
 
-/* ---- PipeConnect identity: flowing pipes, pink→indigo→cyan (Part B) ---- */
+/* ---- Overlay identity: lightbox gels (Part B) ---- */
 :root{
-  --m-bg-top:#eef3f8; --m-vignette: rgba(40,60,90,0.15); --m-grain-opacity:.04;
-  --m-cta-grad: linear-gradient(135deg,#ec4899 0%,#6366f1 48%,#22d3ee 100%);
-  --m-cta-glow: rgba(99,102,241,.45); --m-glow: rgba(99,102,241,.30);
-  --m-cta-glyph:"▶ "; --m-tile-icon:#6366f1;
-  /* motif: faint flowing pipe strokes */
-  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cg fill='none' stroke='%236366f1' stroke-width='14' stroke-linecap='round' opacity='0.07'%3E%3Cpath d='M40 80 H200 a40 40 0 0 1 40 40 V300'/%3E%3Cpath d='M120 420 V260 a40 40 0 0 1 40 -40 H380'/%3E%3C/g%3E%3C/svg%3E");
+  --m-bg-top:#fbfafc; --m-vignette: rgba(50,40,70,0.14); --m-grain-opacity:.05;
+  --m-cta-grad: linear-gradient(135deg,#e8447e,#0fa89b);
+  --m-cta-glow: rgba(232,68,126,.35); --m-glow: rgba(15,168,155,.30);
+  --m-cta-glyph:"▶ "; --m-tile-icon:#4a3f63;
+  /* motif: three offset translucent gel squares */
+  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='380' height='380'%3E%3Crect x='90' y='84' width='120' height='120' rx='16' fill='%23e8447e' opacity='0.06'/%3E%3Crect x='140' y='124' width='120' height='120' rx='16' fill='%230fa89b' opacity='0.06'/%3E%3Crect x='190' y='164' width='120' height='120' rx='16' fill='%23dd9a10' opacity='0.06'/%3E%3C/svg%3E");
+  --m-motif-size: 380px 380px;
 }
-body.midnight{ --m-bg-top:#161b2e; --m-vignette:rgba(0,0,0,.5);
+body.midnight{ --m-bg-top:#1a1726; --m-vignette:rgba(0,0,0,.55);
   /* --m-* defaults resolve at html scope and cannot see body.midnight
      token overrides — restate the tile fill here explicitly. */
-  --m-tile-grad:#16242f; --m-tile-icon:#7fb3ff; }
+  --m-tile-grad:#16141d; --m-tile-icon:#b7aed4; }
 </style>
 </head>
 <body>
@@ -319,8 +359,8 @@ body.midnight{ --m-bg-top:#161b2e; --m-vignette:rgba(0,0,0,.5);
 <div id="screen-menu" class="active">
   <div class="menu-lives" id="menu-lives">❤️ 5</div>
   <div class="menu-coins" id="menu-coins">🪙 0</div>
-  <div class="menu-logo">PIPE CONNECT</div>
-  <div class="menu-sub">Connect the dots. Fill the grid.</div>
+  <div class="menu-logo">OVERLAY</div>
+  <div class="menu-sub">Slide the sheets. Reveal the picture.</div>
   <button class="menu-primary" onclick="startGame()">PLAY</button>
   <button class="menu-pair" id="dailyChallengeBtn" onclick="startDailyChallenge()" style="width:240px;margin-top:14px">Daily puzzle</button>
   <div class="menu-icon-row">
@@ -341,7 +381,7 @@ body.midnight{ --m-bg-top:#161b2e; --m-vignette:rgba(0,0,0,.5);
       <span class="menu-icon-label">Settings</span>
     </button>
   </div>
-  <div style="position:absolute;bottom:20px;color:#263238;font-size:0.7rem;">v1.0.0 • com.pegasusgames.pipeconnect</div>
+  <div style="position:absolute;bottom:20px;color:#263238;font-size:0.7rem;">v1.0.0 • com.pegasusgames.overlay</div>
 </div>
 
 <!-- GAME -->
@@ -351,9 +391,13 @@ body.midnight{ --m-bg-top:#161b2e; --m-vignette:rgba(0,0,0,.5);
     <div class="hdr-lives" id="hdr-lives">❤️❤️❤️❤️❤️</div>
     <div class="hdr-coins" id="hdr-coins">🪙 0</div>
   </div>
-  <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
-  <div class="canvas-wrap">
-    <canvas id="gameCanvas"></canvas>
+  <div class="board-zone">
+    <div class="boards">
+      <div class="bcol"><div class="cap">Target</div><div class="grid" id="targetGrid"></div></div>
+      <div class="bcol" id="resultWrap"><div class="cap">Your stack</div><div class="grid" id="resultGrid"></div></div>
+    </div>
+    <div class="progress"><b id="hud-match">0</b> / <span id="hud-total">0</span> cells · <span id="hud-moves">0</span> slides</div>
+    <div class="sheets" id="sheets"></div>
   </div>
   <div class="game-footer">
     <button class="foot-btn" onclick="goMenu()">← Menu</button>
@@ -361,10 +405,10 @@ body.midnight{ --m-bg-top:#161b2e; --m-vignette:rgba(0,0,0,.5);
     <button class="foot-btn warn" onclick="resetLevel()">↺ Reset</button>
   </div>
   <div id="tutorialOverlay" style="display:none;position:absolute;bottom:90px;left:0;right:0;justify-content:center;pointer-events:none;z-index:50">
-    <div style="background:rgba(10,25,35,0.96);border:1.5px solid rgba(68,138,255,0.55);border-radius:18px;padding:16px 22px;max-width:280px;text-align:center;pointer-events:all">
-      <div style="color:#448aff;font-size:15px;font-weight:800;margin-bottom:6px">🔧 How to Play</div>
-      <div style="color:rgba(255,255,255,0.8);font-size:13px;line-height:1.4">Draw paths to connect matching colored pipe endpoints. Fill the entire grid to complete the puzzle!</div>
-      <div style="color:rgba(255,255,255,0.35);font-size:11px;margin-top:10px">Tap anywhere to start</div>
+    <div style="background:var(--surface,#fff);border:1.5px solid var(--c2,#0fa89b);border-radius:18px;padding:16px 22px;max-width:290px;text-align:center;pointer-events:all;box-shadow:0 14px 40px rgba(20,15,35,0.25)">
+      <div id="tut-title" style="color:var(--c2,#0fa89b);font-size:15px;font-weight:800;margin-bottom:6px">🎞️ Three sheets</div>
+      <div id="tut-body" style="color:var(--text,#211d2b);font-size:13px;line-height:1.45">Each see-through sheet holds a few colored cells. Drag a sheet to slide it.</div>
+      <div id="tut-foot" style="color:var(--text-mute,#6e6783);font-size:11px;margin-top:10px">Tap to continue · 1/3</div>
     </div>
   </div>
 </div>
@@ -426,8 +470,16 @@ body.midnight{ --m-bg-top:#161b2e; --m-vignette:rgba(0,0,0,.5);
       <button class="modal-btn danger" style="padding:8px 20px;font-size:0.8rem;" onclick="confirmReset()">Reset All Data</button>
     </div>
     <div class="settings-item">
-      <span class="settings-label">🎨 Pipe Theme</span>
+      <span class="settings-label">🎨 Board Theme</span>
       <button onclick="showScreen('themes')" id="themeBtn" style="background:rgba(68,138,255,0.12);border:1px solid rgba(68,138,255,0.3);border-radius:8px;padding:6px 14px;color:#448aff;font-size:13px;font-weight:600;cursor:pointer">Classic</button>
+    </div>
+    <div class="settings-item">
+      <span class="settings-label">🎓 Tutorial</span>
+      <button class="shop-item-btn" onclick="replayTutorial()">Replay</button>
+    </div>
+    <div class="settings-item">
+      <span class="settings-label">🔺 Shape markers</span>
+      <button class="shop-item-btn" id="shapes-toggle-btn" onclick="toggleShapes()">ON</button>
     </div>
     <div class="settings-item">
       <span class="settings-label">🔁 Restore Purchases</span>
@@ -438,22 +490,22 @@ body.midnight{ --m-bg-top:#161b2e; --m-vignette:rgba(0,0,0,.5);
       <button class="shop-item-btn" onclick="openPrivacyPolicy()">View</button>
     </div>
     <div class="settings-item" style="justify-content:center;">
-      <span style="color:#37474f;font-size:0.75rem;">Pipe Connect v1.0 • com.pegasusgames.pipeconnect</span>
+      <span style="color:#37474f;font-size:0.75rem;">Overlay v1.0 • com.pegasusgames.overlay</span>
     </div>
   </div>
 </div>
 
 <!-- THEMES -->
-<div id="screen-themes" style="display:none;flex-direction:column;height:100vh;background:#eef4f8;">
+<div id="screen-themes" style="display:none;flex-direction:column;height:100vh;background:var(--bg,#e9eef7);">
   <div class="shop-header">
     <button class="ls-back" onclick="showScreen('settings')">←</button>
-    <div class="ls-title">🎨 Pipe Themes</div>
+    <div class="ls-title">🎨 Themes</div>
   </div>
   <div id="themesGrid" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px"></div>
 </div>
 
 <!-- STATS -->
-<div id="screen-stats" style="display:none;flex-direction:column;height:100vh;background:#eef4f8;">
+<div id="screen-stats" style="display:none;flex-direction:column;height:100vh;background:var(--bg,#e9eef7);">
   <div class="shop-header">
     <button class="ls-back" onclick="showScreen('menu')">←</button>
     <div class="ls-title">📊 Stats</div>
@@ -462,7 +514,7 @@ body.midnight{ --m-bg-top:#161b2e; --m-vignette:rgba(0,0,0,.5);
 </div>
 
 <!-- MISSIONS -->
-<div id="screen-missions" style="display:none;flex-direction:column;height:100vh;background:#eef4f8;">
+<div id="screen-missions" style="display:none;flex-direction:column;height:100vh;background:var(--bg,#e9eef7);">
   <div class="shop-header">
     <button class="ls-back" onclick="showScreen('menu')">←</button>
     <div class="ls-title">🎯 Missions</div>
@@ -500,7 +552,7 @@ body.midnight{ --m-bg-top:#161b2e; --m-vignette:rgba(0,0,0,.5);
 <div class="overlay" id="overlay-hint">
   <div class="modal">
     <h2>Need a Hint? 💡</h2>
-    <p>Highlights the next step of an unsolved pipe.</p>
+    <p>Reveals your next optimal move.</p>
     <div class="modal-btns">
       <button class="modal-btn primary" onclick="watchAdForHint()">📺 Watch Ad (Free)</button>
       <button class="modal-btn secondary" onclick="spendCoinsHint()">🪙 10 Coins</button>
@@ -535,15 +587,12 @@ body.midnight{ --m-bg-top:#161b2e; --m-vignette:rgba(0,0,0,.5);
 // ============================================================
 // CONSTANTS & COLORS
 // ============================================================
+// Gel palette — theme palettes assign into this (portfolio PIPE_COLORS
+// contract); values mirror the --c1/--c2/--c3 CSS tokens.
 const PIPE_COLORS = {
-  red:    '#ff5252',
-  blue:   '#448aff',
-  green:  '#69f0ae',
-  yellow: '#ffd740',
-  purple: '#e040fb',
-  orange: '#ff6d00',
-  pink:   '#f48fb1',
-  teal:   '#18ffff'
+  c1: 'var(--c1)',
+  c2: 'var(--c2)',
+  c3: 'var(--c3)'
 };
 
 const VALID_PRODUCTS = new Set([
@@ -572,141 +621,82 @@ const SHOP_PRODUCTS = [
 // ============================================================
 // LEVELS (150 levels)
 // ============================================================
-const LEVELS = [
-// 1-20: 5x5
-{size:5,dots:[[0,0,'red'],[4,2,'red'],[0,2,'blue'],[4,4,'blue'],[0,1,'green'],[4,3,'green']]},
-{size:5,dots:[[1,0,'red'],[4,2,'red'],[0,4,'blue'],[3,4,'blue'],[2,0,'green'],[4,4,'green']]},
-{size:5,dots:[[1,1,'red'],[4,3,'red'],[0,3,'blue'],[2,4,'blue'],[1,0,'green'],[4,1,'green']]},
-{size:5,dots:[[1,0,'red'],[2,4,'red'],[0,2,'blue'],[4,4,'blue'],[1,1,'green'],[4,2,'green'],[0,4,'yellow'],[4,0,'yellow']]},
-{size:5,dots:[[0,0,'red'],[4,4,'red'],[0,4,'blue'],[4,0,'blue'],[2,1,'green'],[2,3,'green']]},
-{size:5,dots:[[1,0,'red'],[3,3,'red'],[0,3,'blue'],[4,4,'blue'],[1,1,'green'],[4,2,'green']]},
-{size:5,dots:[[0,1,'red'],[4,1,'red'],[0,3,'blue'],[4,3,'blue'],[2,0,'green'],[2,4,'green']]},
-{size:5,dots:[[0,0,'red'],[2,2,'red'],[0,4,'blue'],[4,4,'blue'],[4,0,'green'],[2,4,'green']]},
-{size:5,dots:[[0,0,'red'],[4,2,'red'],[2,4,'blue'],[4,0,'blue'],[0,4,'green'],[3,3,'green']]},
-{size:5,dots:[[1,0,'red'],[3,4,'red'],[0,2,'blue'],[4,2,'blue'],[0,4,'green'],[4,0,'green']]},
-{size:5,dots:[[1,0,'red'],[4,4,'red'],[0,2,'blue'],[4,2,'blue'],[2,0,'green'],[2,4,'green'],[0,4,'yellow'],[4,0,'yellow']]},
-{size:5,dots:[[1,0,'red'],[4,3,'red'],[0,4,'blue'],[4,0,'blue'],[2,2,'green'],[3,1,'green']]},
-{size:5,dots:[[0,1,'red'],[3,4,'red'],[1,0,'blue'],[4,3,'blue'],[0,4,'green'],[4,0,'green']]},
-{size:5,dots:[[1,0,'red'],[2,3,'red'],[0,4,'blue'],[3,1,'blue'],[4,0,'green'],[4,4,'green']]},
-{size:5,dots:[[0,0,'red'],[4,4,'red'],[1,2,'blue'],[3,2,'blue'],[0,4,'green'],[4,0,'green']]},
-{size:5,dots:[[0,0,'red'],[3,4,'red'],[0,4,'blue'],[4,0,'blue'],[2,1,'green'],[2,3,'green'],[1,2,'yellow'],[3,2,'yellow']]},
-{size:5,dots:[[0,2,'red'],[4,2,'red'],[0,0,'blue'],[4,4,'blue'],[0,4,'green'],[4,0,'green']]},
-{size:5,dots:[[0,0,'red'],[4,4,'red'],[0,4,'blue'],[4,0,'blue'],[1,1,'green'],[3,3,'green']]},
-{size:5,dots:[[0,0,'red'],[4,2,'red'],[1,4,'blue'],[4,4,'blue'],[0,2,'green'],[3,0,'green']]},
-{size:5,dots:[[1,0,'red'],[4,4,'red'],[2,0,'blue'],[2,4,'blue'],[0,2,'green'],[4,2,'green'],[0,4,'yellow'],[4,0,'yellow']]},
-// 21-50: 6x6
-{size:6,dots:[[1,0,'red'],[5,5,'red'],[0,5,'blue'],[5,0,'blue'],[2,2,'green'],[3,3,'green']]},
-{size:6,dots:[[1,0,'red'],[5,4,'red'],[0,5,'blue'],[5,0,'blue'],[2,1,'green'],[3,4,'green'],[1,3,'yellow'],[4,2,'yellow']]},
-{size:6,dots:[[0,1,'red'],[5,4,'red'],[0,4,'blue'],[5,1,'blue'],[2,0,'green'],[3,5,'green'],[1,3,'yellow'],[4,2,'yellow']]},
-{size:6,dots:[[0,0,'red'],[3,5,'red'],[0,5,'blue'],[5,0,'blue'],[2,2,'green'],[4,3,'green'],[1,4,'yellow'],[5,5,'yellow']]},
-{size:6,dots:[[0,0,'red'],[5,5,'red'],[0,3,'blue'],[5,2,'blue'],[2,1,'green'],[3,4,'green'],[0,5,'yellow'],[5,0,'yellow']]},
-{size:6,dots:[[0,0,'red'],[5,3,'red'],[1,5,'blue'],[5,0,'blue'],[0,4,'green'],[4,4,'green'],[2,2,'yellow'],[4,1,'yellow']]},
-{size:6,dots:[[0,1,'red'],[4,5,'red'],[1,0,'blue'],[5,4,'blue'],[0,4,'green'],[5,1,'green'],[2,3,'yellow'],[3,2,'yellow']]},
-{size:6,dots:[[0,0,'red'],[5,5,'red'],[0,5,'blue'],[5,0,'blue'],[1,2,'green'],[4,3,'green'],[2,1,'yellow'],[3,4,'yellow']]},
-{size:6,dots:[[0,2,'red'],[5,3,'red'],[0,0,'blue'],[5,5,'blue'],[2,0,'green'],[3,5,'green'],[0,5,'yellow'],[5,0,'yellow']]},
-{size:6,dots:[[0,0,'red'],[5,5,'red'],[0,3,'blue'],[3,0,'blue'],[2,4,'green'],[5,1,'green'],[1,2,'yellow'],[4,3,'yellow']]},
-{size:6,dots:[[0,0,'red'],[5,4,'red'],[0,5,'blue'],[4,0,'blue'],[1,2,'green'],[4,3,'green'],[2,4,'yellow'],[5,1,'yellow']]},
-{size:6,dots:[[0,1,'red'],[5,4,'red'],[1,0,'blue'],[4,5,'blue'],[0,4,'green'],[5,1,'green'],[2,2,'yellow'],[3,3,'yellow']]},
-{size:6,dots:[[0,0,'red'],[5,5,'red'],[0,4,'blue'],[4,0,'blue'],[2,2,'green'],[3,3,'green'],[0,2,'yellow'],[5,3,'yellow']]},
-{size:6,dots:[[1,0,'red'],[4,5,'red'],[0,3,'blue'],[5,2,'blue'],[0,0,'green'],[5,5,'green'],[2,4,'yellow'],[3,1,'yellow']]},
-{size:6,dots:[[0,0,'red'],[5,5,'red'],[0,2,'blue'],[2,0,'blue'],[3,5,'green'],[5,3,'green'],[0,5,'yellow'],[5,0,'yellow']]},
-{size:6,dots:[[0,0,'red'],[4,4,'red'],[0,5,'blue'],[5,0,'blue'],[2,1,'green'],[3,4,'green'],[1,3,'yellow'],[4,2,'yellow'],[2,5,'purple'],[5,3,'purple']]},
-{size:6,dots:[[0,0,'red'],[5,5,'red'],[0,5,'blue'],[5,0,'blue'],[2,2,'green'],[3,3,'green'],[1,4,'yellow'],[4,1,'yellow']]},
-{size:6,dots:[[0,1,'red'],[5,4,'red'],[1,0,'blue'],[4,5,'blue'],[0,3,'green'],[3,0,'green'],[2,5,'yellow'],[5,2,'yellow']]},
-{size:6,dots:[[0,0,'red'],[5,3,'red'],[0,3,'blue'],[3,0,'blue'],[1,5,'green'],[5,1,'green'],[3,4,'yellow'],[4,3,'yellow']]},
-{size:6,dots:[[0,2,'red'],[5,3,'red'],[2,0,'blue'],[3,5,'blue'],[0,5,'green'],[5,0,'green'],[1,1,'yellow'],[4,4,'yellow']]},
-{size:6,dots:[[1,0,'red'],[5,5,'red'],[0,5,'blue'],[5,0,'blue'],[2,1,'green'],[1,4,'green'],[3,2,'yellow'],[4,3,'yellow'],[0,3,'purple'],[3,0,'purple']]},
-// 51-80: 7x7
-{size:7,dots:[[1,0,'red'],[6,6,'red'],[0,6,'blue'],[6,0,'blue'],[3,3,'green'],[2,4,'green'],[1,2,'yellow'],[5,4,'yellow']]},
-{size:7,dots:[[1,0,'red'],[6,5,'red'],[0,6,'blue'],[6,0,'blue'],[2,2,'green'],[4,4,'green'],[1,4,'yellow'],[5,2,'yellow'],[3,1,'purple'],[3,5,'purple']]},
-{size:7,dots:[[0,1,'red'],[6,5,'red'],[1,0,'blue'],[5,6,'blue'],[0,4,'green'],[4,0,'green'],[2,6,'yellow'],[6,2,'yellow'],[3,3,'purple'],[4,4,'purple']]},
-{size:7,dots:[[0,0,'red'],[6,6,'red'],[0,4,'blue'],[4,0,'blue'],[2,2,'green'],[4,4,'green'],[0,6,'yellow'],[6,0,'yellow'],[3,1,'purple'],[1,5,'purple']]},
-{size:7,dots:[[0,0,'red'],[6,4,'red'],[0,6,'blue'],[6,0,'blue'],[2,1,'green'],[1,4,'green'],[4,2,'yellow'],[5,5,'yellow'],[3,3,'purple'],[4,6,'purple']]},
-{size:7,dots:[[0,1,'red'],[5,6,'red'],[1,0,'blue'],[6,5,'blue'],[0,4,'green'],[4,0,'green'],[3,2,'yellow'],[2,5,'yellow'],[0,6,'purple'],[6,0,'purple']]},
-{size:7,dots:[[0,0,'red'],[6,6,'red'],[0,3,'blue'],[3,0,'blue'],[3,6,'green'],[6,3,'green'],[1,5,'yellow'],[5,1,'yellow'],[2,2,'purple'],[4,4,'purple']]},
-{size:7,dots:[[1,0,'red'],[6,5,'red'],[1,6,'blue'],[6,1,'blue'],[0,3,'green'],[3,0,'green'],[3,5,'yellow'],[5,3,'yellow'],[2,4,'purple'],[4,2,'purple']]},
-{size:7,dots:[[0,2,'red'],[6,4,'red'],[2,0,'blue'],[4,6,'blue'],[0,5,'green'],[5,0,'green'],[1,3,'yellow'],[3,1,'yellow'],[4,4,'purple'],[4,6,'purple']]},
-{size:7,dots:[[0,0,'red'],[6,6,'red'],[0,6,'blue'],[6,0,'blue'],[2,3,'green'],[3,2,'green'],[1,1,'yellow'],[5,5,'yellow'],[3,4,'purple'],[4,3,'purple']]},
-{size:7,dots:[[0,0,'red'],[6,6,'red'],[0,3,'blue'],[3,0,'blue'],[3,3,'green'],[4,4,'green'],[1,5,'yellow'],[5,1,'yellow'],[0,6,'purple'],[6,0,'purple']]},
-{size:7,dots:[[0,0,'red'],[5,6,'red'],[0,2,'blue'],[6,4,'blue'],[0,5,'green'],[5,1,'green'],[2,3,'yellow'],[4,3,'yellow'],[3,5,'purple'],[6,2,'purple']]},
-{size:7,dots:[[0,1,'red'],[6,5,'red'],[1,0,'blue'],[5,6,'blue'],[0,4,'green'],[4,0,'green'],[2,2,'yellow'],[4,4,'yellow'],[0,6,'purple'],[6,0,'purple']]},
-{size:7,dots:[[0,0,'red'],[6,4,'red'],[0,5,'blue'],[5,0,'blue'],[2,1,'green'],[1,4,'green'],[4,3,'yellow'],[3,6,'yellow'],[1,6,'purple'],[6,1,'purple']]},
-{size:7,dots:[[0,0,'red'],[6,6,'red'],[0,4,'blue'],[4,0,'blue'],[1,3,'green'],[3,1,'green'],[2,5,'yellow'],[5,2,'yellow'],[0,6,'purple'],[6,0,'purple']]},
-{size:7,dots:[[1,0,'red'],[6,6,'red'],[0,6,'blue'],[6,0,'blue'],[3,3,'green'],[4,4,'green'],[1,1,'yellow'],[5,5,'yellow'],[2,4,'purple'],[4,2,'purple'],[1,5,'orange'],[5,1,'orange']]},
-{size:7,dots:[[0,1,'red'],[6,5,'red'],[1,6,'blue'],[5,0,'blue'],[0,3,'green'],[3,0,'green'],[3,6,'yellow'],[6,3,'yellow'],[2,2,'purple'],[4,4,'purple']]},
-{size:7,dots:[[0,0,'red'],[5,5,'red'],[0,5,'blue'],[5,0,'blue'],[2,2,'green'],[4,4,'green'],[1,4,'yellow'],[4,1,'yellow'],[3,0,'purple'],[0,3,'purple']]},
-{size:7,dots:[[0,2,'red'],[6,4,'red'],[2,6,'blue'],[4,0,'blue'],[0,0,'green'],[6,6,'green'],[3,3,'yellow'],[4,4,'yellow'],[1,5,'purple'],[5,1,'purple']]},
-{size:7,dots:[[1,0,'red'],[6,6,'red'],[0,6,'blue'],[6,0,'blue'],[2,1,'green'],[1,2,'green'],[4,5,'yellow'],[5,4,'yellow'],[3,3,'purple'],[4,4,'purple'],[2,4,'orange'],[4,2,'orange']]},
-// 81-110: 8x8
-{size:8,dots:[[1,0,'red'],[7,7,'red'],[0,7,'blue'],[7,0,'blue'],[3,3,'green'],[4,4,'green'],[1,5,'yellow'],[5,1,'yellow'],[2,6,'purple'],[6,2,'purple']]},
-{size:8,dots:[[1,0,'red'],[7,6,'red'],[0,7,'blue'],[7,0,'blue'],[2,2,'green'],[5,5,'green'],[1,4,'yellow'],[4,1,'yellow'],[3,5,'purple'],[5,3,'purple'],[2,6,'orange'],[6,2,'orange']]},
-{size:8,dots:[[0,1,'red'],[7,6,'red'],[1,0,'blue'],[6,7,'blue'],[0,4,'green'],[4,0,'green'],[3,3,'yellow'],[4,4,'yellow'],[0,7,'purple'],[7,0,'purple'],[2,5,'orange'],[5,2,'orange']]},
-{size:8,dots:[[0,0,'red'],[7,7,'red'],[0,4,'blue'],[4,0,'blue'],[2,2,'green'],[5,5,'green'],[1,6,'yellow'],[6,1,'yellow'],[3,4,'purple'],[4,3,'purple'],[0,7,'orange'],[7,0,'orange']]},
-{size:8,dots:[[0,0,'red'],[7,5,'red'],[0,7,'blue'],[7,0,'blue'],[2,3,'green'],[3,2,'green'],[4,5,'yellow'],[5,4,'yellow'],[1,6,'purple'],[6,1,'purple'],[3,6,'orange'],[6,3,'orange']]},
-{size:8,dots:[[0,2,'red'],[7,5,'red'],[2,0,'blue'],[5,7,'blue'],[0,5,'green'],[5,0,'green'],[3,3,'yellow'],[4,4,'yellow'],[1,7,'purple'],[7,1,'purple'],[2,4,'orange'],[4,2,'orange']]},
-{size:8,dots:[[0,0,'red'],[7,7,'red'],[0,7,'blue'],[7,0,'blue'],[2,4,'green'],[4,2,'green'],[3,5,'yellow'],[5,3,'yellow'],[1,1,'purple'],[6,6,'purple'],[2,6,'orange'],[6,2,'orange']]},
-{size:8,dots:[[0,1,'red'],[6,7,'red'],[1,0,'blue'],[7,6,'blue'],[0,4,'green'],[4,0,'green'],[3,4,'yellow'],[4,3,'yellow'],[2,6,'purple'],[6,2,'purple'],[1,7,'orange'],[7,1,'orange']]},
-{size:8,dots:[[1,0,'red'],[7,4,'red'],[0,5,'blue'],[5,0,'blue'],[2,2,'green'],[5,5,'green'],[3,6,'yellow'],[6,3,'yellow'],[1,4,'purple'],[4,1,'purple'],[2,7,'orange'],[7,2,'orange']]},
-{size:8,dots:[[0,0,'red'],[7,7,'red'],[0,4,'blue'],[4,0,'blue'],[1,3,'green'],[3,1,'green'],[4,6,'yellow'],[6,4,'yellow'],[2,5,'purple'],[5,2,'purple'],[0,7,'orange'],[7,0,'orange']]},
-{size:8,dots:[[0,0,'red'],[7,7,'red'],[0,7,'blue'],[7,0,'blue'],[2,2,'green'],[5,5,'green'],[1,4,'yellow'],[4,1,'yellow'],[3,6,'purple'],[6,3,'purple'],[2,5,'orange'],[5,2,'orange']]},
-{size:8,dots:[[0,1,'red'],[7,6,'red'],[1,7,'blue'],[6,0,'blue'],[0,3,'green'],[3,0,'green'],[4,7,'yellow'],[7,4,'yellow'],[2,4,'purple'],[4,2,'purple'],[3,5,'orange'],[5,3,'orange']]},
-{size:8,dots:[[0,0,'red'],[7,5,'red'],[0,6,'blue'],[6,0,'blue'],[2,1,'green'],[1,2,'green'],[5,6,'yellow'],[6,5,'yellow'],[3,3,'purple'],[4,4,'purple'],[1,5,'orange'],[5,1,'orange']]},
-{size:8,dots:[[1,0,'red'],[7,7,'red'],[0,4,'blue'],[4,7,'blue'],[1,2,'green'],[2,1,'green'],[5,3,'yellow'],[3,5,'yellow'],[0,7,'purple'],[7,0,'purple'],[2,6,'orange'],[6,2,'orange']]},
-{size:8,dots:[[0,2,'red'],[7,5,'red'],[2,7,'blue'],[5,0,'blue'],[0,0,'green'],[7,7,'green'],[3,3,'yellow'],[5,5,'yellow'],[1,5,'purple'],[5,1,'purple'],[3,6,'orange'],[6,3,'orange']]},
-{size:8,dots:[[1,0,'red'],[7,7,'red'],[0,7,'blue'],[7,0,'blue'],[3,3,'green'],[4,4,'green'],[1,5,'yellow'],[5,1,'yellow'],[2,6,'purple'],[6,2,'purple'],[3,6,'orange'],[6,3,'orange'],[1,3,'pink'],[3,1,'pink']]},
-{size:8,dots:[[1,1,'red'],[6,7,'red'],[1,0,'blue'],[7,6,'blue'],[0,5,'green'],[5,7,'green'],[2,3,'yellow'],[3,2,'yellow'],[4,5,'purple'],[5,4,'purple'],[1,6,'orange'],[6,1,'orange']]},
-{size:8,dots:[[1,0,'red'],[7,6,'red'],[1,7,'blue'],[6,0,'blue'],[2,2,'green'],[5,5,'green'],[0,4,'yellow'],[4,0,'yellow'],[3,5,'purple'],[5,3,'purple'],[2,7,'orange'],[7,2,'orange']]},
-{size:8,dots:[[1,2,'red'],[6,4,'red'],[2,0,'blue'],[4,6,'blue'],[0,5,'green'],[5,7,'green'],[3,1,'yellow'],[1,3,'yellow'],[4,4,'purple'],[5,5,'purple'],[2,6,'orange'],[6,2,'orange']]},
-{size:8,dots:[[1,0,'red'],[7,7,'red'],[0,7,'blue'],[7,0,'blue'],[2,3,'green'],[3,2,'green'],[4,5,'yellow'],[5,4,'yellow'],[1,6,'purple'],[6,1,'purple'],[3,4,'orange'],[4,3,'orange'],[1,4,'pink'],[4,1,'pink']]},
-// 111-130: 9x9
-{size:9,dots:[[1,0,'red'],[8,8,'red'],[0,8,'blue'],[8,0,'blue'],[3,3,'green'],[5,5,'green'],[1,5,'yellow'],[5,1,'yellow'],[3,7,'purple'],[7,3,'purple'],[2,4,'orange'],[4,2,'orange']]},
-{size:9,dots:[[1,0,'red'],[8,7,'red'],[0,8,'blue'],[8,0,'blue'],[2,2,'green'],[6,6,'green'],[1,5,'yellow'],[5,1,'yellow'],[4,7,'purple'],[7,4,'purple'],[2,6,'orange'],[6,2,'orange'],[3,4,'pink'],[4,3,'pink']]},
-{size:9,dots:[[0,1,'red'],[8,7,'red'],[1,0,'blue'],[7,8,'blue'],[0,5,'green'],[5,0,'green'],[3,4,'yellow'],[4,3,'yellow'],[2,7,'purple'],[7,2,'purple'],[1,6,'orange'],[6,1,'orange'],[4,6,'pink'],[6,4,'pink']]},
-{size:9,dots:[[0,0,'red'],[8,8,'red'],[0,5,'blue'],[5,0,'blue'],[2,3,'green'],[3,2,'green'],[5,6,'yellow'],[6,5,'yellow'],[1,7,'purple'],[7,1,'purple'],[3,6,'orange'],[6,3,'orange'],[4,4,'pink'],[5,5,'pink']]},
-{size:9,dots:[[0,2,'red'],[8,6,'red'],[2,8,'blue'],[6,0,'blue'],[0,0,'green'],[8,8,'green'],[3,3,'yellow'],[6,6,'yellow'],[1,5,'purple'],[5,1,'purple'],[4,7,'orange'],[7,4,'orange'],[2,6,'pink'],[6,2,'pink']]},
-{size:9,dots:[[0,0,'red'],[8,8,'red'],[0,8,'blue'],[8,0,'blue'],[2,4,'green'],[4,2,'green'],[5,3,'yellow'],[3,5,'yellow'],[1,6,'purple'],[6,1,'purple'],[4,6,'orange'],[6,4,'orange'],[2,7,'pink'],[7,2,'pink']]},
-{size:9,dots:[[0,1,'red'],[7,8,'red'],[1,0,'blue'],[8,7,'blue'],[0,4,'green'],[4,0,'green'],[3,5,'yellow'],[5,3,'yellow'],[1,7,'purple'],[7,1,'purple'],[5,6,'orange'],[6,5,'orange'],[3,8,'pink'],[8,3,'pink']]},
-{size:9,dots:[[1,0,'red'],[8,7,'red'],[0,7,'blue'],[7,0,'blue'],[2,2,'green'],[6,6,'green'],[3,5,'yellow'],[5,3,'yellow'],[1,4,'purple'],[4,1,'purple'],[4,7,'orange'],[7,4,'orange'],[2,6,'pink'],[6,2,'pink']]},
-{size:9,dots:[[0,2,'red'],[8,6,'red'],[2,0,'blue'],[6,8,'blue'],[0,6,'green'],[6,0,'green'],[3,3,'yellow'],[5,5,'yellow'],[1,4,'purple'],[4,1,'purple'],[4,6,'orange'],[6,4,'orange'],[3,7,'pink'],[7,3,'pink']]},
-{size:9,dots:[[0,0,'red'],[8,8,'red'],[0,8,'blue'],[8,0,'blue'],[2,2,'green'],[6,6,'green'],[2,6,'yellow'],[6,2,'yellow'],[1,4,'purple'],[4,1,'purple'],[5,7,'orange'],[7,5,'orange'],[3,5,'pink'],[5,3,'pink']]},
-{size:9,dots:[[0,0,'red'],[8,8,'red'],[0,4,'blue'],[4,8,'blue'],[1,2,'green'],[2,1,'green'],[6,7,'yellow'],[7,6,'yellow'],[0,8,'purple'],[8,0,'purple'],[3,5,'orange'],[5,3,'orange'],[2,7,'pink'],[7,2,'pink']]},
-{size:9,dots:[[0,1,'red'],[8,7,'red'],[1,8,'blue'],[7,0,'blue'],[0,4,'green'],[4,0,'green'],[4,8,'yellow'],[8,4,'yellow'],[2,3,'purple'],[3,2,'purple'],[5,5,'orange'],[6,6,'orange'],[1,6,'pink'],[6,1,'pink']]},
-{size:9,dots:[[0,0,'red'],[8,6,'red'],[0,6,'blue'],[6,0,'blue'],[2,2,'green'],[6,4,'green'],[4,7,'yellow'],[7,4,'yellow'],[1,4,'purple'],[4,1,'purple'],[3,6,'orange'],[6,3,'orange'],[2,7,'pink'],[7,2,'pink']]},
-{size:9,dots:[[1,2,'red'],[7,8,'red'],[2,7,'blue'],[8,1,'blue'],[0,0,'green'],[8,8,'green'],[3,4,'yellow'],[5,4,'yellow'],[1,5,'purple'],[5,1,'purple'],[4,6,'orange'],[6,4,'orange'],[3,7,'pink'],[7,3,'pink']]},
-{size:9,dots:[[0,0,'red'],[8,8,'red'],[0,8,'blue'],[8,0,'blue'],[3,3,'green'],[5,5,'green'],[1,5,'yellow'],[5,1,'yellow'],[2,6,'purple'],[6,2,'purple'],[4,7,'orange'],[7,4,'orange'],[3,6,'pink'],[6,3,'pink']]},
-{size:9,dots:[[1,0,'red'],[8,8,'red'],[0,8,'blue'],[8,0,'blue'],[2,3,'green'],[3,6,'green'],[6,5,'yellow'],[5,2,'yellow'],[1,5,'purple'],[5,1,'purple'],[4,6,'orange'],[6,4,'orange'],[3,7,'pink'],[7,3,'pink'],[2,7,'teal'],[7,2,'teal']]},
-{size:9,dots:[[0,1,'red'],[8,7,'red'],[1,0,'blue'],[7,8,'blue'],[0,5,'green'],[5,0,'green'],[3,3,'yellow'],[6,6,'yellow'],[2,7,'purple'],[7,2,'purple'],[4,5,'orange'],[5,4,'orange'],[1,6,'pink'],[6,1,'pink']]},
-{size:9,dots:[[0,0,'red'],[8,8,'red'],[0,6,'blue'],[6,0,'blue'],[2,2,'green'],[6,6,'green'],[3,5,'yellow'],[5,3,'yellow'],[1,4,'purple'],[4,1,'purple'],[5,7,'orange'],[7,5,'orange'],[2,8,'pink'],[8,2,'pink']]},
-{size:9,dots:[[0,0,'red'],[8,7,'red'],[1,8,'blue'],[7,1,'blue'],[0,4,'green'],[4,0,'green'],[4,5,'yellow'],[5,4,'yellow'],[2,6,'purple'],[6,2,'purple'],[3,7,'orange'],[7,3,'orange'],[1,3,'pink'],[3,1,'pink']]},
-{size:9,dots:[[0,2,'red'],[7,8,'red'],[2,0,'blue'],[8,6,'blue'],[0,6,'green'],[6,8,'green'],[3,3,'yellow'],[5,5,'yellow'],[1,4,'purple'],[4,1,'purple'],[5,6,'orange'],[6,5,'orange'],[3,7,'pink'],[7,3,'pink'],[2,5,'teal'],[5,2,'teal']]},
-// 131-150: 10x10
-{size:10,dots:[[1,0,'red'],[9,9,'red'],[0,9,'blue'],[9,0,'blue'],[3,3,'green'],[6,6,'green'],[1,5,'yellow'],[5,1,'yellow'],[4,7,'purple'],[7,4,'purple'],[2,7,'orange'],[7,2,'orange'],[3,8,'pink'],[8,3,'pink']]},
-{size:10,dots:[[1,0,'red'],[9,8,'red'],[0,9,'blue'],[9,0,'blue'],[2,2,'green'],[7,7,'green'],[1,5,'yellow'],[5,1,'yellow'],[4,7,'purple'],[7,4,'purple'],[2,7,'orange'],[7,2,'orange'],[3,5,'pink'],[5,3,'pink'],[4,8,'teal'],[8,4,'teal']]},
-{size:10,dots:[[0,1,'red'],[9,8,'red'],[1,0,'blue'],[8,9,'blue'],[0,5,'green'],[5,0,'green'],[3,4,'yellow'],[4,3,'yellow'],[2,7,'purple'],[7,2,'purple'],[5,8,'orange'],[8,5,'orange'],[3,7,'pink'],[7,3,'pink'],[1,8,'teal'],[8,1,'teal']]},
-{size:10,dots:[[0,0,'red'],[9,9,'red'],[0,5,'blue'],[5,0,'blue'],[2,3,'green'],[3,2,'green'],[6,7,'yellow'],[7,6,'yellow'],[1,7,'purple'],[7,1,'purple'],[4,6,'orange'],[6,4,'orange'],[3,8,'pink'],[8,3,'pink'],[5,9,'teal'],[9,5,'teal']]},
-{size:10,dots:[[0,2,'red'],[9,7,'red'],[2,9,'blue'],[7,0,'blue'],[0,0,'green'],[9,9,'green'],[3,3,'yellow'],[7,7,'yellow'],[1,5,'purple'],[5,1,'purple'],[4,8,'orange'],[8,4,'orange'],[2,6,'pink'],[6,2,'pink'],[5,6,'teal'],[6,5,'teal']]},
-{size:10,dots:[[0,0,'red'],[9,9,'red'],[0,9,'blue'],[9,0,'blue'],[2,4,'green'],[4,2,'green'],[5,3,'yellow'],[3,5,'yellow'],[1,6,'purple'],[6,1,'purple'],[4,7,'orange'],[7,4,'orange'],[3,8,'pink'],[8,3,'pink'],[5,8,'teal'],[8,5,'teal']]},
-{size:10,dots:[[0,1,'red'],[8,9,'red'],[1,0,'blue'],[9,8,'blue'],[0,5,'green'],[5,0,'green'],[3,4,'yellow'],[4,3,'yellow'],[1,8,'purple'],[8,1,'purple'],[5,7,'orange'],[7,5,'orange'],[3,7,'pink'],[7,3,'pink'],[4,9,'teal'],[9,4,'teal']]},
-{size:10,dots:[[1,0,'red'],[9,8,'red'],[0,8,'blue'],[8,0,'blue'],[2,2,'green'],[7,7,'green'],[3,5,'yellow'],[5,3,'yellow'],[1,6,'purple'],[6,1,'purple'],[4,7,'orange'],[7,4,'orange'],[2,8,'pink'],[8,2,'pink'],[5,6,'teal'],[6,5,'teal']]},
-{size:10,dots:[[0,2,'red'],[9,7,'red'],[2,0,'blue'],[7,9,'blue'],[0,7,'green'],[7,0,'green'],[3,3,'yellow'],[6,6,'yellow'],[1,5,'purple'],[5,1,'purple'],[4,8,'orange'],[8,4,'orange'],[3,7,'pink'],[7,3,'pink'],[2,5,'teal'],[5,2,'teal']]},
-{size:10,dots:[[0,0,'red'],[9,9,'red'],[0,9,'blue'],[9,0,'blue'],[2,2,'green'],[7,7,'green'],[2,7,'yellow'],[7,2,'yellow'],[1,4,'purple'],[4,1,'purple'],[5,8,'orange'],[8,5,'orange'],[3,6,'pink'],[6,3,'pink'],[4,5,'teal'],[5,4,'teal']]},
-{size:10,dots:[[1,0,'red'],[9,9,'red'],[0,5,'blue'],[5,9,'blue'],[1,2,'green'],[2,1,'green'],[7,8,'yellow'],[8,7,'yellow'],[0,9,'purple'],[9,0,'purple'],[3,6,'orange'],[6,3,'orange'],[4,7,'pink'],[7,4,'pink'],[2,8,'teal'],[8,2,'teal']]},
-{size:10,dots:[[0,1,'red'],[9,8,'red'],[1,9,'blue'],[8,0,'blue'],[0,4,'green'],[4,0,'green'],[5,9,'yellow'],[9,5,'yellow'],[2,3,'purple'],[3,2,'purple'],[6,6,'orange'],[7,7,'orange'],[2,7,'pink'],[7,2,'pink'],[4,6,'teal'],[6,4,'teal']]},
-{size:10,dots:[[0,0,'red'],[9,7,'red'],[0,7,'blue'],[7,0,'blue'],[2,2,'green'],[7,5,'green'],[5,8,'yellow'],[8,5,'yellow'],[1,4,'purple'],[4,1,'purple'],[3,7,'orange'],[7,3,'orange'],[2,8,'pink'],[8,2,'pink'],[5,5,'teal'],[6,6,'teal']]},
-{size:10,dots:[[1,2,'red'],[8,9,'red'],[2,8,'blue'],[9,1,'blue'],[0,0,'green'],[9,9,'green'],[3,4,'yellow'],[5,4,'yellow'],[1,6,'purple'],[6,1,'purple'],[4,7,'orange'],[7,4,'orange'],[3,8,'pink'],[8,3,'pink'],[2,5,'teal'],[5,2,'teal']]},
-{size:10,dots:[[0,0,'red'],[9,9,'red'],[0,6,'blue'],[6,0,'blue'],[2,2,'green'],[7,7,'green'],[3,5,'yellow'],[5,3,'yellow'],[1,4,'purple'],[4,1,'purple'],[5,8,'orange'],[8,5,'orange'],[3,8,'pink'],[8,3,'pink'],[4,6,'teal'],[6,4,'teal']]},
-{size:10,dots:[[0,0,'red'],[9,9,'red'],[0,9,'blue'],[9,0,'blue'],[2,3,'green'],[3,6,'green'],[6,5,'yellow'],[5,2,'yellow'],[1,5,'purple'],[5,1,'purple'],[4,6,'orange'],[6,4,'orange'],[3,7,'pink'],[7,3,'pink'],[2,7,'teal'],[7,2,'teal']]},
-{size:10,dots:[[0,1,'red'],[9,8,'red'],[1,0,'blue'],[8,9,'blue'],[0,5,'green'],[5,0,'green'],[3,3,'yellow'],[7,7,'yellow'],[2,8,'purple'],[8,2,'purple'],[4,5,'orange'],[5,4,'orange'],[1,6,'pink'],[6,1,'pink'],[4,8,'teal'],[8,4,'teal']]},
-{size:10,dots:[[1,0,'red'],[9,8,'red'],[1,9,'blue'],[8,0,'blue'],[0,4,'green'],[4,0,'green'],[5,5,'yellow'],[6,6,'yellow'],[2,6,'purple'],[6,2,'purple'],[4,8,'orange'],[8,4,'orange'],[3,7,'pink'],[7,3,'pink'],[2,3,'teal'],[3,2,'teal']]},
-{size:10,dots:[[0,2,'red'],[8,8,'red'],[2,0,'blue'],[8,6,'blue'],[0,7,'green'],[7,9,'green'],[3,3,'yellow'],[5,4,'yellow'],[1,4,'purple'],[4,1,'purple'],[5,7,'orange'],[7,5,'orange'],[2,8,'pink'],[8,2,'pink'],[4,6,'teal'],[6,4,'teal']]},
-{size:10,dots:[[0,0,'red'],[9,9,'red'],[0,7,'blue'],[7,0,'blue'],[2,2,'green'],[7,5,'green'],[5,9,'yellow'],[9,5,'yellow'],[1,4,'purple'],[4,1,'purple'],[4,7,'orange'],[7,4,'orange'],[3,6,'pink'],[6,3,'pink'],[5,8,'teal'],[8,5,'teal']]},
-{size:10,dots:[[0,0,'red'],[9,9,'red'],[0,9,'blue'],[9,0,'blue'],[2,2,'green'],[7,7,'green'],[2,7,'yellow'],[7,2,'yellow'],[1,4,'purple'],[4,1,'purple'],[5,8,'orange'],[8,5,'orange'],[3,6,'pink'],[6,3,'pink'],[4,5,'teal'],[5,4,'teal']]}
+// 60-level campaign: deterministic generator seeds, mined + verified by
+// test/verify_levels.js (solvable by construction; 'lower' = witness
+// Manhattan lower bound used for stars). 1-20 easy, 21-40 med, 41-60 hard.
+const CAMPAIGN = [
+  {"seed":2028,"band":"easy","lower":2},
+  {"seed":2031,"band":"easy","lower":3},
+  {"seed":2002,"band":"easy","lower":4},
+  {"seed":2019,"band":"easy","lower":4},
+  {"seed":2037,"band":"easy","lower":4},
+  {"seed":2050,"band":"easy","lower":4},
+  {"seed":2058,"band":"easy","lower":4},
+  {"seed":2004,"band":"easy","lower":5},
+  {"seed":2012,"band":"easy","lower":5},
+  {"seed":2040,"band":"easy","lower":5},
+  {"seed":2053,"band":"easy","lower":5},
+  {"seed":2007,"band":"easy","lower":6},
+  {"seed":2038,"band":"easy","lower":6},
+  {"seed":2049,"band":"easy","lower":6},
+  {"seed":2009,"band":"easy","lower":7},
+  {"seed":2024,"band":"easy","lower":7},
+  {"seed":2042,"band":"easy","lower":7},
+  {"seed":2014,"band":"easy","lower":8},
+  {"seed":2035,"band":"easy","lower":8},
+  {"seed":2046,"band":"easy","lower":9},
+  {"seed":2022,"band":"med","lower":4},
+  {"seed":2027,"band":"med","lower":5},
+  {"seed":2009,"band":"med","lower":6},
+  {"seed":2043,"band":"med","lower":6},
+  {"seed":2005,"band":"med","lower":8},
+  {"seed":2041,"band":"med","lower":8},
+  {"seed":2023,"band":"med","lower":9},
+  {"seed":2051,"band":"med","lower":9},
+  {"seed":2059,"band":"med","lower":9},
+  {"seed":2011,"band":"med","lower":10},
+  {"seed":2035,"band":"med","lower":10},
+  {"seed":2054,"band":"med","lower":10},
+  {"seed":2006,"band":"med","lower":11},
+  {"seed":2031,"band":"med","lower":11},
+  {"seed":2040,"band":"med","lower":11},
+  {"seed":2017,"band":"med","lower":12},
+  {"seed":2044,"band":"med","lower":12},
+  {"seed":2015,"band":"med","lower":13},
+  {"seed":2001,"band":"med","lower":14},
+  {"seed":2012,"band":"med","lower":15},
+  {"seed":2001,"band":"hard","lower":7},
+  {"seed":2012,"band":"hard","lower":7},
+  {"seed":2031,"band":"hard","lower":7},
+  {"seed":2040,"band":"hard","lower":7},
+  {"seed":2053,"band":"hard","lower":7},
+  {"seed":2042,"band":"hard","lower":8},
+  {"seed":2058,"band":"hard","lower":8},
+  {"seed":2014,"band":"hard","lower":9},
+  {"seed":2025,"band":"hard","lower":9},
+  {"seed":2041,"band":"hard","lower":9},
+  {"seed":2054,"band":"hard","lower":9},
+  {"seed":2018,"band":"hard","lower":10},
+  {"seed":2037,"band":"hard","lower":10},
+  {"seed":2013,"band":"hard","lower":11},
+  {"seed":2030,"band":"hard","lower":11},
+  {"seed":2004,"band":"hard","lower":12},
+  {"seed":2008,"band":"hard","lower":13},
+  {"seed":2021,"band":"hard","lower":13},
+  {"seed":2048,"band":"hard","lower":13},
+  {"seed":2006,"band":"hard","lower":15}
 ];
+const LEVELS = CAMPAIGN;
+const BANDS={
+  easy:{colors:2,density:[4,6],range:1,recog:true,minLower:2},
+  med: {colors:3,density:[5,7],range:2,recog:true,minLower:4},
+  hard:{colors:3,density:[6,8],range:2,recog:true,minLower:7}
+};
 
 // ============================================================
 // SAVE STATE
 // ============================================================
-const SAVE_KEY = 'pipeconnect_save';
+const SAVE_KEY = 'overlay_save';
 let save = loadSave();
 
 function defaultSave(){
@@ -1303,380 +1293,178 @@ window.onBackPressed=function(){
 // ============================================================
 // GAME ENGINE
 // ============================================================
-const canvas=document.getElementById('gameCanvas');
-const ctx2=canvas.getContext('2d');
+// ━━ OVERLAY CORE — ported verbatim from docs/prototypes/stack.html ━━
+// composite()/gen() are the tested prototype logic (solvable by
+// construction). Production layers: banded difficulty (colors/density/
+// offset range), recognizable-target filter (connected or mirror-
+// symmetric), witness solution kept for Hint, stars from the witness
+// Manhattan lower bound, daily weekday ramp, colorblind glyphs.
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const GN=5,CB_GLYPH={1:'▲',2:'●',3:'■'};
+function composite(sheets,offs){const out=new Array(GN*GN).fill(0);
+  for(let r=0;r<GN;r++)for(let c=0;c<GN;c++)for(let s2=2;s2>=0;s2--){const[dx,dy]=offs[s2];const sc=c-dx,sr=r-dy;
+    if(sc<0||sr<0||sc>=GN||sr>=GN)continue;const v=sheets[s2][sr*GN+sc];if(v){out[r*GN+c]=v;break;}}
+  return out;}
+function eqOff(a,b){return a.every((o,i)=>o[0]===b[i][0]&&o[1]===b[i][1]);}
+function arrSame(a,b){return a.every((v,i)=>v===b[i]);}
+function recognizable(t){
+  const lit=[];for(let i=0;i<GN*GN;i++)if(t[i])lit.push(i);
+  if(!lit.length)return false;
+  const seen=new Set([lit[0]]);const st=[lit[0]];
+  while(st.length){const i=st.pop();const r=Math.floor(i/GN),c=i%GN;
+    [[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([rr,cc])=>{
+      if(rr<0||cc<0||rr>=GN||cc>=GN)return;const j=rr*GN+cc;
+      if(t[j]&&!seen.has(j)){seen.add(j);st.push(j);}});}
+  if(seen.size===lit.length)return true;
+  for(let r=0;r<GN;r++)for(let c=0;c<GN;c++){
+    if(!!t[r*GN+c]!==!!t[r*GN+(GN-1-c)])return false;}
+  return true;
+}
+function gen(seed,band){
+  const rnd=mulberry32(seed);
+  const R=band.range,NC=band.colors;
+  for(let t=0;t<3000;t++){
+    const sheets=[];for(let s2=0;s2<3;s2++){const g=new Array(GN*GN).fill(0);
+      let cnt=band.density[0]+Math.floor(rnd()*(band.density[1]-band.density[0]+1));
+      while(cnt-->0)g[Math.floor(rnd()*GN*GN)]=1+Math.floor(rnd()*NC);sheets.push(g);}
+    const ro=()=>Math.floor(rnd()*(2*R+1))-R;
+    const sol=[];for(let s2=0;s2<3;s2++)sol.push([ro(),ro()]);
+    const target=composite(sheets,sol);
+    if(target.filter(x=>x).length<6)continue;
+    if(band.recog&&!recognizable(target))continue;
+    let init,g=0;do{init=[];for(let s2=0;s2<3;s2++)init.push([ro(),ro()]);}while(g++<60&&(eqOff(init,sol)||arrSame(composite(sheets,init),target)));
+    if(arrSame(composite(sheets,init),target))continue;
+    const lower=sol.reduce((a,o,i)=>a+Math.abs(o[0]-init[i][0])+Math.abs(o[1]-init[i][1]),0);
+    if(lower<band.minLower)continue;
+    return{sheets,target,init,sol,lower};
+  }
+  return null;
+}
+function dayNum(){return Math.floor((Date.now()-Date.UTC(2026,0,1))/864e5);}
+function dailyBand(day){const wd=new Date(Date.UTC(2026,0,1)+day*864e5).getUTCDay();return wd===1||wd===2?BANDS.easy:(wd===0||wd===6?BANDS.hard:BANDS.med);}
+function genDaily(day){
+  const seed=(day*40503+12345)>>>0;
+  return gen(seed,dailyBand(day))||gen(seed,{colors:3,density:[4,8],range:2,recog:false,minLower:1});
+}
 
-let levelIndex=0;
-let level=null;
-let cellSize=0;
-let pipes={};       // color -> array of [row,col]
-let grid=[];        // grid[r][c] = color string or null
-let dragging=false;
-let dragColor=null;
-let dragPath=[];
-let firstAttempt=true;
-let resetCount=0;
-let levelStarted=false;
-let hintHighlight=null; // {color, cells:[]}
-let interstitialCounter=0;
-let isDailyChallenge=false;
-
+// ── state / rendering ──
+let levelIndex=0,L=null,offsets=null,gMoves=0,gWon=false,cellR=24;
+let firstAttempt=true,levelStarted=false,interstitialCounter=0,isDailyChallenge=false,dailyDay=0;
+const targetEl=document.getElementById('targetGrid'),resultEl=document.getElementById('resultGrid'),sheetsEl=document.getElementById('sheets');
+let targetCells,resultCells,sheetGridEls;
+function sizing(){
+  const w=Math.min(window.innerWidth-28,460);
+  cellR=Math.max(20,Math.min(36,Math.floor((w-18-36)/(GN*2))));
+}
+function makeGrid(el,size){
+  el.style.gridTemplateColumns='repeat('+GN+','+size+'px)';el.innerHTML='';const cells=[];
+  for(let i=0;i<GN*GN;i++){const d=document.createElement('div');d.className='gc';
+    d.style.width=d.style.height=size+'px';el.appendChild(d);cells.push(d);}
+  return cells;
+}
+function paint(cells,arr){
+  for(let i=0;i<GN*GN;i++){const v=arr[i];
+    if(v){cells[i].dataset.c=v;cells[i].innerHTML='<span class="cb">'+CB_GLYPH[v]+'</span>';}
+    else{delete cells[i].dataset.c;cells[i].innerHTML='';}}
+}
+function buildSheets(){
+  sheetsEl.innerHTML='';sheetGridEls=[];
+  const frameSize=Math.min(110,Math.floor(cellR*3.4));const sc=Math.floor((frameSize-8)/GN);
+  L.sheets.forEach(function(sheet,si){
+    const wrap=document.createElement('div');wrap.className='sheet';
+    const frame=document.createElement('div');frame.className='frame';frame.style.width=frame.style.height=frameSize+'px';
+    const grid=document.createElement('div');grid.className='sgrid';
+    grid.style.gridTemplateColumns='repeat('+GN+','+sc+'px)';grid.style.gap='2px';
+    grid.style.left=((frameSize-(sc*GN+2*(GN-1)))/2)+'px';grid.style.top=((frameSize-(sc*GN+2*(GN-1)))/2)+'px';
+    for(let i=0;i<GN*GN;i++){const c=document.createElement('div');c.className='sc';
+      c.style.width=c.style.height=sc+'px';
+      if(sheet[i]){c.dataset.c=sheet[i];c.innerHTML='<span class="cb" style="font-size:'+Math.floor(sc*0.55)+'px">'+CB_GLYPH[sheet[i]]+'</span>';}
+      grid.appendChild(c);}
+    frame.appendChild(grid);
+    const name=document.createElement('div');name.className='sname';
+    name.innerHTML='Sheet <b>'+(si+1)+'</b>'+(si===2?' · top':(si===0?' · bottom':''));
+    wrap.append(frame,name);sheetsEl.appendChild(wrap);
+    sheetGridEls.push({grid:grid,sc:sc});
+    enableDrag(frame,si,sc);
+  });
+}
+function enableDrag(frame,si,sc){
+  let startX,startY,startOff,dragging=false;
+  const stepPx=sc+2;
+  frame.addEventListener('pointerdown',function(e){
+    e.preventDefault();dragging=true;startX=e.clientX;startY=e.clientY;startOff=offsets[si].slice();
+    if(frame.setPointerCapture)try{frame.setPointerCapture(e.pointerId);}catch(_){}});
+  frame.addEventListener('pointermove',function(e){
+    if(!dragging||gWon)return;e.preventDefault();
+    const R=L.band.range;
+    const dx=Math.max(-R,Math.min(R,startOff[0]+Math.round((e.clientX-startX)/stepPx)));
+    const dy=Math.max(-R,Math.min(R,startOff[1]+Math.round((e.clientY-startY)/stepPx)));
+    if(dx!==offsets[si][0]||dy!==offsets[si][1]){offsets[si]=[dx,dy];gMoves++;playMove();renderGame();}
+  });
+  const up=function(){dragging=false;};
+  frame.addEventListener('pointerup',up);frame.addEventListener('pointercancel',up);
+}
+// keyboard fallback: 1/2/3 select a sheet, arrows slide it
+let kbSheet=2;
+addEventListener('keydown',function(e){
+  if(!document.getElementById('screen-game').classList.contains('active')||!L||gWon)return;
+  if(e.key==='1'||e.key==='2'||e.key==='3'){kbSheet=parseInt(e.key,10)-1;_showMsg('Sheet '+(kbSheet+1)+' selected');return;}
+  const dmap={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]};
+  const d=dmap[e.key];if(!d)return;e.preventDefault();
+  const R=L.band.range;
+  const nx=Math.max(-R,Math.min(R,offsets[kbSheet][0]+d[0]));
+  const ny=Math.max(-R,Math.min(R,offsets[kbSheet][1]+d[1]));
+  if(nx!==offsets[kbSheet][0]||ny!==offsets[kbSheet][1]){offsets[kbSheet]=[nx,ny];gMoves++;playMove();renderGame();}
+});
+function renderGame(){
+  sheetGridEls.forEach(function(sg,si){
+    const dx=offsets[si][0],dy=offsets[si][1];
+    sg.grid.style.transform='translate('+(dx*(sg.sc+2))+'px,'+(dy*(sg.sc+2))+'px)';
+  });
+  const comp=composite(L.sheets,offsets);
+  paint(resultCells,comp);
+  for(let i=0;i<GN*GN;i++)resultCells[i].classList.toggle('ghost',!!(L.target[i]&&comp[i]!==L.target[i]));
+  const targetLit=L.target.filter(function(x){return x;}).length;
+  const litMatch=L.target.reduce(function(a,v,i){return a+((v&&v===comp[i])?1:0);},0);
+  document.getElementById('hud-match').textContent=litMatch;
+  document.getElementById('hud-total').textContent=targetLit;
+  document.getElementById('hud-moves').textContent=gMoves;
+  if(!gWon&&arrSame(comp,L.target))winLevel();
+}
 function loadLevel(idx){
-  levelIndex=idx;
-  level=LEVELS[idx];
-  save.currentLevel=Math.max(save.currentLevel,idx);
-  persist();
-  firstAttempt=true;
-  resetCount=0;
-  levelStarted=false;
-  isDailyChallenge=false;
-  pipes={};
-  grid=[];
-  hintHighlight=null;
-  for(let r=0;r<level.size;r++){grid[r]=[];for(let c=0;c<level.size;c++)grid[r][c]=null;}
-  // Place endpoints
-  level.dots.forEach(d=>{const [r,c,col]=d;grid[r][c]=col+'_dot';});
-  // Init pipe arrays (just endpoints)
-  const colorsSeen={};
-  level.dots.forEach(d=>{
-    const[r,c,col]=d;
-    if(!colorsSeen[col]){colorsSeen[col]=[];pipes[col]=[];}
-    colorsSeen[col].push([r,c]);
-  });
-  document.getElementById('hdr-level').textContent=(isDailyChallenge?'Daily ':'Level ')+(idx+1);
-  resizeCanvas();
-  render();
-  updateProgress();
+  levelIndex=idx;isDailyChallenge=false;
+  const row=CAMPAIGN[idx];
+  L=gen(row.seed,BANDS[row.band]);
+  if(!L){_showMsg('Level failed to generate');return;}
+  L.band=BANDS[row.band];
+  offsets=L.init.map(function(o){return o.slice();});gMoves=0;gWon=false;
+  firstAttempt=true;levelStarted=true;
+  document.getElementById('hdr-level').textContent='Level '+(idx+1);
+  sizing();
+  targetCells=makeGrid(targetEl,cellR);resultCells=makeGrid(resultEl,cellR);
+  paint(targetCells,L.target);
+  document.getElementById('resultWrap').classList.remove('win');
+  buildSheets();renderGame();updateAllUI();
+  save.lastLevelProgress={level:idx+1};persist(); // display-numbered for the shim's Continue label
+  maybeShowTutorial();
 }
-
-function resizeCanvas(){
-  if(!level)return;
-  const wrap=document.querySelector('.canvas-wrap');
-  const maxW=(wrap.clientWidth||window.innerWidth)-16;
-  const maxH=(wrap.clientHeight||(window.innerHeight-120))-16;
-  const s=Math.max(1,Math.min(maxW,maxH));
-  canvas.width=s;canvas.height=s;
-  cellSize=s/level.size;
+window.addEventListener('resize',function(){
+  if(!L)return;const o=offsets,mv=gMoves;
+  sizing();targetCells=makeGrid(targetEl,cellR);resultCells=makeGrid(resultEl,cellR);
+  paint(targetCells,L.target);buildSheets();offsets=o;gMoves=mv;renderGame();
+});
+function resetLevel(){
+  if(!L||gWon)return;
+  offsets=L.init.map(function(o){return o.slice();});gMoves=0;renderGame();
 }
-
-window.addEventListener('resize',()=>{resizeCanvas();render();});
-
-// ============================================================
-// RENDERING
-// ============================================================
-function render(){
-  if(!level)return;
-  const n=level.size;
-  ctx2.clearRect(0,0,canvas.width,canvas.height);
-  // Draw grid cells — palette adapts to the body.midnight class so the
-  // canvas grid stays in step with the UI chrome when the player buys
-  // the Midnight theme.
-  const _midnight = document.body && document.body.classList.contains('midnight');
-  const _cellFill = _midnight ? '#1f1733' : '#ffffff';
-  const _cellStroke = _midnight ? '#2d2447' : '#d4e2ec';
-  for(let r=0;r<n;r++){
-    for(let c=0;c<n;c++){
-      ctx2.fillStyle=_cellFill;
-      ctx2.strokeStyle=_cellStroke;
-      ctx2.lineWidth=1;
-      ctx2.fillRect(c*cellSize,r*cellSize,cellSize,cellSize);
-      ctx2.strokeRect(c*cellSize,r*cellSize,cellSize,cellSize);
-    }
-  }
-  // Hint highlight
-  if(hintHighlight){
-    ctx2.fillStyle='rgba(255,255,100,0.2)';
-    hintHighlight.cells.forEach(([r,c])=>{
-      ctx2.fillRect(c*cellSize+2,r*cellSize+2,cellSize-4,cellSize-4);
-    });
-  }
-  // Draw completed pipes
-  Object.entries(pipes).forEach(([color,path])=>{
-    if(path.length>=2) drawPipePath(path,color,1.0);
-  });
-  // Draw dragging pipe
-  if(dragging&&dragPath.length>=2){
-    drawPipePath(dragPath,dragColor,0.75);
-  }
-  // Draw dots on top
-  level.dots.forEach(d=>{
-    const[r,c,col]=d;
-    drawDot(r,c,col);
-  });
-  // Draw progress
-  updateProgress();
-}
-
-function drawPipePath(path,color,alpha){
-  if(path.length<2)return;
-  const hexColor=PIPE_COLORS[color]||'#fff';
-  ctx2.save();
-  ctx2.globalAlpha=alpha;
-  ctx2.strokeStyle=hexColor;
-  ctx2.lineWidth=cellSize*0.65;
-  ctx2.lineCap='round';
-  ctx2.lineJoin='round';
-  ctx2.beginPath();
-  path.forEach(([r,c],i)=>{
-    const x=c*cellSize+cellSize/2;
-    const y=r*cellSize+cellSize/2;
-    if(i===0)ctx2.moveTo(x,y);
-    else ctx2.lineTo(x,y);
-  });
-  ctx2.stroke();
-  ctx2.restore();
-}
-
-function drawDot(r,c,color){
-  if(!cellSize||cellSize<=0)return;
-  const hexColor=PIPE_COLORS[color]||'#fff';
-  const x=c*cellSize+cellSize/2;
-  const y=r*cellSize+cellSize/2;
-  const radius=Math.max(1,cellSize*0.32);
-  ctx2.save();
-  ctx2.beginPath();
-  ctx2.arc(x,y,radius,0,Math.PI*2);
-  ctx2.fillStyle=hexColor;
-  ctx2.fill();
-  ctx2.strokeStyle='rgba(0,0,0,0.18)';
-  ctx2.lineWidth=2;
-  ctx2.stroke();
-  // White center dot
-  ctx2.beginPath();
-  ctx2.arc(x,y,radius*0.3,0,Math.PI*2);
-  ctx2.fillStyle='rgba(255,255,255,0.9)';
-  ctx2.fill();
-  ctx2.restore();
-}
-
-function updateProgress(){
-  const n=level?level.size:1;
-  let filled=0;
-  for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(grid[r][c])filled++;
-  const pct=(filled/(n*n))*100;
-  document.getElementById('progress-bar').style.width=pct+'%';
-}
-
-// ============================================================
-// INPUT HANDLING
-// ============================================================
-function getCellFromEvent(e){
-  const rect=canvas.getBoundingClientRect();
-  let x,y;
-  if(e.touches){x=e.touches[0].clientX-rect.left;y=e.touches[0].clientY-rect.top;}
-  else{x=e.clientX-rect.left;y=e.clientY-rect.top;}
-  const c=Math.floor(x/cellSize);
-  const r=Math.floor(y/cellSize);
-  if(r<0||r>=level.size||c<0||c>=level.size)return null;
-  return[r,c];
-}
-
-function getDotColorAt(r,c){
-  for(const d of level.dots){if(d[0]===r&&d[1]===c)return d[2];}
-  return null;
-}
-
-function getPipeColorAt(r,c){
-  for(const[color,path]of Object.entries(pipes)){
-    for(const[pr,pc]of path){if(pr===r&&pc===c)return color;}
-  }
-  return null;
-}
-
-function onPointerDown(e){
-  e.preventDefault();
-  const cell=getCellFromEvent(e);
-  if(!cell)return;
-  const[r,c]=cell;
-  // Start drag from dot or existing pipe
-  const dotColor=getDotColorAt(r,c);
-  const pipeColor=getPipeColorAt(r,c);
-  const startColor=dotColor||pipeColor;
-  if(!startColor)return;
-  levelStarted=true;
-  // Clear existing pipe from this color if starting from a dot
-  if(dotColor){
-    // Check if already has a path - clear it
-    clearPipeFrom(dotColor,r,c);
-    dragColor=dotColor;
-    dragPath=[[r,c]];
-  } else if(pipeColor){
-    // Start from midpoint, erase from this point
-    const path=pipes[pipeColor];
-    const idx=path.findIndex(([pr,pc])=>pr===r&&pc===c);
-    if(idx>=0){
-      // Remove cells after idx from grid
-      for(let i=idx+1;i<path.length;i++){
-        const[pr,pc]=path[i];
-        if(!isDotCell(pr,pc))grid[pr][pc]=null;
-      }
-      pipes[pipeColor]=path.slice(0,idx+1);
-      dragColor=pipeColor;
-      dragPath=[...pipes[pipeColor]];
-    }
-  }
-  dragging=true;
-  render();
-}
-
-function isDotCell(r,c){
-  return level.dots.some(d=>d[0]===r&&d[1]===c);
-}
-
-function clearPipeFrom(color,r,c){
-  const path=pipes[color]||[];
-  // Clear all path cells from grid
-  path.forEach(([pr,pc])=>{
-    if(!isDotCell(pr,pc))grid[pr][pc]=null;
-  });
-  pipes[color]=[];
-}
-
-function onPointerMove(e){
-  e.preventDefault();
-  if(!dragging)return;
-  const cell=getCellFromEvent(e);
-  if(!cell)return;
-  const[r,c]=cell;
-  const last=dragPath[dragPath.length-1];
-  if(last[0]===r&&last[1]===c)return;
-  // Check adjacency
-  const dr=Math.abs(r-last[0]),dc=Math.abs(c-last[1]);
-  if(dr+dc!==1)return;
-  // Check if going back (undo)
-  if(dragPath.length>=2){
-    const prev=dragPath[dragPath.length-2];
-    if(prev[0]===r&&prev[1]===c){
-      // Remove last cell
-      const removed=dragPath.pop();
-      if(!isDotCell(removed[0],removed[1]))grid[removed[0]][removed[1]]=null;
-      playDragHiss();
-      render();
-      return;
-    }
-  }
-  // Check if cell is occupied by another pipe
-  const existing=grid[r][c];
-  if(existing&&existing!==dragColor&&existing!==dragColor+'_dot'){
-    // Cell belongs to another pipe - erase that pipe from this point
-    const otherColor=existing.replace('_dot','');
-    if(otherColor!==dragColor){
-      eraseOtherPipeFromCell(otherColor,r,c);
-    }
-  }
-  // Check if hitting own path (not the second-to-last) - block
-  const selfIdx=dragPath.findIndex(([pr,pc])=>pr===r&&pc===c);
-  if(selfIdx>=0&&selfIdx<dragPath.length-1){
-    // Truncate to that point
-    for(let i=selfIdx+1;i<dragPath.length;i++){
-      const[pr,pc]=dragPath[i];
-      if(!isDotCell(pr,pc))grid[pr][pc]=null;
-    }
-    dragPath=dragPath.slice(0,selfIdx+1);
-    playDragHiss();
-    render();
-    return;
-  }
-  // Check if landing on other endpoint (not matching)
-  const dotAtCell=getDotColorAt(r,c);
-  if(dotAtCell&&dotAtCell!==dragColor)return;
-  // Add cell to path
-  dragPath.push([r,c]);
-  if(!isDotCell(r,c))grid[r][c]=dragColor;
-  playDragHiss();
-  // Check if reached matching endpoint
-  if(dotAtCell===dragColor&&dragPath.length>1){
-    finishConnection();
-    return;
-  }
-  render();
-}
-
-function eraseOtherPipeFromCell(color,r,c){
-  const path=pipes[color]||[];
-  const idx=path.findIndex(([pr,pc])=>pr===r&&pc===c);
-  if(idx>=0){
-    for(let i=idx;i<path.length;i++){
-      const[pr,pc]=path[i];
-      if(!isDotCell(pr,pc))grid[pr][pc]=null;
-    }
-    pipes[color]=path.slice(0,idx);
-  }
-}
-
-function finishConnection(){
-  pipes[dragColor]=[...dragPath];
-  dragging=false;
-  dragPath=[];
-  playConnect();
-  render();
-  checkLevelComplete();
-}
-
-function onPointerUp(e){
-  if(!dragging)return;
-  // Save partial path
-  if(dragPath.length>0){
-    pipes[dragColor]=[...dragPath];
-  }
-  dragging=false;
-  dragPath=[];
-  render();
-}
-
-canvas.addEventListener('mousedown',onPointerDown);
-canvas.addEventListener('mousemove',onPointerMove);
-canvas.addEventListener('mouseup',onPointerUp);
-canvas.addEventListener('touchstart',onPointerDown,{passive:false});
-canvas.addEventListener('touchmove',onPointerMove,{passive:false});
-canvas.addEventListener('touchend',onPointerUp,{passive:false});
-
-// ============================================================
-// LEVEL COMPLETE CHECK
-// ============================================================
-function allPipesConnected(){
-  // All pipes connected (each color has both endpoints in path)
-  const colorSet=new Set(level.dots.map(d=>d[2]));
-  for(const col of colorSet){
-    const path=pipes[col]||[];
-    if(path.length<2)return false;
-    const endpoints=level.dots.filter(d=>d[2]===col);
-    const ep0=endpoints[0],ep1=endpoints[1];
-    const first=path[0],last=path[path.length-1];
-    const connected=(first[0]===ep0[0]&&first[1]===ep0[1]&&last[0]===ep1[0]&&last[1]===ep1[1])||
-                    (first[0]===ep1[0]&&first[1]===ep1[1]&&last[0]===ep0[0]&&last[1]===ep0[1]);
-    if(!connected)return false;
-  }
-  return true;
-}
-
-function allCellsFilled(){
-  const n=level.size;
-  for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(!grid[r][c])return false;
-  return true;
-}
-
-function isLevelComplete(){
-  // Complete when all pipes are connected (filling all cells earns bonus stars)
-  return allPipesConnected();
-}
-
-function checkLevelComplete(){
-  if(!isLevelComplete())return;
+function winLevel(){
+  if(gWon)return;
+  gWon=true;
   playComplete();
-  hintHighlight=null;
-  // Stars: 3 = all cells filled + no resets, 2 = all cells filled, 1 = pipes connected
-  const perfect=allCellsFilled();
-  let stars=perfect?(resetCount===0?3:2):1;
-  // Save
-  if(!save.completedLevels.includes(levelIndex))save.completedLevels.push(levelIndex);
-  const prev=save.levelStars[levelIndex]||0;
-  if(stars>prev)save.levelStars[levelIndex]=stars;
-  if(save.currentLevel<=levelIndex)save.currentLevel=Math.min(levelIndex+1,LEVELS.length-1);
-  save.coins+=stars*5;
-  persist();
-  if(window.gOnAnyClear){try{window.gOnAnyClear();}catch(e){}}
-  // Daily challenge streak
+  document.getElementById('resultWrap').classList.add('win');
+  if(window.Android&&window.Android.vibrate)try{Android.vibrate(40);}catch(e){}
+  const delta=gMoves-L.lower;
+  const stars=delta<=1?3:(delta<=5?2:1);
   if(isDailyChallenge){
     const today=new Date().toISOString().split('T')[0];
     if(save.dailyChallengeDate!==today){
@@ -1686,144 +1474,128 @@ function checkLevelComplete(){
       persist();
       if(window.gOnDailyDone){try{window.gOnDailyDone();}catch(e){}}
     }
+  }else{
+    if(!save.completedLevels.includes(levelIndex))save.completedLevels.push(levelIndex);
+    const prev=save.levelStars[levelIndex]||0;
+    if(stars>prev)save.levelStars[levelIndex]=stars;
+    if(save.currentLevel<=levelIndex)save.currentLevel=Math.min(levelIndex+1,CAMPAIGN.length-1);
   }
-  // Interstitial every 3 levels
+  save.coins+=stars*5;
+  save.lastLevelProgress=null;
+  persist();
+  if(window.gOnAnyClear){try{window.gOnAnyClear();}catch(e){}}
   interstitialCounter++;
-  if(interstitialCounter%3===0)safeShowInterstitial();
-  // Show overlay
+  if(interstitialCounter%3===0&&interstitialCounter>3)safeShowInterstitial();
   const starsStr='★'.repeat(stars)+'☆'.repeat(3-stars);
   document.getElementById('complete-stars').textContent=starsStr;
-  const msgs=['','Pipes connected!','All cells filled!','Perfect solution!'];
-  document.getElementById('complete-msg').textContent=msgs[stars]+' +'+stars*5+' coins';
-  showOverlay('overlay-complete');
-}
-
-// ============================================================
-// GAME ACTIONS
-// ============================================================
-function resetLevel(){
-  if(!levelStarted)return;
-  if(!firstAttempt&&!hasUnlimitedLives()){
-    if(save.lives<=0){showOverlay('overlay-nolives');return;}
-    save.lives--;
-    persist();
-    updateAllUI();
-    if(window.gScheduleLivesRefilled){
-      try{window.gScheduleLivesRefilled(save.lastLifeTime+(save.maxLives-save.lives)*30*60*1000);}catch(e){}
-    }
-  }
-  firstAttempt=false;
-  resetCount++;
-  pipes={};
-  grid=[];
-  hintHighlight=null;
-  for(let r=0;r<level.size;r++){grid[r]=[];for(let c=0;c<level.size;c++)grid[r][c]=null;}
-  level.dots.forEach(d=>{const[r,c,col]=d;grid[r][c]=col+'_dot';});
-  levelStarted=false;
-  render();
+  document.getElementById('complete-msg').textContent='Revealed in '+gMoves+' slides. +'+(stars*5)+' coins';
+  const ov=document.getElementById('overlay-complete');
+  ov.dataset.share=shareString();
+  setTimeout(function(){showOverlay('overlay-complete');},700);
   updateAllUI();
 }
-
+function shareString(){
+  if(isDailyChallenge)return 'Overlay #'+dailyDay+' — '+gMoves+' slides 🟩';
+  return 'Overlay level '+(levelIndex+1)+' — '+gMoves+' slides 🟩';
+}
+function shareResult(){
+  const ov=document.getElementById('overlay-complete');
+  const txt=(ov&&ov.dataset.share)||shareString();
+  if(window.Android&&window.Android.shareText){try{window.Android.shareText(txt);return;}catch(e){}}
+  try{navigator.clipboard.writeText(txt);_showMsg('Copied!');}catch(e){}
+}
 function nextLevel(){
   hideOverlay('overlay-complete');
+  if(isDailyChallenge){goMenu();return;}
   const next=levelIndex+1;
-  if(next>=LEVELS.length){goMenu();return;}
-  loadLevel(next);
-  showScreen('game');
+  if(next>=CAMPAIGN.length){goMenu();return;}
+  loadLevel(next);showScreen('game');
 }
-
-function replayLevel(){
-  hideOverlay('overlay-complete');
-  loadLevel(levelIndex);
-}
-
+function replayLevel(){hideOverlay('overlay-complete');if(isDailyChallenge)launchDailyLevel();else loadLevel(levelIndex);}
 function skipLevel(){
-  hideOverlay('overlay-complete');
+  if(isDailyChallenge)return;
   const next=levelIndex+1;
-  if(next<LEVELS.length){loadLevel(next);showScreen('game');}
-  else goMenu();
+  if(next<CAMPAIGN.length){loadLevel(next);showScreen('game');}
 }
-
-// ============================================================
-// HINTS
-// ============================================================
+// ── hint: snap the most-wrong sheet to its witness-solution offset ──
+function giveHint(){
+  if(!L||gWon)return;
+  let best=-1,bestDist=0;
+  for(let s2=0;s2<3;s2++){
+    const d=Math.abs(offsets[s2][0]-L.sol[s2][0])+Math.abs(offsets[s2][1]-L.sol[s2][1]);
+    if(d>bestDist){bestDist=d;best=s2;}
+  }
+  if(best<0){_showMsg('All sheets match a known solution — keep sliding!');return;}
+  offsets[best]=L.sol[best].slice();
+  gMoves+=bestDist;
+  _showMsg('Sheet '+(best+1)+' snapped into place.');
+  renderGame();
+}
 function useHint(){
+  if(save.hintCount>0&&!hasUnlimitedHints()){save.hintCount--;persist();updateAllUI();giveHint();return;}
+  if(hasUnlimitedHints()){giveHint();return;}
   showOverlay('overlay-hint');
 }
-
-function watchAdForHint(){
-  hideOverlay('overlay-hint');
-  requestRewardedAd('hint');
-}
-
+function hasUnlimitedHints(){return (save.seasonPassUntil&&Date.now()<save.seasonPassUntil)||(save.weeklyPassUntil&&Date.now()<save.weeklyPassUntil);}
+function watchAdForHint(){hideOverlay('overlay-hint');requestRewardedAd('hint');}
 function spendCoinsHint(){
-  if(save.coins>=10){
-    save.coins-=10;
-    persist();
-    hideOverlay('overlay-hint');
-    giveHint();
-  } else {
-    _showMsg('Not enough coins! Need 10 coins for a hint.');
-  }
+  if(save.coins<25){_showMsg('Not enough coins!');return;}
+  save.coins-=25;persist();updateAllUI();hideOverlay('overlay-hint');giveHint();
 }
-
-function giveHint(){
-  // Find first unsolved pipe and highlight its expected direction
-  const colorSet=Array.from(new Set(level.dots.map(d=>d[2])));
-  for(const col of colorSet){
-    const path=pipes[col]||[];
-    const endpoints=level.dots.filter(d=>d[2]===col);
-    if(path.length<2||(path.length===2&&path[0][0]===endpoints[0][0]&&path[0][1]===endpoints[0][1]&&path[path.length-1][0]===endpoints[1][0]&&path[path.length-1][1]===endpoints[1][1])){
-      // Not connected - highlight endpoint
-      hintHighlight={color:col,cells:[[endpoints[0][0],endpoints[0][1]],[endpoints[1][0],endpoints[1][1]]]};
-      render();
-      setTimeout(()=>{hintHighlight=null;render();},2000);
-      return;
-    }
-  }
-}
-
-// ============================================================
-// LIVES UI
-// ============================================================
-function watchAdForLife(){
-  requestRewardedAd('life');
-}
-
-function buyLivesShop(){
-  hideOverlay('overlay-nolives');
-  showShop();
-}
-
-// ============================================================
-// DAILY CHALLENGE
-// ============================================================
+// ── daily ──
 function startDailyChallenge(){
-  showOverlay('overlay-daily');
   const today=new Date().toISOString().split('T')[0];
-  const alreadyDone=save.dailyChallengeDate===today;
-  document.getElementById('daily-msg').textContent=alreadyDone?
-    'You already completed today\'s challenge! Streak: '+save.dailyChallengeStreak+' days':
-    'Complete today\'s challenge for bonus coins! Streak: '+save.dailyChallengeStreak+' days';
+  if(save.dailyChallengeDate===today){_showMsg('You already revealed today’s picture! Streak: '+save.dailyChallengeStreak);return;}
+  launchDailyLevel();
 }
-
 function launchDailyLevel(){
-  hideOverlay('overlay-daily');
-  // Seed based on date
-  const today=new Date().toISOString().split('T')[0];
-  const seed=today.split('-').reduce((a,b)=>a*100+parseInt(b),0);
-  const idx=seed%LEVELS.length;
-  isDailyChallenge=true;
+  dailyDay=dayNum();
+  L=genDaily(dailyDay);
+  if(!L){_showMsg('Daily failed to generate');return;}
+  L.band=dailyBand(dailyDay);
+  isDailyChallenge=true;levelStarted=true;
+  offsets=L.init.map(function(o){return o.slice();});gMoves=0;gWon=false;
+  document.getElementById('hdr-level').textContent='Daily #'+dailyDay;
+  sizing();
+  targetCells=makeGrid(targetEl,cellR);resultCells=makeGrid(resultEl,cellR);
+  paint(targetCells,L.target);
+  document.getElementById('resultWrap').classList.remove('win');
+  buildSheets();renderGame();updateAllUI();
   showScreen('game');
-setTimeout(()=>{
-    loadLevel(idx);
-    document.getElementById('hdr-level').textContent='Daily Challenge';
-  }, 0);
 }
+function playMove(){if(!save.soundEnabled)return;try{const a=getAudio();const o=a.createOscillator(),g=a.createGain();o.frequency.value=380;g.gain.setValueAtTime(0.04,a.currentTime);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+0.07);o.connect(g).connect(a.destination);o.start();o.stop(a.currentTime+0.08);}catch(e){}}
+// ── tutorial: 3 sequential steps, once ──
+const TUT_STEPS=[
+  {t:'🎞️ Three sheets',b:'Each see-through sheet holds a few colored cells. Drag a sheet to slide it (snaps to the grid).'},
+  {t:'🔝 Topmost wins',b:'Where sheets overlap, you see the TOP sheet’s color: Sheet 3 covers 2 covers 1.'},
+  {t:'🖼️ Match the target',b:'Slide until your stack equals the Target picture. Dashed cells show what’s still missing.'}
+];
+function maybeShowTutorial(){
+  if(localStorage.getItem('ovl_tutorialDone')||levelIndex!==0||isDailyChallenge)return;
+  let stepI=0;const ov=document.getElementById('tutorialOverlay');
+  function show(){
+    document.getElementById('tut-title').textContent=TUT_STEPS[stepI].t;
+    document.getElementById('tut-body').textContent=TUT_STEPS[stepI].b;
+    document.getElementById('tut-foot').textContent='Tap to continue · '+(stepI+1)+'/3';
+    ov.style.display='flex';
+  }
+  function advance(){
+    stepI++;
+    if(stepI>=TUT_STEPS.length){ov.style.display='none';localStorage.setItem('ovl_tutorialDone','1');ov.removeEventListener('click',advance);return;}
+    show();
+  }
+  ov.addEventListener('click',advance);
+  show();
+}
+window.replayTutorial=function(){localStorage.removeItem('ovl_tutorialDone');showScreen('game');loadLevel(0);};
+// colorblind glyphs toggle (default ON; settings row wires this)
+window.toggleShapes=function(){
+  const off=document.body.classList.toggle('no-shapes');
+  localStorage.setItem('ovl_noShapes',off?'1':'0');
+  const b=document.getElementById('shapes-toggle-btn');if(b)b.textContent=off?'OFF':'ON';
+};
+if(localStorage.getItem('ovl_noShapes')==='1')document.body.classList.add('no-shapes');
 
-// ============================================================
-// SETTINGS
-// ============================================================
 function confirmReset(){showOverlay('overlay-confirm-reset');}
 
 function restorePurchases(){
@@ -1868,7 +1640,7 @@ if (!window.Android && !save.removeAds) {
 }
 updateAllUI();
 showScreen('menu');
-window.addEventListener('load', () => { resizeCanvas(); render(); });
+
 </script>
 <style>
 /* ===== DAILY LOGIN STREAK ===== */
@@ -2611,7 +2383,7 @@ window.renderPipeStats=function(){
   var completed=(save.completedLevels||[]).length;
   var perfect=Object.values(save.levelStars||{}).filter(function(s){return s>=3;}).length;
   var stats=[
-    {icon:'🎯',label:'Levels Completed',sub:'pipes connected',value:completed},
+    {icon:'🖼️',label:'Pictures Revealed',sub:'stacks matched',value:completed},
     {icon:'⭐',label:'Perfect Levels',sub:'no resets',value:perfect},
     {icon:'🔥',label:'Daily Streak',sub:'days in a row',value:save.dailyChallengeStreak||0},
     {icon:'🪙',label:'Coins',sub:'current balance',value:save.coins||0},
@@ -2628,13 +2400,13 @@ window.renderPipeStats=function(){
   //                      Listed in save.unlockedThemes once bought.
   // No theme is sold via paid IAP — Midnight is a coin sink. (2026-05-25 user policy.)
   var THEMES=[
-    {id:'default',name:'Classic',emoji:'🎨',unlockLevel:0,palette:{red:'#ff5252',blue:'#448aff',green:'#69f0ae',yellow:'#ffd740',purple:'#e040fb',orange:'#ff6d00',pink:'#f48fb1',teal:'#18ffff'}},
-    {id:'neon',name:'Neon',emoji:'⚡',unlockLevel:30,palette:{red:'#ff073a',blue:'#00f5ff',green:'#39ff14',yellow:'#ffff00',purple:'#bf00ff',orange:'#ff6600',pink:'#ff69b4',teal:'#00ffcc'}},
-    {id:'pastel',name:'Pastel',emoji:'🌸',unlockLevel:60,palette:{red:'#ffb3ba',blue:'#bae1ff',green:'#b5ead7',yellow:'#ffffba',purple:'#e0b3ff',orange:'#ffdfba',pink:'#ffb3de',teal:'#b3fff0'}},
-    {id:'midnight',name:'Midnight',emoji:'🌙',coinCost:800,palette:{red:'#ff4d6d',blue:'#5390f5',green:'#3ddc97',yellow:'#ffd166',purple:'#b18cff',orange:'#ff9a3c',pink:'#ff70a6',teal:'#4cc9f0'}},
-    {id:'ocean',name:'Ocean',emoji:'🌊',unlockLevel:100,palette:{red:'#e06c75',blue:'#61afef',green:'#98c379',yellow:'#e5c07b',purple:'#c678dd',orange:'#d19a66',pink:'#e06c75',teal:'#56b6c2'}},
-    {id:'fire',name:'Inferno',emoji:'🔥',unlockLevel:110,palette:{red:'#ff4500',blue:'#ff8c00',green:'#ffd700',yellow:'#ff6347',purple:'#ff1493',orange:'#ff7f50',pink:'#ff69b4',teal:'#ff6600'}},
-    {id:'galaxy',name:'Galaxy',emoji:'🌌',unlockLevel:120,palette:{red:'#9b59b6',blue:'#3498db',green:'#1abc9c',yellow:'#f1c40f',purple:'#8e44ad',orange:'#e67e22',pink:'#e91e63',teal:'#16a085'}},
+    {id:'default',name:'Gels',emoji:'🎞️',unlockLevel:0,palette:{c1:'#e8447e',c2:'#0fa89b',c3:'#dd9a10'}},
+    {id:'primary',name:'Primary',emoji:'🟥',unlockLevel:10,palette:{c1:'#e23b3b',c2:'#2563d8',c3:'#e8b400'}},
+    {id:'orchid',name:'Orchid',emoji:'🌸',unlockLevel:20,palette:{c1:'#c44fd1',c2:'#3aa6a0',c3:'#d98a3d'}},
+    {id:'midnight',name:'Darkroom',emoji:'🌙',coinCost:800,palette:{c1:'#ff5d8f',c2:'#33d6c8',c3:'#ffc24b'}},
+    {id:'forest',name:'Forest',emoji:'🌲',unlockLevel:35,palette:{c1:'#b2503a',c2:'#3f7d4e',c3:'#caa53a'}},
+    {id:'ocean',name:'Ocean',emoji:'🌊',unlockLevel:45,palette:{c1:'#d35d7e',c2:'#2a7fb8',c3:'#3ec0ad'}},
+    {id:'mono',name:'Duotone',emoji:'🖋️',unlockLevel:60,palette:{c1:'#3a3f53',c2:'#8088a3',c3:'#b3852f'}},
   ];
   window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel,coinCost:t.coinCost};});
 
@@ -2685,6 +2457,8 @@ window.renderPipeStats=function(){
         }
         save.activeTheme=t.id; persist();
         Object.assign(PIPE_COLORS,t.palette);
+    ['c1','c2','c3'].forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
+        ['c1','c2','c3'].forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
         applyMidnightChrome(t.id==='midnight');
         var btn=document.getElementById('themeBtn'); if(btn) btn.textContent=t.name;
         window.renderThemes();
@@ -2697,6 +2471,7 @@ window.renderPipeStats=function(){
   setTimeout(function(){
     var t=THEMES.find(function(x){return x.id===save.activeTheme;})||THEMES[0];
     Object.assign(PIPE_COLORS,t.palette);
+    ['c1','c2','c3'].forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
     applyMidnightChrome(t.id==='midnight');
     var btn=document.getElementById('themeBtn'); if(btn) btn.textContent=t.name;
   },400);
@@ -2704,7 +2479,7 @@ window.renderPipeStats=function(){
 
 /* Missions */
 (function(){
-  var MISSION_KEY='pipe_missions_v1';
+  var MISSION_KEY='ovl_missions_v1';
   var MISSION_POOL=[
     {id:'complete3',desc:'Connect 3 boards',goal:3,reward:30,icon:'🎯',track:'levels'},
     {id:'complete5',desc:'Connect 5 boards',goal:5,reward:50,icon:'🏆',track:'levels'},
@@ -3057,7 +2832,7 @@ function injectDragonTheme(){
   if(window._THEMES_META.find(function(t){return t.id==='dragon';})) return;
   window._THEMES_META.push({
     id:'dragon', name:'Dragon 🐉', unlock:0, coinCost:300,
-    colors:['#ff4444','#ff8800','#ffdd00','#1a0000','#cc2200']
+    colors:['#ff4444','#ff8800','#ffdd00','#2ea043','#cc2200'], palette:{c1:'#cc2200',c2:'#ff8800',c3:'#ffdd00'}
   });
 
   // Patch selectTheme to handle coinCost
@@ -4531,7 +4306,7 @@ window.addEventListener('load',function(){
   //   UnblockPuzzle    CgkIg4KVn8kGEAIQBg
   // The literal below is patched in each per-app game.html — use
   // scripts/wire_leaderboards.py to (re)apply after a shim re-inject.
-  var LEADERBOARD_ID = 'CgkIg4KVn8kGEAIQCA';
+  var LEADERBOARD_ID = 'TODO_FROM_PLAY_CONSOLE';
   // Exported so the MENU shim's Ranks sheet can open the matching leaderboard.
   window._GROWTH_LEADERBOARD_ID = LEADERBOARD_ID;
 

@@ -28,6 +28,7 @@ CANONICAL = {
     "com.pegasusgames.unblockpuzzle",
     "com.pegasusgames.pipeconnect",
     "com.pegasusgames.afterimage",
+    "com.pegasusgames.overlay",
 }
 
 PKG_RE = re.compile(r"com\.pegasusgames\.[a-z0-9_]+")

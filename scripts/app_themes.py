@@ -99,6 +99,16 @@ THEMES = {
         "texture":          "T3",  # paper texture
     },
 
+    "Overlay": {
+        "bg_top_left": (251, 250, 252), "bg_top_right": (245, 244, 247), "bg_bottom": (228, 225, 234),
+        "text_primary": (33, 29, 43), "text_accent": (232, 68, 126), "text_subtle": (110, 103, 131),
+        "footer_tint": (220, 216, 228),
+        "mood": "lightbox-gels",
+        "layout_archetype": "F",
+        "mascot_pattern": "M0",
+        "voice": "V6",
+        "texture": "T7",
+    },
     "Afterimage": {
         "bg_top_left": (233, 238, 247), "bg_top_right": (242, 245, 251), "bg_bottom": (211, 221, 239),
         "text_primary": (19, 35, 63), "text_accent": (15, 181, 201), "text_subtle": (91, 108, 138),

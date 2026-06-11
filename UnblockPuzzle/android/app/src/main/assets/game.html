@@ -4342,7 +4342,7 @@ window.addEventListener('load',function(){
     if (!api('scheduleLivesRefilled')) return;
     var SAVE_KEYS = [
       'unblock_save','watersort_save','puzzle2048_save','nonogram_state',
-      'pipeconnect_save','afterimage_save','save','state','gameState','progress'
+      'pipeconnect_save','afterimage_save','overlay_save','save','state','gameState','progress'
     ];
     var REGEN_MS = 30 * 60 * 1000; // every shipping game uses 30 min
     for (var i=0;i<SAVE_KEYS.length;i++){
@@ -4594,6 +4594,7 @@ window.addEventListener('load',function(){
     if (t.indexOf('unblock') >= 0) return 'com.pegasusgames.unblockpuzzle';
     if (t.indexOf('pipe') >= 0) return 'com.pegasusgames.pipeconnect';
     if (t.indexOf('afterimage') >= 0) return 'com.pegasusgames.afterimage';
+    if (t.indexOf('overlay') >= 0) return 'com.pegasusgames.overlay';
     return '';
   }
   var CUR = currentPkg();
@@ -5556,10 +5557,11 @@ window.addEventListener('load',function(){
     //   UnblockPuzzle: unblock_save
     //   PipeConnect:  pipeconnect_save
     //   Afterimage:   afterimage_save
+    //   Overlay:      overlay_save
     var keys = ['save','state','gameState','progress','State',
                 'watersort_save','puzzle2048_save','unblock_save',
                 'nonogram_state','nonogram_save','pipeconnect_save',
-                'afterimage_save'];
+                'afterimage_save','overlay_save'];
     for (var i=0;i<keys.length;i++){
       var raw = lsGet(keys[i], null);
       if (!raw) continue;
@@ -6094,6 +6096,7 @@ window.addEventListener('load',function(){
     if (t.indexOf('unblock') >= 0) return 4;
     if (t.indexOf('pipe') >= 0)    return 5;
     if (t.indexOf('afterimage') >= 0) return 6;
+    if (t.indexOf('overlay') >= 0) return 7;
     return 1;
   }
   // Part D: assert no game-themed words sneak into the pools. Logs
@@ -6101,7 +6104,7 @@ window.addEventListener('load',function(){
   var _SANITY_DONE = false;
   function debugSanityGuard(rows){
     if (_SANITY_DONE) return; _SANITY_DONE = true;
-    var bad = ['tile','block','sort','color','pour','flow','pixel','grid','number','tube','cube','cell','clue','merge','slide','unblock','water','nono','2048','puzzle','pipe','connect','echo','afterimage'];
+    var bad = ['tile','block','sort','color','pour','flow','pixel','grid','number','tube','cube','cell','clue','merge','slide','unblock','water','nono','2048','puzzle','pipe','connect','echo','afterimage','sheet','gel','overlay'];
     rows.forEach(function(r){
       var lower = (r.name||'').toLowerCase();
       bad.forEach(function(t){
@@ -6556,6 +6559,15 @@ window.addEventListener('load',function(){
           '<rect x="14" y="34" width="14" height="26" rx="2" fill="#7c92c0"/>'+
           '<rect x="38" y="34" width="32" height="12" rx="2" fill="#c83838" style="filter:drop-shadow(0 0 6px #d84034)"/>'+ // red hero block, glowing, nudged toward the exit
           '<rect x="46" y="52" width="12" height="22" rx="2" fill="#a8b3d4"/>'+
+        '</svg>';
+    } else if (t.indexOf('overlay') >= 0) {
+      // Three offset translucent gel squares composing into a mark.
+      svg =
+        '<svg viewBox="0 0 96 80" width="128" height="106" xmlns="http://www.w3.org/2000/svg">'+
+          '<rect x="14" y="8" width="44" height="44" rx="9" fill="#e8447e" opacity="0.55"/>'+
+          '<rect x="28" y="20" width="44" height="44" rx="9" fill="#0fa89b" opacity="0.55"/>'+
+          '<rect x="42" y="32" width="44" height="44" rx="9" fill="#dd9a10" opacity="0.55"/>'+
+          '<rect x="42" y="32" width="16" height="16" rx="4" fill="currentColor" opacity="0.85"/>'+
         '</svg>';
     } else if (t.indexOf('afterimage') >= 0) {
       // A cube and its two-behind echo on a mini blueprint board.
