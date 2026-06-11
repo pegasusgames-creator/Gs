@@ -99,6 +99,16 @@ THEMES = {
         "texture":          "T3",  # paper texture
     },
 
+    "Afterimage": {
+        "bg_top_left": (233, 238, 247), "bg_top_right": (242, 245, 251), "bg_bottom": (211, 221, 239),
+        "text_primary": (19, 35, 63), "text_accent": (15, 181, 201), "text_subtle": (91, 108, 138),
+        "footer_tint": (198, 211, 234),
+        "mood": "blueprint-echo",
+        "layout_archetype": "F",
+        "mascot_pattern": "M0",
+        "voice": "V5",
+        "texture": "T5",
+    },
     "PipeConnect": {
         "bg_top_left":  (8, 45, 50),      # deep teal
         "bg_top_right": (15, 70, 75),     # teal-cyan
