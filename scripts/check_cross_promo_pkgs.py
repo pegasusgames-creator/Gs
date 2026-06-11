@@ -29,6 +29,7 @@ CANONICAL = {
     "com.pegasusgames.pipeconnect",
     "com.pegasusgames.afterimage",
     "com.pegasusgames.overlay",
+    "com.pegasusgames.hunch",
 }
 
 PKG_RE = re.compile(r"com\.pegasusgames\.[a-z0-9_]+")

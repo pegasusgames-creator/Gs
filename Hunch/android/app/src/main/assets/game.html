@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Afterimage</title>
+<title>Hunch</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:#eef4f8;color:#1e3a5f;font-family:'Poppins',sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
 /* Midnight chrome — applied via body.midnight when the Midnight theme is active. */
-body.midnight{background:#0e1726;color:#dce8fb;}
+body.midnight{background:#10130f;color:#eaf2e2;}
 body.midnight #screen-menu,
 body.midnight #screen-game,
 body.midnight #screen-levelselect,
@@ -18,18 +18,18 @@ body.midnight #screen-settings,
 body.midnight #screen-moregames,
 body.midnight #screen-themes,
 body.midnight #screen-stats,
-body.midnight #screen-missions{background:#0e1726;}
+body.midnight #screen-missions{background:#10130f;}
 body.midnight .ls-title,
-body.midnight .ls-h1{color:#dce8fb;}
+body.midnight .ls-h1{color:#eaf2e2;}
 body.midnight .settings-item,
 body.midnight .shop-item,
 body.midnight .mg-card,
-body.midnight .modal{background:#1b2942;border-color:#24395e;}
+body.midnight .modal{background:#181d15;border-color:#2a3324;}
 body.midnight .game-header,
-body.midnight .game-footer{background:#13203a;border-color:#24395e;}
-body.midnight .hdr-level{color:#8fb4e8;}
+body.midnight .game-footer{background:#141811;border-color:#2a3324;}
+body.midnight .hdr-level{color:#a9c096;}
 body.midnight .menu-sub,
-body.midnight .ls-section-title{color:#7d93b6;}
+body.midnight .ls-section-title{color:#8b9a7e;}
 body.midnight .btn-levels,
 body.midnight .btn-shop,
 body.midnight .btn-settings,
@@ -42,15 +42,15 @@ body.midnight .modal-btn.secondary,
 body.midnight .progress-bar-wrap,
 body.midnight .menu-coins,
 body.midnight .menu-lives,
-body.midnight .shop-coins-banner{background:#1b2942;color:#8fb4e8;border-color:#24395e;}
-body.midnight .ls-bubble.locked{color:#51648a;}
-body.midnight .toggle{background:#24395e;}
-body.midnight .modal p{color:#7d93b6;}
+body.midnight .shop-coins-banner{background:#181d15;color:#a9c096;border-color:#2a3324;}
+body.midnight .ls-bubble.locked{color:#5c6852;}
+body.midnight .toggle{background:#2a3324;}
+body.midnight .modal p{color:#8b9a7e;}
 #screen-menu,#screen-game,#screen-levelselect,#screen-shop,#screen-settings,#screen-moregames{display:none;flex-direction:column;height:100vh;}
 .active{display:flex!important;}
 /* MENU */
 #screen-menu{align-items:center;justify-content:center;background:var(--bg,#e9eef7);}
-.menu-logo{font-size:3rem;font-weight:800;letter-spacing:2px;margin-bottom:8px;background:linear-gradient(90deg,#0fb5c9,#2563b0,#e85d5d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.menu-logo{font-size:3rem;font-weight:800;letter-spacing:2px;margin-bottom:8px;background:linear-gradient(90deg,#2f9e4f,#d9b500,#cf4242);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .menu-sub{color:#607d8b;font-size:0.9rem;margin-bottom:40px;}
 .menu-btn{width:220px;padding:14px 0;border:none;border-radius:30px;font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;margin:8px;transition:transform 0.1s,box-shadow 0.1s;}
 .menu-btn:active{transform:scale(0.96);}
@@ -64,29 +64,30 @@ body.midnight .modal p{color:#7d93b6;}
 .btn-moregames{background:linear-gradient(135deg,#e040fb,#448aff);color:#fff;}
 /* §3.1 menu hierarchy: V8 minimal + T6 neon — hero Play, secondary pair, glowing tertiary icons. */
 :root{
-  /* Daylight = light blueprint paper (portfolio rule: no dark defaults).
-     The spec's dark-navy "blueprint-echo" mood ships as Midnight below. */
-  --bg:#e9eef7; --app-bg:#e9eef7; --surface:#ffffff;
-  --text:#13233f; --text-mute:#5b6c8a;
-  --border:rgba(19,35,63,0.14);
-  --g-play:linear-gradient(135deg,#0fb5c9,#2563b0); --on-accent:#ffffff;
-  --btn-neutral-bg:#d3ddef;
-  --menu-tile-bg:#eef2fa; --menu-tile-border:#c6d3ea; --menu-tile-fg:#2b4a86;
-  --board-bg:#f4f7fc; --board-line:#c6d3ea; --wall:#2a3c5e;
-  --you:#0fb5c9; --you-dim:#0c8a99; --echo:#e85d5d; --echo-dim:#b03c3c;
-  --plate:#d29922; --exit:#2ea043;
+  /* Daylight = a bright signal lab: paper-white bench, the green/red
+     status light is the loudest thing in the room. (Portfolio rule:
+     no dark defaults — the spec's dark slate ships as Midnight.) */
+  --bg:#f1f4ee; --app-bg:#f1f4ee; --surface:#ffffff;
+  --text:#1d241a; --text-mute:#66735c;
+  --border:rgba(29,36,26,0.13);
+  --g-play:linear-gradient(135deg,#2f9e4f,#1f6f38); --on-accent:#ffffff;
+  --btn-neutral-bg:#dfe6d8;
+  --menu-tile-bg:#eef2ea; --menu-tile-border:#d7e0cf; --menu-tile-fg:#3c5232;
+  --go:#2f9e4f; --go-dim:#1f6f38; --no:#cf4242; --no-dim:#933030;
+  --lit:#d9b500; --litcell:#f4e27a; --offcell:#e7ecdf; --cellline:#d7e0cf;
+  --panel:#ffffff; --pline:#d7e0cf;
 }
 body.midnight{
-  /* the prototype's blueprint-echo navy, verbatim */
-  --bg:#0e1726; --app-bg:#0e1726; --surface:#1b2942;
-  --text:#dce8fb; --text-mute:#7d93b6;
-  --border:rgba(220,232,251,0.13);
-  --on-accent:#04222a;
-  --btn-neutral-bg:#24395e;
-  --menu-tile-bg:#1b2942; --menu-tile-border:#24395e; --menu-tile-fg:#8fb4e8;
-  --board-bg:#1b2942; --board-line:#24395e; --wall:#0a1120;
-  --you:#37e0e0; --you-dim:#1d8f8f; --echo:#ff6b6b; --echo-dim:#a83b3b;
-  --plate:#f2c14e; --exit:#9be37d;
+  /* the prototype's signal-lab dark slate, verbatim */
+  --bg:#10130f; --app-bg:#10130f; --surface:#181d15;
+  --text:#eaf2e2; --text-mute:#8b9a7e;
+  --border:rgba(234,242,226,0.12);
+  --on-accent:#06210d;
+  --btn-neutral-bg:#2a3324;
+  --menu-tile-bg:#181d15; --menu-tile-border:#2a3324; --menu-tile-fg:#a9c096;
+  --go:#5dd672; --go-dim:#2f7a3d; --no:#e25b5b; --no-dim:#8f3030;
+  --lit:#e9d54a; --litcell:#e9d54a; --offcell:#222a1c; --cellline:#2a3324;
+  --panel:#181d15; --pline:#2a3324;
 }
 .menu-primary{width:240px;padding:18px 0;border:none;border-radius:32px;font-family:'Poppins',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:2px;cursor:pointer;background:linear-gradient(135deg,#448aff,#69f0ae);color:#0f1923;box-shadow:0 0 24px rgba(105,240,174,0.35),0 0 60px rgba(68,138,255,0.25);transition:transform 0.1s;}
 .menu-primary:active{transform:scale(0.97);}
@@ -173,39 +174,44 @@ body.midnight{
 .modal-btn.danger{background:#ff5252;color:#fff;}
 .stars-display{font-size:2rem;margin-bottom:16px;letter-spacing:4px;}
 
-/* ── Afterimage board ─────────────────────────────────────────── */
-.board-zone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:4px 14px;}
-.par-row{display:flex;gap:8px;}
-.chip{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:5px 11px;font-size:0.78rem;font-weight:700;color:var(--text-mute);}
-.chip b{color:var(--text);}
-#board{position:relative;background:
-    repeating-linear-gradient(0deg,transparent 0 calc(100%/6 - 1px),var(--board-line) calc(100%/6 - 1px) calc(100%/6)),
-    repeating-linear-gradient(90deg,transparent 0 calc(100%/6 - 1px),var(--board-line) calc(100%/6 - 1px) calc(100%/6)),
-    var(--board-bg);
-  border:2px solid var(--board-line);border-radius:16px;overflow:hidden;box-shadow:0 16px 36px -18px rgba(10,20,40,0.45);touch-action:none;}
-.ent{position:absolute;border-radius:9px;transition:transform .13s cubic-bezier(.3,1.4,.5,1);}
-.wallc{position:absolute;background:var(--wall);border-radius:7px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.12);}
-.exitc{position:absolute;border-radius:9px;border:2.5px dashed var(--exit);box-shadow:inset 0 0 14px -2px var(--exit);transition:box-shadow .2s;}
-.exitc.armed{box-shadow:inset 0 0 18px 0 var(--exit),0 0 12px -2px var(--exit);}
-.platec{position:absolute;border-radius:50%;border:3px solid var(--plate);opacity:.85;transition:box-shadow .2s,background .2s;}
-.platec.held{background:radial-gradient(circle,var(--plate) 0%,transparent 70%);box-shadow:0 0 18px -2px var(--plate);}
-.youc{background:linear-gradient(160deg,var(--you),var(--you-dim));box-shadow:0 4px 10px -2px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.55);z-index:3;}
-.echoc{background:linear-gradient(160deg,var(--echo),var(--echo-dim));box-shadow:0 4px 10px -2px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.4);z-index:2;opacity:.93;}
-.echoc::after{content:"";position:absolute;inset:0;border-radius:9px;border:1.5px dashed rgba(255,255,255,0.6);opacity:.55;}
-.trail{position:absolute;border-radius:9px;background:var(--echo);opacity:.18;pointer-events:none;transition:opacity .5s;}
-.shake{animation:aim-sh .32s;}
-@keyframes aim-sh{0%,100%{transform:translate(var(--tx),var(--ty))}25%{transform:translate(calc(var(--tx) - 5px),var(--ty))}75%{transform:translate(calc(var(--tx) + 5px),var(--ty))}}
-.queue{display:flex;gap:6px;align-items:center;justify-content:center;height:24px;color:var(--echo);font-size:.74rem;}
-.queue .lbl{color:var(--text-mute);}
-.q{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--echo-dim);display:grid;place-items:center;font-weight:800;}
-.q.empty{opacity:.32;border-style:dashed;}
-.dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(2,52px);gap:6px;margin-top:2px;}
-.dpad button{background:var(--surface);border:1px solid var(--border);border-radius:13px;color:var(--text);font-size:1.25rem;font-weight:800;cursor:pointer;transition:transform .08s,background .12s,box-shadow .12s;}
-.dpad button:active{transform:scale(.92);}
-.dpad button.hinted{box-shadow:0 0 0 2px var(--you),0 0 14px -2px var(--you);}
-.pad-u{grid-column:2;grid-row:1}.pad-l{grid-column:1;grid-row:2}.pad-d{grid-column:2;grid-row:2}.pad-r{grid-column:3;grid-row:2}
-@media (min-width:600px){.dpad{grid-template-columns:repeat(3,62px);grid-template-rows:repeat(2,62px);}}
-@media (prefers-reduced-motion:reduce){.ent,.trail{transition:none!important;}.shake{animation:none!important;}}
+/* ── Hunch signal lab ─────────────────────────────────────────── */
+.board-zone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:4px 14px;overflow-y:auto;}
+.lab-status{display:flex;align-items:center;gap:9px;font-weight:700;color:var(--text-mute);font-size:.85rem;}
+.lab-status b{color:var(--text);}
+.status-dot{width:14px;height:14px;border-radius:50%;background:var(--go);box-shadow:0 0 12px var(--go);transition:background .15s,box-shadow .15s;}
+.lab-label{color:var(--text-mute);font-size:.72rem;letter-spacing:1px;text-transform:uppercase;align-self:flex-start;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;max-width:300px;aspect-ratio:1;}
+.grid4 .gc{border-radius:12px;background:var(--offcell);border:1px solid var(--cellline);cursor:pointer;transition:transform .08s,background .12s,box-shadow .12s;}
+.grid4 .gc.lit{background:radial-gradient(circle at 50% 40%,#fdf08a,var(--lit));box-shadow:0 0 14px -2px var(--lit),inset 0 1px 0 #fff7c4;border-color:transparent;}
+.grid4 .gc:active{transform:scale(.93);}
+.test-btn{width:100%;max-width:300px;border:none;border-radius:14px;padding:15px;font-family:'Poppins',sans-serif;font-weight:800;font-size:1.02rem;letter-spacing:1px;color:var(--on-accent);background:linear-gradient(135deg,var(--go),var(--go-dim));cursor:pointer;box-shadow:0 10px 24px -8px var(--go-dim);transition:transform .08s;}
+.test-btn:active{transform:scale(.97);}
+.verdict{height:24px;font-weight:800;letter-spacing:2px;font-size:.95rem;opacity:0;transition:opacity .15s;}
+.verdict.show{opacity:1;}
+.verdict.go{color:var(--go);} .verdict.no{color:var(--no);}
+.history{width:100%;}
+.hscroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;}
+.hitem{flex:0 0 auto;}
+.mini{display:grid;grid-template-columns:repeat(4,8px);grid-template-rows:repeat(4,8px);gap:2px;padding:5px;border-radius:8px;border:2px solid var(--pline);background:var(--panel);}
+.mini.go{border-color:var(--go);} .mini.no{border-color:var(--no);}
+.mc{width:8px;height:8px;border-radius:2px;background:var(--offcell);}
+.mc.lit{background:var(--lit);}
+.lab-row{display:flex;gap:10px;width:100%;justify-content:center;}
+.lab-btn{background:var(--panel);border:1px solid var(--pline);color:var(--text);font-family:'Poppins',sans-serif;font-weight:700;font-size:.85rem;border-radius:12px;padding:12px 18px;cursor:pointer;transition:transform .08s;}
+.lab-btn:active{transform:scale(.96);}
+.lab-btn.go{background:linear-gradient(135deg,var(--go),var(--go-dim));color:var(--on-accent);border:none;}
+.lab-btn.ghost{background:transparent;}
+.guesses{display:flex;flex-direction:column;gap:12px;width:100%;}
+.guess{background:var(--panel);border:1px solid var(--pline);border-radius:16px;padding:13px;display:flex;gap:14px;align-items:center;}
+.guess .gg{display:grid;grid-template-columns:repeat(4,16px);grid-template-rows:repeat(4,16px);gap:3px;}
+.gg .c{width:16px;height:16px;border-radius:3px;background:var(--offcell);}
+.gg .c.lit{background:var(--lit);}
+.verdpick{display:flex;gap:8px;margin-left:auto;}
+.pick{border:1.5px solid var(--pline);background:transparent;color:var(--text-mute);border-radius:10px;padding:9px 12px;font-weight:800;font-family:'Poppins',sans-serif;cursor:pointer;font-size:.78rem;}
+.pick.sel.go{background:var(--go);color:var(--on-accent);border-color:var(--go);}
+.pick.sel.no{background:var(--no);color:#fff;border-color:var(--no);}
+@media (min-width:600px){.grid4{max-width:360px;}.test-btn{max-width:360px;}}
+@media (prefers-reduced-motion:reduce){.grid4 .gc,.status-dot{transition:none!important;}}
 
 /* ============ 2026-06-10 round-1: adaptive sizing via clamp() ============ */
 .game-footer {
@@ -341,20 +347,20 @@ body.midnight{
 }
 /* =================== END SHARED MENU SKIN v1 =================== */
 
-/* ---- Afterimage identity: blueprint echo (Part B) ---- */
+/* ---- Hunch identity: signal lab (Part B) ---- */
 :root{
-  --m-bg-top:#f2f5fb; --m-vignette: rgba(30,50,90,0.16); --m-grain-opacity:.04;
-  --m-cta-grad: linear-gradient(135deg,#0fb5c9,#2563b0);
-  --m-cta-glow: rgba(37,99,176,.42); --m-glow: rgba(15,181,201,.30);
-  --m-cta-glyph:"▶ "; --m-tile-icon:#2b4a86;
-  /* motif: graph paper + a cube with its dashed afterimage */
-  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cpath d='M0 0H360M0 60H360M0 120H360M0 180H360M0 240H360M0 300H360M0 0V360M60 0V360M120 0V360M180 0V360M240 0V360M300 0V360' stroke='%232b4a86' stroke-width='1' opacity='0.05' fill='none'/%3E%3Crect x='186' y='126' width='44' height='44' rx='9' fill='%230fb5c9' opacity='0.10'/%3E%3Crect x='126' y='186' width='44' height='44' rx='9' fill='none' stroke='%23e85d5d' stroke-width='3' stroke-dasharray='7 6' opacity='0.12'/%3E%3C/svg%3E");
+  --m-bg-top:#f8faf5; --m-vignette: rgba(40,55,30,0.14); --m-grain-opacity:.05;
+  --m-cta-grad: linear-gradient(135deg,#2f9e4f,#1f6f38);
+  --m-cta-glow: rgba(47,158,79,.38); --m-glow: rgba(217,181,0,.28);
+  --m-cta-glyph:"▶ "; --m-tile-icon:#3c5232;
+  /* motif: faint 4x4 boards with a status dot */
+  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cg opacity='0.06'%3E%3Cg stroke='%233c5232' stroke-width='2' fill='none'%3E%3Crect x='60' y='60' width='100' height='100' rx='12'/%3E%3Cpath d='M85 60V160M110 60V160M135 60V160M60 85H160M60 110H160M60 135H160'/%3E%3C/g%3E%3Ccircle cx='200' cy='70' r='12' fill='%232f9e4f'/%3E%3Ccircle cx='236' cy='70' r='12' fill='%23cf4242'/%3E%3C/g%3E%3C/svg%3E");
   --m-motif-size: 360px 360px;
 }
-body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
+body.midnight{ --m-bg-top:#1a2016; --m-vignette:rgba(0,0,0,.55);
   /* --m-* defaults resolve at html scope and cannot see body.midnight
      token overrides — restate the tile fill here explicitly. */
-  --m-tile-grad:#1b2942; --m-tile-icon:#8fb4e8; }
+  --m-tile-grad:#181d15; --m-tile-icon:#a9c096; }
 </style>
 </head>
 <body>
@@ -363,8 +369,8 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
 <div id="screen-menu" class="active">
   <div class="menu-lives" id="menu-lives">❤️ 5</div>
   <div class="menu-coins" id="menu-coins">🪙 0</div>
-  <div class="menu-logo">AFTERIMAGE</div>
-  <div class="menu-sub">Your echo moves two behind. Use it.</div>
+  <div class="menu-logo">HUNCH</div>
+  <div class="menu-sub">Test. Observe. Crack the rule.</div>
   <button class="menu-primary" onclick="startGame()">PLAY</button>
   <button class="menu-pair" id="dailyChallengeBtn" onclick="startDailyChallenge()" style="width:240px;margin-top:14px">Daily puzzle</button>
   <div class="menu-icon-row">
@@ -385,7 +391,7 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
       <span class="menu-icon-label">Settings</span>
     </button>
   </div>
-  <div style="position:absolute;bottom:20px;color:#263238;font-size:0.7rem;">v1.0.0 • com.pegasusgames.afterimage</div>
+  <div style="position:absolute;bottom:20px;color:#263238;font-size:0.7rem;">v1.0.0 • com.pegasusgames.hunch</div>
 </div>
 
 <!-- GAME -->
@@ -396,30 +402,40 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
     <div class="hdr-coins" id="hdr-coins">🪙 0</div>
   </div>
   <div class="board-zone">
-    <div class="par-row">
-      <div class="chip">Moves <b id="hud-moves">0</b></div>
-      <div class="chip">Par <b id="hud-par">–</b></div>
+    <div id="lab-stage" style="display:flex;flex-direction:column;align-items:center;width:100%;max-width:360px;gap:8px">
+      <div class="lab-status"><span class="status-dot" id="status-dot"></span><span id="hud-tests-wrap">Tests <b id="hud-tests">0</b></span></div>
+      <div class="lab-label">Build a pattern, then test it</div>
+      <div class="grid4" id="labBoard"></div>
+      <button class="test-btn" id="testBtn" onclick="doTest()">TEST</button>
+      <div class="verdict" id="verdict"></div>
+      <div class="history" id="histWrap" style="display:none">
+        <div class="lab-label">Experiments</div>
+        <div class="hscroll" id="hscroll"></div>
+      </div>
+      <div class="lab-row">
+        <button class="lab-btn ghost" onclick="clearBoard()">Clear</button>
+        <button class="lab-btn go" onclick="showGuess()">I know the rule →</button>
+      </div>
     </div>
-    <div id="board"></div>
-    <div class="queue"><span class="lbl">echo plays next →</span><div class="q empty" id="q0">·</div><div class="q empty" id="q1">·</div></div>
-    <div class="dpad">
-      <button class="pad-u" data-d="U" aria-label="Up">↑</button>
-      <button class="pad-l" data-d="L" aria-label="Left">←</button>
-      <button class="pad-d" data-d="D" aria-label="Down">↓</button>
-      <button class="pad-r" data-d="R" aria-label="Right">→</button>
+    <div id="guess-stage" style="display:none;flex-direction:column;align-items:center;width:100%;max-width:360px;gap:8px">
+      <div class="lab-label">Mark each board: does it obey the rule?</div>
+      <div class="guesses" id="guesses"></div>
+      <div class="lab-row">
+        <button class="lab-btn ghost" onclick="showLab()">← Keep testing</button>
+        <button class="lab-btn go" id="submitBtn" onclick="submitGuess()">Submit</button>
+      </div>
     </div>
   </div>
   <div class="game-footer">
     <button class="foot-btn" onclick="goMenu()">← Menu</button>
-    <button class="foot-btn" onclick="undoMove()">↶ Undo</button>
     <button class="foot-btn" onclick="useHint()">💡 Hint</button>
-    <button class="foot-btn warn" onclick="resetLevel()">↺ Reset</button>
+    <button class="foot-btn warn" onclick="resetLevel()">↺ Restart</button>
   </div>
   <div id="tutorialOverlay" style="display:none;position:absolute;bottom:90px;left:0;right:0;justify-content:center;pointer-events:none;z-index:50">
-    <div style="background:var(--surface,#fff);border:1.5px solid var(--you,#0fb5c9);border-radius:18px;padding:16px 22px;max-width:290px;text-align:center;pointer-events:all;box-shadow:0 14px 40px rgba(10,20,40,0.25)">
-      <div id="tut-title" style="color:var(--you,#0fb5c9);font-size:15px;font-weight:800;margin-bottom:6px">🟦 Two behind</div>
-      <div id="tut-body" style="color:var(--text,#13233f);font-size:13px;line-height:1.45">Swipe (or use the pad) to move your cyan cube one cell.</div>
-      <div id="tut-foot" style="color:var(--text-mute,#5b6c8a);font-size:11px;margin-top:10px">Tap to continue · 1/3</div>
+    <div style="background:var(--surface,#fff);border:1.5px solid var(--go,#2f9e4f);border-radius:18px;padding:16px 22px;max-width:290px;text-align:center;pointer-events:all;box-shadow:0 14px 40px rgba(20,30,15,0.25)">
+      <div id="tut-title" style="color:var(--go,#2f9e4f);font-size:15px;font-weight:800;margin-bottom:6px">🚦 The secret rule</div>
+      <div id="tut-body" style="color:var(--text,#1d241a);font-size:13px;line-height:1.45">This board hides a rule. Tap cells to build any pattern you like.</div>
+      <div id="tut-foot" style="color:var(--text-mute,#66735c);font-size:11px;margin-top:10px">Tap to continue · 1/4</div>
     </div>
   </div>
 </div>
@@ -497,7 +513,7 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
       <button class="shop-item-btn" onclick="openPrivacyPolicy()">View</button>
     </div>
     <div class="settings-item" style="justify-content:center;">
-      <span style="color:#37474f;font-size:0.75rem;">Afterimage v1.0 • com.pegasusgames.afterimage</span>
+      <span style="color:#37474f;font-size:0.75rem;">Hunch v1.0 • com.pegasusgames.hunch</span>
     </div>
   </div>
 </div>
@@ -594,13 +610,12 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
 // ============================================================
 // CONSTANTS & COLORS
 // ============================================================
-// Entity palette — keys are roles, not colors. Theme palettes assign into
-// this (same contract as the rest of the portfolio's PIPE_COLORS).
+// Signal palette — theme palettes assign into this (portfolio
+// PIPE_COLORS contract); values mirror the CSS tokens.
 const PIPE_COLORS = {
-  you:   'var(--you)',
-  echo:  'var(--echo)',
-  plate: 'var(--plate)',
-  exit:  'var(--exit)'
+  go:  'var(--go)',
+  no:  'var(--no)',
+  lit: 'var(--lit)'
 };
 
 const VALID_PRODUCTS = new Set([
@@ -629,78 +644,77 @@ const SHOP_PRODUCTS = [
 // ============================================================
 // LEVELS (150 levels)
 // ============================================================
-// 60-level campaign: deterministic generator seeds, mined + verified by
-// test/verify_levels.js (par = true BFS optimum; plate forced off the
-// natural shortest path). Bands: 1-20 easy, 21-40 medium, 41-60 hard.
+// 60-level campaign: rule index + mystery-board seed, mined + verified by
+// test/verify_levels.js (every level's 3 mystery boards uniquely identify
+// the rule against the whole catalog). Tier ramp 0→2 across the campaign.
 const CAMPAIGN = [
-  {"seed":1000,"par":5,"band":"easy"},
-  {"seed":1011,"par":5,"band":"easy"},
-  {"seed":1030,"par":5,"band":"easy"},
-  {"seed":1050,"par":5,"band":"easy"},
-  {"seed":1003,"par":6,"band":"easy"},
-  {"seed":1019,"par":6,"band":"easy"},
-  {"seed":1035,"par":6,"band":"easy"},
-  {"seed":1047,"par":6,"band":"easy"},
-  {"seed":1006,"par":7,"band":"easy"},
-  {"seed":1012,"par":7,"band":"easy"},
-  {"seed":1021,"par":7,"band":"easy"},
-  {"seed":1032,"par":7,"band":"easy"},
-  {"seed":1040,"par":7,"band":"easy"},
-  {"seed":1054,"par":7,"band":"easy"},
-  {"seed":1015,"par":8,"band":"easy"},
-  {"seed":1022,"par":8,"band":"easy"},
-  {"seed":1029,"par":8,"band":"easy"},
-  {"seed":1038,"par":8,"band":"easy"},
-  {"seed":1048,"par":8,"band":"easy"},
-  {"seed":1056,"par":8,"band":"easy"},
-  {"seed":1007,"par":9,"band":"med"},
-  {"seed":1017,"par":9,"band":"med"},
-  {"seed":1023,"par":9,"band":"med"},
-  {"seed":1040,"par":9,"band":"med"},
-  {"seed":1053,"par":9,"band":"med"},
-  {"seed":1059,"par":9,"band":"med"},
-  {"seed":1008,"par":10,"band":"med"},
-  {"seed":1018,"par":10,"band":"med"},
-  {"seed":1037,"par":10,"band":"med"},
-  {"seed":1043,"par":10,"band":"med"},
-  {"seed":1004,"par":11,"band":"med"},
-  {"seed":1024,"par":11,"band":"med"},
-  {"seed":1039,"par":11,"band":"med"},
-  {"seed":1048,"par":11,"band":"med"},
-  {"seed":1001,"par":12,"band":"med"},
-  {"seed":1012,"par":12,"band":"med"},
-  {"seed":1032,"par":12,"band":"med"},
-  {"seed":1051,"par":12,"band":"med"},
-  {"seed":1005,"par":13,"band":"med"},
-  {"seed":1034,"par":13,"band":"med"},
-  {"seed":1002,"par":14,"band":"hard"},
-  {"seed":1006,"par":14,"band":"hard"},
-  {"seed":1012,"par":14,"band":"hard"},
-  {"seed":1022,"par":14,"band":"hard"},
-  {"seed":1043,"par":14,"band":"hard"},
-  {"seed":1052,"par":14,"band":"hard"},
-  {"seed":1001,"par":15,"band":"hard"},
-  {"seed":1018,"par":15,"band":"hard"},
-  {"seed":1027,"par":15,"band":"hard"},
-  {"seed":1038,"par":15,"band":"hard"},
-  {"seed":1047,"par":15,"band":"hard"},
-  {"seed":1058,"par":15,"band":"hard"},
-  {"seed":1015,"par":16,"band":"hard"},
-  {"seed":1028,"par":16,"band":"hard"},
-  {"seed":1039,"par":16,"band":"hard"},
-  {"seed":1054,"par":16,"band":"hard"},
-  {"seed":1034,"par":17,"band":"hard"},
-  {"seed":1044,"par":17,"band":"hard"},
-  {"seed":1040,"par":18,"band":"hard"},
-  {"seed":1008,"par":20,"band":"hard"}
+  {"rule":0,"seed":9000},
+  {"rule":1,"seed":16331},
+  {"rule":2,"seed":23662},
+  {"rule":4,"seed":30993},
+  {"rule":5,"seed":38324},
+  {"rule":10,"seed":45655},
+  {"rule":3,"seed":52986},
+  {"rule":6,"seed":60317},
+  {"rule":7,"seed":67648},
+  {"rule":8,"seed":74979},
+  {"rule":9,"seed":82310},
+  {"rule":11,"seed":89641},
+  {"rule":12,"seed":96972},
+  {"rule":15,"seed":104303},
+  {"rule":13,"seed":111634},
+  {"rule":14,"seed":118965},
+  {"rule":16,"seed":126296},
+  {"rule":17,"seed":133627},
+  {"rule":18,"seed":140958},
+  {"rule":0,"seed":148289},
+  {"rule":1,"seed":155620},
+  {"rule":2,"seed":162951},
+  {"rule":4,"seed":170282},
+  {"rule":5,"seed":177613},
+  {"rule":10,"seed":184944},
+  {"rule":3,"seed":192275},
+  {"rule":6,"seed":199606},
+  {"rule":7,"seed":206937},
+  {"rule":8,"seed":214268},
+  {"rule":9,"seed":221599},
+  {"rule":11,"seed":228930},
+  {"rule":12,"seed":236261},
+  {"rule":15,"seed":243592},
+  {"rule":13,"seed":250923},
+  {"rule":14,"seed":258254},
+  {"rule":16,"seed":265585},
+  {"rule":17,"seed":272916},
+  {"rule":18,"seed":280247},
+  {"rule":0,"seed":287578},
+  {"rule":1,"seed":294909},
+  {"rule":2,"seed":302240},
+  {"rule":4,"seed":309571},
+  {"rule":5,"seed":316902},
+  {"rule":10,"seed":324233},
+  {"rule":3,"seed":331564},
+  {"rule":6,"seed":338895},
+  {"rule":7,"seed":346226},
+  {"rule":8,"seed":353557},
+  {"rule":9,"seed":360888},
+  {"rule":11,"seed":368219},
+  {"rule":12,"seed":375550},
+  {"rule":15,"seed":382881},
+  {"rule":13,"seed":390212},
+  {"rule":14,"seed":397543},
+  {"rule":16,"seed":404874},
+  {"rule":17,"seed":412205},
+  {"rule":18,"seed":419536},
+  {"rule":0,"seed":426867},
+  {"rule":1,"seed":434198},
+  {"rule":2,"seed":441529}
 ];
-const LEVELS = CAMPAIGN; // length contract for level-select/addendum
-const BANDS={easy:{par:[5,8],walls:[4,6]},med:{par:[9,13],walls:[6,9]},hard:{par:[14,20],walls:[8,12]}};
+const LEVELS = CAMPAIGN;
 
 // ============================================================
 // SAVE STATE
 // ============================================================
-const SAVE_KEY = 'afterimage_save';
+const SAVE_KEY = 'hunch_save';
 let save = loadSave();
 
 function defaultSave(){
@@ -1297,163 +1311,155 @@ window.onBackPressed=function(){
 // ============================================================
 // GAME ENGINE
 // ============================================================
-// ━━ AFTERIMAGE CORE — ported verbatim from docs/prototypes/ditto.html ━━
-// step()/solve()/gen() are the tested prototype logic. Production layers:
-// banded difficulty, plate-detour filter, hint = first optimal move,
-// campaign seeds (CAMPAIGN), daily weekday ramp.
+// ━━ HUNCH CORE — ported verbatim from docs/prototypes/greenlight.html ━━
+// The RULES catalog grew from the verified base set to 19 rules across 6
+// categories. mysteryBoards() adds the production disambiguation guarantee:
+// the 3 boards must uniquely identify the true rule — no other catalog rule
+// classifies all three identically (brute-checked at generation).
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-const GN=6,DIRS={U:[0,-1],D:[0,1],L:[-1,0],R:[1,0]},DK=['U','D','L','R'],ARROW={U:'↑',D:'↓',L:'←',R:'→'};
-function step(walls,bp,cp,q,dir){
-  const mv=(p,d)=>{if(d==null)return p;const[dx,dy]=DIRS[d];let nx=p[0]+dx,ny=p[1]+dy;if(nx<0||ny<0||nx>=GN||ny>=GN||walls.has(ny*GN+nx))return p;return[nx,ny];};
-  const nb=mv(bp,dir),nc=mv(cp,q[0]);
-  const collide=(nb[0]===nc[0]&&nb[1]===nc[1])||(nb[0]===cp[0]&&nb[1]===cp[1]&&nc[0]===bp[0]&&nc[1]===bp[1]);
-  return{nb,nc,nq:[q[1],dir],collide};
-}
-function solvePath(walls,bs,cs,exit,plate,q0){
-  // BFS over (you, echo, queue) recording the first move of the optimal line.
-  const enc=(b,c,q)=>b+'|'+c+'|'+(q[0]??'n')+'|'+(q[1]??'n');
-  const start=[bs,cs,q0||[null,null]];
-  let frontier=[[start[0],start[1],start[2],null]];
-  const seen=new Set([enc(start[0],start[1],start[2])]);let depth=0;
-  while(frontier.length){depth++;const next=[];
-    for(const[b,c,q,first]of frontier)for(const d of DK){
-      const{nb,nc,nq,collide}=step(walls,b,c,q,d);if(collide)continue;
-      const k=enc(nb,nc,nq);if(seen.has(k))continue;seen.add(k);
-      const f=first||d;
-      if(nb[0]===exit[0]&&nb[1]===exit[1]&&nc[0]===plate[0]&&nc[1]===plate[1])return{depth,first:f};
-      next.push([nb,nc,nq,f]);
+const RULES=[
+ {cat:'count',tier:0,name:'Exactly 6 cells are lit.',fn:g=>g.filter(x=>x).length===6},
+ {cat:'count',tier:0,name:'Exactly 4 cells are lit.',fn:g=>g.filter(x=>x).length===4},
+ {cat:'count',tier:0,name:'An even number of cells are lit (at least two).',fn:g=>{const n=g.filter(x=>x).length;return n>=2&&n%2===0;}},
+ {cat:'count',tier:1,name:'An odd number of cells are lit.',fn:g=>g.filter(x=>x).length%2===1},
+ {cat:'position',tier:0,name:'All four corner cells are lit.',fn:g=>g[0]&&g[3]&&g[12]&&g[15]},
+ {cat:'position',tier:0,name:'No corner cell is lit (and something is lit).',fn:g=>!g[0]&&!g[3]&&!g[12]&&!g[15]&&g.some(x=>x)},
+ {cat:'position',tier:1,name:'Every lit cell is on the border (none in the middle four).',fn:g=>g.some(x=>x)&&!g[5]&&!g[6]&&!g[9]&&!g[10]},
+ {cat:'position',tier:1,name:'Each 2x2 corner quadrant has at least one lit cell.',fn:g=>{const q=[[0,1,4,5],[2,3,6,7],[8,9,12,13],[10,11,14,15]];return q.every(c=>c.some(i=>g[i]));}},
+ {cat:'rows',tier:1,name:'Exactly one cell is lit in every row.',fn:g=>{for(let r=0;r<4;r++){let c=0;for(let k=0;k<4;k++)if(g[r*4+k])c++;if(c!==1)return false;}return true;}},
+ {cat:'rows',tier:1,name:'Exactly one cell is lit in every column.',fn:g=>{for(let c=0;c<4;c++){let n=0;for(let r=0;r<4;r++)if(g[r*4+c])n++;if(n!==1)return false;}return true;}},
+ {cat:'rows',tier:0,name:'Every column has at least one lit cell.',fn:g=>{for(let c=0;c<4;c++){let any=false;for(let r=0;r<4;r++)if(g[r*4+c])any=true;if(!any)return false;}return true;}},
+ {cat:'rows',tier:1,name:'No row is completely lit.',fn:g=>{for(let r=0;r<4;r++){let n=0;for(let k=0;k<4;k++)if(g[r*4+k])n++;if(n===4)return false;}return g.some(x=>x);}},
+ {cat:'symmetry',tier:1,name:'The pattern is mirror-symmetric: the left half mirrors the right.',fn:g=>{for(let r=0;r<4;r++)for(let c=0;c<2;c++)if(g[r*4+c]!==g[r*4+(3-c)])return false;return true;}},
+ {cat:'symmetry',tier:2,name:'The pattern is the same upside-down (180 degree rotation).',fn:g=>{for(let i=0;i<8;i++)if(g[i]!==g[15-i])return false;return true;}},
+ {cat:'symmetry',tier:2,name:'The top half mirrors the bottom half.',fn:g=>{for(let r=0;r<2;r++)for(let c=0;c<4;c++)if(g[r*4+c]!==g[(3-r)*4+c])return false;return true;}},
+ {cat:'comparison',tier:1,name:'The top half has more lit cells than the bottom half.',fn:g=>{let t=0,b=0;for(let i=0;i<16;i++)if(g[i])(i<8?t++:b++);return t>b;}},
+ {cat:'comparison',tier:2,name:'The left half and right half have the same number of lit cells.',fn:g=>{let l=0,r=0;for(let i=0;i<16;i++)if(g[i])((i%4)<2?l++:r++);return l===r&&(l+r)>0;}},
+ {cat:'adjacency',tier:2,name:'No two lit cells touch side-by-side or top-to-bottom.',fn:g=>{if(!g.some(x=>x))return false;for(let r=0;r<4;r++)for(let c=0;c<4;c++){if(!g[r*4+c])continue;if(c<3&&g[r*4+c+1])return false;if(r<3&&g[(r+1)*4+c])return false;}return true;}},
+ {cat:'adjacency',tier:2,name:'All lit cells form one connected group.',fn:g=>{const on=[];for(let i=0;i<16;i++)if(g[i])on.push(i);if(!on.length)return false;const seen=new Set([on[0]]),st=[on[0]];while(st.length){const i=st.pop(),r=(i/4|0),c=i%4;[[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([nr,nc])=>{if(nr<0||nc<0||nr>=4||nc>=4)return;const j=nr*4+nc;if(g[j]&&!seen.has(j)){seen.add(j);st.push(j);}});}return seen.size===on.length;}},
+];
+function mysteryBoards(ruleIdx,rnd){
+  const rule=RULES[ruleIdx];
+  for(let attempt=0;attempt<4000;attempt++){
+    const out=[];let p=0,f=0,guard=0;
+    while(out.length<3&&guard++<6000){
+      const g=[];for(let i=0;i<16;i++)g.push(rnd()<0.4);
+      const res=rule.fn(g);
+      if(res&&p<2){out.push({g,res});p++;}
+      else if(!res&&f<2){out.push({g,res});f++;}
     }
-    frontier=next;if(depth>40)break;
-  }return null;
-}
-function solve(walls,bs,cs,exit,plate){const r=solvePath(walls,bs,cs,exit,plate,null);return r?r.depth:-1;}
-function shortestPath(walls,from,to){
-  const key=p=>p[1]*GN+p[0];const prev=new Map([[key(from),null]]);let frontier=[from];
-  while(frontier.length){const next=[];
-    for(const p of frontier){
-      if(p[0]===to[0]&&p[1]===to[1]){const path=[];let cur=p;while(cur){path.push(cur);cur=prev.get(key(cur));}return path;}
-      for(const d of DK){const[dx,dy]=DIRS[d];const nx=p[0]+dx,ny=p[1]+dy;
-        if(nx<0||ny<0||nx>=GN||ny>=GN||walls.has(ny*GN+nx))continue;
-        if(prev.has(ny*GN+nx))continue;prev.set(ny*GN+nx,p);next.push([nx,ny]);}
-    }frontier=next;}
-  return null;
-}
-function gen(seed,band){
-  const rnd=mulberry32(seed);
-  for(let t=0;t<5000;t++){
-    const walls=new Set();const nW=band.walls[0]+Math.floor(rnd()*(band.walls[1]-band.walls[0]+1));
-    while(walls.size<nW)walls.add(Math.floor(rnd()*GN*GN));
-    const cells=[];for(let i=0;i<GN*GN;i++)if(!walls.has(i))cells.push([i%GN,Math.floor(i/GN)]);
-    const pick=()=>cells[Math.floor(rnd()*cells.length)];
-    const bs=pick(),cs=pick(),exit=pick(),plate=pick();
-    const key=p=>p[0]+','+p[1];
-    if(new Set([bs,cs,exit,plate].map(key)).size<4)continue;
-    const par=solve(walls,bs,cs,exit,plate);
-    if(par<band.par[0]||par>band.par[1])continue;
-    const sp=shortestPath(walls,bs,exit);
-    if(sp&&sp.some(p=>p[0]===plate[0]&&p[1]===plate[1]))continue;
-    return{walls,bs,cs,exit,plate,par};
+    if(out.length<3||p<1||f<1)continue;
+    let ambiguous=false;
+    for(let r2=0;r2<RULES.length;r2++){
+      if(r2===ruleIdx)continue;
+      if(out.every(m=>RULES[r2].fn(m.g)===m.res)){ambiguous=true;break;}
+    }
+    if(!ambiguous)return out;
   }
   return null;
 }
 function dayNum(){return Math.floor((Date.now()-Date.UTC(2026,0,1))/864e5);}
-function dailyBand(day){const wd=new Date(Date.UTC(2026,0,1)+day*864e5).getUTCDay();return wd===1||wd===2?BANDS.easy:(wd===0||wd===6?BANDS.hard:BANDS.med);}
-function genDaily(day){
-  const seed=(day*2654435761%2147483647)+1;
-  return gen(seed,dailyBand(day))||gen(seed,{par:[7,22],walls:[4,10]})||gen(seed,{par:[5,40],walls:[4,10]});
-}
+function dayTier(day){const wd=new Date(Date.UTC(2026,0,1)+day*864e5).getUTCDay();return wd===1||wd===2?0:(wd===0||wd===6?2:1);}
 
-// ── state / rendering ──
-let levelIndex=0,L=null,gState=null,gHist=[],gMoves=0,cellPx=0,gapPx=0,gWon=false;
+// ── state ──
+let levelIndex=0,ruleIdx=0,labBoard=null,gTests=0,gWon=false,mystery=null,picks=null,mysterySeed=0;
 let firstAttempt=true,levelStarted=false,interstitialCounter=0,isDailyChallenge=false,dailyDay=0;
-const boardEl=document.getElementById('board');
-let youEl,echoEl,plateEl,exitEl;
-function layoutBoard(){
-  const zone=boardEl.parentElement;
-  const maxW=Math.min(window.innerWidth-28,460,Math.floor(window.innerHeight*0.46));
-  cellPx=Math.floor(maxW/GN);gapPx=Math.round(cellPx*0.12);
-  boardEl.style.width=boardEl.style.height=(cellPx*GN)+'px';
+function buildLabBoard(){
+  const el=document.getElementById('labBoard');el.innerHTML='';labBoard=new Array(16).fill(false);
+  for(let i=0;i<16;i++){
+    const c=document.createElement('div');c.className='gc';
+    c.onclick=(function(idx,cell){return function(){
+      if(gWon)return;
+      labBoard[idx]=!labBoard[idx];cell.classList.toggle('lit',labBoard[idx]);clearVerdict();
+    };})(i,c);
+    el.appendChild(c);
+  }
 }
-function bpx(c){return c*cellPx+gapPx/2;}
-function buildBoard(){
-  boardEl.innerHTML='';
-  L.walls.forEach(i=>{const x=i%GN,y=Math.floor(i/GN);const w=document.createElement('div');w.className='wallc';
-    w.style.width=w.style.height=(cellPx-gapPx)+'px';w.style.left=bpx(x)+'px';w.style.top=bpx(y)+'px';boardEl.appendChild(w);});
-  exitEl=document.createElement('div');exitEl.className='exitc';
-  exitEl.style.width=exitEl.style.height=(cellPx-gapPx+2)+'px';
-  exitEl.style.left=(bpx(L.exit[0])-1)+'px';exitEl.style.top=(bpx(L.exit[1])-1)+'px';boardEl.appendChild(exitEl);
-  plateEl=document.createElement('div');plateEl.className='platec';
-  plateEl.style.width=plateEl.style.height=(cellPx-gapPx-6)+'px';
-  plateEl.style.left=(bpx(L.plate[0])+3)+'px';plateEl.style.top=(bpx(L.plate[1])+3)+'px';boardEl.appendChild(plateEl);
-  echoEl=mkEnt('echoc');youEl=mkEnt('youc');
+function clearVerdict(){document.getElementById('verdict').classList.remove('show');}
+function clearBoard(){buildLabBoard();clearVerdict();}
+function doTest(){
+  if(gWon)return;
+  const res=RULES[ruleIdx].fn(labBoard);
+  gTests++;document.getElementById('hud-tests').textContent=gTests;
+  const v=document.getElementById('verdict');
+  v.textContent=res?'● GREEN — obeys':'● RED — breaks';
+  v.className='verdict show '+(res?'go':'no');
+  const dot=document.getElementById('status-dot');
+  dot.style.background=res?'var(--go)':'var(--no)';
+  dot.style.boxShadow='0 0 12px '+(res?'var(--go)':'var(--no)');
+  playMove();
+  document.getElementById('histWrap').style.display='block';
+  const item=document.createElement('div');item.className='hitem';
+  const mini=document.createElement('div');mini.className='mini '+(res?'go':'no');
+  for(let i=0;i<16;i++){const mc=document.createElement('div');mc.className='mc'+(labBoard[i]?' lit':'');mini.appendChild(mc);}
+  item.appendChild(mini);document.getElementById('hscroll').prepend(item);
 }
-function mkEnt(cls){const d=document.createElement('div');d.className='ent '+cls;
-  d.style.width=d.style.height=(cellPx-gapPx)+'px';boardEl.appendChild(d);return d;}
-function setPos(el,c){const tx=bpx(c[0])+'px',ty=bpx(c[1])+'px';
-  el.style.setProperty('--tx',tx);el.style.setProperty('--ty',ty);el.style.transform='translate('+tx+','+ty+')';}
-function dropTrail(c){
-  const t=document.createElement('div');t.className='trail';
-  t.style.width=t.style.height=(cellPx-gapPx)+'px';
-  t.style.left=bpx(c[0])+'px';t.style.top=bpx(c[1])+'px';
-  boardEl.appendChild(t);
-  setTimeout(()=>{t.style.opacity='0';},60);setTimeout(()=>{t.remove();},620);
+function showLab(){
+  document.getElementById('lab-stage').style.display='flex';
+  document.getElementById('guess-stage').style.display='none';
 }
-function renderGame(){
-  setPos(youEl,gState.b);setPos(echoEl,gState.c);
-  const held=gState.c[0]===L.plate[0]&&gState.c[1]===L.plate[1];
-  plateEl.classList.toggle('held',held);
-  exitEl.classList.toggle('armed',held);
-  document.getElementById('hud-moves').textContent=gMoves;
-  document.getElementById('hud-par').textContent=L.par;
-  const q0=document.getElementById('q0'),q1=document.getElementById('q1');
-  q0.textContent=gState.q[0]?ARROW[gState.q[0]]:'·';q0.className='q'+(gState.q[0]?'':' empty');
-  q1.textContent=gState.q[1]?ARROW[gState.q[1]]:'·';q1.className='q'+(gState.q[1]?'':' empty');
-  clearHintGlow();
+function showGuess(){
+  if(gWon)return;
+  const rnd=mulberry32((mysterySeed^0x9e3779b9)>>>0);
+  mystery=mysteryBoards(ruleIdx,rnd)||mysteryBoards(ruleIdx,mulberry32(mysterySeed+999));
+  if(!mystery){_showMsg('Could not build mystery boards');return;}
+  mystery.sort(function(){return rnd()-0.5;});
+  picks=[null,null,null];
+  const wrap=document.getElementById('guesses');wrap.innerHTML='';
+  mystery.forEach(function(m,idx){
+    const row=document.createElement('div');row.className='guess';
+    const gg=document.createElement('div');gg.className='gg';
+    for(let i=0;i<16;i++){const c=document.createElement('div');c.className='c'+(m.g[i]?' lit':'');gg.appendChild(c);}
+    const vp=document.createElement('div');vp.className='verdpick';
+    const yes=document.createElement('button');yes.className='pick';yes.textContent='Obeys';
+    const no=document.createElement('button');no.className='pick';no.textContent='Breaks';
+    yes.onclick=function(){picks[idx]=true;yes.className='pick sel go';no.className='pick';};
+    no.onclick=function(){picks[idx]=false;no.className='pick sel no';yes.className='pick';};
+    vp.append(yes,no);row.append(gg,vp);wrap.appendChild(row);
+  });
+  document.getElementById('lab-stage').style.display='none';
+  document.getElementById('guess-stage').style.display='flex';
+}
+function submitGuess(){
+  if(gWon)return;
+  if(picks.some(function(p){return p===null;})){_showMsg('Mark all three boards first.');return;}
+  const correct=mystery.every(function(m,i){return picks[i]===m.res;});
+  if(correct){winLevel();return;}
+  const n=mystery.filter(function(m,i){return picks[i]===m.res;}).length;
+  showLab();
+  const v=document.getElementById('verdict');
+  v.textContent=n+'/3 right — keep testing';v.className='verdict show no';
+  playError();
 }
 function loadLevel(idx){
   levelIndex=idx;isDailyChallenge=false;
   const row=CAMPAIGN[idx];
-  L=gen(row.seed,BANDS[row.band]);
-  if(!L){_showMsg('Level failed to generate');return;}
-  gState={b:L.bs.slice(),c:L.cs.slice(),q:[null,null]};gHist=[];gMoves=0;gWon=false;
-  firstAttempt=true;levelStarted=true;
-  document.getElementById('hdr-level').textContent='Level '+(idx+1);
-  layoutBoard();buildBoard();renderGame();updateAllUI();
+  ruleIdx=row.rule;mysterySeed=row.seed;
+  startRound('Level '+(idx+1));
   save.lastLevelProgress={level:idx+1};persist(); // display-numbered for the shim's Continue label
   maybeShowTutorial();
 }
-window.addEventListener('resize',()=>{if(L){layoutBoard();buildBoard();renderGame();}});
-function moveDir(d){
-  if(!L||gWon||document.querySelector('.overlay.show'))return;
-  const r=step(L.walls,gState.b,gState.c,gState.q,d);
-  if(r.collide){
-    youEl.classList.add('shake');echoEl.classList.add('shake');
-    setTimeout(()=>{youEl.classList.remove('shake');echoEl.classList.remove('shake');},320);
-    playError();_showMsg("You and the echo can't overlap.");return;
-  }
-  gHist.push({b:gState.b.slice(),c:gState.c.slice(),q:gState.q.slice()});
-  if(r.nc[0]!==gState.c[0]||r.nc[1]!==gState.c[1])dropTrail(gState.c);
-  gState.b=r.nb;gState.c=r.nc;gState.q=r.nq;gMoves++;
-  playMove();renderGame();
-  if(r.nb[0]===L.exit[0]&&r.nb[1]===L.exit[1]&&r.nc[0]===L.plate[0]&&r.nc[1]===L.plate[1])winLevel();
-}
-function undoMove(){
-  if(!gHist.length)return;
-  const p=gHist.pop();gState.b=p.b;gState.c=p.c;gState.q=p.q;gMoves=Math.max(0,gMoves-1);renderGame();
+function startRound(label){
+  gTests=0;gWon=false;mystery=null;picks=null;
+  levelStarted=true;firstAttempt=true;
+  document.getElementById('hdr-level').textContent=label;
+  document.getElementById('hud-tests').textContent='0';
+  document.getElementById('hscroll').innerHTML='';
+  document.getElementById('histWrap').style.display='none';
+  const dot=document.getElementById('status-dot');
+  dot.style.background='var(--go)';dot.style.boxShadow='0 0 12px var(--go)';
+  buildLabBoard();clearVerdict();showLab();updateAllUI();
 }
 function resetLevel(){
-  if(!L)return;
-  gState={b:L.bs.slice(),c:L.cs.slice(),q:[null,null]};gHist=[];gMoves=0;gWon=false;renderGame();
+  if(gWon)return;
+  if(isDailyChallenge)startRound('Daily #'+dailyDay);else startRound('Level '+(levelIndex+1));
 }
 function winLevel(){
   if(gWon)return;
   gWon=true;
   playComplete();
-  // brief sync flourish: both cubes pulse together
-  youEl.style.transition='transform .13s, box-shadow .3s';
-  youEl.style.boxShadow='0 0 22px 2px var(--you)';echoEl.style.boxShadow='0 0 22px 2px var(--echo)';
-  const delta=gMoves-L.par;
-  const stars=delta<=0?3:(delta<=3?2:1);
+  if(window.Android&&window.Android.vibrate)try{Android.vibrate(40);}catch(e){}
+  const stars=gTests<=3?3:(gTests<=7?2:1);
   if(isDailyChallenge){
     const today=new Date().toISOString().split('T')[0];
     if(save.dailyChallengeDate!==today){
@@ -1478,19 +1484,19 @@ function winLevel(){
   const starsStr='★'.repeat(stars)+'☆'.repeat(3-stars);
   document.getElementById('complete-stars').textContent=starsStr;
   document.getElementById('complete-msg').textContent=
-    (delta<=0?'Perfect sync — matched par! ':'Synced in '+gMoves+' moves (par '+L.par+'). ')+'+'+(stars*5)+' coins';
+    'The rule: '+RULES[ruleIdx].name+' Cracked in '+gTests+' test'+(gTests===1?'':'s')+'. +'+(stars*5)+' coins';
   const ov=document.getElementById('overlay-complete');
-  ov.dataset.share=shareString(stars);
-  setTimeout(()=>showOverlay('overlay-complete'),300);
+  ov.dataset.share=shareString();
+  setTimeout(function(){showOverlay('overlay-complete');},500);
   updateAllUI();
 }
-function shareString(stars){
-  if(isDailyChallenge)return 'Afterimage #'+dailyDay+' — '+gMoves+' moves'+(gMoves<=L.par?' ⭐':'');
-  return 'Afterimage level '+(levelIndex+1)+' — '+gMoves+' moves'+(gMoves<=L.par?' ⭐ par':'');
+function shareString(){
+  if(isDailyChallenge)return 'Hunch #'+dailyDay+' — cracked in '+gTests+' 🟢';
+  return 'Hunch level '+(levelIndex+1)+' — cracked in '+gTests+' 🟢';
 }
 function shareResult(){
   const ov=document.getElementById('overlay-complete');
-  const txt=(ov&&ov.dataset.share)||shareString(1);
+  const txt=(ov&&ov.dataset.share)||shareString();
   if(window.Android&&window.Android.shareText){try{window.Android.shareText(txt);return;}catch(e){}}
   try{navigator.clipboard.writeText(txt);_showMsg('Copied!');}catch(e){}
 }
@@ -1507,17 +1513,18 @@ function skipLevel(){
   const next=levelIndex+1;
   if(next<CAMPAIGN.length){loadLevel(next);showScreen('game');}
 }
-// ── hint: first move of the optimal line from the CURRENT state ──
-let _hintTimer=null;
-function clearHintGlow(){document.querySelectorAll('.dpad button.hinted').forEach(b=>b.classList.remove('hinted'));}
+// ── hint: reveal the rule's CATEGORY ──
+const CAT_HINTS={
+  count:'The rule is about HOW MANY cells are lit.',
+  position:'The rule is about WHERE cells sit (corners, border, regions).',
+  rows:'The rule is about rows and columns.',
+  symmetry:'The rule is about symmetry.',
+  comparison:'The rule compares one half of the board to the other.',
+  adjacency:'The rule is about how lit cells touch or connect.'
+};
 function giveHint(){
-  if(!L)return;
-  const r=solvePath(L.walls,gState.b,gState.c,L.exit,L.plate,gState.q);
-  if(!r){_showMsg('No route from here — undo or reset.');return;}
-  clearHintGlow();
-  const btn=document.querySelector('.dpad button[data-d="'+r.first+'"]');
-  if(btn){btn.classList.add('hinted');clearTimeout(_hintTimer);_hintTimer=setTimeout(clearHintGlow,2600);}
-  _showMsg('Optimal: '+ARROW[r.first]+' ('+r.depth+' to sync)');
+  if(gWon)return;
+  _showMsg('💡 '+CAT_HINTS[RULES[ruleIdx].cat]);
 }
 function useHint(){
   if(save.hintCount>0&&!hasUnlimitedHints()){save.hintCount--;persist();updateAllUI();giveHint();return;}
@@ -1533,62 +1540,47 @@ function spendCoinsHint(){
 // ── daily ──
 function startDailyChallenge(){
   const today=new Date().toISOString().split('T')[0];
-  if(save.dailyChallengeDate===today){_showMsg('You already synced today’s daily! Streak: '+save.dailyChallengeStreak);return;}
+  if(save.dailyChallengeDate===today){_showMsg('You already cracked today’s rule! Streak: '+save.dailyChallengeStreak);return;}
   launchDailyLevel();
 }
 function launchDailyLevel(){
   dailyDay=dayNum();
-  L=genDaily(dailyDay);
-  if(!L){_showMsg('Daily failed to generate');return;}
-  isDailyChallenge=true;levelStarted=true;
-  gState={b:L.bs.slice(),c:L.cs.slice(),q:[null,null]};gHist=[];gMoves=0;gWon=false;
-  document.getElementById('hdr-level').textContent='Daily #'+dailyDay;
-  layoutBoard();buildBoard();renderGame();updateAllUI();
+  const seed=(dailyDay*2246822519)>>>0;
+  const rnd=mulberry32(seed);
+  const tier=dayTier(dailyDay);
+  const pool=RULES.map(function(r,i){return i;}).filter(function(i){return RULES[i].tier===tier;});
+  ruleIdx=pool[Math.floor(rnd()*pool.length)];
+  mysterySeed=seed;
+  isDailyChallenge=true;
+  startRound('Daily #'+dailyDay);
   showScreen('game');
 }
-// ── input ──
-document.querySelectorAll('.dpad button').forEach(b=>b.addEventListener('click',()=>moveDir(b.dataset.d)));
-addEventListener('keydown',e=>{
-  if(!document.getElementById('screen-game').classList.contains('active'))return;
-  const m={ArrowUp:'U',ArrowDown:'D',ArrowLeft:'L',ArrowRight:'R',w:'U',s:'D',a:'L',d:'R',W:'U',S:'D',A:'L',D:'R'};
-  if(m[e.key]){e.preventDefault();moveDir(m[e.key]);}
-  if(e.key==='z'||e.key==='Z')undoMove();
-});
-let _sx=null,_sy=null;
-boardEl.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
-boardEl.addEventListener('touchend',e=>{
-  if(_sx==null)return;const t=e.changedTouches[0];
-  const dx=t.clientX-_sx,dy=t.clientY-_sy;
-  if(Math.abs(dx)<18&&Math.abs(dy)<18){_sx=null;return;}
-  if(Math.abs(dx)>Math.abs(dy))moveDir(dx>0?'R':'L');else moveDir(dy>0?'D':'U');
-  _sx=null;
-});
-function playMove(){if(!save.soundEnabled)return;try{const a=getAudio();const o=a.createOscillator(),g=a.createGain();o.frequency.value=420;g.gain.setValueAtTime(0.05,a.currentTime);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+0.08);o.connect(g).connect(a.destination);o.start();o.stop(a.currentTime+0.09);}catch(e){}}
-// ── tutorial: 3 sequential steps, once ──
+function playMove(){if(!save.soundEnabled)return;try{const a=getAudio();const o=a.createOscillator(),g=a.createGain();o.frequency.value=520;g.gain.setValueAtTime(0.04,a.currentTime);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+0.09);o.connect(g).connect(a.destination);o.start();o.stop(a.currentTime+0.1);}catch(e){}}
+// ── tutorial: 4 sequential steps (onboarding matters most here) ──
 const TUT_STEPS=[
-  {t:'🟦 You',b:'Swipe, use arrows, or the pad — your cyan cube moves one cell per turn.'},
-  {t:'🟥 Your echo',b:'The red echo replays YOUR moves, two turns late. Watch the "echo plays next" pips.'},
-  {t:'🎯 The goal',b:'Park the echo on the gold plate and stand on the green exit — on the same turn.'}
+  {t:'🚦 The secret rule',b:'This board hides a rule. Tap cells to build any pattern you like.'},
+  {t:'🧪 Run experiments',b:'Hit TEST: GREEN means your pattern obeys the hidden rule, RED means it breaks it. Test as often as you want.'},
+  {t:'📋 Read the shelf',b:'Every experiment stays on the shelf, tinted green or red. Compare them to form a theory.'},
+  {t:'🎯 Crack it',b:'Confident? Tap "I know the rule" and classify 3 mystery boards. All three right = cracked. Fewer tests, more stars.'}
 ];
 function maybeShowTutorial(){
-  if(localStorage.getItem('aim_tutorialDone')||levelIndex!==0||isDailyChallenge)return;
+  if(localStorage.getItem('hch_tutorialDone')||levelIndex!==0||isDailyChallenge)return;
   let stepI=0;const ov=document.getElementById('tutorialOverlay');
   function show(){
     document.getElementById('tut-title').textContent=TUT_STEPS[stepI].t;
     document.getElementById('tut-body').textContent=TUT_STEPS[stepI].b;
-    document.getElementById('tut-foot').textContent='Tap to continue · '+(stepI+1)+'/3';
+    document.getElementById('tut-foot').textContent='Tap to continue · '+(stepI+1)+'/4';
     ov.style.display='flex';
   }
   function advance(){
     stepI++;
-    if(stepI>=TUT_STEPS.length){ov.style.display='none';localStorage.setItem('aim_tutorialDone','1');ov.removeEventListener('click',advance);return;}
+    if(stepI>=TUT_STEPS.length){ov.style.display='none';localStorage.setItem('hch_tutorialDone','1');ov.removeEventListener('click',advance);return;}
     show();
   }
   ov.addEventListener('click',advance);
   show();
 }
-window.replayTutorial=function(){localStorage.removeItem('aim_tutorialDone');showScreen('game');loadLevel(0);};
-
+window.replayTutorial=function(){localStorage.removeItem('hch_tutorialDone');showScreen('game');loadLevel(0);};
 
 function confirmReset(){showOverlay('overlay-confirm-reset');}
 
@@ -2377,7 +2369,7 @@ window.renderPipeStats=function(){
   var completed=(save.completedLevels||[]).length;
   var perfect=Object.values(save.levelStars||{}).filter(function(s){return s>=3;}).length;
   var stats=[
-    {icon:'🎯',label:'Levels Synced',sub:'echo + exit together',value:completed},
+    {icon:'🔍',label:'Rules Cracked',sub:'mysteries solved',value:completed},
     {icon:'⭐',label:'Perfect Levels',sub:'no resets',value:perfect},
     {icon:'🔥',label:'Daily Streak',sub:'days in a row',value:save.dailyChallengeStreak||0},
     {icon:'🪙',label:'Coins',sub:'current balance',value:save.coins||0},
@@ -2394,13 +2386,13 @@ window.renderPipeStats=function(){
   //                      Listed in save.unlockedThemes once bought.
   // No theme is sold via paid IAP — Midnight is a coin sink. (2026-05-25 user policy.)
   var THEMES=[
-    {id:'default',name:'Blueprint',emoji:'📘',unlockLevel:0,palette:{you:'#0fb5c9',echo:'#e85d5d',plate:'#d29922',exit:'#2ea043'}},
-    {id:'mint',name:'Mint',emoji:'🌿',unlockLevel:10,palette:{you:'#2ea871',echo:'#d96941',plate:'#c9a227',exit:'#3a86ff'}},
-    {id:'sunset',name:'Sunset',emoji:'🌇',unlockLevel:20,palette:{you:'#f2784b',echo:'#7a5cd6',plate:'#e0b228',exit:'#2ea043'}},
-    {id:'midnight',name:'Midnight',emoji:'🌙',coinCost:800,palette:{you:'#37e0e0',echo:'#ff6b6b',plate:'#f2c14e',exit:'#9be37d'}},
-    {id:'violet',name:'Violet',emoji:'🔮',unlockLevel:35,palette:{you:'#8b5cf6',echo:'#ef6292',plate:'#d29922',exit:'#22b8a0'}},
-    {id:'ember',name:'Ember',emoji:'🔥',unlockLevel:45,palette:{you:'#ff8c1a',echo:'#c0392b',plate:'#ffd166',exit:'#7fc97f'}},
-    {id:'mono',name:'Ink',emoji:'🖋️',unlockLevel:60,palette:{you:'#3a4a63',echo:'#8a93a6',plate:'#b08d2f',exit:'#4f7d52'}},
+    {id:'default',name:'Signal',emoji:'🚦',unlockLevel:0,palette:{go:'#2f9e4f',no:'#cf4242',lit:'#d9b500'}},
+    {id:'cobalt',name:'Cobalt',emoji:'🔷',unlockLevel:10,palette:{go:'#2563d8',no:'#d8642b',lit:'#3ec0ad'}},
+    {id:'plum',name:'Plum',emoji:'🍇',unlockLevel:20,palette:{go:'#7a3fd1',no:'#d13f6e',lit:'#d9a23a'}},
+    {id:'midnight',name:'Night Lab',emoji:'🌙',coinCost:800,palette:{go:'#5dd672',no:'#e25b5b',lit:'#e9d54a'}},
+    {id:'ember',name:'Ember',emoji:'🔥',unlockLevel:35,palette:{go:'#e0742b',no:'#b8332b',lit:'#ffd166'}},
+    {id:'sea',name:'Sea',emoji:'🌊',unlockLevel:45,palette:{go:'#1f8f86',no:'#c95a7e',lit:'#e0b228'}},
+    {id:'mono',name:'Graphite',emoji:'🖋️',unlockLevel:60,palette:{go:'#4a5a44',no:'#8a4a4a',lit:'#b08d2f'}},
   ];
   window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel,coinCost:t.coinCost};});
 
@@ -2451,8 +2443,8 @@ window.renderPipeStats=function(){
         }
         save.activeTheme=t.id; persist();
         Object.assign(PIPE_COLORS,t.palette);
-    ['you','echo','plate','exit'].forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
-        ['you','echo','plate','exit'].forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
+    ['go','no','lit'].forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
+        ['go','no','lit'].forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
         applyMidnightChrome(t.id==='midnight');
         var btn=document.getElementById('themeBtn'); if(btn) btn.textContent=t.name;
         window.renderThemes();
@@ -2465,7 +2457,7 @@ window.renderPipeStats=function(){
   setTimeout(function(){
     var t=THEMES.find(function(x){return x.id===save.activeTheme;})||THEMES[0];
     Object.assign(PIPE_COLORS,t.palette);
-    ['you','echo','plate','exit'].forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
+    ['go','no','lit'].forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
     applyMidnightChrome(t.id==='midnight');
     var btn=document.getElementById('themeBtn'); if(btn) btn.textContent=t.name;
   },400);
@@ -2473,7 +2465,7 @@ window.renderPipeStats=function(){
 
 /* Missions */
 (function(){
-  var MISSION_KEY='aim_missions_v1';
+  var MISSION_KEY='hch_missions_v1';
   var MISSION_POOL=[
     {id:'complete3',desc:'Connect 3 boards',goal:3,reward:30,icon:'🎯',track:'levels'},
     {id:'complete5',desc:'Connect 5 boards',goal:5,reward:50,icon:'🏆',track:'levels'},
@@ -2826,7 +2818,7 @@ function injectDragonTheme(){
   if(window._THEMES_META.find(function(t){return t.id==='dragon';})) return;
   window._THEMES_META.push({
     id:'dragon', name:'Dragon 🐉', unlock:0, coinCost:300,
-    colors:['#ff4444','#ff8800','#ffdd00','#2ea043','#cc2200'], palette:{you:'#ff8800',echo:'#cc2200',plate:'#ffdd00',exit:'#2ea043'}
+    colors:['#ff4444','#ff8800','#ffdd00','#2ea043','#cc2200'], palette:{go:'#ff8800',no:'#cc2200',lit:'#ffdd00'}
   });
 
   // Patch selectTheme to handle coinCost

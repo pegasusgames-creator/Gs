@@ -99,6 +99,16 @@ THEMES = {
         "texture":          "T3",  # paper texture
     },
 
+    "Hunch": {
+        "bg_top_left": (248, 250, 245), "bg_top_right": (241, 244, 238), "bg_bottom": (223, 230, 216),
+        "text_primary": (29, 36, 26), "text_accent": (47, 158, 79), "text_subtle": (102, 115, 92),
+        "footer_tint": (215, 224, 207),
+        "mood": "signal-lab",
+        "layout_archetype": "F",
+        "mascot_pattern": "M0",
+        "voice": "V3",
+        "texture": "T2",
+    },
     "Overlay": {
         "bg_top_left": (251, 250, 252), "bg_top_right": (245, 244, 247), "bg_bottom": (228, 225, 234),
         "text_primary": (33, 29, 43), "text_accent": (232, 68, 126), "text_subtle": (110, 103, 131),

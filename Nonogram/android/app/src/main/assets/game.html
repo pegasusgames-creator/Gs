@@ -5680,7 +5680,7 @@ window.addEventListener('load',function(){
     if (!api('scheduleLivesRefilled')) return;
     var SAVE_KEYS = [
       'unblock_save','watersort_save','puzzle2048_save','nonogram_state',
-      'pipeconnect_save','afterimage_save','overlay_save','save','state','gameState','progress'
+      'pipeconnect_save','afterimage_save','overlay_save','hunch_save','save','state','gameState','progress'
     ];
     var REGEN_MS = 30 * 60 * 1000; // every shipping game uses 30 min
     for (var i=0;i<SAVE_KEYS.length;i++){
@@ -5933,6 +5933,7 @@ window.addEventListener('load',function(){
     if (t.indexOf('pipe') >= 0) return 'com.pegasusgames.pipeconnect';
     if (t.indexOf('afterimage') >= 0) return 'com.pegasusgames.afterimage';
     if (t.indexOf('overlay') >= 0) return 'com.pegasusgames.overlay';
+    if (t.indexOf('hunch') >= 0) return 'com.pegasusgames.hunch';
     return '';
   }
   var CUR = currentPkg();
@@ -6896,10 +6897,11 @@ window.addEventListener('load',function(){
     //   PipeConnect:  pipeconnect_save
     //   Afterimage:   afterimage_save
     //   Overlay:      overlay_save
+    //   Hunch:        hunch_save
     var keys = ['save','state','gameState','progress','State',
                 'watersort_save','puzzle2048_save','unblock_save',
                 'nonogram_state','nonogram_save','pipeconnect_save',
-                'afterimage_save','overlay_save'];
+                'afterimage_save','overlay_save','hunch_save'];
     for (var i=0;i<keys.length;i++){
       var raw = lsGet(keys[i], null);
       if (!raw) continue;
@@ -7435,6 +7437,7 @@ window.addEventListener('load',function(){
     if (t.indexOf('pipe') >= 0)    return 5;
     if (t.indexOf('afterimage') >= 0) return 6;
     if (t.indexOf('overlay') >= 0) return 7;
+    if (t.indexOf('hunch') >= 0) return 8;
     return 1;
   }
   // Part D: assert no game-themed words sneak into the pools. Logs
@@ -7442,7 +7445,7 @@ window.addEventListener('load',function(){
   var _SANITY_DONE = false;
   function debugSanityGuard(rows){
     if (_SANITY_DONE) return; _SANITY_DONE = true;
-    var bad = ['tile','block','sort','color','pour','flow','pixel','grid','number','tube','cube','cell','clue','merge','slide','unblock','water','nono','2048','puzzle','pipe','connect','echo','afterimage','sheet','gel','overlay'];
+    var bad = ['tile','block','sort','color','pour','flow','pixel','grid','number','tube','cube','cell','clue','merge','slide','unblock','water','nono','2048','puzzle','pipe','connect','echo','afterimage','sheet','gel','overlay','hunch','rule'];
     rows.forEach(function(r){
       var lower = (r.name||'').toLowerCase();
       bad.forEach(function(t){
@@ -7897,6 +7900,21 @@ window.addEventListener('load',function(){
           '<rect x="14" y="34" width="14" height="26" rx="2" fill="#7c92c0"/>'+
           '<rect x="38" y="34" width="32" height="12" rx="2" fill="#c83838" style="filter:drop-shadow(0 0 6px #d84034)"/>'+ // red hero block, glowing, nudged toward the exit
           '<rect x="46" y="52" width="12" height="22" rx="2" fill="#a8b3d4"/>'+
+        '</svg>';
+    } else if (t.indexOf('hunch') >= 0) {
+      // A traffic light over a mini 4x4 board.
+      svg =
+        '<svg viewBox="0 0 96 80" width="124" height="103" xmlns="http://www.w3.org/2000/svg">'+
+          '<rect x="34" y="4" width="28" height="22" rx="8" fill="none" stroke="currentColor" stroke-width="2.2"/>'+
+          '<circle cx="44" cy="15" r="5" fill="#2f9e4f"/>'+
+          '<circle cx="56" cy="15" r="5" fill="#cf4242" opacity="0.45"/>'+
+          '<g stroke="currentColor" stroke-width="1.6" fill="none" opacity="0.6">'+
+            '<rect x="24" y="32" width="48" height="44" rx="6"/>'+
+            '<path d="M36 32V76M48 32V76M60 32V76M24 43H72M24 54H72M24 65H72"/>'+
+          '</g>'+
+          '<rect x="37" y="44" width="10" height="9" rx="2" fill="#d9b500"/>'+
+          '<rect x="49" y="55" width="10" height="9" rx="2" fill="#d9b500"/>'+
+          '<rect x="25" y="66" width="10" height="9" rx="2" fill="#d9b500" opacity="0.6"/>'+
         '</svg>';
     } else if (t.indexOf('overlay') >= 0) {
       // Three offset translucent gel squares composing into a mark.
