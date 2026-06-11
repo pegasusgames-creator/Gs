@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Stack</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#0c0b10; --panel:#16141d; --line:#272336;
+    --ink:#efeaf6; --mute:#8a83a3;
+    --c1:#ff5d8f; --c2:#33d6c8; --c3:#ffc24b;
+    --font:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,sans-serif;
+  }
+  html,body{height:100%}
+  body{background:radial-gradient(130% 80% at 50% -10%,#1a1726 0%,var(--bg) 65%);color:var(--ink);
+    font-family:var(--font);display:flex;flex-direction:column;align-items:center;overflow:hidden;
+    padding:max(14px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));user-select:none;touch-action:none}
+  .top{width:100%;max-width:460px;display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px}
+  .brand{font-weight:800;letter-spacing:4px;font-size:1.25rem}
+  .sub{color:var(--mute);font-size:.72rem;margin-top:-1px;letter-spacing:.3px}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:6px 11px;font-size:.76rem;font-weight:700}
+  .chip b{color:var(--c2)}
+  .boards{display:flex;gap:18px;align-items:flex-start;margin-top:6px}
+  .bcol{display:flex;flex-direction:column;align-items:center;gap:7px}
+  .cap{color:var(--mute);font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase}
+  .grid{display:grid;gap:3px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px}
+  .gc{border-radius:5px;background:#0e0d14;border:1px solid #1d1a28}
+  .gc[data-c="1"]{background:var(--c1);border-color:transparent;box-shadow:0 0 8px -2px var(--c1)}
+  .gc[data-c="2"]{background:var(--c2);border-color:transparent;box-shadow:0 0 8px -2px var(--c2)}
+  .gc[data-c="3"]{background:var(--c3);border-color:transparent;box-shadow:0 0 8px -2px var(--c3)}
+  #result{position:relative}
+  #result .gc.ghost::after{content:"";position:absolute;inset:0;border-radius:5px;border:1.5px dashed var(--mute);opacity:.5;pointer-events:none}
+  #resultWrap.win .grid{box-shadow:0 0 26px -2px var(--c2);border-color:var(--c2)}
+  .progress{color:var(--mute);font-size:.72rem;margin-top:8px}
+  .progress b{color:var(--ink)}
+  .sheets{display:flex;gap:12px;margin-top:18px}
+  .sheet{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .frame{position:relative;width:96px;height:96px;border-radius:12px;border:1px dashed var(--line);overflow:hidden;
+    background:repeating-linear-gradient(45deg,#121019 0 6px,#15131d 6px 12px);cursor:grab;touch-action:none}
+  .frame:active{cursor:grabbing;border-color:var(--c2)}
+  .sgrid{position:absolute;display:grid;gap:2px;transition:transform .06s linear}
+  .sc{border-radius:3px}
+  .sc[data-c="1"]{background:var(--c1)} .sc[data-c="2"]{background:var(--c2)} .sc[data-c="3"]{background:var(--c3)}
+  .sname{color:var(--mute);font-size:.66rem;letter-spacing:1px}
+  .sname b{color:var(--ink)}
+  .row{display:flex;gap:10px;margin-top:18px}
+  .btn{background:var(--panel);border:1px solid var(--line);color:var(--ink);font-family:inherit;font-weight:700;font-size:.85rem;
+    border-radius:12px;padding:11px 18px;cursor:pointer;transition:transform .08s}
+  .btn:active{transform:scale(.96)}
+  .btn.primary{background:linear-gradient(135deg,var(--c2),#1f8f86);color:#042a27;border:none}
+  .hint{color:var(--mute);font-size:.73rem;text-align:center;max-width:330px;margin-top:14px;line-height:1.5}
+  .hint b{color:var(--c2)}
+  .overlay{position:fixed;inset:0;background:rgba(8,7,12,.85);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:20;padding:20px}
+  .overlay.on{display:flex}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:26px 24px;text-align:center;max-width:340px;width:100%}
+  .card h2{font-size:1.5rem;letter-spacing:1px}
+  .card p{color:var(--mute);font-size:.85rem;margin:10px 0 16px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+  <div class="top">
+    <div><div class="brand">STACK</div><div class="sub" id="sub">Daily · slide the sheets until the picture appears</div></div>
+    <div class="chip">Moves <b id="moves">0</b></div>
+  </div>
+
+  <div class="boards">
+    <div class="bcol"><div class="cap">Target</div><div class="grid" id="target"></div></div>
+    <div class="bcol" id="resultWrap"><div class="cap">Your stack</div><div class="grid" id="result"></div></div>
+  </div>
+  <div class="progress"><b id="match">0</b> / <span id="total">0</span> cells match</div>
+
+  <div class="sheets" id="sheets"></div>
+
+  <div class="row">
+    <button class="btn" id="reset">↺ Reset</button>
+    <button class="btn" id="next">New ⟳</button>
+  </div>
+  <div class="hint">Each sheet is see-through except its colored cells. Drag a sheet to slide it. A cell shows the colour of the <b>topmost</b> sheet over it. Match the target.</div>
+
+  <div class="overlay" id="ov">
+    <div class="card">
+      <h2>Revealed.</h2>
+      <p id="ovs"></p>
+      <button class="btn primary" id="ovnext" style="width:100%">Next picture →</button>
+    </div>
+  </div>
+
+<script>
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const N=5,COLORS=[1,2,3];
+function composite(sheets,offs){const out=new Array(N*N).fill(0);
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++)for(let s=2;s>=0;s--){const[dx,dy]=offs[s];const sc=c-dx,sr=r-dy;
+    if(sc<0||sr<0||sc>=N||sr>=N)continue;const v=sheets[s][sr*N+sc];if(v){out[r*N+c]=v;break;}}
+  return out;}
+function eqOff(a,b){return a.every((o,i)=>o[0]===b[i][0]&&o[1]===b[i][1]);}
+function gen(seed){const rnd=mulberry32(seed);
+  for(let t=0;t<3000;t++){
+    const sheets=[];for(let s=0;s<3;s++){const g=new Array(N*N).fill(0);let cnt=4+Math.floor(rnd()*5);
+      while(cnt-->0)g[Math.floor(rnd()*N*N)]=COLORS[Math.floor(rnd()*3)];sheets.push(g);}
+    const sol=[];for(let s=0;s<3;s++)sol.push([Math.floor(rnd()*5)-2,Math.floor(rnd()*5)-2]);
+    const target=composite(sheets,sol);
+    if(target.filter(x=>x).length<6)continue;
+    let init,g=0;do{init=[];for(let s=0;s<3;s++)init.push([Math.floor(rnd()*5)-2,Math.floor(rnd()*5)-2]);}while(g++<60&&(eqOff(init,sol)||arrSame(composite(sheets,init),target)));
+    if(arrSame(composite(sheets,init),target))continue;
+    return{sheets,target,init};
+  }return null;}
+function arrSame(a,b){return a.every((v,i)=>v===b[i]);}
+
+let P,offsets,cellR,moves;
+const targetEl=document.getElementById('target'),resultEl=document.getElementById('result'),sheetsEl=document.getElementById('sheets');
+function dayNum(){return Math.floor((Date.now()-Date.UTC(2026,0,1))/864e5);}
+function sizing(){const w=Math.min(window.innerWidth-28,460);cellR=Math.max(20,Math.min(34,Math.floor((w-18-36)/ (N*2))));}
+function makeGrid(el,size){el.style.gridTemplateColumns=`repeat(${N},${size}px)`;el.innerHTML='';const cells=[];
+  for(let i=0;i<N*N;i++){const d=document.createElement('div');d.className='gc';d.style.width=d.style.height=size+'px';d.style.position='relative';el.appendChild(d);cells.push(d);}return cells;}
+let targetCells,resultCells,sheetGridEls;
+function paint(cells,arr,ghost){for(let i=0;i<N*N;i++){const v=arr[i];if(v)cells[i].dataset.c=v;else delete cells[i].dataset.c;
+  if(ghost)cells[i].classList.toggle('ghost',!v&&ghost[i]&&false);}}
+function load(seed,no){
+  P=gen(seed);offsets=P.init.map(o=>o.slice());moves=0;
+  sizing();
+  targetCells=makeGrid(targetEl,cellR);resultCells=makeGrid(resultEl,cellR);
+  paint(targetCells,P.target);
+  document.getElementById('total').textContent=P.target.filter(x=>x).length;
+  buildSheets();render();
+}
+function buildSheets(){
+  sheetsEl.innerHTML='';sheetGridEls=[];
+  const frameSize=Math.min(104,cellR*3.2);const sc=Math.floor((frameSize-8)/N);
+  P.sheets.forEach((sheet,s)=>{
+    const wrap=document.createElement('div');wrap.className='sheet';
+    const frame=document.createElement('div');frame.className='frame';frame.style.width=frame.style.height=frameSize+'px';
+    const grid=document.createElement('div');grid.className='sgrid';grid.style.gridTemplateColumns=`repeat(${N},${sc}px)`;grid.style.gap='2px';
+    grid.style.left=((frameSize-(sc*N+2*(N-1)))/2)+'px';grid.style.top=((frameSize-(sc*N+2*(N-1)))/2)+'px';
+    for(let i=0;i<N*N;i++){const c=document.createElement('div');c.className='sc';c.style.width=c.style.height=sc+'px';if(sheet[i])c.dataset.c=sheet[i];grid.appendChild(c);}
+    frame.appendChild(grid);
+    const name=document.createElement('div');name.className='sname';name.innerHTML='Sheet <b>'+(s+1)+'</b>';
+    wrap.append(frame,name);sheetsEl.appendChild(wrap);
+    sheetGridEls.push({grid,sc,frame});
+    enableDrag(frame,grid,s,sc);
+  });
+}
+function enableDrag(frame,grid,s,sc){
+  let startX,startY,startOff,dragging=false;
+  const stepPx=sc+2;
+  const down=e=>{dragging=true;const p=pt(e);startX=p.x;startY=p.y;startOff=offsets[s].slice();frame.setPointerCapture&&frame.setPointerCapture(e.pointerId);};
+  const moveE=e=>{if(!dragging)return;const p=pt(e);
+    const dx=clamp(startOff[0]+Math.round((p.x-startX)/stepPx),-2,2);
+    const dy=clamp(startOff[1]+Math.round((p.y-startY)/stepPx),-2,2);
+    if(dx!==offsets[s][0]||dy!==offsets[s][1]){offsets[s]=[dx,dy];moves++;render();}
+  };
+  const up=()=>{dragging=false;};
+  frame.addEventListener('pointerdown',e=>{e.preventDefault();down(e);});
+  frame.addEventListener('pointermove',e=>{e.preventDefault();moveE(e);});
+  frame.addEventListener('pointerup',up);frame.addEventListener('pointercancel',up);
+}
+function pt(e){return{x:e.clientX,y:e.clientY};}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function render(){
+  // shift each sheet grid visually by its offset
+  sheetGridEls.forEach((sg,s)=>{const[dx,dy]=offsets[s];sg.grid.style.transform=`translate(${dx*(sg.sc+2)}px,${dy*(sg.sc+2)}px)`;});
+  const comp=composite(P.sheets,offsets);
+  paint(resultCells,comp);
+  // ghost hint: show faint target outline on cells that don't yet match
+  for(let i=0;i<N*N;i++)resultCells[i].classList.toggle('ghost',P.target[i]&&comp[i]!==P.target[i]);
+  const match=comp.reduce((a,v,i)=>a+(v===P.target[i]?1:0),0);
+  const targetLit=P.target.filter(x=>x).length;
+  const litMatch=P.target.reduce((a,v,i)=>a+(v&&v===comp[i]?1:0),0);
+  document.getElementById('match').textContent=litMatch;
+  document.getElementById('total').textContent=targetLit;
+  document.getElementById('moves').textContent=moves;
+  if(arrSame(comp,P.target))win();
+}
+let won=false;
+function win(){if(won)return;won=true;document.getElementById('resultWrap').classList.add('win');
+  setTimeout(()=>{const ov=document.getElementById('ov');document.getElementById('ovs').textContent=`Matched in ${moves} slides.`;
+    ov.dataset.share=`Stack #${curNo} — ${moves} slides 🟩`;ov.classList.add('on');},420);}
+let curNo;
+function start(seed,no){won=false;document.getElementById('resultWrap').classList.remove('win');document.getElementById('ov').classList.remove('on');curNo=no;load(seed,no);}
+document.getElementById('reset').onclick=()=>{offsets=P.init.map(o=>o.slice());moves=0;won=false;document.getElementById('resultWrap').classList.remove('win');render();};
+document.getElementById('next').onclick=()=>{start(Math.floor(Math.random()*1e9),'∞');document.getElementById('sub').textContent='Free play · reveal the picture';};
+document.getElementById('ovnext').onclick=()=>{start(Math.floor(Math.random()*1e9),'∞');document.getElementById('sub').textContent='Free play · reveal the picture';};
+addEventListener('resize',()=>{const o=offsets,m=moves;sizing();targetCells=makeGrid(targetEl,cellR);resultCells=makeGrid(resultEl,cellR);paint(targetCells,P.target);buildSheets();offsets=o;moves=m;render();});
+// start daily
+const d=dayNum();start((d*40503+12345)>>>0,d);
+</script>
+</body>
+</html>

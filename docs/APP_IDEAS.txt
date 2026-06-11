@@ -443,6 +443,26 @@ IMPLEMENTATION TEMPLATE
 7. Build release APK, sign, upload
 
 ================================================================================
+GREENLIT — NEXT THREE BUILDS (2026-06-10)
+================================================================================
+Spec + verified prototypes: docs/BUILD_THREE_GAMES.md (+ ~/Downloads/*.html).
+Codenames are INTERNAL — never ship under them (trademark notes in the spec).
+
+Next-1 [greenlit] Ditto -> ship as "Afterimage"  slug:afterimage
+        Move; a clone replays your moves 2 turns late; park it on a plate
+        while you reach the exit. BFS solver = Par (verified).
+        aliases: ditto, echo, delayed clone, lag, time offset
+Next-2 [greenlit] Stack -> ship as "Overlay"     slug:overlay
+        Slide 3 transparent sheets so the topmost-colour composite matches
+        a target. Solvable by construction (verified).
+        aliases: stack, overlay, transparencies, gels, layers, acetate
+Next-3 [greenlit] Green Light -> ship as "Hunch" slug:hunch
+        Deduce the hidden rule by testing patterns (green=obeys/red=breaks).
+        Note: deduction-adjacent to Mastermind/ repo but distinct verb
+        (rule induction vs code guessing) — cleared per spec.
+        aliases: green light, hidden rule, induction, rule guess, zendo
+
+================================================================================
 DAILY-LOGIC WAVE BRAINSTORM (2026-06-10) — dedup-checked adds
 ================================================================================
 Schema: Daily = daily-seeded puzzle + shareable emoji result grid.
