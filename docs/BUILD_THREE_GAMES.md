@@ -10,7 +10,7 @@ Build order: **Ditto → Stack → Green Light**. One game at a time; after each
 - [x] Part 1 — backlog rows greenlit (docs/APP_IDEAS.txt, 2026-06-10)
 - [x] Next-1 **Ditto → Afterimage** — built to reviewable state (2026-06-11, commit `feat(Afterimage)`). Post-review remaining: 13-locale metadata, store assets via `SCREENSHOT_STUDIO.md`, STORE_PASTE/COMPETITIVE_AUDIT rewrites, Firebase entry + real AdMob ids + PGS leaderboard at handoff, keystore 3-way backup, tablet-surface screenshots.
 - [x] Next-2 **Stack → Overlay** — built to reviewable state (2026-06-11, commit `feat(Overlay)`). Same deferred list as Afterimage (locales, store assets via SCREENSHOT_STUDIO, handoff trio, keystore backup, tablets).
-- [ ] Next-3 **Green Light → Hunch**
+- [x] Next-3 **Green Light → Hunch** — built to reviewable state (2026-06-11, commit `feat(Hunch)`). Same deferred list (locales, store assets via SCREENSHOT_STUDIO, handoff trio, keystore backup, tablets).
 
 ---
 
