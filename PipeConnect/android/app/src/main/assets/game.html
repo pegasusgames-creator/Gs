@@ -3588,7 +3588,7 @@ window.addEventListener('load',function(){
     if (!api('scheduleLivesRefilled')) return;
     var SAVE_KEYS = [
       'unblock_save','watersort_save','puzzle2048_save','nonogram_state',
-      'pipeconnect_save','save','state','gameState','progress'
+      'pipeconnect_save','afterimage_save','save','state','gameState','progress'
     ];
     var REGEN_MS = 30 * 60 * 1000; // every shipping game uses 30 min
     for (var i=0;i<SAVE_KEYS.length;i++){
@@ -3840,6 +3840,7 @@ window.addEventListener('load',function(){
     if (t.indexOf('2048') >= 0) return 'com.pegasusgames.puzzle2048';
     if (t.indexOf('unblock') >= 0) return 'com.pegasusgames.unblockpuzzle';
     if (t.indexOf('pipe') >= 0) return 'com.pegasusgames.pipeconnect';
+    if (t.indexOf('afterimage') >= 0) return 'com.pegasusgames.afterimage';
     return '';
   }
   var CUR = currentPkg();
@@ -4806,9 +4807,11 @@ window.addEventListener('load',function(){
     //   Puzzle2048:   puzzle2048_save
     //   UnblockPuzzle: unblock_save
     //   PipeConnect:  pipeconnect_save
+    //   Afterimage:   afterimage_save
     var keys = ['save','state','gameState','progress','State',
                 'watersort_save','puzzle2048_save','unblock_save',
-                'nonogram_state','nonogram_save','pipeconnect_save'];
+                'nonogram_state','nonogram_save','pipeconnect_save',
+                'afterimage_save'];
     for (var i=0;i<keys.length;i++){
       var raw = lsGet(keys[i], null);
       if (!raw) continue;
@@ -5342,6 +5345,7 @@ window.addEventListener('load',function(){
     if (t.indexOf('nono') >= 0)    return 2;
     if (t.indexOf('unblock') >= 0) return 4;
     if (t.indexOf('pipe') >= 0)    return 5;
+    if (t.indexOf('afterimage') >= 0) return 6;
     return 1;
   }
   // Part D: assert no game-themed words sneak into the pools. Logs
@@ -5349,7 +5353,7 @@ window.addEventListener('load',function(){
   var _SANITY_DONE = false;
   function debugSanityGuard(rows){
     if (_SANITY_DONE) return; _SANITY_DONE = true;
-    var bad = ['tile','block','sort','color','pour','flow','pixel','grid','number','tube','cube','cell','clue','merge','slide','unblock','water','nono','2048','puzzle','pipe','connect'];
+    var bad = ['tile','block','sort','color','pour','flow','pixel','grid','number','tube','cube','cell','clue','merge','slide','unblock','water','nono','2048','puzzle','pipe','connect','echo','afterimage'];
     rows.forEach(function(r){
       var lower = (r.name||'').toLowerCase();
       bad.forEach(function(t){
@@ -5804,6 +5808,18 @@ window.addEventListener('load',function(){
           '<rect x="14" y="34" width="14" height="26" rx="2" fill="#7c92c0"/>'+
           '<rect x="38" y="34" width="32" height="12" rx="2" fill="#c83838" style="filter:drop-shadow(0 0 6px #d84034)"/>'+ // red hero block, glowing, nudged toward the exit
           '<rect x="46" y="52" width="12" height="22" rx="2" fill="#a8b3d4"/>'+
+        '</svg>';
+    } else if (t.indexOf('afterimage') >= 0) {
+      // A cube and its two-behind echo on a mini blueprint board.
+      svg =
+        '<svg viewBox="0 0 96 80" width="132" height="110" xmlns="http://www.w3.org/2000/svg">'+
+          '<rect x="2" y="2" width="92" height="76" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.45"/>'+
+          '<path d="M2 28 H94 M2 54 H94 M34 2 V78 M66 2 V78" stroke="currentColor" stroke-width="1" opacity="0.2"/>'+
+          '<rect x="40" y="8" width="20" height="18" rx="5" fill="none" stroke="#e85d5d" stroke-width="2.4" stroke-dasharray="5 4"/>'+
+          '<rect x="8" y="33" width="20" height="18" rx="5" fill="none" stroke="#e85d5d" stroke-width="2.4" stroke-dasharray="5 4" opacity="0.55"/>'+
+          '<rect x="71" y="33" width="20" height="18" rx="5" fill="#0fb5c9"/>'+
+          '<circle cx="18" cy="68" r="6" fill="none" stroke="#d29922" stroke-width="2.6"/>'+
+          '<rect x="72" y="60" width="18" height="16" rx="4" fill="none" stroke="#2ea043" stroke-width="2" stroke-dasharray="4 3"/>'+
         '</svg>';
     } else if (t.indexOf('pipe') >= 0) {
       // Interlocking pipe knot; endpoint dots match the in-game palette

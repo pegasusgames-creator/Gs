@@ -232,14 +232,10 @@ public class MainActivity extends Activity {
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        // Notification channel + runtime permission (API 33+)
+        // Notification channel only. The runtime POST_NOTIFICATIONS request
+        // is NOT made here — growth spec: the JS shim pre-prompts AFTER the
+        // first level clear, then calls requestNotificationPermission().
         NotificationHelper.createChannel(this);
-        if (Build.VERSION.SDK_INT >= 33) {
-            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-                    != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1001);
-            }
-        }
 
         if (USE_APPLOVIN) initAppLovin(); else initAdMob();
         setupBilling();

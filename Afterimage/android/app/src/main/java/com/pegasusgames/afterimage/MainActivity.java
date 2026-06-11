@@ -1,4 +1,4 @@
-package com.pegasusgames.puzzle2048;
+package com.pegasusgames.afterimage;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -43,11 +42,11 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 // Google Play Billing
 import com.android.billingclient.api.AcknowledgePurchaseParams;
-import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.PendingPurchasesParams;
 import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.Purchase;
@@ -58,12 +57,6 @@ import com.android.billingclient.api.QueryPurchasesParams;
 // Firebase
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.Signature;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -71,42 +64,28 @@ import java.util.Set;
 
 public class MainActivity extends Activity {
 
-    // Cross-promo install verification — must match CROSS_PROMO list in game.html
-    // and the <queries> entries in AndroidManifest.xml. Targets are LIVE Play
-    // Store apps only. Pre-release siblings (PipeConnect) added
-    // here ONLY after they have Play links.
-    private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(
-        "com.pegasusgames.watersortpuzzle",
-        "com.pegasusgames.nonogram",
-        "com.pegasusgames.unblockpuzzle"
-    ));
-
-    // ── AppLovin MAX (disabled; using AdMob) ──────────────────────────────────
-    // Populate the four constants below + add the SDK key meta-data in
-    // AndroidManifest.xml to re-enable AppLovin mediation.
-    private static final String MAX_SDK_KEY              = ""; // TODO: paste SDK key when AppLovin account is approved
-    private static final String MAX_BANNER_UNIT_ID       = ""; // TODO: paste banner unit id
-    private static final String MAX_INTERSTITIAL_UNIT_ID = ""; // TODO: paste interstitial unit id
-    private static final String MAX_REWARDED_UNIT_ID     = ""; // TODO: paste rewarded unit id
+    // ── AppLovin MAX ──────────────────────────────────────────────────────────
+    // Get SDK Key: dash.applovin.com → Account → Keys → SDK Key
+    // Get Ad Unit IDs: dash.applovin.com → Monetize → Ad Units
+    private static final String MAX_SDK_KEY              = ""; // TODO: paste SDK key once AppLovin is approved
+    private static final String MAX_BANNER_UNIT_ID       = ""; // TODO: paste once AppLovin is approved
+    private static final String MAX_INTERSTITIAL_UNIT_ID = ""; // TODO: paste once AppLovin is approved
+    private static final String MAX_REWARDED_UNIT_ID     = ""; // TODO: paste once AppLovin is approved
+    // Auto-switch: uses AppLovin when SDK key is real, AdMob otherwise
     private static final boolean USE_APPLOVIN = !MAX_SDK_KEY.isEmpty();
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     // Get from: apps.admob.com → Your App → Ad Units
-    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-5695494884863768/8535411813";
-    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-5695494884863768/8333515691";
-    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-5695494884863768/6020929115";
+    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-3940256099942544/6300978111";
+    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
+    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-3940256099942544/5224354917";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
-    // Base64-encoded RSA public key from:
-    //   Play Console → Monetize setup → Licensing → "Base64-encoded RSA public key"
-    // Used to verify the RSA-SHA1 signature on every Purchase object so a
-    // tampered/spoofed purchase from a hacked billing library is rejected.
-    private static final String LICENSE_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqZbb4fskEZI4QxeFI/SiL5C/vGMhOGUmfC+Tm35beStZnnp2OLPtYhXkWHkSiUEJHNkTyMFEpIqj43we/sTU+5TwO9MTEfWFA/aTLmoLR6Edx4Lw6KMPTjIsIr6bVMjK6AO9Jmxeiwff56qIIiBwX6L71SjoDG+gHwcakdHMAka3ICCfzSRs6QBSNQmXBGuL9h5jdbrZgILP2YzkEECirzDxvzgXvHGL4foGmSvWUurs5S1cYNitPai+07bW3/lUCT/suwtI9WwW3KUnS4SZHDHMEKIFbPy1HP4GYHRYy9JNXmTHl4Bhn9eaBOViwEX7He3KHGq3ijg00GK5v62C3wIDAQAB";
-
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
-        "remove_ads", "coins_small", "coins_large", "coins_medium", "coins_mega", "undo_pack",
-        "five_lives", "unlimited_lives_1h", "unlimited_lives_forever",
-        "starter_pack", "season_pass_monthly", "weekly_pass"
+        "coins_small", "coins_medium", "coins_large", "coins_mega",
+        "five_lives", "hint_pack", "remove_ads",
+        "season_pass_monthly", "starter_pack", "unlimited_lives_1h",
+        "unlimited_lives_forever", "weekly_pass"
     ));
 
     // Subscription SKUs — routed through launchSubscription(), never the
@@ -121,15 +100,15 @@ public class MainActivity extends Activity {
     // acknowledged via acknowledgePurchase. Both flows must complete within
     // Play's 3-day window or the purchase is auto-refunded.
     private static final Set<String> CONSUMABLE_PRODUCTS = new HashSet<>(Arrays.asList(
-        "coins_small", "coins_large", "coins_medium", "coins_mega",
-        "five_lives", "unlimited_lives_1h", "undo_pack", "starter_pack"
-    ));
-    private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
-        "undo", "skip", "life", "continue", "extra_life", "free_coins", "magic_merge", "remove_tile"
+        "coins_small", "coins_medium", "coins_large", "coins_mega",
+        "five_lives", "hint_pack", "starter_pack", "unlimited_lives_1h"
     ));
 
-    // Daylight default = warm cream/sand. (Midnight unlock is dark.)
-    private static final int WEBVIEW_BG_COLOR = 0xFFf3ecd9;
+    private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
+        "undo", "skip", "life"
+    ));
+
+    private static final int WEBVIEW_BG_COLOR = 0xFFeef4f8;
 
     // ── Notification scheduling (NOTIFICATIONS_IMPL.md §1) ────────────────────
     private static final int REQ_DAILY_REMINDER       = 1001;
@@ -145,6 +124,17 @@ public class MainActivity extends Activity {
     private static final String PREF_LAST_PLAYED      = "last_played_ts";
     private static final int NOTIF_CAP_PER_DAY        = 2;
     private static final int POST_NOTIFS_REQUEST_CODE = 9001;
+    // Cross-promo install verification — must match CROSS_PROMO list in game.html
+    // and the <queries> entries in AndroidManifest.xml. Targets are LIVE Play
+    // Store apps only. Pre-release siblings (PipeConnect) added
+    // here ONLY after they have Play links.
+    private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(
+        "com.pegasusgames.watersortpuzzle",
+        "com.pegasusgames.nonogram",
+        "com.pegasusgames.puzzle2048",
+        "com.pegasusgames.unblockpuzzle"
+    ));
+
 
     // AppLovin MAX objects
     private MaxAdView         bannerAd;
@@ -175,33 +165,20 @@ public class MainActivity extends Activity {
         RelativeLayout layout = new RelativeLayout(this);
         setContentView(layout);
 
-        // Banner container at bottom — themed background so empty space
-        // around the ad (when the ad is smaller than the container)
-        // blends with the WebView, not a black bar.
+        // Banner container at bottom
         bannerContainer = new FrameLayout(this);
         bannerContainer.setId(android.view.View.generateViewId());
-        bannerContainer.setBackgroundColor(android.graphics.Color.TRANSPARENT);
         RelativeLayout.LayoutParams bp = new RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT, dpToPx(50));
         bp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         layout.addView(bannerContainer, bp);
-        layout.setBackgroundColor(WEBVIEW_BG_COLOR);
 
-        // WebView above banner. Explicit ALIGN_PARENT_TOP + ABOVE so the
-        // height is unambiguously (screen - banner) instead of MATCH_PARENT
-        // with a constraint hint. Without this, the WebView occasionally
-        // extends BEHIND the banner area and steals touch from the AdView.
+        // WebView above banner
         webView = new WebView(this);
         RelativeLayout.LayoutParams wp = new RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        wp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         wp.addRule(RelativeLayout.ABOVE, bannerContainer.getId());
         layout.addView(webView, wp);
-        bannerContainer.bringToFront();
-        // Kill any transient WebView scroll during cold-start render storm.
-        webView.setVerticalScrollBarEnabled(false);
-        webView.setHorizontalScrollBarEnabled(false);
-        webView.setOverScrollMode(android.view.View.OVER_SCROLL_NEVER);
 
         if (0 != (getApplicationInfo().flags & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE))
             WebView.setWebContentsDebuggingEnabled(true);
@@ -308,19 +285,6 @@ public class MainActivity extends Activity {
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     private void initAdMob() {
-        // Register the emulator and any wired-up debug device as test devices so
-        // banner/interstitial/rewarded production unit IDs serve test ads in
-        // dev builds (otherwise live IDs return "no fill" on non-test devices).
-        boolean isDebuggable = (getApplicationInfo().flags
-            & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-        if (isDebuggable) {
-            com.google.android.gms.ads.RequestConfiguration cfg =
-                new com.google.android.gms.ads.RequestConfiguration.Builder()
-                    .setTestDeviceIds(java.util.Arrays.asList(
-                        com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR))
-                    .build();
-            MobileAds.setRequestConfiguration(cfg);
-        }
         MobileAds.initialize(this, s -> runOnUiThread(() -> {
             loadAdmobBanner(); loadAdmobInterstitial(); loadAdmobRewarded();
         }));
@@ -330,12 +294,9 @@ public class MainActivity extends Activity {
         admobBanner = new com.google.android.gms.ads.AdView(this);
         admobBanner.setAdSize(AdSize.BANNER);
         admobBanner.setAdUnitId(ADMOB_BANNER_UNIT_ID);
-        // Fill the container — WRAP_CONTENT lets the AdView re-measure
-        // when the test creative finally fills, causing visible jitter
-        // for the first ~60s while the cache warms.
-        FrameLayout.LayoutParams admobLp = new FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-        bannerContainer.addView(admobBanner, admobLp);
+        bannerContainer.addView(admobBanner, new FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT,
+            android.view.Gravity.CENTER));
         admobBanner.loadAd(new AdRequest.Builder().build());
     }
 
@@ -466,12 +427,8 @@ public class MainActivity extends Activity {
             });
     }
 
-    private void handlePurchase(Purchase purchase) {
+        private void handlePurchase(Purchase purchase) {
         if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED) return;
-        if (!verifyPurchaseSignature(purchase)) {
-            Log.w("IAP", "Signature verification failed; reward NOT granted.");
-            return;
-        }
 
         boolean isConsumable = false;
         for (String id : purchase.getProducts()) {
@@ -511,35 +468,6 @@ public class MainActivity extends Activity {
             if ("remove_ads".equals(id)) hideBanner();
         }
     }
-
-    // RSA-SHA1 signature check against the app's Play Console public key.
-    // Returns true if verified, false if invalid. Returns true (skip) when the
-    // public key is still a placeholder so local debug builds work before the
-    // real key is pasted in.
-    private boolean verifyPurchaseSignature(Purchase purchase) {
-        if (LICENSE_PUBLIC_KEY == null || LICENSE_PUBLIC_KEY.startsWith("PASTE_")) {
-            Log.w("Puzzle2048", "LICENSE_PUBLIC_KEY is placeholder — signature check skipped.");
-            return true;
-        }
-        String signedData = purchase.getOriginalJson();
-        String signature  = purchase.getSignature();
-        if (signedData == null || signature == null || signature.isEmpty()) return false;
-        try {
-            byte[] keyBytes = Base64.decode(LICENSE_PUBLIC_KEY, Base64.DEFAULT);
-            PublicKey pub = KeyFactory.getInstance("RSA")
-                .generatePublic(new X509EncodedKeySpec(keyBytes));
-            Signature sig = Signature.getInstance("SHA1withRSA");
-            sig.initVerify(pub);
-            sig.update(signedData.getBytes("UTF-8"));
-            return sig.verify(Base64.decode(signature, Base64.DEFAULT));
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException
-                 | java.security.SignatureException | java.security.InvalidKeyException
-                 | java.io.UnsupportedEncodingException | IllegalArgumentException e) {
-            Log.w("Puzzle2048", "Purchase signature verify error: " + e.getMessage());
-            return false;
-        }
-    }
-
     private void launchSubscription(String productId) {
         billingClient.queryProductDetailsAsync(
             QueryProductDetailsParams.newBuilder().setProductList(Arrays.asList(
@@ -577,30 +505,11 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void showInterstitial()              { showInterstitialAd(); }
         @JavascriptInterface public void showRewarded(String type)       { showRewardedAd(type); }
         @JavascriptInterface public void purchase(String id)             { launchPurchase(id); }
-        @JavascriptInterface public void restorePurchases()              { MainActivity.this.restorePurchases(); }
-        @JavascriptInterface public void openUrl(String url)             { try { startActivity(new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))); } catch (Exception e) {} }
         @JavascriptInterface public void hideBannerAd()                  { hideBanner(); }
         @JavascriptInterface public void showBannerAd()                  { showBanner(); }
-        @JavascriptInterface
-        public void setLeaderboardSize(int n) {
-          final int v = Math.max(1000, n);
-          runOnUiThread(() -> {
-            if (webView != null) {
-              webView.evaluateJavascript(
-                "window.LEADERBOARD_TOTAL_OVERRIDE = " + v + ";", null);
-            }
-          });
-        }
         @JavascriptInterface public void log(String msg)                 { /* disabled in release */ }
-
-        // Restricted to CROSS_PROMO_PACKAGES to prevent JS from probing
-        // arbitrary installed apps via this bridge.
-        @JavascriptInterface
-        public boolean isAppInstalled(String pkg) {
-            if (pkg == null || !CROSS_PROMO_PACKAGES.contains(pkg)) return false;
-            try { getPackageManager().getPackageInfo(pkg, 0); return true; }
-            catch (PackageManager.NameNotFoundException e) { return false; }
-        }
+        @JavascriptInterface public void restorePurchases()              { MainActivity.this.restorePurchases(); }
+        @JavascriptInterface public void openUrl(String url)             { try { startActivity(new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))); } catch (Exception e) {} }
 
         @JavascriptInterface
         public void scheduleNotification(String title, String body, long delayMs) {
@@ -733,6 +642,32 @@ public class MainActivity extends Activity {
                 .putLong(PREF_LAST_PLAYED, System.currentTimeMillis()).apply();
             cancelScheduledAlarm(REQ_DAILY_REMINDER);
         }
+
+        // Cross-promo "installed?" check — scoped to the sister-app allowlist
+        // so JS can't probe arbitrary packages.
+        @JavascriptInterface
+        public boolean isAppInstalled(String pkg) {
+            if (pkg == null || !CROSS_PROMO_PACKAGES.contains(pkg)) return false;
+            try {
+                getPackageManager().getPackageInfo(pkg, 0);
+                return true;
+            } catch (PackageManager.NameNotFoundException e) {
+                return false;
+            }
+        }
+
+        @JavascriptInterface
+        public void openPlayStore(String pkg) {
+            if (pkg == null || !CROSS_PROMO_PACKAGES.contains(pkg)) return;
+            runOnUiThread(() -> {
+                android.content.Intent i = new android.content.Intent(
+                    android.content.Intent.ACTION_VIEW,
+                    android.net.Uri.parse("https://play.google.com/store/apps/details?id=" + pkg));
+                i.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+                try { startActivity(i); } catch (Exception e) {}
+            });
+        }
+
         @JavascriptInterface
         public void shareText(String body) {
             if (body == null || body.isEmpty()) return;
@@ -748,11 +683,8 @@ public class MainActivity extends Activity {
             });
         }
 
-        // shareImage(base64) — best-effort. Writes the decoded PNG to the app's
-        // external cache and shares via FileProvider when configured; otherwise
-        // silently falls back to sharing the accompanying caption only. The JS
-        // side passes a caption + base64; the share-a-win shim treats shareImage
-        // as optional and the text-only path always works.
+        // shareImage(base64) — best-effort. The JS share-a-win shim treats
+        // shareImage as optional; the text-only path always works.
         @JavascriptInterface
         public void shareImage(String base64Png, String caption) {
             if (caption == null) caption = "";
@@ -768,12 +700,22 @@ public class MainActivity extends Activity {
                 }
             });
         }
+
+        @JavascriptInterface
+        public void setLeaderboardSize(int n) {
+          final int v = Math.max(1000, n);
+          runOnUiThread(() -> {
+            if (webView != null) {
+              webView.evaluateJavascript(
+                "window.LEADERBOARD_TOTAL_OVERRIDE = " + v + ";", null);
+            }
+          });
+        }
+
         // ── Play Games Services bridge (PGS v2) ───────────────────────────────
-        // All three methods are defensive — they no-op when PGS isn't yet
-        // configured (placeholder games_app_id in strings.xml, or PGS
-        // initialization fails). The synthetic weekly-tournament fallback in
-        // game.html stays active until real leaderboards are wired in Play
-        // Console. See scripts/growth_open_items.md §B.
+        // Defensive — no-op while the leaderboard isn't yet created in Play
+        // Console (JS LEADERBOARD_ID ships as TODO_ placeholder). The synthetic
+        // weekly-tournament fallback in game.html stays active until then.
         @JavascriptInterface
         public void submitScore(String leaderboardId, long score) {
             if (leaderboardId == null || leaderboardId.isEmpty()) return;
@@ -814,13 +756,9 @@ public class MainActivity extends Activity {
             try {
                 com.google.android.gms.tasks.Task<com.google.android.gms.games.AuthenticationResult> t =
                     com.google.android.gms.games.PlayGames.getGamesSignInClient(MainActivity.this).isAuthenticated();
-                // We cannot block here; return false synchronously and rely on the JS
-                // side to call signInPlayGames() to attempt + retry on next call.
                 return t != null && t.isComplete() && t.getResult() != null && t.getResult().isAuthenticated();
             } catch (Throwable e) { return false; }
         }
-
-
 
 
         @JavascriptInterface
@@ -948,8 +886,8 @@ public class MainActivity extends Activity {
         }
     }
 
-    private String getDailyReminderTitle() { return "Puzzle 2048"; }
-    private String getDailyReminderBody()  { return "Your daily 2048 challenge is ready!"; }
+    private String getDailyReminderTitle() { return "Afterimage"; }
+    private String getDailyReminderBody()  { return "Your daily echo puzzle is ready!"; }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,

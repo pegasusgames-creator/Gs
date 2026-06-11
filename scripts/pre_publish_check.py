@@ -2017,6 +2017,7 @@ def main():
         ('check_ad_network_switch.py',    'ad network switch'),
         ('check_pgs_init.py',             'pgs init'),
         ('check_cross_promo_pkgs.py',     'cross-promo pkgs'),
+        ('check_notif_prompt_timing.py',  'notif prompt timing'),
     ]:
         try:
             _r = _subprocess.run(
