@@ -6,6 +6,17 @@ Apps: `Nonogram`, `Puzzle2048`, `UnblockPuzzle`, `WaterSortPuzzle`, and the new 
 
 ---
 
+
+> **v2 (2026-06-11):** the skin now lives at **`scripts/_menu_skin.css`** —
+> the single editable source, synced into every app by
+> `reinject_all_shims.py` (grep `SHARED MENU SKIN v2`). v2 changes: filled
+> brand-tinted icon tiles (color-mix on `--accent`, literal-token fallback
+> first), world motif moved to the container's ::after with a radial
+> **center mask** + felt (~12-16%) strength, emblem scaled 1.2× with the
+> emblem→CTA gap tightened, wordmark-gradient cleanliness rule (≤3 stops).
+> Apps must define `--accent`. The embedded copies below are historical —
+> edit the master.
+
 ## How to run this
 
 > Implement `docs/MENU_REDESIGN.md`. Do Part A first (shared skin) on **WaterSortPuzzle only**, stop, and show me a screenshot of the menu (light + midnight). After I approve, apply Part A to the other four, then Part B per app. One commit per app. Do not touch gameplay screens.

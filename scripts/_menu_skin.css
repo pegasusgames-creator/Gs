@@ -1,0 +1,140 @@
+/* ===================== SHARED MENU SKIN v2 ===================== */
+/* Family look: depth + world + motion. Additive only. Layout owned   */
+/* by data-growth-shim="MENU". Per-app identity = --m-* tokens placed  */
+/* AFTER this block (same-specificity :root — later wins).             */
+/* SINGLE SOURCE: scripts/_menu_skin.css — synced into every app by    */
+/* scripts/reinject_all_shims.py. Edit the master, never the copies.   */
+
+/* ---- skin token defaults (overridden per app AFTER the block) ---- */
+:root{
+  --m-bg-top: var(--surface);
+  --m-vignette: rgba(0,0,0,0.16);
+  --m-motif: none;                 /* CSS gradients or 1 inline-SVG data-URI */
+  --m-motif-size: cover;           /* set e.g. 300px 300px to tile at native size */
+  --m-motif-opacity: 1;            /* multiplier on the motif's internal alphas */
+  --m-grain-opacity: 0.05;
+  --m-glow: rgba(0,0,0,0.18);      /* halo behind the illustration/emblem */
+  --m-cta-grad: linear-gradient(135deg, var(--accent, #888), var(--accent-dim, var(--accent, #666)));
+  --m-cta-glow: rgba(0,0,0,0.35);
+  --m-cta-glyph: "";               /* set "▶ " on apps whose CTA lacks one  */
+  --m-tile-grad: var(--menu-tile-bg, var(--surface, rgba(255,255,255,0.08)));
+  --m-tile-icon: var(--accent, currentColor);
+  --m-title-shadow: none;          /* title gradients stay per-app static CSS */
+  --m-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- background: base gradient + vignette in the container;        */
+/* ::before = film grain (full-bleed), ::after = world motif MASKED   */
+/* out of the central column so the CTA/tiles/emblem stay clean. ---- */
+#screen-menu, #menuScreen{
+  position: relative;
+  background:
+    radial-gradient(135% 105% at 50% 38%, transparent 55%, var(--m-vignette) 100%),
+    radial-gradient(125% 85% at 50% 16%, var(--m-bg-top) 0%, var(--bg) 72%) !important;
+  background-size: cover, cover;
+  background-position: center;
+}
+#screen-menu::before, #menuScreen::before,
+#screen-menu::after,  #menuScreen::after{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+}
+#screen-menu::before, #menuScreen::before{               /* film grain */
+  background-image: var(--m-grain); background-size: 160px 160px;
+  opacity: var(--m-grain-opacity); mix-blend-mode: overlay;
+}
+#screen-menu::after, #menuScreen::after{                 /* world motif */
+  background-image: var(--m-motif);
+  background-size: var(--m-motif-size);
+  background-position: center;
+  opacity: var(--m-motif-opacity);
+  -webkit-mask: radial-gradient(120% 70% at 50% 44%, transparent 0 40%, #000 64%);
+          mask: radial-gradient(120% 70% at 50% 44%, transparent 0 40%, #000 64%);
+}
+/* keep real menu content above the two decorative layers */
+#screen-menu > *, #menuScreen > *{ position: relative; z-index: 1; }
+
+/* ---- title: optional shadow only ---- */
+#screen-menu .menu-logo, #screen-menu .menu-title,
+#menuScreen .menu-title, #menuScreen .game-title h1, #menuScreen .menu-logo{
+  text-shadow: var(--m-title-shadow);
+}
+/* NOTE: the skin must NOT declare `background` on titles. The background
+   shorthand resets background-clip, and this higher-specificity rule would
+   beat each app's static `-webkit-background-clip:text` — painting a filled
+   gradient box. Title gradients are per-app static CSS. Keep wordmark
+   gradients CLEAN: ≤3 stops, no murky complementary midpoint, ≥4.5:1. */
+
+/* ---- mini-preview: halo + presence (v2: bigger, tighter to the CTA) ---- */
+#screen-menu [data-menu-illustration], #menuScreen [data-menu-illustration]{
+  filter: drop-shadow(0 8px 22px var(--m-glow));
+  animation: m-float 5.5s ease-in-out infinite;
+  margin: 4px 0 6px !important; /* v2: kill the dead emblem→CTA gap */
+}
+#screen-menu [data-menu-illustration] svg, #menuScreen [data-menu-illustration] svg{
+  transform: scale(1.2);
+  transform-origin: center bottom;
+}
+@keyframes m-float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+
+/* ---- CTA: hero gradient, depth, slow shine, optional play glyph ---- */
+#screen-menu .btn-primary, #screen-menu .btn-play, #screen-menu .menu-primary, #screen-menu .menu-tile-primary,
+#menuScreen .btn-primary, #menuScreen .btn-play, #menuScreen .menu-primary, #menuScreen .menu-tile-primary{
+  position: relative; overflow: hidden; border: none;
+  background: var(--m-cta-grad) !important;
+  box-shadow: 0 12px 28px -8px var(--m-cta-glow),
+              inset 0 1px 0 rgba(255,255,255,0.28),
+              inset 0 -2px 0 rgba(0,0,0,0.12) !important;
+}
+#screen-menu .btn-primary::before, #menuScreen .btn-primary::before,
+#screen-menu .menu-primary::before, #menuScreen .menu-primary::before,
+#screen-menu .menu-tile-primary::before, #menuScreen .menu-tile-primary::before{
+  content: var(--m-cta-glyph); font-weight: 900; margin-right: .15em;
+}
+#screen-menu .btn-primary::after, #menuScreen .btn-primary::after,
+#screen-menu .menu-primary::after, #menuScreen .menu-primary::after,
+#screen-menu .menu-tile-primary::after, #menuScreen .menu-tile-primary::after{
+  content:""; position:absolute; top:0; left:-65%; width:45%; height:100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.40), transparent);
+  transform: skewX(-18deg); animation: m-shine 4.8s ease-in-out infinite;
+}
+@keyframes m-shine{ 0%,70%{left:-65%} 88%,100%{left:135%} }
+
+/* ---- Tier-3 icons (v2): FILLED, brand-tinted, with depth — never the
+   thin outline-on-white "settings app" look. The first declarations are
+   the literal-token fallback; the color-mix block wins where supported. */
+#screen-menu .menu-icon-btn, #menuScreen .menu-icon-btn, #menuScreen .icon-btn{
+  background: var(--m-tile-grad) !important;
+  border: 1px solid var(--menu-tile-border, rgba(255,255,255,0.15)) !important;
+  background: linear-gradient(180deg,
+     color-mix(in srgb, var(--accent, #6688aa) 16%, var(--surface, #ffffff)),
+     color-mix(in srgb, var(--accent, #6688aa) 7%,  var(--surface, #ffffff))) !important;
+  border: 1px solid color-mix(in srgb, var(--accent, #6688aa) 24%, var(--border, rgba(0,0,0,0.15))) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 6px 14px -6px color-mix(in srgb, var(--accent, #6688aa) 45%, transparent),
+              inset 0 1px 0 rgba(255,255,255,.35) !important;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+#screen-menu .menu-icon-btn svg, #menuScreen .menu-icon-btn svg, #menuScreen .icon-btn svg{
+  color: var(--m-tile-icon) !important;
+  color: var(--accent, var(--m-tile-icon)) !important;
+  stroke: currentColor; stroke-width: 2.2 !important;
+}
+#screen-menu .menu-icon-label, #menuScreen .menu-icon-label{
+  color: color-mix(in srgb, var(--text, #222) 70%, var(--accent, #6688aa)) !important;
+  font-weight: 700;
+}
+#screen-menu .menu-icon-btn:active, #menuScreen .menu-icon-btn:active, #menuScreen .icon-btn:active{
+  transform: translateY(1px) scale(.96);
+  box-shadow: 0 2px 6px -3px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.20);
+}
+
+/* ---- resource pills: a little weight ---- */
+#screen-menu .stat-pill, #menuScreen .stat-pill,
+#screen-menu .coin-display, #menuScreen .coin-display{
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 2px 6px -3px rgba(0,0,0,0.25);
+}
+
+@media (prefers-reduced-motion: reduce){
+  #screen-menu *, #menuScreen *{ animation: none !important; }
+}
+/* =================== END SHARED MENU SKIN v2 =================== */

@@ -64,6 +64,26 @@ def normalized(block: str) -> str:
     return LID_RE.sub("var LEADERBOARD_ID = '@';", block)
 
 
+SKIN_RE = re.compile(
+    r"/\* =+ SHARED MENU SKIN v\d+ =+ \*/[\s\S]*?/\* =+ END SHARED MENU SKIN v\d+ =+ \*/"
+)
+
+
+def sync_menu_skin(app: str, s: str) -> tuple[str, bool]:
+    """Replace the embedded SHARED MENU SKIN block with scripts/_menu_skin.css.
+
+    Single-source rule: the master css is the only editable copy; per-app
+    --m-* identity tokens live AFTER the block and are untouched.
+    """
+    master = (REPO / "scripts/_menu_skin.css").read_text(encoding="utf-8").strip()
+    m = SKIN_RE.search(s)
+    if not m:
+        return s, False
+    if m.group(0) == master:
+        return s, False
+    return s[: m.start()] + master + s[m.end():], True
+
+
 def process(app: str) -> None:
     p = REPO / app / "android/app/src/main/assets/game.html"
     if not p.exists():
@@ -71,6 +91,10 @@ def process(app: str) -> None:
         return
     s = p.read_text(encoding="utf-8")
     replaced, appended = [], []
+
+    s, skin_changed = sync_menu_skin(app, s)
+    if skin_changed:
+        replaced.append("SKIN")
 
     for key, fname in SHIMS:
         block = master_block(fname)

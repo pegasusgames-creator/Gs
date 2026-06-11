@@ -302,6 +302,23 @@ ONE function renders on `showScreen('menuScreen')`. Owner: `scripts/_growth_shim
 
 **Leaderboard floor.** `buildStandings()` MUST use `var total = Math.max(1000, (window.LEADERBOARD_TOTAL_OVERRIDE | 0));`. Native bridge `setLeaderboardSize(int)` (`@JavascriptInterface`). 1000 floor stands.
 
+**Menu must pass (skin v2 gate — every NEW app, before merge).** The shared
+skin is `scripts/_menu_skin.css` (single source — synced into every app by
+`reinject_all_shims.py`; edit the master, never an embedded copy; grep
+`SHARED MENU SKIN v2` to confirm rollout). A new app's menu ships only when
+ALL true: (1) icon tiles **filled & brand-tinted with depth**, bold accent
+glyphs — never thin outline-on-white ("settings app" tell); (2) background
+motif **felt (~12-16% internal alpha)** and **masked out of the center**
+(the skin's ::after mask); no dead mid-section between emblem and CTA;
+(3) emblem **reads the core mechanic** in one glance; (4) hero CTA dominates
+(gradient + depth + glyph + shine); (5) wordmark gradient clean — ≤3 stops,
+no murky complementary midpoint, ≥4.5:1 vs bg; (6) reads as **family**
+(shared skin/layout) yet **distinct** (own world/accent) vs every sibling;
+(7) light + midnight (+ extra themes) correct, `prefers-reduced-motion`
+respected, gameplay untouched, no competing shim. Per-app `--m-*` identity
+tokens go AFTER the skin block; apps must define `--accent` (the v2 tile
+tint reads it).
+
 **Sizing.** Bottom-bar buttons at phone-resolution feel tiny on tablet. Add `@media (min-width: 600px)` + `@media (min-width: 900px)` for 10".
 
 **Canvas symmetry.** Game-canvas drawings (P2048 grid) center internal layout AND ensure frame has equal padding all four sides. P2048 fix: draw frame at `(ox, oy)` not `(ox - gridPad, oy - gridPad)`.

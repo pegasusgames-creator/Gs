@@ -19,3 +19,12 @@ to uniquely identify the day's rule against the whole catalog — a wrong
 never hard-fail. Hint reveals the rule's category only. Anti-patterns
 check: experiment-shelf history as the signature element, traffic-light
 emblem, no generic celebration (the rule "prints" into the win card).
+
+## Menu-must-pass checklist (skin v2 — see CLAUDE.md)
+- [x] Icon tiles filled & brand-tinted with depth (never outline-on-white)
+- [x] Motif felt (~12-16%) and masked out of the center; no dead mid-section
+- [x] Emblem reads the core mechanic in one glance
+- [x] Hero CTA dominates (gradient + depth + glyph + shine)
+- [x] Wordmark gradient clean (≤3 stops, no murky middle, ≥4.5:1)
+- [x] Family-consistent yet distinct vs every sibling
+- [x] Light + midnight correct; reduced-motion respected; no competing shim
