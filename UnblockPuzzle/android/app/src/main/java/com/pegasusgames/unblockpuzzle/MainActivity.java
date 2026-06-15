@@ -90,7 +90,7 @@ public class MainActivity extends Activity {
     ));
 
     private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
-        "undo", "skip", "life"
+        "undo", "skip", "life", "free_coins", "hint"
     ));
 
     // Daylight default = mint/sage. (Midnight unlock is dark.)
@@ -128,7 +128,17 @@ public class MainActivity extends Activity {
     private WebView      webView;
     private FrameLayout  bannerContainer;
     private BillingClient billingClient;
-    private String        pendingRewardType;
+    // ── Ad state (Part 2: FIFO reward queue + backoff + freshness + cadence) ──
+    private final java.util.ArrayDeque<String> pendingRewardTypes = new java.util.ArrayDeque<>();
+    private boolean interstitialLoading = false;
+    private boolean rewardedLoading = false;
+    private long interstitialLoadedAt = 0L;
+    private long rewardedLoadedAt = 0L;
+    private long lastInterstitialAt = 0L;
+    private int interstitialFails = 0;
+    private int rewardedFails = 0;
+    private static final long AD_FRESH_MS = 50L * 60L * 1000L;        // discard ads >50 min old
+    private static final long INTERSTITIAL_MIN_GAP_MS = 60L * 1000L;  // >=60s between interstitials
     private FirebaseAnalytics firebaseAnalytics;
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -213,7 +223,7 @@ public class MainActivity extends Activity {
     // ── AdMob fallback ────────────────────────────────────────────────────────
     private void initAdMob() {
         MobileAds.initialize(this, s -> runOnUiThread(() -> {
-            loadAdmobBanner(); loadAdmobInterstitial(); loadAdmobRewarded();
+            loadAdmobBanner(); loadAdmobInterstitial(); // rewarded is lazy-loaded (preloadRewarded)
         }));
     }
 
@@ -231,10 +241,15 @@ public class MainActivity extends Activity {
     }
 
     private void loadAdmobInterstitial() {
+        if (admobInterstitial != null || interstitialLoading) return; // one in flight/loaded at a time
+        interstitialLoading = true;
         InterstitialAd.load(this, ADMOB_INTERSTITIAL_UNIT_ID, new AdRequest.Builder().build(),
             new InterstitialAdLoadCallback() {
                 @Override public void onAdLoaded(InterstitialAd ad) {
                     admobInterstitial = ad;
+                    interstitialLoading = false;
+                    interstitialLoadedAt = System.currentTimeMillis();
+                    interstitialFails = 0;
                     ad.setFullScreenContentCallback(new FullScreenContentCallback() {
                         @Override public void onAdDismissedFullScreenContent() {
                             admobInterstitial = null; loadAdmobInterstitial();
@@ -244,26 +259,49 @@ public class MainActivity extends Activity {
                         }
                     });
                 }
-                @Override public void onAdFailedToLoad(LoadAdError e) { admobInterstitial = null; }
+                @Override public void onAdFailedToLoad(LoadAdError e) {
+                    admobInterstitial = null;
+                    interstitialLoading = false;
+                    // back off 8s/16s/32s/64s instead of re-requesting immediately
+                    new android.os.Handler(android.os.Looper.getMainLooper())
+                        .postDelayed(MainActivity.this::loadAdmobInterstitial, backoffMs(interstitialFails++));
+                }
             });
     }
 
     private void loadAdmobRewarded() {
+        if (admobRewarded != null || rewardedLoading) return; // one in flight/loaded at a time
+        rewardedLoading = true;
         RewardedAd.load(this, ADMOB_REWARDED_UNIT_ID, new AdRequest.Builder().build(),
             new RewardedAdLoadCallback() {
                 @Override public void onAdLoaded(RewardedAd ad) {
                     admobRewarded = ad;
+                    rewardedLoading = false;
+                    rewardedLoadedAt = System.currentTimeMillis();
+                    rewardedFails = 0;
                     ad.setFullScreenContentCallback(new FullScreenContentCallback() {
                         @Override public void onAdDismissedFullScreenContent() {
+                            pendingRewardTypes.clear();
                             admobRewarded = null; loadAdmobRewarded();
                         }
                         @Override public void onAdFailedToShowFullScreenContent(com.google.android.gms.ads.AdError e) {
+                            pendingRewardTypes.clear();
                             admobRewarded = null; loadAdmobRewarded();
                         }
                     });
                 }
-                @Override public void onAdFailedToLoad(LoadAdError e) { admobRewarded = null; }
+                @Override public void onAdFailedToLoad(LoadAdError e) {
+                    admobRewarded = null;
+                    rewardedLoading = false;
+                    new android.os.Handler(android.os.Looper.getMainLooper())
+                        .postDelayed(MainActivity.this::loadAdmobRewarded, backoffMs(rewardedFails++));
+                }
             });
+    }
+
+    // Exponential backoff for ad re-requests: 8s, 16s, 32s, then capped at 64s.
+    private long backoffMs(int fails) {
+        return Math.min(64000L, 8000L * (1L << Math.min(fails, 3)));
     }
 
     // ── Banner show/hide ──────────────────────────────────────────────────────
@@ -277,26 +315,45 @@ public class MainActivity extends Activity {
     // ── Interstitial show ─────────────────────────────────────────────────────
     private void showInterstitialAd() {
         runOnUiThread(() -> {
-            if (admobInterstitial != null) admobInterstitial.show(this);
+            long now = System.currentTimeMillis();
+            if (now - lastInterstitialAt < INTERSTITIAL_MIN_GAP_MS) return; // >=60s apart
+            if (admobInterstitial != null && now - interstitialLoadedAt > AD_FRESH_MS) {
+                admobInterstitial = null; loadAdmobInterstitial(); return;  // stale -> refresh, skip
+            }
+            if (admobInterstitial != null) {
+                lastInterstitialAt = now;
+                admobInterstitial.show(MainActivity.this);
+            } else {
+                loadAdmobInterstitial();
+            }
         });
     }
 
     // ── Rewarded show ─────────────────────────────────────────────────────────
     // Reward is granted ONLY in the reward callback, never in dismiss.
     private void showRewardedAd(String rewardType) {
+        // extra_life is a synonym for life — route to the existing life branch.
+        if ("extra_life".equals(rewardType)) rewardType = "life";
         if (!VALID_REWARD_TYPES.contains(rewardType)) return;
-        pendingRewardType = rewardType;
+        final String type = rewardType;
         runOnUiThread(() -> {
+            long now = System.currentTimeMillis();
+            if (admobRewarded != null && now - rewardedLoadedAt > AD_FRESH_MS) {
+                admobRewarded = null; loadAdmobRewarded();              // stale -> refresh
+                webView.evaluateJavascript("window.onAdNotReady && window.onAdNotReady();", null);
+                return;
+            }
             if (admobRewarded != null) {
-                admobRewarded.show(this, item -> {
-                    if (pendingRewardType == null) return;
-                    String js = "window.onAdReward && window.onAdReward('" + pendingRewardType + "');";
-                    webView.evaluateJavascript(js, null);
-                    pendingRewardType = null;
+                pendingRewardTypes.addLast(type);   // FIFO: back-to-back triggers can't drop a reward
+                admobRewarded.show(MainActivity.this, item -> {
+                    String t = pendingRewardTypes.pollFirst();
+                    if (t == null) return;
+                    webView.evaluateJavascript(
+                        "window.onAdReward && window.onAdReward('" + t + "');", null);
                 });
             } else {
+                loadAdmobRewarded();                // lazy: nothing ready -> start a load for next time
                 webView.evaluateJavascript("window.onAdNotReady && window.onAdNotReady();", null);
-                pendingRewardType = null;
             }
         });
     }
@@ -421,6 +478,7 @@ public class MainActivity extends Activity {
     private class NativeBridge {
         @JavascriptInterface public void showInterstitial()              { showInterstitialAd(); }
         @JavascriptInterface public void showRewarded(String type)       { showRewardedAd(type); }
+        @JavascriptInterface public void preloadRewarded()              { runOnUiThread(() -> loadAdmobRewarded()); }
         @JavascriptInterface public void purchase(String id)             { launchPurchase(id); }
         @JavascriptInterface public void hideBannerAd()                  { hideBanner(); }
         @JavascriptInterface public void showBannerAd()                  { showBanner(); }
