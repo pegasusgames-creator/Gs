@@ -106,14 +106,14 @@ body.midnight{
 .mg-card-desc{font-size:0.75rem;color:#607d8b;margin-top:2px;}
 .mg-card-btn{background:linear-gradient(135deg,#e040fb,#448aff);border:none;color:#fff;font-family:'Poppins',sans-serif;font-size:0.8rem;font-weight:700;padding:8px 14px;border-radius:20px;cursor:pointer;white-space:nowrap;}
 .mg-card-btn.claimed{background:#2ea043;color:#ffffff;cursor:default;}
-.menu-coins{position:absolute;top:20px;right:20px;background:#d4e2ec;border-radius:20px;padding:8px 16px;font-size:0.9rem;color:#ffd740;}
+.menu-coins{position:absolute;top:20px;right:20px;background:#d4e2ec;border-radius:20px;padding:8px 16px;font-size:0.9rem;color:var(--text,#13233f);}
 .menu-lives{position:absolute;top:20px;left:20px;background:#d4e2ec;border-radius:20px;padding:8px 16px;font-size:0.9rem;color:#ff5252;}
 /* GAME */
 #screen-game{background:#eef4f8;}
 .game-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#e0ecf3;border-bottom:1px solid #d4e2ec;}
 .hdr-level{font-size:1rem;font-weight:700;color:#3b6db8;}
 .hdr-lives{font-size:0.85rem;color:#ff5252;}
-.hdr-coins{font-size:0.85rem;color:#ffd740;}
+.hdr-coins{font-size:0.85rem;color:var(--text,#13233f);}
 .canvas-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:8px;}
 #gameCanvas{touch-action:none;cursor:pointer;}
 .game-footer{display:flex;align-items:center;justify-content:space-around;padding:12px 8px;background:#e0ecf3;border-top:1px solid #d4e2ec;}
@@ -449,7 +449,7 @@ body.midnight{ --m-bg-top:#1a1726; --m-vignette:rgba(0,0,0,.55);
   <div class="ls-header">
     <button class="ls-back" onclick="showScreen('menu')">←</button>
     <div class="ls-title">Select Level</div>
-    <div style="margin-left:auto;color:#ffd740;font-size:0.85rem;" id="ls-coins">🪙 0</div>
+    <div style="margin-left:auto;color:var(--text,#13233f);font-size:0.85rem;" id="ls-coins">🪙 0</div>
   </div>
   <div class="ls-scroll" id="ls-scroll"></div>
 </div>
@@ -459,7 +459,7 @@ body.midnight{ --m-bg-top:#1a1726; --m-vignette:rgba(0,0,0,.55);
   <div class="shop-header">
     <button class="ls-back" onclick="showScreen('menu')">←</button>
     <div class="ls-title">Shop</div>
-    <div style="margin-left:auto;color:#ffd740;font-size:0.85rem;" id="shop-coins">🪙 0</div>
+    <div style="margin-left:auto;color:var(--text,#13233f);font-size:0.85rem;" id="shop-coins">🪙 0</div>
   </div>
   <div class="shop-scroll">
     <div id="shop-items"></div>
@@ -735,7 +735,7 @@ function defaultSave(){
     currentLevel:0,
     completedLevels:[],
     levelStars:{},
-    coins:0,
+    coins:200,
     lives:5,
     maxLives:5,
     lastLifeTime:Date.now(),
@@ -991,12 +991,9 @@ function buildLevelSelect(){
   const scroll=document.getElementById('ls-scroll');
   scroll.innerHTML='';
   const sections=[
-    {label:'5×5 Beginner',range:[0,20]},
-    {label:'6×6 Easy',range:[20,50]},
-    {label:'7×7 Medium',range:[50,80]},
-    {label:'8×8 Hard',range:[80,110]},
-    {label:'9×9 Expert',range:[110,130]},
-    {label:'10×10 Master',range:[130,150]}
+    {label:'Two Colors — 1–20',range:[0,20]},
+    {label:'Three Colors — 21–40',range:[20,40]},
+    {label:'Dense Stacks — 41–60',range:[40,60]}
   ];
   sections.forEach(sec=>{
     const title=document.createElement('div');
@@ -1029,6 +1026,17 @@ function buildLevelSelect(){
     }
     scroll.appendChild(grid);
   });
+  // Endless tile at the end of the grid
+  const et=document.createElement('div');
+  et.className='ls-section-title';
+  et.textContent='Endless';
+  scroll.appendChild(et);
+  const eb=document.createElement('button');
+  eb.className='ls-bubble available';
+  eb.style.width='auto';eb.style.padding='0 18px';
+  eb.textContent='∞ Random board';
+  eb.onclick=function(){launchEndless();};
+  scroll.appendChild(eb);
 }
 
 // ============================================================
@@ -1463,7 +1471,7 @@ function renderGame(){
   if(!gWon&&arrSame(comp,L.target))winLevel();
 }
 function loadLevel(idx){
-  levelIndex=idx;isDailyChallenge=false;
+  levelIndex=idx;isDailyChallenge=false;isEndless=false;
   const row=CAMPAIGN[idx];
   L=gen(row.seed,BANDS[row.band]);
   if(!L){_showMsg('Level failed to generate');return;}
@@ -1505,7 +1513,7 @@ function winLevel(){
       persist();
       if(window.gOnDailyDone){try{window.gOnDailyDone();}catch(e){}}
     }
-  }else{
+  }else if(!isEndless){
     if(!save.completedLevels.includes(levelIndex))save.completedLevels.push(levelIndex);
     const prev=save.levelStars[levelIndex]||0;
     if(stars>prev)save.levelStars[levelIndex]=stars;
@@ -1537,6 +1545,7 @@ function shareResult(){
 }
 function nextLevel(){
   hideOverlay('overlay-complete');
+  if(isEndless){launchEndless();return;}
   if(isDailyChallenge){goMenu();return;}
   const next=levelIndex+1;
   if(next>=CAMPAIGN.length){goMenu();return;}
@@ -1573,6 +1582,23 @@ function spendCoinsHint(){
   if(save.coins<25){_showMsg('Not enough coins!');return;}
   save.coins-=25;persist();updateAllUI();hideOverlay('overlay-hint');giveHint();
 }
+
+// ── ENDLESS: unlimited random pictures, hard band ──
+let isEndless=false;
+function launchEndless(){
+  let L2=null,tries=0;
+  while(!L2&&tries<50){L2=gen(Math.floor(Math.random()*1e9)+1,BANDS.hard);tries++;}
+  if(!L2){_showMsg('Generation failed — try again');return;}
+  L=L2;L.band=BANDS.hard;isEndless=true;isDailyChallenge=false;levelStarted=true;
+  offsets=L.init.map(function(o){return o.slice();});gMoves=0;gWon=false;
+  document.getElementById('hdr-level').textContent='Endless';
+  sizing();
+  targetCells=makeGrid(targetEl,cellR);resultCells=makeGrid(resultEl,cellR);
+  paint(targetCells,L.target);
+  document.getElementById('resultWrap').classList.remove('win');
+  buildSheets();renderGame();updateAllUI();
+  showScreen('game');
+}
 // ── daily ──
 function startDailyChallenge(){
   const today=new Date().toISOString().split('T')[0];
@@ -1584,7 +1610,7 @@ function launchDailyLevel(){
   L=genDaily(dailyDay);
   if(!L){_showMsg('Daily failed to generate');return;}
   L.band=dailyBand(dailyDay);
-  isDailyChallenge=true;levelStarted=true;
+  isDailyChallenge=true;isEndless=false;levelStarted=true;
   offsets=L.init.map(function(o){return o.slice();});gMoves=0;gWon=false;
   document.getElementById('hdr-level').textContent='Daily #'+dailyDay;
   sizing();
@@ -2923,7 +2949,7 @@ function injectSeasonPassShop(){
         '<div class="shop-item-name">Season Pass</div>'+
         '<div class="shop-item-desc">Ad-free · +100 coins daily · all themes</div>'+
       '</div>'+
-      '<button id="x-season-btn" class="shop-item-price" onclick="xBuySeason()">'+btnTxt+'</button>';
+      '<button id="x-season-btn" class="shop-item-btn" onclick="xBuySeason()">'+btnTxt+'</button>';
     var anchor = scroll.querySelector('[onclick*="starter_pack"]');
     var anchorCard = anchor ? anchor.closest('.shop-item') : null;
     if (anchorCard) anchorCard.parentNode.insertBefore(div, anchorCard);
@@ -6000,5 +6026,53 @@ window.addEventListener('load',function(){
 })();
 </script>
 
+<script data-growth-shim="ADPREP">
+/* Part 2 wire-up: warm a rewarded ad shortly after the app is live (and after
+   each use, handled natively via reload-on-dismiss) so the first "watch ad"
+   tap of a session doesn't hit onAdNotReady. Rewarded is no longer loaded at
+   native init, so this is the only proactive load. Idempotent. */
+(function(){
+  if (window.__adPrepInstalled) return; window.__adPrepInstalled = true;
+  function prep(){ try { if (window.Android && window.Android.preloadRewarded) window.Android.preloadRewarded(); } catch(e){} }
+  if (document.readyState === 'complete') setTimeout(prep, 1500);
+  else window.addEventListener('load', function(){ setTimeout(prep, 1500); });
+})();
+</script>
+<script data-growth-shim="BANNERSCREEN">
+/* PART 1C: hide + pause the banner while the main menu or settings screen is
+   showing; show + resume only on gameplay/other screens. Native hideBannerAd()/
+   showBannerAd() also pause()/resume() the AdView (reconciled there, not here).
+   Never re-shows a banner the user removed via IAP/season pass. Idempotent. */
+(function(){
+  if(window.__bannerScreenInstalled) return; window.__bannerScreenInstalled=true;
+  function adsGone(){
+    try{ if(typeof adsRemoved==='function') return !!adsRemoved(); }catch(e){}
+    try{ if(typeof window.adsRemoved==='function') return !!window.adsRemoved(); }catch(e){}
+    var st=window.State||window.state||window.save||window.gameState;
+    try{ if(st&&st.removeAds) return true; }catch(e){}
+    return false;
+  }
+  var MENU=['menuScreen','screen-menu'];
+  var SET=['settingsScreen','screen-settings','overlay-settings'];
+  function vis(el){ return !!(el && el.offsetParent!==null); }
+  function anyVis(ids){ for(var i=0;i<ids.length;i++){ if(vis(document.getElementById(ids[i]))) return true; } return false; }
+  function update(){
+    if(!window.Android) return;
+    var hide = anyVis(MENU) || anyVis(SET);
+    try{
+      if(hide){ if(window.Android.hideBannerAd) window.Android.hideBannerAd(); }
+      else if(!adsGone()){ if(window.Android.showBannerAd) window.Android.showBannerAd(); }
+    }catch(e){}
+  }
+  function arm(){
+    var targets=MENU.concat(SET).map(function(id){return document.getElementById(id);}).filter(Boolean);
+    if(!targets.length){ setTimeout(arm,500); return; }
+    var obs=new MutationObserver(update);
+    targets.forEach(function(t){ obs.observe(t,{attributes:true,attributeFilter:['style','class']}); });
+    update();
+  }
+  if(document.readyState!=='loading') arm(); else window.addEventListener('load',arm);
+})();
+</script>
 </body>
 </html>

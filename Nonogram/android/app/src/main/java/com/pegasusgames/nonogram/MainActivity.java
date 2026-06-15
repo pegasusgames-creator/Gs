@@ -224,16 +224,21 @@ public class MainActivity extends Activity {
     private void initAdMob() {
         // Register the emulator as a test device so production unit IDs serve
         // test ads in dev builds (otherwise live IDs return "no fill").
+        // Family puzzle game — cap served creatives at G (never adult/suggestive).
+        // TODO: tagForChildDirectedTreatment / tagForUnderAgeOfConsent is a SEPARATE
+        // manual COPPA / Play-Families decision — do NOT set it here without that call.
+        com.google.android.gms.ads.RequestConfiguration.Builder cfgB =
+            new com.google.android.gms.ads.RequestConfiguration.Builder()
+                .setMaxAdContentRating(
+                    com.google.android.gms.ads.RequestConfiguration.MAX_AD_CONTENT_RATING_G);
         boolean isDebuggable = (getApplicationInfo().flags
             & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         if (isDebuggable) {
-            com.google.android.gms.ads.RequestConfiguration cfg =
-                new com.google.android.gms.ads.RequestConfiguration.Builder()
-                    .setTestDeviceIds(java.util.Arrays.asList(
-                        com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR))
-                    .build();
-            MobileAds.setRequestConfiguration(cfg);
+            // Serve test ads on the emulator/dev device with production unit IDs.
+            cfgB.setTestDeviceIds(java.util.Arrays.asList(
+                com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR));
         }
+        MobileAds.setRequestConfiguration(cfgB.build());
         MobileAds.initialize(this, s -> runOnUiThread(() -> {
             loadAdmobBanner(); loadAdmobInterstitial(); // rewarded is lazy-loaded (preloadRewarded)
         }));
@@ -318,10 +323,16 @@ public class MainActivity extends Activity {
 
     // ── Banner show/hide ──────────────────────────────────────────────────────
     private void hideBanner() {
-        runOnUiThread(() -> bannerContainer.setVisibility(android.view.View.GONE));
+        runOnUiThread(() -> {
+            bannerContainer.setVisibility(android.view.View.GONE);
+            if (admobBanner != null) admobBanner.pause();   // PART 1C: pause the AdView while hidden (menu/settings or ads-removed)
+        });
     }
     private void showBanner() {
-        runOnUiThread(() -> bannerContainer.setVisibility(android.view.View.VISIBLE));
+        runOnUiThread(() -> {
+            bannerContainer.setVisibility(android.view.View.VISIBLE);
+            if (admobBanner != null && bannerContainer.getVisibility() == android.view.View.VISIBLE) admobBanner.resume(); // PART 1C: don't resume a menu-hidden banner  // PART 1C: resume when shown on a gameplay screen
+        });
     }
 
     // ── Interstitial show ─────────────────────────────────────────────────────

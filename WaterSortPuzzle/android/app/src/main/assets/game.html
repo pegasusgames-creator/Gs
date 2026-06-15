@@ -1388,7 +1388,7 @@ const State = {
     try {
       const d = JSON.parse(localStorage.getItem('watersort_save') || '{}');
       this.currentLevel = d.currentLevel || 0;
-      this.coins = d.coins || 0;
+      this.coins = d.coins !== undefined ? d.coins : 200; // first-run float; returning players keep their value (incl. 0)
       this.levelStars = d.levelStars || {};
       this.completedLevels = d.completedLevels || {};
       this.removeAds = d.removeAds || false;
@@ -8745,6 +8745,42 @@ window.addEventListener('load',function(){
   function prep(){ try { if (window.Android && window.Android.preloadRewarded) window.Android.preloadRewarded(); } catch(e){} }
   if (document.readyState === 'complete') setTimeout(prep, 1500);
   else window.addEventListener('load', function(){ setTimeout(prep, 1500); });
+})();
+</script>
+<script data-growth-shim="BANNERSCREEN">
+/* PART 1C: hide + pause the banner while the main menu or settings screen is
+   showing; show + resume only on gameplay/other screens. Native hideBannerAd()/
+   showBannerAd() also pause()/resume() the AdView (reconciled there, not here).
+   Never re-shows a banner the user removed via IAP/season pass. Idempotent. */
+(function(){
+  if(window.__bannerScreenInstalled) return; window.__bannerScreenInstalled=true;
+  function adsGone(){
+    try{ if(typeof adsRemoved==='function') return !!adsRemoved(); }catch(e){}
+    try{ if(typeof window.adsRemoved==='function') return !!window.adsRemoved(); }catch(e){}
+    var st=window.State||window.state||window.save||window.gameState;
+    try{ if(st&&st.removeAds) return true; }catch(e){}
+    return false;
+  }
+  var MENU=['menuScreen','screen-menu'];
+  var SET=['settingsScreen','screen-settings','overlay-settings'];
+  function vis(el){ return !!(el && el.offsetParent!==null); }
+  function anyVis(ids){ for(var i=0;i<ids.length;i++){ if(vis(document.getElementById(ids[i]))) return true; } return false; }
+  function update(){
+    if(!window.Android) return;
+    var hide = anyVis(MENU) || anyVis(SET);
+    try{
+      if(hide){ if(window.Android.hideBannerAd) window.Android.hideBannerAd(); }
+      else if(!adsGone()){ if(window.Android.showBannerAd) window.Android.showBannerAd(); }
+    }catch(e){}
+  }
+  function arm(){
+    var targets=MENU.concat(SET).map(function(id){return document.getElementById(id);}).filter(Boolean);
+    if(!targets.length){ setTimeout(arm,500); return; }
+    var obs=new MutationObserver(update);
+    targets.forEach(function(t){ obs.observe(t,{attributes:true,attributeFilter:['style','class']}); });
+    update();
+  }
+  if(document.readyState!=='loading') arm(); else window.addEventListener('load',arm);
 })();
 </script>
 </body>

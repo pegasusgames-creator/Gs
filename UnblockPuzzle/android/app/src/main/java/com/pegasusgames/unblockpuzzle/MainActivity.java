@@ -222,6 +222,14 @@ public class MainActivity extends Activity {
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     private void initAdMob() {
+        // Family puzzle game — cap served creatives at G (never adult/suggestive).
+        // TODO: tagForChildDirectedTreatment / tagForUnderAgeOfConsent is a SEPARATE
+        // manual COPPA / Play-Families decision — do NOT set it here without that call.
+        MobileAds.setRequestConfiguration(
+            new com.google.android.gms.ads.RequestConfiguration.Builder()
+                .setMaxAdContentRating(
+                    com.google.android.gms.ads.RequestConfiguration.MAX_AD_CONTENT_RATING_G)
+                .build());
         MobileAds.initialize(this, s -> runOnUiThread(() -> {
             loadAdmobBanner(); loadAdmobInterstitial(); // rewarded is lazy-loaded (preloadRewarded)
         }));
@@ -306,10 +314,16 @@ public class MainActivity extends Activity {
 
     // ── Banner show/hide ──────────────────────────────────────────────────────
     private void hideBanner() {
-        runOnUiThread(() -> bannerContainer.setVisibility(android.view.View.GONE));
+        runOnUiThread(() -> {
+            bannerContainer.setVisibility(android.view.View.GONE);
+            if (admobBanner != null) admobBanner.pause();   // PART 1C: pause the AdView while hidden (menu/settings or ads-removed)
+        });
     }
     private void showBanner() {
-        runOnUiThread(() -> bannerContainer.setVisibility(android.view.View.VISIBLE));
+        runOnUiThread(() -> {
+            bannerContainer.setVisibility(android.view.View.VISIBLE);
+            if (admobBanner != null && bannerContainer.getVisibility() == android.view.View.VISIBLE) admobBanner.resume(); // PART 1C: don't resume a menu-hidden banner  // PART 1C: resume when shown on a gameplay screen
+        });
     }
 
     // ── Interstitial show ─────────────────────────────────────────────────────
