@@ -3538,7 +3538,7 @@ function injectSeasonPassShop(){
         '<div class="shop-item-name">Season Pass</div>'+
         '<div class="shop-item-desc">Ad-free · +100 coins daily · all themes</div>'+
       '</div>'+
-      '<button id="x-season-btn" class="shop-item-price" onclick="xBuySeason()">'+btnTxt+'</button>';
+      '<button id="x-season-btn" class="shop-item-btn" onclick="xBuySeason()">'+btnTxt+'</button>';
     var anchor = scroll.querySelector('[onclick*="starter_pack"]');
     var anchorCard = anchor ? anchor.closest('.shop-item') : null;
     if (anchorCard) anchorCard.parentNode.insertBefore(div, anchorCard);
