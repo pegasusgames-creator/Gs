@@ -50,7 +50,7 @@ body.midnight .modal p{color:#7d93b6;}
 .active{display:flex!important;}
 /* MENU */
 #screen-menu{align-items:center;justify-content:center;background:var(--bg,#e9eef7);}
-.menu-logo{font-size:3rem;font-weight:800;letter-spacing:2px;margin-bottom:8px;background:linear-gradient(90deg,#0fb5c9,#2563b0,#e85d5d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.menu-logo{font-size:3rem;font-weight:800;letter-spacing:2px;margin-bottom:8px;background:linear-gradient(90deg,#0e7490,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .menu-sub{color:#607d8b;font-size:0.9rem;margin-bottom:40px;}
 .menu-btn{width:220px;padding:14px 0;border:none;border-radius:30px;font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;margin:8px;transition:transform 0.1s,box-shadow 0.1s;}
 .menu-btn:active{transform:scale(0.96);}
@@ -92,6 +92,7 @@ body.midnight{
 }
 .menu-primary{width:240px;padding:18px 0;border:none;border-radius:32px;font-family:'Poppins',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:2px;cursor:pointer;background:linear-gradient(135deg,#448aff,#69f0ae);color:#0f1923;box-shadow:0 0 24px rgba(105,240,174,0.35),0 0 60px rgba(68,138,255,0.25);transition:transform 0.1s;}
 .menu-primary:active{transform:scale(0.97);}
+.menu-primary .play-sub{display:block;font-size:0.78rem;font-weight:600;letter-spacing:1px;opacity:0.82;margin-top:3px;text-transform:none;}
 .menu-pair{flex:1;padding:12px 0;border:1.5px solid #d4e2ec;border-radius:18px;font-family:'Poppins',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:1.4px;cursor:pointer;background:#e0ecf3;color:#3b6db8;transition:transform 0.1s,border-color 0.1s,color 0.1s;}
 .menu-pair:active{transform:scale(0.97);border-color:#448aff;color:#69f0ae;}
 .menu-icon-row{display:flex;gap:14px;margin-top:18px;}
@@ -379,7 +380,7 @@ body.midnight{
   --m-cta-glow: rgba(37,99,176,.42); --m-glow: rgba(15,181,201,.30);
   --m-cta-glyph:"▶ "; --m-tile-icon:#2b4a86;
   /* motif: graph paper + a cube with its dashed afterimage */
-  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cpath d='M0 0H360M0 60H360M0 120H360M0 180H360M0 240H360M0 300H360M0 0V360M60 0V360M120 0V360M180 0V360M240 0V360M300 0V360' stroke='%232b4a86' stroke-width='1' opacity='0.22' fill='none'/%3E%3Crect x='186' y='126' width='44' height='44' rx='9' fill='%230fb5c9' opacity='0.18'/%3E%3Crect x='126' y='186' width='44' height='44' rx='9' fill='none' stroke='%23e85d5d' stroke-width='3' stroke-dasharray='7 6' opacity='0.22'/%3E%3C/svg%3E");
+  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cpath d='M0 0H360M0 60H360M0 120H360M0 180H360M0 240H360M0 300H360M0 0V360M60 0V360M120 0V360M180 0V360M240 0V360M300 0V360' stroke='%232b4a86' stroke-width='1' opacity='0.22' fill='none'/%3E%3C/svg%3E");
   --m-motif-size: 360px 360px;
 }
 body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
@@ -396,7 +397,7 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
   <div class="menu-coins" id="menu-coins">🪙 0</div>
   <div class="menu-logo">AFTERIMAGE</div>
   <div class="menu-sub">Your echo moves two behind. Use it.</div>
-  <button class="menu-primary" onclick="startGame()">PLAY</button>
+  <button class="menu-primary" onclick="startGame()"><span>PLAY</span><span class="play-sub" id="aim-play-sub">Level 1</span></button>
   <button class="menu-pair" id="dailyChallengeBtn" onclick="startDailyChallenge()" style="width:240px;margin-top:14px">Daily puzzle</button>
   <div class="menu-icon-row">
     <button class="menu-icon-btn" onclick="showLevelSelect()" aria-label="Levels">
@@ -733,6 +734,9 @@ const BANDS={easy:{par:[5,8],walls:[4,6]},med:{par:[9,13],walls:[6,9]},hard:{par
 // ============================================================
 const SAVE_KEY = 'afterimage_save';
 let save = loadSave();
+// Expose the live save object as window.state so the shared menu shim synth
+// header (which reads window.State/window.state) shows real lives/coins, not 0/0.
+try{ Object.defineProperty(window,'state',{configurable:true,get:function(){return save;}}); }catch(e){}
 
 function defaultSave(){
   return {
@@ -948,6 +952,7 @@ function updateAllUI(){
   const coinsStr='🪙 '+save.coins;
   document.getElementById('menu-lives').textContent=livesStr;
   document.getElementById('menu-coins').textContent=coinsStr;
+  {var _ps=document.getElementById('aim-play-sub'); if(_ps) _ps.textContent='Level '+((save.currentLevel||0)+1);}
   document.getElementById('hdr-lives').textContent=livesStr;
   document.getElementById('hdr-coins').textContent=coinsStr;
   document.getElementById('ls-coins').textContent=coinsStr;
@@ -5668,14 +5673,14 @@ window.addEventListener('load',function(){
           '<rect x="2" y="2" width="92" height="76" rx="6" fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.5"/>'+
           '<path d="M2 28 H94 M2 54 H94 M34 2 V78 M66 2 V78" stroke="currentColor" stroke-width="1.1" opacity="0.28"/>'+
           // the echo: clearly ghosted, trailing two cells behind the you-cube
-          '<rect x="8" y="33" width="22" height="19" rx="5" fill="#e85d5d" opacity="0.16"/>'+
-          '<rect x="8" y="33" width="22" height="19" rx="5" fill="none" stroke="#e85d5d" stroke-width="3" stroke-dasharray="6 4"/>'+
-          '<rect x="39" y="33" width="22" height="19" rx="5" fill="#e85d5d" opacity="0.10"/>'+
-          '<rect x="39" y="33" width="22" height="19" rx="5" fill="none" stroke="#e85d5d" stroke-width="2.2" stroke-dasharray="5 4" opacity="0.55"/>'+
+          '<rect x="8" y="33" width="22" height="19" rx="5" fill="#0fb5c9" opacity="0.14"/>'+
+          '<rect x="8" y="33" width="22" height="19" rx="5" fill="none" stroke="#0fb5c9" stroke-width="3" stroke-dasharray="6 4"/>'+
+          '<rect x="39" y="33" width="22" height="19" rx="5" fill="#0fb5c9" opacity="0.10"/>'+
+          '<rect x="39" y="33" width="22" height="19" rx="5" fill="none" stroke="#0fb5c9" stroke-width="2.2" stroke-dasharray="5 4" opacity="0.55"/>'+
           // the you-cube: solid cyan with a glow halo
           '<rect x="66" y="30" width="26" height="24" rx="6" fill="#0fb5c9" style="filter:drop-shadow(0 0 7px #0fb5c9)"/>'+
           '<rect x="70" y="34" width="10" height="6" rx="3" fill="#ffffff" opacity="0.5"/>'+
-          '<circle cx="18" cy="68" r="7" fill="none" stroke="#d29922" stroke-width="3"/>'+
+          
           '<rect x="70" y="59" width="20" height="17" rx="4" fill="none" stroke="#2ea043" stroke-width="2.4" stroke-dasharray="4 3"/>'+
         '</svg>';
     } else if (t.indexOf('pipe') >= 0) {
