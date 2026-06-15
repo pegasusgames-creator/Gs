@@ -41,6 +41,13 @@ android {
 
 dependencies {
     implementation 'com.google.android.gms:play-services-ads:25.3.0'
+    // AdMob mediation adapters — network credentials live in the AdMob
+    // dashboard mediation groups (see MEDIATION_SETUP.md), not the APK.
+    implementation 'com.google.ads.mediation:facebook:6.21.0.3'
+    implementation 'com.google.ads.mediation:unity:4.18.0.0'
+    implementation 'com.google.ads.mediation:mintegral:17.1.61.0'
+    implementation 'com.google.ads.mediation:pangle:8.0.0.5.0'
+    implementation 'com.google.ads.mediation:inmobi:11.3.0.0'
     implementation 'com.android.billingclient:billing:8.3.0'
     implementation platform('com.google.firebase:firebase-bom:34.12.0')
     implementation 'com.google.firebase:firebase-analytics'
