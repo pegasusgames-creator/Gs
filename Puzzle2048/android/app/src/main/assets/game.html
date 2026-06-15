@@ -6930,5 +6930,17 @@ window.addEventListener('load',function(){
   setInterval(ensureManageRow, 1500);
 })();
 </script>
+<script data-growth-shim="ADPREP">
+/* Part 2 wire-up: warm a rewarded ad shortly after the app is live (and after
+   each use, handled natively via reload-on-dismiss) so the first "watch ad"
+   tap of a session doesn't hit onAdNotReady. Rewarded is no longer loaded at
+   native init, so this is the only proactive load. Idempotent. */
+(function(){
+  if (window.__adPrepInstalled) return; window.__adPrepInstalled = true;
+  function prep(){ try { if (window.Android && window.Android.preloadRewarded) window.Android.preloadRewarded(); } catch(e){} }
+  if (document.readyState === 'complete') setTimeout(prep, 1500);
+  else window.addEventListener('load', function(){ setTimeout(prep, 1500); });
+})();
+</script>
 </body>
 </html>
