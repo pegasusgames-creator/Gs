@@ -8355,5 +8355,31 @@ window.addEventListener('load',function(){
   if(document.readyState!=='loading') arm(); else window.addEventListener('load',arm);
 })();
 </script>
+<script data-growth-shim="MENUEXTRAS">
+/* PART 1D follow-up: add Missions + Stats as a second menu icon row (runtime-
+   injected, like the 6-tile siblings, so the static tile count stays <=6).
+   Idempotent; re-checks on menu show in case the menu re-renders. */
+(function(){
+  if(window.__menuExtrasInstalled) return; window.__menuExtrasInstalled=true;
+  var statsSvg='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>';
+  var missSvg='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6"/></svg>';
+  function iconBtn(id,label,svg,onTap){var b=document.createElement('button');b.className='menu-icon-btn';b.id=id;b.setAttribute('aria-label',label);b.innerHTML=svg+'<span class="menu-icon-label">'+label+'</span>';b.onclick=onTap;return b;}
+  function ensure(){
+    var iconRow=document.querySelector('#screen-menu .menu-icon-row, #menuScreen .menu-icon-row');
+    if(!iconRow) return;
+    if(document.getElementById('xMenuExtras')) return;
+    var row2=document.createElement('div');
+    row2.className='menu-icon-row'; row2.id='xMenuExtras'; row2.style.marginTop='10px';
+    row2.appendChild(iconBtn('xMenuMissions','Missions',missSvg,function(){ showScreen('missions'); }));
+    row2.appendChild(iconBtn('xMenuStats','Stats',statsSvg,function(){ showScreen('stats'); }));
+    iconRow.parentNode.insertBefore(row2, iconRow.nextSibling);
+  }
+  function arm(){ ensure(); setTimeout(ensure,200); setTimeout(ensure,700); }
+  if(document.readyState!=='loading') arm(); else window.addEventListener('load',arm);
+  // re-assert if the menu gets rebuilt
+  var menu=document.querySelector('#screen-menu, #menuScreen');
+  if(menu){ try{ new MutationObserver(function(){ if(!document.getElementById('xMenuExtras')) ensure(); }).observe(menu,{childList:true,subtree:true}); }catch(e){} }
+})();
+</script>
 </body>
 </html>
