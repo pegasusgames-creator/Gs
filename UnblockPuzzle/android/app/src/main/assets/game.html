@@ -2647,9 +2647,9 @@ function buyLivesFromOverlay(){
 function buildLevelSelect(){
   const grid = document.getElementById('lsGrid');
   grid.innerHTML = '';
-  const sections = [{idx:0,label:'Easy — Levels 1–20'},{idx:20,label:'Medium — Levels 21–50'},{idx:50,label:'Hard — Levels 51–100'},{idx:100,label:'Expert — Levels 101–130'},{idx:130,label:'Master — Levels 131–150'}];
+  const sections = [{idx:0,label:'Easy — Levels 1–20'},{idx:20,label:'Medium — Levels 21–50'},{idx:50,label:'Hard — Levels 51–100'},{idx:100,label:'Expert — Levels 101–150'},{idx:150,label:'Master — Levels 151–250'},{idx:250,label:'Grandmaster — Levels 251–380'},{idx:380,label:'Legend — Levels 381–500'}];
   let secIdx = 0;
-  for(let i=0; i<150; i++){
+  for(let i=0; i<LEVELS.length; i++){
     if(secIdx < sections.length && i === sections[secIdx].idx){
       const sec = document.createElement('div');
       sec.className = 'ls-section';
@@ -7670,6 +7670,18 @@ window.addEventListener('load',function(){
     settings.appendChild(row);
   }
   setInterval(ensureManageRow, 1500);
+})();
+</script>
+<script data-growth-shim="ADPREP">
+/* Part 2 wire-up: warm a rewarded ad shortly after the app is live (and after
+   each use, handled natively via reload-on-dismiss) so the first "watch ad"
+   tap of a session doesn't hit onAdNotReady. Rewarded is no longer loaded at
+   native init, so this is the only proactive load. Idempotent. */
+(function(){
+  if (window.__adPrepInstalled) return; window.__adPrepInstalled = true;
+  function prep(){ try { if (window.Android && window.Android.preloadRewarded) window.Android.preloadRewarded(); } catch(e){} }
+  if (document.readyState === 'complete') setTimeout(prep, 1500);
+  else window.addEventListener('load', function(){ setTimeout(prep, 1500); });
 })();
 </script>
 </body>

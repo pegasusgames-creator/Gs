@@ -1388,11 +1388,15 @@ function buildLevelSelect(){
   scroll.innerHTML='';
   const sections=[
     {label:'5×5 Beginner',range:[0,20]},
-    {label:'6×6 Easy',range:[20,50]},
-    {label:'7×7 Medium',range:[50,80]},
-    {label:'8×8 Hard',range:[80,110]},
-    {label:'9×9 Expert',range:[110,130]},
-    {label:'10×10 Master',range:[130,150]}
+    {label:'6×6 Easy',range:[20,41]},
+    {label:'7×7 Medium',range:[41,61]},
+    {label:'8×8 Hard',range:[61,81]},
+    {label:'9×9 Expert',range:[81,101]},
+    {label:'10×10 Master',range:[101,122]},
+    {label:'6×6 Marathon',range:[122,200]},
+    {label:'7×7 Marathon',range:[200,300]},
+    {label:'8×8 Gauntlet',range:[300,400]},
+    {label:'9×9 Legend',range:[400,500]}
   ];
   sections.forEach(sec=>{
     const title=document.createElement('div');
@@ -6611,5 +6615,17 @@ window.addEventListener('load',function(){
 })();
 </script>
 
+<script data-growth-shim="ADPREP">
+/* Part 2 wire-up: warm a rewarded ad shortly after the app is live (and after
+   each use, handled natively via reload-on-dismiss) so the first "watch ad"
+   tap of a session doesn't hit onAdNotReady. Rewarded is no longer loaded at
+   native init, so this is the only proactive load. Idempotent. */
+(function(){
+  if (window.__adPrepInstalled) return; window.__adPrepInstalled = true;
+  function prep(){ try { if (window.Android && window.Android.preloadRewarded) window.Android.preloadRewarded(); } catch(e){} }
+  if (document.readyState === 'complete') setTimeout(prep, 1500);
+  else window.addEventListener('load', function(){ setTimeout(prep, 1500); });
+})();
+</script>
 </body>
 </html>
