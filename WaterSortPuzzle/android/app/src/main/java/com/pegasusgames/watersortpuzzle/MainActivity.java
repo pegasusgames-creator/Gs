@@ -35,20 +35,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import java.util.Calendar;
 
-// AppLovin MAX SDK
-import com.applovin.mediation.MaxAd;
-import com.applovin.mediation.MaxAdListener;
-import com.applovin.mediation.MaxAdViewAdListener;
-import com.applovin.mediation.MaxError;
-import com.applovin.mediation.MaxReward;
-import com.applovin.mediation.MaxRewardedAdListener;
-import com.applovin.mediation.ads.MaxAdView;
-import com.applovin.mediation.ads.MaxInterstitialAd;
-import com.applovin.mediation.ads.MaxRewardedAd;
-import com.applovin.sdk.AppLovinMediationProvider;
-import com.applovin.sdk.AppLovinSdk;
-import com.applovin.sdk.AppLovinSdkInitializationConfiguration;
-
 // AdMob fallback
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -83,23 +69,6 @@ import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends Activity {
-
-    // ── AppLovin MAX ──────────────────────────────────────────────────────────
-    // Disabled until this developer is approved on AppLovin. The app ships
-    // AdMob-only for now. To re-enable when the SDK key is provided:
-    //   1. Paste the real SDK key and unit IDs below
-    //   2. Flip USE_APPLOVIN to true (or revert to the !startsWith("ENTER_") check)
-    //   3. The "if (false /* MAX_ENABLED */)" blocks below will then short-circuit
-    //      to the MAX paths again
-    // Paste real values here and flip USE_APPLOVIN to true when the AppLovin
-    // developer account is approved.
-    private static final String MAX_SDK_KEY              = ""; // TODO: paste SDK key
-    private static final String MAX_BANNER_UNIT_ID       = ""; // TODO: paste banner unit id
-    private static final String MAX_INTERSTITIAL_UNIT_ID = ""; // TODO: paste interstitial unit id
-    private static final String MAX_REWARDED_UNIT_ID     = ""; // TODO: paste rewarded unit id
-    // MAX_ENABLED — AppLovin disabled; app uses AdMob only. Flip to true once
-    // the SDK key above is real.
-    private static final boolean USE_APPLOVIN = false;
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     // Get from: apps.admob.com → Your App → Ad Units
@@ -174,10 +143,6 @@ public class MainActivity extends Activity {
     private static final int NOTIF_CAP_PER_DAY        = 2;
     private static final int POST_NOTIFS_REQUEST_CODE = 9001;
 
-    // AppLovin MAX objects
-    private MaxAdView         bannerAd;
-    private MaxInterstitialAd interstitialAd;
-    private MaxRewardedAd     rewardedAd;
     // AdMob objects
     private com.google.android.gms.ads.AdView admobBanner;
     private InterstitialAd admobInterstitial;
@@ -198,7 +163,6 @@ public class MainActivity extends Activity {
         // client call; without this every PGS bridge method throws and no-ops.
         try { com.google.android.gms.games.PlayGamesSdk.initialize(this); }
         catch (Throwable e) { Log.d("PGS", "PlayGamesSdk.initialize no-op: " + e.getMessage()); }
-
 
         RelativeLayout layout = new RelativeLayout(this);
         setContentView(layout);
@@ -267,72 +231,8 @@ public class MainActivity extends Activity {
         // on first launch. The request is triggered by the JS pre-prompt
         // overlay after the first positive milestone (first level complete).
 
-        if (USE_APPLOVIN) initAppLovin(); else initAdMob();
+        initAdMob();
         setupBilling();
-    }
-
-    // ── AppLovin MAX ──────────────────────────────────────────────────────────
-    private void initAppLovin() {
-        bannerAd = new MaxAdView(MAX_BANNER_UNIT_ID, this);
-        bannerAd.setListener(new BannerListener());
-        bannerContainer.addView(bannerAd, new FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-
-        AppLovinSdkInitializationConfiguration cfg =
-            AppLovinSdkInitializationConfiguration.builder(MAX_SDK_KEY, this)
-                .setMediationProvider(AppLovinMediationProvider.MAX).build();
-        AppLovinSdk.getInstance(this).initialize(cfg, c -> runOnUiThread(() -> {
-            bannerAd.loadAd();
-            loadInterstitialAd();
-            loadRewardedAd();
-        }));
-    }
-
-    private class BannerListener implements MaxAdViewAdListener {
-        @Override public void onAdLoaded(MaxAd ad) {}
-        @Override public void onAdLoadFailed(String id, MaxError e) {}
-        @Override public void onAdClicked(MaxAd ad) {}
-        @Override public void onAdExpanded(MaxAd ad) {}
-        @Override public void onAdCollapsed(MaxAd ad) {}
-        @Override public void onAdDisplayed(MaxAd ad) {}
-        @Override public void onAdDisplayFailed(MaxAd ad, MaxError e) {}
-        @Override public void onAdHidden(MaxAd ad) {}
-    }
-
-    private void loadInterstitialAd() {
-        interstitialAd = new MaxInterstitialAd(MAX_INTERSTITIAL_UNIT_ID, this);
-        interstitialAd.setListener(new MaxAdListener() {
-            @Override public void onAdLoaded(MaxAd ad) {}
-            @Override public void onAdLoadFailed(String id, MaxError e) {}
-            @Override public void onAdDisplayed(MaxAd ad) {}
-            @Override public void onAdDisplayFailed(MaxAd ad, MaxError e) { interstitialAd.loadAd(); }
-            @Override public void onAdClicked(MaxAd ad) {}
-            @Override public void onAdHidden(MaxAd ad) { interstitialAd.loadAd(); }
-        });
-        interstitialAd.loadAd();
-    }
-
-    private void loadRewardedAd() {
-        rewardedAd = MaxRewardedAd.getInstance(MAX_REWARDED_UNIT_ID, this);
-        rewardedAd.setListener(new MaxRewardedAdListener() {
-            @Override public void onAdLoaded(MaxAd ad) {}
-            @Override public void onAdLoadFailed(String id, MaxError e) {}
-            @Override public void onAdDisplayed(MaxAd ad) {}
-            @Override public void onAdDisplayFailed(MaxAd ad, MaxError e) {
-                rewardedAd.loadAd();
-                runOnUiThread(() ->
-                    webView.evaluateJavascript("window.onAdNotReady && window.onAdNotReady();", null));
-            }
-            @Override public void onAdClicked(MaxAd ad) {}
-            @Override public void onAdHidden(MaxAd ad) { rewardedAd.loadAd(); }
-            @Override public void onUserRewarded(MaxAd ad, MaxReward r) {
-                if (pendingRewardType == null) return;
-                String js = "window.onAdReward && window.onAdReward('" + pendingRewardType + "');";
-                runOnUiThread(() -> webView.evaluateJavascript(js, null));
-                pendingRewardType = null;
-            }
-        });
-        rewardedAd.loadAd();
     }
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
@@ -414,11 +314,7 @@ public class MainActivity extends Activity {
     // ── Interstitial show ─────────────────────────────────────────────────────
     private void showInterstitialAd() {
         runOnUiThread(() -> {
-            if (USE_APPLOVIN) {
-                if (interstitialAd != null && interstitialAd.isReady()) interstitialAd.showAd();
-            } else {
-                if (admobInterstitial != null) admobInterstitial.show(this);
-            }
+            if (admobInterstitial != null) admobInterstitial.show(this);
         });
     }
 
@@ -428,25 +324,16 @@ public class MainActivity extends Activity {
         if (!VALID_REWARD_TYPES.contains(rewardType)) return;
         pendingRewardType = rewardType;
         runOnUiThread(() -> {
-            if (USE_APPLOVIN) {
-                if (rewardedAd != null && rewardedAd.isReady()) {
-                    rewardedAd.showAd();
-                } else {
-                    webView.evaluateJavascript("window.onAdNotReady && window.onAdNotReady();", null);
+            if (admobRewarded != null) {
+                admobRewarded.show(this, item -> {
+                    if (pendingRewardType == null) return;
+                    String js = "window.onAdReward && window.onAdReward('" + pendingRewardType + "');";
+                    webView.evaluateJavascript(js, null);
                     pendingRewardType = null;
-                }
+                });
             } else {
-                if (admobRewarded != null) {
-                    admobRewarded.show(this, item -> {
-                        if (pendingRewardType == null) return;
-                        String js = "window.onAdReward && window.onAdReward('" + pendingRewardType + "');";
-                        webView.evaluateJavascript(js, null);
-                        pendingRewardType = null;
-                    });
-                } else {
-                    webView.evaluateJavascript("window.onAdNotReady && window.onAdNotReady();", null);
-                    pendingRewardType = null;
-                }
+                webView.evaluateJavascript("window.onAdNotReady && window.onAdNotReady();", null);
+                pendingRewardType = null;
             }
         });
     }
@@ -883,8 +770,6 @@ public class MainActivity extends Activity {
             } catch (Throwable e) { return false; }
         }
 
-
-
         // ── Cross-promo install verification ───────────────────────────────────
         // Used by the "More Games" reward flow in game.html. JS calls
         // openPlayStore(pkg) when the user taps a promo card, and later calls
@@ -965,31 +850,19 @@ public class MainActivity extends Activity {
     // ── Lifecycle ─────────────────────────────────────────────────────────────
     @Override protected void onResume() {
         super.onResume();
-        if (USE_APPLOVIN) {
-            if (bannerAd != null) bannerAd.startAutoRefresh();
-        } else {
-            if (admobBanner != null) admobBanner.resume();
-        }
+        if (admobBanner != null) admobBanner.resume();
         if (webView != null) webView.onResume();
     }
 
     @Override protected void onPause() {
         super.onPause();
-        if (USE_APPLOVIN) {
-            if (bannerAd != null) bannerAd.stopAutoRefresh();
-        } else {
-            if (admobBanner != null) admobBanner.pause();
-        }
+        if (admobBanner != null) admobBanner.pause();
         if (webView != null) webView.onPause();
     }
 
     @Override protected void onDestroy() {
         super.onDestroy();
-        if (USE_APPLOVIN) {
-            if (bannerAd != null) bannerAd.destroy();
-        } else {
-            if (admobBanner != null) admobBanner.destroy();
-        }
+        if (admobBanner != null) admobBanner.destroy();
         if (webView != null) { webView.stopLoading(); webView.destroy(); }
         if (billingClient != null) billingClient.endConnection();
     }

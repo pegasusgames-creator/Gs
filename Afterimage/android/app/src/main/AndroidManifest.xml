@@ -37,8 +37,6 @@
             android:resource="@xml/gma_ad_services_config"
             tools:replace="android:resource" />
 
-        <!-- MAX_ENABLED: AppLovin disabled until SDK key is approved. Re-add the
-             applovin.sdk.key meta-data with the real key to re-enable. -->
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713"/>
         <activity android:name=".MainActivity" android:exported="true"

@@ -38,7 +38,6 @@
             android:resource="@xml/gma_ad_services_config"
             tools:replace="android:resource" />
 
-        <!-- AppLovin disabled (using AdMob). Re-enable by populating value. -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-5695494884863768~9006185100"/>
