@@ -7,18 +7,14 @@ Each step has all values pre-filled — paste, don't type.
 
 ---
 
-## ✅ Step 1 — AdMob: DONE (2026-06-10)
+## Step 1 — AdMob app entry (already done)
 
-Real AdMob IDs are wired into the code and baked into the AAB:
-
-- App ID         `ca-app-pub-5695494884863768~3214881924`
-- Banner         `ca-app-pub-5695494884863768/5765562640`
-- Interstitial   `ca-app-pub-5695494884863768/6329006131`
-- Rewarded       `ca-app-pub-5695494884863768/7889499819`
-
-Nothing left to do here. The AAB at
-`PipeConnect/android/app/build/outputs/bundle/release/app-release.aab`
-is the one to upload.
+This app's AdMob app ID and ad unit IDs are already baked into
+`PipeConnect/android/app/src/main/AndroidManifest.xml` and
+`PipeConnect/android/app/src/main/java/com/pegasusgames/pipeconnect/MainActivity.java`.
+**Skip directly to Step 2** unless you need to recreate the
+AdMob entry from scratch (in which case follow the manual steps
+in older handoff docs).
 
 ---
 
@@ -192,31 +188,22 @@ Website: `https://pegasusgames-creator.github.io/`
 
 ---
 
-## ✅ Step 6 — Rebuild with real AdMob IDs: DONE (2026-06-10)
+## Step 6 — Re-build the AAB with real AdMob IDs (3 min)
 
-The release AAB was rebuilt after the real IDs were pasted in, is
-signed with PipeConnect's dedicated keystore
-(SHA1 `9A:DA:7D:B4:D1:4A:93:C6:4C:D3:85:2D:6D:58:1E:40:0F:E7:A5:36`),
-and contains zero test AdMob IDs:
+Now that Step 1 gave you real AdMob IDs and you've pasted them into the
+manifest and MainActivity.java, rebuild:
 
+```
+python3 build_release.py PipeConnect
+```
+
+Output AAB will be at:
 ```
 PipeConnect/android/app/build/outputs/bundle/release/app-release.aab
 ```
 
----
-
-## Step 6.5 — Publish the Play Games leaderboard (2 min)
-
-The leaderboard **"Highest Level Cleared in Pipe Connect"**
-(`CgkIg4KVn8kGEAIQCA`, PGS project `225819574531`) exists but is in
-**Draft**. In Play Console → Grow → Play Games Services →
-Setup and management → Leaderboards, open it and click **Publish**
-(it already shows "ready to publish"). Also confirm the PipeConnect
-credential (`com.pegasusgames.pipeconnect`) is added under
-PGS → Configuration → Credentials, same as the other 4 apps.
-
-Until published, the in-game Ranks sheet just uses the synthetic
-weekly standings (by design), so this is not a launch blocker.
+The script verifies the AdMob ID is no longer the placeholder and that
+the AAB is signed and complete.
 
 ---
 
@@ -226,7 +213,7 @@ Play Console → Pipe Connect → **Test and release → Production → Create n
 
 Drag in `app-release.aab`. Add release notes:
 ```
-Initial release.
+Initial release · 500 hand-tuned pipe puzzles · Daily challenge with streak rewards · 7 unlockable themes · Hints, undo-free flow and a weekly tournament · Plays fully offline.
 ```
 
 Save → **Review release** → **Start rollout to Production**.

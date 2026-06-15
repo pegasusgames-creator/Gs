@@ -7,60 +7,14 @@ Each step has all values pre-filled — paste, don't type.
 
 ---
 
-## ⚠️ CRITICAL: AdMob IDs are TEST IDs, not real
+## Step 1 — AdMob app entry (already done)
 
-The AAB at
-`UnblockPuzzle/android/app/build/outputs/bundle/release/app-release.aab`
-was built with **Google's official test AdMob IDs** so the app
-launches cleanly for screenshot capture and smoke-testing:
-
-- App ID         `ca-app-pub-3940256099942544~3347511713`
-- Banner         `ca-app-pub-3940256099942544/6300978111`
-- Interstitial   `ca-app-pub-3940256099942544/1033173712`
-- Rewarded       `ca-app-pub-3940256099942544/5224354917`
-
-**DO NOT upload this AAB to Play production.** Test ads pay nothing.
-Follow **Step 1** below to create real IDs, paste them in, then
-rebuild the AAB via **Step 6** before uploading.
-
----
-
-## Step 1 — Create the AdMob app entry (5 min)
-
-URL: https://apps.admob.com/v2/apps/list
-
-Click **Add app** → Android → "No, the app isn't published yet"
-(switch to "Yes" once the Play listing exists).
-
-Fill in:
-- **App name:** `Unblock Puzzle`
-- **App store:** Google Play (or Not yet listed if pre-publish)
-- **User metrics:** Yes / Yes / Yes (recommended for casual games)
-
-Click **Add**. AdMob will show a new APPLICATION ID like
-`ca-app-pub-5695494884863768~XXXXXXXXXX`. **Copy that.** Then in
-`UnblockPuzzle/android/app/src/main/AndroidManifest.xml`, replace:
-
-```
-ca-app-pub-3940256099942544~3347511713
-```
-
-with your new APPLICATION ID.
-
-Create 3 ad units (Apps → Unblock Puzzle → Ad units → Add ad unit):
-
-| Name | Type |
-|---|---|
-| `UnblockPuzzle_banner`        | Banner |
-| `UnblockPuzzle_interstitial`  | Interstitial |
-| `UnblockPuzzle_rewarded`      | Rewarded |
-
-Each gives an ad unit ID like `ca-app-pub-…/XXXXXXXXXX`. Paste them
-into
-`UnblockPuzzle/android/app/src/main/java/com/pegasusgames/unblockpuzzle/MainActivity.java`,
-replacing the three `ca-app-pub-3940256099942544/…` test unit IDs
-(`ADMOB_BANNER_UNIT_ID`, `ADMOB_INTERSTITIAL_UNIT_ID`,
-`ADMOB_REWARDED_UNIT_ID`).
+This app's AdMob app ID and ad unit IDs are already baked into
+`UnblockPuzzle/android/app/src/main/AndroidManifest.xml` and
+`UnblockPuzzle/android/app/src/main/java/com/pegasusgames/unblockpuzzle/MainActivity.java`.
+**Skip directly to Step 2** unless you need to recreate the
+AdMob entry from scratch (in which case follow the manual steps
+in older handoff docs).
 
 ---
 
@@ -116,7 +70,7 @@ Games policy — see TRANSLATIONS.md §3).
 
 **Short description (English baseline, 80 chars):**
 ```
-Slide blocks to free the red piece! Classic addictive sliding puzzle.
+Slide blocks aside to clear the red piece's path! Classic sliding puzzle.
 ```
 
 **Full description (English baseline):**
@@ -126,9 +80,9 @@ entire contents.
 **Graphics:**
 - App icon → upload `UnblockPuzzle/store/icon_512_playstore.png`
 - Feature graphic → upload `UnblockPuzzle/store/feature_graphic_1024x500.png`
-- Phone screenshots → upload all 7 files in `UnblockPuzzle/store/screenshots/phone/`
-- 7-inch tablet → upload 2 file(s) in `UnblockPuzzle/store/screenshots/tablet_7/`
-- 10-inch tablet → upload 2 file(s) in `UnblockPuzzle/store/screenshots/tablet_10/`
+- Phone screenshots → upload all 14 files in `UnblockPuzzle/store/screenshots/phone/`
+- 7-inch tablet → upload 4 file(s) in `UnblockPuzzle/store/screenshots/tablet_7/`
+- 10-inch tablet → upload 4 file(s) in `UnblockPuzzle/store/screenshots/tablet_10/`
 
 If Play Console rejects 2 tablet screenshots (Google requires min 4),
 open `UnblockPuzzle/wrap_tablet_screenshots.py`, uncomment the lines under
@@ -259,7 +213,7 @@ Play Console → Unblock Puzzle → **Test and release → Production → Create
 
 Drag in `app-release.aab`. Add release notes:
 ```
-Initial release.
+Fresh look! The game menu is fully redesigned — every game now has its own world, with depth, motion and bolder buttons. Play Games sign-in and leaderboards now work properly. Notifications now ask at the right moment. Plus performance and bug fixes.
 ```
 
 Save → **Review release** → **Start rollout to Production**.

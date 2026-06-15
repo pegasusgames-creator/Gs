@@ -80,9 +80,9 @@ entire contents.
 **Graphics:**
 - App icon → upload `Puzzle2048/store/icon_512_playstore.png`
 - Feature graphic → upload `Puzzle2048/store/feature_graphic_1024x500.png`
-- Phone screenshots → upload all 7 files in `Puzzle2048/store/screenshots/phone/`
-- 7-inch tablet → upload 7 file(s) in `Puzzle2048/store/screenshots/tablet_7/`
-- 10-inch tablet → upload 7 file(s) in `Puzzle2048/store/screenshots/tablet_10/`
+- Phone screenshots → upload all 14 files in `Puzzle2048/store/screenshots/phone/`
+- 7-inch tablet → upload 4 file(s) in `Puzzle2048/store/screenshots/tablet_7/`
+- 10-inch tablet → upload 4 file(s) in `Puzzle2048/store/screenshots/tablet_10/`
 
 If Play Console rejects 2 tablet screenshots (Google requires min 4),
 open `Puzzle2048/wrap_tablet_screenshots.py`, uncomment the lines under
@@ -213,14 +213,7 @@ Play Console → 2048 Puzzle → **Test and release → Production → Create ne
 
 Drag in `app-release.aab`. Add release notes:
 ```
-• Bigger coin packs — M 400 · L 800 · XL 2000; Weekly Pass now $1.99/week
-• Starter Pack grants 5 undos and 5 lives
-• Season Pass: +100 daily coins (was +50), all themes, unlimited undos; Weekly +50
-• Magic Merge and Remove Tile boosters
-• Weekly Tournament bracket
-• Seasonal events
-• Free Coins button
-• Continue · current run
+Fresh look! The game menu is fully redesigned — every game now has its own world, with depth, motion and bolder buttons. Play Games sign-in and leaderboards now work properly. Notifications now ask at the right moment. Plus performance and bug fixes.
 ```
 
 Save → **Review release** → **Start rollout to Production**.

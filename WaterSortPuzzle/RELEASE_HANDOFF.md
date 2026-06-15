@@ -42,19 +42,19 @@ Click **Create product** for each row below. Activate after creating
 
 | Product ID | Type | Name | Default price |
 |---|---|---|---|
-| `remove_ads` | Managed | Remove Ads | $2.99 |
-| `coins_small` | Managed | 100 Coins | $0.99 |
-| `coins_large` | Managed | 800 Coins | $4.99 |
-| `coins_medium` | Managed | 400 Coins | $2.99 |
-| `coins_mega` | Managed | 2000 Coins | $9.99 |
-| `five_lives` | Managed | 5 Lives | $0.99 |
-| `unlimited_lives_1h` | Managed | 1 Hour Unlimited Lives | $1.99 |
-| `unlimited_lives_forever` | Managed | Unlimited Lives Forever | $4.99 |
-| `unlimited_undos` | Managed | Unlimited Undos | $4.99 |
-| `hint_pack` | Managed | Hint Pack | $1.99 |
-| `starter_pack` | Managed | Starter Pack | $0.99 |
-| `season_pass_monthly` | Subscription | Season Pass | $4.99/mo |
-| `weekly_pass` | Subscription | Weekly Pass | $1.99/wk |
+| `remove_ads` | Managed |  | $2.99 |
+| `coins_small` | Managed |  | $0.99 |
+| `coins_large` | Managed |  | $4.99 |
+| `coins_medium` | Managed |  | $2.99 |
+| `coins_mega` | Managed |  | $9.99 |
+| `five_lives` | Managed |  | $0.99 |
+| `unlimited_lives_1h` | Managed |  | $1.99 |
+| `unlimited_lives_forever` | Managed |  | $4.99 |
+| `unlimited_undos` | Managed |  | $4.99 |
+| `hint_pack` | Managed |  | $1.99 |
+| `starter_pack` | Managed |  | $0.99 |
+| `season_pass_monthly` | Subscription |  | $4.99/mo |
+| `weekly_pass` | Subscription |  | $1.99/wk |
 
 ---
 
@@ -81,9 +81,9 @@ entire contents.
 **Graphics:**
 - App icon → upload `WaterSortPuzzle/store/icon_512_playstore.png`
 - Feature graphic → upload `WaterSortPuzzle/store/feature_graphic_1024x500.png`
-- Phone screenshots → upload all 7 files in `WaterSortPuzzle/store/screenshots/phone/`
-- 7-inch tablet → upload 7 file(s) in `WaterSortPuzzle/store/screenshots/tablet_7/`
-- 10-inch tablet → upload 7 file(s) in `WaterSortPuzzle/store/screenshots/tablet_10/`
+- Phone screenshots → upload all 14 files in `WaterSortPuzzle/store/screenshots/phone/`
+- 7-inch tablet → upload 4 file(s) in `WaterSortPuzzle/store/screenshots/tablet_7/`
+- 10-inch tablet → upload 4 file(s) in `WaterSortPuzzle/store/screenshots/tablet_10/`
 
 If Play Console rejects 2 tablet screenshots (Google requires min 4),
 open `WaterSortPuzzle/wrap_tablet_screenshots.py`, uncomment the lines under
@@ -214,16 +214,7 @@ Play Console → Water Sort Puzzle → **Test and release → Production → Cre
 
 Drag in `app-release.aab`. Add release notes:
 ```
-• Color Reveal, Steady Pour, Fresh Start — renamed boosters
-• NEW Extra Tube and Magic Wand boosters
-• Hints use a counter — earn via ads or buy a 10-pack
-• Season Pass +100 daily coins (was +50); Weekly Pass +50
-• Coin packs: M 400 · L 800 · XL 2000; Weekly Pass $1.99/week
-• Weekly Tournament bracket on the menu
-• Seasonal events (Halloween, Winter, Spring)
-• Free Coins — 25 every 4 hours
-• Continue · Level N from the menu
-• 7-day login streak rewards
+Fresh look! The game menu is fully redesigned — every game now has its own world, with depth, motion and bolder buttons. Play Games sign-in and leaderboards now work properly. Notifications now ask at the right moment. Plus performance and bug fixes.
 ```
 
 Save → **Review release** → **Start rollout to Production**.

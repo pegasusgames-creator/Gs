@@ -80,9 +80,9 @@ entire contents.
 **Graphics:**
 - App icon → upload `Nonogram/store/icon_512_playstore.png`
 - Feature graphic → upload `Nonogram/store/feature_graphic_1024x500.png`
-- Phone screenshots → upload all 7 files in `Nonogram/store/screenshots/phone/`
-- 7-inch tablet → upload 7 file(s) in `Nonogram/store/screenshots/tablet_7/`
-- 10-inch tablet → upload 7 file(s) in `Nonogram/store/screenshots/tablet_10/`
+- Phone screenshots → upload all 14 files in `Nonogram/store/screenshots/phone/`
+- 7-inch tablet → upload 4 file(s) in `Nonogram/store/screenshots/tablet_7/`
+- 10-inch tablet → upload 4 file(s) in `Nonogram/store/screenshots/tablet_10/`
 
 If Play Console rejects 2 tablet screenshots (Google requires min 4),
 open `Nonogram/wrap_tablet_screenshots.py`, uncomment the lines under
@@ -213,15 +213,7 @@ Play Console → Nonogram Puzzle → **Test and release → Production → Creat
 
 Drag in `app-release.aab`. Add release notes:
 ```
-• Bigger coin packs — M 400 · L 800 · XL 2000; Weekly Pass now $1.99/week
-• Hint Pack now grants the full 10 hints
-• Season Pass now grants +100 daily coins (was +50); Weekly Pass grants +50
-• Reveal Row and Reveal Cell boosters
-• Weekly Tournament bracket
-• Seasonal events (Halloween, Winter, Spring)
-• Free Coins button — 25 every 4 hours
-• Continue from the menu
-• 7-day login streak rewards
+Fresh look! The game menu is fully redesigned — every game now has its own world, with depth, motion and bolder buttons. Play Games sign-in and leaderboards now work properly. Notifications now ask at the right moment. Plus performance and bug fixes.
 ```
 
 Save → **Review release** → **Start rollout to Production**.
