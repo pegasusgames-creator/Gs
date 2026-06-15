@@ -156,6 +156,10 @@ body.midnight{
 #screen-settings{background:#eef4f8;overflow:hidden;}
 .settings-scroll{flex:1;overflow-y:auto;padding:16px;}
 .settings-item{background:#ffffff;border:1px solid #d4e2ec;border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.settings-action-btn{background:#d4e2ec;color:#3b6db8;border:none;font-family:'Poppins',sans-serif;font-size:0.8rem;font-weight:700;padding:8px 16px;border-radius:20px;cursor:pointer;}
+.settings-reset-btn{background:transparent;color:#b23b3b;border:1px solid #e0b4b4;font-family:'Poppins',sans-serif;font-size:0.8rem;font-weight:600;padding:8px 18px;border-radius:20px;cursor:pointer;}
+body.midnight .settings-action-btn{background:#272336;color:#9db4dd;}
+body.midnight .settings-reset-btn{border-color:#5a3a3a;color:#d98a8a;}
 .settings-label{font-size:0.95rem;font-weight:600;}
 .toggle{width:48px;height:26px;background:#37474f;border-radius:13px;position:relative;cursor:pointer;transition:background 0.3s;}
 .toggle.on{background:#448aff;}
@@ -496,29 +500,29 @@ body.midnight{ --m-bg-top:#1a1726; --m-vignette:rgba(0,0,0,.55);
       <span class="settings-label">🎵 Music</span>
       <div class="toggle" id="toggle-music" onclick="toggleSetting('musicEnabled','toggle-music')"></div>
     </div>
-    <div class="settings-item" style="flex-direction:column;align-items:flex-start;gap:6px;">
-      <span class="settings-label">Reset Progress</span>
-      <button class="modal-btn danger" style="padding:8px 20px;font-size:0.8rem;" onclick="confirmReset()">Reset All Data</button>
-    </div>
     <div class="settings-item">
       <span class="settings-label">🎨 Board Theme</span>
       <button onclick="showScreen('themes')" id="themeBtn" style="background:rgba(68,138,255,0.12);border:1px solid rgba(68,138,255,0.3);border-radius:8px;padding:6px 14px;color:#448aff;font-size:13px;font-weight:600;cursor:pointer">Classic</button>
     </div>
     <div class="settings-item">
       <span class="settings-label">🎓 Tutorial</span>
-      <button class="shop-item-btn" onclick="replayTutorial()">Replay</button>
+      <button class="settings-action-btn" onclick="replayTutorial()">Replay</button>
     </div>
     <div class="settings-item">
       <span class="settings-label">🔺 Shape markers</span>
-      <button class="shop-item-btn" id="shapes-toggle-btn" onclick="toggleShapes()">ON</button>
+      <div class="toggle" id="shapes-toggle" onclick="toggleShapes()"></div>
     </div>
     <div class="settings-item">
       <span class="settings-label">🔁 Restore Purchases</span>
-      <button class="shop-item-btn" onclick="restorePurchases()">Restore</button>
+      <button class="settings-action-btn" onclick="restorePurchases()">Restore</button>
     </div>
     <div class="settings-item">
       <span class="settings-label">📄 Privacy Policy</span>
-      <button class="shop-item-btn" onclick="openPrivacyPolicy()">View</button>
+      <button class="settings-action-btn" onclick="openPrivacyPolicy()">View</button>
+    </div>
+    <div class="settings-item">
+      <span class="settings-label">Reset All Data</span>
+      <button class="settings-reset-btn" onclick="confirmReset()">Reset…</button>
     </div>
     <div class="settings-item" style="justify-content:center;">
       <span style="color:#37474f;font-size:0.75rem;">Overlay v1.0 • com.pegasusgames.overlay</span>
@@ -595,7 +599,7 @@ body.midnight{ --m-bg-top:#1a1726; --m-vignette:rgba(0,0,0,.55);
 <div class="overlay" id="overlay-confirm-reset">
   <div class="modal">
     <h2>Reset All Data?</h2>
-    <p>This will erase all progress, coins and settings.</p>
+    <p>This erases all progress, level stars, coins and settings on this device. Your purchases aren't affected — tap Restore Purchases to bring them back.</p>
     <div class="modal-btns">
       <button class="modal-btn danger" onclick="doResetAll()">Yes, Reset</button>
       <button class="modal-btn secondary" onclick="hideOverlay('overlay-confirm-reset')">Cancel</button>
@@ -956,6 +960,8 @@ function updateAllUI(){
   const mt=document.getElementById('toggle-music');
   if(st)st.className='toggle'+(save.soundEnabled?' on':'');
   if(mt)mt.className='toggle'+(save.musicEnabled?' on':'');
+  const sh=document.getElementById('shapes-toggle');
+  if(sh)sh.className='toggle'+(localStorage.getItem('ovl_noShapes')==='1'?'':' on');
 }
 
 function toggleSetting(key,toggleId){
@@ -1652,9 +1658,10 @@ window.replayTutorial=function(){localStorage.removeItem('ovl_tutorialDone');sho
 window.toggleShapes=function(){
   const off=document.body.classList.toggle('no-shapes');
   localStorage.setItem('ovl_noShapes',off?'1':'0');
-  const b=document.getElementById('shapes-toggle-btn');if(b)b.textContent=off?'OFF':'ON';
+  const t=document.getElementById('shapes-toggle');if(t)t.className='toggle'+(off?'':' on');
 };
 if(localStorage.getItem('ovl_noShapes')==='1')document.body.classList.add('no-shapes');
+(function(){var t=document.getElementById('shapes-toggle');if(t)t.className='toggle'+(localStorage.getItem('ovl_noShapes')==='1'?'':' on');})();
 
 function confirmReset(){showOverlay('overlay-confirm-reset');}
 
