@@ -2066,6 +2066,11 @@ def main():
     except Exception as _e:
         print(f"  reward type parity: skipped ({_e})")
     try:
+        from check_free_coins_single_source import check_app as _fcs
+        section("code", "free coins single source", _wrap(_fcs), apps)
+    except Exception as _e:
+        print(f"  free coins single source: skipped ({_e})")
+    try:
         from check_subscription_disclosure import check_app as _sub
         section("code", "subscription disclosure",  _wrap(_sub), apps)
     except Exception as _e:

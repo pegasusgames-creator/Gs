@@ -2727,7 +2727,7 @@ function buildShop(){
         <div class="shop-item-name">${item.name}</div>
         <div class="shop-item-desc">${item.desc}</div>
       </div>
-      <div class="shop-item-price ${item.iap?'iap':''}">${item.price}</div>`;
+      <div class="shop-item-price ${item.iap?'iap':''}">${(window._localizedPrices&&window._localizedPrices[item.id])||item.price}</div>`;
     div.onclick = ()=>shopBuy(item);
     body.appendChild(div);
   }
@@ -7725,5 +7725,6 @@ window.addEventListener('load',function(){
   if(document.readyState!=='loading') arm(); else window.addEventListener('load',arm);
 })();
 </script>
+<script>/*PART4-LOCALPRICE*/window._localizedPrices=window._localizedPrices||{};window.onLocalizedPrices=function(map){try{if(map)Object.assign(window._localizedPrices,map);if(typeof buildShop==="function"&&document.getElementById("shopBody"))buildShop();}catch(e){}};</script>
 </body>
 </html>

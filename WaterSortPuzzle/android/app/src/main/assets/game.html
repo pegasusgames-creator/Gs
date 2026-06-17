@@ -3172,7 +3172,7 @@ function renderShop() {
         <p>${p.desc}</p>
       </div>
       <button class="shop-price-btn ${btnClass}" ${owned ? 'disabled' : ''}>
-        ${owned ? 'Owned' : p.price}
+        ${owned ? 'Owned' : ((window._localizedPrices&&window._localizedPrices[p.id])||p.price)}
       </button>
     `;
     if (!owned) {
@@ -8817,5 +8817,6 @@ window.addEventListener('load',function(){
   if(document.readyState!=='loading') arm(); else window.addEventListener('load',arm);
 })();
 </script>
+<script>/*PART4-LOCALPRICE*/window._localizedPrices=window._localizedPrices||{};window.onLocalizedPrices=function(map){try{if(map)Object.assign(window._localizedPrices,map);if(typeof renderShop==="function"&&document.getElementById("shopGrid"))renderShop();}catch(e){}};</script>
 </body>
 </html>

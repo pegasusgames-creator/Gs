@@ -1387,9 +1387,10 @@ window.onAdReward = function(rewardType) {
     updateUI();
     closeOverlay('overlay-nolives');
     showToast('+1 Life!');
-  } else if (rewardType === 'free_coins') {
-    state.coins += 25; saveState(); updateUI(); showToast('+25 coins!');
   }
+  // free_coins is granted (and its 4h cooldown set) by the queued callback the
+  // Free Coins shim pushes; draining the queue below is the single source —
+  // a base-case +25 here would double-grant on top of that callback.
   // Drain every queued callback (D1, 2026-05-27).
   if (window._pendingRewardCbs && window._pendingRewardCbs.length) {
     while (window._pendingRewardCbs.length) {
@@ -8437,5 +8438,6 @@ window.addEventListener('load',function(){
   if(menu){ try{ new MutationObserver(function(){ if(!document.getElementById('xMenuExtras')) ensure(); }).observe(menu,{childList:true,subtree:true}); }catch(e){} }
 })();
 </script>
+<script>/*PART4-LOCALPRICE*/window._localizedPrices=window._localizedPrices||{};window.onLocalizedPrices=function(map){try{if(map)Object.assign(window._localizedPrices,map);var btns=document.querySelectorAll("button.shop-item-price[onclick],button.shop-price-btn[onclick]");for(var i=0;i<btns.length;i++){var b=btns[i];var oc=b.getAttribute("onclick")||"";var mt=oc.match(/[\'"]([a-z0-9_]+)[\'"]/i);if(!mt)continue;var lp=window._localizedPrices[mt[1]];if(!lp)continue;var suf=((b.textContent||"").match(/\/(mo|wk|month|week)\b/)||[""])[0];b.textContent=lp+suf;}}catch(e){}};</script>
 </body>
 </html>

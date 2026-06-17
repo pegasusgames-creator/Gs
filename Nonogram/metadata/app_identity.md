@@ -9,7 +9,7 @@
 
 The app should feel like the puzzle section of a serious newspaper. Warm
 parchment, ink-red accents, no emoji-as-UI, contemplative pacing. NYT
-Picross / "Today's puzzle" energy. Built for players who want the
+Nonogram / "Today's puzzle" energy. Built for players who want the
 quietest possible puzzle app on their phone.
 
 ## Anti-pattern audit (APP_ARCHETYPES.md §5)
