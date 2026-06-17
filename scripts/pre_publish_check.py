@@ -137,6 +137,7 @@ PLACEHOLDER_PATTERNS = [
     r"YOUR_APP_ID_HERE",
     r"TODO_REPLACE",
     r"__ADMOB_[A-Z_]+_PLACEHOLDER__",  # SHIP_GAME Phase 2 placeholders
+    r"PASTE_[A-Z0-9_]+",               # billing LICENSE_PUBLIC_KEY placeholder (verifyPurchaseSignature skips on it)
 ]
 
 # Filler words in title matching (ignore these when checking folder vs <title>)
@@ -574,6 +575,12 @@ check_seasonal_events      = _delegated_check("check_seasonal_events")
 # level that is unsolvable or carries a wrong optimal/par (added after the
 # 2026-05-15 UnblockPuzzle audit found 35/150 unsolvable, 114/150 mislabelled).
 check_puzzle_solvability   = _delegated_check("check_unblock_solvable")
+
+# flow_solvability — connect-the-dots solver gate: blocks any flow game
+# (PipeConnect and clones) shipping a level whose colour pairs cannot all be
+# joined by vertex-disjoint paths (added after the 2026-06-16 PipeConnect
+# audit found levels 1-122, the hand-authored block, almost all unsolvable).
+check_flow_solvability     = _delegated_check("check_pipeconnect_solvable")
 
 # Audit 2026-05-15 — slip-prevention checks (G2-G6): price-string parity,
 # restore-purchases UI, interstitial cadence, IAP display-name table,
@@ -1912,6 +1919,7 @@ def main():
     section("code",  "menu completeness",           check_menu_completeness, apps)
     section("code",  "seasonal events present",     check_seasonal_events, apps)
     section("code",  "puzzle solvability",           check_puzzle_solvability, apps)
+    section("code",  "flow solvability",              check_flow_solvability, apps)
     # Audit 2026-05-15 slip-prevention checks (G2-G6).
     section("meta",  "IAP price string parity",     check_price_string_parity, apps)
     section("code",  "restore purchases UI",        check_restore_purchases_ui, apps)
@@ -2018,6 +2026,7 @@ def main():
         ('check_pgs_init.py',             'pgs init'),
         ('check_cross_promo_pkgs.py',     'cross-promo pkgs'),
         ('check_notif_prompt_timing.py',  'notif prompt timing'),
+        ('check_screenshot_taps_valid.py', 'screenshot taps valid'),
     ]:
         try:
             _r = _subprocess.run(

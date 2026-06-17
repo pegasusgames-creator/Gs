@@ -1,5 +1,5 @@
 {
-  "_comment": "PipeConnect screenshot capture — 18 slots designed cross-surface so each non-gameplay screen appears once. Showcases all 7 themes (Classic + Neon + Pastel + Midnight + Ocean + Inferno + Galaxy) with Midnight + Inferno + Galaxy unlocked via seed save state. Levels are distinct across every slot. Themes applied by writing palette directly to PIPE_COLORS (THEMES array lives in an IIFE).\n\nNon-gameplay screen distribution: Themes panel → phone 06 · Level Complete overlay → tablet_7 06 · Stats → tablet_10 06 · Level Select grid → tablet_7 03.",
+  "_comment": "PipeConnect screenshot capture \u2014 18 slots designed cross-surface so each non-gameplay screen appears once. Showcases all 7 themes (Classic + Neon + Pastel + Midnight + Ocean + Inferno + Galaxy) with Midnight + Inferno + Galaxy unlocked via seed save state. Levels are distinct across every slot. Themes applied by writing palette directly to PIPE_COLORS (THEMES array lives in an IIFE).\n\nNon-gameplay screen distribution: Themes panel \u2192 phone 06 \u00b7 Level Complete overlay \u2192 tablet_7 06 \u00b7 Stats \u2192 tablet_10 06 \u00b7 Level Select grid \u2192 tablet_7 03.",
   "_readiness_expr": "typeof save !== 'undefined' && typeof loadLevel === 'function' && typeof showScreen === 'function' && typeof PIPE_COLORS !== 'undefined'",
   "_setup_taps": [
     [
@@ -11,36 +11,36 @@
   "01_deep_gameplay": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('game');setTimeout(function(){loadLevel(118);},200);'ok';",
-      2400
+      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(82);var SOL={\"red\":[[2,0],[3,0],[3,1],[2,1],[1,1],[1,0],[0,0],[0,1],[0,2],[0,3],[0,4],[1,4],[1,3]],\"blue\":[[1,2],[2,2],[3,2],[3,3],[3,4],[3,5]],\"green\":[[4,5],[4,4],[4,3],[4,2]],\"yellow\":[[4,1],[4,0],[5,0],[6,0],[7,0]],\"purple\":[[7,1],[6,1],[5,1],[5,2],[6,2],[7,2],[7,3],[6,3],[5,3],[5,4],[5,5],[5,6],[6,6],[6,5],[6,4],[7,4],[7,5],[7,6],[7,7],[6,7],[5,7],[4,7],[4,6],[3,6]],\"orange\":[[3,7],[2,7],[1,7],[0,7],[0,6],[0,5],[1,5],[1,6],[2,6]]};for(var col in SOL){pipes[col]=SOL[col];}render();},260);'ok';",
+      2600
     ]
   ],
   "02_early_gameplay": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.neon);save.activeTheme='neon';persist();showScreen('game');setTimeout(function(){loadLevel(5);},200);'ok';",
-      2400
+      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.neon);save.activeTheme='neon';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(94);var SOL={\"red\":[[0,2],[0,1],[0,0],[1,0]],\"blue\":[[2,0],[2,1],[1,1],[1,2],[2,2],[3,2],[3,3],[2,3],[1,3],[0,3],[0,4],[0,5],[1,5],[1,4],[2,4],[2,5],[2,6],[1,6],[0,6],[0,7],[1,7],[2,7],[3,7],[3,6],[3,5]],\"green\":[[3,4],[4,4],[4,3],[4,2]],\"purple\":[[4,0],[5,0],[5,1],[5,2],[6,2],[6,1],[6,0],[7,0],[7,1]],\"orange\":[[7,2],[7,3],[6,3]],\"pink\":[[5,3],[5,4],[5,5],[4,5],[4,6],[4,7],[5,7],[5,6],[6,6],[6,5],[6,4],[7,4],[7,5],[7,6],[7,7],[6,7]]};for(var col in SOL){pipes[col]=SOL[col];}render();},260);'ok';",
+      2600
     ]
   ],
   "03_level_complete": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.pastel);save.activeTheme='pastel';persist();showScreen('game');setTimeout(function(){loadLevel(58);},200);'ok';",
-      2400
+      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.pastel);save.activeTheme='pastel';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(80);var SOL={\"blue\":[[6,6],[6,5],[7,5],[7,4]],\"green\":[[7,3],[7,2],[6,2],[6,1],[7,1]],\"yellow\":[[7,0],[6,0],[5,0],[4,0],[3,0],[2,0],[1,0],[0,0]],\"purple\":[[0,1],[1,1],[2,1],[3,1],[4,1],[5,1],[5,2],[5,3],[6,3],[6,4],[5,4],[5,5],[4,5],[4,6],[5,6]],\"orange\":[[5,7],[4,7],[3,7],[3,6],[3,5],[2,5],[2,4],[1,4],[1,5],[1,6],[2,6],[2,7],[1,7],[0,7],[0,6],[0,5],[0,4],[0,3],[0,2],[1,2],[1,3],[2,3],[2,2],[3,2]],\"pink\":[[3,3],[3,4],[4,4],[4,3],[4,2]]};for(var col in SOL){pipes[col]=SOL[col];}render();},260);'ok';",
+      2600
     ]
   ],
   "04_missions_panel": [
     [
       "js",
-      "document.body.classList.add('midnight');Object.assign(PIPE_COLORS,window._PALETTES.midnight);save.activeTheme='midnight';persist();showScreen('game');setTimeout(function(){loadLevel(72);},200);'ok';",
-      2400
+      "document.body.classList.add('midnight');Object.assign(PIPE_COLORS,window._PALETTES.midnight);save.activeTheme='midnight';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(120);var SOL={\"red\":[[7,1],[7,0],[8,0],[8,1],[8,2]],\"blue\":[[8,3],[8,4],[8,5],[8,6],[8,7],[8,8],[7,8],[7,7],[7,6]],\"yellow\":[[5,4],[4,4],[4,5],[4,6],[3,6],[2,6],[2,5],[3,5],[3,4],[2,4],[2,3],[1,3],[1,4]],\"purple\":[[1,5],[1,6],[1,7],[2,7],[3,7],[4,7],[5,7],[6,7],[6,8],[5,8],[4,8],[3,8]],\"orange\":[[2,8],[1,8],[0,8],[0,7],[0,6],[0,5],[0,4],[0,3],[0,2],[1,2],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[5,1],[5,2],[4,2]],\"pink\":[[4,1],[3,1],[2,1],[2,2],[3,2],[3,3],[4,3],[5,3],[6,3],[6,4]],\"teal\":[[6,5],[7,5],[7,4],[7,3],[7,2],[6,2],[6,1],[6,0]]};for(var col in SOL){pipes[col]=SOL[col];}render();},260);'ok';",
+      2600
     ]
   ],
   "05_stats": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.ocean);save.activeTheme='ocean';persist();showScreen('game');setTimeout(function(){loadLevel(95);},200);'ok';",
-      2400
+      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.ocean);save.activeTheme='ocean';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(112);var SOL={\"red\":[[1,5],[1,6],[1,7],[1,8],[0,8],[0,7],[0,6],[0,5],[0,4],[1,4],[1,3]],\"blue\":[[0,3],[0,2],[0,1],[0,0],[1,0],[1,1],[1,2],[2,2],[2,1]],\"green\":[[2,0],[3,0],[4,0],[4,1],[3,1],[3,2],[4,2],[4,3],[3,3],[2,3],[2,4],[2,5],[2,6],[2,7],[2,8],[3,8]],\"yellow\":[[4,8],[5,8],[5,7],[4,7],[4,6],[5,6],[6,6],[7,6],[7,7]],\"purple\":[[6,7],[6,8],[7,8],[8,8],[8,7],[8,6],[8,5],[8,4],[8,3]],\"pink\":[[6,0],[5,0],[5,1],[5,2],[6,2],[6,1],[7,1]],\"teal\":[[7,2],[7,3],[6,3],[5,3],[5,4],[6,4],[7,4],[7,5],[6,5],[5,5],[4,5],[4,4],[3,4],[3,5],[3,6],[3,7]]};for(var col in SOL){pipes[col]=SOL[col];}render();},260);'ok';",
+      2600
     ]
   ],
   "06_levels_grid": [
@@ -53,15 +53,15 @@
   "tablet_7_01_deep_gameplay": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.fire);save.activeTheme='fire';persist();showScreen('game');setTimeout(function(){loadLevel(85);},200);'ok';",
-      2400
+      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.fire);save.activeTheme='fire';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(111);var SOL={\"blue\":[[8,7],[8,8],[7,8],[6,8],[6,7],[7,7],[7,6],[7,5],[7,4],[6,4],[6,5],[6,6],[5,6],[4,6]],\"green\":[[4,5],[5,5],[5,4],[4,4],[3,4],[3,5],[3,6],[3,7],[4,7],[5,7],[5,8],[4,8]],\"yellow\":[[3,8],[2,8],[2,7],[2,6],[2,5],[1,5],[1,6],[1,7],[1,8],[0,8],[0,7],[0,6],[0,5]],\"purple\":[[0,4],[1,4],[2,4]],\"orange\":[[2,3],[1,3],[0,3],[0,2],[1,2],[1,1],[0,1],[0,0]],\"pink\":[[1,0],[2,0],[3,0],[3,1],[2,1],[2,2],[3,2],[3,3],[4,3],[5,3],[6,3],[7,3],[8,3],[8,2],[8,1],[8,0],[7,0],[6,0],[6,1],[7,1],[7,2]],\"teal\":[[6,2],[5,2],[4,2],[4,1],[5,1],[5,0],[4,0]]};for(var col in SOL){pipes[col]=SOL[col];}render();},260);'ok';",
+      2600
     ]
   ],
   "tablet_7_02_early_gameplay": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('game');setTimeout(function(){loadLevel(28);},200);'ok';",
-      2400
+      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(119);var SOL={\"red\":[[2,4],[1,4],[1,3],[2,3],[3,3],[3,2],[3,1],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0]],\"blue\":[[3,0],[4,0],[4,1],[4,2],[4,3],[5,3],[5,2],[5,1],[5,0],[6,0],[7,0],[8,0],[8,1],[7,1],[6,1],[6,2],[6,3],[7,3],[7,2]],\"green\":[[8,2],[8,3],[8,4],[7,4],[6,4],[5,4],[4,4],[3,4]],\"purple\":[[8,6],[7,6],[6,6],[6,7],[7,7],[8,7],[8,8],[7,8],[6,8],[5,8]],\"orange\":[[4,8],[4,7],[5,7],[5,6],[4,6],[3,6],[3,7],[3,8],[2,8]],\"pink\":[[1,8],[0,8],[0,7],[1,7],[2,7],[2,6],[2,5],[1,5],[1,6]],\"teal\":[[0,6],[0,5],[0,4],[0,3],[0,2],[1,2],[2,2]]};for(var col in SOL){pipes[col]=SOL[col];}render();},260);'ok';",
+      2600
     ]
   ],
   "tablet_7_03_level_complete": [
@@ -95,15 +95,15 @@
   "tablet_10_01_deep_gameplay": [
     [
       "js",
-      "document.body.classList.add('midnight');Object.assign(PIPE_COLORS,window._PALETTES.midnight);save.activeTheme='midnight';persist();showScreen('game');setTimeout(function(){loadLevel(120);},200);'ok';",
-      2500
+      "document.body.classList.add('midnight');Object.assign(PIPE_COLORS,window._PALETTES.midnight);save.activeTheme='midnight';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(114);var SOL={\"red\":[[0,4],[1,4],[2,4],[3,4],[3,3]],\"blue\":[[2,3],[1,3],[0,3],[0,2],[0,1],[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[8,0]],\"green\":[[8,1],[8,2],[7,2],[7,1],[6,1],[5,1],[4,1],[3,1],[2,1],[1,1]],\"yellow\":[[1,2],[2,2],[3,2],[4,2],[4,3],[4,4],[5,4],[5,3],[5,2],[6,2],[6,3],[6,4],[7,4],[7,3]],\"purple\":[[8,3],[8,4],[8,5],[8,6],[8,7],[8,8],[7,8],[7,7],[7,6],[7,5],[6,5],[6,6],[6,7],[6,8],[5,8],[4,8],[4,7],[4,6],[3,6],[3,7],[3,8],[2,8],[1,8]],\"orange\":[[0,8],[0,7],[1,7],[2,7],[2,6]],\"pink\":[[1,6],[0,6],[0,5],[1,5],[2,5],[3,5],[4,5]]};for(var col in SOL){pipes[col]=SOL[col];}render();},260);'ok';",
+      2600
     ]
   ],
   "tablet_10_02_early_gameplay": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.galaxy);save.activeTheme='galaxy';persist();showScreen('game');setTimeout(function(){loadLevel(15);},200);'ok';",
-      2400
+      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.neon);save.activeTheme='neon';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(83);var SOL={\"red\":[[7,4],[7,5],[6,5],[5,5],[5,4],[6,4],[6,3],[7,3],[7,2],[6,2],[6,1],[7,1],[7,0],[6,0],[5,0],[5,1],[5,2],[5,3],[4,3],[3,3],[3,2],[4,2]],\"blue\":[[4,1],[4,0],[3,0],[3,1],[2,1]],\"yellow\":[[0,1],[1,1],[1,2],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[1,7]],\"purple\":[[2,7],[3,7],[4,7],[5,7],[6,7],[7,7],[7,6],[6,6],[5,6],[4,6],[4,5],[4,4],[3,4],[2,4],[2,5],[3,5],[3,6],[2,6],[1,6],[1,5],[1,4],[1,3],[2,3],[2,2]]};for(var col in SOL){pipes[col]=SOL[col];}render();},260);'ok';",
+      2600
     ]
   ],
   "tablet_10_03_level_complete": [
@@ -137,8 +137,8 @@
   "07_depth": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.galaxy);save.activeTheme='galaxy';if(Array.isArray(save.unlockedThemes)&&save.unlockedThemes.indexOf('galaxy')<0)save.unlockedThemes.push('galaxy');persist();showScreen('game');setTimeout(function(){loadLevel(110);},200);'ok';",
-      2400
+      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.galaxy);save.activeTheme='galaxy';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(116);var SOL={\"red\":[[1,1],[2,1],[3,1],[3,0],[2,0],[1,0],[0,0],[0,1],[0,2],[1,2],[1,3]],\"blue\":[[0,3],[0,4],[0,5],[0,6],[0,7]],\"green\":[[0,8],[1,8],[2,8],[3,8],[4,8],[4,7],[4,6],[5,6],[6,6],[7,6],[7,7],[6,7],[5,7],[5,8]],\"yellow\":[[6,8],[7,8],[8,8],[8,7],[8,6],[8,5],[8,4]],\"purple\":[[8,3],[7,3],[7,4],[7,5],[6,5],[5,5],[5,4],[6,4],[6,3],[6,2]],\"orange\":[[6,1],[7,1],[7,2],[8,2],[8,1],[8,0],[7,0],[6,0],[5,0],[4,0]],\"teal\":[[4,3],[4,2],[3,2],[2,2],[2,3],[3,3],[3,4],[4,4],[4,5],[3,5],[2,5],[2,4],[1,4],[1,5],[1,6],[1,7],[2,7],[2,6],[3,6],[3,7]]};for(var col in SOL){pipes[col]=SOL[col];}render();},260);'ok';",
+      2600
     ]
   ]
 }

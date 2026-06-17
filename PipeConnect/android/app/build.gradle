@@ -7,8 +7,8 @@ android {
         applicationId "com.pegasusgames.pipeconnect"
         minSdk 24
         targetSdk 36
-        versionCode 16
-        versionName "1.8.0"
+        versionCode 17
+        versionName "1.8.1"
     }
     signingConfigs { release { storeFile rootProject.file(kp['storeFile']); storePassword kp['storePassword']; keyAlias kp['keyAlias']; keyPassword kp['keyPassword'] } }
     buildTypes {

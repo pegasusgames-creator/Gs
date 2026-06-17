@@ -1,5 +1,48 @@
 # Screenshot re-capture — open items (2026-06-08)
 
+## 2026-06-16 update — emulator capture is now self-cleaning
+
+`adb` + the three AVDs (`pegasus_phone`, `pegasus_tablet_7`,
+`pegasus_tablet_10`) are now available in the dev environment, and the
+capture pipeline no longer depends on per-app `_setup_taps` to clean the
+frame. `scripts/capture_screenshots.py` now, right before every
+screencap, runs a clean-JS step that:
+
+- sets `tutorialDone` / `coachmarkDone` (no coachmark overlay),
+- calls `Android.hideBannerAd()` (no "Test Ad" banner — works on any app
+  whose `MainActivity` exposes the bridge; no-op otherwise), and
+- hides the two first-launch popups that queue over gameplay on a fresh
+  install: `#ls-overlay` (daily login-streak) and `#starterPackModal`.
+  The intentional capture overlays (`overlay-complete/daily/hint/nolives`)
+  are left alone.
+
+Device prep that the operator still does once per fresh emulator boot:
+`adb shell settings put secure immersive_mode_confirmations confirmed`
+(kills the system "Viewing full screen" dialog), and for
+**`pegasus_tablet_10` rotate to portrait** — it boots landscape
+(2560×1600); `adb shell settings put system user_rotation 1` (after
+`accelerometer_rotation 0`) gives the required 1600×2560. The raw must be
+portrait or the tablet_10 wrap is distorted. (Orientation can transiently
+flip on an app's first launch — verify each tablet_10 raw is
+`h > w` and re-shoot the odd slot.)
+
+`scripts/wrap_screenshots.py --iphone` re-wraps 3 phone raws at Apple's
+1320×2868 into `store/screenshots/iphone_6_9/` (slots 1 / mid / last,
+skipping the themes slot).
+
+**Recaptured 2026-06-16 (all surfaces, 7 phone / 2 tab7 / 2 tab10 + 3
+iPhone):** Afterimage, PipeConnect, Hunch, Overlay. PipeConnect because
+its 122 levels were regenerated; Afterimage because its board was
+polished; Hunch+Overlay because their `test/screenshot_taps.json` were
+**verbatim copies of PipeConnect's** (referenced `loadLevel(72..120)`
+that don't exist in those 60-level games, and applied PipeConnect dot
+palettes that do nothing) — rewritten per-game with valid levels + each
+app's real theme palette + `body.midnight` chrome. Hunch additionally
+seeds a lit pattern + runs `doTest()` via `window._hunchFill(cells)`
+because a fresh Hunch level is an empty grid (otherwise every slot is
+near-identical). This copied-config class is now gated by
+`scripts/check_screenshot_taps_valid.py`.
+
 ## Why this exists
 
 The 2026-06-08 screenshot audit found 3 systemic problems across all 4

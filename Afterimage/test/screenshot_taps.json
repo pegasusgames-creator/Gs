@@ -1,143 +1,87 @@
 {
-  "_comment": "PipeConnect screenshot capture — 18 slots designed cross-surface so each non-gameplay screen appears once. Showcases all 7 themes (Classic + Neon + Pastel + Midnight + Ocean + Inferno + Galaxy) with Midnight + Inferno + Galaxy unlocked via seed save state. Levels are distinct across every slot. Themes applied by writing palette directly to PIPE_COLORS (THEMES array lives in an IIFE).\n\nNon-gameplay screen distribution: Themes panel → phone 06 · Level Complete overlay → tablet_7 06 · Stats → tablet_10 06 · Level Select grid → tablet_7 03.",
+  "_comment": "Afterimage (echo-puzzle 'Ditto') screenshot capture. 60-level CAMPAIGN (valid loadLevel indices 0-59, display level = idx+1). Themes applied via window._applyAT(id,midnight) which writes Afterimage's real theme palette to PIPE_COLORS + the --you/--echo/--plate/--exit CSS vars + midnight chrome. Each slot picks a distinct level AND a distinct theme so all 11 store slots differ. Non-gameplay screens distributed once each: Themes panel -> phone 06; Level Select grid -> tablet_7 (not in 2-slot trim, kept for completeness); Level Complete overlay -> tablet_7 06; Stats -> tablet_10 06. Phone ships 7, tablets ship 2 each (01_deep + 02_early).",
   "_readiness_expr": "typeof save !== 'undefined' && typeof loadLevel === 'function' && typeof showScreen === 'function' && typeof PIPE_COLORS !== 'undefined'",
   "_setup_taps": [
     [
       "js",
-      "(function(){try{var s={currentLevel:121,completedLevels:Array.from({length:121},function(_,i){return i;}),levelStars:(function(){var x={};for(var i=0;i<121;i++)x[i]=(i%4===0?3:(i%3===0?2:1));return x;})(),coins:2480,lives:5,maxLives:5,lastLifeTime:Date.now(),removeAds:false,unlimitedLivesPermanent:false,unlimitedLivesExpiry:0,dailyChallengeDate:'',dailyChallengeStreak:7,soundEnabled:true,musicEnabled:false,activeTheme:'default',lastLevelProgress:null,hintPack:3,hintCount:3,seasonPassUntil:0,weeklyPassUntil:0,lastSeasonGrantDate:'',lastWeeklyGrantDate:'',unlockedThemes:['midnight']};Object.assign(save,s);if(typeof persist==='function')persist();if(typeof updateAllUI==='function')updateAllUI();window._PALETTES={classic:{red:'#ff5252',blue:'#448aff',green:'#69f0ae',yellow:'#ffd740',purple:'#e040fb',orange:'#ff6d00',pink:'#f48fb1',teal:'#18ffff'},neon:{red:'#ff073a',blue:'#00f5ff',green:'#39ff14',yellow:'#ffff00',purple:'#bf00ff',orange:'#ff6600',pink:'#ff69b4',teal:'#00ffcc'},pastel:{red:'#ffb3ba',blue:'#bae1ff',green:'#b5ead7',yellow:'#ffffba',purple:'#e0b3ff',orange:'#ffdfba',pink:'#ffb3de',teal:'#b3fff0'},midnight:{red:'#ff4d6d',blue:'#5390f5',green:'#3ddc97',yellow:'#ffd166',purple:'#b18cff',orange:'#ff9a3c',pink:'#ff70a6',teal:'#4cc9f0'},ocean:{red:'#e06c75',blue:'#61afef',green:'#98c379',yellow:'#e5c07b',purple:'#c678dd',orange:'#d19a66',pink:'#e06c75',teal:'#56b6c2'},fire:{red:'#ff4500',blue:'#ff8c00',green:'#ffd700',yellow:'#ff6347',purple:'#ff1493',orange:'#ff7f50',pink:'#ff69b4',teal:'#ff6600'},galaxy:{red:'#9b59b6',blue:'#3498db',green:'#1abc9c',yellow:'#f1c40f',purple:'#8e44ad',orange:'#e67e22',pink:'#e91e63',teal:'#16a085'}};}catch(e){}return 'seeded';})()",
+      "(function(){try{var s={currentLevel:50,completedLevels:Array.from({length:50},function(_,i){return i;}),levelStars:(function(){var x={};for(var i=0;i<50;i++)x[i]=(i%4===0?3:(i%3===0?2:1));return x;})(),coins:2480,lives:5,maxLives:5,lastLifeTime:Date.now(),removeAds:false,unlimitedLivesPermanent:false,unlimitedLivesExpiry:0,dailyChallengeDate:'',dailyChallengeStreak:7,soundEnabled:true,musicEnabled:false,activeTheme:'default',lastLevelProgress:{level:50},hintPack:3,hintCount:3,seasonPassUntil:0,weeklyPassUntil:0,lastSeasonGrantDate:'',lastWeeklyGrantDate:'',unlockedThemes:['default','mint','sunset','midnight','violet','ember','mono']};Object.assign(save,s);if(typeof persist==='function')persist();if(typeof updateAllUI==='function')updateAllUI();window._ATP={default:{you:'#0fb5c9',echo:'#e85d5d',plate:'#d29922',exit:'#2ea043'},mint:{you:'#2ea871',echo:'#d96941',plate:'#c9a227',exit:'#3a86ff'},sunset:{you:'#f2784b',echo:'#7a5cd6',plate:'#e0b228',exit:'#2ea043'},midnight:{you:'#37e0e0',echo:'#ff6b6b',plate:'#f2c14e',exit:'#9be37d'},violet:{you:'#8b5cf6',echo:'#ef6292',plate:'#d29922',exit:'#22b8a0'},ember:{you:'#ff8c1a',echo:'#c0392b',plate:'#ffd166',exit:'#7fc97f'},mono:{you:'#3a4a63',echo:'#8a93a6',plate:'#b08d2f',exit:'#4f7d52'}};window._applyAT=function(id,mid){var p=window._ATP[id]||window._ATP.default;if(typeof PIPE_COLORS!=='undefined')Object.assign(PIPE_COLORS,p);['you','echo','plate','exit'].forEach(function(k){if(p[k])document.body.style.setProperty('--'+k,p[k]);});save.activeTheme=id;if(mid){document.body.classList.add('midnight');document.documentElement.dataset.theme='midnight';}else{document.body.classList.remove('midnight');document.documentElement.dataset.theme='';}if(typeof persist==='function')persist();};}catch(e){}return 'seeded';})()",
       400
     ]
   ],
   "01_deep_gameplay": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('game');setTimeout(function(){loadLevel(118);},200);'ok';",
+      "window._applyAT('ember',false);showScreen('game');setTimeout(function(){loadLevel(46);},220);'ok';",
       2400
     ]
   ],
   "02_early_gameplay": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.neon);save.activeTheme='neon';persist();showScreen('game');setTimeout(function(){loadLevel(5);},200);'ok';",
+      "window._applyAT('default',false);showScreen('game');setTimeout(function(){loadLevel(6);},220);'ok';",
       2400
     ]
   ],
   "03_level_complete": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.pastel);save.activeTheme='pastel';persist();showScreen('game');setTimeout(function(){loadLevel(58);},200);'ok';",
+      "window._applyAT('sunset',false);showScreen('game');setTimeout(function(){loadLevel(17);},220);'ok';",
       2400
     ]
   ],
   "04_missions_panel": [
     [
       "js",
-      "document.body.classList.add('midnight');Object.assign(PIPE_COLORS,window._PALETTES.midnight);save.activeTheme='midnight';persist();showScreen('game');setTimeout(function(){loadLevel(72);},200);'ok';",
+      "window._applyAT('midnight',true);showScreen('game');setTimeout(function(){loadLevel(29);},220);'ok';",
       2400
     ]
   ],
   "05_stats": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.ocean);save.activeTheme='ocean';persist();showScreen('game');setTimeout(function(){loadLevel(95);},200);'ok';",
+      "window._applyAT('violet',false);showScreen('game');setTimeout(function(){loadLevel(23);},220);'ok';",
       2400
     ]
   ],
   "06_levels_grid": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';save.completedLevels=Array.from({length:104},function(_,i){return i;});save.unlockedThemes=['midnight'];persist();showScreen('themes');if(typeof renderThemes==='function')renderThemes();if(typeof updateThemeProgressStrip==='function')updateThemeProgressStrip();'ok';",
+      "window._applyAT('default',false);showScreen('themes');if(typeof renderThemes==='function')renderThemes();if(typeof updateThemeProgressStrip==='function')updateThemeProgressStrip();'ok';",
       3000
+    ]
+  ],
+  "07_depth": [
+    [
+      "js",
+      "window._applyAT('mono',false);showScreen('game');setTimeout(function(){loadLevel(53);},220);'ok';",
+      2400
     ]
   ],
   "tablet_7_01_deep_gameplay": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.fire);save.activeTheme='fire';persist();showScreen('game');setTimeout(function(){loadLevel(85);},200);'ok';",
+      "window._applyAT('ember',false);showScreen('game');setTimeout(function(){loadLevel(41);},220);'ok';",
       2400
     ]
   ],
   "tablet_7_02_early_gameplay": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('game');setTimeout(function(){loadLevel(28);},200);'ok';",
+      "window._applyAT('mint',false);showScreen('game');setTimeout(function(){loadLevel(11);},220);'ok';",
       2400
-    ]
-  ],
-  "tablet_7_03_level_complete": [
-    [
-      "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('levelselect');if(typeof showLevelSelect==='function')showLevelSelect();else if(typeof buildLevelSelect==='function'){buildLevelSelect();showScreen('levelselect');}'ok';",
-      2200
-    ]
-  ],
-  "tablet_7_04_missions_panel": [
-    [
-      "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.galaxy);save.activeTheme='galaxy';persist();showScreen('game');setTimeout(function(){loadLevel(40);},200);'ok';",
-      2400
-    ]
-  ],
-  "tablet_7_05_stats": [
-    [
-      "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.neon);save.activeTheme='neon';persist();showScreen('game');setTimeout(function(){loadLevel(108);},200);'ok';",
-      2400
-    ]
-  ],
-  "tablet_7_06_levels_grid": [
-    [
-      "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.ocean);save.activeTheme='ocean';persist();showScreen('game');setTimeout(function(){loadLevel(78);setTimeout(function(){var ov=document.getElementById('overlay-complete');if(ov){ov.classList.add('active');ov.classList.add('show');ov.style.display='flex';}},500);},200);'ok';",
-      2900
     ]
   ],
   "tablet_10_01_deep_gameplay": [
     [
       "js",
-      "document.body.classList.add('midnight');Object.assign(PIPE_COLORS,window._PALETTES.midnight);save.activeTheme='midnight';persist();showScreen('game');setTimeout(function(){loadLevel(120);},200);'ok';",
+      "window._applyAT('midnight',true);showScreen('game');setTimeout(function(){loadLevel(57);},220);'ok';",
       2500
     ]
   ],
   "tablet_10_02_early_gameplay": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.galaxy);save.activeTheme='galaxy';persist();showScreen('game');setTimeout(function(){loadLevel(15);},200);'ok';",
-      2400
-    ]
-  ],
-  "tablet_10_03_level_complete": [
-    [
-      "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.pastel);save.activeTheme='pastel';persist();showScreen('game');setTimeout(function(){loadLevel(102);},200);'ok';",
-      2400
-    ]
-  ],
-  "tablet_10_04_missions_panel": [
-    [
-      "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.fire);save.activeTheme='fire';persist();showScreen('game');setTimeout(function(){loadLevel(48);},200);'ok';",
-      2400
-    ]
-  ],
-  "tablet_10_05_stats": [
-    [
-      "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.ocean);save.activeTheme='ocean';persist();showScreen('game');setTimeout(function(){loadLevel(92);},200);'ok';",
-      2400
-    ]
-  ],
-  "tablet_10_06_levels_grid": [
-    [
-      "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('stats');if(typeof renderStats==='function')renderStats();setTimeout(function(){if(typeof injectRankCard==='function')injectRankCard();},250);'ok';",
-      2200
-    ]
-  ],
-  "07_depth": [
-    [
-      "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.galaxy);save.activeTheme='galaxy';if(Array.isArray(save.unlockedThemes)&&save.unlockedThemes.indexOf('galaxy')<0)save.unlockedThemes.push('galaxy');persist();showScreen('game');setTimeout(function(){loadLevel(110);},200);'ok';",
+      "window._applyAT('default',false);showScreen('game');setTimeout(function(){loadLevel(4);},220);'ok';",
       2400
     ]
   ]

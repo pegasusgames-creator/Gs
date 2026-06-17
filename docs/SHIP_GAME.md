@@ -416,6 +416,14 @@ python3 wrap_tablet_screenshots.py <AppName>
 That's it. No script cloning, no inline editing, no manual color
 adjustment. The theme registry handles per-app variation.
 
+> **⚠️ OWNER POLICY (2026-06-11): steps 3.1 and 3.2 are NOT automated
+> anymore.** The owner creates `icon_512_playstore.png`,
+> `icon_1024_appstore.png` and `feature_graphic_1024x500.png` manually
+> for every new app. Skip `gen_icon.py` / `gen_feature.py` and list
+> "icon + feature graphic needed" in RELEASE_HANDOFF instead. Launcher
+> mipmaps are still synced from the owner's 512 icon via
+> `scripts/sync_launcher_icons.py` once it lands.
+
 ### Step 3.1 — Generate the icon
 
 ```

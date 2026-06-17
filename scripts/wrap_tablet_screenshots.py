@@ -33,6 +33,11 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from app_themes import get_theme
+import wrap_screenshots as ws  # reuse the phone decoration engine at tablet scale
+
+# Per-app composition/decoration overrides (metadata/wrap_profile.json). Empty
+# == original behavior (untouched apps keep the plain frame).
+PROFILE = {}
 
 # Number of screenshots per tablet size (start with 2; bump to 4 if rejected)
 MIN_SCREENSHOTS = 2
@@ -87,9 +92,13 @@ def variant_for(slot_index, surface_offset):
 
 
 def make_gradient_bg(theme, w, h, direction="tl-br"):
-    c1 = theme["bg_top_left"]
-    c2 = theme["bg_top_right"]
-    c3 = theme["bg_bottom"]
+    stops = PROFILE.get("gradient_stops")
+    if stops:
+        c1, c2, c3 = (ws._hex(stops[0]), ws._hex(stops[1]), ws._hex(stops[2]))
+    else:
+        c1 = theme["bg_top_left"]
+        c2 = theme["bg_top_right"]
+        c3 = theme["bg_bottom"]
     mid = tuple((c1[i] + c3[i]) // 2 for i in range(3))
     layouts = {
         "tl-br":      (c1, c2, mid, c3),
@@ -289,7 +298,7 @@ def draw_footer(img, app_display_name, theme, w, h):
 
 
 def build_one(src, out, headline, subtitle, app_display_name, theme,
-              target_size, variant):
+              target_size, variant, slot=0):
     out_w, out_h = target_size
 
     # ★ Resolution guard (May 2026): tablet wraps must use captures from
@@ -330,7 +339,16 @@ def build_one(src, out, headline, subtitle, app_display_name, theme,
     h = out_h * S
 
     canvas = make_gradient_bg(theme, w, h, variant["gradient"]).convert('RGBA')
-    draw_decorations(canvas, theme, w, h, variant["deco"])
+    # Drive the shared phone decoration engine at tablet scale: point its
+    # module globals at this canvas size + profile, then reuse the same
+    # blob/piece layers so tablets match the phone wrapper exactly.
+    ws.W, ws.H, ws.PROFILE = w, h, PROFILE
+    if PROFILE.get('blobs'):
+        ws.draw_palette_blobs(canvas, PROFILE['blobs'])
+    if PROFILE.get('pieces'):
+        ws.draw_decoration_pieces(canvas, PROFILE['pieces'], slot, layer='back')
+    else:
+        draw_decorations(canvas, theme, w, h, variant["deco"])
 
     bottom = variant["headline"] == "bottom"
     shot = Image.open(src)
@@ -354,6 +372,9 @@ def build_one(src, out, headline, subtitle, app_display_name, theme,
             fy = int(h * 0.94) - fh
 
     canvas.alpha_composite(frame, (fx, fy))
+    if PROFILE.get('pieces'):
+        ws.W, ws.H, ws.PROFILE = w, h, PROFILE
+        ws.draw_decoration_pieces(canvas, PROFILE['pieces'], slot, layer='front')
     draw_footer(canvas, app_display_name, theme, w, h)
 
     final = canvas.resize((out_w, out_h), Image.LANCZOS)
@@ -378,6 +399,11 @@ def main():
         sys.exit(1)
 
     default_headlines = json.loads(default_headlines_path.read_text())
+    global PROFILE
+    profile_path = app_dir / "metadata" / "wrap_profile.json"
+    PROFILE = json.loads(profile_path.read_text()) if profile_path.exists() else {}
+    if PROFILE:
+        print(f"Wrap profile: decorations from {profile_path.name}")
     theme = get_theme(args.app_name)
     print(f"Theme for {args.app_name}: {theme['mood']}")
 
@@ -427,7 +453,7 @@ def main():
             print(f"  raw/{src.name} → {out.name}  ({h['line1']} {h['line2']})"
                   f"  [{variant['gradient']}/{variant['headline']}/{variant['deco']}]")
             build_one(src, out, h, h['subtitle'], app_display_name,
-                      theme, tablet_size, variant)
+                      theme, tablet_size, variant, slot=slot - 1)
             any_wrapped = True
 
     if not any_wrapped:

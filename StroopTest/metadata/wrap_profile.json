@@ -1,0 +1,192 @@
+{
+ "_comment": "StroopTest wrapper decorations (scripts/wrap_screenshots.py). Style: ABUNDANT \u2014 on-theme motifs in the app's sampled palette, placed in corners/edges, center playfield + headline + subtitle kept clear; positions jitter per slot. Existing gradient kept.",
+ "blobs": [
+  [
+   0.15,
+   0.2,
+   0.34,
+   "#e74c3c",
+   74
+  ],
+  [
+   0.86,
+   0.24,
+   0.32,
+   "#2ecc71",
+   66
+  ],
+  [
+   0.1,
+   0.66,
+   0.34,
+   "#f39c12",
+   58
+  ],
+  [
+   0.9,
+   0.7,
+   0.32,
+   "#ab47bc",
+   74
+  ],
+  [
+   0.42,
+   0.92,
+   0.34,
+   "#3498db",
+   66
+  ],
+  [
+   0.72,
+   0.1,
+   0.26,
+   "#e74c3c",
+   58
+  ]
+ ],
+ "pieces": [
+  {
+   "shape": "tile",
+   "x": 0.12,
+   "y": 0.29,
+   "size": 0.46,
+   "color": "#e74c3c",
+   "rot": 8,
+   "alpha": 95,
+   "blur": 26,
+   "num": "BLUE"
+  },
+  {
+   "shape": "tile",
+   "x": 0.88,
+   "y": 0.79,
+   "size": 0.44,
+   "color": "#2ecc71",
+   "rot": 1,
+   "alpha": 95,
+   "blur": 26,
+   "num": "RED"
+  },
+  {
+   "shape": "tile",
+   "x": 0.08,
+   "y": 0.27,
+   "size": 0.13,
+   "color": "#f39c12",
+   "rot": -12,
+   "alpha": 242,
+   "blur": 0,
+   "num": "GREEN",
+   "shadow": true
+  },
+  {
+   "shape": "tile",
+   "x": 0.93,
+   "y": 0.27,
+   "size": 0.12,
+   "color": "#ab47bc",
+   "rot": -11,
+   "alpha": 242,
+   "blur": 0,
+   "num": "YELLOW",
+   "shadow": true
+  },
+  {
+   "shape": "tile",
+   "x": 0.05,
+   "y": 0.5,
+   "size": 0.13,
+   "color": "#3498db",
+   "rot": -10,
+   "alpha": 242,
+   "blur": 0,
+   "num": "PINK",
+   "shadow": true
+  },
+  {
+   "shape": "sparkle",
+   "x": 0.95,
+   "y": 0.55,
+   "size": 0.12,
+   "color": "#ffd700",
+   "rot": -9,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "tile",
+   "x": 0.09,
+   "y": 0.9,
+   "size": 0.22,
+   "color": "#2ecc71",
+   "rot": -8,
+   "alpha": 242,
+   "blur": 0,
+   "num": "BLUE",
+   "shadow": true
+  },
+  {
+   "shape": "tile",
+   "x": 0.91,
+   "y": 0.91,
+   "size": 0.18,
+   "color": "#e74c3c",
+   "rot": -7,
+   "alpha": 242,
+   "blur": 0,
+   "num": "GREEN",
+   "shadow": true
+  },
+  {
+   "shape": "tile",
+   "x": 0.5,
+   "y": 0.94,
+   "size": 0.15,
+   "color": "#e74c3c",
+   "rot": -6,
+   "alpha": 242,
+   "blur": 0,
+   "num": "BLUE",
+   "shadow": true
+  },
+  {
+   "shape": "tile",
+   "x": 0.72,
+   "y": 0.12,
+   "size": 0.11,
+   "color": "#2ecc71",
+   "rot": -5,
+   "alpha": 242,
+   "blur": 0,
+   "num": "RED",
+   "shadow": true
+  },
+  {
+   "shape": "tile",
+   "x": 0.16,
+   "y": 0.89,
+   "size": 0.15,
+   "color": "#f39c12",
+   "rot": 8,
+   "alpha": 245,
+   "blur": 0,
+   "num": "GREEN",
+   "shadow": true,
+   "front": true
+  },
+  {
+   "shape": "tile",
+   "x": 0.85,
+   "y": 0.88,
+   "size": 0.15,
+   "color": "#ab47bc",
+   "rot": 8,
+   "alpha": 245,
+   "blur": 0,
+   "num": "YELLOW",
+   "shadow": true,
+   "front": true
+  }
+ ]
+}

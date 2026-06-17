@@ -664,6 +664,26 @@ def main():
             execute_taps(ops, screen_w, screen_h, package_name=package)
         else:
             time.sleep(1)
+        # Screenshot rule: NO AdMob "Test Ad" banner + no tutorial/coachmark
+        # overlay in any store shot. Run this AFTER the per-slot navigation
+        # (which may call showBanner() on the game screen) so the native
+        # banner is hidden right before the screencap. hideBannerAd() sets
+        # the container GONE + pauses the AdView, so it stays hidden through
+        # the settle delay below. No-op on apps that don't expose the bridge.
+        # Also dismiss the portfolio's first-launch popups that queue over
+        # gameplay on a fresh install (daily login-streak '#ls-overlay' and
+        # the '#starterPackModal'). These are NOT intentional capture overlays
+        # (those are overlay-complete/daily/hint/nolives, left untouched), so
+        # hiding them by id is safe and keeps the board visible.
+        _clean_js = ("(function(){try{"
+                     "localStorage.setItem('tutorialDone','1');"
+                     "localStorage.setItem('coachmarkDone','1');"
+                     "if(window.Android&&Android.hideBannerAd)Android.hideBannerAd();"
+                     "['ls-overlay','starterPackModal'].forEach(function(id){"
+                     "var o=document.getElementById(id);if(o)o.style.display='none';});"
+                     "}catch(e){}return 'clean';})()")
+        execute_taps([["js", _clean_js, 350]], screen_w, screen_h,
+                     package_name=package)
         # SurfaceFlinger composite delay — empirically Pixel6_API34 races
         # for slots that load 20×20 grids; 2s is conservative.
         time.sleep(2.0)

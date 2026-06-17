@@ -47,6 +47,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import android.util.Base64;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 
 public class MainActivity extends Activity {
 
@@ -55,6 +62,11 @@ public class MainActivity extends Activity {
     private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-5695494884863768/5765562640";
     private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-5695494884863768/6329006131";
     private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-5695494884863768/7889499819";
+
+    // Play Console → Monetization setup → Licensing → base64-encoded RSA public
+    // key. Used by verifyPurchaseSignature() to validate every purchase locally
+    // before the reward is granted. Per-app and unique (never shared).
+    private static final String LICENSE_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkrZZsHdkD4AyEcdjevtHAN4bdON2QmjgNX4uWTubEYgIfVD96a3aVB7lZT3UC8H+BUC0pWJNKXqaoKtUY2LRbOVwXEusJvPVdRHAuUC5hVPbqbLa3KGe9WKMgLeT6hoXzZW7gumZv/CA19uzvDMz7Y0PnXoSI8aI7PDQQiLWy4llczOFrf1Id8S5GVFmvqESpUWgpaBboIOsf6dPmOY6tSdEtm9Hbu9Q1RWcsLSX6/MOfDLpbZM8a8L6JNAJ0LoxD51CAs5U8ow7qlhQu27qeOwMqxN/xyEW2COw2/7fbYRkOctEfxvxv0ODaTj/8J3BJJ7c9lyTyD7Ehe7+okrb2QIDAQAB";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
@@ -393,6 +405,10 @@ public class MainActivity extends Activity {
 
         private void handlePurchase(Purchase purchase) {
         if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED) return;
+        if (!verifyPurchaseSignature(purchase)) {
+            Log.w("IAP", "Signature verification failed; reward NOT granted.");
+            return;
+        }
 
         boolean isConsumable = false;
         for (String id : purchase.getProducts()) {
@@ -430,6 +446,34 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> webView.evaluateJavascript(
                 "window.onPurchaseSuccess && window.onPurchaseSuccess('" + id + "');", null));
             if ("remove_ads".equals(id)) hideBanner();
+        }
+    }
+
+    // RSA-SHA1 signature check against the app's Play Console public key.
+    // Returns true if verified, false if invalid. Returns true (skip) when the
+    // public key is still a placeholder so local debug builds work before the
+    // real key is pasted in.
+    private boolean verifyPurchaseSignature(Purchase purchase) {
+        if (LICENSE_PUBLIC_KEY == null || LICENSE_PUBLIC_KEY.startsWith("PASTE_")) {
+            Log.w("IAP", "LICENSE_PUBLIC_KEY is placeholder — signature check skipped.");
+            return true;
+        }
+        String signedData = purchase.getOriginalJson();
+        String signature  = purchase.getSignature();
+        if (signedData == null || signature == null || signature.isEmpty()) return false;
+        try {
+            byte[] keyBytes = Base64.decode(LICENSE_PUBLIC_KEY, Base64.DEFAULT);
+            PublicKey pub = KeyFactory.getInstance("RSA")
+                .generatePublic(new X509EncodedKeySpec(keyBytes));
+            Signature sig = Signature.getInstance("SHA1withRSA");
+            sig.initVerify(pub);
+            sig.update(signedData.getBytes("UTF-8"));
+            return sig.verify(Base64.decode(signature, Base64.DEFAULT));
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException
+                 | java.security.SignatureException | java.security.InvalidKeyException
+                 | java.io.UnsupportedEncodingException | IllegalArgumentException e) {
+            Log.w("IAP", "Purchase signature verify error: " + e.getMessage());
+            return false;
         }
     }
     private void launchSubscription(String productId) {

@@ -1,0 +1,29 @@
+{
+  "_comment": "SatisfyingSlime wrapper profile (scripts/wrap_screenshots.py). Style: ABUNDANT / kawaii — fits a cute, squishy, candy-colored slime toy. The generic auto-theme was a pale wellness lavender; gradient_stops set a brighter candy-pastel (cotton pink -> lilac -> mint) sampled to suit the slime palette. ADDS crisp full-colour slime blobs, sparkles, hearts and bubbles with soft drop shadows in the edges/corners + a couple peeking over the phone's bottom corner. Never covers the dark playfield, headline, or subtitle. Positions/rotation jitter per slot.",
+  "gradient_stops": ["#ffd6ec", "#ecd4ff", "#c2efdc"],
+  "blobs": [
+    [0.15, 0.20, 0.36, "#ff80ab", 82],
+    [0.86, 0.24, 0.34, "#00c853", 74],
+    [0.10, 0.66, 0.36, "#00bcd4", 78],
+    [0.90, 0.70, 0.34, "#ff6e40", 76],
+    [0.42, 0.93, 0.36, "#e040fb", 72],
+    [0.72, 0.10, 0.26, "#ffaa00", 64],
+    [0.50, 0.48, 0.42, "#ffd740", 40]
+  ],
+  "pieces": [
+    {"shape": "blob",    "x": 0.13, "y": 0.30, "size": 0.46, "color": "#ff80ab", "rot": 18,  "alpha": 95,  "blur": 26},
+    {"shape": "blob",    "x": 0.88, "y": 0.78, "size": 0.44, "color": "#00bcd4", "rot": -22, "alpha": 92,  "blur": 26},
+    {"shape": "blob",    "x": 0.08, "y": 0.93, "size": 0.36, "color": "#00c853", "rot": 12,  "alpha": 235, "blur": 1, "shadow": true},
+    {"shape": "blob",    "x": 0.93, "y": 0.92, "size": 0.30, "color": "#ffc107", "rot": -14, "alpha": 232, "blur": 1, "shadow": true},
+    {"shape": "blob",    "x": 0.95, "y": 0.31, "size": 0.25, "color": "#ff4081", "rot": -18, "alpha": 230, "blur": 1, "shadow": true},
+    {"shape": "blob",    "x": 0.04, "y": 0.57, "size": 0.21, "color": "#00bcd4", "rot": 20,  "alpha": 228, "blur": 1, "shadow": true},
+    {"shape": "bubble",  "x": 0.07, "y": 0.40, "size": 0.13, "color": "#00bcd4", "rot": 0,   "alpha": 230, "blur": 0},
+    {"shape": "bubble",  "x": 0.94, "y": 0.66, "size": 0.11, "color": "#ff80ab", "rot": 0,   "alpha": 230, "blur": 0},
+    {"shape": "heart",   "x": 0.96, "y": 0.45, "size": 0.10, "color": "#e91e63", "rot": 12,  "alpha": 235, "blur": 0, "shadow": true},
+    {"shape": "sparkle", "x": 0.11, "y": 0.27, "size": 0.10, "color": "#ffd700", "rot": 0,   "alpha": 255, "blur": 0},
+    {"shape": "sparkle", "x": 0.90, "y": 0.80, "size": 0.09, "color": "#ffd700", "rot": 0,   "alpha": 255, "blur": 0},
+    {"shape": "sparkle", "x": 0.06, "y": 0.75, "size": 0.07, "color": "#ffffff", "rot": 0,   "alpha": 255, "blur": 0},
+    {"shape": "blob",    "x": 0.16, "y": 0.90, "size": 0.18, "color": "#ff6e40", "rot": 8,   "alpha": 235, "blur": 0, "shadow": true, "front": true},
+    {"shape": "sparkle", "x": 0.26, "y": 0.84, "size": 0.07, "color": "#ffd700", "rot": 0,   "alpha": 255, "blur": 0, "front": true}
+  ]
+}

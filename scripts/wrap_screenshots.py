@@ -50,6 +50,45 @@ S = 2  # supersample factor for crisp text
 W = OUT_W * S
 H = OUT_H * S
 
+# Per-app composition overrides, loaded from <app>/metadata/wrap_profile.json
+# when present. Absent profile == empty dict == original behavior, so the
+# grandfathered apps (WS/Nono/P2048/UB) are never restyled by a new profile.
+PROFILE = {}
+
+
+def tighten_board(shot):
+    """Collapse the big near-uniform vertical gaps above/below a square game
+    board so it fills far more of the framed phone. Detects 'empty' rows by
+    low per-row colour variance and shrinks any empty run longer than
+    `tighten_max_gap` (fraction of height) down to `tighten_keep`. Header,
+    board and footer (all have content → variance) are preserved."""
+    from PIL import ImageStat
+    rgb = shot.convert('RGB')
+    w, h = rgb.size
+    thresh = PROFILE.get('tighten_var', 6.0)
+    keep = int(h * PROFILE.get('tighten_keep', 0.022))
+    max_gap = int(h * PROFILE.get('tighten_max_gap', 0.045))
+    empties = [max(ImageStat.Stat(rgb.crop((0, y, w, y + 1))).stddev) < thresh
+               for y in range(h)]
+    segs = []
+    y = 0
+    while y < h:
+        y0 = y
+        run_empty = empties[y]
+        while y < h and empties[y] == run_empty:
+            y += 1
+        if run_empty and (y - y0) > max_gap:
+            segs.append((y0, y0 + keep))
+        else:
+            segs.append((y0, y))
+    new_h = sum(b - a for a, b in segs)
+    out = Image.new('RGB', (w, new_h), (255, 255, 255))
+    cy = 0
+    for a, b in segs:
+        out.paste(rgb.crop((0, a, w, b)), (0, cy))
+        cy += b - a
+    return out
+
 # ---------------------- font discovery ----------------------
 _FONTS_DIR = str(Path(__file__).resolve().parent / 'fonts')
 FONT_CANDIDATES = {
@@ -98,12 +137,22 @@ def variant_for(slot_index, surface_offset=0):
 
 # ---------------------- image helpers ----------------------
 
+def _hex(s):
+    s = s.lstrip('#')
+    return (int(s[0:2], 16), int(s[2:4], 16), int(s[4:6], 16))
+
+
 def make_gradient_bg(theme, direction="tl-br"):
     """3-stop gradient; corner placement varies by direction so each
-    variant reads as a visually different background."""
-    c1 = theme["bg_top_left"]
-    c2 = theme["bg_top_right"]
-    c3 = theme["bg_bottom"]
+    variant reads as a visually different background. A profile may supply
+    `gradient_stops` (3 hex colours) to override the theme's murky defaults."""
+    stops = PROFILE.get("gradient_stops")
+    if stops:
+        c1, c2, c3 = (_hex(stops[0]), _hex(stops[1]), _hex(stops[2]))
+    else:
+        c1 = theme["bg_top_left"]
+        c2 = theme["bg_top_right"]
+        c3 = theme["bg_bottom"]
     mid = tuple((c1[i] + c3[i]) // 2 for i in range(3))
     # (TL, TR, BL, BR) corner colours per direction
     layouts = {
@@ -169,6 +218,262 @@ def draw_decorations(img, theme, style="bubbles"):
             r = int(W * rr)
             draw.ellipse([x - r, y - r, x + r, y + r],
                          outline=deco, width=4)
+
+
+# ---------------------- v2 wrapper layers (profile: wrapper="v2") ----------
+# A brighter, on-brand frame: an energetic gradient (set via gradient_stops),
+# soft radial blobs in the game's route palette, faint rounded pipe-route
+# motifs, and a halo behind the phone for depth. Gated by the profile so the
+# grandfathered apps keep the original flat treatment.
+
+import math as _math
+
+
+def _radial_mask(diam, peak, falloff=1.7):
+    """L-mode soft radial falloff (peak alpha at centre → 0 at edge)."""
+    s = 72
+    m = Image.new('L', (s, s), 0)
+    px = m.load()
+    c = (s - 1) / 2.0
+    maxr = s / 2.0
+    for y in range(s):
+        for x in range(s):
+            r = _math.hypot(x - c, y - c) / maxr
+            px[x, y] = int(peak * max(0.0, 1.0 - r) ** falloff) if r < 1 else 0
+    return m.resize((max(1, diam), max(1, diam)), Image.BICUBIC)
+
+
+def draw_palette_blobs(canvas, blobs):
+    """blobs: list of (cx_frac, cy_frac, radius_frac, '#hex', peak_alpha)."""
+    layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    for cx, cy, rad, hexcol, peak in blobs:
+        d = int(W * rad * 2)
+        col = _hex(hexcol)
+        tile = Image.new('RGBA', (d, d), (col[0], col[1], col[2], 0))
+        tile.putalpha(_radial_mask(d, peak))
+        layer.alpha_composite(tile, (int(W * cx) - d // 2, int(H * cy) - d // 2))
+    canvas.alpha_composite(layer)
+
+
+def draw_pipe_motifs(canvas, paths, hexcol, alpha, width_frac=0.02):
+    """Faint rounded pipe-route motifs drifting behind the phone.
+    paths: list of polylines, each a list of (x_frac, y_frac) points."""
+    layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    col = _hex(hexcol)
+    rgba = (col[0], col[1], col[2], alpha)
+    lw = int(W * width_frac)
+    for path in paths:
+        pts = [(int(W * x), int(H * y)) for x, y in path]
+        if len(pts) >= 2:
+            d.line(pts, fill=rgba, width=lw, joint='curve')
+        for ex, ey in (pts[0], pts[-1]):
+            r = int(lw * 0.62)
+            d.ellipse([ex - r, ey - r, ex + r, ey + r], fill=rgba)
+    canvas.alpha_composite(layer.filter(ImageFilter.GaussianBlur(radius=3)))
+
+
+def draw_phone_halo(canvas, cx, cy, diam, hexcol, peak):
+    """Soft radial halo behind the phone so it lifts off the background."""
+    col = _hex(hexcol)
+    tile = Image.new('RGBA', (diam, diam), (col[0], col[1], col[2], 0))
+    tile.putalpha(_radial_mask(diam, peak, falloff=1.3))
+    canvas.alpha_composite(tile, (cx - diam // 2, cy - diam // 2))
+
+
+# Default v2 ambient layout (fractions of W/H). Blob colours are the game's
+# route palette; positions hug the edges so the phone column stays clean.
+V2_BLOBS = [
+    (0.10, 0.12, 0.30, '#ff5a5a', 70),   # red   top-left
+    (0.90, 0.14, 0.26, '#ff9f1c', 64),   # orange top-right
+    (0.96, 0.46, 0.30, '#ffd166', 56),   # yellow right
+    (0.06, 0.52, 0.30, '#2ec4b6', 60),   # teal  left
+    (0.12, 0.88, 0.30, '#3a86ff', 66),   # blue  bottom-left
+    (0.90, 0.90, 0.28, '#c44fe0', 66),   # magenta bottom-right
+    (0.50, 0.30, 0.34, '#7b2ff7', 40),   # violet centre wash (subtle)
+]
+V2_MOTIFS = [
+    [(0.05, 0.20), (0.05, 0.30), (0.18, 0.30)],
+    [(0.95, 0.30), (0.95, 0.40), (0.82, 0.40), (0.82, 0.47)],
+    [(0.08, 0.70), (0.20, 0.70), (0.20, 0.62)],
+    [(0.92, 0.66), (0.92, 0.78), (0.80, 0.78)],
+]
+
+
+# ---------------------- ambient decoration pieces (per-app) ----------------
+# Restraint brief: 4-7 soft, blurred, low-opacity copies of an app's own
+# signature game pieces, scattered in the corners/edges only (never the
+# centre). Each app's wrap_profile.json supplies `pieces`; positions jitter
+# per slot so no two screenshots look identical. Shapes are sampled from the
+# app's real art + palette.
+
+def _piece_tile(shape, size, hexcol, alpha, text=None):
+    """Render one signature piece into a transparent square tile."""
+    img = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    col = _hex(hexcol)
+    rgba = (col[0], col[1], col[2], alpha)
+    light = (min(255, col[0] + 60), min(255, col[1] + 60), min(255, col[2] + 60),
+             int(alpha * 0.85))
+    w = max(2, int(size * 0.26))
+    pad = int(size * 0.20)
+    mid = size // 2
+    if shape == 'pipe_straight':
+        d.line([(pad, mid), (size - pad, mid)], fill=rgba, width=w, joint='curve')
+        for px in (pad, size - pad):
+            r = w // 2
+            d.ellipse([px - r, mid - r, px + r, mid + r], fill=rgba)
+    elif shape == 'pipe_elbow':
+        pts = [(pad, pad), (pad, size - pad), (size - pad, size - pad)]
+        d.line(pts, fill=rgba, width=w, joint='curve')
+        for px, py in (pts[0], pts[-1]):
+            r = w // 2
+            d.ellipse([px - r, py - r, px + r, py + r], fill=rgba)
+    elif shape == 'dot':
+        r = int(size * 0.30)
+        d.ellipse([mid - r, mid - r, mid + r, mid + r], fill=rgba)
+        r2 = int(r * 0.42)
+        d.ellipse([mid - r2, mid - r2, mid + r2, mid + r2], fill=light)
+    elif shape == 'tile':            # rounded square (2048-style) + optional number
+        rr = int(size * 0.16)
+        box = [pad, pad, size - pad, size - pad]
+        d.rounded_rectangle(box, radius=rr, fill=rgba)
+        if text:
+            # dark glyph on light tiles, white on saturated tiles (2048 rule)
+            lum = 0.299 * col[0] + 0.587 * col[1] + 0.114 * col[2]
+            tcol = (119, 110, 101, alpha) if lum > 180 else (255, 255, 255, alpha)
+            fsize = int(size * (0.34 if len(str(text)) <= 2 else
+                                0.26 if len(str(text)) == 3 else 0.20))
+            font = pick_font('heavy', fsize)
+            tb = d.textbbox((0, 0), str(text), font=font)
+            tx = (size - (tb[2] - tb[0])) // 2 - tb[0]
+            ty = (size - (tb[3] - tb[1])) // 2 - tb[1]
+            d.text((tx, ty), str(text), font=font, fill=tcol)
+    elif shape == 'block':           # solid rounded block (unblock/sokoban)
+        rr = int(size * 0.12)
+        d.rounded_rectangle([pad, pad, size - pad, size - pad], radius=rr,
+                            fill=rgba)
+        d.rounded_rectangle([pad + w // 3, pad + w // 3, size - pad - w // 3,
+                            size - pad - w // 3], radius=rr, outline=light,
+                            width=max(2, w // 5))
+    elif shape == 'cell':            # filled nonogram cell cluster
+        rr = int(size * 0.14)
+        d.rounded_rectangle([pad, pad, size - pad, size - pad], radius=rr,
+                            fill=rgba)
+    elif shape == 'tube':            # water-sort tube with a band
+        rr = int(size * 0.42)
+        x0, x1 = int(size * 0.34), int(size * 0.66)
+        d.rounded_rectangle([x0, pad, x1, size - pad], radius=rr, outline=rgba,
+                            width=max(3, w // 3))
+        d.rounded_rectangle([x0, int(size * 0.55), x1, size - pad - w // 4],
+                            radius=rr // 2, fill=rgba)
+    elif shape == 'ring':            # hollow ring (lights-out / reaction)
+        r = int(size * 0.32)
+        d.ellipse([mid - r, mid - r, mid + r, mid + r], outline=rgba,
+                  width=max(3, w // 2))
+    # ---- kawaii / abundant vocabulary (crisp, full-colour) ----
+    elif shape == 'blob':            # gooey slime blob with gloss
+        d.ellipse([pad, int(size * 0.30), size - pad, size - pad], fill=rgba)
+        d.ellipse([int(size * 0.28), pad, int(size * 0.80), int(size * 0.64)], fill=rgba)
+        d.ellipse([pad, int(size * 0.46), int(size * 0.56), size - pad], fill=rgba)
+        gloss = (255, 255, 255, int(alpha * 0.55))
+        d.ellipse([int(size * 0.40), int(size * 0.40),
+                   int(size * 0.60), int(size * 0.56)], fill=gloss)
+    elif shape == 'sparkle':         # 4-point star
+        arm, ww = int(size * 0.46), int(size * 0.11)
+        d.polygon([(mid, mid - arm), (mid + ww, mid), (mid, mid + arm), (mid - ww, mid)], fill=rgba)
+        d.polygon([(mid - arm, mid), (mid, mid + ww), (mid + arm, mid), (mid, mid - ww)], fill=rgba)
+        d.ellipse([mid - ww, mid - ww, mid + ww, mid + ww], fill=(255, 255, 255, alpha))
+    elif shape == 'heart':
+        r, top = int(size * 0.20), int(size * 0.38)
+        d.ellipse([mid - 2 * r, top - r, mid, top + r], fill=rgba)
+        d.ellipse([mid, top - r, mid + 2 * r, top + r], fill=rgba)
+        d.polygon([(mid - 2 * r + 2, top), (mid + 2 * r - 2, top), (mid, size - pad)], fill=rgba)
+    elif shape == 'bubble':          # translucent bubble w/ highlight
+        r = int(size * 0.30)
+        d.ellipse([mid - r, mid - r, mid + r, mid + r],
+                  fill=(col[0], col[1], col[2], int(alpha * 0.35)))
+        d.ellipse([mid - r, mid - r, mid + r, mid + r], outline=rgba, width=max(3, int(size * 0.05)))
+        hr = int(r * 0.30)
+        hx, hy = mid - int(r * 0.4), mid - int(r * 0.4)
+        d.ellipse([hx - hr, hy - hr, hx + hr, hy + hr], fill=(255, 255, 255, int(alpha * 0.85)))
+    elif shape == 'drip':            # teardrop
+        r, by = int(size * 0.26), int(size * 0.62)
+        d.ellipse([mid - r, by - r, mid + r, by + r], fill=rgba)
+        d.polygon([(mid - int(r * 0.5), by - int(r * 0.3)),
+                   (mid + int(r * 0.5), by - int(r * 0.3)), (mid, pad)], fill=rgba)
+    elif shape == 'star':            # 5-point star
+        R, r2 = size * 0.40, size * 0.40 * 0.42
+        pts = []
+        for k in range(10):
+            ang = -_math.pi / 2 + k * _math.pi / 5
+            rad = R if k % 2 == 0 else r2
+            pts.append((mid + rad * _math.cos(ang), mid + rad * _math.sin(ang)))
+        d.polygon(pts, fill=rgba)
+    elif shape == 'burst':           # firework explosion
+        R = size * 0.44
+        lw = max(2, int(size * 0.035))
+        for k in range(12):
+            ang = k * 2 * _math.pi / 12
+            ex, ey = mid + R * _math.cos(ang), mid + R * _math.sin(ang)
+            d.line([(mid, mid), (ex, ey)], fill=rgba, width=lw)
+            rr = int(size * 0.03)
+            d.ellipse([ex - rr, ey - rr, ex + rr, ey + rr], fill=rgba)
+        c2 = int(size * 0.05)
+        d.ellipse([mid - c2, mid - c2, mid + c2, mid + c2], fill=(255, 255, 255, alpha))
+    elif shape == 'cloud':
+        y = int(size * 0.56)
+        d.ellipse([int(size * 0.10), y - int(size * 0.18), int(size * 0.46), y + int(size * 0.18)], fill=rgba)
+        d.ellipse([int(size * 0.32), int(size * 0.28), int(size * 0.70), y + int(size * 0.16)], fill=rgba)
+        d.ellipse([int(size * 0.54), y - int(size * 0.16), int(size * 0.90), y + int(size * 0.18)], fill=rgba)
+        d.rounded_rectangle([int(size * 0.16), y, int(size * 0.84), y + int(size * 0.20)],
+                            radius=int(size * 0.1), fill=rgba)
+    elif shape == 'clock':
+        r = int(size * 0.38)
+        d.ellipse([mid - r, mid - r, mid + r, mid + r],
+                  fill=(col[0], col[1], col[2], int(alpha * 0.16)))
+        d.ellipse([mid - r, mid - r, mid + r, mid + r], outline=rgba, width=max(3, int(size * 0.05)))
+        d.line([(mid, mid), (mid, mid - int(r * 0.6))], fill=rgba, width=max(3, int(size * 0.045)))
+        d.line([(mid, mid), (mid + int(r * 0.45), mid)], fill=rgba, width=max(3, int(size * 0.045)))
+        cc = int(size * 0.03)
+        d.ellipse([mid - cc, mid - cc, mid + cc, mid + cc], fill=rgba)
+    elif shape == 'shard':           # triangle (kaleidoscope)
+        d.polygon([(mid, pad), (size - pad, size - pad), (pad, size - pad)], fill=rgba)
+    return img
+
+
+def draw_decoration_pieces(canvas, pieces, slot, layer='all'):
+    """pieces: list of dicts {shape,x,y,size,color,alpha,rot,blur,shadow,front}.
+    Positions + rotation jitter deterministically by slot so each screenshot
+    varies. `layer` selects 'back' (default pieces, drawn behind the phone),
+    'front' (pieces with front=true, drawn over the phone edge), or 'all'."""
+    for i, p in enumerate(pieces):
+        is_front = bool(p.get('front'))
+        if layer == 'back' and is_front:
+            continue
+        if layer == 'front' and not is_front:
+            continue
+        size = max(8, int(W * p.get('size', 0.3)))
+        tile = _piece_tile(p['shape'], size, p.get('color', '#ffffff'),
+                           p.get('alpha', 60), text=p.get('num'))
+        jx = ((slot * 37 + i * 53) % 7 - 3) / 100.0
+        jy = ((slot * 29 + i * 41) % 7 - 3) / 100.0
+        rot = p.get('rot', 0) + ((slot * 17 + i * 23) % 21 - 10)
+        tile = tile.rotate(rot, expand=True, resample=Image.BICUBIC)
+        blur = p.get('blur', 8)
+        if blur:
+            tile = tile.filter(ImageFilter.GaussianBlur(radius=blur))
+        cx = int(W * (p['x'] + jx)) - tile.width // 2
+        cy = int(H * (p['y'] + jy)) - tile.height // 2
+        if p.get('shadow'):
+            # soft drop shadow from the piece silhouette (abundant/crisp style)
+            alpha_ch = tile.split()[3].point(lambda a: int(a * 0.40))
+            sh = Image.new('RGBA', tile.size, (25, 18, 40, 0))
+            sh.putalpha(alpha_ch)
+            sh = sh.filter(ImageFilter.GaussianBlur(radius=max(4, size // 22)))
+            off = max(4, size // 26)
+            canvas.alpha_composite(sh, (cx + off, cy + off))
+        canvas.alpha_composite(tile, (cx, cy))
 
 
 def frame_screenshot(shot, theme, height_frac=0.62):
@@ -340,14 +645,35 @@ def draw_footer(img, app_display_name, theme):
 
 
 def build_one(src_path, out_path, line1, line2, subtitle,
-              app_display_name, theme, variant):
+              app_display_name, theme, variant, slot=0):
     canvas = make_gradient_bg(theme, variant["gradient"]).convert('RGBA')
-    draw_decorations(canvas, theme, variant["deco"])
+    v2 = PROFILE.get('wrapper') == 'v2'
+    if PROFILE.get('blobs'):
+        # Soft, blurred colour washes behind everything — fills out an
+        # abundant background so it isn't just crisp stickers on flat gradient.
+        draw_palette_blobs(canvas, PROFILE['blobs'])
+    if PROFILE.get('pieces'):
+        # On-theme decorations from THIS app's own pieces. Back layer draws
+        # behind the phone; front pieces (front=true) draw after the phone so
+        # they peek over its edge (abundant style). Density/opacity/blur are
+        # set per-app in the profile.
+        draw_decoration_pieces(canvas, PROFILE['pieces'], slot, layer='back')
+    elif v2:
+        draw_palette_blobs(canvas, PROFILE.get('blobs', V2_BLOBS))
+        draw_pipe_motifs(canvas, PROFILE.get('motifs', V2_MOTIFS),
+                         PROFILE.get('motif_color', '#ffffff'),
+                         PROFILE.get('motif_alpha', 26))
+    else:
+        draw_decorations(canvas, theme, variant["deco"])
 
     bottom = variant["headline"] == "bottom"
     shot = Image.open(src_path)
+    if PROFILE.get('tighten_board'):
+        shot = tighten_board(shot)
+    hf_top = PROFILE.get('height_frac_top', 0.62)
+    hf_bottom = PROFILE.get('height_frac_bottom', 0.52)
     framed, fw, fh = frame_screenshot(
-        shot, theme, height_frac=(0.52 if bottom else 0.62))
+        shot, theme, height_frac=(hf_bottom if bottom else hf_top))
 
     # Framed screenshot always stays horizontally centered.
     fx = (W - fw) // 2
@@ -358,12 +684,25 @@ def build_one(src_path, out_path, line1, line2, subtitle,
                       y_start=fy + fh + int(H * 0.035))
     else:
         headline_bottom = draw_headline(canvas, line1, line2, subtitle, theme)
-        fy = headline_bottom + int(H * 0.03)
-        bottom_limit = int(H * 0.94) - fh
+        fy = headline_bottom + int(H * PROFILE.get('headline_gap', 0.03))
+        # Anchor: when there's slack below, drop the phone so the block sits
+        # centered in the lower region instead of floating under the headline.
+        bottom_limit = int(H * PROFILE.get('phone_bottom', 0.94)) - fh
+        anchor = PROFILE.get('phone_anchor')
+        if anchor is not None and fy < bottom_limit:
+            fy = min(bottom_limit, fy + int((bottom_limit - fy) * anchor))
         if fy > bottom_limit:
             fy = bottom_limit
 
+    if v2:
+        # Halo behind the phone for separation/depth (drawn before the phone).
+        draw_phone_halo(canvas, fx + fw // 2, fy + fh // 2,
+                        int(fw * 1.55), PROFILE.get('halo_color', '#ffffff'),
+                        PROFILE.get('halo_alpha', 64))
     canvas.alpha_composite(framed, (fx, fy))
+    if PROFILE.get('pieces'):
+        # Front decorations peek over the phone edge for depth (abundant).
+        draw_decoration_pieces(canvas, PROFILE['pieces'], slot, layer='front')
     draw_footer(canvas, app_display_name, theme)
 
     out = canvas.resize((OUT_W, OUT_H), Image.LANCZOS)
@@ -377,6 +716,9 @@ def build_one(src_path, out_path, line1, line2, subtitle,
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("app_name", help="App folder name (e.g., WaterSort)")
+    ap.add_argument("--iphone", action="store_true",
+                    help="generate 3 Apple iPhone 6.9\" (1320x2868) shots into "
+                         "store/screenshots/iphone_6_9/ instead of the phone set")
     args = ap.parse_args()
 
     app_name = args.app_name
@@ -423,6 +765,12 @@ def main():
               f"found {len(headlines)} in {headlines_path}")
         sys.exit(1)
 
+    global PROFILE
+    profile_path = app_dir / "metadata" / "wrap_profile.json"
+    PROFILE = json.loads(profile_path.read_text()) if profile_path.exists() else {}
+    if PROFILE:
+        print(f"Wrap profile: {profile_path.name} → {sorted(PROFILE)}")
+
     theme = get_theme(app_name)
     print(f"Theme for {app_name}: {theme['mood']}")
     print(f"  bg gradient: {theme['bg_top_left']} → {theme['bg_top_right']} → {theme['bg_bottom']}")
@@ -433,6 +781,40 @@ def main():
         app_display_name = title_path.read_text().strip()
     else:
         app_display_name = app_name
+
+    # iPhone 6.9" mode re-wraps 3 of the phone gameplay raws at Apple's
+    # 1320x2868 canvas (App Store requires ≥1; we ship 3 like the other
+    # apps). Same gameplay raws, re-framed for the taller iPhone aspect —
+    # the frame layout differs, so these are genuinely distinct artifacts.
+    if args.iphone:
+        global OUT_W, OUT_H, W, H
+        OUT_W, OUT_H = 1320, 2868
+        W, H = OUT_W * S, OUT_H * S
+        out_dir = app_dir / "store" / "screenshots" / "iphone_6_9"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        # Pick 3 spread-out gameplay slots (skip the themes/non-gameplay
+        # slot 6 when 7 exist). Prefer early/mid/late for variety.
+        candidates = [i for i in range(n_slots) if (i + 1) != 6]
+        if len(candidates) >= 3:
+            picks = [candidates[0], candidates[len(candidates) // 2], candidates[-1]]
+        else:
+            picks = list(range(min(3, n_slots)))
+        print(f"\nWrapping 3 iPhone 6.9\" shots for {app_name} ({OUT_W}x{OUT_H})...")
+        print(f"  source raws: {[p + 1 for p in picks]}")
+        for out_idx, i in enumerate(picks):
+            src = raw_dir / f"{i+1:02d}.png"
+            out = out_dir / f"{out_idx+1:02d}.png"
+            if not src.exists():
+                print(f"  WARNING: missing {src.name}, skipping")
+                continue
+            h = headlines[i]
+            variant = variant_for(out_idx)
+            print(f"  raw/{src.name} → {out.name}  ({h['line1']} {h['line2']})")
+            build_one(src, out, h['line1'], h['line2'], h['subtitle'],
+                      app_display_name, theme, variant, slot=out_idx)
+        print()
+        print(f"✓ Done. iPhone 6.9\" screenshots ready at {out_dir}")
+        return
 
     out_dir = app_dir / "store" / "screenshots" / "phone"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -453,7 +835,7 @@ def main():
         print(f"  {src.name} → {out.name}  ({h['line1']} {h['line2']})"
               f"  [{variant['gradient']}/{variant['headline']}/{variant['deco']}]")
         build_one(src, out, h['line1'], h['line2'], h['subtitle'],
-                  app_display_name, theme, variant)
+                  app_display_name, theme, variant, slot=i)
 
     print()
     print(f"✓ Done. Phone screenshots ready at {out_dir}")

@@ -1,0 +1,21 @@
+{
+  "_comment": "PipeConnect screenshot wrapper profile (scripts/wrap_screenshots.py). Scoped to this app. Keeps the energetic indigo->violet gradient + phone halo; ambient decorations are a restrained set of the game's own pipe pieces (elbows, straights, endpoint dots) in the sampled route palette, soft + blurred in the corners/edges only, partly behind the phone for depth. Positions jitter per slot.",
+  "tighten_board": false,
+  "height_frac_top": 0.72,
+  "height_frac_bottom": 0.64,
+  "headline_gap": 0.024,
+  "phone_anchor": 0.5,
+  "phone_bottom": 0.95,
+  "wrapper": "v2",
+  "gradient_stops": ["#3a4ad6", "#5e3fd0", "#8330d6"],
+  "halo_color": "#ffffff",
+  "halo_alpha": 66,
+  "pieces": [
+    {"shape": "pipe_elbow",    "x": 0.09, "y": 0.25, "size": 0.32, "color": "#e040fb", "rot": -15, "alpha": 70, "blur": 12},
+    {"shape": "pipe_elbow",    "x": 0.91, "y": 0.31, "size": 0.30, "color": "#ff6d00", "rot": 110, "alpha": 64, "blur": 14},
+    {"shape": "dot",           "x": 0.05, "y": 0.50, "size": 0.13, "color": "#18ffff", "rot": 0,   "alpha": 78, "blur": 5},
+    {"shape": "pipe_straight", "x": 0.96, "y": 0.62, "size": 0.28, "color": "#448aff", "rot": 90,  "alpha": 60, "blur": 14},
+    {"shape": "pipe_elbow",    "x": 0.10, "y": 0.82, "size": 0.30, "color": "#69f0ae", "rot": 150, "alpha": 66, "blur": 11},
+    {"shape": "dot",           "x": 0.90, "y": 0.86, "size": 0.12, "color": "#ffd740", "rot": 0,   "alpha": 72, "blur": 6}
+  ]
+}

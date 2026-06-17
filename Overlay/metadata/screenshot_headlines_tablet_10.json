@@ -1,8 +1,12 @@
 [
-  {"line1": "MIDNIGHT", "line2": "MASTER", "subtitle": "Dark mode on the biggest 10x10 boards."},
-  {"line1": "GALAXY", "line2": "SPEED RUN", "subtitle": "5x5 starter levels in jewel tones."},
-  {"line1": "PASTEL", "line2": "EXPERT", "subtitle": "Soft palette, 9x9 expert routing."},
-  {"line1": "INFERNO", "line2": "FOCUS", "subtitle": "Warm-tone palette for medium boards."},
-  {"line1": "OCEAN", "line2": "DEEP RUN", "subtitle": "Cool blues across late-game 9x9 puzzles."},
-  {"line1": "STREAK", "line2": "AND STARS", "subtitle": "Track daily streaks, levels, perfect runs."}
+ {
+  "line1": "ENDLESS",
+  "line2": "PICTURES",
+  "subtitle": "A new target every time."
+ },
+ {
+  "line1": "PRIMARY",
+  "line2": "COLORS",
+  "subtitle": "Bold gels, clean reads."
+ }
 ]

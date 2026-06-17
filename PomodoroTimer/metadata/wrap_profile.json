@@ -1,0 +1,65 @@
+{
+ "_comment": "PomodoroTimer wrapper decorations (scripts/wrap_screenshots.py). Style: RESTRAINED \u2014 on-theme motifs in the app's sampled palette, placed in corners/edges, center playfield + headline + subtitle kept clear; positions jitter per slot. Existing gradient kept.",
+ "pieces": [
+  {
+   "shape": "clock",
+   "x": 0.07,
+   "y": 0.28,
+   "size": 0.3,
+   "color": "#ff4040",
+   "rot": -12,
+   "alpha": 78,
+   "blur": 12
+  },
+  {
+   "shape": "blob",
+   "x": 0.93,
+   "y": 0.3,
+   "size": 0.28,
+   "color": "#ff5a5a",
+   "rot": 1,
+   "alpha": 72,
+   "blur": 14
+  },
+  {
+   "shape": "dot",
+   "x": 0.05,
+   "y": 0.55,
+   "size": 0.2,
+   "color": "#40c080",
+   "rot": -10,
+   "alpha": 66,
+   "blur": 16
+  },
+  {
+   "shape": "clock",
+   "x": 0.95,
+   "y": 0.58,
+   "size": 0.18,
+   "color": "#ff4040",
+   "rot": 3,
+   "alpha": 78,
+   "blur": 12
+  },
+  {
+   "shape": "dot",
+   "x": 0.1,
+   "y": 0.89,
+   "size": 0.26,
+   "color": "#4080ff",
+   "rot": -8,
+   "alpha": 72,
+   "blur": 14
+  },
+  {
+   "shape": "blob",
+   "x": 0.9,
+   "y": 0.91,
+   "size": 0.16,
+   "color": "#ff7a7a",
+   "rot": 5,
+   "alpha": 66,
+   "blur": 16
+  }
+ ]
+}

@@ -1,0 +1,181 @@
+{
+ "_comment": "Fireworks wrapper decorations (scripts/wrap_screenshots.py). Style: ABUNDANT \u2014 on-theme motifs in the app's sampled palette, placed in corners/edges, center playfield + headline + subtitle kept clear; positions jitter per slot. Existing gradient kept.",
+ "blobs": [
+  [
+   0.15,
+   0.2,
+   0.34,
+   "#ffd700",
+   74
+  ],
+  [
+   0.86,
+   0.24,
+   0.32,
+   "#ff4081",
+   66
+  ],
+  [
+   0.1,
+   0.66,
+   0.34,
+   "#00f5d4",
+   58
+  ],
+  [
+   0.9,
+   0.7,
+   0.32,
+   "#3fb950",
+   74
+  ],
+  [
+   0.42,
+   0.92,
+   0.34,
+   "#ffaa00",
+   66
+  ],
+  [
+   0.72,
+   0.1,
+   0.26,
+   "#ff6f00",
+   58
+  ]
+ ],
+ "pieces": [
+  {
+   "shape": "burst",
+   "x": 0.12,
+   "y": 0.29,
+   "size": 0.46,
+   "color": "#ffd700",
+   "rot": 8,
+   "alpha": 95,
+   "blur": 26
+  },
+  {
+   "shape": "star",
+   "x": 0.88,
+   "y": 0.79,
+   "size": 0.44,
+   "color": "#ff4081",
+   "rot": 1,
+   "alpha": 95,
+   "blur": 26
+  },
+  {
+   "shape": "sparkle",
+   "x": 0.08,
+   "y": 0.27,
+   "size": 0.13,
+   "color": "#00f5d4",
+   "rot": -12,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "burst",
+   "x": 0.93,
+   "y": 0.27,
+   "size": 0.12,
+   "color": "#3fb950",
+   "rot": -11,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "star",
+   "x": 0.05,
+   "y": 0.5,
+   "size": 0.13,
+   "color": "#ffaa00",
+   "rot": -10,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "sparkle",
+   "x": 0.95,
+   "y": 0.55,
+   "size": 0.12,
+   "color": "#ffff44",
+   "rot": -9,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "burst",
+   "x": 0.09,
+   "y": 0.9,
+   "size": 0.22,
+   "color": "#ff4081",
+   "rot": -8,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "star",
+   "x": 0.91,
+   "y": 0.91,
+   "size": 0.18,
+   "color": "#ffd700",
+   "rot": -7,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "burst",
+   "x": 0.5,
+   "y": 0.94,
+   "size": 0.15,
+   "color": "#ffd700",
+   "rot": -6,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "star",
+   "x": 0.72,
+   "y": 0.12,
+   "size": 0.11,
+   "color": "#ff4081",
+   "rot": -5,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "sparkle",
+   "x": 0.16,
+   "y": 0.89,
+   "size": 0.15,
+   "color": "#00f5d4",
+   "rot": 8,
+   "alpha": 245,
+   "blur": 0,
+   "shadow": true,
+   "front": true
+  },
+  {
+   "shape": "burst",
+   "x": 0.85,
+   "y": 0.88,
+   "size": 0.15,
+   "color": "#3fb950",
+   "rot": 8,
+   "alpha": 245,
+   "blur": 0,
+   "shadow": true,
+   "front": true
+  }
+ ]
+}

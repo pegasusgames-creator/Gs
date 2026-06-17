@@ -1,0 +1,108 @@
+{
+ "_comment": "Sokoban wrapper decorations (scripts/wrap_screenshots.py). Style: MODERATE \u2014 on-theme motifs in the app's sampled palette, placed in corners/edges, center playfield + headline + subtitle kept clear; positions jitter per slot. Existing gradient kept.",
+ "blobs": [
+  [
+   0.15,
+   0.2,
+   0.34,
+   "#ff8f00",
+   46
+  ],
+  [
+   0.86,
+   0.24,
+   0.32,
+   "#a9743a",
+   42
+  ]
+ ],
+ "pieces": [
+  {
+   "shape": "block",
+   "x": 0.12,
+   "y": 0.29,
+   "size": 0.44,
+   "color": "#ff8f00",
+   "rot": 11,
+   "alpha": 150,
+   "blur": 17
+  },
+  {
+   "shape": "dot",
+   "x": 0.88,
+   "y": 0.79,
+   "size": 0.42,
+   "color": "#ffd54a",
+   "rot": 10,
+   "alpha": 150,
+   "blur": 17
+  },
+  {
+   "shape": "block",
+   "x": 0.93,
+   "y": 0.28,
+   "size": 0.16,
+   "color": "#a9743a",
+   "rot": 9,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "block",
+   "x": 0.05,
+   "y": 0.55,
+   "size": 0.17,
+   "color": "#ff8f00",
+   "rot": -8,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "dot",
+   "x": 0.95,
+   "y": 0.6,
+   "size": 0.15,
+   "color": "#ffd54a",
+   "rot": -1,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "block",
+   "x": 0.1,
+   "y": 0.9,
+   "size": 0.22,
+   "color": "#8a5a2b",
+   "rot": 6,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "block",
+   "x": 0.9,
+   "y": 0.92,
+   "size": 0.18,
+   "color": "#ff8f00",
+   "rot": -11,
+   "alpha": 242,
+   "blur": 0,
+   "shadow": true
+  },
+  {
+   "shape": "dot",
+   "x": 0.16,
+   "y": 0.89,
+   "size": 0.13,
+   "color": "#ffd54a",
+   "rot": 6,
+   "alpha": 245,
+   "blur": 0,
+   "shadow": true,
+   "front": true
+  }
+ ]
+}

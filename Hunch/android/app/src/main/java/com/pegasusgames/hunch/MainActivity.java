@@ -47,14 +47,27 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import android.util.Base64;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 
 public class MainActivity extends Activity {
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     // Get from: apps.admob.com → Your App → Ad Units
-    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-3940256099942544/6300978111";
-    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
-    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-3940256099942544/5224354917";
+    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-2759523698880843/7621281789";
+    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-2759523698880843/8447278294";
+    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-2759523698880843/5729574051";
+
+    // Play Console → Monetization setup → Licensing → base64-encoded RSA public
+    // key. Used by verifyPurchaseSignature() to validate every purchase locally
+    // before the reward is granted. Per-app and unique (never shared). Replace
+    // the PASTE_ placeholder with this app's real key at release handoff.
+    private static final String LICENSE_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1WeP/ZiwWfbc53LPQz4S28jRz/aNOCdC0nXm7qSKt0U1cy4YxjQ3i9u0bK++zPAtohRJCb02ZrGszqGQAwDEPo/JUmD3H6r45v7/GwSVC4QiqP0EPLZWcidceFbCGZRYtxYYUNV5wVKhZ2NsUhD6StadGaJlcF/7BtVWKhQoULiw0zy07uSkXTeuMYKjkbvayDnV1iHVy5+oGbnDoALVo66RfWSDDhWSCFTPXAX068iw7wcTxWHUB1sAGVUCgvHM3SM11j818QHTeq4hidK/5KMrFkGOkqnYaRbw5wFGwfULDjh0ptzfCrg7x0YUyv+HUwvE6ITIMZn80D6GKPeZgQIDAQAB";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
@@ -393,6 +406,10 @@ public class MainActivity extends Activity {
 
         private void handlePurchase(Purchase purchase) {
         if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED) return;
+        if (!verifyPurchaseSignature(purchase)) {
+            Log.w("IAP", "Signature verification failed; reward NOT granted.");
+            return;
+        }
 
         boolean isConsumable = false;
         for (String id : purchase.getProducts()) {
@@ -430,6 +447,34 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> webView.evaluateJavascript(
                 "window.onPurchaseSuccess && window.onPurchaseSuccess('" + id + "');", null));
             if ("remove_ads".equals(id)) hideBanner();
+        }
+    }
+
+    // RSA-SHA1 signature check against the app's Play Console public key.
+    // Returns true if verified, false if invalid. Returns true (skip) when the
+    // public key is still a placeholder so local debug builds work before the
+    // real key is pasted in.
+    private boolean verifyPurchaseSignature(Purchase purchase) {
+        if (LICENSE_PUBLIC_KEY == null || LICENSE_PUBLIC_KEY.startsWith("PASTE_")) {
+            Log.w("IAP", "LICENSE_PUBLIC_KEY is placeholder — signature check skipped.");
+            return true;
+        }
+        String signedData = purchase.getOriginalJson();
+        String signature  = purchase.getSignature();
+        if (signedData == null || signature == null || signature.isEmpty()) return false;
+        try {
+            byte[] keyBytes = Base64.decode(LICENSE_PUBLIC_KEY, Base64.DEFAULT);
+            PublicKey pub = KeyFactory.getInstance("RSA")
+                .generatePublic(new X509EncodedKeySpec(keyBytes));
+            Signature sig = Signature.getInstance("SHA1withRSA");
+            sig.initVerify(pub);
+            sig.update(signedData.getBytes("UTF-8"));
+            return sig.verify(Base64.decode(signature, Base64.DEFAULT));
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException
+                 | java.security.SignatureException | java.security.InvalidKeyException
+                 | java.io.UnsupportedEncodingException | IllegalArgumentException e) {
+            Log.w("IAP", "Purchase signature verify error: " + e.getMessage());
+            return false;
         }
     }
     private void launchSubscription(String productId) {
