@@ -1,16 +1,18 @@
 platform :ios, '14.0'
 use_frameworks!
 
-target 'UnblockPuzzle' do   # <- replace 'GameApp' with your Xcode target name
+target 'UnblockPuzzle' do   # <- replace with your Xcode target name
 
-  # AppLovin MAX SDK
-  pod 'AppLovinSDK'
+  # Google Mobile Ads (AdMob) + UMP consent
+  pod 'Google-Mobile-Ads-SDK'
+  pod 'GoogleUserMessagingPlatform'
 
-  # Mediation adapters — add networks for higher eCPM
-  pod 'AppLovinMediationGoogleAdMobAdapter'         # AdMob (requires GoogleService-Info.plist)
-  # pod 'AppLovinMediationMetaAudienceNetworkAdapter' # Meta/Facebook
-  # pod 'AppLovinMediationUnityAdsAdapter'            # Unity Ads
-  # pod 'AppLovinMediationIronSourceAdapter'          # IronSource
+  # AdMob mediation adapters — same networks as the Android build
+  pod 'GoogleMobileAdsMediationFacebook'   # Meta Audience Network
+  pod 'GoogleMobileAdsMediationUnity'      # Unity Ads
+  pod 'GoogleMobileAdsMediationMintegral'  # Mintegral
+  pod 'GoogleMobileAdsMediationPangle'     # Pangle
+  pod 'GoogleMobileAdsMediationInMobi'     # InMobi
 
 end
 

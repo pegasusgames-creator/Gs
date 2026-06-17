@@ -1,6 +1,8 @@
 import UIKit
 import WebKit
-import AppLovinSDK
+import GoogleMobileAds
+import UserMessagingPlatform
+import AppTrackingTransparency
 import StoreKit
 
 // -------------------------------------------------------
@@ -8,10 +10,13 @@ import StoreKit
 // and fill in the constants below.
 // -------------------------------------------------------
 struct GameConfig {
-    // AppLovin MAX ad unit IDs — create at dash.applovin.com → Ad Units
-    static let bannerUnitId       = "ENTER_YOUR_MAX_BANNER_UNIT_ID"
-    static let interstitialUnitId = "ENTER_YOUR_MAX_INTER_UNIT_ID"
-    static let rewardedUnitId     = "ENTER_YOUR_MAX_REWARDED_UNIT_ID"
+    // AdMob ad unit IDs — the SAME unit IDs the Android AdMob app uses
+    // (apps.admob.com → this app → Ad Units). NOTE: AdMob serves these by
+    // platform, so create iOS-platform units in the same AdMob app if fill
+    // is low; the IDs below mirror the Android build per the migration spec.
+    static let bannerUnitId       = "ca-app-pub-5695494884863768/5765562640"
+    static let interstitialUnitId = "ca-app-pub-5695494884863768/6329006131"
+    static let rewardedUnitId     = "ca-app-pub-5695494884863768/7889499819"
 
     // StoreKit product IDs — must match App Store Connect
     static let validProducts: Set<String> = [
@@ -32,18 +37,18 @@ struct GameConfig {
 
 // -------------------------------------------------------
 // ViewController
-// WKWebView + AppLovin MAX + StoreKit 2
-// The iOS WKWebView bridge injects window.Android so the
-// game HTML works without any changes — same JS on both platforms.
+// WKWebView + Google Mobile Ads (AdMob) + UMP consent + ATT + StoreKit 2
+// The iOS WKWebView bridge injects window.Android so the game HTML works
+// without any changes — same JS on both platforms.
 // -------------------------------------------------------
 class ViewController: UIViewController {
 
     private var webView: WKWebView!
-    private var bannerAd: MAAdView!
-    private var interstitialAd: MAInterstitialAd!
-    private var rewardedAd: MARewardedAd!
+    private var bannerAd: GADBannerView!
+    private var interstitialAd: GADInterstitialAd?
+    private var rewardedAd: GADRewardedAd?
     private var pendingRewardType: String?
-    private var bannerHeightConstraint: NSLayoutConstraint?
+    private var adsStarted = false
 
     // MARK: - Lifecycle
 
@@ -52,7 +57,7 @@ class ViewController: UIViewController {
         view.backgroundColor = GameConfig.webViewBackground
         setupWebView()
         setupBannerAd()
-        initAppLovinMax()
+        gatherConsentThenStartAds()
     }
 
     override var prefersStatusBarHidden: Bool { true }
@@ -64,8 +69,8 @@ class ViewController: UIViewController {
         let config = WKWebViewConfiguration()
         config.mediaTypesRequiringUserActionForPlayback = []
 
-        // Inject window.Android shim so game.html works unchanged on iOS
-        // All method calls are forwarded to the native "bridge" message handler
+        // Inject window.Android shim so game.html works unchanged on iOS.
+        // All method calls are forwarded to the native "bridge" message handler.
         let bridgeJS = """
         window.Android = {
             showInterstitial: function() {
@@ -110,12 +115,42 @@ class ViewController: UIViewController {
         }
     }
 
-    // MARK: - AppLovin MAX
+    // MARK: - Consent (UMP) + ATT, then start ads
 
-    private func initAppLovinMax() {
-        ALSdk.shared().initialize { [weak self] _ in
+    // Gather Google UMP consent and request App Tracking Transparency BEFORE
+    // the first ad loads / before MobileAds starts (EEA + Apple requirements).
+    private func gatherConsentThenStartAds() {
+        let params = UMPRequestParameters()
+        params.tagForUnderAgeOfConsent = false
+        #if DEBUG
+        let dbg = UMPDebugSettings()
+        dbg.geography = .EEA
+        params.debugSettings = dbg
+        #endif
+        UMPConsentInformation.sharedInstance.requestConsentInfoUpdate(with: params) { [weak self] _ in
+            guard let self = self else { return }
+            UMPConsentForm.loadAndPresentIfRequired(from: self) { [weak self] _ in
+                self?.requestATTThenStart()
+            }
+        }
+    }
+
+    private func requestATTThenStart() {
+        if #available(iOS 14, *) {
+            ATTrackingManager.requestTrackingAuthorization { [weak self] _ in
+                DispatchQueue.main.async { self?.startAds() }
+            }
+        } else {
+            startAds()
+        }
+    }
+
+    private func startAds() {
+        guard !adsStarted else { return }
+        adsStarted = true
+        GADMobileAds.sharedInstance().start { [weak self] _ in
             DispatchQueue.main.async {
-                self?.bannerAd.loadAd()
+                self?.bannerAd.load(GADRequest())
                 self?.loadInterstitialAd()
                 self?.loadRewardedAd()
             }
@@ -125,7 +160,9 @@ class ViewController: UIViewController {
     // MARK: - Banner
 
     private func setupBannerAd() {
-        bannerAd = MAAdView(adUnitIdentifier: GameConfig.bannerUnitId)
+        bannerAd = GADBannerView(adSize: GADAdSizeBanner)
+        bannerAd.adUnitID = GameConfig.bannerUnitId
+        bannerAd.rootViewController = self
         bannerAd.delegate = self
         bannerAd.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(bannerAd)
@@ -158,35 +195,45 @@ class ViewController: UIViewController {
     // MARK: - Interstitial
 
     private func loadInterstitialAd() {
-        interstitialAd = MAInterstitialAd(adUnitIdentifier: GameConfig.interstitialUnitId)
-        interstitialAd.delegate = self
-        interstitialAd.load()
+        GADInterstitialAd.load(withAdUnitID: GameConfig.interstitialUnitId,
+                               request: GADRequest()) { [weak self] ad, error in
+            guard let self = self, error == nil else { return }
+            self.interstitialAd = ad
+            self.interstitialAd?.fullScreenContentDelegate = self
+        }
     }
 
     private func showInterstitialAd() {
         DispatchQueue.main.async {
-            if self.interstitialAd?.isReady == true {
-                self.interstitialAd.show()
-            }
+            guard let ad = self.interstitialAd else { return }
+            ad.present(fromRootViewController: self)
         }
     }
 
     // MARK: - Rewarded
 
     private func loadRewardedAd() {
-        rewardedAd = MARewardedAd.shared(withAdUnitIdentifier: GameConfig.rewardedUnitId)
-        rewardedAd.delegate = self
-        rewardedAd.load()
+        GADRewardedAd.load(withAdUnitID: GameConfig.rewardedUnitId,
+                           request: GADRequest()) { [weak self] ad, error in
+            guard let self = self, error == nil else { return }
+            self.rewardedAd = ad
+            self.rewardedAd?.fullScreenContentDelegate = self
+        }
     }
 
     private func showRewardedAd(type: String) {
         guard GameConfig.validRewardTypes.contains(type) else { return }
         pendingRewardType = type
         DispatchQueue.main.async {
-            if self.rewardedAd?.isReady == true {
-                self.rewardedAd.show()
-            } else {
+            guard let ad = self.rewardedAd else {
                 self.evaluateJS("window.onAdNotReady && window.onAdNotReady();")
+                return
+            }
+            ad.present(fromRootViewController: self) { [weak self] in
+                // CRITICAL: reward granted ONCE here only (user earned reward).
+                guard let self = self, let rewardType = self.pendingRewardType else { return }
+                self.evaluateJS("window.onAdReward && window.onAdReward('\(rewardType)');")
+                self.pendingRewardType = nil
             }
         }
     }
@@ -298,62 +345,25 @@ extension ViewController: WKNavigationDelegate {
     }
 }
 
-// MARK: - MAAdViewAdDelegate (Banner)
+// MARK: - GADBannerViewDelegate
 
-extension ViewController: MAAdViewAdDelegate {
-    func didLoad(_ ad: MAAd) { }
-    func didFailToLoadAd(forAdUnitIdentifier adUnitIdentifier: String, withError error: MAError) { }
-    func didDisplay(_ ad: MAAd) { }
-    func didHide(_ ad: MAAd) { }
-    func didClick(_ ad: MAAd) { }
-    func didFail(toDisplay ad: MAAd, withError error: MAError) { }
-    func didExpand(_ ad: MAAd) { }
-    func didCollapse(_ ad: MAAd) { }
+extension ViewController: GADBannerViewDelegate {
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) { }
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) { }
 }
 
-// MARK: - MAAdDelegate (Interstitial)
+// MARK: - GADFullScreenContentDelegate (interstitial + rewarded)
 
-extension ViewController: MAAdDelegate {
-    func didLoad(_ ad: MAAd) {
-        // Ad ready — nothing needed, isReady checks handle gating
+extension ViewController: GADFullScreenContentDelegate {
+    func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        // Preload the next interstitial + rewarded after dismissal.
+        loadInterstitialAd()
+        loadRewardedAd()
     }
 
-    func didFailToLoadAd(forAdUnitIdentifier adUnitIdentifier: String, withError error: MAError) {
-        // Retry will happen on next show attempt
+    func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
+        loadInterstitialAd()
+        loadRewardedAd()
+        evaluateJS("window.onAdNotReady && window.onAdNotReady();")
     }
-
-    func didDisplay(_ ad: MAAd) { }
-
-    func didHide(_ ad: MAAd) {
-        // Preload next ad after dismissal
-        if ad.adUnitIdentifier == GameConfig.interstitialUnitId {
-            interstitialAd.load()
-        } else if ad.adUnitIdentifier == GameConfig.rewardedUnitId {
-            rewardedAd.load()
-        }
-    }
-
-    func didClick(_ ad: MAAd) { }
-
-    func didFail(toDisplay ad: MAAd, withError error: MAError) {
-        if ad.adUnitIdentifier == GameConfig.interstitialUnitId {
-            interstitialAd.load()
-        } else if ad.adUnitIdentifier == GameConfig.rewardedUnitId {
-            rewardedAd.load()
-            evaluateJS("window.onAdNotReady && window.onAdNotReady();")
-        }
-    }
-}
-
-// MARK: - MARewardedAdDelegate
-
-extension ViewController: MARewardedAdDelegate {
-    func didRewardUser(for ad: MAAd, with reward: MAReward) {
-        guard let rewardType = pendingRewardType else { return }
-        // CRITICAL: reward granted ONCE here only — not in didHide
-        evaluateJS("window.onAdReward && window.onAdReward('\(rewardType)');")
-        pendingRewardType = nil
-    }
-    func didStartRewardedVideo(for ad: MAAd) { }
-    func didCompleteRewardedVideo(for ad: MAAd) { }
 }

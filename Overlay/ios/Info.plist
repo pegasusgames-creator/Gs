@@ -23,13 +23,10 @@
 
     <!-- AppLovin MAX SDK Key -->
     <!-- Get from: dash.applovin.com → Account → Keys → SDK Key -->
-    <key>AppLovinSdkKey</key>
-    <string>ENTER_YOUR_APPLOVIN_SDK_KEY_HERE</string>
-
     <!-- AdMob App ID — required for AdMob mediation adapter -->
     <!-- Get from: apps.admob.com → Your App → App Settings -->
     <key>GADApplicationIdentifier</key>
-    <string>ca-app-pub-ENTER_YOUR_ADMOB_APP_ID</string>
+    <string>ca-app-pub-2759523698880843~8164165704</string>
 
     <!-- Required for AdMob's SKAdNetwork attribution -->
     <key>SKAdNetworkItems</key>

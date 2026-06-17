@@ -5,13 +5,21 @@
 - Apple Developer account ($99/year — needed for App Store)
 - CocoaPods (`sudo gem install cocoapods`)
 
-## One-time setup: AppLovin MAX
+## One-time setup: Google Mobile Ads (AdMob)
 
-1. Go to dash.applovin.com → Sign up / Log in
-2. Create a new iOS app
-3. Create 3 Ad Units: Banner, Interstitial, Rewarded
-4. Copy the Ad Unit IDs into `ViewController.swift` → `GameConfig`
-5. Copy your SDK Key (dash.applovin.com → Account → Keys) into `Info.plist`
+Ads run on Google Mobile Ads (AdMob) — the SAME AdMob app and ad-unit IDs as
+the Android build. AdMob mediation (Meta / Unity / Mintegral / Pangle / InMobi)
+is configured dashboard-side; the iOS adapter pods are in the `Podfile`.
+
+1. apps.admob.com → open the SAME AdMob app you use for Android
+2. Reuse its Banner / Interstitial / Rewarded ad-unit IDs (or create
+   iOS-platform units in that app if iOS fill is low)
+3. Copy those Ad Unit IDs into `ViewController.swift` → `GameConfig`
+4. Copy the AdMob **App ID** (App Settings) into `Info.plist` →
+   `GADApplicationIdentifier`
+5. Consent: Google UMP + App Tracking Transparency are requested at launch
+   from `ViewController` before the first ad loads — no extra setup needed
+   beyond the `NSUserTrackingUsageDescription` string already in `Info.plist`.
 
 ## Per-game steps
 
@@ -54,27 +62,22 @@ open YourGame.xcworkspace  # always use .xcworkspace after pod install
 ```
 
 ### 6. Fill in the constants
-In `ViewController.swift`, update `GameConfig`:
+In `ViewController.swift`, update `GameConfig` (reuse the Android AdMob IDs):
 ```swift
-static let bannerUnitId       = "your-max-banner-unit-id"
-static let interstitialUnitId = "your-max-inter-unit-id"
-static let rewardedUnitId     = "your-max-rewarded-unit-id"
+static let bannerUnitId       = "ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX"
+static let interstitialUnitId = "ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX"
+static let rewardedUnitId     = "ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX"
 static let webViewBackground  = UIColor(red: 26/255, green: 26/255, blue: 46/255, alpha: 1)
 ```
 
 In `Info.plist`:
 ```
-AppLovinSdkKey      → your AppLovin SDK key
-GADApplicationIdentifier → your AdMob iOS app ID
+GADApplicationIdentifier → your AdMob App ID (ca-app-pub-...~...)
 CFBundleDisplayName → Your App Name
 CFBundleIdentifier  → com.pegasusgames.yourgame
 ```
 
-### 7. Add GoogleService-Info.plist (for AdMob adapter)
-- Firebase Console → Add iOS app → download `GoogleService-Info.plist`
-- Drag into Xcode project → Add to target ✓
-
-### 8. Build & Archive
+### 7. Build & Archive
 - Select a device or simulator → Product → Build (⌘B)
 - For App Store: Product → Archive → Distribute App → App Store Connect
 
