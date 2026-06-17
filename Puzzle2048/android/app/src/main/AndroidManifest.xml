@@ -15,10 +15,6 @@
         <package android:name="com.pegasusgames.watersortpuzzle" />
         <package android:name="com.pegasusgames.nonogram" />
         <package android:name="com.pegasusgames.unblockpuzzle" />
-        <package android:name="com.pegasusgames.pipeconnect" />
-        <package android:name="com.pegasusgames.hunch" />
-        <package android:name="com.pegasusgames.afterimage" />
-        <package android:name="com.pegasusgames.overlay" />
     </queries>
 
     <application

@@ -121,9 +121,6 @@ public class MainActivity extends Activity {
         "com.pegasusgames.nonogram",
         "com.pegasusgames.puzzle2048",
         "com.pegasusgames.unblockpuzzle",
-        "com.pegasusgames.hunch",
-        "com.pegasusgames.afterimage",
-        "com.pegasusgames.overlay"
     ));
 
     // AdMob objects

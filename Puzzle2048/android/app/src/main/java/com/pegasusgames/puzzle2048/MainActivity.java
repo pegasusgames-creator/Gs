@@ -65,10 +65,6 @@ public class MainActivity extends Activity {
         "com.pegasusgames.watersortpuzzle",
         "com.pegasusgames.nonogram",
         "com.pegasusgames.unblockpuzzle",
-        "com.pegasusgames.pipeconnect",
-        "com.pegasusgames.hunch",
-        "com.pegasusgames.afterimage",
-        "com.pegasusgames.overlay"
     ));
 
     // ── AdMob fallback ────────────────────────────────────────────────────────

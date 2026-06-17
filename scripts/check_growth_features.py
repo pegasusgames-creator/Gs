@@ -26,10 +26,14 @@ SKIP = {"_template", "_release", "release_aabs", "docs", "scripts",
 # anyone else's CROSS_PROMO_PACKAGES set / <queries> / PROMO_GAMES list.
 # Edit this list when a pre-release app goes live.
 PRE_RELEASE = {
-    # 2026-05-29: UnblockPuzzle is in Play review / shipping — removed
-    # from pre-release exclusion list so the other 3 apps can keep it
-    # in their cross-promo lists.
+    # Only the original four (WaterSort, Nonogram, Puzzle2048, UnblockPuzzle)
+    # are live on the Play Store. These four are NOT yet released, so no app
+    # may cross-promote to them (dead store links). Remove each from this set
+    # the day it publishes, then re-add it to the others' cross-promo lists.
     "com.pegasusgames.pipeconnect",
+    "com.pegasusgames.hunch",
+    "com.pegasusgames.afterimage",
+    "com.pegasusgames.overlay",
 }
 
 # Java NativeBridge methods every shipping game.html must call into.
