@@ -1068,7 +1068,7 @@ function buildShop(){
         <div class="shop-item-name">${p.name}</div>
         <div class="shop-item-desc">${p.desc}</div>
       </div>
-      <button class="shop-item-btn" onclick="purchaseItem('${p.id}')">${p.price}</button>`;
+      <button class="shop-item-btn" onclick="purchaseItem('${p.id}')">${(window._localizedPrices&&window._localizedPrices[p.id])||p.price}</button>`;
     container.appendChild(div);
   });
 }
@@ -6069,5 +6069,6 @@ window.addEventListener('load',function(){
   if(document.readyState!=='loading') arm(); else window.addEventListener('load',arm);
 })();
 </script>
+<script>/*PART3B*/window._localizedPrices=window._localizedPrices||{};window.onLocalizedPrices=function(m){try{if(m)Object.assign(window._localizedPrices,m);if(typeof buildShop==="function"&&document.getElementById("shop-items"))buildShop();}catch(e){}};</script>
 </body>
 </html>

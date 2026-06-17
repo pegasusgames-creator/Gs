@@ -414,7 +414,7 @@ public class MainActivity extends Activity {
 
         BillingClientStateListener l = new BillingClientStateListener() {
             @Override public void onBillingSetupFinished(BillingResult r) {
-                if (r.getResponseCode() == BillingClient.BillingResponseCode.OK) restorePurchases();
+                if (r.getResponseCode() == BillingClient.BillingResponseCode.OK) { restorePurchases(); queryAndPushPrices(); }
             }
             @Override public void onBillingServiceDisconnected() {
                 final BillingClientStateListener self = this;
@@ -443,6 +443,54 @@ public class MainActivity extends Activity {
                                 .setProductDetails(details.get(0)).build()
                         )).build()));
             });
+    }
+
+    // PART 3B — localized IAP pricing: push BillingClient's locale-formatted
+    // prices to the WebView (hardcoded $-strings are the fallback).
+    private final java.util.Map<String, String> _localizedPrices =
+        new java.util.concurrent.ConcurrentHashMap<>();
+
+    private void queryAndPushPrices() {
+        queryPriceType(BillingClient.ProductType.INAPP);
+        queryPriceType(BillingClient.ProductType.SUBS);
+    }
+
+    private void queryPriceType(String type) {
+        boolean wantSub = BillingClient.ProductType.SUBS.equals(type);
+        java.util.List<QueryProductDetailsParams.Product> prods = new java.util.ArrayList<>();
+        for (String sku : VALID_PRODUCTS) {
+            if (SUBSCRIPTION_PRODUCTS.contains(sku) != wantSub) continue;
+            prods.add(QueryProductDetailsParams.Product.newBuilder()
+                .setProductId(sku).setProductType(type).build());
+        }
+        if (prods.isEmpty() || billingClient == null) return;
+        billingClient.queryProductDetailsAsync(
+            QueryProductDetailsParams.newBuilder().setProductList(prods).build(),
+            (res, qpdr) -> {
+                for (ProductDetails pd : qpdr.getProductDetailsList()) {
+                    String price = null;
+                    if (pd.getOneTimePurchaseOfferDetails() != null) {
+                        price = pd.getOneTimePurchaseOfferDetails().getFormattedPrice();
+                    } else if (pd.getSubscriptionOfferDetails() != null
+                               && !pd.getSubscriptionOfferDetails().isEmpty()) {
+                        java.util.List<ProductDetails.PricingPhase> ph =
+                            pd.getSubscriptionOfferDetails().get(0)
+                              .getPricingPhases().getPricingPhaseList();
+                        if (!ph.isEmpty()) price = ph.get(ph.size() - 1).getFormattedPrice();
+                    }
+                    if (price != null) _localizedPrices.put(pd.getProductId(), price);
+                }
+                pushPricesToWeb();
+            });
+    }
+
+    private void pushPricesToWeb() {
+        if (_localizedPrices.isEmpty() || webView == null) return;
+        final String json = new org.json.JSONObject(_localizedPrices).toString();
+        runOnUiThread(() -> {
+            if (webView != null) webView.evaluateJavascript(
+                "window.onLocalizedPrices && window.onLocalizedPrices(" + json + ")", null);
+        });
     }
 
         private void handlePurchase(Purchase purchase) {
