@@ -5313,18 +5313,20 @@ window.addEventListener('load',function(){
   }
   function renderLeaderboardTab(){
     var d = buildStandings();
+    var _lbPlaceholder = (typeof LEADERBOARD_ID === 'string') && /^(TODO|PLACEHOLDER|ENTER_)/.test(LEADERBOARD_ID);
     // "Updated <minutes> ago" — gives the synthetic table a live feel
     // without lying about real-time. Computed deterministically from
     // current minute so it doesn't tick while open.
     var freshMin = (new Date().getMinutes() % 17) + 1;
-    var head = 'Weekly · #' + d.rank.toLocaleString() +
-               ' of ' + d.total.toLocaleString() +
-               ' · Updated ' + freshMin + 'm ago';
+    var head = _lbPlaceholder
+      ? 'Practice bracket · #' + d.rank.toLocaleString() + ' of ' + d.total.toLocaleString()
+      : 'Weekly · #' + d.rank.toLocaleString() + ' of ' + d.total.toLocaleString() + ' · Updated ' + freshMin + 'm ago';
     var html =
       '<div style="display:flex;align-items:center;justify-content:space-between;font-size:0.78rem;opacity:0.92;margin-bottom:10px;gap:10px;">'+
         '<span style="flex:1;">'+head+'</span>'+
         '<button data-standings-jump style="background:var(--g-play, #3b6db8);color:var(--on-accent, #fff);border:none;border-radius:10px;padding:5px 12px;font-weight:700;font-size:0.78rem;cursor:pointer;font-family:inherit;flex:0 0 auto;">Jump to me</button>'+
       '</div>' +
+      (_lbPlaceholder ? '<div style="font-size:0.74rem;opacity:0.82;margin:-2px 0 10px;line-height:1.4;">🤖 Practice ranks — sample players to pace against, not a live global ranking.</div>' : '') +
       '<div data-standings-list style="max-height:62vh;overflow-y:auto;border-radius:12px;border:1px solid var(--border, rgba(127,127,127,0.22));-webkit-overflow-scrolling:touch;">';
     // Render ALL rows from #1 to last. WebView handles ~10k rows but
     // we keep the row DOM minimal to stay snappy on first paint.
@@ -5350,7 +5352,7 @@ window.addEventListener('load',function(){
       );
     }
     html += parts.join('') + '</div>';
-    if (api('showLeaderboard')) {
+    if (api('showLeaderboard') && !_lbPlaceholder) {
       html += '<a data-open-lb style="display:block;text-align:center;margin-top:10px;' +
               'font-size:0.78rem;color:inherit;opacity:0.62;text-decoration:underline;' +
               'cursor:pointer;">Compare on Play Games →</a>';
