@@ -1299,7 +1299,7 @@ window.onAdReward=function(rewardType){
     case 'skip': skipLevel(); break;
     case 'life': addLives(1); hideOverlay('overlay-nolives'); updateAllUI(); break;
     case 'extra_life': addLives(1); hideOverlay('overlay-nolives'); updateAllUI(); break;
-    case 'free_coins': save.coins+=25; persist(); updateAllUI(); break;
+    case 'free_coins': /* single source: granted by the free-coins shim */ break;
   }
 };
 
@@ -3064,7 +3064,6 @@ function refreshFreeCoins(){
 window.xClaimFreeCoins = function(){
   if(_freeCoinsReadyAt() > Date.now()) return;
   if(window.Android && window.Android.showRewarded){
-    window._pendingFreeCoins = true;
     window.Android.showRewarded('free_coins');
   } else {
     G.addCoins(FREE_COINS_AMT);
@@ -3076,8 +3075,7 @@ window.xClaimFreeCoins = function(){
 (function(){
   var prev = window.onAdReward;
   window.onAdReward = function(type){
-    if(window._pendingFreeCoins){
-      window._pendingFreeCoins = false;
+    if(type === 'free_coins'){
       G.addCoins(FREE_COINS_AMT);
       G.setFlag('lastFreeCoinsAt', String(Date.now()));
       refreshFreeCoins();

@@ -4712,7 +4712,6 @@ function refreshFreeCoins(){
 window.xClaimFreeCoins = function(){
   if(_freeCoinsReadyAt() > Date.now()) return;
   if(window.Android && window.Android.showRewarded){
-    window._pendingFreeCoins = true;
     window.Android.showRewarded('free_coins');
   } else {
     G.addCoins(FREE_COINS_AMT);
@@ -4725,8 +4724,7 @@ window.xClaimFreeCoins = function(){
 (function(){
   var prev = window.onAdReward;
   window.onAdReward = function(type){
-    if(window._pendingFreeCoins){
-      window._pendingFreeCoins = false;
+    if(type === 'free_coins'){
       G.addCoins(FREE_COINS_AMT);
       G.setFlag('lastFreeCoinsAt', String(Date.now()));
       refreshFreeCoins();
