@@ -1080,10 +1080,13 @@ function buildShop(){
 // ============================================================
 const MG_COIN_REWARD = 200;
 const MORE_GAMES = [
-  {id:'watersort',   pkg:'com.pegasusgames.watersortpuzzle', icon:'💧', name:'Water Sort',          desc:'Pour colored water into flasks!'},
-  {id:'nonogram',    pkg:'com.pegasusgames.nonogram',        icon:'🖼️', name:'Nonogram',            desc:'Solve pixel art grid puzzles!'},
-  {id:'puzzle2048',  pkg:'com.pegasusgames.puzzle2048',      icon:'✨', name:'2048 Puzzle',         desc:'Merge tiles to reach 2048!'},
-  {id:'unblock',     pkg:'com.pegasusgames.unblockpuzzle',   icon:'🧩', name:'Unblock Puzzle',      desc:'Slide blocks to free the red piece!'}
+  {id:'watersort', pkg:'com.pegasusgames.watersortpuzzle', icon:'💧', name:'Water Sort', desc:'Pour colored water into flasks!'},
+  {id:'nonogram', pkg:'com.pegasusgames.nonogram', icon:'🖼️', name:'Nonogram', desc:'Solve pixel art grid puzzles!'},
+  {id:'puzzle2048', pkg:'com.pegasusgames.puzzle2048', icon:'✨', name:'2048 Puzzle', desc:'Merge tiles to reach 2048!'},
+  {id:'unblock', pkg:'com.pegasusgames.unblockpuzzle', icon:'🧩', name:'Unblock Puzzle', desc:'Slide blocks to free the red piece!'},
+  {id:'pipeconnect', pkg:'com.pegasusgames.pipeconnect', icon:'🔧', name:'Pipe Connect', desc:'Connect the dots with pipes!'},
+  {id:'hunch', pkg:'com.pegasusgames.hunch', icon:'🚦', name:'Hunch', desc:'Crack the hidden rule!'},
+  {id:'overlay', pkg:'com.pegasusgames.overlay', icon:'🎞️', name:'Overlay', desc:'Stack sheets into one picture!'}
 ];
 
 function showMoreGames(){
@@ -4098,31 +4101,7 @@ window.addEventListener('load',function(){
     var kind = document.body && document.body.getAttribute('data-growth-coachmark');
     if (!kind) return;
     var steps;
-    if (kind === 'nono') {
-      steps = [
-        { title:'Find the picture', body:'Numbers show how many filled squares are in each row + column.' },
-        { title:'Tap to fill', body:'Tap a cell to fill. Long-press marks it empty (a guaranteed blank).' },
-        { title:'Solve the row', body:'When a row matches its numbers, it locks in. Clear them all to win.' },
-      ];
-    } else if (kind === 'unblock') {
-      steps = [
-        { title:'Find the red block', body:'Your goal: slide the red block out the right edge.' },
-        { title:'Drag to slide', body:'Blocks slide along their long axis only. Drag, don\'t tap.' },
-        { title:'Clear the path', body:'Move the other blocks out of the way. Fewer moves = more stars.' },
-      ];
-    } else if (kind === 'watersort') {
-      steps = [
-        { title:'Sort the colors', body:'Each tube can hold 4 layers. Win when every tube is one color (or empty).' },
-        { title:'Tap to pour', body:'Tap a tube to lift it. Tap another to pour. Liquid only pours onto the same color (or into an empty tube).' },
-        { title:'Boosters help', body:'Out of moves? Use Hint, Undo, Restart, +Tube, or Wand at the bottom.' },
-      ];
-    } else if (kind === 'puzzle2048') {
-      steps = [
-        { title:'Merge to grow', body:'Swipe to slide all tiles. Two tiles with the same number merge into one — bigger.' },
-        { title:'Reach 2048', body:'Keep merging: 2 → 4 → 8 → 16 → … all the way to 2048 (and beyond if you can).' },
-        { title:'Plan ahead', body:'The board fills up fast. Keep your highest tile in a corner and chain merges toward it.' },
-      ];
-    } else if (kind === 'afterimage') {
+    if (kind === 'afterimage') {
       steps = [
         { title:'You and your echo', body:'Move with the arrows — your echo mirrors every step you take.' },
         { title:'Reach both goals', body:'Land yourself on the exit and your echo on its plate at the same time.' },

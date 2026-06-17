@@ -5480,10 +5480,63 @@ window.addEventListener('load',function(){
 <script>
 (function(){
   var PROMO_GAMES = [
-    { id:'puzzle2048', pkg:'com.pegasusgames.puzzle2048',      emoji:'🔢', name:'2048 Puzzle',     desc:'Merge tiles to reach 2048!',           installReward:200 },
-    { id:'watersort',  pkg:'com.pegasusgames.watersortpuzzle', emoji:'💧', name:'Water Sort',      desc:'Pour colored water into flasks!',      installReward:200 },
-    { id:'unblock',    pkg:'com.pegasusgames.unblockpuzzle',   emoji:'🧩', name:'Unblock Puzzle',  desc:'Slide blocks to clear the red one!',   installReward:200 }
-  ];
+  {
+    id: 'watersort',
+    packageId: 'com.pegasusgames.watersortpuzzle',
+    emoji: '💧',
+    name: 'Water Sort',
+    desc: 'Pour colored water into flasks!',
+    installReward: 200,
+  },
+  {
+    id: 'puzzle2048',
+    packageId: 'com.pegasusgames.puzzle2048',
+    emoji: '✨',
+    name: '2048 Puzzle',
+    desc: 'Merge tiles to reach 2048!',
+    installReward: 200,
+  },
+  {
+    id: 'unblock',
+    packageId: 'com.pegasusgames.unblockpuzzle',
+    emoji: '🧩',
+    name: 'Unblock Puzzle',
+    desc: 'Slide blocks to free the red piece!',
+    installReward: 200,
+  },
+  {
+    id: 'pipeconnect',
+    packageId: 'com.pegasusgames.pipeconnect',
+    emoji: '🔧',
+    name: 'Pipe Connect',
+    desc: 'Connect the dots with pipes!',
+    installReward: 200,
+  },
+  {
+    id: 'hunch',
+    packageId: 'com.pegasusgames.hunch',
+    emoji: '🚦',
+    name: 'Hunch',
+    desc: 'Crack the hidden rule!',
+    installReward: 200,
+  },
+  {
+    id: 'afterimage',
+    packageId: 'com.pegasusgames.afterimage',
+    emoji: '👻',
+    name: 'Afterimage',
+    desc: 'Guide you and your echo!',
+    installReward: 200,
+  },
+  {
+    id: 'overlay',
+    packageId: 'com.pegasusgames.overlay',
+    emoji: '🎞️',
+    name: 'Overlay',
+    desc: 'Stack sheets into one picture!',
+    installReward: 200,
+  }
+];
   function xCpKey(pkg){ return 'xCrossPromoRewarded_'+pkg; }
   function xCpRewarded(pkg){ return localStorage.getItem(xCpKey(pkg))==='1'; }
   function isInst(pkg){
