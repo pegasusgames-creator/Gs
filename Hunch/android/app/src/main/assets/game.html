@@ -3975,7 +3975,7 @@ window.addEventListener('load',function(){
        AND tutorialDone, fire a "Come back tomorrow for your daily bonus"
        toast and schedule the daily reminder (already wired in Part A).
      - 3-step coachmark for Nonogram + UnblockPuzzle: opt-in by setting
-       a body attribute data-growth-coachmark="nono" or ="unblock". The
+       a body attribute data-growth-coachmark="hunch" or ="unblock". The
        per-app injection script below opts those two in.
 -->
 <script data-growth-shim="E">
@@ -4105,6 +4105,12 @@ window.addEventListener('load',function(){
         { title:'Merge to grow', body:'Swipe to slide all tiles. Two tiles with the same number merge into one — bigger.' },
         { title:'Reach 2048', body:'Keep merging: 2 → 4 → 8 → 16 → … all the way to 2048 (and beyond if you can).' },
         { title:'Plan ahead', body:'The board fills up fast. Keep your highest tile in a corner and chain merges toward it.' },
+      ];
+    } else if (kind === 'hunch') {
+      steps = [
+        { title:'Crack the hidden rule', body:'A secret rule decides which patterns pass and which break.' },
+        { title:'Build, then TEST', body:'Light up cells and hit TEST — green means your pattern obeys, red means it breaks.' },
+        { title:'Make the call', body:"Once you've spotted the rule, pick the patterns that follow it." },
       ];
     } else {
       return;

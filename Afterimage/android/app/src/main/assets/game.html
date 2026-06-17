@@ -3988,7 +3988,7 @@ window.addEventListener('load',function(){
        AND tutorialDone, fire a "Come back tomorrow for your daily bonus"
        toast and schedule the daily reminder (already wired in Part A).
      - 3-step coachmark for Nonogram + UnblockPuzzle: opt-in by setting
-       a body attribute data-growth-coachmark="nono" or ="unblock". The
+       a body attribute data-growth-coachmark="afterimage" or ="unblock". The
        per-app injection script below opts those two in.
 -->
 <script data-growth-shim="E">
@@ -4118,6 +4118,12 @@ window.addEventListener('load',function(){
         { title:'Merge to grow', body:'Swipe to slide all tiles. Two tiles with the same number merge into one — bigger.' },
         { title:'Reach 2048', body:'Keep merging: 2 → 4 → 8 → 16 → … all the way to 2048 (and beyond if you can).' },
         { title:'Plan ahead', body:'The board fills up fast. Keep your highest tile in a corner and chain merges toward it.' },
+      ];
+    } else if (kind === 'afterimage') {
+      steps = [
+        { title:'You and your echo', body:'Move with the arrows — your echo mirrors every step you take.' },
+        { title:'Reach both goals', body:'Land yourself on the exit and your echo on its plate at the same time.' },
+        { title:"Don't collide", body:'You and the echo can never overlap — plan a path that works for both.' },
       ];
     } else {
       return;
