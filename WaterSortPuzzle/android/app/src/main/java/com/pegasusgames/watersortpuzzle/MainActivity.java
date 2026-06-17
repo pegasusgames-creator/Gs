@@ -221,8 +221,14 @@ public class MainActivity extends Activity {
 
         NativeBridge bridge = new NativeBridge();
         webView.addJavascriptInterface(bridge, "Android");
-        webView.addJavascriptInterface(bridge, "NativeBridge");
         webView.setWebViewClient(new WebViewClient() {
+            @Override public boolean shouldOverrideUrlLoading(WebView view, android.webkit.WebResourceRequest req) {
+                String _u = (req != null && req.getUrl() != null) ? req.getUrl().toString() : "";
+                if (_u.startsWith("file:///android_asset")) return false;   // keep in-app nav in the WebView
+                try { startActivity(new android.content.Intent(android.content.Intent.ACTION_VIEW,
+                    android.net.Uri.parse(_u))); } catch (Exception ignored) {}
+                return true;   // external links open in the browser, never the game WebView
+            }
             @Override public void onPageFinished(WebView view, String url) {
                 runOnUiThread(() ->
                     webView.evaluateJavascript("window.onAdMobLoaded && window.onAdMobLoaded();", null));
