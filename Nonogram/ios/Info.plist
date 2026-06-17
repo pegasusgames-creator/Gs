@@ -58,5 +58,7 @@
 
     <key>LSRequiresIPhoneOS</key>
     <true/>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Allow tracking so ads can be more relevant to you. Declining keeps the game fully playable with non-personalized ads.</string>
 </dict>
 </plist>

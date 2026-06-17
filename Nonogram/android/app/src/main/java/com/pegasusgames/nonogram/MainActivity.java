@@ -57,7 +57,11 @@ public class MainActivity extends Activity {
     private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(
         "com.pegasusgames.watersortpuzzle",
         "com.pegasusgames.puzzle2048",
-        "com.pegasusgames.unblockpuzzle"
+        "com.pegasusgames.unblockpuzzle",
+        "com.pegasusgames.pipeconnect",
+        "com.pegasusgames.hunch",
+        "com.pegasusgames.afterimage",
+        "com.pegasusgames.overlay"
     ));
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
@@ -221,7 +225,33 @@ public class MainActivity extends Activity {
     }
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
+    private boolean _adsInitialized = false;
+
+    // Google UMP consent must resolve BEFORE ads initialize (EEA/UK requirement).
     private void initAdMob() {
+        com.google.android.ump.ConsentRequestParameters.Builder _pB =
+            new com.google.android.ump.ConsentRequestParameters.Builder();
+        boolean _dbg = (getApplicationInfo().flags
+            & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0;   // debug-only geography
+        if (_dbg) {
+            _pB.setConsentDebugSettings(
+                new com.google.android.ump.ConsentDebugSettings.Builder(this)
+                    .setDebugGeography(com.google.android.ump.ConsentDebugSettings
+                        .DebugGeography.DEBUG_GEOGRAPHY_EEA)
+                    .build());
+        }
+        com.google.android.ump.ConsentInformation _ci =
+            com.google.android.ump.UserMessagingPlatform.getConsentInformation(this);
+        _ci.requestConsentInfoUpdate(this, _pB.build(),
+            () -> com.google.android.ump.UserMessagingPlatform
+                .loadAndShowConsentFormIfRequired(this, e -> initAdsAfterConsent()),
+            e -> initAdsAfterConsent());
+    }
+
+    // Original ad init, now gated behind consent.
+    private void initAdsAfterConsent() {
+        if (_adsInitialized) return;
+        _adsInitialized = true;
         // Register the emulator as a test device so production unit IDs serve
         // test ads in dev builds (otherwise live IDs return "no fill").
         // Family puzzle game — cap served creatives at G (never adult/suggestive).
