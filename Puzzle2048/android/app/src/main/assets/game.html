@@ -1339,7 +1339,8 @@ function loadState() {
     const s = localStorage.getItem(SAVE_KEY);
     if (s) {
       const loaded = JSON.parse(s);
-      State = Object.assign(defaultState(), loaded);
+          function migrateSave(s){try{if(!s||typeof s!=='object'||s.saveVersion===1)return s;var n=(typeof LEVELS!=='undefined'&&LEVELS&&LEVELS.length)||(typeof CAMPAIGN!=='undefined'&&CAMPAIGN&&CAMPAIGN.length)||0;if(n>0){if(Array.isArray(s.completedLevels))s.completedLevels=s.completedLevels.filter(function(i){return i>=0&&i<n;});if(Array.isArray(s.completed))s.completed=s.completed.filter(function(i){return i>=0&&i<n;});var st=s.levelStars;if(st&&typeof st==='object'&&!Array.isArray(st)){for(var k in st){var idx=parseInt(k,10);if(!(idx>=0&&idx<n))delete st[k];}}if(typeof s.currentLevel==='number'&&s.currentLevel>n)s.currentLevel=n;}s.saveVersion=1;}catch(e){}return s;}
+State = migrateSave(Object.assign(defaultState(), loaded));
     }
   } catch(e) {}
 }
