@@ -303,7 +303,7 @@ body.no-shapes .gc .cb{display:none;}
   filter: drop-shadow(0 8px 22px var(--m-glow));
   animation: m-float 5.5s ease-in-out infinite;
   pointer-events: none; position: relative; z-index: 0; /* PART7: decorative emblem — never intercept taps; stay below interactive menu content */
-  margin: 4px 0 6px !important; /* v2: kill the dead emblem→CTA gap */
+  margin: 26px 0 6px !important; /* v2 + clearance: keep the scaled (1.2x, origin bottom) emblem off the title/tagline */
 }
 #screen-menu [data-menu-illustration] svg, #menuScreen [data-menu-illustration] svg{
   transform: scale(1.2);
