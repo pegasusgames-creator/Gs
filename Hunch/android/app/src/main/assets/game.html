@@ -6500,5 +6500,34 @@ if(typeof window.showSettings!=='function')window.showSettings=function(){showSc
 if(typeof window.buyLivesShop!=='function')window.buyLivesShop=function(){if(typeof hideOverlay==='function')hideOverlay('overlay-nolives');showScreen('shop');};
 if(typeof window.watchAdForLife!=='function')window.watchAdForLife=function(){if(typeof requestRewardedAd==='function')requestRewardedAd('extra_life');};
 </script>
+<script>/*PART8: Weekly Pass parity — surface the existing weekly_pass SKU beside the Season Pass (no new product)*/
+(function(){
+  if(window.__weeklyParity) return; window.__weeklyParity=1;
+  if(typeof window.xBuyWeekly!=='function') window.xBuyWeekly=function(){
+    if(typeof isWeeklyActive==='function'&&isWeeklyActive()){ if(typeof xToast==='function')xToast('Weekly Pass already active!'); return; }
+    if(window.Android&&window.Android.purchase) window.Android.purchase('weekly_pass');
+    else if(typeof xToast==='function') xToast('Purchase unavailable in browser');
+  };
+  function injectWeekly(){
+    var season=document.querySelector('#x-season-pass-item, #screen-shop [onclick*="season_pass_monthly"], #shopScreen [onclick*="season_pass_monthly"]');
+    if(!season) return;
+    var card=(season.closest&&season.closest('.shop-item'))||season;
+    if(!card.parentNode||card.parentNode.querySelector('#x-weekly-pass-item')) return;
+    var p=(window._localizedPrices&&window._localizedPrices['weekly_pass'])||'$1.99';
+    var act=(typeof isWeeklyActive==='function'&&isWeeklyActive());
+    var btnCls=((card.querySelector('button')||{}).className)||'shop-item-btn';
+    var wdiv=document.createElement('div'); wdiv.id='x-weekly-pass-item'; wdiv.className=card.className||'shop-item';
+    wdiv.innerHTML='<div class="shop-item-icon">📅</div>'+
+      '<div class="shop-item-info"><div class="shop-item-name">Weekly Pass</div>'+
+      '<div class="shop-item-desc">+50 coins daily · cancel anytime</div></div>'+
+      '<button id="x-weekly-btn" class="'+btnCls+'" onclick="xBuyWeekly()">'+(act?'✅ Active':p+'/week')+'</button>';
+    card.parentNode.insertBefore(wdiv, card.nextSibling);
+  }
+  var orig=window.injectSeasonPassShop;
+  if(typeof orig==='function'){ window.injectSeasonPassShop=function(){ var r=orig.apply(this,arguments); try{injectWeekly();}catch(e){} return r; }; }
+  document.addEventListener('click',function(){ setTimeout(injectWeekly,80); }, true);
+  setTimeout(injectWeekly,1200);
+})();
+</script>
 </body>
 </html>
