@@ -2030,6 +2030,7 @@ def main():
         ('check_screenshots_gameplay_only.py', 'screenshots gameplay only'),
         ('check_min_levels.py', 'min levels (500 floor)'),
         ('check_java_arglist_comma.py', 'java arglist trailing comma'),
+        ('check_sokoban_solvable.py', 'sokoban solvable'),
     ]:
         try:
             _r = _subprocess.run(
