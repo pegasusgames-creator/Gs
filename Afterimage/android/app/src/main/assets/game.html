@@ -2075,7 +2075,7 @@ const TUT_STEPS=[
 ];
 function maybeShowTutorial(){
   if(localStorage.getItem('aim_tutorialDone')||levelIndex!==0||isDailyChallenge)return;
-  let stepI=0;const ov=document.getElementById('tutorialOverlay');
+  let stepI=0;const ov=document.getElementById('tutorialOverlay');const card=(ov&&ov.querySelector('div'))||ov;/*PART3: bind taps to the pointer-events:all inner popup*/
   function show(){
     document.getElementById('tut-title').textContent=TUT_STEPS[stepI].t;
     document.getElementById('tut-body').textContent=TUT_STEPS[stepI].b;
@@ -2084,10 +2084,10 @@ function maybeShowTutorial(){
   }
   function advance(){
     stepI++;
-    if(stepI>=TUT_STEPS.length){ov.style.display='none';localStorage.setItem('aim_tutorialDone','1');ov.removeEventListener('click',advance);return;}
+    if(stepI>=TUT_STEPS.length){ov.style.display='none';localStorage.setItem('aim_tutorialDone','1');card.removeEventListener('click',advance);return;}
     show();
   }
-  ov.addEventListener('click',advance);
+  card.addEventListener('click',advance);
   show();
 }
 window.replayTutorial=function(){localStorage.removeItem('aim_tutorialDone');showScreen('game');loadLevel(0);};
@@ -3022,7 +3022,7 @@ window.renderPipeStats=function(){
     origLoadLevel(idx);
     if(!shown&&idx===0){shown=true;
       var el=document.getElementById('tutorialOverlay');
-      if(el){el.style.display='flex';el.addEventListener('click',function(){el.style.display='none';},{once:true});}
+      if(el){/*PART3: maybeShowTutorial (called inside loadLevel) owns the tutorial; shim no longer re-shows or auto-closes it*/}
     }
   };
 })();
