@@ -29,6 +29,14 @@ def check_app(app):
     if Image is None:
         return [], ["Pillow not installed — icon white-border check skipped"]
     blockers = []
+    # An app WITHOUT an adaptive icon gets its legacy bitmap shrunk + padded
+    # with white by Android 8+ launchers — the root cause of the white space.
+    res = os.path.join(REPO, app, "android/app/src/main/res")
+    if os.path.isfile(os.path.join(res, "mipmap-xxxhdpi/ic_launcher.png")) \
+       and not os.path.isfile(os.path.join(res, "mipmap-anydpi-v26/ic_launcher.xml")):
+        blockers.append(f"{app}: no adaptive icon (mipmap-anydpi-v26/ic_launcher.xml) "
+                        f"— launchers pad the legacy icon with white; add one "
+                        f"(scripts/gen_adaptive.py)")
     cands = [
         os.path.join(REPO, app, "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"),
         os.path.join(REPO, app, "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png"),
