@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
     private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(
         "com.pegasusgames.watersortpuzzle",
         "com.pegasusgames.puzzle2048",
-        "com.pegasusgames.unblockpuzzle",
+        "com.pegasusgames.unblockpuzzle"
     ));
 
     // ── AdMob fallback ────────────────────────────────────────────────────────

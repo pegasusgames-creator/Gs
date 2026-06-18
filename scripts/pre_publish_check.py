@@ -2029,6 +2029,7 @@ def main():
         ('check_screenshot_taps_valid.py', 'screenshot taps valid'),
         ('check_screenshots_gameplay_only.py', 'screenshots gameplay only'),
         ('check_min_levels.py', 'min levels (500 floor)'),
+        ('check_java_arglist_comma.py', 'java arglist trailing comma'),
     ]:
         try:
             _r = _subprocess.run(
