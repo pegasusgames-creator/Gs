@@ -617,6 +617,7 @@ html[data-theme="midnight"] .about-meta { color:rgba(255,255,255,0.45); }
 /* out of the central column so the CTA/tiles/emblem stay clean. ---- */
 #screen-menu, #menuScreen{
   position: relative;
+  min-height: 100dvh; /* PART6: fill the viewport so the motif covers the full height (no bottom void) */
   background:
     radial-gradient(135% 105% at 50% 38%, transparent 55%, var(--m-vignette) 100%),
     radial-gradient(125% 85% at 50% 16%, var(--m-bg-top) 0%, var(--bg) 72%) !important;

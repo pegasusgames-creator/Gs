@@ -262,6 +262,7 @@ body.midnight{
 /* out of the central column so the CTA/tiles/emblem stay clean. ---- */
 #screen-menu, #menuScreen{
   position: relative;
+  min-height: 100dvh; /* PART6: fill the viewport so the motif covers the full height (no bottom void) */
   background:
     radial-gradient(135% 105% at 50% 38%, transparent 55%, var(--m-vignette) 100%),
     radial-gradient(125% 85% at 50% 16%, var(--m-bg-top) 0%, var(--bg) 72%) !important;
@@ -373,6 +374,8 @@ body.midnight{
   #screen-menu *, #menuScreen *{ animation: none !important; }
 }
 /* =================== END SHARED MENU SKIN v2 =================== */
+/* PART6: faint board-grid motif fills the empty menu space (skin masks center, behind content, pointer-events:none) */
+:root{ --m-motif-size:240px 240px; --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg stroke='%230fb5c9' stroke-width='2' opacity='0.10'%3E%3Cpath d='M0 60H240M0 120H240M0 180H240M60 0V240M120 0V240M180 0V240'/%3E%3C/g%3E%3C/svg%3E"); }
 
 /* ---- Afterimage identity: blueprint echo (Part B) ---- */
 :root{
