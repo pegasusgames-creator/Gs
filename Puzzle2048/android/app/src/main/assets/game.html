@@ -3307,7 +3307,7 @@ window.renderStats2048=function(){
     {icon:'🏆',label:'Best Score',sub:'all time',value:State.bestScore||0},
     {icon:'🔢',label:'Highest Tile',sub:'ever reached',value:State.highestTile||0},
     {icon:'✨',label:'2048 Achieved',sub:'legendary milestone',value:State.achieved2048?'Yes':'No'},
-    {icon:'🔥',label:'Daily Streak',sub:'days in a row',value:State.dailyChallengeStreak||0},
+    {icon:'🔥',label:'Daily Streak',sub:'days in a row',value:Math.max(State.dailyChallengeStreak||0,1)},
     {icon:'🪙',label:'Coins',sub:'current balance',value:State.coins||0},
   ];
   list.innerHTML=stats.map(function(s){

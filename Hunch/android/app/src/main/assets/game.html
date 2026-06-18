@@ -2870,7 +2870,7 @@ window.renderPipeStats=function(){
   var stats=[
     {icon:'🔍',label:'Rules Cracked',sub:'mysteries solved',value:completed},
     {icon:'⭐',label:'Perfect Levels',sub:'no resets',value:perfect},
-    {icon:'🔥',label:'Daily Streak',sub:'days in a row',value:save.dailyChallengeStreak||0},
+    {icon:'🔥',label:'Daily Streak',sub:'days in a row',value:Math.max(save.dailyChallengeStreak||0,1)},
     {icon:'🪙',label:'Coins',sub:'current balance',value:save.coins||0},
     {icon:'📋',label:'Current Level',sub:'keep flowing!',value:(save.currentLevel||0)+1},
   ];

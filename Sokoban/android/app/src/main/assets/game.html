@@ -4304,7 +4304,7 @@ function buildMenu(){
     '<button onclick="hideMenu();loadLevel(' + (lastProgress?lastProgress.level:0) + ')" style="background:#FF8F00;color:#000;border:none;padding:14px 28px;border-radius:10px;font-weight:800;font-size:1.05rem;letter-spacing:1px;cursor:pointer;margin-bottom:10px;min-width:220px">PUSH BOXES</button>' +
     '<div style="display:flex;gap:8px;margin-bottom:10px">' +
       '<button onclick="showLevelGrid()" style="flex:1;background:#2a1e00;color:#fff;border:1px solid #443300;padding:9px 14px;border-radius:8px;font-size:0.8rem;font-weight:600;cursor:pointer">LEVELS</button>' +
-      '<button onclick="startDailyChallenge()" id="btnDaily" style="flex:1;background:#2a1e00;color:#fff;border:1px solid #443300;padding:9px 14px;border-radius:8px;font-size:0.8rem;font-weight:600;cursor:pointer">DAILY 🔥' + (sokoState.dailyChallengeStreak||0) + '</button>' +
+      '<button onclick="startDailyChallenge()" id="btnDaily" style="flex:1;background:#2a1e00;color:#fff;border:1px solid #443300;padding:9px 14px;border-radius:8px;font-size:0.8rem;font-weight:600;cursor:pointer">DAILY 🔥' + Math.max(sokoState.dailyChallengeStreak||0,1) + '</button>' +
     '</div>' +
     '<div style="display:flex;gap:8px;margin-bottom:8px">' +
       '<button onclick="showShop()" style="background:#2a1e00;color:#fff;border:1px solid #443300;padding:9px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer">🛒 Shop</button>' +
@@ -4377,7 +4377,7 @@ window.showStatsScreen = function(){
       '<button onclick="document.getElementById(\'statsScreen\').style.display=\'none\'" style="background:#FF8F00;color:#000;border:none;padding:6px 14px;border-radius:8px;font-weight:700;cursor:pointer">Close</button>' +
     '</div>' +
     '<div style="background:#2a1e00;border-radius:10px;padding:14px;margin-bottom:8px"><div style="color:#886633;font-size:0.78rem">📦 Levels solved</div><div style="font-size:1.4rem;font-weight:800;color:#FF8F00">' + completed.size + ' / ' + LEVELS.length + '</div></div>' +
-    '<div style="background:#2a1e00;border-radius:10px;padding:14px;margin-bottom:8px"><div style="color:#886633;font-size:0.78rem">🔥 Daily streak</div><div style="font-size:1.4rem;font-weight:800;color:#FF8F00">' + (sokoState.dailyChallengeStreak||0) + ' days</div></div>' +
+    '<div style="background:#2a1e00;border-radius:10px;padding:14px;margin-bottom:8px"><div style="color:#886633;font-size:0.78rem">🔥 Daily streak</div><div style="font-size:1.4rem;font-weight:800;color:#FF8F00">' + Math.max(sokoState.dailyChallengeStreak||0,1) + ' days</div></div>' +
     '<div style="background:#2a1e00;border-radius:10px;padding:14px;margin-bottom:8px"><div style="color:#886633;font-size:0.78rem">🏆 Global rank</div><div style="font-size:1.4rem;font-weight:800;color:#FF8F00">Top ' + rank + '%</div></div>' +
     '<div style="background:#2a1e00;border-radius:10px;padding:14px"><div style="color:#886633;font-size:0.78rem">🪙 Coins earned</div><div style="font-size:1.4rem;font-weight:800;color:#FF8F00">' + (sokoState.coins||0) + '</div></div>';
   document.body.appendChild(s);
