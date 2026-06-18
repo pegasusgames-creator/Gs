@@ -1161,7 +1161,7 @@ function defaultSave(){
 function loadSave(){
   try{
     const s=JSON.parse(localStorage.getItem(SAVE_KEY));
-    if(s)     function migrateSave(s){try{if(!s||typeof s!=='object'||s.saveVersion===1)return s;var n=(typeof LEVELS!=='undefined'&&LEVELS&&LEVELS.length)||(typeof CAMPAIGN!=='undefined'&&CAMPAIGN&&CAMPAIGN.length)||0;if(n>0){if(Array.isArray(s.completedLevels))s.completedLevels=s.completedLevels.filter(function(i){return i>=0&&i<n;});if(Array.isArray(s.completed))s.completed=s.completed.filter(function(i){return i>=0&&i<n;});var st=s.levelStars;if(st&&typeof st==='object'&&!Array.isArray(st)){for(var k in st){var idx=parseInt(k,10);if(!(idx>=0&&idx<n))delete st[k];}}if(typeof s.currentLevel==='number'&&s.currentLevel>n)s.currentLevel=n;}s.saveVersion=1;}catch(e){}return s;}
+    function migrateSave(s){try{if(!s||typeof s!=='object'||s.saveVersion===1)return s;var n=(typeof LEVELS!=='undefined'&&LEVELS&&LEVELS.length)||(typeof CAMPAIGN!=='undefined'&&CAMPAIGN&&CAMPAIGN.length)||0;if(n>0){if(Array.isArray(s.completedLevels))s.completedLevels=s.completedLevels.filter(function(i){return i>=0&&i<n;});if(Array.isArray(s.completed))s.completed=s.completed.filter(function(i){return i>=0&&i<n;});var st=s.levelStars;if(st&&typeof st==='object'&&!Array.isArray(st)){for(var k in st){var idx=parseInt(k,10);if(!(idx>=0&&idx<n))delete st[k];}}if(typeof s.currentLevel==='number'&&s.currentLevel>n)s.currentLevel=n;}s.saveVersion=1;}catch(e){}return s;}
 return migrateSave(Object.assign(defaultSave(),s));
   }catch(e){}
   return defaultSave();
@@ -6659,5 +6659,8 @@ window.addEventListener('load',function(){
 })();
 </script>
 <script>/*PART3B*/window._localizedPrices=window._localizedPrices||{};window.onLocalizedPrices=function(m){try{if(m)Object.assign(window._localizedPrices,m);if(typeof buildShop==="function"&&document.getElementById("shop-items"))buildShop();}catch(e){}};</script>
+<script>/*PART1 dead-handler defs — were undefined => silent no-op clicks*/
+if(typeof window.showSettings!=='function')window.showSettings=function(){showScreen('settings');};
+</script>
 </body>
 </html>

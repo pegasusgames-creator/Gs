@@ -2031,6 +2031,7 @@ def main():
         ('check_min_levels.py', 'min levels (500 floor)'),
         ('check_java_arglist_comma.py', 'java arglist trailing comma'),
         ('check_sokoban_solvable.py', 'sokoban solvable'),
+        ('check_dead_handlers.py', 'dead onclick handlers'),
     ]:
         try:
             _r = _subprocess.run(
