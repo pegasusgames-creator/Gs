@@ -4426,7 +4426,7 @@ window.addEventListener('load',function(){
        AND tutorialDone, fire a "Come back tomorrow for your daily bonus"
        toast and schedule the daily reminder (already wired in Part A).
      - 3-step coachmark for Nonogram + UnblockPuzzle: opt-in by setting
-       a body attribute data-growth-coachmark="hunch" or ="unblock". The
+       a body attribute data-growth-coachmark="nono" or ="unblock". The
        per-app injection script below opts those two in.
 -->
 <script data-growth-shim="E">
@@ -4533,11 +4533,29 @@ window.addEventListener('load',function(){
     var kind = document.body && document.body.getAttribute('data-growth-coachmark');
     if (!kind) return;
     var steps;
-    if (kind === 'hunch') {
+    if (kind === 'nono') {
       steps = [
-        { title:'Crack the hidden rule', body:'A secret rule decides which patterns pass and which break.' },
-        { title:'Build, then TEST', body:'Light up cells and hit TEST — green means your pattern obeys, red means it breaks.' },
-        { title:'Make the call', body:"Once you've spotted the rule, pick the patterns that follow it." },
+        { title:'Find the picture', body:'Numbers show how many filled squares are in each row + column.' },
+        { title:'Tap to fill', body:'Tap a cell to fill. Long-press marks it empty (a guaranteed blank).' },
+        { title:'Solve the row', body:'When a row matches its numbers, it locks in. Clear them all to win.' },
+      ];
+    } else if (kind === 'unblock') {
+      steps = [
+        { title:'Find the red block', body:'Your goal: slide the red block out the right edge.' },
+        { title:'Drag to slide', body:'Blocks slide along their long axis only. Drag, don\'t tap.' },
+        { title:'Clear the path', body:'Move the other blocks out of the way. Fewer moves = more stars.' },
+      ];
+    } else if (kind === 'watersort') {
+      steps = [
+        { title:'Sort the colors', body:'Each tube can hold 4 layers. Win when every tube is one color (or empty).' },
+        { title:'Tap to pour', body:'Tap a tube to lift it. Tap another to pour. Liquid only pours onto the same color (or into an empty tube).' },
+        { title:'Boosters help', body:'Out of moves? Use Hint, Undo, Restart, +Tube, or Wand at the bottom.' },
+      ];
+    } else if (kind === 'puzzle2048') {
+      steps = [
+        { title:'Merge to grow', body:'Swipe to slide all tiles. Two tiles with the same number merge into one — bigger.' },
+        { title:'Reach 2048', body:'Keep merging: 2 → 4 → 8 → 16 → … all the way to 2048 (and beyond if you can).' },
+        { title:'Plan ahead', body:'The board fills up fast. Keep your highest tile in a corner and chain merges toward it.' },
       ];
     } else {
       return;
@@ -4930,7 +4948,18 @@ window.addEventListener('load',function(){
         'padding:clamp(8px, 1.4vw, 12px) clamp(16px, 3.2vw, 24px) !important;'+
         'width:clamp(220px, 60vw, 340px) !important;'+
         'margin:14px 0 0 !important;'+
+        // PART2(e): daily card was a faint ghost — give it a real surface +
+        // accent hairline + bold legible text (AA), still clearly secondary
+        // to the Play hero (smaller, no gradient fill).
+        'background:var(--surface, rgba(255,255,255,0.9)) !important;'+
+        'color:var(--text, #1b2030) !important;'+
+        'border:1.5px solid var(--accent, var(--border, rgba(0,0,0,0.22))) !important;'+
+        'border-radius:14px !important;'+
+        'font-weight:700 !important;'+
+        'box-shadow:0 2px 8px rgba(0,0,0,0.08) !important;'+
+        'opacity:1 !important;'+
       '}'+
+      '#menuScreen [data-daily-date], #screen-menu [data-daily-date]{opacity:0.85 !important;}'+
       // Chips container — full width, one row, even rhythm.
       '[data-menu-chips]{width:100% !important;max-width:none !important;padding:0 16px !important;margin:0 !important;}'+
       // Tier-3 icon-row buttons — size for icon + label stacked
@@ -5727,26 +5756,18 @@ window.addEventListener('load',function(){
   }
   function renderLeaderboardTab(){
     var d = buildStandings();
-    // Read the GLOBAL exported id: the per-app `var LEADERBOARD_ID` lives in
-    // a different IIFE and is NOT in scope here, so the bare name always read
-    // 'undefined' and the synthetic bracket wrongly rendered as a real
-    // "Weekly" leaderboard. A missing / TODO / PLACEHOLDER / ENTER_ id ⇒ a
-    // practice bracket (never implying real global players).
-    var _lbid = window._GROWTH_LEADERBOARD_ID;
-    var _lbPlaceholder = (typeof _lbid !== 'string') || !_lbid || /^(TODO|PLACEHOLDER|ENTER_)/.test(_lbid);
     // "Updated <minutes> ago" — gives the synthetic table a live feel
     // without lying about real-time. Computed deterministically from
     // current minute so it doesn't tick while open.
     var freshMin = (new Date().getMinutes() % 17) + 1;
-    var head = _lbPlaceholder
-      ? 'Practice bracket · #' + d.rank.toLocaleString() + ' of ' + d.total.toLocaleString()
-      : 'Weekly · #' + d.rank.toLocaleString() + ' of ' + d.total.toLocaleString() + ' · Updated ' + freshMin + 'm ago';
+    var head = 'Weekly · #' + d.rank.toLocaleString() +
+               ' of ' + d.total.toLocaleString() +
+               ' · Updated ' + freshMin + 'm ago';
     var html =
       '<div style="display:flex;align-items:center;justify-content:space-between;font-size:0.78rem;opacity:0.92;margin-bottom:10px;gap:10px;">'+
         '<span style="flex:1;">'+head+'</span>'+
         '<button data-standings-jump style="background:var(--g-play, #3b6db8);color:var(--on-accent, #fff);border:none;border-radius:10px;padding:5px 12px;font-weight:700;font-size:0.78rem;cursor:pointer;font-family:inherit;flex:0 0 auto;">Jump to me</button>'+
       '</div>' +
-      (_lbPlaceholder ? '<div style="font-size:0.74rem;opacity:0.82;margin:-2px 0 10px;line-height:1.4;">🤖 Practice ranks — sample players to pace against, not a live global ranking.</div>' : '') +
       '<div data-standings-list style="max-height:62vh;overflow-y:auto;border-radius:12px;border:1px solid var(--border, rgba(127,127,127,0.22));-webkit-overflow-scrolling:touch;">';
     // Render ALL rows from #1 to last. WebView handles ~10k rows but
     // we keep the row DOM minimal to stay snappy on first paint.
@@ -5772,7 +5793,7 @@ window.addEventListener('load',function(){
       );
     }
     html += parts.join('') + '</div>';
-    if (api('showLeaderboard') && !_lbPlaceholder) {
+    if (api('showLeaderboard')) {
       html += '<a data-open-lb style="display:block;text-align:center;margin-top:10px;' +
               'font-size:0.78rem;color:inherit;opacity:0.62;text-decoration:underline;' +
               'cursor:pointer;">Compare on Play Games →</a>';
@@ -6330,10 +6351,7 @@ window.addEventListener('load',function(){
     return alias[head] || 'en-US';
   }
   function priceFor(sku){
-    // Prefer the live BillingClient price piped via window._localizedPrices.
-    var _lp = window._localizedPrices && window._localizedPrices[sku];
-    if (_lp) return ('' + _lp).split('/')[0];
-    // Then the in-app PRODUCTS array if it exists.
+    // Prefer the in-app PRODUCTS array if it exists.
     var arr = window.PRODUCTS || (window.Game && window.Game.PRODUCTS);
     if (Array.isArray(arr)){
       for (var i=0;i<arr.length;i++){

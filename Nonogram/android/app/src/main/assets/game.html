@@ -6833,7 +6833,18 @@ window.addEventListener('load',function(){
         'padding:clamp(8px, 1.4vw, 12px) clamp(16px, 3.2vw, 24px) !important;'+
         'width:clamp(220px, 60vw, 340px) !important;'+
         'margin:14px 0 0 !important;'+
+        // PART2(e): daily card was a faint ghost — give it a real surface +
+        // accent hairline + bold legible text (AA), still clearly secondary
+        // to the Play hero (smaller, no gradient fill).
+        'background:var(--surface, rgba(255,255,255,0.9)) !important;'+
+        'color:var(--text, #1b2030) !important;'+
+        'border:1.5px solid var(--accent, var(--border, rgba(0,0,0,0.22))) !important;'+
+        'border-radius:14px !important;'+
+        'font-weight:700 !important;'+
+        'box-shadow:0 2px 8px rgba(0,0,0,0.08) !important;'+
+        'opacity:1 !important;'+
       '}'+
+      '#menuScreen [data-daily-date], #screen-menu [data-daily-date]{opacity:0.85 !important;}'+
       // Chips container — full width, one row, even rhythm.
       '[data-menu-chips]{width:100% !important;max-width:none !important;padding:0 16px !important;margin:0 !important;}'+
       // Tier-3 icon-row buttons — size for icon + label stacked
