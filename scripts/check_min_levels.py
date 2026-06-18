@@ -33,6 +33,16 @@ def _array_len(html: str, name: str):
     n = len(html)
     while i < n:
         c = html[i]
+        # skip // line comments and /* */ block comments (their commas are
+        # prose, e.g. "// Band 1: 10 levels, 3c/5t", not array separators)
+        if c == "/" and i + 1 < n and html[i+1] == "/":
+            j = html.find("\n", i)
+            i = n if j == -1 else j
+            continue
+        if c == "/" and i + 1 < n and html[i+1] == "*":
+            j = html.find("*/", i)
+            i = n if j == -1 else j + 2
+            continue
         if c in "[{(":
             depth += 1
         elif c in ")}]":
@@ -51,7 +61,7 @@ def _array_len(html: str, name: str):
 
 def _level_count(html: str):
     best = None
-    for name in ("CAMPAIGN", "LEVELS"):
+    for name in ("CAMPAIGN", "LEVELS", "LEVEL_SEEDS"):
         c = _array_len(html, name)
         if c is not None:
             best = c if best is None else max(best, c)
