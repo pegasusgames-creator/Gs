@@ -1,5 +1,38 @@
 # Screenshot re-capture — open items (2026-06-08)
 
+## 2026-06-18 update — GAMEPLAY-ONLY policy (supersedes the 7th-slot plan below)
+
+New rule from the user: **every store-screenshot slot is an actual
+gameplay board at a distinct level. No other pages, no overlays.** This
+retires the older "each non-gameplay screen type at most once" allowance
+and the "pick a meta-loop 7th slot (themes grid / weekly bracket)" plan
+in the "What needs the emulator" section further down — *all* of those
+non-gameplay slots (Themes, Stats, Level Select, Ranks/weekly, Missions,
+Daily banner, Level-Complete / win / game-over overlay) are now
+forbidden in every slot across phone + both tablets.
+
+What changed in-repo (2026-06-18):
+
+- **`test/screenshot_taps.json` for WS / Nono / P2048 / UB rewritten** so
+  every slot (7 phone + 2 tablet_7 + 2 tablet_10) calls only the per-app
+  start-gameplay path (`_jumpTo` / `startLevel` / `initGame` / grid-set +
+  `drawGrid`) at a *unique* level. Slot keys renamed from the old
+  feature names (`03_level_complete`, `05_stats`, `07_depth`, …) to
+  gameplay descriptors (`0N_gameplay_*`), matching the new
+  `SLOTS_BY_TARGET` in `capture_screenshots.py`.
+- **`metadata/screenshot_headlines.json` reworded** off any
+  theme / daily / weekly-tournament / missions / stats / 3-star copy so
+  every headline markets the gameplay board it sits over.
+- **`scripts/check_screenshots_gameplay_only.py`** added + wired into
+  `pre_publish_check.py`: BLOCKS a tap config whose ops `showScreen(...)`
+  a non-gameplay screen, `classList.add('active')` a win/level-complete
+  overlay, open the ranks sheet, or inject a daily/streak banner.
+- **CLAUDE.md Screenshot rules + QUALITY_PLAYBOOK §7.1** rewritten to the
+  gameplay-only policy; WS/Nono/P2048 grandfathering retired.
+
+Re-capture run: `adb` + the three AVDs are available in the dev env, so
+the PNGs are regenerated here (see capture/wrap commands at the bottom).
+
 ## 2026-06-16 update — emulator capture is now self-cleaning
 
 `adb` + the three AVDs (`pegasus_phone`, `pegasus_tablet_7`,

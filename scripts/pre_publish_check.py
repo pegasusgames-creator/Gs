@@ -2027,6 +2027,7 @@ def main():
         ('check_cross_promo_pkgs.py',     'cross-promo pkgs'),
         ('check_notif_prompt_timing.py',  'notif prompt timing'),
         ('check_screenshot_taps_valid.py', 'screenshot taps valid'),
+        ('check_screenshots_gameplay_only.py', 'screenshots gameplay only'),
     ]:
         try:
             _r = _subprocess.run(

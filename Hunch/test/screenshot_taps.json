@@ -9,36 +9,80 @@
     ]
   ],
   "01_deep_gameplay": [
-    [ "js", "window._applyAT('ember',false);showScreen('game');setTimeout(function(){loadLevel(46);setTimeout(function(){window._hunchFill([0,3,5,6,9,10,12,15]);},180);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('ember',false);showScreen('game');setTimeout(function(){loadLevel(46);setTimeout(function(){window._hunchFill([0,3,5,6,9,10,12,15]);},180);},220);'ok';",
+      2400
+    ]
   ],
   "02_early_gameplay": [
-    [ "js", "window._applyAT('default',false);showScreen('game');setTimeout(function(){loadLevel(6);setTimeout(function(){window._hunchFill([1,2,5,6,9,10,13,14]);},180);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('default',false);showScreen('game');setTimeout(function(){loadLevel(6);setTimeout(function(){window._hunchFill([1,2,5,6,9,10,13,14]);},180);},220);'ok';",
+      2400
+    ]
   ],
   "03_level_complete": [
-    [ "js", "window._applyAT('cobalt',false);showScreen('game');setTimeout(function(){loadLevel(17);setTimeout(function(){window._hunchFill([0,1,2,3,12,13,14,15]);},180);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('cobalt',false);showScreen('game');setTimeout(function(){loadLevel(17);setTimeout(function(){window._hunchFill([0,1,2,3,12,13,14,15]);},180);},220);'ok';",
+      2400
+    ]
   ],
   "04_missions_panel": [
-    [ "js", "window._applyAT('midnight',true);showScreen('game');setTimeout(function(){loadLevel(29);setTimeout(function(){window._hunchFill([0,5,10,15,3,6,9,12]);},180);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('midnight',true);showScreen('game');setTimeout(function(){loadLevel(29);setTimeout(function(){window._hunchFill([0,5,10,15,3,6,9,12]);},180);},220);'ok';",
+      2400
+    ]
   ],
   "05_stats": [
-    [ "js", "window._applyAT('plum',false);showScreen('game');setTimeout(function(){loadLevel(23);setTimeout(function(){window._hunchFill([4,5,6,7,8,9,10,11]);},180);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('plum',false);showScreen('game');setTimeout(function(){loadLevel(23);setTimeout(function(){window._hunchFill([4,5,6,7,8,9,10,11]);},180);},220);'ok';",
+      2400
+    ]
   ],
   "06_levels_grid": [
-    [ "js", "window._applyAT('default',false);showScreen('themes');if(typeof renderThemes==='function')renderThemes();if(typeof updateThemeProgressStrip==='function')updateThemeProgressStrip();'ok';", 3000 ]
+    [
+      "js",
+      "window._applyAT('sea',false);showScreen('game');setTimeout(function(){loadLevel(35);setTimeout(function(){window._hunchFill([4,5,6,7,8,9,10,11]);},180);},220);'ok';",
+      2600
+    ]
   ],
   "07_depth": [
-    [ "js", "window._applyAT('sea',false);showScreen('game');setTimeout(function(){loadLevel(53);setTimeout(function(){window._hunchFill([0,2,5,7,8,10,13,15]);},180);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('sea',false);showScreen('game');setTimeout(function(){loadLevel(53);setTimeout(function(){window._hunchFill([0,2,5,7,8,10,13,15]);},180);},220);'ok';",
+      2400
+    ]
   ],
   "tablet_7_01_deep_gameplay": [
-    [ "js", "window._applyAT('ember',false);showScreen('game');setTimeout(function(){loadLevel(41);setTimeout(function(){window._hunchFill([1,4,6,9,11,14]);},180);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('ember',false);showScreen('game');setTimeout(function(){loadLevel(41);setTimeout(function(){window._hunchFill([1,4,6,9,11,14]);},180);},220);'ok';",
+      2400
+    ]
   ],
   "tablet_7_02_early_gameplay": [
-    [ "js", "window._applyAT('plum',false);showScreen('game');setTimeout(function(){loadLevel(11);setTimeout(function(){window._hunchFill([0,1,4,5,10,11,14,15]);},180);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('plum',false);showScreen('game');setTimeout(function(){loadLevel(11);setTimeout(function(){window._hunchFill([0,1,4,5,10,11,14,15]);},180);},220);'ok';",
+      2400
+    ]
   ],
   "tablet_10_01_deep_gameplay": [
-    [ "js", "window._applyAT('midnight',true);showScreen('game');setTimeout(function(){loadLevel(57);setTimeout(function(){window._hunchFill([2,3,5,8,12,13,7,10]);},180);},220);'ok';", 2500 ]
+    [
+      "js",
+      "window._applyAT('midnight',true);showScreen('game');setTimeout(function(){loadLevel(57);setTimeout(function(){window._hunchFill([2,3,5,8,12,13,7,10]);},180);},220);'ok';",
+      2500
+    ]
   ],
   "tablet_10_02_early_gameplay": [
-    [ "js", "window._applyAT('cobalt',false);showScreen('game');setTimeout(function(){loadLevel(4);setTimeout(function(){window._hunchFill([0,3,6,9,12,15]);},180);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('cobalt',false);showScreen('game');setTimeout(function(){loadLevel(4);setTimeout(function(){window._hunchFill([0,3,6,9,12,15]);},180);},220);'ok';",
+      2400
+    ]
   ]
 }

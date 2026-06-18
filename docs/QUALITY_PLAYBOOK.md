@@ -571,22 +571,31 @@ and rate 1-star.
 ### 7.1 Screenshot order [ALL, P0]
 
 The Play Store shows the first 3 screenshots in search results. Those 3 have
-to sell the game. Order:
+to sell the game. **GAMEPLAY ONLY (2026-06-18 policy):** every single slot is
+an actual gameplay board at a *distinct* level — no other pages, and no
+overlays. Order by difficulty/variety, not by feature:
 
 1. **Gameplay mid-action** — a dramatic in-progress state showing what the
-   player does. Not the menu. Not an empty board.
-2. **Level complete celebration** — 3-star clear, particles, coin reward —
-   **and the theme-unlock celebration card visible when the level crosses a
-   theme threshold** (this is the emotional + progression payoff in one shot).
-3. **Progression / variety** — shows long-term content (many levels, daily
-   challenge, missions).
-4-6. Various gameplay, daily challenge, missions, stats — a different board
-   or state in each slot.
+   player does. Not the menu. Not an empty board. The largest/most-populated
+   board the level generator produces, mid-progression.
+2. **A different gameplay board** — another level, ideally a different theme
+   palette so the screenshot set shows visual range *while the game is being
+   played* (the theme appears on the board, never as a Themes-screen shot).
+3. **A third gameplay board** — yet another level/theme, harder or busier, to
+   signal long-term content depth.
+4-7. More gameplay — a different board, level number, and (where possible)
+   theme in every slot. No repeated level across the full 11-slot set.
 
-**Every screenshot is gameplay.** The main menu, shop, settings, and
-"More Games" screens are NEVER used as store screenshots — a menu shot
-wastes a slot and a shop shot signals monetization-first.
-`capture_screenshots.py` captures 6 gameplay slots and never the menu.
+**Every screenshot is gameplay — and ONLY gameplay.** The main menu, shop,
+settings, "More Games", **Themes/palette page, Stats, Level Select,
+Ranks/weekly-standings sheet, Missions, and Daily-challenge banners are NEVER
+used as store screenshots**, and neither is any **Level-Complete / win /
+game-over overlay** (a celebration card on top of a board is not "a level" —
+capture the board mid-play instead). A menu shot wastes a slot, a shop shot
+signals monetization-first, and a feature-page shot reads as a settings app.
+`capture_screenshots.py` drives only the per-app start-gameplay path for every
+slot; `check_screenshots_gameplay_only.py` BLOCKS any tap config that
+navigates to a non-gameplay screen or triggers an overlay.
 
 ### 7.1.5 Capture quality — what to actually show inside the frame [ALL, P0]
 
@@ -619,11 +628,15 @@ screenshot inside the frame is still mostly empty. The in-app
 gameplay layout must scale the playable area to fill tall phones (per
 §1.5).
 
-**Modals over darkened backgrounds.** Capturing a modal (Daily
-Mission panel, Stats popup) shows a dark scrim over the menu behind.
-The result is muddy and low-contrast. For modals, capture in a
-dedicated screenshot mode where the background is replaced with the
-app's solid theme color. See §7.1.5.4.
+**Modals / overlays are never captured (2026-06-18).** Under the
+gameplay-only policy, no slot shows a modal at all — not a Daily
+Mission panel, Stats popup, Level-Complete card, win/game-over
+overlay, or Themes sheet. They render a dark scrim over the screen
+behind (muddy, low-contrast) AND they aren't "a level." Capture the
+gameplay board mid-play instead. The capture pipeline's clean step
+still hides the *involuntary* first-launch popups (`#ls-overlay`,
+`#starterPackModal`); the per-slot taps never trigger an intentional
+overlay.
 
 **★ NEW (Puzzle2048 May 2026 audit) — Same raw screenshot used in
 multiple slots.** The pre-wrap raw captures must be VISUALLY DISTINCT

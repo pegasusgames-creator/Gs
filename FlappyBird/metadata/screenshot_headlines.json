@@ -1,9 +1,37 @@
 [
-  {"line1": "TAP TO", "line2": "FLAP", "subtitle": "Time each tap to weave through the pipes."},
-  {"line1": "HOW FAR", "line2": "CAN YOU FLY?", "subtitle": "One mistake and the run ends. Try again."},
-  {"line1": "EARN", "line2": "MEDALS", "subtitle": "Bronze, silver, and gold reward longer runs."},
-  {"line1": "UNLOCK", "line2": "BIRD SKINS", "subtitle": "Spend earned coins on five colored wings."},
-  {"line1": "RUNS", "line2": "TRACKED", "subtitle": "Your best score, last ten runs, all in one place."},
-  {"line1": "ONE MORE", "line2": "FLAP", "subtitle": "Quick-play arcade — pick it up anywhere."},
-  {"line1": "FLAPPY", "line2": "WINGS", "subtitle": "One tap. One bird. One stubborn pipe forest."}
+  {
+    "line1": "TAP TO",
+    "line2": "FLAP",
+    "subtitle": "Time each tap to weave through the pipes."
+  },
+  {
+    "line1": "HOW FAR",
+    "line2": "CAN YOU FLY?",
+    "subtitle": "One mistake ends the run. Try again."
+  },
+  {
+    "line1": "THREAD",
+    "line2": "THE GAP",
+    "subtitle": "Slip through each pipe gap, one tap at a time."
+  },
+  {
+    "line1": "KEEP",
+    "line2": "CLIMBING",
+    "subtitle": "Every pipe cleared adds to your score."
+  },
+  {
+    "line1": "CHASE",
+    "line2": "THE SCORE",
+    "subtitle": "How long can you keep the bird in the air?"
+  },
+  {
+    "line1": "ONE MORE",
+    "line2": "FLAP",
+    "subtitle": "Quick-play arcade — pick it up anywhere."
+  },
+  {
+    "line1": "STAY",
+    "line2": "AIRBORNE",
+    "subtitle": "One tap, one bird, a forest of pipes."
+  }
 ]

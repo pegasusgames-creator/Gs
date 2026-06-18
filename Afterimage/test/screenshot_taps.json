@@ -46,8 +46,8 @@
   "06_levels_grid": [
     [
       "js",
-      "window._applyAT('default',false);showScreen('themes');if(typeof renderThemes==='function')renderThemes();if(typeof updateThemeProgressStrip==='function')updateThemeProgressStrip();'ok';",
-      3000
+      "window._applyAT('sunset',false);showScreen('game');setTimeout(function(){loadLevel(35);},220);'ok';",
+      2600
     ]
   ],
   "07_depth": [

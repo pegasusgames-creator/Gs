@@ -9,36 +9,80 @@
     ]
   ],
   "01_deep_gameplay": [
-    [ "js", "window._applyAT('forest',false);showScreen('game');setTimeout(function(){loadLevel(46);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('forest',false);showScreen('game');setTimeout(function(){loadLevel(46);},220);'ok';",
+      2400
+    ]
   ],
   "02_early_gameplay": [
-    [ "js", "window._applyAT('default',false);showScreen('game');setTimeout(function(){loadLevel(6);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('default',false);showScreen('game');setTimeout(function(){loadLevel(6);},220);'ok';",
+      2400
+    ]
   ],
   "03_level_complete": [
-    [ "js", "window._applyAT('primary',false);showScreen('game');setTimeout(function(){loadLevel(17);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('primary',false);showScreen('game');setTimeout(function(){loadLevel(17);},220);'ok';",
+      2400
+    ]
   ],
   "04_missions_panel": [
-    [ "js", "window._applyAT('midnight',true);showScreen('game');setTimeout(function(){loadLevel(29);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('midnight',true);showScreen('game');setTimeout(function(){loadLevel(29);},220);'ok';",
+      2400
+    ]
   ],
   "05_stats": [
-    [ "js", "window._applyAT('orchid',false);showScreen('game');setTimeout(function(){loadLevel(23);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('orchid',false);showScreen('game');setTimeout(function(){loadLevel(23);},220);'ok';",
+      2400
+    ]
   ],
   "06_levels_grid": [
-    [ "js", "window._applyAT('default',false);showScreen('themes');if(typeof renderThemes==='function')renderThemes();if(typeof updateThemeProgressStrip==='function')updateThemeProgressStrip();'ok';", 3000 ]
+    [
+      "js",
+      "window._applyAT('orchid',false);showScreen('game');setTimeout(function(){loadLevel(35);},220);'ok';",
+      2600
+    ]
   ],
   "07_depth": [
-    [ "js", "window._applyAT('ocean',false);showScreen('game');setTimeout(function(){loadLevel(53);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('ocean',false);showScreen('game');setTimeout(function(){loadLevel(53);},220);'ok';",
+      2400
+    ]
   ],
   "tablet_7_01_deep_gameplay": [
-    [ "js", "window._applyAT('forest',false);showScreen('game');setTimeout(function(){loadLevel(41);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('forest',false);showScreen('game');setTimeout(function(){loadLevel(41);},220);'ok';",
+      2400
+    ]
   ],
   "tablet_7_02_early_gameplay": [
-    [ "js", "window._applyAT('orchid',false);showScreen('game');setTimeout(function(){loadLevel(11);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('orchid',false);showScreen('game');setTimeout(function(){loadLevel(11);},220);'ok';",
+      2400
+    ]
   ],
   "tablet_10_01_deep_gameplay": [
-    [ "js", "window._applyAT('midnight',true);showScreen('game');setTimeout(function(){loadLevel(57);},220);'ok';", 2500 ]
+    [
+      "js",
+      "window._applyAT('midnight',true);showScreen('game');setTimeout(function(){loadLevel(57);},220);'ok';",
+      2500
+    ]
   ],
   "tablet_10_02_early_gameplay": [
-    [ "js", "window._applyAT('primary',false);showScreen('game');setTimeout(function(){loadLevel(4);},220);'ok';", 2400 ]
+    [
+      "js",
+      "window._applyAT('primary',false);showScreen('game');setTimeout(function(){loadLevel(4);},220);'ok';",
+      2400
+    ]
   ]
 }

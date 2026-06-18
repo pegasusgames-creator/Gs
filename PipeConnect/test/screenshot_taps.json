@@ -1,5 +1,5 @@
 {
-  "_comment": "PipeConnect screenshot capture \u2014 18 slots designed cross-surface so each non-gameplay screen appears once. Showcases all 7 themes (Classic + Neon + Pastel + Midnight + Ocean + Inferno + Galaxy) with Midnight + Inferno + Galaxy unlocked via seed save state. Levels are distinct across every slot. Themes applied by writing palette directly to PIPE_COLORS (THEMES array lives in an IIFE).\n\nNon-gameplay screen distribution: Themes panel \u2192 phone 06 \u00b7 Level Complete overlay \u2192 tablet_7 06 \u00b7 Stats \u2192 tablet_10 06 \u00b7 Level Select grid \u2192 tablet_7 03.",
+  "_comment": "PipeConnect screenshot capture — 18 slots designed cross-surface so each non-gameplay screen appears once. Showcases all 7 themes (Classic + Neon + Pastel + Midnight + Ocean + Inferno + Galaxy) with Midnight + Inferno + Galaxy unlocked via seed save state. Levels are distinct across every slot. Themes applied by writing palette directly to PIPE_COLORS (THEMES array lives in an IIFE).\n\nNon-gameplay screen distribution: Themes panel → phone 06 · Level Complete overlay → tablet_7 06 · Stats → tablet_10 06 · Level Select grid → tablet_7 03.",
   "_readiness_expr": "typeof save !== 'undefined' && typeof loadLevel === 'function' && typeof showScreen === 'function' && typeof PIPE_COLORS !== 'undefined'",
   "_setup_taps": [
     [
@@ -46,8 +46,8 @@
   "06_levels_grid": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';save.completedLevels=Array.from({length:104},function(_,i){return i;});save.unlockedThemes=['midnight'];persist();showScreen('themes');if(typeof renderThemes==='function')renderThemes();if(typeof updateThemeProgressStrip==='function')updateThemeProgressStrip();'ok';",
-      3000
+      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.pastel);save.activeTheme='pastel';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(55);if(typeof render==='function')render();},260);'ok';",
+      2600
     ]
   ],
   "tablet_7_01_deep_gameplay": [
@@ -67,8 +67,8 @@
   "tablet_7_03_level_complete": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('levelselect');if(typeof showLevelSelect==='function')showLevelSelect();else if(typeof buildLevelSelect==='function'){buildLevelSelect();showScreen('levelselect');}'ok';",
-      2200
+      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.fire);save.activeTheme='fire';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(63);if(typeof render==='function')render();},260);'ok';",
+      2600
     ]
   ],
   "tablet_7_04_missions_panel": [
@@ -88,8 +88,8 @@
   "tablet_7_06_levels_grid": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.ocean);save.activeTheme='ocean';persist();showScreen('game');setTimeout(function(){loadLevel(78);setTimeout(function(){var ov=document.getElementById('overlay-complete');if(ov){ov.classList.add('active');ov.classList.add('show');ov.style.display='flex';}},500);},200);'ok';",
-      2900
+      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.ocean);save.activeTheme='ocean';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(78);if(typeof render==='function')render();},260);'ok';",
+      2600
     ]
   ],
   "tablet_10_01_deep_gameplay": [
@@ -130,8 +130,8 @@
   "tablet_10_06_levels_grid": [
     [
       "js",
-      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.classic);save.activeTheme='default';persist();showScreen('stats');if(typeof renderStats==='function')renderStats();setTimeout(function(){if(typeof injectRankCard==='function')injectRankCard();},250);'ok';",
-      2200
+      "document.body.classList.remove('midnight');Object.assign(PIPE_COLORS,window._PALETTES.galaxy);save.activeTheme='galaxy';persist();window._SS_CONTRAST=true;showScreen('game');setTimeout(function(){loadLevel(97);if(typeof render==='function')render();},260);'ok';",
+      2600
     ]
   ],
   "07_depth": [

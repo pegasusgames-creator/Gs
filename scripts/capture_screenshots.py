@@ -81,30 +81,34 @@ REPO_ROOT = (Path(__file__).resolve().parent.parent
 # etc.), create <App>/test/screenshot_taps.json with the correct sequence.
 
 DEFAULT_TAPS = {
-    "01_deep_gameplay": [
+    # GAMEPLAY ONLY (2026-06-18 policy): every slot is an actual gameplay
+    # board at a DISTINCT level — no menu/shop/settings/themes/stats/
+    # level-select/ranks/missions/daily and no win/level-complete overlays.
+    # These coordinate fallbacks just tap the hero Play button; real apps
+    # override every slot per-app in test/screenshot_taps.json with a
+    # start-gameplay call (_jumpTo / startLevel / initGame / grid+drawGrid)
+    # at a different level each.
+    "01_gameplay_open": [
         ("tap", 0.50, 0.50, 1500),  # Hero Play button → loads currentLevel
     ],
-    "02_early_gameplay": [
-        ("tap", 0.40, 0.72, 1500),  # Levels icon (left in icon row)
-        ("tap", 0.30, 0.30, 1500),  # tap a low-numbered level (≈level 5)
+    "02_gameplay_early": [
+        ("tap", 0.50, 0.50, 1500),
     ],
-    "03_level_complete": [
-        # Most reliable path: Daily Challenge button.
-        # The captured screen will be the daily mode opening — if app has
-        # no daily, override per-app via screenshot_taps.json.
-        ("tap", 0.50, 0.62, 2000),
+    "03_gameplay_build": [
+        ("tap", 0.50, 0.50, 1500),
     ],
-    "04_missions_panel": [
-        ("tap", 0.50, 0.72, 1500),  # center of icon row
+    "04_gameplay_mid": [
+        ("tap", 0.50, 0.50, 1500),
     ],
-    "05_stats": [
-        ("tap", 0.72, 0.72, 1500),  # right of icon row
+    "05_gameplay_busy": [
+        ("tap", 0.50, 0.50, 1500),
     ],
-    "06_levels_grid": [
-        ("tap", 0.40, 0.72, 1500),  # left of icon row
+    "06_gameplay_deep": [
+        ("tap", 0.50, 0.50, 1500),
     ],
-    # NOTE: no menu/shop/settings slot — every store screenshot must show
-    # actual gameplay (CLAUDE.md "Things to flag", QUALITY_PLAYBOOK §7.1).
+    "07_gameplay_late": [
+        ("tap", 0.50, 0.50, 1500),
+    ],
 }
 
 
@@ -592,29 +596,43 @@ def main():
 
     # Per-target slot list (2026-06-08 user policy: 7 phone / 2 tablet_7 /
     # 2 tablet_10). Phone is the primary listing surface, tablets get the
-    # 2 most-impactful shots each. The 7th phone slot ("07_depth") is a
-    # late-game / meta-loop content shot — never the menu (per QUALITY_PLAYBOOK
-    # §7.1 + CLAUDE.md "Things to flag"). Each app picks its own 07_*
-    # named slot in test/screenshot_taps.json (e.g., 07_themes_grid,
-    # 07_weekly_tournament, 07_daily_challenge).
+    # 2 most-impactful shots each. GAMEPLAY ONLY (2026-06-18): every slot —
+    # including the 7th phone slot — is an actual gameplay board at a DISTINCT
+    # level. No menu/shop/settings/themes/stats/level-select/ranks/missions/
+    # daily page, and no win/level-complete/game-over overlay, in any slot
+    # (per QUALITY_PLAYBOOK §7.1 + CLAUDE.md Screenshot rules). Each slot is
+    # overridden per-app in test/screenshot_taps.json with a start-gameplay
+    # call at a unique level. check_screenshots_gameplay_only.py gates it.
     SLOTS_BY_TARGET = {
         "phone": [
-            ("01", "01_deep_gameplay"),
-            ("02", "02_early_gameplay"),
-            ("03", "03_level_complete"),
-            ("04", "04_missions_panel"),
-            ("05", "05_stats"),
-            ("06", "06_levels_grid"),
-            ("07", "07_depth"),
+            ("01", "01_gameplay_open"),
+            ("02", "02_gameplay_early"),
+            ("03", "03_gameplay_build"),
+            ("04", "04_gameplay_mid"),
+            ("05", "05_gameplay_busy"),
+            ("06", "06_gameplay_deep"),
+            ("07", "07_gameplay_late"),
         ],
         "tablet_7": [
-            ("01", "01_deep_gameplay"),
-            ("02", "02_early_gameplay"),
+            ("01", "01_gameplay_open"),
+            ("02", "02_gameplay_early"),
         ],
         "tablet_10": [
-            ("01", "01_deep_gameplay"),
-            ("02", "02_early_gameplay"),
+            ("01", "01_gameplay_open"),
+            ("02", "02_gameplay_early"),
         ],
+    }
+    # Legacy slot-key aliases: apps captured before the 2026-06-18 rename
+    # still use the old feature-named keys. Try the new gameplay key first,
+    # then fall back to the legacy name(s) so old configs keep working.
+    LEGACY_TAP_KEYS = {
+        "01_gameplay_open":  ["01_deep_gameplay"],
+        "02_gameplay_early": ["02_early_gameplay"],
+        "03_gameplay_build": ["03_level_complete"],
+        "04_gameplay_mid":   ["04_missions_panel"],
+        "05_gameplay_busy":  ["05_stats"],
+        "06_gameplay_deep":  ["06_levels_grid"],
+        "07_gameplay_late":  ["07_depth", "07_menu"],
     }
     SLOTS = SLOTS_BY_TARGET.get(args.target, SLOTS_BY_TARGET["phone"])
     if args.slot:
@@ -655,11 +673,20 @@ def main():
         # fresh on page load and only loadState() merges localStorage).
         if setup_ops:
             execute_taps(setup_ops, screen_w, screen_h, package_name=package)
-        # Tablet-aware key lookup: tablet_7_03_level_complete falls back
-        # to 03_level_complete when the per-app file doesn't ship a
-        # tablet override.
-        target_key = f"{args.target}_{tap_key}" if args.target != "phone" else tap_key
-        ops = taps.get(target_key) or taps.get(tap_key, [])
+        # Tablet-aware key lookup: tablet_7_02_gameplay_early falls back
+        # to 02_gameplay_early when the per-app file doesn't ship a
+        # tablet override. (Tablets SHOULD ship distinct overrides so the
+        # 11 slots are all different levels — see Screenshot rules.)
+        candidate_keys = []
+        for base in [tap_key] + LEGACY_TAP_KEYS.get(tap_key, []):
+            if args.target != "phone":
+                candidate_keys.append(f"{args.target}_{base}")
+            candidate_keys.append(base)
+        ops = []
+        for ckey in candidate_keys:
+            if taps.get(ckey):
+                ops = taps[ckey]
+                break
         if ops:
             execute_taps(ops, screen_w, screen_h, package_name=package)
         else:
