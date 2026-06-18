@@ -1373,6 +1373,23 @@ function recognizable(t){
     if(!!t[r*GN+c]!==!!t[r*GN+(GN-1-c)])return false;}
   return true;
 }
+// PART 5: fewest single-cell slides from init to ANY composite-matching
+// offset config in the [-R,R] travel — the witness must equal this optimum.
+function optimalCost(sheets,target,init,R){
+  let opt=Infinity;
+  for(let ax=-R;ax<=R;ax++)for(let ay=-R;ay<=R;ay++)
+   for(let bx=-R;bx<=R;bx++)for(let by=-R;by<=R;by++)
+    for(let cx=-R;cx<=R;cx++)for(let cy=-R;cy<=R;cy++){
+      const off=[[ax,ay],[bx,by],[cx,cy]];
+      if(arrSame(composite(sheets,off),target)){
+        const c=Math.abs(ax-init[0][0])+Math.abs(ay-init[0][1])
+               +Math.abs(bx-init[1][0])+Math.abs(by-init[1][1])
+               +Math.abs(cx-init[2][0])+Math.abs(cy-init[2][1]);
+        if(c<opt)opt=c;
+      }
+    }
+  return opt;
+}
 function gen(seed,band){
   const rnd=mulberry32(seed);
   const R=band.range,NC=band.colors;
@@ -1389,6 +1406,7 @@ function gen(seed,band){
     if(arrSame(composite(sheets,init),target))continue;
     const lower=sol.reduce((a,o,i)=>a+Math.abs(o[0]-init[i][0])+Math.abs(o[1]-init[i][1]),0);
     if(lower<band.minLower)continue;
+    if(optimalCost(sheets,target,init,R)<lower)continue; // PART 5: witness must be the true optimum
     return{sheets,target,init,sol,lower};
   }
   return null;
@@ -2958,7 +2976,8 @@ function injectSeasonPassShop(){
     var div=document.createElement('div');
     div.id='x-season-pass-item';
     div.className='shop-item';
-    var btnTxt=isSeasonActive()?'✅ Active':'$4.99/month';
+    var _spPrice=(window._localizedPrices&&window._localizedPrices['season_pass_monthly'])||'$4.99';
+    var btnTxt=isSeasonActive()?'✅ Active':_spPrice+'/month';
     div.innerHTML=
       '<div class="shop-item-icon">🌟</div>'+
       '<div class="shop-item-info x-season-badge-target">'+
@@ -5310,7 +5329,13 @@ window.addEventListener('load',function(){
   }
   function renderLeaderboardTab(){
     var d = buildStandings();
-    var _lbPlaceholder = (typeof LEADERBOARD_ID === 'string') && /^(TODO|PLACEHOLDER|ENTER_)/.test(LEADERBOARD_ID);
+    // Read the GLOBAL exported id: the per-app `var LEADERBOARD_ID` lives in
+    // a different IIFE and is NOT in scope here, so the bare name always read
+    // 'undefined' and the synthetic bracket wrongly rendered as a real
+    // "Weekly" leaderboard. A missing / TODO / PLACEHOLDER / ENTER_ id ⇒ a
+    // practice bracket (never implying real global players).
+    var _lbid = window._GROWTH_LEADERBOARD_ID;
+    var _lbPlaceholder = (typeof _lbid !== 'string') || !_lbid || /^(TODO|PLACEHOLDER|ENTER_)/.test(_lbid);
     // "Updated <minutes> ago" — gives the synthetic table a live feel
     // without lying about real-time. Computed deterministically from
     // current minute so it doesn't tick while open.
@@ -5907,7 +5932,10 @@ window.addEventListener('load',function(){
     return alias[head] || 'en-US';
   }
   function priceFor(sku){
-    // Prefer the in-app PRODUCTS array if it exists.
+    // Prefer the live BillingClient price piped via window._localizedPrices.
+    var _lp = window._localizedPrices && window._localizedPrices[sku];
+    if (_lp) return ('' + _lp).split('/')[0];
+    // Then the in-app PRODUCTS array if it exists.
     var arr = window.PRODUCTS || (window.Game && window.Game.PRODUCTS);
     if (Array.isArray(arr)){
       for (var i=0;i<arr.length;i++){

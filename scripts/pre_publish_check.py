@@ -2028,6 +2028,7 @@ def main():
         ('check_notif_prompt_timing.py',  'notif prompt timing'),
         ('check_screenshot_taps_valid.py', 'screenshot taps valid'),
         ('check_screenshots_gameplay_only.py', 'screenshots gameplay only'),
+        ('check_min_levels.py', 'min levels (500 floor)'),
     ]:
         try:
             _r = _subprocess.run(

@@ -159,6 +159,26 @@ Every game ships `SEASONAL_EVENTS` covering at least October (Halloween), Decemb
 
 Track best-metric-this-week (best-level for level games, best-score for 2048), map through per-game `WEEKLY_BRACKETS` (10/25/50/75% tiers), show "🏆 This week — <metric> · Top <pct>%", reset Monday 00:00 local, award 100 coins for top 25% / 250 for top 10%, granted at week rollover next time app opens within 7 days.
 
+## Level count floor — 500 levels on release
+
+**Every game with discrete levels ships ≥500 levels on release.** A thin
+campaign (60, 120, 150) reads as unfinished next to category leaders and
+caps retention/LTV. The bar is 500 *solvable, verified* levels, not 500
+padded ones — generator-based games (Afterimage, Hunch, Overlay, PipeConnect,
+WaterSort, Unblock, Sokoban, Nonogram) mine the count from their own seed
+generator + acceptance test (so every level still passes its solvability /
+uniqueness / par-optimality gate), then store the campaign list. Non-leveled
+games (Puzzle2048-style score chase, FlappyBird) are exempt — the rule is
+"has discrete levels", not "is a game".
+
+`check_min_levels.py` enforces it: a `const CAMPAIGN`/`LEVELS` array under 500
+BLOCKS for any app not yet live. Already-live apps released under the old bar
+(WaterSortPuzzle, Nonogram, Puzzle2048, UnblockPuzzle) are grandfathered to a
+WARN — expand them on their next content update, never regress a live level
+set in a rush (changing live level data resets/raptures existing players'
+progress; do it deliberately, behind the solvability gates, with a save
+migration). Nonogram already meets the bar (500 pregen + runtime-unique).
+
 ## Red lines — never do these
 
 Any one can terminate the developer account.

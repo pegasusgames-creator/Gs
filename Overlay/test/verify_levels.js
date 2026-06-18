@@ -22,6 +22,25 @@ function recognizable(t){
     if(!!t[r*N+c]!==!!t[r*N+(N-1-c)])return false;}
   return true;
 }
+// PART 5: exhaustive optimum — fewest single-cell slides from `init` to ANY
+// offset config (within the slider's [-R,R] travel) whose composite equals
+// the target. The witness `sol` is only accepted when it IS this optimum, so
+// the stored par (`lower`) can never overstate the true minimum.
+function optimalCost(sheets,target,init,R){
+  let opt=Infinity;
+  for(let ax=-R;ax<=R;ax++)for(let ay=-R;ay<=R;ay++)
+   for(let bx=-R;bx<=R;bx++)for(let by=-R;by<=R;by++)
+    for(let cx=-R;cx<=R;cx++)for(let cy=-R;cy<=R;cy++){
+      const off=[[ax,ay],[bx,by],[cx,cy]];
+      if(arrSame(composite(sheets,off),target)){
+        const c=Math.abs(ax-init[0][0])+Math.abs(ay-init[0][1])
+               +Math.abs(bx-init[1][0])+Math.abs(by-init[1][1])
+               +Math.abs(cx-init[2][0])+Math.abs(cy-init[2][1]);
+        if(c<opt)opt=c;
+      }
+    }
+  return opt;
+}
 function gen(seed,band){
   const rnd=mulberry32(seed);
   const R=band.range, NC=band.colors;
@@ -38,6 +57,7 @@ function gen(seed,band){
     if(arrSame(composite(sheets,init),target))continue;
     const lower=sol.reduce((a,o,i)=>a+Math.abs(o[0]-init[i][0])+Math.abs(o[1]-init[i][1]),0);
     if(lower<band.minLower)continue;
+    if(optimalCost(sheets,target,init,R)<lower)continue; // PART 5: witness must be the true optimum
     return{sheets,target,init,sol,lower};
   }return null;}
 const BANDS={

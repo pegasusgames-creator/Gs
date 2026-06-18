@@ -2943,7 +2943,8 @@ function injectSeasonPassShop(){
     var div=document.createElement('div');
     div.id='x-season-pass-item';
     div.className='shop-item';
-    var btnTxt=isSeasonActive()?'✅ Active':'$4.99/month';
+    var _spPrice=(window._localizedPrices&&window._localizedPrices['season_pass_monthly'])||'$4.99';
+    var btnTxt=isSeasonActive()?'✅ Active':_spPrice+'/month';
     div.innerHTML=
       '<div class="shop-item-icon">🌟</div>'+
       '<div class="shop-item-info x-season-badge-target">'+
@@ -5295,7 +5296,13 @@ window.addEventListener('load',function(){
   }
   function renderLeaderboardTab(){
     var d = buildStandings();
-    var _lbPlaceholder = (typeof LEADERBOARD_ID === 'string') && /^(TODO|PLACEHOLDER|ENTER_)/.test(LEADERBOARD_ID);
+    // Read the GLOBAL exported id: the per-app `var LEADERBOARD_ID` lives in
+    // a different IIFE and is NOT in scope here, so the bare name always read
+    // 'undefined' and the synthetic bracket wrongly rendered as a real
+    // "Weekly" leaderboard. A missing / TODO / PLACEHOLDER / ENTER_ id ⇒ a
+    // practice bracket (never implying real global players).
+    var _lbid = window._GROWTH_LEADERBOARD_ID;
+    var _lbPlaceholder = (typeof _lbid !== 'string') || !_lbid || /^(TODO|PLACEHOLDER|ENTER_)/.test(_lbid);
     // "Updated <minutes> ago" — gives the synthetic table a live feel
     // without lying about real-time. Computed deterministically from
     // current minute so it doesn't tick while open.
@@ -5892,7 +5899,10 @@ window.addEventListener('load',function(){
     return alias[head] || 'en-US';
   }
   function priceFor(sku){
-    // Prefer the in-app PRODUCTS array if it exists.
+    // Prefer the live BillingClient price piped via window._localizedPrices.
+    var _lp = window._localizedPrices && window._localizedPrices[sku];
+    if (_lp) return ('' + _lp).split('/')[0];
+    // Then the in-app PRODUCTS array if it exists.
     var arr = window.PRODUCTS || (window.Game && window.Game.PRODUCTS);
     if (Array.isArray(arr)){
       for (var i=0;i<arr.length;i++){
