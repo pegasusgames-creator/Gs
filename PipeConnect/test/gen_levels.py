@@ -141,6 +141,14 @@ SCHEDULE = [
     (30, 7, (4, 6)),    # 51-80   7x7
     (30, 8, (5, 7)),    # 81-110  8x8
     (12, 9, (6, 8)),    # 111-122 9x9
+    # 123-500: extend to the 500-level release floor. The schedule PREFIX
+    # above is unchanged, so the seed stream is identical and levels 1-122
+    # stay byte-for-byte the same (screenshots/progress preserved); only the
+    # appended block below is new. Difficulty keeps ramping 6x6 -> 9x9.
+    (60,  6, (4, 5)),   # 123-182  6x6
+    (90,  7, (4, 6)),   # 183-272  7x7
+    (110, 8, (5, 7)),   # 273-382  8x8
+    (118, 9, (6, 8)),   # 383-500  9x9
 ]
 out = []; seed = 12345
 for count, N, (pmin, pmax) in SCHEDULE:
