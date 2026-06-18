@@ -65,6 +65,13 @@ def _level_count(html: str):
         c = _array_len(html, name)
         if c is not None:
             best = c if best is None else max(best, c)
+    # Rush-Hour / sliding-block games build LEVELS inside an IIFE
+    # (const LEVELS = (function(){... return [...]})()), so the array
+    # finder above can't reach it. Count the level-object signature.
+    if best is None:
+        rh = len(re.findall(r"\{blocks:\[.*?\],optimal:\d+\}", html))
+        if rh:
+            best = rh
     return best
 
 
