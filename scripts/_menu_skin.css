@@ -73,13 +73,18 @@
   margin: 16px 0 16px !important; /* balanced gap above/below — the old 34px top stacked with the tagline margin into a ~47px void above the emblem */
 }
 #screen-menu [data-menu-illustration] svg, #menuScreen [data-menu-illustration] svg{
-  /* PART2: enlarge the emblem ~1.5x with `zoom`, NOT transform:scale.
-     transform paints outside the layout box, so the container couldn't
-     reserve the scaled height — which forced a big top margin (the ~47px
-     void) or overlapped the tagline (tall emblems like Afterimage). zoom
-     scales AND reserves layout space, so the balanced 16px margins hold for
-     every app's aspect ratio with no void and no overlap. */
-  zoom: 1.5;
+  /* PART2: size the emblem via CSS height (LAYOUT, not transform/zoom).
+     transform:scale paints outside the box (void or tagline overlap) and
+     `zoom` mis-reports its position in this WebView (the SVG painted over the
+     title). Setting height + width:auto + max-width sizes it through normal
+     layout, so it reserves its own space, never overflows into the title or
+     Play, and the balanced 16px container margins give even gaps. height
+     drives the size (enlarges square/tall emblems); max-width keeps the wide
+     WaterSort tubes in bounds (aspect preserved by the viewBox). */
+  height: clamp(118px, 17vh, 150px);
+  width: auto;
+  max-width: 66vw;
+  transform: none;
   pointer-events: none; /* PART7 */
 }
 

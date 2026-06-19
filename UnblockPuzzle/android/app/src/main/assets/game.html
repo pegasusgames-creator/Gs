@@ -258,7 +258,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--app-bg);font-f
 .hdr-moves{font-size:0.9rem;color:var(--text-soft);display:flex;align-items:center;gap:4px;}
 .hdr-lives{font-size:0.9rem;color:var(--danger);display:flex;align-items:center;gap:4px;}
 .hdr-coins{font-size:0.9rem;color:var(--gold);display:flex;align-items:center;gap:4px;}
-.game-canvas-wrap{flex:1;display:flex;align-items:center;justify-content:center;width:100%;position:relative;}
+.game-canvas-wrap{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;width:100%;position:relative;}
 #gameCanvas{touch-action:none;display:block;}
 .exit-arrow{position:absolute;right:0;font-size:1.6rem;color:#ff3d3d;pointer-events:none;filter:drop-shadow(0 0 8px #ff3d3d);}
 .game-footer{width:100%;display:flex;align-items:center;justify-content:space-around;padding:10px 8px;background:var(--surface-2);border-top:1px solid var(--border-soft);}
@@ -480,13 +480,18 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--app-bg);font-f
   margin: 16px 0 16px !important; /* balanced gap above/below — the old 34px top stacked with the tagline margin into a ~47px void above the emblem */
 }
 #screen-menu [data-menu-illustration] svg, #menuScreen [data-menu-illustration] svg{
-  /* PART2: enlarge the emblem ~1.5x with `zoom`, NOT transform:scale.
-     transform paints outside the layout box, so the container couldn't
-     reserve the scaled height — which forced a big top margin (the ~47px
-     void) or overlapped the tagline (tall emblems like Afterimage). zoom
-     scales AND reserves layout space, so the balanced 16px margins hold for
-     every app's aspect ratio with no void and no overlap. */
-  zoom: 1.5;
+  /* PART2: size the emblem via CSS height (LAYOUT, not transform/zoom).
+     transform:scale paints outside the box (void or tagline overlap) and
+     `zoom` mis-reports its position in this WebView (the SVG painted over the
+     title). Setting height + width:auto + max-width sizes it through normal
+     layout, so it reserves its own space, never overflows into the title or
+     Play, and the balanced 16px container margins give even gaps. height
+     drives the size (enlarges square/tall emblems); max-width keeps the wide
+     WaterSort tubes in bounds (aspect preserved by the viewBox). */
+  height: clamp(118px, 17vh, 150px);
+  width: auto;
+  max-width: 66vw;
+  transform: none;
   pointer-events: none; /* PART7 */
 }
 
@@ -6180,7 +6185,8 @@ window.addEventListener('load',function(){
       '#menuScreen .menu-logo, #screen-menu .menu-logo,'+
       '#menuScreen .menu-title, #screen-menu .menu-title{margin:0 !important;}'+
       '#menuScreen .menu-tagline, #screen-menu .menu-tagline,'+
-      '#menuScreen .menu-subtitle, #screen-menu .menu-subtitle{margin:4px 0 14px !important;}'+
+      '#menuScreen .menu-subtitle, #screen-menu .menu-subtitle,'+
+      '#menuScreen .menu-sub, #screen-menu .menu-sub{margin:4px 0 14px !important;}'+
       // Title — Round-15 bigger + bolder + tighter spacing for a logo
       // feel (user feedback: "make title bigger and more interesting").
       '#menuScreen .game-title h1, #menuScreen .menu-title, #screen-menu .menu-logo, #menuScreen .menu-logo, #screen-menu .menu-title{'+
@@ -6190,7 +6196,8 @@ window.addEventListener('load',function(){
       // Per-app illustration container, filled at runtime by
       // injectMenuIllustration().
       '[data-menu-illustration]{display:flex !important;justify-content:center !important;margin:6px 0 12px !important;}'+
-      '#menuScreen .game-title p, #menuScreen .menu-tagline, #screen-menu .menu-tagline, #screen-menu .menu-subtitle{'+
+      '#menuScreen .game-title p, #menuScreen .menu-tagline, #screen-menu .menu-tagline, #screen-menu .menu-subtitle,'+
+      '#menuScreen .menu-sub, #screen-menu .menu-sub{'+
         'margin-top:2px !important;font-size:clamp(0.78rem, 2vw, 0.95rem) !important;opacity:0.78;'+
       '}'+
       // Tier-1 Play/Continue — the LARGEST element. min-height 64px,

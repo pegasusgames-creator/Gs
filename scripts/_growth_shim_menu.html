@@ -82,7 +82,8 @@
       '#menuScreen .menu-logo, #screen-menu .menu-logo,'+
       '#menuScreen .menu-title, #screen-menu .menu-title{margin:0 !important;}'+
       '#menuScreen .menu-tagline, #screen-menu .menu-tagline,'+
-      '#menuScreen .menu-subtitle, #screen-menu .menu-subtitle{margin:4px 0 14px !important;}'+
+      '#menuScreen .menu-subtitle, #screen-menu .menu-subtitle,'+
+      '#menuScreen .menu-sub, #screen-menu .menu-sub{margin:4px 0 14px !important;}'+
       // Title — Round-15 bigger + bolder + tighter spacing for a logo
       // feel (user feedback: "make title bigger and more interesting").
       '#menuScreen .game-title h1, #menuScreen .menu-title, #screen-menu .menu-logo, #menuScreen .menu-logo, #screen-menu .menu-title{'+
@@ -92,7 +93,8 @@
       // Per-app illustration container, filled at runtime by
       // injectMenuIllustration().
       '[data-menu-illustration]{display:flex !important;justify-content:center !important;margin:6px 0 12px !important;}'+
-      '#menuScreen .game-title p, #menuScreen .menu-tagline, #screen-menu .menu-tagline, #screen-menu .menu-subtitle{'+
+      '#menuScreen .game-title p, #menuScreen .menu-tagline, #screen-menu .menu-tagline, #screen-menu .menu-subtitle,'+
+      '#menuScreen .menu-sub, #screen-menu .menu-sub{'+
         'margin-top:2px !important;font-size:clamp(0.78rem, 2vw, 0.95rem) !important;opacity:0.78;'+
       '}'+
       // Tier-1 Play/Continue — the LARGEST element. min-height 64px,
