@@ -301,16 +301,28 @@
       if (ended) return false;
       return sc > 0;
     }
-    // Level-based games: lastLevelProgress / boardState / currentLevel
-    // / completedLevels all count.
-    if (s.lastLevelProgress) return true;
-    if (s.boardState || s.gameBoard) {
-      var go = s.gameOver === true || s.isGameOver === true;
-      if (!go) return true;
-    }
+    // Level-based games. "Continue" must mean REAL progress — NOT merely
+    // having opened level 1. Several apps set lastLevelProgress={level:1}
+    // (a bare pointer, no moves) the moment a level is opened, which made a
+    // fresh, untouched level 1 read as "Continue · Level 1". So only count:
+    //  • a finished level (completedLevels / completed / levelsCompleted),
+    //  • a level past #1 (currentLevel / lastLevelProgress.level > 1),
+    //  • a saved mid-level board with ACTUAL state (board/cells/moves),
+    // otherwise it's "Play".
+    var go = s.gameOver === true || s.isGameOver === true;
     if (typeof s.currentLevel === 'number' && s.currentLevel > 1) return true;
     if (Array.isArray(s.completedLevels) && s.completedLevels.length > 0) return true;
+    if (Array.isArray(s.completed) && s.completed.length > 0) return true;
     if (typeof s.levelsCompleted === 'number' && s.levelsCompleted > 0) return true;
+    var lp = s.lastLevelProgress;
+    if (lp && typeof lp === 'object') {
+      if (lp.level > 1) return true;
+      if (!go && (lp.board || lp.cells || lp.grid || lp.tiles || lp.state ||
+                  (lp.moves | 0) > 0 || (lp.movesMade | 0) > 0)) return true;
+    }
+    // A live in-memory board only counts past a fresh level-1 open.
+    if ((s.boardState || s.gameBoard) && !go &&
+        typeof s.currentLevel === 'number' && s.currentLevel > 1) return true;
     return false;
   }
   function progressLabel(){

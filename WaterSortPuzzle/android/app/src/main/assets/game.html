@@ -7458,16 +7458,28 @@ window.addEventListener('load',function(){
       if (ended) return false;
       return sc > 0;
     }
-    // Level-based games: lastLevelProgress / boardState / currentLevel
-    // / completedLevels all count.
-    if (s.lastLevelProgress) return true;
-    if (s.boardState || s.gameBoard) {
-      var go = s.gameOver === true || s.isGameOver === true;
-      if (!go) return true;
-    }
+    // Level-based games. "Continue" must mean REAL progress — NOT merely
+    // having opened level 1. Several apps set lastLevelProgress={level:1}
+    // (a bare pointer, no moves) the moment a level is opened, which made a
+    // fresh, untouched level 1 read as "Continue · Level 1". So only count:
+    //  • a finished level (completedLevels / completed / levelsCompleted),
+    //  • a level past #1 (currentLevel / lastLevelProgress.level > 1),
+    //  • a saved mid-level board with ACTUAL state (board/cells/moves),
+    // otherwise it's "Play".
+    var go = s.gameOver === true || s.isGameOver === true;
     if (typeof s.currentLevel === 'number' && s.currentLevel > 1) return true;
     if (Array.isArray(s.completedLevels) && s.completedLevels.length > 0) return true;
+    if (Array.isArray(s.completed) && s.completed.length > 0) return true;
     if (typeof s.levelsCompleted === 'number' && s.levelsCompleted > 0) return true;
+    var lp = s.lastLevelProgress;
+    if (lp && typeof lp === 'object') {
+      if (lp.level > 1) return true;
+      if (!go && (lp.board || lp.cells || lp.grid || lp.tiles || lp.state ||
+                  (lp.moves | 0) > 0 || (lp.movesMade | 0) > 0)) return true;
+    }
+    // A live in-memory board only counts past a fresh level-1 open.
+    if ((s.boardState || s.gameBoard) && !go &&
+        typeof s.currentLevel === 'number' && s.currentLevel > 1) return true;
     return false;
   }
   function progressLabel(){
@@ -9080,7 +9092,7 @@ window.addEventListener('load',function(){
       var frag=document.createDocumentFragment();
       var bucket={Preferences:[],Help:[],Purchases:[]};
       var ASSIGN=[['Preferences',['sound','music','haptic','vibrat','daily remind','reminder','notification','language','theme'],true],
-                  ['Purchases',['restore','manage sub'],false],
+                  ['Purchases',['restore','manage sub'],true],
                   ['Help',['tutorial','how to play','privacy'],false]];
       ASSIGN.forEach(function(g){g[1].forEach(function(kw){ if(g[2]){var r;while((r=find(kw)))bucket[g[0]].push(r);} else {var r=find(kw);if(r)bucket[g[0]].push(r);} });});
       ['Preferences','Help','Purchases'].forEach(function(name){ if(bucket[name].length){frag.appendChild(hdr(name)); bucket[name].forEach(function(r){frag.appendChild(r);}); } });

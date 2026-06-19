@@ -30,7 +30,7 @@
       var frag=document.createDocumentFragment();
       var bucket={Preferences:[],Help:[],Purchases:[]};
       var ASSIGN=[['Preferences',['sound','music','haptic','vibrat','daily remind','reminder','notification','language','theme'],true],
-                  ['Purchases',['restore','manage sub'],false],
+                  ['Purchases',['restore','manage sub'],true],
                   ['Help',['tutorial','how to play','privacy'],false]];
       ASSIGN.forEach(function(g){g[1].forEach(function(kw){ if(g[2]){var r;while((r=find(kw)))bucket[g[0]].push(r);} else {var r=find(kw);if(r)bucket[g[0]].push(r);} });});
       ['Preferences','Help','Purchases'].forEach(function(name){ if(bucket[name].length){frag.appendChild(hdr(name)); bucket[name].forEach(function(r){frag.appendChild(r);}); } });
