@@ -65,16 +65,49 @@
    gradient box. Title gradients are per-app static CSS. Keep wordmark
    gradients CLEAN: ≤3 stops, no murky complementary midpoint, ≥4.5:1. */
 
-/* ---- mini-preview: halo + presence (v2: bigger, tighter to the CTA) ---- */
+/* ---- mini-preview: halo + presence (v3: hero-scale focal element) ---- */
 #screen-menu [data-menu-illustration], #menuScreen [data-menu-illustration]{
-  filter: drop-shadow(0 8px 22px var(--m-glow));
+  filter: drop-shadow(0 12px 30px var(--m-glow));
   animation: m-float 5.5s ease-in-out infinite;
   pointer-events: none; position: relative; z-index: 0; /* PART7: decorative emblem — never intercept taps; stay below interactive menu content */
-  margin: 26px 0 6px !important; /* v2 + clearance: keep the scaled (1.2x, origin bottom) emblem off the title/tagline */
+  margin: 34px 0 12px !important; /* v3 + clearance: keep the scaled (1.6x, origin bottom) emblem off the title/tagline */
 }
 #screen-menu [data-menu-illustration] svg, #menuScreen [data-menu-illustration] svg{
-  transform: scale(1.2);
+  /* PART2: scale the emblem 1.6x so it reads as a focal element, not a
+     stranded thumbnail. Origin bottom so it grows up into its own margin. */
+  transform: scale(1.6);
   transform-origin: center bottom; pointer-events: none; /* PART7 */
+}
+
+/* ---- PART2 background motif: injected by the MENU shim as
+   [data-menu-motif] — a CRISP (never blurred) low-opacity world watermark
+   (outline silhouettes bleeding off the edges + sharp accent specks) plus a
+   soft radial glow behind the title. Sits BELOW all interactive content
+   (inline z-index:0 on the layer beats #menuScreen>*{z-index:1}). The SVG
+   silhouettes are masked out of the central column so the CTA / tiles / title
+   never drop below AA; the glow is intentionally centred and unmasked. ---- */
+#screen-menu [data-menu-motif], #menuScreen [data-menu-motif]{
+  position:absolute; inset:0; overflow:hidden; pointer-events:none;
+  color: var(--accent, #6688aa);
+}
+#screen-menu [data-menu-motif] .m-motif-shapes,
+#menuScreen [data-menu-motif] .m-motif-shapes{
+  /* per-element opacity is baked in the SVG (silhouettes ~0.11 stroke,
+     specks ~0.42 fill); this 0.9 container dimmer keeps the whole thing a
+     hair under target. Masked out of the central column for legibility. */
+  position:absolute; inset:0; opacity:0.9;
+  -webkit-mask: radial-gradient(135% 78% at 50% 42%, transparent 0 40%, #000 70%);
+          mask: radial-gradient(135% 78% at 50% 42%, transparent 0 40%, #000 70%);
+}
+#screen-menu [data-menu-motif] .m-motif-glow,
+#menuScreen [data-menu-motif] .m-motif-glow{
+  position:absolute; top:-4%; left:50%; transform:translateX(-50%);
+  width:86%; height:42%;
+  background: radial-gradient(ellipse 60% 60% at 50% 38%, currentColor, transparent 70%);
+  opacity:0.16;
+}
+@media (prefers-reduced-motion: reduce){
+  #screen-menu [data-menu-illustration], #menuScreen [data-menu-illustration]{ animation:none !important; }
 }
 @keyframes m-float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
 
@@ -112,8 +145,10 @@
      color-mix(in srgb, var(--accent, #6688aa) 7%,  var(--surface, #ffffff))) !important;
   border: 1px solid color-mix(in srgb, var(--accent, #6688aa) 24%, var(--border, rgba(0,0,0,0.15))) !important;
   border-radius: 18px !important;
-  box-shadow: 0 6px 14px -6px color-mix(in srgb, var(--accent, #6688aa) 45%, transparent),
-              inset 0 1px 0 rgba(255,255,255,.35) !important;
+  /* PART2: tiles get only a light/flat lift — the Play hero owns the deep
+     elevation shadow so it clearly dominates the depth hierarchy. */
+  box-shadow: 0 3px 9px -5px color-mix(in srgb, var(--accent, #6688aa) 38%, transparent),
+              inset 0 1px 0 rgba(255,255,255,.32) !important;
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
 }
 #screen-menu .menu-icon-btn svg, #menuScreen .menu-icon-btn svg, #menuScreen .icon-btn svg{

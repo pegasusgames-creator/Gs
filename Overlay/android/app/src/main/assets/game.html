@@ -298,16 +298,49 @@ body.no-shapes .gc .cb{display:none;}
    gradient box. Title gradients are per-app static CSS. Keep wordmark
    gradients CLEAN: ≤3 stops, no murky complementary midpoint, ≥4.5:1. */
 
-/* ---- mini-preview: halo + presence (v2: bigger, tighter to the CTA) ---- */
+/* ---- mini-preview: halo + presence (v3: hero-scale focal element) ---- */
 #screen-menu [data-menu-illustration], #menuScreen [data-menu-illustration]{
-  filter: drop-shadow(0 8px 22px var(--m-glow));
+  filter: drop-shadow(0 12px 30px var(--m-glow));
   animation: m-float 5.5s ease-in-out infinite;
   pointer-events: none; position: relative; z-index: 0; /* PART7: decorative emblem — never intercept taps; stay below interactive menu content */
-  margin: 26px 0 6px !important; /* v2 + clearance: keep the scaled (1.2x, origin bottom) emblem off the title/tagline */
+  margin: 34px 0 12px !important; /* v3 + clearance: keep the scaled (1.6x, origin bottom) emblem off the title/tagline */
 }
 #screen-menu [data-menu-illustration] svg, #menuScreen [data-menu-illustration] svg{
-  transform: scale(1.2);
+  /* PART2: scale the emblem 1.6x so it reads as a focal element, not a
+     stranded thumbnail. Origin bottom so it grows up into its own margin. */
+  transform: scale(1.6);
   transform-origin: center bottom; pointer-events: none; /* PART7 */
+}
+
+/* ---- PART2 background motif: injected by the MENU shim as
+   [data-menu-motif] — a CRISP (never blurred) low-opacity world watermark
+   (outline silhouettes bleeding off the edges + sharp accent specks) plus a
+   soft radial glow behind the title. Sits BELOW all interactive content
+   (inline z-index:0 on the layer beats #menuScreen>*{z-index:1}). The SVG
+   silhouettes are masked out of the central column so the CTA / tiles / title
+   never drop below AA; the glow is intentionally centred and unmasked. ---- */
+#screen-menu [data-menu-motif], #menuScreen [data-menu-motif]{
+  position:absolute; inset:0; overflow:hidden; pointer-events:none;
+  color: var(--accent, #6688aa);
+}
+#screen-menu [data-menu-motif] .m-motif-shapes,
+#menuScreen [data-menu-motif] .m-motif-shapes{
+  /* per-element opacity is baked in the SVG (silhouettes ~0.11 stroke,
+     specks ~0.42 fill); this 0.9 container dimmer keeps the whole thing a
+     hair under target. Masked out of the central column for legibility. */
+  position:absolute; inset:0; opacity:0.9;
+  -webkit-mask: radial-gradient(135% 78% at 50% 42%, transparent 0 40%, #000 70%);
+          mask: radial-gradient(135% 78% at 50% 42%, transparent 0 40%, #000 70%);
+}
+#screen-menu [data-menu-motif] .m-motif-glow,
+#menuScreen [data-menu-motif] .m-motif-glow{
+  position:absolute; top:-4%; left:50%; transform:translateX(-50%);
+  width:86%; height:42%;
+  background: radial-gradient(ellipse 60% 60% at 50% 38%, currentColor, transparent 70%);
+  opacity:0.16;
+}
+@media (prefers-reduced-motion: reduce){
+  #screen-menu [data-menu-illustration], #menuScreen [data-menu-illustration]{ animation:none !important; }
 }
 @keyframes m-float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
 
@@ -345,8 +378,10 @@ body.no-shapes .gc .cb{display:none;}
      color-mix(in srgb, var(--accent, #6688aa) 7%,  var(--surface, #ffffff))) !important;
   border: 1px solid color-mix(in srgb, var(--accent, #6688aa) 24%, var(--border, rgba(0,0,0,0.15))) !important;
   border-radius: 18px !important;
-  box-shadow: 0 6px 14px -6px color-mix(in srgb, var(--accent, #6688aa) 45%, transparent),
-              inset 0 1px 0 rgba(255,255,255,.35) !important;
+  /* PART2: tiles get only a light/flat lift — the Play hero owns the deep
+     elevation shadow so it clearly dominates the depth hierarchy. */
+  box-shadow: 0 3px 9px -5px color-mix(in srgb, var(--accent, #6688aa) 38%, transparent),
+              inset 0 1px 0 rgba(255,255,255,.32) !important;
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
 }
 #screen-menu .menu-icon-btn svg, #menuScreen .menu-icon-btn svg, #menuScreen .icon-btn svg{
@@ -5027,6 +5062,22 @@ window.addEventListener('load',function(){
       '#screen-menu .menu-icon-row .menu-icon-btn .menu-icon-label{'+
         'display:block !important;font-size:11px !important;line-height:1 !important;'+
       '}'+
+      // PART2: adaptive tile grid. layoutTileGrid() merges every
+      // .menu-icon-row into one and sets data-tile-grid + --tile-cols
+      // (2 for a 4-tile menu → 2x2; 3 for a 6-tile menu → 3x3). Balanced
+      // rows, equal gaps, never a lone trailing tile (no ragged 4+2).
+      '#menuScreen .menu-icon-row[data-tile-grid], #screen-menu .menu-icon-row[data-tile-grid]{'+
+        'display:grid !important;'+
+        'grid-template-columns:repeat(var(--tile-cols,3), minmax(0,1fr)) !important;'+
+        'gap:clamp(10px, 2.4vw, 16px) !important;'+
+        'width:100% !important;max-width:clamp(264px, 80vw, 420px) !important;'+
+        'margin:10px auto 0 !important;justify-items:stretch !important;align-content:center !important;'+
+      '}'+
+      '#menuScreen .menu-icon-row[data-tile-grid] .menu-icon-btn, #menuScreen .menu-icon-row[data-tile-grid] .icon-btn,'+
+      '#screen-menu .menu-icon-row[data-tile-grid] .menu-icon-btn, #screen-menu .menu-icon-row[data-tile-grid] .icon-btn{'+
+        'width:auto !important;flex:0 0 auto !important;min-width:0 !important;max-width:none !important;'+
+        'min-height:clamp(60px, 8.5vh, 78px) !important;'+
+      '}'+
       // Top bar pinned to the very top of the menu container ONLY. The
       // synth header is a child of menuScreen, so when menuScreen loses
       // .active it should disappear — but some apps' .screen CSS uses
@@ -6050,7 +6101,10 @@ window.addEventListener('load',function(){
     hideNativeLevelLabels();
     slimSeasonBanner();
     renderChips();
+    injectMenuMotif();
     injectMenuIllustration();
+    layoutTileGrid();
+    observeMenuForTiles();
     // Round-15.1: do NOT fire the shim's daily-login popup. Every app
     // ships its own polished native "Day N Streak!" overlay
     // (#ls-overlay) which grants coins from the per-app DAY_COINS
@@ -6059,6 +6113,158 @@ window.addEventListener('load',function(){
     // still defined for cases where an app has no native overlay, but
     // is no longer auto-called.
     // maybeFireDailyLoginPopup();
+  }
+
+  // ── PART2: adaptive tile grid. Merge every .menu-icon-row into one
+  // (WaterSort packs Missions/Stats into a 2nd row → the ragged 4+2) and
+  // lay the whole tile set out as a BALANCED grid: 2 columns for a 4-tile
+  // menu (2x2), 3 columns for 6 (3x3). Never a lone trailing tile.
+  function tileCols(n){
+    if (n <= 2) return n;        // 1→1, 2→2
+    if (n === 4) return 2;       // 4 → 2x2 (balanced, not 3+1)
+    if (n <= 3) return 3;        // 3 → single row of 3
+    return 3;                    // 5,6,… → 3 columns (6 → clean 3+3)
+  }
+  function tileKey(b){
+    return (((b.getAttribute && b.getAttribute('aria-label')) || '') + '|' +
+            (b.textContent || '')).replace(/\s+/g, ' ').trim().toLowerCase();
+  }
+  function layoutTileGrid(){
+    var menu = menuEl(); if (!menu) return;
+    var rows = menu.querySelectorAll('.menu-icon-row');
+    if (!rows.length) return;
+    var primary = rows[0];
+    // Merge every extra row's tiles into the first, DE-DUPLICATING by label.
+    // WaterSort injects Missions/Stats once (IIFE); Nono/P2048 RE-INJECT them
+    // on every menu render — without dedup the destructive merge accumulated
+    // copies (4 + 2 per render → 14 tiles). Keep the first of each label,
+    // drop later duplicates, then remove emptied rows. Fully idempotent.
+    var seen = {};
+    Array.prototype.slice.call(primary.children).forEach(function(b){
+      if (b.nodeType !== 1) return;
+      var k = tileKey(b);
+      if (seen[k]) { if (b.parentNode) b.parentNode.removeChild(b); }
+      else seen[k] = true;
+    });
+    for (var i = 1; i < rows.length; i++){
+      var r = rows[i];
+      if (r === primary) continue;
+      Array.prototype.slice.call(r.children).forEach(function(b){
+        if (b.nodeType !== 1) return;
+        var k = tileKey(b);
+        if (seen[k]) { if (b.parentNode) b.parentNode.removeChild(b); }
+        else { seen[k] = true; primary.appendChild(b); }
+      });
+      // HIDE the emptied extra row but KEEP it in the DOM. Some apps
+      // (Nonogram/Puzzle2048 #xMenuExtras) run their own observer that
+      // re-creates the row whenever getElementById('xMenuExtras') is null —
+      // removing it triggered an endless re-create/re-merge ping-pong + a
+      // flickering stray row. Leaving an empty, hidden div satisfies that
+      // existence guard so the app never re-injects.
+      r.style.display = 'none';
+    }
+    var n = primary.querySelectorAll('button, .menu-icon-btn, .icon-btn').length;
+    if (!n) return;
+    primary.setAttribute('data-tile-grid','1');
+    primary.style.setProperty('--tile-cols', String(tileCols(n)));
+  }
+  // PART2: Nono/P2048 re-inject their Missions/Stats row on a timer/event
+  // that can fire AFTER the last render sweep — leaving a stray 2-tile row
+  // below the merged grid. Observe the menu and re-merge whenever a new
+  // .menu-icon-row (or tile) appears. Guarded so layoutTileGrid's own DOM
+  // mutations don't re-trigger it (infinite loop).
+  function observeMenuForTiles(){
+    var menu = menuEl(); if (!menu || menu.__tileObserved || !window.MutationObserver) return;
+    menu.__tileObserved = true;
+    var pending = false, applying = false;
+    var mo = new MutationObserver(function(muts){
+      if (applying || pending) return;
+      var relevant = muts.some(function(m){
+        return Array.prototype.some.call(m.addedNodes || [], function(nd){
+          return nd.nodeType === 1 && nd.classList &&
+            (nd.classList.contains('menu-icon-row') ||
+             (nd.querySelector && nd.querySelector('.menu-icon-row')));
+        });
+      });
+      if (!relevant) return;
+      pending = true;
+      setTimeout(function(){
+        pending = false; applying = true;
+        try { layoutTileGrid(); } finally { setTimeout(function(){ applying = false; }, 0); }
+      }, 50);
+    });
+    mo.observe(menu, { childList: true, subtree: true });
+  }
+
+  // ── PART2: crisp world watermark behind the menu — 3-4 app-shape OUTLINE
+  // silhouettes bleeding off the edges (~11% stroke), a handful of SHARP
+  // accent specks (~42% fill), and one soft radial glow behind the title.
+  // currentColor on the layer = the app accent, so every app is tinted by
+  // its own --accent with NO per-app data-URI. NEVER blurred. Masked out of
+  // the central column (skin) so content stays ≥AA.
+  function motifGrid(ox, oy, cell, cols, rows, sw, rx){
+    var s = '';
+    for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++){
+      s += '<rect x="'+(ox+c*cell)+'" y="'+(oy+r*cell)+'" width="'+(cell-6)+'" height="'+(cell-6)+
+           '" rx="'+rx+'" fill="none" stroke="currentColor" stroke-width="'+sw+'" stroke-opacity="0.11"/>';
+    }
+    return s;
+  }
+  function motifSilhouettes(t){
+    if (t.indexOf('water') >= 0)
+      return '<g fill="none" stroke="currentColor" stroke-width="8" stroke-opacity="0.11" stroke-linecap="round">'+
+        '<rect x="-26" y="-50" width="78" height="250" rx="39"/><rect x="356" y="70" width="78" height="270" rx="39"/>'+
+        '<rect x="20" y="620" width="78" height="260" rx="39"/><rect x="320" y="600" width="78" height="280" rx="39"/></g>';
+    if (t.indexOf('nono') >= 0)
+      return motifGrid(-30,-22,56,4,4,5,4) + motifGrid(252,584,56,4,4,5,4);
+    if (t.indexOf('unblock') >= 0)
+      return '<g fill="none" stroke="currentColor" stroke-width="8" stroke-opacity="0.11" stroke-linejoin="round">'+
+        '<rect x="-40" y="60" width="160" height="58" rx="14"/><rect x="300" y="-30" width="58" height="170" rx="14"/>'+
+        '<rect x="280" y="660" width="170" height="58" rx="14"/><rect x="44" y="700" width="58" height="160" rx="14"/></g>';
+    if (t.indexOf('hunch') >= 0)
+      return '<g fill="none" stroke="currentColor" stroke-width="7" stroke-opacity="0.11">'+
+        '<rect x="-30" y="40" width="120" height="120" rx="22"/><rect x="322" y="120" width="110" height="110" rx="20"/>'+
+        '<circle cx="58" cy="720" r="64"/><rect x="300" y="640" width="120" height="120" rx="22"/></g>';
+    if (t.indexOf('overlay') >= 0)
+      return '<g fill="none" stroke="currentColor" stroke-width="7" stroke-opacity="0.11" stroke-linejoin="round">'+
+        '<rect x="-40" y="-20" width="130" height="130" rx="24"/><rect x="10" y="30" width="130" height="130" rx="24"/>'+
+        '<rect x="290" y="640" width="130" height="130" rx="24"/><rect x="340" y="690" width="130" height="130" rx="24"/></g>';
+    if (t.indexOf('afterimage') >= 0)
+      return '<g fill="none" stroke="currentColor" stroke-width="7" stroke-opacity="0.12" stroke-dasharray="14 10">'+
+        '<rect x="-30" y="60" width="120" height="100" rx="18"/><rect x="112" y="60" width="120" height="100" rx="18"/>'+
+        '<rect x="250" y="660" width="120" height="100" rx="18"/><rect x="112" y="700" width="120" height="100" rx="18"/></g>';
+    if (t.indexOf('pipe') >= 0)
+      return '<g fill="none" stroke="currentColor" stroke-width="11" stroke-opacity="0.11" stroke-linecap="round">'+
+        '<path d="M-30 80 H40 a40 40 0 0 1 40 40 V210"/><path d="M430 140 H330 a40 40 0 0 0 -40 40 V300"/>'+
+        '<path d="M60 870 V740 a40 40 0 0 1 40 -40 H210"/><path d="M430 700 H320 a40 40 0 0 1 -40 -40 V560"/></g>';
+    if (t.indexOf('2048') >= 0)
+      return motifGrid(-34,-26,84,3,3,7,12) + motifGrid(230,560,84,3,3,7,12);
+    // Generic fallback: a couple of outline grids in opposite corners.
+    return motifGrid(-30,-22,56,4,4,5,6) + motifGrid(252,584,56,4,4,5,6);
+  }
+  function motifSpecks(){
+    var pts = [[34,150,5],[366,210,4],[26,500,5],[372,470,4],[64,690,6],[336,700,5],[200,46,4],[200,760,4]];
+    var s = '';
+    for (var i=0;i<pts.length;i++)
+      s += '<circle cx="'+pts[i][0]+'" cy="'+pts[i][1]+'" r="'+pts[i][2]+'" fill="currentColor" fill-opacity="0.42"/>';
+    return s;
+  }
+  function injectMenuMotif(){
+    var menu = menuEl(); if (!menu) return;
+    if (menu.querySelector('[data-menu-motif]')) return;
+    var t = (document.title||'').toLowerCase();
+    var svg = '<svg class="m-motif-shapes" width="100%" height="100%" viewBox="0 0 400 800" '+
+              'preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">'+
+              motifSilhouettes(t) + motifSpecks() + '</svg>';
+    var layer = document.createElement('div');
+    layer.setAttribute('data-menu-motif','1');
+    layer.setAttribute('aria-hidden','true');
+    // inline z-index:0 beats the skin's #menuScreen>*{z-index:1}, keeping
+    // the watermark below every interactive menu element.
+    layer.style.cssText = 'position:absolute;inset:0;z-index:0;pointer-events:none;';
+    layer.innerHTML = '<div class="m-motif-glow"></div>' + svg;
+    if (menu.firstChild) menu.insertBefore(layer, menu.firstChild);
+    else menu.appendChild(layer);
   }
 
   // Round-15: per-app SVG illustration below the title, like the 2048
@@ -6228,6 +6434,16 @@ window.addEventListener('load',function(){
     refreshTopBarIconState();
     patchMenuButtons();
     hideNativeLevelLabels();
+    // PART2: self-heal the STRUCTURE, not just text. On a cold launch some
+    // apps' async boot rebuilds the menu DOM AFTER the 300ms first render,
+    // dropping the synth header / motif / grid (they never came back because
+    // the old sweep only refreshed text). All three calls are idempotent —
+    // no-ops when the elements are already present — so re-asserting them
+    // here restores them if an app wiped them, and also catches WaterSort's
+    // load-time Missions/Stats 2nd icon-row.
+    ensureTopBarIcons();
+    injectMenuMotif();
+    layoutTileGrid();
   }
   [400, 900, 1800, 3500].forEach(function(d){
     setTimeout(function(){ if (onMenu()) lateRenderSweep(); }, d);
