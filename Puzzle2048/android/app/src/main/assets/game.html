@@ -1863,9 +1863,9 @@ function renderMoreGames() {
       btnClass = claimed ? ' claimed' : '';
     }
     card.innerHTML = `
-      <div class="promo-icon">${g.icon}</div>
+      <div class="promo-icon">${g.emoji}</div>
       <div class="promo-info">
-        <h3>${g.icon} ${g.title}</h3>
+        <h3>${g.name}</h3>
         <p>${g.desc}</p>
       </div>
       <button class="promo-btn${btnClass}" id="promo-btn-${g.id}"
@@ -7281,8 +7281,8 @@ window.addEventListener('load',function(){
     if(document.getElementById('xMenuExtras')) return;
     var row2=document.createElement('div');
     row2.className='menu-icon-row'; row2.id='xMenuExtras'; row2.style.marginTop='10px';
-    row2.appendChild(iconBtn('xMenuMissions','Missions',missSvg,function(){ showScreen('missionsScreen'); }));
-    row2.appendChild(iconBtn('xMenuStats','Stats',statsSvg,function(){ showScreen('statsScreen'); }));
+    row2.appendChild(iconBtn('xMenuMissions','Missions',missSvg,function(){ if(typeof Game!=='undefined'&&Game.showScreen)Game.showScreen('missionsScreen'); else if(typeof showScreen==='function')showScreen('missionsScreen'); }));
+    row2.appendChild(iconBtn('xMenuStats','Stats',statsSvg,function(){ if(typeof Game!=='undefined'&&Game.showScreen)Game.showScreen('statsScreen'); else if(typeof showScreen==='function')showScreen('statsScreen'); }));
     iconRow.parentNode.insertBefore(row2, iconRow.nextSibling);
   }
   function arm(){ ensure(); setTimeout(ensure,200); setTimeout(ensure,700); }
