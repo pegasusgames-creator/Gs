@@ -1020,6 +1020,18 @@ html[data-theme="midnight"]{ --m-bg-top:#241f1b; --m-vignette:rgba(0,0,0,.45); -
     </div>
   </div>
 
+  <!-- Reset Confirm Overlay -->
+  <div class="overlay" id="overlay-reset">
+    <div class="overlay-card pop-in">
+      <div class="overlay-title" style="color:var(--heart)">Reset All Progress?</div>
+      <div class="overlay-msg">This erases every solved level, your coins, and your streak. This can't be undone.</div>
+      <div class="overlay-btns">
+        <button class="btn btn-secondary" onclick="closeOverlay('overlay-reset')">Cancel</button>
+        <button class="btn btn-primary" onclick="nonoResetAllProgress()">Reset</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Error Overlay -->
   <div class="overlay" id="overlay-error">
     <div class="overlay-card pop-in">
@@ -1258,6 +1270,10 @@ html[data-theme="midnight"]{ --m-bg-top:#241f1b; --m-vignette:rgba(0,0,0,.45); -
       <div class="settings-item" style="cursor:pointer;" onclick="showScreen('stats')">
         <span class="settings-item-label">📊 Statistics</span>
         <span style="color:var(--accent);font-size:0.85rem">View ›</span>
+      </div>
+      <div class="settings-item">
+        <span class="settings-item-label">🗑️ Reset Progress</span>
+        <button class="btn btn-secondary" type="button" style="width:auto;padding:8px 16px;font-size:0.8rem" onclick="showOverlay('overlay-reset')">Reset</button>
       </div>
     </div>
     <div class="settings-section">
@@ -3251,6 +3267,21 @@ function showOverlay(id) {
   document.getElementById(id).classList.add('active');
   const card = document.querySelector('#' + id + ' .overlay-card');
   if (card) { card.classList.remove('pop-in'); void card.offsetWidth; card.classList.add('pop-in'); }
+}
+
+// Full progress wipe (confirm-gated by #overlay-reset). Clears the save +
+// gameplay/streak/weekly keys, but preserves the language choice. Reloads
+// so the app re-initializes from defaults.
+function nonoResetAllProgress() {
+  try {
+    ['nonogram_state','xLoginLast','xWeekly','xThemeSeenAt','xRevealCellTokens',
+     'pendingGrants','lastFreeCoinsAt'].forEach(function(k){ localStorage.removeItem(k); });
+    Object.keys(localStorage).forEach(function(k){
+      if (k.indexOf('xWeeklyAward_') === 0) localStorage.removeItem(k);
+    });
+  } catch (e) {}
+  try { closeOverlay('overlay-reset'); } catch (e) {}
+  try { location.reload(); } catch (e) {}
 }
 
 function useHint() {
