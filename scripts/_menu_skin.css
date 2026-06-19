@@ -92,12 +92,13 @@
 }
 #screen-menu [data-menu-motif] .m-motif-shapes,
 #menuScreen [data-menu-motif] .m-motif-shapes{
-  /* per-element opacity is baked in the SVG (silhouettes ~0.11 stroke,
-     specks ~0.42 fill); this 0.9 container dimmer keeps the whole thing a
-     hair under target. Masked out of the central column for legibility. */
-  position:absolute; inset:0; opacity:0.9;
-  -webkit-mask: radial-gradient(135% 78% at 50% 42%, transparent 0 40%, #000 70%);
-          mask: radial-gradient(135% 78% at 50% 42%, transparent 0 40%, #000 70%);
+  /* per-element opacity is baked in the SVG (silhouettes ~0.13 stroke,
+     specks ~0.5 fill). The mask now only SOFTENS the central CTA band
+     (partial alpha, not a hard hole) so shapes read across the whole
+     menu — including the TOP behind the title — while staying ≥AA. */
+  position:absolute; inset:0; opacity:1;
+  -webkit-mask: radial-gradient(125% 72% at 50% 50%, rgba(0,0,0,0.28) 0 26%, #000 58%);
+          mask: radial-gradient(125% 72% at 50% 50%, rgba(0,0,0,0.28) 0 26%, #000 58%);
 }
 #screen-menu [data-menu-motif] .m-motif-glow,
 #menuScreen [data-menu-motif] .m-motif-glow{
