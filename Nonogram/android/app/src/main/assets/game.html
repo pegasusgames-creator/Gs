@@ -5606,7 +5606,7 @@ window.addEventListener('load',function(){
     PROMO_GAMES.forEach(function(g){
       var installed = isInst(g.pkg);
       var rewarded  = xCpRewarded(g.pkg);
-      var btnLabel, btnDisabled = false, btnBg = '#f7c948', btnColor = '#3a2e0a';
+      var btnLabel, btnDisabled = false, btnBg = 'var(--accent, #c83838)', btnColor = '#fff';
       // 2026-05-28 round-14: claimed state was rendering as illegible
       // light-grey-on-pale-green. Use the success-green palette with
       // white text — clear success indicator, AA contrast on any bg.
@@ -5621,7 +5621,7 @@ window.addEventListener('load',function(){
           '<div style="font-size:15px;font-weight:800;color:var(--text,#fff);margin-bottom:4px">'+g.name+'</div>'+
           '<div style="font-size:12px;color:var(--text-muted,#9aa0a6);line-height:1.4">'+g.desc+'</div>'+
         '</div>'+
-        '<button '+(btnDisabled?'disabled ':'')+'style="flex:none;background:'+btnBg+';color:'+btnColor+';border:none;border-radius:10px;padding:10px 12px;font-weight:800;font-size:12px;cursor:'+(btnDisabled?'default':'pointer')+';max-width:130px;white-space:normal;line-height:1.2">'+btnLabel+'</button>';
+        '<button '+(btnDisabled?'disabled ':'')+'style="flex:none;background:'+btnBg+';color:'+btnColor+';border:none;border-radius:10px;padding:10px 12px;font-weight:800;font-size:12px;cursor:'+(btnDisabled?'default':'pointer')+';white-space:nowrap;line-height:1.2">'+btnLabel+'</button>';
       if (!btnDisabled) {
         card.querySelector('button').addEventListener('click', function(){ claimPromo(g.id, g.pkg); });
       }
