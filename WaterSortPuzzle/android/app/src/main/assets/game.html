@@ -9138,7 +9138,7 @@ window.addEventListener('load',function(){
       if(footer)frag.appendChild(footer);
       if(reset){frag.appendChild(hdr('Danger Zone'));
         try{reset.style.flexDirection='row';reset.style.alignItems='center';}catch(e){}
-        var b=reset.querySelector('button'); if(b)b.style.cssText='padding:7px 16px;font-size:.78rem;background:transparent;color:#b0413a;border:1px solid rgba(176,65,58,.45);border-radius:8px;cursor:pointer;opacity:.85;font-weight:600;';
+        var b=reset.querySelector('button'); if(b){var rlbl=reset.querySelector('.settings-label,.setting-label,.settings-item-label,.set-label');if(rlbl&&!rlbl.contains(b))b.textContent='Reset';b.style.cssText='padding:12px 22px;font-size:.84rem;white-space:nowrap;background:#b8332b;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.22);';}
         frag.appendChild(reset);}
       cont.appendChild(frag);
     }catch(e){}
