@@ -2032,6 +2032,7 @@ def main():
         ('check_java_arglist_comma.py', 'java arglist trailing comma'),
         ('check_sokoban_solvable.py', 'sokoban solvable'),
         ('check_dead_handlers.py', 'dead onclick handlers'),
+        ('check_orphan_else.py', 'orphaned else (script parse error)'),
         ('check_icon_white_border.py', 'icon white border'),
     ]:
         try:
