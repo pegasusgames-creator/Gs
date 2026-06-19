@@ -659,13 +659,17 @@ html[data-theme="midnight"] .about-meta { color:rgba(255,255,255,0.45); }
   filter: drop-shadow(0 12px 30px var(--m-glow));
   animation: m-float 5.5s ease-in-out infinite;
   pointer-events: none; position: relative; z-index: 0; /* PART7: decorative emblem — never intercept taps; stay below interactive menu content */
-  margin: 34px 0 12px !important; /* v3 + clearance: keep the scaled (1.6x, origin bottom) emblem off the title/tagline */
+  margin: 16px 0 16px !important; /* balanced gap above/below — the old 34px top stacked with the tagline margin into a ~47px void above the emblem */
 }
 #screen-menu [data-menu-illustration] svg, #menuScreen [data-menu-illustration] svg{
-  /* PART2: scale the emblem 1.6x so it reads as a focal element, not a
-     stranded thumbnail. Origin bottom so it grows up into its own margin. */
-  transform: scale(1.6);
-  transform-origin: center bottom; pointer-events: none; /* PART7 */
+  /* PART2: enlarge the emblem ~1.5x with `zoom`, NOT transform:scale.
+     transform paints outside the layout box, so the container couldn't
+     reserve the scaled height — which forced a big top margin (the ~47px
+     void) or overlapped the tagline (tall emblems like Afterimage). zoom
+     scales AND reserves layout space, so the balanced 16px margins hold for
+     every app's aspect ratio with no void and no overlap. */
+  zoom: 1.5;
+  pointer-events: none; /* PART7 */
 }
 
 /* ---- PART2 background motif: injected by the MENU shim as
