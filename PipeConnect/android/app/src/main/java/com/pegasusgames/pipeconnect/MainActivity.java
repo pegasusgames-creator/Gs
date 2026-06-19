@@ -169,8 +169,12 @@ public class MainActivity extends Activity {
         webView = new WebView(this);
         RelativeLayout.LayoutParams wp = new RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        // ALIGN_PARENT_TOP + ABOVE so WebView height is unambiguously
+        // (screen - banner) instead of MATCH_PARENT; banner must draw on top.
+        wp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         wp.addRule(RelativeLayout.ABOVE, bannerContainer.getId());
         layout.addView(webView, wp);
+        bannerContainer.bringToFront();
 
         if (0 != (getApplicationInfo().flags & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE))
             WebView.setWebContentsDebuggingEnabled(true);
