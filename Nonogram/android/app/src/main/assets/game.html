@@ -5586,6 +5586,10 @@ window.addEventListener('load',function(){
 
 
 ];
+  // 2026-06-22: entries declare `packageId` but the cross-promo functions read
+  // `g.pkg`; without this alias isAppInstalled(undefined) was always false and
+  // the +200 install reward never auto-claimed. Normalise once.
+  PROMO_GAMES.forEach(function(g){ if(!g.pkg) g.pkg = g.packageId; });
   function xCpKey(pkg){ return 'xCrossPromoRewarded_'+pkg; }
   function xCpRewarded(pkg){ return localStorage.getItem(xCpKey(pkg))==='1'; }
   function isInst(pkg){

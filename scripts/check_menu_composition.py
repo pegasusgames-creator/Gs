@@ -30,9 +30,12 @@ BASE = Path(__file__).resolve().parent.parent
 
 FLAGSHIPS = ['WaterSortPuzzle', 'Nonogram', 'Puzzle2048', 'UnblockPuzzle']
 
-# Canonical icon-row labels in this order. Puzzle2048 substitutes "Best"
-# for "Levels" — both are accepted in the first slot.
-CANONICAL_LABELS_LEFTMOST = {'Levels', 'Best'}
+# Canonical icon-row labels in this order. The leftmost slot is the
+# game-specific surface: level games use "Levels"; Puzzle2048 (no levels)
+# used "Best" until 2026-06-22, when that High-Scores screen was retired as
+# a strict duplicate of Stats and the slot became "Themes". All three are
+# accepted in the first slot.
+CANONICAL_LABELS_LEFTMOST = {'Levels', 'Best', 'Themes'}
 CANONICAL_LABELS_REST = ['Shop', 'Games', 'Settings']
 
 

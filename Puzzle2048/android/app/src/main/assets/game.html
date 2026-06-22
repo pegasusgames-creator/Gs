@@ -818,9 +818,9 @@ html[data-theme="midnight"]{ --m-bg-top:#23201a; --m-vignette:rgba(0,0,0,.5); }
       <button class="menu-tile-primary" onclick="Game.startOrResumeGame()">PLAY</button>
       <button class="menu-tile-pair" id="dailyChallengeBtn" onclick="Game.startDailyChallenge()" style="width:100%">DAILY</button>
       <div class="menu-icon-row">
-        <button class="menu-icon-btn" onclick="Game.showScreen('scoresScreen')" aria-label="Best">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M8 21h8M12 17v4M5 4h14v6a7 7 0 0 1-14 0V4zM5 6H3v2a2 2 0 0 0 2 2M19 6h2v2a2 2 0 0 1-2 2"/></svg>
-          <span class="menu-icon-label">Best</span>
+        <button class="menu-icon-btn" onclick="Game.showScreen('themeScreen')" aria-label="Themes">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><path d="M12 3a9 9 0 1 0 0 18c1 0 1.8-.8 1.8-1.8 0-.5-.2-.9-.5-1.2-.3-.4-.5-.8-.5-1.3 0-1 .8-1.7 1.8-1.7H16a5 5 0 0 0 5-5c0-3.9-4-7-9-7z"/></svg>
+          <span class="menu-icon-label">Themes</span>
         </button>
         <button class="menu-icon-btn" onclick="Game.showScreen('shopScreen')" aria-label="Shop">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M4 8h16l-1 11H5L4 8z"/><path d="M9 8V5h6v3"/></svg>
@@ -867,34 +867,9 @@ html[data-theme="midnight"]{ --m-bg-top:#23201a; --m-vignette:rgba(0,0,0,.5); }
     </div>
   </div>
 
-  <!-- HIGH SCORES SCREEN -->
-  <div id="scoresScreen" class="screen">
-    <div class="screen-header">
-      <button class="back-btn" onclick="Game.showScreen('menuScreen')">← Back</button>
-      <h2>High Scores</h2>
-      <div style="width:60px"></div>
-    </div>
-    <div class="scores-content">
-      <div class="achievement-card">
-        <h3>🏆 Best Score</h3>
-        <div class="big-score" id="hsBestScore">0</div>
-        <p>Keep merging to beat your record!</p>
-      </div>
-      <div class="achievement-card" id="tile2048Card" style="display:none">
-        <h3>✨ 2048 Achieved!</h3>
-        <p>You've reached the legendary 2048 tile!</p>
-      </div>
-      <div class="achievement-card">
-        <h3>🎯 Highest Tile</h3>
-        <div class="big-score" id="hsHighTile">2</div>
-      </div>
-      <div class="daily-streak">
-        <h3>🔥 Login Streak</h3>
-        <div class="streak-num" id="hsStreak">0</div>
-        <p>days in a row</p>
-      </div>
-    </div>
-  </div>
+  <!-- (High Scores screen removed 2026-06-22 — its data (Best Score /
+       Highest Tile / Streak) fully duplicated the Stats screen. The menu's
+       leftmost tile now opens Themes; Stats is the single stats surface.) -->
 
   <!-- SHOP SCREEN -->
   <div id="shopScreen" class="screen">
@@ -1060,7 +1035,7 @@ html[data-theme="midnight"]{ --m-bg-top:#23201a; --m-vignette:rgba(0,0,0,.5); }
       <h2>🎨 Tile Themes</h2>
       <div style="width:60px"></div>
     </div>
-    <div id="themesGrid" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;width:100%;max-width:780px;box-sizing:border-box;justify-content:center"></div>
+    <div id="themesGrid" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;width:100%;max-width:780px;margin:0 auto;box-sizing:border-box;justify-content:flex-start"></div>
     <div style="padding:0 16px 16px;color:var(--text-mute);font-size:11px;text-align:center">Complete games to unlock new themes!</div>
   </div>
 
@@ -1833,6 +1808,11 @@ const PROMO_GAMES = [
 
 
 ];
+// 2026-06-22: entries declare `packageId`, but renderMoreGames/claimPromo/
+// checkCrossPromoInstalls all read `g.pkg`. Without this alias every
+// isAppInstalled(undefined) returned false, so the +200 install reward never
+// auto-claimed. Normalise once.
+PROMO_GAMES.forEach(function(g){ if(!g.pkg) g.pkg = g.packageId; });
 
 function promoKey(id) { return 'promo_claimed_' + id; }
 function isPromoClaimed(id) { return !!localStorage.getItem(promoKey(id)); }
@@ -1987,16 +1967,8 @@ const Game = {
       document.getElementById('btnRemoveAds').classList.add('owned');
     }
 
-    // High scores
-    document.getElementById('hsBestScore').textContent = State.bestScore;
-    document.getElementById('hsHighTile').textContent = State.highestTile || 2;
-    // Round-15.24: streak is "consecutive days played". Just opening
-    // the app today counts as day 1, so minimum visible value is 1.
-    var _lsN = 0;
-    try { var _ls = JSON.parse(localStorage.getItem('ls_v2')||'{}'); _lsN = _ls.n || 0; } catch(e){}
-    document.getElementById('hsStreak').textContent =
-      Math.max(_lsN, State.loginStreakDay || 0, State.dailyChallengeStreak || 0, 1);
-    if (State.achieved2048) document.getElementById('tile2048Card').style.display = 'block';
+    // (High Scores screen retired 2026-06-22 — best score / highest tile /
+    //  streak now live solely on the Stats screen, see renderStats2048.)
 
     // Undo button
     const undoBtn = document.getElementById('undoBtn');
@@ -2015,7 +1987,6 @@ const Game = {
       this.updateUI();
       /* Comeback banner removed per §3.1; PLAY resumes lastLevelProgress. */
     }
-    if (id === 'scoresScreen') this.updateUI();
     if (id === 'shopScreen') this.updateUI();
     if (id === 'moreGamesScreen') renderMoreGames();
     if (id === 'themeScreen') window.renderThemes && window.renderThemes();
