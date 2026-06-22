@@ -5,8 +5,9 @@ ID into each app's game.html, replacing the canonical
 re-created in Play Console.
 
 Hardcoded mapping (PGS project 225819574531, leaderboards created
-2026-05-27). Add entries here when shipping a new app — every NEW app's
-game.html starts with the placeholder.
+2026-05-27; Hunch/Afterimage/Overlay leaderboards added 2026-06-22, still
+"draft / ready to publish" in Play Console). Add entries here when shipping
+a new app — every NEW app's game.html starts with the placeholder.
 """
 import re
 import sys
@@ -20,6 +21,9 @@ IDS = {
     'Puzzle2048':      'CgkIg4KVn8kGEAIQBQ',
     'UnblockPuzzle':   'CgkIg4KVn8kGEAIQBg',
     'PipeConnect':     'CgkIg4KVn8kGEAIQCA',
+    'Hunch':           'CgkIg4KVn8kGEAIQCQ',
+    'Afterimage':      'CgkIg4KVn8kGEAIQCg',
+    'Overlay':         'CgkIg4KVn8kGEAIQCw',
 }
 LINE_RE = re.compile(r"var LEADERBOARD_ID = '[^']*';")
 
