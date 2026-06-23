@@ -150,40 +150,52 @@ SCHEDULE = [
     (110, 8, (5, 7)),   # 273-382  8x8
     (118, 9, (6, 8)),   # 383-500  9x9
 ]
-out = []; seed = 12345
-for count, N, (pmin, pmax) in SCHEDULE:
-    made = 0
-    while made < count:
-        if seed > 3_000_000: raise RuntimeError(f"seed exhausted {N}x{N}")
-        pairs = pmin + int(make_rng(seed)()*(pmax-pmin+1))
-        L = gen(seed, N, pairs); seed += 1
-        if L: out.append(L); made += 1
+def build_levels():
+    """Deterministically build the full 500-level list. gen() validates each
+    level's recorded solution for FULL COVERAGE before returning it, so every
+    level here is winnable AND fully fillable by construction. Importable so
+    scripts/check_pipeconnect_fillable.py can assert game.html matches."""
+    out = []; seed = 12345
+    for count, N, (pmin, pmax) in SCHEDULE:
+        made = 0
+        while made < count:
+            if seed > 3_000_000:
+                raise RuntimeError(f"seed exhausted {N}x{N}")
+            pairs = pmin + int(make_rng(seed)()*(pmax-pmin+1))
+            L = gen(seed, N, pairs); seed += 1
+            if L:
+                out.append(L); made += 1
+    return out
 
-# --emit-solutions: dump the full-coverage witness solution for every level so
-# the screenshot pipeline can render a solved (or mostly-solved) board. Levels
-# are 1-indexed to match the in-app "Level N". Does NOT write the levels file.
-if "--emit-solutions" in sys.argv:
-    sols = [{"level": i + 1, "size": L["size"], "dots": L["dots"],
-             "solution": L["solution"]} for i, L in enumerate(out)]
-    with open("/tmp/pipeconnect_solutions.json", "w") as fh:
-        json.dump(sols, fh)
-    # surface the richest candidates: bigger boards with the most colours.
-    ranked = sorted(sols, key=lambda s: (s["size"], len(s["solution"])), reverse=True)
-    print(f"emitted {len(sols)} solutions → /tmp/pipeconnect_solutions.json")
-    print("richest candidates (level / size / colours):")
-    for s in ranked[:14]:
-        print(f"  L{s['level']:>3}  {s['size']}x{s['size']}  {len(s['solution'])} colours")
-    sys.exit(0)
 
-print(f"generated {len(out)} levels; sizes:", dict(Counter(L['size'] for L in out)))
-print("pairs per size:", {s: sorted({len(set((d[0],d[1]) for d in L['dots']))//2 for L in out if L['size']==s}) for s in (5,6,7,8,9)})
-lines = []; cur = 0; n = 1
-for L in out:
-    if L['size'] != cur:
-        cur = L['size']; lines.append(f"// {n}-{n+ -1}: placeholder")
-        lines[-1] = f"// {n}+: {cur}x{cur}"
-    dots = json.dumps(L['dots']).replace('"', "'").replace(' ', '')
-    lines.append(f"{{size:{L['size']},dots:{dots}}},")
-    n += 1
-open('/tmp/new_levels_1_122.txt', 'w').write('\n'.join(lines) + '\n')
-print("wrote /tmp/new_levels_1_122.txt")
+if __name__ == "__main__":
+    out = build_levels()
+
+    # --emit-solutions: dump the full-coverage witness solution for every level
+    # so the screenshot pipeline can render a solved (or mostly-solved) board.
+    # Levels are 1-indexed to match the in-app "Level N". Does NOT write the
+    # levels file.
+    if "--emit-solutions" in sys.argv:
+        sols = [{"level": i + 1, "size": L["size"], "dots": L["dots"],
+                 "solution": L["solution"]} for i, L in enumerate(out)]
+        with open("/tmp/pipeconnect_solutions.json", "w") as fh:
+            json.dump(sols, fh)
+        # surface the richest candidates: bigger boards with the most colours.
+        ranked = sorted(sols, key=lambda s: (s["size"], len(s["solution"])), reverse=True)
+        print(f"emitted {len(sols)} solutions → /tmp/pipeconnect_solutions.json")
+        print("richest candidates (level / size / colours):")
+        for s in ranked[:14]:
+            print(f"  L{s['level']:>3}  {s['size']}x{s['size']}  {len(s['solution'])} colours")
+        sys.exit(0)
+
+    print(f"generated {len(out)} levels; sizes:", dict(Counter(L['size'] for L in out)))
+    print("pairs per size:", {s: sorted({len(set((d[0], d[1]) for d in L['dots'])) // 2 for L in out if L['size'] == s}) for s in (5, 6, 7, 8, 9)})
+    lines = []; cur = 0; n = 1
+    for L in out:
+        if L['size'] != cur:
+            cur = L['size']; lines.append(f"// {n}+: {cur}x{cur}")
+        dots = json.dumps(L['dots']).replace('"', "'").replace(' ', '')
+        lines.append(f"{{size:{L['size']},dots:{dots}}},")
+        n += 1
+    open('/tmp/new_levels_1_122.txt', 'w').write('\n'.join(lines) + '\n')
+    print("wrote /tmp/new_levels_1_122.txt")

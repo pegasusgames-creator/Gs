@@ -581,6 +581,7 @@ check_puzzle_solvability   = _delegated_check("check_unblock_solvable")
 # joined by vertex-disjoint paths (added after the 2026-06-16 PipeConnect
 # audit found levels 1-122, the hand-authored block, almost all unsolvable).
 check_flow_solvability     = _delegated_check("check_pipeconnect_solvable")
+check_flow_fillable        = _delegated_check("check_pipeconnect_fillable")
 
 # Audit 2026-05-15 — slip-prevention checks (G2-G6): price-string parity,
 # restore-purchases UI, interstitial cadence, IAP display-name table,
@@ -1920,6 +1921,7 @@ def main():
     section("code",  "seasonal events present",     check_seasonal_events, apps)
     section("code",  "puzzle solvability",           check_puzzle_solvability, apps)
     section("code",  "flow solvability",              check_flow_solvability, apps)
+    section("code",  "flow fillability (stars)",       check_flow_fillable, apps)
     # Audit 2026-05-15 slip-prevention checks (G2-G6).
     section("meta",  "IAP price string parity",     check_price_string_parity, apps)
     section("code",  "restore purchases UI",        check_restore_purchases_ui, apps)
