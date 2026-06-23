@@ -2,23 +2,24 @@
 """check_nonogram_unique.py — pre-publish gate that every shipped
 Nonogram level has exactly one solution.
 
-Spawns `node scripts/verify_nonogram_pregen.js` to run the JS solver
-against the actual game.html PREGEN_10 / PREGEN_15 / PREGEN_20 arrays.
-For PATTERNS_5 + PATTERNS_10 (the hand-curated small boards) we trust
-them — they're hand-written and have been audited; the runtime gate in
-buildLevels (A2) keeps them honest if anything regresses.
+Delegates to the self-contained Python verifier scripts/verify_nonogram.py
+(no node dependency). It reconstructs ALL 500 campaign boards exactly as
+buildLevels() does — curated PATTERNS_5/PATTERNS_10 INCLUDED — derives the
+clues and counts solutions (capped at 2) with a line-solver + bounded search.
+
+History: this gate used to verify only the PREGEN arrays via a node solver
+and explicitly TRUSTED the curated PATTERNS_* ("hand-written and audited").
+That trust was misplaced — PATTERNS_5 levels 30/45/46/50 each had two
+solutions (2026-06-23) because buildLevels() uses the curated arrays directly,
+bypassing the runtime _generateUnique gate. The verifier now checks them too.
 
 Returns ([blocking], [warnings]) per app.
 """
 
-import json
-import shutil
-import subprocess
 import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-VERIFY = REPO / "scripts" / "verify_nonogram_pregen.js"
 
 
 def _is_app(app: str) -> bool:
@@ -29,28 +30,33 @@ def check_app(app: str):
     blocking, warnings = [], []
     if app != "Nonogram":
         return blocking, warnings
-    if not VERIFY.exists():
-        blocking.append(f"{app}: scripts/verify_nonogram_pregen.js missing")
+    sys.path.insert(0, str(REPO / "scripts"))
+    try:
+        import verify_nonogram as V
+    except Exception as e:
+        blocking.append(f"{app}: cannot import verify_nonogram ({e})")
         return blocking, warnings
-    if not shutil.which("node"):
-        warnings.append(f"{app}: node not on PATH — cannot run uniqueness verifier (install nodejs)")
+    if not V.GAME.exists():
+        blocking.append(f"{app}: game.html not found for nonogram verify")
         return blocking, warnings
     try:
-        r = subprocess.run(
-            ["node", str(VERIFY)],
-            cwd=str(REPO), capture_output=True, text=True, timeout=120,
-        )
-    except subprocess.TimeoutExpired:
-        blocking.append(f"{app}: nonogram solver timed out (120s)")
+        levels, _ = V.build_levels(V.GAME.read_text(encoding="utf-8"))
+    except Exception as e:
+        blocking.append(f"{app}: failed to reconstruct nonogram levels ({e})")
         return blocking, warnings
-    if r.returncode != 0:
-        # Try to parse the JSON summary line.
-        last = r.stdout.strip().splitlines()[-1] if r.stdout.strip() else ""
-        try:
-            j = json.loads(last)
-            blocking.append(f"{app}: {j.get('totalBad', '?')} non-unique nonogram boards — run scripts/verify_nonogram_pregen.js --fix")
-        except Exception:
-            blocking.append(f"{app}: nonogram uniqueness verifier failed: {r.stderr.strip()[-300:]}")
+    if len(levels) != 500:
+        blocking.append(f"{app}: expected 500 nonogram levels, got {len(levels)}")
+        return blocking, warnings
+    bad = []
+    for lvl, n, grid in levels:
+        rc, cc = V.clues(grid, n)
+        if V.count_solutions(rc, cc, n, cap=2) != 1:
+            bad.append(lvl)
+    if bad:
+        blocking.append(
+            f"{app}: {len(bad)} non-unique nonogram level(s): "
+            f"{bad[:12]}{'…' if len(bad) > 12 else ''} — run "
+            f"scripts/verify_nonogram.py")
     return blocking, warnings
 
 
