@@ -6,6 +6,15 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+
+    <queries>
+        <package android:name="com.pegasusgames.watersortpuzzle" />
+        <package android:name="com.pegasusgames.nonogram" />
+        <package android:name="com.pegasusgames.puzzle2048" />
+        <package android:name="com.pegasusgames.unblockpuzzle" />
+    </queries>
 
     <application
         android:allowBackup="false"
@@ -42,6 +51,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Play Games Services -->
+        <meta-data android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/games_app_id"/>
+
+        <!-- Local notification alarm receiver -->
+        <receiver android:name=".NotificationReceiver" android:exported="false" />
 
     </application>
 

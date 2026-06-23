@@ -64,6 +64,7 @@ dependencies {
 
     // Google Play Billing
     implementation 'com.android.billingclient:billing:8.0.0'
+    implementation 'com.google.android.gms:play-services-games-v2:20.1.2'
 
     // Firebase Analytics — requires google-services.json in this folder
     // Setup: Firebase Console → Add Android app → download google-services.json → place in app/

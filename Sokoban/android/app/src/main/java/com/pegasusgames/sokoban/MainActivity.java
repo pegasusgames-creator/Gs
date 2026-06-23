@@ -16,6 +16,10 @@ import com.android.billingclient.api.QueryPurchasesParams;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import androidx.core.content.ContextCompat;
+import android.Manifest;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -65,6 +69,30 @@ public class MainActivity extends Activity {
         "season_pass_monthly", "starter_pack", "unlimited_lives_1h",
         "unlimited_lives_forever", "weekly_pass"
     ));
+    // Subscriptions — routed through launchSubscription() (SUBS), never INAPP.
+    private static final Set<String> SUBSCRIPTION_PRODUCTS = new HashSet<>(Arrays.asList(
+        "season_pass_monthly", "weekly_pass"));
+
+    // ── Notification scheduling (NOTIFICATIONS_IMPL.md §1) ───────────────────
+    private static final int REQ_DAILY_REMINDER       = 1001;
+    private static final int REQ_STREAK_AT_RISK       = 1002;
+    private static final int REQ_LIVES_REFILLED       = 1003;
+    private static final int REQ_RETURN_AFTER_ABSENCE = 1004;
+    private static final int REQ_WIN_BACK_D3          = 1005;
+    private static final int REQ_WIN_BACK_D7          = 1006;
+    private static final int REQ_WIN_BACK_D14         = 1007;
+    private static final int REQ_WIN_BACK_D30         = 1008;
+    private static final String PREF_NOTIFS_ENABLED   = "notifications_enabled";
+    private static final String PREF_LAST_PLAYED      = "last_played_ts";
+    private static final int NOTIF_CAP_PER_DAY        = 2;
+    private static final int POST_NOTIFS_REQUEST_CODE = 9001;
+    // Cross-promo targets — LIVE Play Store apps only, excludes self.
+    private static final java.util.Set<String> CROSS_PROMO_PACKAGES =
+        new java.util.HashSet<>(java.util.Arrays.asList(
+            "com.pegasusgames.watersortpuzzle",
+            "com.pegasusgames.nonogram",
+            "com.pegasusgames.puzzle2048",
+            "com.pegasusgames.unblockpuzzle"));
     // SKUs that are CONSUMABLE — must be consumed via consumeAsync after each
     // purchase, otherwise the user can buy once and never re-buy. Anything in
     // VALID_PRODUCTS but NOT in this set is non-consumable / subscription and
@@ -88,6 +116,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try { com.google.android.gms.games.PlayGamesSdk.initialize(this); }
+        catch (Throwable e) { android.util.Log.d("PGS", "init no-op: "+e.getMessage()); }
 
         RelativeLayout layout = new RelativeLayout(this);
         setContentView(layout);
@@ -254,8 +284,32 @@ public class MainActivity extends Activity {
         billingClient.startConnection(listener);
     }
 
+    private void launchSubscription(String productId) {
+        billingClient.queryProductDetailsAsync(
+            QueryProductDetailsParams.newBuilder().setProductList(Arrays.asList(
+                QueryProductDetailsParams.Product.newBuilder()
+                    .setProductId(productId)
+                    .setProductType(BillingClient.ProductType.SUBS).build()
+            )).build(),
+            (r, queryResult) -> {
+                List<ProductDetails> details = queryResult.getProductDetailsList();
+                if (details.isEmpty()) return;
+                ProductDetails pd = details.get(0);
+                List<ProductDetails.SubscriptionOfferDetails> offers = pd.getSubscriptionOfferDetails();
+                if (offers == null || offers.isEmpty()) return;
+                runOnUiThread(() ->
+                    billingClient.launchBillingFlow(this,
+                        BillingFlowParams.newBuilder().setProductDetailsParamsList(Arrays.asList(
+                            BillingFlowParams.ProductDetailsParams.newBuilder()
+                                .setProductDetails(pd)
+                                .setOfferToken(offers.get(0).getOfferToken()).build()
+                        )).build()));
+            });
+    }
+
     private void launchPurchase(String productId) {
         if (!VALID_PRODUCTS.contains(productId)) return;
+        if (SUBSCRIPTION_PRODUCTS.contains(productId)) { launchSubscription(productId); return; }
         List<QueryProductDetailsParams.Product> list = Arrays.asList(
             QueryProductDetailsParams.Product.newBuilder()
                 .setProductId(productId).setProductType(BillingClient.ProductType.INAPP).build());
@@ -348,11 +402,303 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void log(String msg) { /* disabled in release */ }
+
+        public void requestNotificationPermission() {
+            if (Build.VERSION.SDK_INT >= 33) {
+                if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1001);
+                }
+            }
+        }
+
+        @JavascriptInterface
+        public boolean hasNotificationPermission() {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true;
+            return ContextCompat.checkSelfPermission(
+                MainActivity.this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED;
+        }
+
+        @JavascriptInterface
+        public void scheduleDailyReminder(int hourOfDay, int minute) {
+            cancelScheduledAlarm(REQ_DAILY_REMINDER);
+            if (!getSharedPreferences("game", MODE_PRIVATE)
+                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
+
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.set(java.util.Calendar.HOUR_OF_DAY, hourOfDay);
+            cal.set(java.util.Calendar.MINUTE, minute);
+            cal.set(java.util.Calendar.SECOND, 0);
+            if (cal.getTimeInMillis() <= System.currentTimeMillis()) {
+                cal.add(java.util.Calendar.DAY_OF_YEAR, 1);
+            }
+            scheduleAlarm(
+                REQ_DAILY_REMINDER, cal.getTimeInMillis(),
+                "daily_reminder",
+                getDailyReminderTitle(), getDailyReminderBody());
+        }
+
+        @JavascriptInterface
+        public void scheduleStreakAtRisk(int streakDays) {
+            cancelScheduledAlarm(REQ_STREAK_AT_RISK);
+            if (streakDays < 3) return;
+            if (!getSharedPreferences("game", MODE_PRIVATE)
+                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.set(java.util.Calendar.HOUR_OF_DAY, 20);
+            cal.set(java.util.Calendar.MINUTE, 30);
+            cal.set(java.util.Calendar.SECOND, 0);
+            if (cal.getTimeInMillis() <= System.currentTimeMillis()) {
+                cal.add(java.util.Calendar.DAY_OF_YEAR, 1);
+            }
+            String body = "Your " + streakDays + "-day streak ends in 4 hours — keep it alive! 🔥";
+            scheduleAlarm(REQ_STREAK_AT_RISK, cal.getTimeInMillis(),
+                "streak_at_risk", "Don't break your streak!", body);
+        }
+
+        @JavascriptInterface
+        public void scheduleLivesRefilled(long whenMillis) {
+            cancelScheduledAlarm(REQ_LIVES_REFILLED);
+            if (!getSharedPreferences("game", MODE_PRIVATE)
+                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
+            if (whenMillis <= System.currentTimeMillis()) return;
+            scheduleAlarm(REQ_LIVES_REFILLED, whenMillis,
+                "lives_refilled", "Your lives are back!", "Ready for another round? ❤️");
+        }
+
+        @JavascriptInterface
+        public void scheduleWinBack(int dayOffset, String title, String body) {
+            if (title == null || body == null) return;
+            if (!getSharedPreferences("game", MODE_PRIVATE)
+                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
+            int req;
+            switch (dayOffset) {
+                case 3:  req = REQ_WIN_BACK_D3;  break;
+                case 7:  req = REQ_WIN_BACK_D7;  break;
+                case 14: req = REQ_WIN_BACK_D14; break;
+                case 30: req = REQ_WIN_BACK_D30; break;
+                default: return;
+            }
+            cancelScheduledAlarm(req);
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.add(java.util.Calendar.DAY_OF_YEAR, dayOffset);
+            cal.set(java.util.Calendar.HOUR_OF_DAY, 12);
+            cal.set(java.util.Calendar.MINUTE, 0);
+            cal.set(java.util.Calendar.SECOND, 0);
+            scheduleAlarm(req, cal.getTimeInMillis(),
+                "win_back_d" + dayOffset, title, body);
+        }
+
+        @JavascriptInterface
+        public void cancelAllNotifications() {
+            cancelScheduledAlarm(REQ_DAILY_REMINDER);
+            cancelScheduledAlarm(REQ_STREAK_AT_RISK);
+            cancelScheduledAlarm(REQ_LIVES_REFILLED);
+            cancelScheduledAlarm(REQ_RETURN_AFTER_ABSENCE);
+            cancelScheduledAlarm(REQ_WIN_BACK_D3);
+            cancelScheduledAlarm(REQ_WIN_BACK_D7);
+            cancelScheduledAlarm(REQ_WIN_BACK_D14);
+            cancelScheduledAlarm(REQ_WIN_BACK_D30);
+        }
+
+        @JavascriptInterface
+        public void setNotificationsEnabled(boolean enabled) {
+            getSharedPreferences("game", MODE_PRIVATE).edit()
+                .putBoolean(PREF_NOTIFS_ENABLED, enabled).apply();
+            if (!enabled) cancelAllNotifications();
+        }
+
+        @JavascriptInterface
+        public boolean getNotificationsEnabled() {
+            return getSharedPreferences("game", MODE_PRIVATE)
+                .getBoolean(PREF_NOTIFS_ENABLED, true);
+        }
+
+        @JavascriptInterface
+        public void recordLastPlayed() {
+            getSharedPreferences("game", MODE_PRIVATE).edit()
+                .putLong(PREF_LAST_PLAYED, System.currentTimeMillis()).apply();
+            cancelScheduledAlarm(REQ_DAILY_REMINDER);
+        }
+
+        // Cross-promo "installed?" check — scoped to the sister-app allowlist
+        // so JS can't probe arbitrary packages.
+        @JavascriptInterface
+        public boolean isAppInstalled(String pkg) {
+            if (pkg == null || !CROSS_PROMO_PACKAGES.contains(pkg)) return false;
+            try {
+                getPackageManager().getPackageInfo(pkg, 0);
+                return true;
+            } catch (PackageManager.NameNotFoundException e) {
+                return false;
+            }
+        }
+
+        @JavascriptInterface
+        public void openPlayStore(String pkg) {
+            if (pkg == null || !CROSS_PROMO_PACKAGES.contains(pkg)) return;
+            runOnUiThread(() -> {
+                android.content.Intent i = new android.content.Intent(
+                    android.content.Intent.ACTION_VIEW,
+                    android.net.Uri.parse("https://play.google.com/store/apps/details?id=" + pkg));
+                i.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+                try { startActivity(i); } catch (Exception e) {}
+            });
+        }
+
+        @JavascriptInterface
+        public void shareText(String body) {
+            if (body == null || body.isEmpty()) return;
+            runOnUiThread(() -> {
+                android.content.Intent send = new android.content.Intent(android.content.Intent.ACTION_SEND);
+                send.setType("text/plain");
+                send.putExtra(android.content.Intent.EXTRA_TEXT, body);
+                try {
+                    startActivity(android.content.Intent.createChooser(send, "Share"));
+                } catch (android.content.ActivityNotFoundException e) {
+                    Log.w("Share", "no chooser available", e);
+                }
+            });
+        }
+
+        // shareImage(base64) — best-effort. The JS share-a-win shim treats
+        // shareImage as optional; the text-only path always works.
+        @JavascriptInterface
+        public void shareImage(String base64Png, String caption) {
+            if (caption == null) caption = "";
+            final String body = caption;
+            runOnUiThread(() -> {
+                android.content.Intent send = new android.content.Intent(android.content.Intent.ACTION_SEND);
+                send.setType("text/plain");
+                send.putExtra(android.content.Intent.EXTRA_TEXT, body);
+                try {
+                    startActivity(android.content.Intent.createChooser(send, "Share"));
+                } catch (android.content.ActivityNotFoundException e) {
+                    Log.w("Share", "no chooser available", e);
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void setLeaderboardSize(int n) {
+          final int v = Math.max(1000, n);
+          runOnUiThread(() -> {
+            if (webView != null) {
+              webView.evaluateJavascript(
+                "window.LEADERBOARD_TOTAL_OVERRIDE = " + v + ";", null);
+            }
+          });
+        }
+
+        // ── Play Games Services bridge (PGS v2) ───────────────────────────────
+        // Defensive — no-op while the leaderboard isn't yet created in Play
+        // Console (JS LEADERBOARD_ID ships as TODO_ placeholder). The synthetic
+        // weekly-tournament fallback in game.html stays active until then.
+        @JavascriptInterface
+        public void submitScore(String leaderboardId, long score) {
+            if (leaderboardId == null || leaderboardId.isEmpty()) return;
+            if (leaderboardId.startsWith("TODO_")) return;
+            try {
+                com.google.android.gms.games.PlayGames.getLeaderboardsClient(MainActivity.this)
+                    .submitScore(leaderboardId, score);
+            } catch (Throwable e) { Log.d("PGS", "submitScore no-op: " + e.getMessage()); }
+        }
+
+        @JavascriptInterface
+        public void showLeaderboard(String leaderboardId) {
+            if (leaderboardId == null || leaderboardId.isEmpty()) return;
+            if (leaderboardId.startsWith("TODO_")) return;
+            try {
+                com.google.android.gms.games.PlayGames.getLeaderboardsClient(MainActivity.this)
+                    .getLeaderboardIntent(leaderboardId)
+                    .addOnSuccessListener(intent -> runOnUiThread(() -> {
+                        try { startActivityForResult(intent, 9991); }
+                        catch (Throwable e) { Log.w("PGS", "leaderboard intent failed", e); }
+                    }));
+            } catch (Throwable e) { Log.d("PGS", "showLeaderboard no-op: " + e.getMessage()); }
+        }
+
+        @JavascriptInterface
+        public boolean signInPlayGames() {
+            try {
+                com.google.android.gms.games.PlayGames.getGamesSignInClient(MainActivity.this).signIn();
+                return true;
+            } catch (Throwable e) {
+                Log.d("PGS", "signInPlayGames no-op: " + e.getMessage());
+                return false;
+            }
+        }
+
+        @JavascriptInterface
+        public boolean isPlayGamesAuthenticated() {
+            try {
+                com.google.android.gms.tasks.Task<com.google.android.gms.games.AuthenticationResult> t =
+                    com.google.android.gms.games.PlayGames.getGamesSignInClient(MainActivity.this).isAuthenticated();
+                return t != null && t.isComplete() && t.getResult() != null && t.getResult().isAuthenticated();
+            } catch (Throwable e) { return false; }
+        }
     }
 
     // -------------------------------------------------------
     // Lifecycle
     // -------------------------------------------------------
+    private void scheduleAlarm(int requestCode, long triggerAtMillis,
+                                String type, String title, String body) {
+        android.content.Intent intent = new android.content.Intent(this, NotificationReceiver.class);
+        intent.putExtra("type", type);
+        intent.putExtra("title", title);
+        intent.putExtra("body", body);
+        intent.putExtra("requestCode", requestCode);
+
+        int flags = android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags |= android.app.PendingIntent.FLAG_IMMUTABLE;
+        }
+        android.app.PendingIntent pi = android.app.PendingIntent.getBroadcast(this, requestCode, intent, flags);
+
+        android.app.AlarmManager am = (android.app.AlarmManager) getSystemService(ALARM_SERVICE);
+        if (am == null) return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            am.setAndAllowWhileIdle(android.app.AlarmManager.RTC_WAKEUP, triggerAtMillis, pi);
+        } else {
+            am.set(android.app.AlarmManager.RTC_WAKEUP, triggerAtMillis, pi);
+        }
+    }
+
+    private void cancelScheduledAlarm(int requestCode) {
+        android.content.Intent intent = new android.content.Intent(this, NotificationReceiver.class);
+        int flags = android.app.PendingIntent.FLAG_NO_CREATE;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags |= android.app.PendingIntent.FLAG_IMMUTABLE;
+        }
+        android.app.PendingIntent pi = android.app.PendingIntent.getBroadcast(this, requestCode, intent, flags);
+        if (pi != null) {
+            android.app.AlarmManager am = (android.app.AlarmManager) getSystemService(ALARM_SERVICE);
+            if (am != null) am.cancel(pi);
+            pi.cancel();
+        }
+    }
+
+    private String getDailyReminderTitle() { return "Pipe Connect"; }
+    private String getDailyReminderBody()  { return "Your daily pipe puzzle is ready!"; }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                            int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == POST_NOTIFS_REQUEST_CODE) {
+            boolean granted = grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+            webView.evaluateJavascript(
+                "window.onNotificationPermissionResult && "
+                + "window.onNotificationPermissionResult(" + granted + ");",
+                null
+            );
+        }
+    }
+
     private void applyFullscreen() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             getWindow().setDecorFitsSystemWindows(false);
