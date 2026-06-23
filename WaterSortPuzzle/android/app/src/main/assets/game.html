@@ -1405,9 +1405,35 @@ for (const [nt, nc, sd] of LEVEL_SEEDS) levels.push(generateLevel(nt, nc, sd));
 // ============================================================
 // GAME STATE
 // ============================================================
+// Save schema version + migration. Every other portfolio app carries this;
+// WaterSort (the most-installed live app) lacked it, so a future level/content
+// change could leave stale out-of-range indices in completedLevels/levelStars/
+// currentLevel and corrupt existing saves. migrateSave() clamps level-keyed
+// data to the current campaign size and stamps saveVersion so it runs once.
+const SAVE_VERSION = 1;
+function migrateSave(s){
+  try {
+    if(!s || typeof s!=='object' || s.saveVersion===SAVE_VERSION) return s;
+    const n=(typeof levels!=='undefined' && levels && levels.length)||0;
+    if(n>0){
+      ['completedLevels','levelStars'].forEach(function(key){
+        const m=s[key];
+        if(Array.isArray(m)){
+          s[key]=m.filter(function(i){return i>=0 && i<n;});
+        } else if(m && typeof m==='object'){
+          for(const k in m){ const idx=parseInt(k,10); if(!(idx>=0 && idx<n)) delete m[k]; }
+        }
+      });
+      if(typeof s.currentLevel==='number' && s.currentLevel>n) s.currentLevel=n;
+    }
+    s.saveVersion=SAVE_VERSION;
+  } catch(e){}
+  return s;
+}
 const State = {
   currentLevel: 0,
   coins: 0,
+  saveVersion: SAVE_VERSION,
   levelStars: {},
   completedLevels: {},
   removeAds: false,
@@ -1438,6 +1464,8 @@ const State = {
   load() {
     try {
       const d = JSON.parse(localStorage.getItem('watersort_save') || '{}');
+      migrateSave(d);  // clamp stale level-keyed data + stamp saveVersion (runs once)
+      this.saveVersion = d.saveVersion || SAVE_VERSION;
       this.currentLevel = d.currentLevel || 0;
       this.coins = d.coins !== undefined ? d.coins : 200; // first-run float; returning players keep their value (incl. 0)
       this.levelStars = d.levelStars || {};
@@ -1470,6 +1498,7 @@ const State = {
   save() {
     try {
       const json = JSON.stringify({
+        saveVersion: SAVE_VERSION,
         currentLevel: this.currentLevel,
         coins: this.coins,
         levelStars: this.levelStars,
@@ -1503,8 +1532,9 @@ const State = {
 
   reset() {
     localStorage.removeItem('watersort_save');
+    this.saveVersion = SAVE_VERSION;
     this.currentLevel = 0;
-    this.coins = 0;
+    this.coins = 200;  // mirror the first-run seed (portfolio standard: 200 coins / 5 lives)
     this.levelStars = {};
     this.completedLevels = {};
     this.removeAds = false;
