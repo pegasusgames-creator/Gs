@@ -1,0 +1,32 @@
+# app-ads.txt — Pegasus Games
+#
+# HOSTING (required): this file authorizes who may sell our apps' ad
+# inventory. It must be served as plain text at the ROOT of the
+# developer website declared in Play Console for these apps, i.e.
+#     https://pegasusgames-creator.github.io/app-ads.txt
+# The URL in Play Console → App content / store listing "Website" must
+# match that domain exactly, or AdMob/crawlers won't associate it.
+# This copy lives in Afterimage/store/ as the canonical source; publish
+# the same bytes to the site root (the pegasusgames-creator.github.io
+# repo). ONE file covers every Pegasus app — it is NOT per-app.
+#
+# Format per IAB spec: <domain>, <publisher id>, <DIRECT|RESELLER>, <certification authority id>
+
+# --- Google AdMob — DIRECT (both Pegasus AdMob publisher accounts) ---
+# Account A: WaterSort, Nonogram, Puzzle2048, Unblock, PipeConnect
+google.com, pub-5695494884863768, DIRECT, f08c47fec0942fa0
+# Account B: Afterimage, Hunch, Overlay
+google.com, pub-2759523698880843, DIRECT, f08c47fec0942fa0
+
+# --- Mediation networks — TODO ---
+# Uncomment and fill the real publisher id for each network from its own
+# app-ads.txt guidance (linked in the AdMob mediation dashboard) once the
+# network partnership is live. The certification-authority id (last field)
+# is a public per-network constant; the publisher id is account-specific.
+# Leaving these commented keeps the file valid and ships no false claims.
+#
+# TODO(Meta / Audience Network):  facebook.com, <META_PUBLISHER_ID>, RESELLER, c3e20eee3f780d68
+# TODO(Unity Ads):                unityads.unity3d.com, <UNITY_PUBLISHER_ID>, DIRECT, <CERT_AUTH_ID>
+# TODO(Mintegral):                mintegral.com, <MINTEGRAL_PUBLISHER_ID>, RESELLER, 44a2b1854d7bbe93
+# TODO(Pangle):                   pangleglobal.com, <PANGLE_PUBLISHER_ID>, RESELLER, <CERT_AUTH_ID>
+# TODO(InMobi):                   inmobi.com, <INMOBI_PUBLISHER_ID>, DIRECT, 83e75a7ae333ca9d
