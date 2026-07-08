@@ -2037,6 +2037,7 @@ def main():
         ('check_dead_handlers.py', 'dead onclick handlers'),
         ('check_orphan_else.py', 'orphaned else (script parse error)'),
         ('check_icon_white_border.py', 'icon white border'),
+        ('check_notif_cadence_cap.py', 'notif cadence cap'),
     ]:
         try:
             _r = _subprocess.run(

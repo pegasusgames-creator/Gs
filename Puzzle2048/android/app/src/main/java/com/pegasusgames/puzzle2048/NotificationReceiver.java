@@ -25,6 +25,27 @@ public class NotificationReceiver extends BroadcastReceiver {
         int reqCode  = intent.getIntExtra("requestCode", 0);
         if (title == null || body == null) return;
 
+        // ── Cadence guard (audit 2026-07). Two protections the scheduler
+        // alone can't give: (1) re-check the opt-out at FIRE time, not just
+        // when scheduling; (2) a per-day cap so win-back (noon) + daily
+        // reminder (~19:00) + streak-at-risk (20:30) can't stack into 3+
+        // notifications on a single absent day. The daily reminder itself is
+        // already once/day (one alarm, unique request code); this bounds the
+        // total across all types.
+        {
+            android.content.SharedPreferences np =
+                ctx.getSharedPreferences("game", Context.MODE_PRIVATE);
+            if (!np.getBoolean("notifications_enabled", true)) return;
+            final int NOTIF_CAP_PER_DAY = 2;
+            Calendar nc = Calendar.getInstance();
+            int dayKey = nc.get(Calendar.YEAR) * 1000 + nc.get(Calendar.DAY_OF_YEAR);
+            int lastDay = np.getInt("notif_day_key", -1);
+            int shownToday = (lastDay == dayKey) ? np.getInt("notif_day_count", 0) : 0;
+            if (shownToday >= NOTIF_CAP_PER_DAY) return;
+            np.edit().putInt("notif_day_key", dayKey)
+                     .putInt("notif_day_count", shownToday + 1).apply();
+        }
+
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         String channelId = (hour >= 21 || hour < 9) ? CHANNEL_ID_SILENT : CHANNEL_ID_LOUD;
 
