@@ -1981,7 +1981,7 @@ const Game = {
 
   showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    var _sel=document.getElementById(id)||document.getElementById(id+'Screen')||document.getElementById('screen-'+id); if(_sel)_sel.classList.add('active');
     if (id === 'menuScreen') {
       renderMiniGrid();
       this.updateUI();
