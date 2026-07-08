@@ -5873,20 +5873,34 @@ window.addEventListener('load',function(){
     debugSanityGuard(rows);
     return { rows: rows, total: rows.length, rank: rank, label: m.label };
   }
+  function lbIsPlaceholder(){
+    // True when no real Play Games leaderboard is wired. A placeholder id
+    // means the standings below are a LOCAL practice bracket, never real
+    // players — so we must label it as such and hide "Compare on Play
+    // Games" (there is nothing real to open). A genuine id looks like
+    // 'CgkI…'; placeholders are empty or carry a TODO/PLACEHOLDER/ENTER_ marker.
+    var id = window._GROWTH_LEADERBOARD_ID;
+    return !id || /TODO|PLACEHOLDER|ENTER_/i.test(id);
+  }
   function renderLeaderboardTab(){
     var d = buildStandings();
+    var practice = lbIsPlaceholder();
     // "Updated <minutes> ago" — gives the synthetic table a live feel
     // without lying about real-time. Computed deterministically from
-    // current minute so it doesn't tick while open.
+    // current minute so it doesn't tick while open. Suppressed in practice
+    // mode: with no real board it would imply a live global ranking.
     var freshMin = (new Date().getMinutes() % 17) + 1;
-    var head = 'Weekly · #' + d.rank.toLocaleString() +
-               ' of ' + d.total.toLocaleString() +
-               ' · Updated ' + freshMin + 'm ago';
+    var head = practice
+      ? 'Practice bracket · #' + d.rank.toLocaleString() + ' of ' + d.total.toLocaleString()
+      : 'Weekly · #' + d.rank.toLocaleString() + ' of ' + d.total.toLocaleString() + ' · Updated ' + freshMin + 'm ago';
+    var note = practice
+      ? '<div style="font-size:0.72rem;opacity:0.6;margin:-2px 0 10px;">Practice ladder to pace yourself — not a global ranking of real players.</div>'
+      : '';
     var html =
       '<div style="display:flex;align-items:center;justify-content:space-between;font-size:0.78rem;opacity:0.92;margin-bottom:10px;gap:10px;">'+
         '<span style="flex:1;">'+head+'</span>'+
         '<button data-standings-jump style="background:var(--g-play, #3b6db8);color:var(--on-accent, #fff);border:none;border-radius:10px;padding:5px 12px;font-weight:700;font-size:0.78rem;cursor:pointer;font-family:inherit;flex:0 0 auto;">Jump to me</button>'+
-      '</div>' +
+      '</div>' + note +
       '<div data-standings-list style="max-height:62vh;overflow-y:auto;border-radius:12px;border:1px solid var(--border, rgba(127,127,127,0.22));-webkit-overflow-scrolling:touch;">';
     // Render ALL rows from #1 to last. WebView handles ~10k rows but
     // we keep the row DOM minimal to stay snappy on first paint.
@@ -5912,7 +5926,7 @@ window.addEventListener('load',function(){
       );
     }
     html += parts.join('') + '</div>';
-    if (api('showLeaderboard')) {
+    if (!practice && api('showLeaderboard')) {
       html += '<a data-open-lb style="display:block;text-align:center;margin-top:10px;' +
               'font-size:0.78rem;color:inherit;opacity:0.62;text-decoration:underline;' +
               'cursor:pointer;">Compare on Play Games →</a>';
