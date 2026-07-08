@@ -8774,7 +8774,7 @@ window.addEventListener('load',function(){
       if(footer)frag.appendChild(footer);
       if(reset){frag.appendChild(hdr('Danger Zone'));
         try{reset.style.flexDirection='row';reset.style.alignItems='center';}catch(e){}
-        var b=reset.querySelector('button'); if(b){var rlbl=reset.querySelector('.settings-label,.setting-label,.settings-item-label,.set-label');if(rlbl&&!rlbl.contains(b))b.textContent='Reset';b.style.cssText='padding:12px 22px;font-size:.84rem;white-space:nowrap;background:#b8332b;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.22);';}
+        var b=reset.querySelector('button'); if(b){var rlbl=reset.querySelector('.settings-label,.setting-label,.settings-item-label,.set-label');if(rlbl&&!rlbl.contains(b))b.textContent='Reset';b.style.cssText='padding:11px 20px;font-size:.84rem;white-space:nowrap;background:transparent;color:var(--text-mute, var(--text-muted, #8a7f76));border:1px solid var(--border, rgba(127,127,127,0.32));border-radius:10px;cursor:pointer;font-weight:600;box-shadow:none;';}
         frag.appendChild(reset);}
       cont.appendChild(frag);
     }catch(e){}
