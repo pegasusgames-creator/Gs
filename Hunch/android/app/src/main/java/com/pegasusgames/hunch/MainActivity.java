@@ -59,9 +59,9 @@ public class MainActivity extends Activity {
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     // Get from: apps.admob.com → Your App → Ad Units
-    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-2759523698880843/7621281789";
-    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-2759523698880843/8447278294";
-    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-2759523698880843/5729574051";
+    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-5695494884863768/9569057779";
+    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-5695494884863768/3337892584";
+    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-5695494884863768/2159295442";
 
     // Play Console → Monetization setup → Licensing → base64-encoded RSA public
     // key. Used by verifyPurchaseSignature() to validate every purchase locally

@@ -12,11 +12,12 @@
 #
 # Format per IAB spec: <domain>, <publisher id>, <DIRECT|RESELLER>, <certification authority id>
 
-# --- Google AdMob — DIRECT (both Pegasus AdMob publisher accounts) ---
-# Account A: WaterSort, Nonogram, Puzzle2048, Unblock, PipeConnect
+# --- Google AdMob — DIRECT ---
+# One AdMob publisher account for the entire portfolio (all 8 AdMob apps:
+# WaterSort, Nonogram, Puzzle2048, Unblock, PipeConnect, Afterimage, Hunch,
+# Overlay). Afterimage/Hunch/Overlay were briefly created under a second
+# account by mistake and moved here.
 google.com, pub-5695494884863768, DIRECT, f08c47fec0942fa0
-# Account B: Afterimage, Hunch, Overlay
-google.com, pub-2759523698880843, DIRECT, f08c47fec0942fa0
 
 # --- Mediation networks — TODO ---
 # Uncomment and fill the real publisher id for each network from its own

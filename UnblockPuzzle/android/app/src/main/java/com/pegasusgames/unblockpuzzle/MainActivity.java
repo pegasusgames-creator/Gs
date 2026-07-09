@@ -52,9 +52,8 @@ public class MainActivity extends Activity {
 
     // ── AdMob fallback ────────────────────────────────────────────────────────
     // Get from: apps.admob.com → Your App → Ad Units
-    // NOTE: these are stale IDs from a prior account (publisher 2759523698880843).
-    // Replace with real IDs from the canonical Pegasus Games AdMob account
-    // (publisher 5695494884863768) per RELEASE_HANDOFF.md before shipping.
+    // Real IDs from the canonical Pegasus Games AdMob account (publisher
+    // 5695494884863768). The whole portfolio uses this single account.
     private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-5695494884863768/9906792093";
     private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-5695494884863768/8593710424";
     private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-5695494884863768/5121369274";
