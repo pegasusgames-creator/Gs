@@ -38,6 +38,12 @@ def check_app(app: str):
         return [], []
     lines = s.splitlines()
     bad = []
+    # Pass detection must be reachable from the global isPremium(): a
+    # `typeof isSeasonActive === 'function'` probe at top level with the
+    # function defined only inside an addendum closure silently made the
+    # Season Pass worthless (Nonogram + Puzzle2048, live, 2026-10-03).
+    if re.search(r"typeof\s+isSeasonActive\s*===?\s*'function'", s) and not re.search(r"window\.isSeasonActive\s*=", s):
+        bad.append(f"{app}: isPremium() probes isSeasonActive but it is never exported to window — Season Pass holders get no benefits")
     for i, line in enumerate(lines):
         if not CALL.search(line) or line.strip().startswith("//"):
             continue

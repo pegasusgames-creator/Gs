@@ -5411,6 +5411,10 @@ function isSeasonActive(){
   if(s.seasonPassForever) return true;
   return !!(s.seasonPassUntil&&Date.now()<s.seasonPassUntil);
 }
+// Exported (audit 2026-10-03): the pass-promo cards probe
+// `typeof isSeasonActive` from another closure — without this an active
+// Season Pass never showed "✓ ACTIVE" and could be "bought" again.
+window.isSeasonActive = isSeasonActive;
 
 function activateSeason(ms){
   var s=G.st(); if(!s) return;

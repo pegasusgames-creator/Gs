@@ -4997,6 +4997,11 @@ function isSeasonActive(){
   if(s.seasonPassForever) return true;
   return !!(s.seasonPassUntil&&Date.now()<s.seasonPassUntil);
 }
+// Exported (audit 2026-10-03): the top-level isPremium() / adsRemoved()
+// probe `typeof isSeasonActive` from OUTSIDE this closure — without this the
+// Season Pass never counted: subscribers still saw ads, themes stayed locked
+// and hints/undos were still consumed.
+window.isSeasonActive = isSeasonActive;
 
 function activateSeason(ms){
   var s=G.st(); if(!s) return;
