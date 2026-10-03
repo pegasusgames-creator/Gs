@@ -2070,6 +2070,7 @@ def main():
         ('check_store_paste_fresh.py', 'STORE_PASTE.md belongs to this app + matches metadata'),
         ('check_reward_types_native.py', 'rewarded types requested by JS are whitelisted in Java'),
         ('check_lang_picker.py', 'every translated listing locale is selectable in the language picker'),
+        ('check_trademarks.py', 'no third-party game/franchise trademarks in listing text'),
     ]:
         try:
             _r = _subprocess.run(
