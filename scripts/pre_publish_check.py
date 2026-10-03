@@ -2068,6 +2068,7 @@ def main():
         ('check_app_version_display.py', 'displayed version == versionName'),
         ('check_live_events.py', 'live-ops calendar (12 months, no fake banners)'),
         ('check_store_paste_fresh.py', 'STORE_PASTE.md belongs to this app + matches metadata'),
+        ('check_reward_types_native.py', 'rewarded types requested by JS are whitelisted in Java'),
     ]:
         try:
             _r = _subprocess.run(

@@ -118,8 +118,12 @@ public class MainActivity extends Activity {
         "com.pegasusgames.puzzle2048",
         "com.pegasusgames.unblockpuzzle"
     ));
-    private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
-        "undo", "skip", "life"
+        // Every reward type game.html requests MUST be listed — an unlisted type is dropped
+    // silently (no ad, no reward) and, in WaterSort, left a pending callback that blocked
+    // every later rewarded ad that session (audit 2026-10-03: free_coins / hint / extra_tube /
+    // magic_wand were missing). Gate: scripts/check_reward_types_native.py
+private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
+        "undo", "skip", "life", "free_coins", "hint", "extra_tube", "magic_wand"
     ));
 
     // Daylight default = medium ocean blue. (Midnight unlock = #0a1628.)
