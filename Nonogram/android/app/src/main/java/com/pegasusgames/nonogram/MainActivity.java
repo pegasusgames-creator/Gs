@@ -95,7 +95,7 @@ public class MainActivity extends Activity {
         "five_lives", "unlimited_lives_1h", "hint_pack", "starter_pack"
     ));
     private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
-        "undo", "skip", "life", "hint", "free_coins", "reveal_cell", "reveal_row"
+        "undo", "skip", "life", "hint", "free_coins", "reveal_cell", "reveal_row", "double_coins"
     ));
 
     // Daylight default = cream/paper. (Midnight unlock is dark.)

@@ -39,6 +39,7 @@ SHIMS = [
     ("MENU", "_growth_shim_menu.html"),
     ("SUBS", "_growth_shim_subs.html"),
     ("EVENTS", "_growth_shim_events.html"),
+    ("REWARDS", "_growth_shim_rewards.html"),
 ]
 
 

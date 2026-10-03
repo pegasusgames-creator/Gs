@@ -97,7 +97,7 @@ public class MainActivity extends Activity {
     // every later rewarded ad that session (audit 2026-10-03: free_coins / hint / extra_tube /
     // magic_wand were missing). Gate: scripts/check_reward_types_native.py
 private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
-        "undo", "skip", "life", "free_coins", "hint", "extra_life"
+        "undo", "skip", "life", "free_coins", "hint", "extra_life", "double_coins"
     ));
 
     private static final int WEBVIEW_BG_COLOR = 0xFFeef4f8;

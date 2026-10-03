@@ -90,7 +90,7 @@ public class MainActivity extends Activity {
     ));
 
     private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
-        "undo", "skip", "life", "free_coins", "hint"
+        "undo", "skip", "life", "free_coins", "hint", "double_coins"
     ));
 
     // Daylight default = mint/sage. (Midnight unlock is dark.)

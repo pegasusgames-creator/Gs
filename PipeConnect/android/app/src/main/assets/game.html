@@ -2262,7 +2262,7 @@ function checkLevelComplete(){
       if(window.gOnDailyDone){try{window.gOnDailyDone();}catch(e){}}
     }
   }
-  try{if(window.gGame)window.gGame.clear(isDailyChallenge?{daily:true,stars:stars,isNew:true}:{level:levelIndex+1,stars:stars,isNew:wasNew,perfect:stars===3});}catch(e){}
+  try{if(window.gGame)window.gGame.clear(isDailyChallenge?{daily:true,stars:stars,isNew:true,coins:stars*5}:{level:levelIndex+1,stars:stars,isNew:wasNew,perfect:stars===3,coins:stars*5});}catch(e){}
   // Interstitial every 3 levels
   interstitialCounter++;
   if(interstitialCounter%3===0)safeShowInterstitial();
@@ -7923,6 +7923,157 @@ if(typeof window.showSettings!=='function')window.showSettings=function(){showSc
     setTimeout(maybeIntro, 2500);
     var c = current(), s = load(c);
     if (pending(c, s).length) setTimeout(function(){ queueRewardCard(c); }, 3000);
+  })();
+})();
+</script>
+
+
+<!-- Growth shim — REWARDS (opt-in rewarded placements). Idempotent: data-growth-shim="REWARDS".
+     "Watch a video, double your coins" on every win overlay — the highest-
+     volume rewarded placement in casual puzzle games, missing from the whole
+     portfolio (audit 2026-10-03). Opt-in, so it is offered to Remove-Ads /
+     pass holders too (Remove Ads removes FORCED ads only).
+
+     Flow: CORE 'clear' event carries {coins} → the button appears above the
+     win overlay's button row (once per clear, only for >= 5 coins) →
+     Android.showRewarded('double_coins') → Java calls onAdReward('double_coins')
+     after the video → +coins (doubling the level reward). 'double_coins' must
+     be in MainActivity.VALID_REWARD_TYPES (check_reward_types_native).
+     window.onAdReward / onAdNotReady are wrapped so every game's own reward
+     handling is untouched for all other types. Depends on CORE (gGame).
+-->
+<script data-growth-shim="REWARDS">
+(function(){
+  if (window.__growthShimRewards) return;
+  window.__growthShimRewards = true;
+
+  function safe(fn){ try { return fn(); } catch(e){} }
+  var T = {
+    en:{btn:'Double it · +{n} 🪙', ok:'Doubled! +{n} 🪙', none:'No video right now — try again in a moment'},
+    de:{btn:'Verdoppeln · +{n} 🪙', ok:'Verdoppelt! +{n} 🪙', none:'Gerade kein Video – versuch es gleich nochmal'},
+    fr:{btn:'Doubler · +{n} 🪙', ok:'Doublé ! +{n} 🪙', none:'Aucune vidéo pour le moment, réessaie bientôt'},
+    es:{btn:'Duplicar · +{n} 🪙', ok:'¡Duplicado! +{n} 🪙', none:'No hay video ahora; inténtalo en un momento'},
+    pt:{btn:'Dobrar · +{n} 🪙', ok:'Dobrado! +{n} 🪙', none:'Nenhum vídeo agora — tente daqui a pouco'},
+    it:{btn:'Raddoppia · +{n} 🪙', ok:'Raddoppiato! +{n} 🪙', none:'Nessun video ora, riprova tra poco'},
+    tr:{btn:'İki katına çıkar · +{n} 🪙', ok:'İki katı! +{n} 🪙', none:'Şu an video yok, birazdan tekrar dene'},
+    id:{btn:'Gandakan · +{n} 🪙', ok:'Berlipat! +{n} 🪙', none:'Belum ada video, coba lagi sebentar'},
+    uk:{btn:'Подвоїти · +{n} 🪙', ok:'Подвоєно! +{n} 🪙', none:'Зараз немає відео — спробуй трохи згодом'},
+    ja:{btn:'2倍にする · +{n} 🪙', ok:'2倍！ +{n} 🪙', none:'今は動画がありません。少し後でお試しください'},
+    zh:{btn:'翻倍 · +{n} 🪙', ok:'翻倍！+{n} 🪙', none:'暂时没有视频，请稍后再试'},
+    ar:{btn:'ضاعِف · ‎+{n} 🪙', ok:'تمت المضاعفة! ‎+{n} 🪙', none:'لا يوجد فيديو الآن، حاول بعد قليل'},
+    hi:{btn:'दोगुना करें · +{n} 🪙', ok:'दोगुना! +{n} 🪙', none:'अभी कोई वीडियो नहीं — थोड़ी देर बाद कोशिश करें'}
+  };
+  function tr(k, n){
+    var l = String((window.gGame && window.gGame.lang()) || 'en').toLowerCase().split('-')[0];
+    var s = (T[l] || T.en)[k] || T.en[k];
+    return s.split('{n}').join(String(n));
+  }
+
+  var OVERLAYS = ['levelCompleteOverlay', 'dailyCompleteOverlay', 'overlay-win', 'overlay-daily', 'winOverlay', 'overlay-complete'];
+  var pending = null;   // {coins} while our video is in flight
+  var offer = null;     // {coins, used}
+
+  function visible(el){
+    if (!el) return false;
+    var cs = getComputedStyle(el);
+    return cs.display !== 'none' && cs.visibility !== 'hidden' && parseFloat(cs.opacity || '1') > 0.05 && el.getBoundingClientRect().height > 0;
+  }
+  function activeOverlay(){
+    for (var i = 0; i < OVERLAYS.length; i++){ var el = document.getElementById(OVERLAYS[i]); if (visible(el)) return el; }
+    return null;
+  }
+  function removeButtons(){ document.querySelectorAll('[data-growth-double]').forEach(function(b){ b.remove(); }); }
+
+  function injectStyle(){
+    if (document.getElementById('growth-double-css')) return;
+    var st = document.createElement('style');
+    st.id = 'growth-double-css';
+    st.textContent =
+      '[data-growth-double]{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:340px;min-height:48px;margin:4px auto 12px;' +
+        'padding:10px 12px;border-radius:14px;border:2px solid #d29922;background:var(--surface2, var(--menu-tile-bg, var(--surface, transparent)));' +
+        'color:var(--text, var(--page-fg, inherit));font:inherit;font-weight:800;font-size:clamp(0.82rem, 3.7vw, 1rem);cursor:pointer;box-sizing:border-box;' +
+        'box-shadow:0 4px 14px rgba(0,0,0,0.18);}' +
+      '[data-growth-double] .gd-play{width:28px;height:28px;flex:0 0 28px;border-radius:50%;background:#d29922;color:#fff;display:flex;' +
+        'align-items:center;justify-content:center;font-size:0.8rem;animation:gdPulse 1.6s ease-in-out infinite;}' +
+      '[data-growth-double] .gd-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}' +
+      '[data-growth-double][disabled]{opacity:.55;cursor:default;}' +
+      '@keyframes gdPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}' +
+      '@media (prefers-reduced-motion: reduce){[data-growth-double] .gd-play{animation:none;}}';
+    document.head.appendChild(st);
+  }
+
+  function place(){
+    if (!offer || offer.used) return;
+    var ov = activeOverlay(); if (!ov) return;
+    if (ov.querySelector('[data-growth-double]')) return;
+    var card = ov.querySelector('.overlay-card, .overlay-box, .modal, .overlay-content, .win-card, [class*="-card"]') || ov;
+    var row = card.querySelector('.overlay-buttons, .overlay-btns, .modal-btns, .overlay-actions') || card.querySelector('button');
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('data-growth-double', '1');
+    b.innerHTML = '<span class="gd-play">▶</span><span class="gd-label">' + tr('btn', offer.coins) + '</span>';
+    b.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      if (!offer || offer.used || pending) return;
+      if (!(window.Android && typeof window.Android.showRewarded === 'function')){ if (window.gGame) window.gGame.toast(tr('none')); return; }
+      pending = { coins: offer.coins };
+      b.setAttribute('disabled', 'disabled');
+      safe(function(){ window.Android.showRewarded('double_coins'); });
+    });
+    if (row && row.parentNode) row.parentNode.insertBefore(b, row); else card.appendChild(b);
+  }
+
+  function onReward(){
+    var p = pending; pending = null;
+    if (!p || !offer) return;
+    offer.used = true;
+    removeButtons();
+    if (window.gGame) window.gGame.addCoins(p.coins, tr('ok', p.coins));
+  }
+  function onNotReady(){
+    if (!pending) return;
+    pending = null;
+    document.querySelectorAll('[data-growth-double]').forEach(function(b){ b.removeAttribute('disabled'); });
+    if (window.gGame) window.gGame.toast(tr('none'));
+  }
+
+  // Wrap the bridge callbacks without disturbing each game's own handlers.
+  function wrap(){
+    var r = window.onAdReward;
+    if (!(r && r.__gDouble)){
+      var origR = r;
+      var nr = function(type){
+        if (type === 'double_coins'){ onReward(); return; }
+        if (typeof origR === 'function') return origR.apply(this, arguments);
+      };
+      nr.__gDouble = true;
+      window.onAdReward = nr;
+    }
+    var n = window.onAdNotReady;
+    if (!(n && n.__gDouble)){
+      var origN = n;
+      var nn = function(){
+        onNotReady();
+        if (typeof origN === 'function') return origN.apply(this, arguments);
+      };
+      nn.__gDouble = true;
+      window.onAdNotReady = nn;
+    }
+  }
+  // Games (re)assign their handlers during boot — re-wrap until settled.
+  [0, 1500, 4000, 9000].forEach(function(d){ setTimeout(wrap, d); });
+
+  (function boot(){
+    if (!window.gGame){ setTimeout(boot, 60); return; }
+    injectStyle();
+    window.gGame.on('clear', function(d){
+      var n = d && d.coins | 0;
+      removeButtons();
+      offer = (n >= 5) ? { coins: n, used: false } : null;
+      if (!offer) return;
+      wrap();
+      [400, 1000, 1800, 3000].forEach(function(t){ setTimeout(place, t); });
+    });
   })();
 })();
 </script>
