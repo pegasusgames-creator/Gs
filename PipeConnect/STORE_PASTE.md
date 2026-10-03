@@ -24,55 +24,55 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-Initial release.
+Initial release · 500 clever pipe puzzles · A new themed event every month, with trophies to win · Daily challenge with streak rewards · 7 unlockable themes · Hints and a weekly tournament · Plays fully offline.
 </en-US>
 
 <ar>
-الإصدار الأول.
+الإصدار الأول · 500 لغز أنابيب ذكي · فعالية جديدة بموضوع مختلف كل شهر مع كؤوس للفوز · تحدٍّ يومي مع مكافآت السلسلة · 7 سمات قابلة للفتح · تلميحات وبطولة أسبوعية · تعمل دون إنترنت بالكامل.
 </ar>
 
 <de-DE>
-Erstveröffentlichung.
+Erstveröffentlichung · 500 clevere Rohr-Puzzles · Jeden Monat ein neues Themen-Event mit Trophäen · Tägliche Challenge mit Serien-Belohnungen · 7 freischaltbare Designs · Hinweise und ein wöchentliches Turnier · Komplett offline spielbar.
 </de-DE>
 
 <es-419>
-Lanzamiento inicial.
+Lanzamiento inicial · 500 ingeniosos puzzles de tuberías · Un evento temático nuevo cada mes, con trofeos para ganar · Desafío diario con premios por racha · 7 temas desbloqueables · Pistas y torneo semanal · Se juega totalmente sin conexión.
 </es-419>
 
 <fr-FR>
-Version initiale.
+Première version · 500 casse-têtes de tuyaux astucieux · Un nouvel événement à thème chaque mois, avec des trophées à gagner · Défi quotidien avec récompenses de série · 7 thèmes à débloquer · Indices et tournoi hebdomadaire · Jouable entièrement hors ligne.
 </fr-FR>
 
 <hi-IN>
-प्रारंभिक विमोचन।
+पहला रिलीज़ · 500 चतुर पाइप पहेलियाँ · हर महीने नया थीम वाला इवेंट, ट्रॉफी जीतने का मौका · स्ट्रीक इनाम वाली दैनिक चुनौती · 7 अनलॉक करने योग्य थीम · संकेत और साप्ताहिक टूर्नामेंट · पूरी तरह ऑफ़लाइन खेलें।
 </hi-IN>
 
 <id>
-Rilis awal.
+Rilis perdana · 500 teka-teki pipa yang cerdas · Event bertema baru setiap bulan dengan trofi untuk dimenangkan · Tantangan harian dengan hadiah runtunan · 7 tema yang bisa dibuka · Petunjuk dan turnamen mingguan · Bisa dimainkan sepenuhnya offline.
 </id>
 
 <it-IT>
-Rilascio iniziale.
+Prima versione · 500 ingegnosi puzzle di tubi · Un nuovo evento a tema ogni mese, con trofei da vincere · Sfida giornaliera con premi per la serie · 7 temi sbloccabili · Suggerimenti e torneo settimanale · Si gioca completamente offline.
 </it-IT>
 
 <ja-JP>
-初版リリース。
+初回リリース · 500の巧妙なパイプパズル · 毎月トロフィーが手に入る新しいテーマイベント · 連続記録報酬つきデイリーチャレンジ · 解放できる7つのテーマ · ヒントと週間トーナメント · 完全オフラインでプレイ可能。
 </ja-JP>
 
 <pt-BR>
-Lançamento inicial.
+Lançamento inicial · 500 quebra-cabeças de canos engenhosos · Um evento temático novo todo mês, com troféus para ganhar · Desafio diário com prêmios por sequência · 7 temas desbloqueáveis · Dicas e torneio semanal · Funciona totalmente offline.
 </pt-BR>
 
 <tr-TR>
-Başlangıç sürümü.
+İlk sürüm · 500 zekice boru bulmacası · Her ay kupa kazanabileceğin yeni temalı bir etkinlik · Seri ödüllü günlük görev · 7 açılabilir tema · İpuçları ve haftalık turnuva · Tamamen çevrimdışı oynanır.
 </tr-TR>
 
 <uk>
-Початковий випуск.
+Перший випуск · 500 кмітливих головоломок із трубами · Щомісяця нова тематична подія з трофеями · Щоденний виклик із нагородами за серію · 7 тем для відкриття · Підказки й щотижневий турнір · Повністю офлайн.
 </uk>
 
 <zh-CN>
-初始版本。
+首次发布 · 500 个巧妙的管道谜题 · 每月全新主题活动，赢取奖杯 · 每日挑战，连胜有奖励 · 7 款可解锁主题 · 提示与每周锦标赛 · 完全离线畅玩。
 </zh-CN>
 
 ---
@@ -143,7 +143,7 @@ _Grow → Store presence → Main store listing → Full description_
 Welcome to Pipe Connect, a beautifully calm logic puzzle for anyone who likes a quiet, focused brain workout. Drag pipes from each colored endpoint to its matching pair, fill every cell on the board, and listen for the soft click when the grid clicks shut.
 
 🧠 ONE QUIET PUZZLE AT A TIME
-Every level has a single elegant solution. No timers, no lives lost on tricky moves — just you, the grid, and one of 150 hand-tuned puzzles waiting to be untangled.
+Every level has an elegant solution. No timers, no lives lost on tricky moves — just you, the grid, and one of 500 clever puzzles waiting to be untangled.
 
 ✨ THE FEEL
 • Smooth, satisfying pipe routing animations
@@ -153,14 +153,14 @@ Every level has a single elegant solution. No timers, no lives lost on tricky mo
 • Fully offline — play on flights, in line, anywhere
 
 🎯 WHAT'S IN IT
-• 150 free hand-crafted levels, from gentle 5×5 grids up to brain-bending 10×10 boards
+• 500 free solvable levels, from gentle 5×5 grids up to brain-bending 9×9 boards
 • 6 unlockable pipe themes — earn them by clearing milestones
 • Daily Challenge with login streak rewards
 • Daily Missions — three fresh objectives every 24 hours
 • Free Coins button (rewarded ad, 25 coins every 4 hours)
 • Stats screen tracking puzzles solved, perfect runs, and your longest streak
 • Lives system with free regeneration — no paywall on the core game
-• Weekly Tournament with synthetic leaderboard tiers
+• Weekly Tournament — see how your week stacks up
 
 🎁 EXTRAS (OPTIONAL)
 • Starter Pack — 100 coins + 5 hints + 5 lives + Ads Off for $0.99
@@ -182,7 +182,7 @@ Made with care by Pegasus Games.
 مرحبًا بك في Pipe Connect، لغز منطق هادئ وجميل لأي شخص يحب تمرين عقل هادئ ومركز. قم بسحب الأنابيب من كل نقطة ملونة إلى زوجها المطابق، واملأ كل خلية على اللوحة، واستمع إلى النقرات اللينة عندما تنغلق الشبكة.
 
 🧠 لُغز هادئ واحد في كل مرة
-كل مستوى له حل أنيق وحيد. لا توقيتات، ولا حياة تضيع في الحركات المعقدة — فقط أنت والشبكة وأحد 150 لغزًا تم ضبطه يدويًا في انتظار أن تحلّه.
+كل مستوى له حل أنيق. لا توقيتات، ولا حياة تضيع في الحركات المعقدة — فقط أنت والشبكة وأحد 500 لغزٍ بحلٍّ أنيق في انتظار أن تحلّه.
 
 ✨ الإحساس
 • رسوم متحركة سلسة ومُرضية لتوجيه الأنابيب
@@ -192,14 +192,14 @@ Made with care by Pegasus Games.
 • بالكامل غير متصل بالإنترنت — العب أثناء الرحلات، وفي الطوابير، في أي مكان
 
 🎯 ما الذي يحتويه
-• 150 مستوى مجاني مصمم يدويًا، من شبكات 5×5 السهلة إلى ألواح 10×10 المحيرة
+• 500 مستوى مجاني مصمم بعناية، من شبكات 5×5 السهلة إلى ألواح 9×9 المحيرة
 • 6 ثيمات أنابيب قابلة للتفتح — اكسبها عن طريق اجتياز المعالم
 • تحدي يومي مع جوائز لمن يحقق موجات تسجيل الدخول
 • مهام يومية — ثلاثة أهداف جديدة كل 24 ساعة
 • زر العملات المجانية (إعلان مكافأة، 25 عملة كل 4 ساعات)
 • شاشة إحصاءات تتعقب الألغاز المحلولة، والمشاريع المثالية، وأطول سلسلة لك
 • نظام حياة مع تجديد مجاني — لا توجد نقطة دفع على اللعبة الأساسية
-• بطولة أسبوعية مع مستويات تصنيف اصطناعية
+• بطولة أسبوعية — شاهد ترتيب أفضل أسبوع لك
 
 🎁 إضافات (اختياري)
 • حزمة البداية — 100 عملة + 5 تلميحات + 5 أرواح + إعلانات بدون 0.99 دولار
@@ -221,7 +221,7 @@ Made with care by Pegasus Games.
 Willkommen bei Pipe Connect, einem wunderschön ruhigen Logikrätsel für alle, die ein stilles, fokussiertes Gehirntraining mögen. Ziehen Sie Rohre von jedem farbigen Endpunkt zu seinem passenden Paar, füllen Sie jede Zelle auf dem Brett und hören Sie auf das sanfte Klicken, wenn das Raster sich schließt.
 
 🧠 EINE RUHIGE RÄTSELN NACH DER ANDEREN
-Jede Stufe hat eine elegante Lösung. Keine Timer, keine Leben, die bei kniffligen Zügen verloren gehen — nur Sie, das Raster und eines von 150 handverfeinerten Rätseln, die darauf warten, entwirrt zu werden.
+Jede Stufe hat eine elegante Lösung. Keine Timer, keine Leben, die bei kniffligen Zügen verloren gehen — nur Sie, das Raster und eines von 500 handverfeinerten Rätseln, die darauf warten, entwirrt zu werden.
 
 ✨ DAS GEFÜHL
 • Sanfte, zufriedenstellende Animationen beim Rohrverlegen
@@ -231,14 +231,14 @@ Jede Stufe hat eine elegante Lösung. Keine Timer, keine Leben, die bei knifflig
 • Vollständig offline — spielen Sie im Flugzeug, in der Warteschlange, überall
 
 🎯 WAS IST ENTHALTEN
-• 150 kostenlose, handgefertigte Level, von sanften 5×5 Rastern bis zu herausfordernden 10×10 Brettern
+• 500 kostenlose, raffinierte Level, von sanften 5×5 Rastern bis zu herausfordernden 9×9 Brettern
 • 6 freischaltbare Rohr-Themen — verdienen Sie diese durch das Erreichen von Meilensteinen
 • Tägliche Herausforderung mit Belohnungen für Anmeldereihen
 • Tägliche Missionen — drei neue Ziele alle 24 Stunden
 • Kostenloser Münzen-Button (belohnte Werbung, 25 Münzen alle 4 Stunden)
 • Statistiken zur Verfolgung gelöster Rätsel, perfekter Läufe und Ihrer längsten Reihe
 • Lebenssystem mit kostenloser Regeneration — keine Bezahlschranke im Hauptspiel
-• Wöchentlicher Wettbewerb mit synthetischen Bestenlisten
+• Wöchentliches Turnier — sieh, wo deine beste Woche steht
 
 🎁 EXTRAS (OPTIONAL)
 • Starter-Paket — 100 Münzen + 5 Hinweise + 5 Leben + Werbung aus für 0,99 $
@@ -259,38 +259,38 @@ Mit Sorgfalt von Pegasus Games erstellt.
 <es-419>
 Bienvenido a Pipe Connect, un hermoso puzzle lógico y tranquilo para quienes disfrutan de un ejercicio mental enfocado. Arrastra tuberías desde cada extremo de color hasta su pareja correspondiente, llena cada celda en el tablero y escucha el suave clic cuando la rejilla se cierra.
 
-🧠 UN PUZZLE TRANQUILO A LA VEZ  
-Cada nivel tiene una única solución elegante. Sin temporizadores, sin vidas perdidas en movimientos complicados, solo tú, la rejilla y uno de los 150 puzzles diseñados a mano esperando ser desmadejados.
+🧠 UN PUZZLE TRANQUILO A LA VEZ
+Cada nivel tiene una solución elegante. Sin temporizadores, sin vidas perdidas en movimientos complicados, solo tú, la rejilla y uno de los 500 puzzles diseñados a mano esperando ser desmadejados.
 
-✨ LA SENSACIÓN  
-• Animaciones de enrutamiento de tuberías suaves y satisfactorias  
-• Diseño de sonido estilo ASMR — clics suaves, tonos de confirmación delicados  
-• Ligera retroalimentación háptica en cada conexión  
-• Paleta de colores cálida pensada para largas sesiones nocturnas  
-• Totalmente offline — juega en vuelos, en fila, en cualquier lugar  
+✨ LA SENSACIÓN
+• Animaciones de enrutamiento de tuberías suaves y satisfactorias
+• Diseño de sonido estilo ASMR — clics suaves, tonos de confirmación delicados
+• Ligera retroalimentación háptica en cada conexión
+• Paleta de colores cálida pensada para largas sesiones nocturnas
+• Totalmente offline — juega en vuelos, en fila, en cualquier lugar
 
-🎯 ¿QUÉ HAY DENTRO?  
-• 150 niveles gratuitos hechos a mano, desde suaves rejillas de 5×5 hasta complicados tableros de 10×10  
-• 6 temas de tuberías desbloqueables — consíguelos al completar hitos  
-• Desafío diario con recompensas por rachas de inicio de sesión  
-• Misiones diarias — tres objetivos nuevos cada 24 horas  
-• Botón de monedas gratis (anuncio recompensado, 25 monedas cada 4 horas)  
-• Pantalla de estadísticas que rastrea puzzles resueltos, carreras perfectas y tu racha más larga  
-• Sistema de vidas con regeneración gratuita — sin muro de pago en el juego principal  
-• Torneos semanales con niveles de clasificaciones sintéticas  
+🎯 ¿QUÉ HAY DENTRO?
+• 500 niveles gratuitos ingeniosos, desde suaves rejillas de 5×5 hasta complicados tableros de 9×9
+• 6 temas de tuberías desbloqueables — consíguelos al completar hitos
+• Desafío diario con recompensas por rachas de inicio de sesión
+• Misiones diarias — tres objetivos nuevos cada 24 horas
+• Botón de monedas gratis (anuncio recompensado, 25 monedas cada 4 horas)
+• Pantalla de estadísticas que rastrea puzzles resueltos, carreras perfectas y tu racha más larga
+• Sistema de vidas con regeneración gratuita — sin muro de pago en el juego principal
+• Torneo semanal: mira dónde queda tu mejor semana
 
-🎁 EXTRAS (OPCIONALES)  
-• Paquete inicial — 100 monedas + 5 pistas + 5 vidas + sin anuncios por $0.99  
-• Pase de temporada — sin anuncios + 100 monedas/día + todos los temas + pistas ilimitadas  
-• Paquetes de monedas de 100 a 2,000 monedas, paquetes de pistas, recargas de vidas  
+🎁 EXTRAS (OPCIONALES)
+• Paquete inicial — 100 monedas + 5 pistas + 5 vidas + sin anuncios por $0.99
+• Pase de temporada — sin anuncios + 100 monedas/día + todos los temas + pistas ilimitadas
+• Paquetes de monedas de 100 a 2,000 monedas, paquetes de pistas, recargas de vidas
 
-🎮 CÓMO JUGAR  
-• Toca y arrastra desde un punto de color hasta su pareja correspondiente  
-• Las rutas no pueden cruzarse  
-• Llena cada celda en el tablero para resolver el nivel  
-• Gana tres estrellas resolviendo sin dar marcha atrás  
+🎮 CÓMO JUGAR
+• Toca y arrastra desde un punto de color hasta su pareja correspondiente
+• Las rutas no pueden cruzarse
+• Llena cada celda en el tablero para resolver el nivel
+• Gana tres estrellas resolviendo sin dar marcha atrás
 
-El tablero es un pequeño nudo silencioso — y tú tienes que desatarlo.  
+El tablero es un pequeño nudo silencioso — y tú tienes que desatarlo.
 
 Hecho con cuidado por Pegasus Games.
 </es-419>
@@ -299,7 +299,7 @@ Hecho con cuidado por Pegasus Games.
 Bienvenue dans Pipe Connect, un puzzle logique apaisant pour tous ceux qui aiment un entraînement cérébral calme et concentré. Glissez les tuyaux de chaque extrémité colorée vers son paire correspondante, remplissez chaque cellule du plateau et écoutez le doux clic lorsque la grille se verrouille.
 
 🧠 UN PUZZLE CALME À LA FOIS
-Chaque niveau a une seule solution élégante. Pas de chronomètres, pas de vies perdues sur des mouvements délicats — juste vous, la grille, et l'une des 150 énigmes conçues à la main qui attendent d'être résolues.
+Chaque niveau a une solution élégante. Pas de chronomètres, pas de vies perdues sur des mouvements délicats — juste vous, la grille, et l'une des 500 énigmes conçues à la main qui attendent d'être résolues.
 
 ✨ L'AMBIANCE
 • Animations de routage de tuyaux fluides et satisfaisantes
@@ -309,14 +309,14 @@ Chaque niveau a une seule solution élégante. Pas de chronomètres, pas de vies
 • Entièrement hors ligne — jouez en vol, dans la file d'attente, partout
 
 🎯 CE QUE VOUS TROUVEREZ
-• 150 niveaux gratuits faits à la main, des grilles accessibles de 5×5 aux tableaux déroutants de 10×10
+• 500 niveaux gratuits astucieux, des grilles accessibles de 5×5 aux tableaux déroutants de 9×9
 • 6 thèmes de tuyaux déblocables — gagnez-les en atteignant des jalons
 • Défi Quotidien avec des récompenses de connexion
 • Missions Quotidiennes — trois nouveaux objectifs toutes les 24 heures
 • Bouton de Pièces Gratuites (publicité récompensée, 25 pièces toutes les 4 heures)
 • Écran de statistiques suivant les puzzles résolus, les courses parfaites et votre plus longue série
 • Système de vies avec régénération gratuite — pas de mur payant pour le jeu principal
-• Tournoi Hebdomadaire avec niveaux de classement synthétiques
+• Tournoi hebdomadaire — voyez où se situe votre meilleure semaine
 
 🎁 SUPPLÉMENTS (OPTIONNELS)
 • Pack de Démarrage — 100 pièces + 5 indices + 5 vies + Publicités Désactivées pour 0,99 $
@@ -337,38 +337,38 @@ Fait avec soin par Pegasus Games.
 <hi-IN>
 Pipe Connect में आपका स्वागत है, एक सुंदर शांत लॉजिक पज़ल जो किसी भी व्यक्ति के लिए है जो एक शांत, केंद्रित मस्तिष्क के वर्कआउट का आनंद लेता है। हर रंग के अंत बिंदु से पाइप खींचें और इसे उसके संगत जोड़ी पर ले जाएं, बोर्ड के हर सेल को भरें, और जब ग्रिड बंद होता है तब सुनहरी क्लिक सुनें।
 
-🧠 एक समय में एक शांत पहेली  
-हर स्तर में केवल एक सुंदर समाधान होता है। कोई टाइमर नहीं, पेचीदा चालों पर कोई जीवन नहीं खोता — सिर्फ आप, ग्रिड, और 150 हस्तनिर्मित पहेलियाँ जो सुलझाने के लिए इंतजार कर रही हैं।
+🧠 एक समय में एक शांत पहेली
+हर स्तर में एक सुंदर समाधान होता है। कोई टाइमर नहीं, पेचीदा चालों पर कोई जीवन नहीं खोता — सिर्फ आप, ग्रिड, और 500 चतुर पहेलियाँ जो सुलझाने के लिए इंतजार कर रही हैं।
 
-✨ एहसास  
-• चिकनी, संतोषजनक पाइप रूटिंग एनीमेशन  
-• ASMR-शैली की ध्वनि डिज़ाइन — नरम क्लिक, हल्की पुष्टि की ध्वनियाँ  
-• हर कनेक्शन पर हल्का हैप्टिक फीडबैक  
-• लंबे शाम के सत्रों के लिए गर्म रंगों की पैलेट  
-• पूरी तरह से ऑफलाइन — उड़ानों में, लाइन में, कहीं भी खेलें  
+✨ एहसास
+• चिकनी, संतोषजनक पाइप रूटिंग एनीमेशन
+• ASMR-शैली की ध्वनि डिज़ाइन — नरम क्लिक, हल्की पुष्टि की ध्वनियाँ
+• हर कनेक्शन पर हल्का हैप्टिक फीडबैक
+• लंबे शाम के सत्रों के लिए गर्म रंगों की पैलेट
+• पूरी तरह से ऑफलाइन — उड़ानों में, लाइन में, कहीं भी खेलें
 
-🎯 इसमें क्या है  
-• 150 मुफ्त हस्तनिर्मित स्तर, सरल 5×5 ग्रिड से लेकर दिमाग को मोड़ने वाले 10×10 बोर्ड तक  
-• 6 अनलॉक होने वाले पाइप थीम — मील के पत्थर को साफ करके कमाएं  
-• दैनिक चुनौती के साथ लॉगिन श्रृंखला पुरस्कार  
-• दैनिक मिशन — हर 24 घंटे में तीन नए उद्देश्य  
-• मुफ्त सिक्के बटन (पुरস্কृत विज्ञापन, हर 4 घंटे में 25 सिक्के)  
-• सांख्यिकी स्क्रीन जो हल की गई पहेलियों, परफेक्ट रन, और आपकी सबसे लंबी श्रृंखला को ट्रैक करती है  
-• मुफ्त पुनर्जनन के साथ जीवन प्रणाली — मुख्य खेल पर कोई भुगतान दीवार नहीं  
-• साप्ताहिक टूर्नामेंट के साथ सिंथेटिक लीडरबोर्ड स्तर  
+🎯 इसमें क्या है
+• 500 मुफ्त चतुर स्तर, सरल 5×5 ग्रिड से लेकर दिमाग को मोड़ने वाले 9×9 बोर्ड तक
+• 6 अनलॉक होने वाले पाइप थीम — मील के पत्थर को साफ करके कमाएं
+• दैनिक चुनौती के साथ लॉगिन श्रृंखला पुरस्कार
+• दैनिक मिशन — हर 24 घंटे में तीन नए उद्देश्य
+• मुफ्त सिक्के बटन (पुरস্কृत विज्ञापन, हर 4 घंटे में 25 सिक्के)
+• सांख्यिकी स्क्रीन जो हल की गई पहेलियों, परफेक्ट रन, और आपकी सबसे लंबी श्रृंखला को ट्रैक करती है
+• मुफ्त पुनर्जनन के साथ जीवन प्रणाली — मुख्य खेल पर कोई भुगतान दीवार नहीं
+• साप्ताहिक टूर्नामेंट — देखें आपका सर्वश्रेष्ठ सप्ताह कहाँ है
 
-🎁 अतिरिक्त (वैकल्पिक)  
-• स्टार्टर पैक — 100 सिक्के + 5 संकेत + 5 जीवन + विज्ञापनों के बिना $0.99 में  
-• सीज़न पास — विज्ञापन-मुक्त + 100 सिक्के/दिन + सभी थीम + अनलिमिटेड संकेत  
-• 100 से 2000 सिक्कों के सिक्का पैक, संकेत पैक, जीवन पुनः भरना  
+🎁 अतिरिक्त (वैकल्पिक)
+• स्टार्टर पैक — 100 सिक्के + 5 संकेत + 5 जीवन + विज्ञापनों के बिना $0.99 में
+• सीज़न पास — विज्ञापन-मुक्त + 100 सिक्के/दिन + सभी थीम + अनलिमिटेड संकेत
+• 100 से 2000 सिक्कों के सिक्का पैक, संकेत पैक, जीवन पुनः भरना
 
-🎮 खेलना कैसे है  
-• एक रंगीन बिंदु पर टैप करें और उसे उसकी संगत साथी पर खींचें  
-• मार्ग क्रॉस नहीं कर सकते  
-• स्तर को हल करने के लिए बोर्ड के हर सेल को भरें  
-• बिना फिर से ट्रेस किए हल करने पर तीन सितारे कमाएं  
+🎮 खेलना कैसे है
+• एक रंगीन बिंदु पर टैप करें और उसे उसकी संगत साथी पर खींचें
+• मार्ग क्रॉस नहीं कर सकते
+• स्तर को हल करने के लिए बोर्ड के हर सेल को भरें
+• बिना फिर से ट्रेस किए हल करने पर तीन सितारे कमाएं
 
-बोर्ड एक शांत छोटा गाँठ है — और आपको इसे खोलना है।  
+बोर्ड एक शांत छोटा गाँठ है — और आपको इसे खोलना है।
 
 पीगासस गेम्स द्वारा ध्यान से बनाया गया।
 </hi-IN>
@@ -377,7 +377,7 @@ Pipe Connect में आपका स्वागत है, एक सुं�
 Selamat datang di Pipe Connect, teka-teki logika yang tenang dan indah untuk siapa saja yang menyukai latihan otak yang fokus. Seret pipa dari setiap titik warna ke pasangan yang cocok, isi setiap sel di papan, dan dengarkan suara lembut saat grid terhubung.
 
 🧠 SATU TEKA-TEKI TENANG SEKALIGUS
-Setiap level memiliki satu solusi elegan. Tanpa batas waktu, tanpa kehilangan nyawa atas gerakan sulit — hanya Anda, grid, dan salah satu dari 150 teka-teki yang telah disesuaikan menunggu untuk dipecahkan.
+Setiap level memiliki solusi yang elegan. Tanpa batas waktu, tanpa kehilangan nyawa atas gerakan sulit — hanya Anda, grid, dan salah satu dari 500 teka-teki yang telah disesuaikan menunggu untuk dipecahkan.
 
 ✨ PERASAAN
 • Animasi jalur pipa yang halus dan memuaskan
@@ -387,14 +387,14 @@ Setiap level memiliki satu solusi elegan. Tanpa batas waktu, tanpa kehilangan ny
 • Sepenuhnya offline — mainkan di pesawat, dalam antrean, di mana saja
 
 🎯 APA YANG ADA DI DALAMNYA
-• 150 level gratis yang dibuat dengan tangan, dari grid 5×5 yang lembut hingga papan 10×10 yang menantang
+• 500 level gratis yang cerdas, dari grid 5×5 yang lembut hingga papan 9×9 yang menantang
 • 6 tema pipa yang dapat dibuka — dapatkan dengan menyelesaikan tonggak
 • Tantangan Harian dengan hadiah streak login
 • Misi Harian — tiga tujuan baru setiap 24 jam
 • Tombol Koin Gratis (iklan berhadiah, 25 koin setiap 4 jam)
 • Layar statistik yang melacak teka-teki yang diselesaikan, run sempurna, dan streak terpanjang Anda
 • Sistem nyawa dengan regenerasi gratis — tidak ada dinding bayar pada permainan inti
-• Turnamen Mingguan dengan tier papan peringkat sintetis
+• Turnamen Mingguan — lihat posisi minggu terbaikmu
 
 🎁 EKSTRA (OPSIONAL)
 • Paket Pemula — 100 koin + 5 petunjuk + 5 nyawa + Iklan Dimatikan seharga $0,99
@@ -416,7 +416,7 @@ Dibuat dengan hati-hati oleh Pegasus Games.
 Benvenuto in Pipe Connect, un puzzle logico splendidamente rilassante per chi ama un allenamento mentale tranquillo e concentrato. Trascina i tubi da ciascun estremità colorata alla sua coppia corrispondente, riempi ogni cella della griglia e ascolta il dolce clic quando la griglia si chiude.
 
 🧠 UN PUZZLE TRANQUILLO ALLA VOLTA
-Ogni livello ha una sola elegante soluzione. Niente timer, nessuna vita persa in mosse complicate: solo tu, la griglia e uno dei 150 puzzle creati a mano in attesa di essere risolti.
+Ogni livello ha un'elegante soluzione. Niente timer, nessuna vita persa in mosse complicate: solo tu, la griglia e uno dei 500 puzzle creati a mano in attesa di essere risolti.
 
 ✨ L'ATMOFERA
 • Animazioni fluide e soddisfacenti del percorso dei tubi
@@ -426,14 +426,14 @@ Ogni livello ha una sola elegante soluzione. Niente timer, nessuna vita persa in
 • Completamente offline — gioca in volo, in coda, ovunque
 
 🎯 COSA C'È DENTRO
-• 150 livelli gratuiti fatti a mano, da griglie dolci 5×5 a tabelloni 10×10 che sfidano la mente
+• 500 livelli gratuiti ingegnosi, da griglie dolci 5×5 a tabelloni 9×9 che sfidano la mente
 • 6 temi di tubi sbloccabili — guadagnali completando traguardi
 • Sfida Giornaliera con ricompense per accesso continuo
 • Missioni Giornalieri — tre nuovi obiettivi ogni 24 ore
 • Pulsante Monete gratuito (video promozionale, 25 monete ogni 4 ore)
 • Schermata statistiche per tenere traccia dei puzzle risolti, dei percorsi perfetti e della tua serie più lunga
 • Sistema di vite con rigenerazione gratuita — nessun muro di pagamento nel gioco principale
-• Torneo Settimanale con livelli della classifica sintetica
+• Torneo settimanale — scopri dove si piazza la tua settimana migliore
 
 🎁 EXTRA (OPZIONALI)
 • Pacchetto Iniziale — 100 monete + 5 suggerimenti + 5 vite + Annunci disattivati per $0.99
@@ -455,7 +455,7 @@ Realizzato con cura da Pegasus Games.
 パイプコネクトへようこそ。静かで集中できる頭の体操を楽しむ人のための美しい論理パズルです。各色のエンドポイントから対応するペアにパイプをドラッグし、ボード上のすべてのセルを埋め、グリッドが閉じるときの柔らかなクリック音を楽しんでください。
 
 🧠 一度に一つの静かなパズル
-すべてのレベルには、わずかに優雅な解法があります。タイマーなし、難しい動きで命を失うこともなし — あなたとグリッド、そして150の手作りのパズルのうちの一つがあります。
+すべてのレベルに優雅な解法があります。タイマーなし、難しい動きで命を失うこともなし — あなたとグリッド、そして500の巧妙なパズルのうちの一つがあります。
 
 ✨ 感触
 • 滑らかで満足感のあるパイプルーティングアニメーション
@@ -465,14 +465,14 @@ Realizzato con cura da Pegasus Games.
 • 完全オフライン — 飛行機内や列の中、どこでもプレイ可能
 
 🎯 何が含まれているか
-• 優しい5×5グリッドから脳をひねる10×10ボードまで、150の無料ハンドクラフトレベル
+• 優しい5×5グリッドから脳をひねる9×9ボードまで、500の無料の巧妙なレベル
 • 6つの解除可能なパイプテーマ — マイルストーンをクリアすることで獲得
 • ログインボーナスがあるデイリーチャレンジ
 • デイリーミッション — 24時間ごとに新しい三つの目標
 • 無料コインボタン（広告視聴で獲得、4時間ごとに25コイン）
 • 解決したパズルの数、パーフェクトなプレイ、最長の連続記録を追跡する統計画面
 • 無料再生可能なライフシステム — コアゲームに支払いの壁なし
-• 合成リーダーボード階層を持つ週刊トーナメント
+• 週間トーナメント — ベスト記録の順位をチェック
 
 🎁 エクストラ（オプション）
 • スターティングパック — 100コイン + 5ヒント + 5ライフ + 広告オフ $0.99
@@ -493,36 +493,36 @@ Realizzato con cura da Pegasus Games.
 <pt-BR>
 Bem-vindo ao Pipe Connect, um puzzle lógico calmamente bonito para quem gosta de um exercício cerebral tranquilo e focado. Arraste canos de cada extremidade colorida para seu par correspondente, preencha cada célula do tabuleiro e ouça o suave clique quando a grade se fechar.
 
-🧠 UM PUZZLE SILENCIOSO POR VEZ  
-Cada nível possui uma única solução elegante. Sem cronômetros, sem vidas perdidas em movimentos complicados — apenas você, a grade e um dos 150 puzzles cuidadosamente elaborados esperando para serem desvendados.
+🧠 UM PUZZLE SILENCIOSO POR VEZ
+Cada nível possui uma solução elegante. Sem cronômetros, sem vidas perdidas em movimentos complicados — apenas você, a grade e um dos 500 puzzles cuidadosamente elaborados esperando para serem desvendados.
 
-✨ A SENSÇÃO  
-• Animações de roteamento de canos suaves e satisfatórias  
-• Design de som estilo ASMR — cliques suaves, tons de confirmação delicados  
-• Feedback tátil leve em cada conexão  
-• Paleta de cores quentes, ideal para longas sessões noturnas  
-• Totalmente offline — jogue durante voos, em filas, em qualquer lugar  
+✨ A SENSÇÃO
+• Animações de roteamento de canos suaves e satisfatórias
+• Design de som estilo ASMR — cliques suaves, tons de confirmação delicados
+• Feedback tátil leve em cada conexão
+• Paleta de cores quentes, ideal para longas sessões noturnas
+• Totalmente offline — jogue durante voos, em filas, em qualquer lugar
 
-🎯 O QUE TEM NELE  
-• 150 níveis gratuitos feitos à mão, desde grades suaves de 5×5 até tabuleiros desafiadores de 10×10  
-• 6 temas de canos desbloqueáveis — ganhe ao atingir marcos  
-• Desafio Diário com recompensas por sequência de login  
-• Missões Diárias — três objetivos novos a cada 24 horas  
-• Botão de Moedas Gratuitas (anúncio recompensado, 25 moedas a cada 4 horas)  
-• Tela de estatísticas rastreando puzzles resolvidos, corridas perfeitas e sua maior sequência  
-• Sistema de vidas com regeneração gratuita — sem limite de pagamento no jogo principal  
-• Torneio Semanal com níveis de leaderboard sintéticos  
+🎯 O QUE TEM NELE
+• 500 níveis gratuitos engenhosos, desde grades suaves de 5×5 até tabuleiros desafiadores de 9×9
+• 6 temas de canos desbloqueáveis — ganhe ao atingir marcos
+• Desafio Diário com recompensas por sequência de login
+• Missões Diárias — três objetivos novos a cada 24 horas
+• Botão de Moedas Gratuitas (anúncio recompensado, 25 moedas a cada 4 horas)
+• Tela de estatísticas rastreando puzzles resolvidos, corridas perfeitas e sua maior sequência
+• Sistema de vidas com regeneração gratuita — sem limite de pagamento no jogo principal
+• Torneio Semanal — veja onde sua melhor semana se posiciona
 
-🎁 EXTRAS (OPCIONAL)  
-• Pacote Inicial — 100 moedas + 5 dicas + 5 vidas + Ads Off por $0,99  
-• Passe de Temporada — sem anúncios + 100 moedas/dia + todos os temas + dicas ilimitadas  
-• Pacotes de moedas de 100 a 2.000 moedas, pacotes de dicas, recargas de vidas  
+🎁 EXTRAS (OPCIONAL)
+• Pacote Inicial — 100 moedas + 5 dicas + 5 vidas + Ads Off por $0,99
+• Passe de Temporada — sem anúncios + 100 moedas/dia + todos os temas + dicas ilimitadas
+• Pacotes de moedas de 100 a 2.000 moedas, pacotes de dicas, recargas de vidas
 
-🎮 COMO JOGAR  
-• Toque e arraste de um ponto colorido para seu parceiro correspondente  
-• Os trajetos não podem se cruzar  
-• Preencha cada célula do tabuleiro para resolver o nível  
-• Ganhe três estrelas ao resolver sem retrazar  
+🎮 COMO JOGAR
+• Toque e arraste de um ponto colorido para seu parceiro correspondente
+• Os trajetos não podem se cruzar
+• Preencha cada célula do tabuleiro para resolver o nível
+• Ganhe três estrelas ao resolver sem retrazar
 
 O tabuleiro é um pequeno nó silencioso — e você vai desamarrá-lo.
 
@@ -533,7 +533,7 @@ Feito com cuidado pela Pegasus Games.
 Pipe Connect'e hoş geldiniz, sessiz, odaklanmış bir beyin egzersizi arayan herkes için huzurlu bir mantık bulmacası. Renkli uçlardan boruları eşleşen çiftine sürükleyin, tahtadaki her hücreyi doldurun ve ızgaranın kapandığında çıkan yumuşak tıklamayı dinleyin.
 
 🧠 BİR SESSİZ BULMACA
-Her seviyenin tek bir zarif çözümü vardır. Süre sınırlaması yok, zor hamlelerde yaşam kaybı yok — sadece siz, ızgara ve çözüme kavuşmayı bekleyen 150 el yapımı bulmacadan biri.
+Her seviyenin zarif bir çözümü vardır. Süre sınırlaması yok, zor hamlelerde yaşam kaybı yok — sadece siz, ızgara ve çözüme kavuşmayı bekleyen 500 akıllı bulmacadan biri.
 
 ✨ HİSSİ
 • Akıcı, tatmin edici boru yönlendirme animasyonları
@@ -543,14 +543,14 @@ Her seviyenin tek bir zarif çözümü vardır. Süre sınırlaması yok, zor ha
 • Tamamen çevrimdışı — uçuşta, sırada, her yerde oynayın
 
 🎯 İÇİNDE NE VAR
-• 5×5 hafif ızgaralardan 10×10 kafa karıştırıcı tahtalara kadar 150 ücretsiz el yapımı seviye
+• 5×5 hafif ızgaralardan 9×9 kafa karıştırıcı tahtalara kadar 500 ücretsiz akıllı seviye
 • 6 açılabilir boru teması — kilometre taşlarını temizleyerek kazanın
 • Günlük meydan okuma ile giriş streak ödülleri
 • Günlük görevler — her 24 saatte üç yeni hedef
 • Ücretsiz Madeni Para butonu (ödüllü reklam, her 4 saatte 25 madeni para)
 • Çözülen bulmacalar, mükemmel oyunlar ve en uzun serinizi takip eden istatistik ekranı
 • Ücretsiz yenilenme ile yaşam sistemi — ana oyunda ödeme duvarı yok
-• Sentetik liderlik seviyeleri ile haftalık turnuva
+• Haftalık turnuva — en iyi haftanın sıralamasını gör
 
 🎁 EKSTRA (İSTEĞE BAĞLI)
 • Başlangıç Paketi — 100 madeni para + 5 ipucu + 5 yaşam + Reklamsız 0,99 dolara
@@ -572,7 +572,7 @@ Pegasus Oyunları tarafından özenle hazırlanmıştır.
 Ласкаво просимо до Pipe Connect, спокійної логічної головоломки для тих, хто любить тихе та зосереджене тренування розуму. Перетягуйте труби з кожної кольорової точки до відповідної пари, заповніть кожну клітину на полі та слухайте ніжний клацання, коли сітка закривається.
 
 🧠 ОДНА СПОКІЙНА ГОЛОВОЛОМКА ЗА РАЗ
-Кожен рівень має єдине елегантне рішення. Без таймерів, без втрати життів через складні ходи — лише ви, сітка та одна з 150 ручно налаштованих головоломок, які чекають на розв'язання.
+Кожен рівень має елегантне рішення. Без таймерів, без втрати життів через складні ходи — лише ви, сітка та одна з 500 продуманих головоломок, які чекають на розв'язання.
 
 ✨ ВІДЧУТТЯ
 • Плавні, задовольняючі анімації прокладання труб
@@ -582,14 +582,14 @@ Pegasus Oyunları tarafından özenle hazırlanmıştır.
 • Повністю офлайн — грайте в літаках, у чергах, будь-де
 
 🎯 ЩО В ТОМУ
-• 150 безкоштовних рівнів ручної роботи, від легких 5×5 до заплутаних 10×10
+• 500 безкоштовних продуманих рівнів, від легких 5×5 до заплутаних 9×9
 • 6 тем труби, що відкриваються — отримуйте їх за досягнення етапів
 • Щоденний виклик з винагородами за послідовності входу
 • Щоденні місії — три нові завдання кожні 24 години
 • Кнопка безкоштовних монет (реклама, 25 монет кожні 4 години)
 • Екран статистики з відстеженням вирішених головоломок, ідеальних серій та найтривалішої послідовності
 • Система життів з безкоштовним відновленням — без платних вхідних на основну гру
-• Щотижневий турнір з синтетичними категоріями лідерів
+• Щотижневий турнір — дізнайся, де твій найкращий тиждень
 
 🎁 ДОПОЛНЕННЯ (НЕ ОБОВ'ЯЗКОВО)
 • Стартовий пакет — 100 монет + 5 підказок + 5 життів + відсутність реклами за $0.99
@@ -611,7 +611,7 @@ Pegasus Oyunları tarafından özenle hazırlanmıştır.
 欢迎来到流水管连接，这是一款优雅宁静的逻辑益智游戏，适合喜欢安静、专注思考的玩家。将每个颜色端点的管道拖动到匹配的另一端，填满棋盘上的每一个单元格，当网格闭合时可以听到轻柔的点击声。
 
 🧠 一次解一个安静的谜题
-每个关卡都有一个优雅的解法。没有计时器，也不会因难度而失去生命 — 只有你、棋盘和等待被解开的150个精心调校的谜题。
+每个关卡都有优雅的解法。没有计时器，也不会因难度而失去生命 — 只有你、棋盘和等待被解开的500个精心调校的谜题。
 
 ✨ 游戏体验
 • 平滑、令人满意的管道布局动画
@@ -621,14 +621,14 @@ Pegasus Oyunları tarafından özenle hazırlanmıştır.
 • 完全离线 — 可在飞行中、排队时随时畅玩
 
 🎯 游戏内容
-• 150个免费手工制作的关卡，从简单的5×5网格到难度较高的10×10布局
+• 500个免费精心设计的关卡，从简单的5×5网格到难度较高的9×9布局
 • 6个可解锁的管道主题 — 通过完成里程碑来获得它们
 • 每日挑战，登录连击奖励
 • 每日任务 — 每24小时更新三个新目标
 • 免费金币按钮（奖励广告，每4小时获得25个金币）
 • 统计屏幕，跟踪已解谜题数量、完美通关和最长连击
 • 生命系统可免费再生 — 核心游戏无付费墙
-• 每周锦标赛，设有合成排行榜等级
+• 每周锦标赛 — 看看你的最佳成绩排在哪里
 
 🎁 额外功能（可选）
 • 起始包 — 100金币 + 5个提示 + 5条生命 + 关掉广告，仅需$0.99
@@ -711,7 +711,7 @@ Renkli boruları bağlayın ve
 _Apple App Store Connect → Version → Keywords_
 
 <en-US>
-pipe puzzle,flow free,connect pipes,color connect,brain puzzle,relaxing,offline
+pipe puzzle,connect the dots,connect pipes,color connect,brain puzzle,relaxing,offline
 </en-US>
 
 <ar>

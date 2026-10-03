@@ -24,55 +24,55 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-Polish & fixes.
+New: monthly events! Collect pumpkins in the Pumpkin Hunt — a fresh themed event every month — to win coins, hints, unlimited lives and a trophy. Weekend Rush doubles your tokens and Golden Hour (7–8 pm) adds bonus coins. Fixed: daily streaks now count correctly, reminders and Streak Shields work, the Perfectionist and No Hints achievements track your solves, and your progress shows on the Play Games leaderboard. Happy puzzling!
 </en-US>
 
 <ar>
-تلميع وإصلاحات.
+جديد: فعاليات كل شهر! اجمع اليقطين في «البحث عن اليقطين» — فعالية بموضوع جديد كل شهر — واربح عملات وتلميحات وأرواحًا غير محدودة وكأسًا. اندفاعة نهاية الأسبوع تضاعف رموزك، والساعة الذهبية (7–8 مساءً) تمنحك عملات إضافية. تم الإصلاح: السلاسل اليومية تُحتسب بشكل صحيح، والتذكيرات ودرع السلسلة تعمل، وإنجازا «المثالي» و«بلا تلميحات» يتقدمان، وتقدّمك يظهر في لوحة صدارة ألعاب Play.
 </ar>
 
 <de-DE>
-Politur & Fehlerbehebungen.
+Neu: monatliche Events! Sammle Kürbisse bei der Kürbisjagd – jeden Monat ein neues Themen-Event – und gewinne Münzen, Hinweise, unendliche Leben und eine Trophäe. Der Wochenend-Rausch verdoppelt deine Marken, die Goldene Stunde (19–20 Uhr) bringt Bonusmünzen. Behoben: Tagesserien zählen korrekt, Erinnerungen und Serienschutz funktionieren, die Erfolge Perfektionist und Ohne Hinweise zählen mit, und dein Fortschritt erscheint in der Play-Games-Bestenliste.
 </de-DE>
 
 <es-419>
-Pulido y correcciones.
+¡Nuevo: eventos cada mes! Junta calabazas en la Caza de calabazas —un evento temático nuevo cada mes— y gana monedas, pistas, vidas ilimitadas y un trofeo. La Fiebre de fin de semana duplica tus fichas y la Hora dorada (19–20 h) da monedas extra. Corregido: las rachas diarias cuentan bien, los recordatorios y escudos de racha funcionan, los logros Perfeccionista y Sin pistas avanzan y tu progreso aparece en la tabla de Play Juegos.
 </es-419>
 
 <fr-FR>
-Améliorations et corrections.
+Nouveau : des événements chaque mois ! Récolte des citrouilles pendant la Chasse aux citrouilles – un nouvel événement à thème chaque mois – pour gagner pièces, indices, vies illimitées et un trophée. Le Rush du week-end double tes jetons et l'Heure dorée (19 h–20 h) offre des pièces bonus. Corrigé : les séries quotidiennes se comptent bien, rappels et boucliers fonctionnent, les succès Perfectionniste et Sans indice progressent, et ta progression s'affiche au classement Play Jeux.
 </fr-FR>
 
 <hi-IN>
-सुधार और बग फिक्स।
+नया: हर महीने इवेंट! कद्दू खोज में कद्दू जमा करें — हर महीने नया थीम वाला इवेंट — और सिक्के, संकेत, असीमित जीवन व ट्रॉफी जीतें। वीकेंड रश टोकन दोगुने करता है और गोल्डन आवर (शाम 7–8 बजे) बोनस सिक्के देता है। सुधार: दैनिक स्ट्रीक सही गिनी जाती है, रिमाइंडर और स्ट्रीक शील्ड काम करते हैं, परफ़ेक्शनिस्ट और बिना संकेत उपलब्धियाँ अब गिनी जाती हैं, और आपकी प्रगति Play Games लीडरबोर्ड पर दिखती है।
 </hi-IN>
 
 <id>
-Penyempurnaan & perbaikan.
+Baru: event setiap bulan! Kumpulkan labu di Berburu Labu — event bertema baru tiap bulan — dan menangkan koin, petunjuk, nyawa tak terbatas, dan trofi. Serbu Akhir Pekan menggandakan tokenmu dan Jam Emas (19.00–20.00) memberi koin bonus. Diperbaiki: runtunan harian dihitung dengan benar, pengingat dan Perisai Runtunan berfungsi, pencapaian Perfeksionis dan Tanpa Petunjuk kini tercatat, dan progresmu tampil di papan peringkat Play Games.
 </id>
 
 <it-IT>
-Rifiniture e correzioni.
+Novità: eventi ogni mese! Raccogli zucche nella Caccia alle zucche – un nuovo evento a tema ogni mese – e vinci monete, suggerimenti, vite infinite e un trofeo. La Corsa del weekend raddoppia i gettoni e l'Ora d'oro (19–20) regala monete bonus. Corretto: le serie giornaliere si contano bene, promemoria e scudi funzionano, gli obiettivi Perfezionista e Senza aiuti avanzano e i progressi compaiono nella classifica Play Giochi.
 </it-IT>
 
 <ja-JP>
-改善とバグ修正。
+新機能：毎月のイベント！パンプキンハント（毎月テーマが変わります）でカボチャを集めて、コイン、ヒント、無限ライフ、トロフィーをゲット。週末ラッシュでトークン2倍、ゴールデンアワー（19〜20時）でボーナスコイン。修正：デイリー連続記録が正しくカウントされ、リマインダーと連続記録シールドが動作し、実績「完璧主義者」「ヒントなし」が進行し、進捗が Play ゲームのリーダーボードに表示されます。
 </ja-JP>
 
 <pt-BR>
-Polimento e correções.
+Novidade: eventos todo mês! Junte abóboras na Caça às Abóboras — um evento temático novo a cada mês — e ganhe moedas, dicas, vidas infinitas e um troféu. A Corrida de Fim de Semana dobra suas fichas e a Hora de Ouro (19h–20h) dá moedas extras. Corrigido: sequências diárias contam certo, lembretes e escudos funcionam, as conquistas Perfeccionista e Sem Dicas avançam e seu progresso aparece no ranking do Play Games.
 </pt-BR>
 
 <tr-TR>
-İyileştirmeler ve düzeltmeler.
+Yeni: her ay etkinlik! Balkabağı Avı'nda balkabağı topla – her ay yeni temalı bir etkinlik – altın, ipucu, sınırsız can ve kupa kazan. Hafta Sonu Telaşı jetonlarını ikiye katlar, Altın Saat (19.00–20.00) ek altın verir. Düzeltildi: günlük seriler doğru sayılır, hatırlatıcılar ve seri kalkanı çalışır, Mükemmeliyetçi ve İpuçsuz başarımları ilerler, ilerlemen Play Games sıralamasında görünür. İyi bulmacalar!
 </tr-TR>
 
 <uk>
-Покращення та виправлення.
+Нове: щомісячні події! Збирай гарбузи в «Полюванні на гарбузи» — щомісяця нова тематична подія — і вигравай монети, підказки, безлімітні життя та трофей. Вихідний ривок подвоює жетони, а Золота година (19:00–20:00) дає бонусні монети. Виправлено: щоденні серії рахуються правильно, нагадування й щит серії працюють, досягнення «Перфекціоніст» і «Без підказок» зараховуються, а прогрес видно в таблиці Play Ігор.
 </uk>
 
 <zh-CN>
-优化和错误修复。
+全新每月活动！在「南瓜大搜寻」中收集南瓜——每月都有全新主题活动——赢取金币、提示、无限生命和奖杯。周末狂欢让代币翻倍，黄金时段（19–20点）额外送金币。修复：每日连胜计数正确，提醒和连胜护盾正常工作，「完美主义者」「零提示」成就开始累计，你的进度会显示在 Play 游戏排行榜上。解谜愉快！
 </zh-CN>
 
 ---
@@ -82,7 +82,7 @@ Polimento e correções.
 _Grow → Store presence → Main store listing → Short description_
 
 <en-US>
-Number clues, hidden pictures. Slow logic. No timers. A daily picross.
+Number clues, hidden pictures. Slow logic. No timers. A daily nonogram.
 </en-US>
 
 <ar>
@@ -94,11 +94,11 @@ Zahlenrätsel, versteckte Bilder. Entspanntes Logikspiel. Tägliches Puzzle.
 </de-DE>
 
 <es-419>
-Pistas, imágenes ocultas. Lógica calma, sin reloj. Picross diario.
+Pistas, imágenes ocultas. Lógica calma, sin reloj. Nonogram diario.
 </es-419>
 
 <fr-FR>
-Indices numériques, images cachées. Pas de minuteurs. Picross quotidien.
+Indices numériques, images cachées. Pas de minuteurs. Nonogram quotidien.
 </fr-FR>
 
 <hi-IN>
@@ -106,11 +106,11 @@ Indices numériques, images cachées. Pas de minuteurs. Picross quotidien.
 </hi-IN>
 
 <id>
-Petunjuk angka, gambar tersembunyi. Logika santai. Tanpa timer. Picross harian.
+Petunjuk angka, gambar tersembunyi. Logika santai. Tanpa timer. Nonogram harian.
 </id>
 
 <it-IT>
-Indovinelli e immagini nascoste. Logica lenta, no timer. Picross quotidiano.
+Indovinelli e immagini nascoste. Logica lenta, no timer. Nonogram quotidiano.
 </it-IT>
 
 <ja-JP>
@@ -118,11 +118,11 @@ Indovinelli e immagini nascoste. Logica lenta, no timer. Picross quotidiano.
 </ja-JP>
 
 <pt-BR>
-Dicas e imagens ocultas. Lógica calma, sem cronômetro. Picross diário.
+Dicas e imagens ocultas. Lógica calma, sem cronômetro. Nonogram diário.
 </pt-BR>
 
 <tr-TR>
-Sayı ipuçları, gizli resimler. Yavaş mantık. Zamanlayıcı yok. Günlük picross.
+Sayı ipuçları, gizli resimler. Yavaş mantık. Zamanlayıcı yok. Günlük nonogram.
 </tr-TR>
 
 <uk>
@@ -142,7 +142,7 @@ _Grow → Store presence → Main store listing → Full description_
 <en-US>
 Mark a row. Count a column. Watch a pixel-art picture emerge from a grid of nothing.
 
-500 hand-made boards. No timer. No streak you can break by skipping a day. Just the slow satisfaction of clue-driven logic.
+500 solvable boards. No timer. No streak you can break by skipping a day. Just the slow satisfaction of clue-driven logic.
 
 ✨ THE FEEL
 • Warm paper aesthetic — relaxing on the eyes after a long screen day
@@ -151,13 +151,13 @@ Mark a row. Count a column. Watch a pixel-art picture emerge from a grid of noth
 • Picture-reveal moment when the final cell falls into place
 
 🧠 BRAIN-BENDING LOGIC
-500 hand-crafted brain-teaser puzzles ramping from a 5×5 warm-up to a 20×20 you'll come back to for days. Every puzzle is solvable by logic — no guessing required.
+500 solvable brain-teaser puzzles ramping from a 5×5 warm-up to a 20×20 you'll come back to for days. Every puzzle is solvable by logic — no guessing required.
 
 🎯 WHAT'S IN IT
 • Free to play — every one of the 500 boards included, no paywall
 • Four grid sizes: 5×5 BEGINNER → 20×20 EXPERT
 • Boosters when you're stuck: Hint, Reveal Cell (auto-fills a provably-correct cell), Reveal Row (solves a whole row)
-• Daily Picross — one fresh nonogram every morning, always solvable
+• Daily Nonogram — one fresh nonogram every morning, always solvable
 • Daily missions — three fresh objectives every 24 hours
 • Weekly Tournament — a personal-record challenge each week; beat your own record to earn coins
 • Seasonal events — Halloween, Winter and Spring bring limited-time themes
@@ -189,7 +189,7 @@ Unlock new color palettes as you climb the level ladder. In October, December an
 • Weekly Pass — ad-free, +50 coins daily, all themes, unlimited hints (7 days, no commitment)
 • Extra Lives — restore 5 lives instantly · Unlimited Lives 1h · Unlimited Lives forever
 
-Also called picross, hanjie, or paint by numbers. Whatever you call it, it's the calmest twenty minutes you'll spend with your phone today.
+Also called nonogram, hanjie, or paint by numbers. Whatever you call it, it's the calmest twenty minutes you'll spend with your phone today.
 </en-US>
 
 <ar>
@@ -263,7 +263,7 @@ Markiere eine Reihe. Zähle eine Spalte. Schau, wie ein Pixel-Art-Bild aus einem
 • Kostenlos spielbar – alle 500 Boards enthalten, kein Bezahlschranke
 • Vier Gittergrößen: 5×5 ANFÄNGER → 20×20 EXPERTE
 • Booster, wenn du feststeckst: Hinweis, Zelle enthüllen (füllt automatisch eine nachweislich richtige Zelle), Reihe enthüllen (löst eine ganze Reihe)
-• Tägliches Picross – jeden Morgen ein frisches Nonogramm, immer lösbar
+• Tägliches Nonogram – jeden Morgen ein frisches Nonogramm, immer lösbar
 • Tägliche Missionen – drei frische Ziele alle 24 Stunden
 • Wöchentliches Turnier — eine Bestleistungs-Challenge pro Woche; schlag deinen eigenen Rekord, um Münzen zu verdienen
 • Saisonale Events – Halloween, Winter und Frühling bringen zeitlich begrenzte Themen
@@ -295,7 +295,7 @@ Schalte neue Farbpaletten frei, während du die Levelleiter hinaufsteigst. Im Ok
 • Wöchentlicher Pass – werbefrei, +50 Münzen täglich, alle Themen, unbegrenzte Hinweise (7 Tage, keine Verpflichtung)
 • Zusätzliche Leben – 5 Leben sofort wiederherstellen · Unlimitierte Leben 1h · Unlimitierte Leben für immer
 
-Auch bekannt als Picross, Hanjie oder Malen nach Zahlen. Wie immer du es nennst, es sind die ruhigsten zwanzig Minuten, die du heute mit deinem Telefon verbringen wirst.
+Auch bekannt als Nonogram, Hanjie oder Malen nach Zahlen. Wie immer du es nennst, es sind die ruhigsten zwanzig Minuten, die du heute mit deinem Telefon verbringen wirst.
 </de-DE>
 
 <es-419>
@@ -316,7 +316,7 @@ Marca una fila. Cuenta una columna. Observa cómo surge una imagen de arte en p�
 • Gratis para jugar — cada uno de los 500 tableros incluidos, sin muros de pago
 • Cuatro tamaños de cuadrícula: 5×5 PRINCIPIANTE → 20×20 EXPERTO
 • Potenciadores cuando estés atascado: Pista, Revelar Celda (llenar automáticamente una celda comprobablemente correcta), Revelar Fila (resolver toda una fila)
-• Picross diario — un nuevo nonograma cada mañana, siempre resolvible
+• Nonogram diario — un nuevo nonograma cada mañana, siempre resolvible
 • Misiones diarias — tres objetivos frescos cada 24 horas
 • Torneo Semanal — un desafío semanal de marca personal; supera tu propio récord para ganar monedas
 • Eventos estacionales — Halloween, invierno y primavera traen temas por tiempo limitado
@@ -348,7 +348,7 @@ Desbloquea nuevas paletas de colores a medida que escalas la lista de niveles. E
 • Pase semanal — sin anuncios, +50 monedas diarias, todos los temas, pistas ilimitadas (7 días, sin compromiso)
 • Vidas extra — restaura 5 vidas instantáneamente · Vidas ilimitadas 1h · Vidas ilimitadas para siempre
 
-También llamado picross, hanjie o pintar por números. Sea como lo llames, son los veinte minutos más tranquilos que pasarás con tu teléfono hoy.
+También llamado nonogram, hanjie o pintar por números. Sea como lo llames, son los veinte minutos más tranquilos que pasarás con tu teléfono hoy.
 </es-419>
 
 <fr-FR>
@@ -369,7 +369,7 @@ Marquez une ligne. Comptez une colonne. Regardez une image en pixel art émerger
 • Gratuit à jouer — chacun des 500 tableaux inclus, pas de mur payant
 • Quatre tailles de grille : 5×5 DÉBUTANT → 20×20 EXPERT
 • Boosters quand vous êtes bloqué : Indice, Révéler Cellule (remplit automatiquement une cellule prouvée correcte), Révéler Ligne (résout toute une ligne)
-• Picross quotidien — un nouveau nonogramme chaque matin, toujours solvable
+• Nonogram quotidien — un nouveau nonogramme chaque matin, toujours solvable
 • Missions quotidiennes — trois nouveaux objectifs toutes les 24 heures
 • Tournoi Hebdomadaire — un défi de record personnel chaque semaine ; battez votre meilleur score pour gagner des pièces
 • Événements saisonniers — Halloween, Hiver et Printemps apportent des thèmes limités dans le temps
@@ -401,7 +401,7 @@ Débloquez de nouvelles palettes de couleurs à mesure que vous gravissez l'éch
 • Pass hebdomadaire — sans publicité, +50 pièces par jour, tous les thèmes, indices illimités (7 jours, sans engagement)
 • Vies supplémentaires — restaurez 5 vies instantanément · Vies illimitées 1h · Vies illimitées pour toujours
 
-Également appelé picross, hanjie ou peinture par numéros. Quel que soit le nom que vous lui donnez, ce sont les vingt minutes les plus calmes que vous passerez avec votre téléphone aujourd'hui.
+Également appelé nonogram, hanjie ou peinture par numéros. Quel que soit le nom que vous lui donnez, ce sont les vingt minutes les plus calmes que vous passerez avec votre téléphone aujourd'hui.
 </fr-FR>
 
 <hi-IN>
@@ -475,7 +475,7 @@ Tandai satu baris. Hitung satu kolom. Saksikan gambar pixel-art muncul dari kisi
 • Gratis untuk dimainkan — setiap satu dari 500 papan disertakan, tanpa dinding pembayaran
 • Empat ukuran kisi: 5×5 PEMULA → 20×20 AHLI
 • Pendorong saat kamu terjebak: Petunjuk, Ungkap Sel (mengisi otomatis sel yang terbukti benar), Ungkap Baris (menyelesaikan satu baris penuh)
-• Picross Harian — satu nonogram baru setiap pagi, selalu dapat dipecahkan
+• Nonogram Harian — satu nonogram baru setiap pagi, selalu dapat dipecahkan
 • Misi Harian — tiga tujuan baru setiap 24 jam
 • Turnamen Mingguan — tantangan rekor pribadi setiap minggu; kalahkan rekor terbaikmu untuk mendapatkan koin
 • Acara Musiman — Halloween, Musim Dingin dan Musim Semi membawa tema terbatas
@@ -507,7 +507,7 @@ Buka palet warna baru saat kamu mendaki tangga tingkat. Di bulan Oktober, Desemb
 • Pass Mingguan — tanpa iklan, +50 koin setiap hari, semua tema, petunjuk tanpa batas (7 hari, tanpa komitmen)
 • Nyawa Tambahan — pulihkan 5 nyawa secara instan · Nyawa Tanpa Batas 1 jam · Nyawa Tanpa Batas selamanya
 
-Juga disebut picross, hanjie, atau menggambar dengan angka. Apapun sebutannya, ini adalah dua puluh menit paling tenang yang akan kamu habiskan dengan ponselmu hari ini.
+Juga disebut nonogram, hanjie, atau menggambar dengan angka. Apapun sebutannya, ini adalah dua puluh menit paling tenang yang akan kamu habiskan dengan ponselmu hari ini.
 </id>
 
 <it-IT>
@@ -528,7 +528,7 @@ Segna una riga. Conta una colonna. Guarda un’immagine in pixel-art emergere da
 • Giocabile gratuitamente — tutte le 500 schede incluse, nessun muro di pagamento
 • Quattro dimensioni di griglia: 5×5 INIZIANTE → 20×20 ESPERTO
 • Potenziamenti quando sei bloccato: Indizio, Rivela Cella (compila automaticamente una cella dimostrabilmente corretta), Rivela Riga (risolve un’intera riga)
-• Picross quotidiano — un nuovo nonogramma ogni mattina, sempre risolvibile
+• Nonogram quotidiano — un nuovo nonogramma ogni mattina, sempre risolvibile
 • Missioni giornaliere — tre nuovi obiettivi ogni 24 ore
 • Torneo Settimanale — una sfida settimanale di record personale; batti il tuo miglior risultato per guadagnare monete
 • Eventi stagionali — Halloween, Inverno e Primavera portano temi a tempo limitato
@@ -560,7 +560,7 @@ Sblocca nuove palette di colori man mano che sali nella scala dei livelli. In ot
 • Pass Settimanale — senza annunci, +50 monete giornaliere, tutti i temi, indizi illimitati (7 giorni, senza impegno)
 • Vite Extra — ripristina 5 vite immediatamente · Vite Illimitate 1h · Vite Illimitate per sempre
 
-Chiamato anche picross, hanjie o dipingi per numeri. Qualunque cosa tu lo chiami, saranno i venti minuti più tranquilli che passerai con il tuo telefono oggi.
+Chiamato anche nonogram, hanjie o dipingi per numeri. Qualunque cosa tu lo chiami, saranno i venti minuti più tranquilli che passerai con il tuo telefono oggi.
 </it-IT>
 
 <ja-JP>
@@ -634,7 +634,7 @@ Marque uma linha. Conte uma coluna. Veja uma imagem em pixel-art surgir de uma g
 • Gratuito para jogar — todos os 500 tabuleiros incluídos, sem bloqueios
 • Quatro tamanhos de grade: 5×5 INICIANTE → 20×20 EXPERIENTE
 • Auxiliares quando você está preso: Dica, Revelar Célula (preenche automaticamente uma célula correta), Revelar Linha (soluciona uma linha inteira)
-• Picross Diário — um novo nonograma toda manhã, sempre solucionável
+• Nonogram Diário — um novo nonograma toda manhã, sempre solucionável
 • Missões diárias — três novos objetivos a cada 24 horas
 • Torneio Semanal — um desafio semanal de recorde pessoal; supere sua melhor marca para ganhar moedas
 • Eventos sazonais — Halloween, Inverno e Primavera trazem temas por tempo limitado
@@ -666,7 +666,7 @@ Desbloqueie novas paletas de cores conforme sobe na escada de níveis. Em outubr
 • Passe Semanal — sem anúncios, +50 moedas diárias, todos os temas, dicas ilimitadas (7 dias, sem compromisso)
 • Vidas Extras — restaura 5 vidas imediatamente · Vidas Ilimitadas 1h · Vidas Ilimitadas para sempre
 
-Também chamado de picross, hanjie ou pintar por números. Seja qual for o nome, são os vinte minutos mais tranquilos que você passará com seu celular hoje.
+Também chamado de nonogram, hanjie ou pintar por números. Seja qual for o nome, são os vinte minutos mais tranquilos que você passará com seu celular hoje.
 </pt-BR>
 
 <tr-TR>
@@ -687,7 +687,7 @@ Bir satırı işaretle. Bir sütunu say. Hiçbir şeyden oluşan bir ızgaradan 
 • Ücretsiz oyun — 500 panonun tamamı dahil, ödeme duvarı yok
 • Dört ızgara boyutu: 5×5 YENİ BAŞLAYAN → 20×20 UZMAN
 • Takıldığında güçlendiriciler: İpucu, Hücre Aç, Satır Aç
-• Günlük Picross — her sabah çözülmesi garanti bir yeni nonogram
+• Günlük Nonogram — her sabah çözülmesi garanti bir yeni nonogram
 • Günlük görevler — her 24 saatte üç yeni hedef
 • Haftalık Turnuva — her hafta kişisel rekor mücadelesi; kendi rekorunu kır, jeton kazan
 • Mevsimsel etkinlikler — Cadılar Bayramı, Kış ve Bahar sınırlı süreli temalar getirir
@@ -719,7 +719,7 @@ Seviye merdivenini tırmandıkça yeni renk paletleri aç. Ekim, Aralık ve Şub
 • Haftalık Geçiş — reklamsız, her gün +50 madeni para, tüm temalar, sınırsız ipucu (7 gün, taahhüt yok)
 • Ekstra Hayatlar — 5 hayatı anında geri kazan · Sınırsız Hayatlar 1 saat · Sonsuz Hayatlar sonsuza dek
 
-Ayrıca picross, hanjie veya sayılarla boyama olarak da bilinir. Her ne dersen de, bugün telefonunla geçireceğin en huzurlu yirmi dakika.
+Ayrıca nonogram, hanjie veya sayılarla boyama olarak da bilinir. Her ne dersen de, bugün telefonunla geçireceğin en huzurlu yirmi dakika.
 </tr-TR>
 
 <uk>
@@ -740,7 +740,7 @@ Ayrıca picross, hanjie veya sayılarla boyama olarak da bilinir. Her ne dersen 
 • Безкоштовно грати — всі 500 дошок включені, без платних бар'єрів
 • Чотири розміри сітки: 5×5 ДЛЯ ПОЧАТКІВЦІВ → 20×20 ДЛЯ ЕКСПЕРТІВ
 • Бустери, коли ви застрягли: Підказка, Відкрити клітинку (автоматично заповнює правильну клітинку), Відкрити рядок (вирішує весь рядок)
-• Щоденний Picross — щодня новий нонограм, завжди розв'язуваний
+• Щоденний Nonogram — щодня новий нонограм, завжди розв'язуваний
 • Щоденні місії — три нові цілі кожні 24 години
 • Щотижневий турнір — тиждень особистих рекордів; побий свій найкращий результат, щоб заробити монети
 • Сезонні події — Хелловін, Зима та Весна приносять тимчасові теми
@@ -893,7 +893,7 @@ Günlük. Sayılara göre boyama.
 _Apple App Store Connect → Version → Keywords_
 
 <en-US>
-nonogram,picross,hanjie,pixel art,number puzzle,logic puzzle,brain game,paint by numbers,relaxing
+nonogram,griddlers,hanjie,pixel art,number puzzle,logic puzzle,brain game,paint by numbers,relaxing
 </en-US>
 
 <ar>
@@ -901,15 +901,15 @@ nonogram,picross,hanjie,pixel art,number puzzle,logic puzzle,brain game,paint by
 </ar>
 
 <de-DE>
-nonogramm, picross, hanjie, pixelkunst, zahlenrätsel, logikspiel, gehirnspiel, malen nach zahlen
+nonogramm, griddlers, hanjie, pixelkunst, zahlenrätsel, logikspiel, gehirnspiel, malen nach zahlen
 </de-DE>
 
 <es-419>
-nonogram, picross, hanjie, arte en píxeles, puzzle numérico, juego de mente, pintar por números
+nonogram, griddlers, hanjie, arte en píxeles, puzzle numérico, juego de mente, pintar por números
 </es-419>
 
 <fr-FR>
-nonogram, picross, hanjie, art pixel, puzzle, casse-tête, jeu de réflexion, peinture par numéros
+nonogram, griddlers, hanjie, art pixel, puzzle, casse-tête, jeu de réflexion, peinture par numéros
 </fr-FR>
 
 <hi-IN>
@@ -917,11 +917,11 @@ nonogram, picross, hanjie, art pixel, puzzle, casse-tête, jeu de réflexion, pe
 </hi-IN>
 
 <id>
-nonogram, picross, hanjie, seni piksel, teka-teki angka, teka-teki logika, permainan otak, santai
+nonogram, griddlers, hanjie, seni piksel, teka-teki angka, teka-teki logika, permainan otak, santai
 </id>
 
 <it-IT>
-nonogram, picross, hanjie, arte pixel, puzzle, gioco logico, rompicapo, pittura numeri, rilassante
+nonogram, griddlers, hanjie, arte pixel, puzzle, gioco logico, rompicapo, pittura numeri, rilassante
 </it-IT>
 
 <ja-JP>
@@ -929,11 +929,11 @@ nonogram, picross, hanjie, arte pixel, puzzle, gioco logico, rompicapo, pittura 
 </ja-JP>
 
 <pt-BR>
-nonogram, picross, hanjie, arte em pixels, puzzle numérico, lógica, raciocínio, pintura por números
+nonogram,griddlers,hanjie,arte em pixels,puzzle numérico,lógica,raciocínio,pintura por números
 </pt-BR>
 
 <tr-TR>
-nonogram, picross, hanjie, piksel sanatı, sayısal bulmaca, mantık oyunu, sayı ile boyama
+nonogram, griddlers, hanjie, piksel sanatı, sayısal bulmaca, mantık oyunu, sayı ile boyama
 </tr-TR>
 
 <uk>

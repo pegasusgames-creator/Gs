@@ -24,55 +24,55 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-Polish & fixes.
+New: monthly events! Collect pumpkins in the Pumpkin Hunt — a fresh themed event every month — to win coins, Color Reveals, unlimited lives and a trophy. Weekend Rush doubles your tokens and Golden Hour (7–8 pm) adds bonus coins. Plus a free Halloween liquid theme all October. Fixed: Continue now resumes your furthest level, reminders and Streak Shields work properly, and your progress counts on the Play Games leaderboard. Happy pouring!
 </en-US>
 
 <ar>
-تلميع وإصلاحات.
+جديد: فعاليات كل شهر! اجمع اليقطين في «البحث عن اليقطين» — فعالية بموضوع جديد كل شهر — واربح عملات وكشف الألوان وأرواحًا غير محدودة وكأسًا. اندفاعة نهاية الأسبوع تضاعف رموزك، والساعة الذهبية (7–8 مساءً) تمنحك عملات إضافية. وسمة هالوين مجانية طوال أكتوبر. تم الإصلاح: «متابعة» يعيدك إلى أبعد مستوى، والتذكيرات ودرع السلسلة تعمل، وتقدّمك يُحتسب في لوحة صدارة ألعاب Play.
 </ar>
 
 <de-DE>
-Politur & Fehlerbehebungen.
+Neu: monatliche Events! Sammle Kürbisse bei der Kürbisjagd – jeden Monat ein neues Themen-Event – und gewinne Münzen, Farbhinweise, unendliche Leben und eine Trophäe. Der Wochenend-Rausch verdoppelt deine Marken, die Goldene Stunde (19–20 Uhr) bringt Bonusmünzen. Dazu ein gratis Halloween-Design im Oktober. Behoben: Weiter springt zu deinem höchsten Level, Erinnerungen und Serienschutz funktionieren, und dein Fortschritt zählt in der Play-Games-Bestenliste.
 </de-DE>
 
 <es-419>
-Pulido y correcciones.
+¡Nuevo: eventos cada mes! Junta calabazas en la Caza de calabazas —un evento temático nuevo cada mes— y gana monedas, revelaciones de color, vidas ilimitadas y un trofeo. La Fiebre de fin de semana duplica tus fichas y la Hora dorada (19–20 h) da monedas extra. Además, un tema de Halloween gratis todo octubre. Corregido: Continuar retoma tu nivel más alto, los recordatorios y escudos de racha funcionan y tu progreso cuenta en la tabla de Play Juegos.
 </es-419>
 
 <fr-FR>
-Améliorations et corrections.
+Nouveau : des événements chaque mois ! Récolte des citrouilles pendant la Chasse aux citrouilles – un nouvel événement à thème chaque mois – pour gagner pièces, révélations de couleur, vies illimitées et un trophée. Le Rush du week-end double tes jetons et l'Heure dorée (19 h–20 h) offre des pièces bonus. Thème Halloween offert en octobre. Corrigé : Continuer reprend ton niveau le plus avancé, rappels et boucliers de série fonctionnent, et ta progression compte au classement Play Jeux.
 </fr-FR>
 
 <hi-IN>
-सुधार और बग फिक्स।
+नया: हर महीने इवेंट! कद्दू खोज में कद्दू जमा करें — हर महीने नया थीम वाला इवेंट — और सिक्के, कलर रिवील, असीमित जीवन व ट्रॉफी जीतें। वीकेंड रश टोकन दोगुने करता है और गोल्डन आवर (शाम 7–8 बजे) बोनस सिक्के देता है। पूरे अक्टूबर हैलोवीन थीम मुफ़्त। सुधार: Continue अब आपके सबसे आगे वाले लेवल पर ले जाता है, रिमाइंडर और स्ट्रीक शील्ड ठीक से काम करते हैं, और आपकी प्रगति Play Games लीडरबोर्ड पर दिखती है।
 </hi-IN>
 
 <id>
-Penyempurnaan & perbaikan.
+Baru: event setiap bulan! Kumpulkan labu di Berburu Labu — event bertema baru tiap bulan — dan menangkan koin, Color Reveal, nyawa tak terbatas, dan trofi. Serbu Akhir Pekan menggandakan tokenmu dan Jam Emas (19.00–20.00) memberi koin bonus. Plus tema cairan Halloween gratis sepanjang Oktober. Diperbaiki: Lanjutkan kini membuka level terjauhmu, pengingat dan Perisai Runtunan berfungsi, dan progresmu tercatat di papan peringkat Play Games.
 </id>
 
 <it-IT>
-Rifiniture e correzioni.
+Novità: eventi ogni mese! Raccogli zucche nella Caccia alle zucche – un nuovo evento a tema ogni mese – e vinci monete, rivelazioni di colore, vite infinite e un trofeo. La Corsa del weekend raddoppia i gettoni e l'Ora d'oro (19–20) regala monete bonus. In più un tema di Halloween gratis per tutto ottobre. Corretto: Continua riprende dal livello più avanzato, promemoria e scudi della serie funzionano e i progressi contano nella classifica Play Giochi.
 </it-IT>
 
 <ja-JP>
-改善とバグ修正。
+新機能：毎月のイベント！パンプキンハント（毎月テーマが変わります）でカボチャを集めて、コイン、カラーリビール、無限ライフ、トロフィーをゲット。週末ラッシュでトークン2倍、ゴールデンアワー（19〜20時）でボーナスコイン。10月はハロウィンの液体テーマが無料！修正：「続ける」で最も進んだレベルから再開、リマインダーと連続記録シールドが正しく動作、進捗が Play ゲームのリーダーボードに反映されます。
 </ja-JP>
 
 <pt-BR>
-Polimento e correções.
+Novidade: eventos todo mês! Junte abóboras na Caça às Abóboras — um evento temático novo a cada mês — e ganhe moedas, revelações de cor, vidas infinitas e um troféu. A Corrida de Fim de Semana dobra suas fichas e a Hora de Ouro (19h–20h) dá moedas extras. E um tema de Halloween grátis em outubro. Corrigido: Continuar volta ao seu nível mais alto, lembretes e escudos de sequência funcionam e seu progresso conta no ranking do Play Games.
 </pt-BR>
 
 <tr-TR>
-İyileştirmeler ve düzeltmeler.
+Yeni: her ay etkinlik! Balkabağı Avı'nda balkabağı topla – her ay yeni temalı bir etkinlik – altın, renk ipucu, sınırsız can ve kupa kazan. Hafta Sonu Telaşı jetonlarını ikiye katlar, Altın Saat (19.00–20.00) ek altın verir. Ekim boyunca ücretsiz Cadılar Bayramı teması da var. Düzeltildi: Devam artık en ileri bölümüne götürür, hatırlatıcılar ve seri kalkanı çalışır, ilerlemen Play Games sıralamasına yansır. İyi eğlenceler!
 </tr-TR>
 
 <uk>
-Покращення та виправлення.
+Нове: щомісячні події! Збирай гарбузи в «Полюванні на гарбузи» — щомісяця нова тематична подія — і вигравай монети, підказки кольору, безлімітні життя та трофей. Вихідний ривок подвоює жетони, а Золота година (19:00–20:00) дає бонусні монети. Ще й безкоштовна тема Хелловіну весь жовтень. Виправлено: «Продовжити» веде на найдальший рівень, нагадування й щит серії працюють, а прогрес зараховується в таблиці Play Ігор.
 </uk>
 
 <zh-CN>
-优化和错误修复。
+全新每月活动！在「南瓜大搜寻」中收集南瓜——每月都有全新主题活动——赢取金币、颜色提示、无限生命和奖杯。周末狂欢让代币翻倍，黄金时段（19–20点）额外送金币。十月还可免费使用万圣节液体主题。修复：「继续」现在会回到你最远的关卡，提醒和连胜护盾正常工作，你的进度会计入 Play 游戏排行榜。祝你玩得开心！
 </zh-CN>
 
 ---
@@ -154,7 +154,7 @@ Tap to pour. Watch the colors settle. One satisfying flow at a time.
 
 ✨ FEATURES
 • Free to play — every one of the 500 levels included, no paywall
-• 500 handcrafted levels — from gentle beginner puzzles to mind-bending expert challenges
+• 500 solvable levels — from gentle beginner puzzles to mind-bending expert challenges
 • Buttery-smooth liquid pour animations — watch the water flow!
 • ASMR water-pour sound effects and procedural ambient music
 • Boosters when you get stuck: Color Reveal (hint), Steady Pour (undo), Fresh Start (restart), Extra Tube, Magic Wand
@@ -1183,7 +1183,7 @@ su sıralama, renk bulmacası, sıvı sıralama, tüp bulmacası, dökme oyunu, 
 _Apple App Store Connect → Version → Promotional Text_
 
 <en-US>
-Pour, sort, and relax. 500 handcrafted levels with daily challenges and missions.
+Pour, sort, and relax. 500 solvable levels with daily challenges and missions.
 </en-US>
 
 <ar>

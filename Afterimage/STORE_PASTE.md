@@ -1,4 +1,4 @@
-# PipeConnect — store paste sheet
+# Afterimage — store paste sheet
 
 One file with every translated string for every locale, wrapped in
 `<locale>…</locale>` blocks. Open in Play Console / App Store Connect,
@@ -24,55 +24,55 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-Initial release.
+Initial release · 500 solver-verified levels with a true par · A new themed event every month, with trophies to win · Daily puzzle with streaks · Endless practice · 7 unlockable themes · Plays fully offline.
 </en-US>
 
 <ar>
-الإصدار الأول.
+الإصدار الأول · 500 مستوى تم التحقق منها آليًا مع عدد خطوات مثالي حقيقي · فعالية جديدة بموضوع مختلف كل شهر مع كؤوس للفوز · لغز يومي مع سلاسل · تدريب بلا نهاية · 7 سمات قابلة للفتح · تعمل دون إنترنت بالكامل.
 </ar>
 
 <de-DE>
-Erstveröffentlichung.
+Erstveröffentlichung · 500 per Solver geprüfte Level mit echtem Par · Jeden Monat ein neues Themen-Event mit Trophäen · Tagesrätsel mit Serien · Endloses Training · 7 freischaltbare Designs · Komplett offline spielbar.
 </de-DE>
 
 <es-419>
-Lanzamiento inicial.
+Lanzamiento inicial · 500 niveles verificados por solucionador con par real · Un evento temático nuevo cada mes, con trofeos para ganar · Puzzle diario con rachas · Práctica sin fin · 7 temas desbloqueables · Se juega totalmente sin conexión.
 </es-419>
 
 <fr-FR>
-Version initiale.
+Première version · 500 niveaux vérifiés par solveur avec un vrai par · Un nouvel événement à thème chaque mois, avec des trophées à gagner · Puzzle du jour avec séries · Entraînement infini · 7 thèmes à débloquer · Jouable entièrement hors ligne.
 </fr-FR>
 
 <hi-IN>
-प्रारंभिक विमोचन।
+पहला रिलीज़ · सॉल्वर से जाँचे गए, सही पार वाले 500 लेवल · हर महीने नया थीम वाला इवेंट, ट्रॉफी जीतने का मौका · स्ट्रीक वाली दैनिक पहेली · अंतहीन अभ्यास · 7 अनलॉक करने योग्य थीम · पूरी तरह ऑफ़लाइन खेलें।
 </hi-IN>
 
 <id>
-Rilis awal.
+Rilis perdana · 500 level terverifikasi solver dengan par sejati · Event bertema baru setiap bulan dengan trofi untuk dimenangkan · Teka-teki harian dengan runtunan · Latihan tanpa batas · 7 tema yang bisa dibuka · Bisa dimainkan sepenuhnya offline.
 </id>
 
 <it-IT>
-Rilascio iniziale.
+Prima versione · 500 livelli verificati dal risolutore con un vero par · Un nuovo evento a tema ogni mese, con trofei da vincere · Puzzle del giorno con serie · Allenamento infinito · 7 temi sbloccabili · Si gioca completamente offline.
 </it-IT>
 
 <ja-JP>
-初版リリース。
+初回リリース · ソルバーで検証済み・正確なパー付きの500レベル · 毎月トロフィーが手に入る新しいテーマイベント · 連続記録つきデイリーパズル · エンドレス練習 · 解放できる7つのテーマ · 完全オフラインでプレイ可能。
 </ja-JP>
 
 <pt-BR>
-Lançamento inicial.
+Lançamento inicial · 500 níveis verificados por solucionador com par real · Um evento temático novo todo mês, com troféus para ganhar · Desafio diário com sequências · Treino infinito · 7 temas desbloqueáveis · Funciona totalmente offline.
 </pt-BR>
 
 <tr-TR>
-Başlangıç sürümü.
+İlk sürüm · Gerçek par değerine sahip, çözücüyle doğrulanmış 500 bölüm · Her ay kupa kazanabileceğin yeni temalı bir etkinlik · Serili günlük bulmaca · Sonsuz antrenman · 7 açılabilir tema · Tamamen çevrimdışı oynanır.
 </tr-TR>
 
 <uk>
-Початковий випуск.
+Перший випуск · 500 рівнів, перевірених розв'язувачем, зі справжнім паром · Щомісяця нова тематична подія з трофеями · Щоденна головоломка із серіями · Нескінченне тренування · 7 тем для відкриття · Повністю офлайн.
 </uk>
 
 <zh-CN>
-初始版本。
+首次发布 · 500 个经求解器验证、附真实标准步数的关卡 · 每月全新主题活动，赢取奖杯 · 每日谜题，连续挑战 · 无尽练习 · 7 款可解锁主题 · 完全离线畅玩。
 </zh-CN>
 
 ---
@@ -82,55 +82,55 @@ Başlangıç sürümü.
 _Grow → Store presence → Main store listing → Short description_
 
 <en-US>
-Connect the colored pipes and fill the grid! Relaxing logic puzzle.
+Guide your echo. It repeats your moves two turns late. Park it, then escape.
 </en-US>
 
 <ar>
-قم بتوصيل الأنابيب الملونة واملأ الشبكة! أحجية منطقية مريحة.
+وجه صداك. يعيد حركاتك بعد دورتين. اركنه، ثم اهرب.
 </ar>
 
 <de-DE>
-Verbinde die farbigen Rohre und fülle das Gitter! Entspannendes Logikspiel.
+Leite dein Echo. Es wiederholt deine Züge mit Verzögerung. Parke, dann entkomme.
 </de-DE>
 
 <es-419>
-¡Conecta las tuberías de colores y llena la cuadrícula! Rompecabezas lógico.
+Guía tu eco. Repite tus movimientos con dos turnos de retraso. Estaciona y huye.
 </es-419>
 
 <fr-FR>
-Connectez les tuyaux colorés et remplissez la grille ! Casse-tête relaxant.
+Guide ton écho. Il imite tes mouvements avec un temps de retard. Reste ou fuis.
 </fr-FR>
 
 <hi-IN>
-रंगीन पाइपों को जोड़ें और ग्रिड भरें! आरामदायक लॉजिकल पहेली।
+अपने प्रतिध्वनि को मार्गदर्शित करें। चालों को दोहराएं। पार्क करें, फिर भागें।
 </hi-IN>
 
 <id>
-Sambungkan pipa berwarna dan isi grid! Teka-teki logika yang santai.
+Pandukan gema Anda. Ia mengulang gerakan Anda dua putaran. Parkir, lalu lari.
 </id>
 
 <it-IT>
-Collega i tubi colorati e riempi la griglia! Puzzle di logica rilassante.
+Guida il tuo eco. Ripete le tue mosse con due turni di ritardo. Parcheggialo.
 </it-IT>
 
 <ja-JP>
-色付きのパイプをつなげて、グリッドを埋めよう！リラックスできる論理パズル。
+エコーを導いてください。2ターン後に動きを繰り返します。駐車してから逃げましょう。
 </ja-JP>
 
 <pt-BR>
-Conecte os tubos coloridos e preencha a grade! Enigma relaxante.
+Guie seu eco. Ele repete seus movimentos com dois turnos de atraso. Estacione.
 </pt-BR>
 
 <tr-TR>
-Renkli boruları birleştir ve ızgarayı doldur! Rahatlatıcı mantık bulmacası.
+Echo'nuzu yönlendirin. İki tur sonra hareketlerinizi tekrar eder. Park edin.
 </tr-TR>
 
 <uk>
-З'єднуйте кольорові труби та заповнюйте сітку! Логічна головоломка.
+Керуйте відлунням. Воно повторює дії через два ходи. Паркуйте й утікайте.
 </uk>
 
 <zh-CN>
-连接彩色管道，填满网格！轻松的逻辑谜题。
+引导你的回声。它会延迟两步重复你的动作。停下，然后逃脱。
 </zh-CN>
 
 ---
@@ -140,510 +140,289 @@ Renkli boruları birleştir ve ızgarayı doldur! Rahatlatıcı mantık bulmacas
 _Grow → Store presence → Main store listing → Full description_
 
 <en-US>
-Welcome to Pipe Connect, a beautifully calm logic puzzle for anyone who likes a quiet, focused brain workout. Drag pipes from each colored endpoint to its matching pair, fill every cell on the board, and listen for the soft click when the grid clicks shut.
+Your worst enemy is you, two moves ago.
 
-🧠 ONE QUIET PUZZLE AT A TIME
-Every level has a single elegant solution. No timers, no lives lost on tricky moves — just you, the grid, and one of 150 hand-tuned puzzles waiting to be untangled.
+Afterimage is a move-planning puzzle with one rule that changes everything: a coral echo replays your moves, exactly two turns late. You steer the cyan cube. The echo copies you — your past path, on a delay. Win by standing on the exit while your echo holds the pressure plate, on the same turn.
 
-✨ THE FEEL
-• Smooth, satisfying pipe routing animations
-• ASMR-style sound design — gentle clicks, soft confirmation tones
-• Light haptic feedback on every connection
-• Warm color palette built for long evening sessions
-• Fully offline — play on flights, in line, anywhere
+It sounds simple. Then you try to park a copy of your own past somewhere useful.
 
-🎯 WHAT'S IN IT
-• 150 free hand-crafted levels, from gentle 5×5 grids up to brain-bending 10×10 boards
-• 6 unlockable pipe themes — earn them by clearing milestones
-• Daily Challenge with login streak rewards
-• Daily Missions — three fresh objectives every 24 hours
-• Free Coins button (rewarded ad, 25 coins every 4 hours)
-• Stats screen tracking puzzles solved, perfect runs, and your longest streak
-• Lives system with free regeneration — no paywall on the core game
-• Weekly Tournament with synthetic leaderboard tiers
+Every level shows Par — the true optimal move count, computed by a solver, not a guess. Match it for three stars. The campaign runs 500 levels across three difficulty bands — from gentle warm-ups to genuinely knotted endgames — and the daily puzzle gives everyone the same board with a streak to protect.
 
-🎁 EXTRAS (OPTIONAL)
-• Starter Pack — 100 coins + 5 hints + 5 lives + Ads Off for $0.99
-• Season Pass — ad-free + 100 coins/day + all themes + unlimited hints
-• Coin packs from 100 to 2,000 coins, hint packs, life refills
+FEATURES
+• 500 solver-verified levels — Par is the real optimum, every level provably solvable
+• The echo: your own moves, replayed two turns behind
+• Daily puzzle — same board for everyone, streak rewards, spoiler-free sharing
+• Endless mode for unlimited practice boards
+• Full undo and reset — collisions never cost you the level
+• Hints that reveal the next optimal move, straight from the solver
+• 7 unlockable board themes, light and midnight looks
+• Relaxing, offline, no timer — think as long as you like
 
-🎮 HOW TO PLAY
-• Tap and drag from a colored dot to its matching partner
-• Routes can't cross
-• Fill every cell on the board to solve the level
-• Earn three stars by solving without retracing
-
-The board is a quiet little knot — and you get to untie it.
-
-Made with care by Pegasus Games.
+One grid. Two of you. Get out clean.
 </en-US>
 
 <ar>
-مرحبًا بك في Pipe Connect، لغز منطق هادئ وجميل لأي شخص يحب تمرين عقل هادئ ومركز. قم بسحب الأنابيب من كل نقطة ملونة إلى زوجها المطابق، واملأ كل خلية على اللوحة، واستمع إلى النقرات اللينة عندما تنغلق الشبكة.
+عدوك الأسوأ هو أنت، قبل حركتين.
 
-🧠 لُغز هادئ واحد في كل مرة
-كل مستوى له حل أنيق وحيد. لا توقيتات، ولا حياة تضيع في الحركات المعقدة — فقط أنت والشبكة وأحد 150 لغزًا تم ضبطه يدويًا في انتظار أن تحلّه.
+Afterimage هي لعبة تخطيط حركات مع قاعدة واحدة تغير كل شيء: صدى مرجاني يعيد تشغيل حركاتك، بعد دورتين بالضبط. أنت تتحكم في المكعب السماوي. الصدى ينسخ خطواتك - مسارك الماضي، مع تأخير. اربح من خلال الوقوف على المخرج بينما يحمل صدى حركتك لوحة الضغط، في نفس الدورة.
 
-✨ الإحساس
-• رسوم متحركة سلسة ومُرضية لتوجيه الأنابيب
-• تصميم صوتي على نمط ASMR — نقرات لطيفة، وأصوات تأكيد هادئة
-• ردود فعل لمسية خفيفة في كل اتصال
-• لوحة ألوان دافئة مصممة لجلسات مسائية طويلة
-• بالكامل غير متصل بالإنترنت — العب أثناء الرحلات، وفي الطوابير، في أي مكان
+يبدو الأمر بسيطًا. ثم تحاول إيقاف نسخة من ماضيك في مكان مفيد.
 
-🎯 ما الذي يحتويه
-• 150 مستوى مجاني مصمم يدويًا، من شبكات 5×5 السهلة إلى ألواح 10×10 المحيرة
-• 6 ثيمات أنابيب قابلة للتفتح — اكسبها عن طريق اجتياز المعالم
-• تحدي يومي مع جوائز لمن يحقق موجات تسجيل الدخول
-• مهام يومية — ثلاثة أهداف جديدة كل 24 ساعة
-• زر العملات المجانية (إعلان مكافأة، 25 عملة كل 4 ساعات)
-• شاشة إحصاءات تتعقب الألغاز المحلولة، والمشاريع المثالية، وأطول سلسلة لك
-• نظام حياة مع تجديد مجاني — لا توجد نقطة دفع على اللعبة الأساسية
-• بطولة أسبوعية مع مستويات تصنيف اصطناعية
+كل مستوى يظهر "بار" - العدد الحقيقي للحركات المثلى، محسوبة بواسطة محلل، وليس تخمينا. قم بمطابقته لتأخذ ثلاث نجوم. الحملة تشمل 500 مستوى موزعة بشكل يدوي من الإحماءات اللطيفة إلى النهاية المعقدة حقًا، وكذلك اللغز اليومي يقدم نفس اللوحة للجميع مع سلسلة للحفاظ عليها.
 
-🎁 إضافات (اختياري)
-• حزمة البداية — 100 عملة + 5 تلميحات + 5 أرواح + إعلانات بدون 0.99 دولار
-• التذكرة الموسمية — بدون إعلانات + 100 عملة/يوم + جميع الثيمات + تلميحات غير محدودة
-• حزم العملات من 100 إلى 2000 عملة، حزم التلميحات، تجديد الأرواح
+الميزات
+• 500 مستوى تم التحقق منها من قبل المحلل - بار هو الأمثل الحقيقي، كل مستوى قابل للحل بشكل مثبت
+• الصدى: حركاتك الخاصة، يعاد تشغيلها بعد دورتين
+• اللغز اليومي - نفس اللوحة للجميع، مكافآت سلسلة، مشاركة خالية من الحرق
+• وضع لا نهائي لممارسة غير محدودة
+• إمكانية التراجع الكاملة وإعادة التعيين - التصادمات لا تكلفك المستوى أبدًا
+• تلميحات تكشف عن الحركة المثلى التالية، مباشرة من المحلل
+• 7 ثيمات لوحة قابلة للفك، مشاهد خفيفة والخيال
+• مريح، بدون اتصال بالإنترنت، لا مؤقت - فكر كما تشاء
 
-🎮 كيفية اللعب
-• انقر واسحب من نقطة ملونة إلى شريكها المطابق
-• لا يمكن أن تتقاطع المسارات
-• املأ كل خلية على اللوحة لحل المستوى
-• احصل على ثلاث نجوم عن طريق الحل بدون الرجوع للخلف
-
-اللوحة هي عقدة صغيرة هادئة — وأنت من سيفككها.
-
-صُنعت بعناية من قبل Pegasus Games.
+شبكة واحدة. اثنان منك. أخرج بدون عوائق.
 </ar>
 
 <de-DE>
-Willkommen bei Pipe Connect, einem wunderschön ruhigen Logikrätsel für alle, die ein stilles, fokussiertes Gehirntraining mögen. Ziehen Sie Rohre von jedem farbigen Endpunkt zu seinem passenden Paar, füllen Sie jede Zelle auf dem Brett und hören Sie auf das sanfte Klicken, wenn das Raster sich schließt.
+Dein schlimmster Feind bist du, vor zwei Zügen.
 
-🧠 EINE RUHIGE RÄTSELN NACH DER ANDEREN
-Jede Stufe hat eine elegante Lösung. Keine Timer, keine Leben, die bei kniffligen Zügen verloren gehen — nur Sie, das Raster und eines von 150 handverfeinerten Rätseln, die darauf warten, entwirrt zu werden.
+Afterimage ist ein Puzzle zum Planen von Zügen mit einer Regel, die alles verändert: ein Korallenecho spielt deine Züge exakt zwei Züge verzögert nach. Du steuerst den cyanfarbenen Würfel. Das Echo kopiert dich — deinen vergangenen Weg mit Verzögerung. Gewinne, indem du auf dem Ausgang stehst, während dein Echo die Druckplatte betätigt, im selben Zug.
 
-✨ DAS GEFÜHL
-• Sanfte, zufriedenstellende Animationen beim Rohrverlegen
-• ASMR-ähnliches Sounddesign — sanfte Klicks, leise Bestätigungstöne
-• Leichtes haptisches Feedback bei jeder Verbindung
-• Warme Farbpalette, die für lange Abendsitzungen gedacht ist
-• Vollständig offline — spielen Sie im Flugzeug, in der Warteschlange, überall
+Es klingt einfach. Dann versuchst du, eine Kopie deiner eigenen Vergangenheit irgendwo nützlich zu parken.
 
-🎯 WAS IST ENTHALTEN
-• 150 kostenlose, handgefertigte Level, von sanften 5×5 Rastern bis zu herausfordernden 10×10 Brettern
-• 6 freischaltbare Rohr-Themen — verdienen Sie diese durch das Erreichen von Meilensteinen
-• Tägliche Herausforderung mit Belohnungen für Anmeldereihen
-• Tägliche Missionen — drei neue Ziele alle 24 Stunden
-• Kostenloser Münzen-Button (belohnte Werbung, 25 Münzen alle 4 Stunden)
-• Statistiken zur Verfolgung gelöster Rätsel, perfekter Läufe und Ihrer längsten Reihe
-• Lebenssystem mit kostenloser Regeneration — keine Bezahlschranke im Hauptspiel
-• Wöchentlicher Wettbewerb mit synthetischen Bestenlisten
+Jedes Level zeigt den Par — die tatsächliche optimale Zuganzahl, berechnet von einem Solver, nicht geraten. Erreiche diesen für drei Sterne. Die Kampagne umfasst 500 sorgfältig ausgewählte Levels von sanften Aufwärmübungen bis zu wahrhaft kniffligen Endspielen, und das tägliche Puzzle bietet jedem dasselbe Brett mit einem Streak, der geschützt werden muss.
 
-🎁 EXTRAS (OPTIONAL)
-• Starter-Paket — 100 Münzen + 5 Hinweise + 5 Leben + Werbung aus für 0,99 $
-• Saisonpass — werbefrei + 100 Münzen/Tag + alle Themen + unbegrenzte Hinweise
-• Münzpakete von 100 bis 2.000 Münzen, Hinweis-Pakete, Lebensauffüllungen
+EIGENSCHAFTEN
+• 500 vom Solver verifizierte Levels — Par ist das echte Optimum, jedes Level ist beweisbar lösbar
+• Das Echo: deine eigenen Züge, zwei Züge verzögert wiedergegeben
+• Tägliches Puzzle — dasselbe Brett für alle, Streak-Belohnungen, spoilerfreies Teilen
+• Endlosmodus für unbegrenzte Übungsboards
+• Volle Rückgängigmach- und Zurücksetzen-Funktion — Kollisionen kosten dich niemals das Level
+• Hinweise, die den nächsten optimalen Zug enthüllen, direkt vom Solver
+• 7 freischaltbare Brettthemen, helle und Mitternachtsansichten
+• Entspannend, offline, kein Zeitdruck — denke so lange du möchtest
 
-🎮 SO SPIELEN SIE
-• Tippen und ziehen Sie von einem farbigen Punkt zu seinem passenden Partner
-• Routen dürfen sich nicht kreuzen
-• Füllen Sie jede Zelle auf dem Brett, um das Level zu lösen
-• Verdienen Sie drei Sterne, indem Sie ohne Rückverfolgung lösen
-
-Das Brett ist ein ruhiger kleiner Knoten — und Sie dürfen ihn entknüpfen.
-
-Mit Sorgfalt von Pegasus Games erstellt.
+Ein Gitter. Zwei von dir. Komm unversehrt heraus.
 </de-DE>
 
 <es-419>
-Bienvenido a Pipe Connect, un hermoso puzzle lógico y tranquilo para quienes disfrutan de un ejercicio mental enfocado. Arrastra tuberías desde cada extremo de color hasta su pareja correspondiente, llena cada celda en el tablero y escucha el suave clic cuando la rejilla se cierra.
+Tu peor enemigo eres tú, hace dos movimientos.
 
-🧠 UN PUZZLE TRANQUILO A LA VEZ  
-Cada nivel tiene una única solución elegante. Sin temporizadores, sin vidas perdidas en movimientos complicados, solo tú, la rejilla y uno de los 150 puzzles diseñados a mano esperando ser desmadejados.
+Afterimage es un rompecabezas de planificación de movimientos con una regla que lo cambia todo: un eco coral repite tus movimientos, exactamente dos turnos después. Tú guías el cubo cian. El eco te imita: tu ruta pasada, con un retraso. Gana al estar sobre la salida mientras tu eco presiona la placa de presión, en el mismo turno.
 
-✨ LA SENSACIÓN  
-• Animaciones de enrutamiento de tuberías suaves y satisfactorias  
-• Diseño de sonido estilo ASMR — clics suaves, tonos de confirmación delicados  
-• Ligera retroalimentación háptica en cada conexión  
-• Paleta de colores cálida pensada para largas sesiones nocturnas  
-• Totalmente offline — juega en vuelos, en fila, en cualquier lugar  
+Suena simple. Luego intentas aparcar una copia de tu propio pasado en algún lugar útil.
 
-🎯 ¿QUÉ HAY DENTRO?  
-• 150 niveles gratuitos hechos a mano, desde suaves rejillas de 5×5 hasta complicados tableros de 10×10  
-• 6 temas de tuberías desbloqueables — consíguelos al completar hitos  
-• Desafío diario con recompensas por rachas de inicio de sesión  
-• Misiones diarias — tres objetivos nuevos cada 24 horas  
-• Botón de monedas gratis (anuncio recompensado, 25 monedas cada 4 horas)  
-• Pantalla de estadísticas que rastrea puzzles resueltos, carreras perfectas y tu racha más larga  
-• Sistema de vidas con regeneración gratuita — sin muro de pago en el juego principal  
-• Torneos semanales con niveles de clasificaciones sintéticas  
+Cada nivel muestra el Par — el verdadero conteo óptimo de movimientos, calculado por un solucionador, no una conjetura. Igualalo para obtener tres estrellas. La campaña consta de 500 niveles cuidadosamente diseñados, desde cálidos calentamientos hasta finales verdaderamente complejos, y el rompecabezas diario ofrece a todos el mismo tablero con una racha que proteger.
 
-🎁 EXTRAS (OPCIONALES)  
-• Paquete inicial — 100 monedas + 5 pistas + 5 vidas + sin anuncios por $0.99  
-• Pase de temporada — sin anuncios + 100 monedas/día + todos los temas + pistas ilimitadas  
-• Paquetes de monedas de 100 a 2,000 monedas, paquetes de pistas, recargas de vidas  
+CARACTERÍSTICAS
+• 500 niveles verificados por un solucionador — Par es el verdadero óptimo, cada nivel comprobablemente solucionable
+• El eco: tus propios movimientos, reproducidos dos turnos atrás
+• Rompecabezas diario — mismo tablero para todos, recompensas por rachas, compartición sin spoilers
+• Modo infinito para tableros de práctica ilimitados
+• Deshacer y reiniciar completos — las colisiones nunca te costarán el nivel
+• Sugerencias que revelan el siguiente movimiento óptimo, directamente del solucionador
+• 7 temas de tablero desbloqueables, apariencias diurnas y nocturnas
+• Relajante, sin conexión, sin temporizador — piensa tanto como desees
 
-🎮 CÓMO JUGAR  
-• Toca y arrastra desde un punto de color hasta su pareja correspondiente  
-• Las rutas no pueden cruzarse  
-• Llena cada celda en el tablero para resolver el nivel  
-• Gana tres estrellas resolviendo sin dar marcha atrás  
-
-El tablero es un pequeño nudo silencioso — y tú tienes que desatarlo.  
-
-Hecho con cuidado por Pegasus Games.
+Un tablero. Dos de ustedes. Salgan limpios.
 </es-419>
 
 <fr-FR>
-Bienvenue dans Pipe Connect, un puzzle logique apaisant pour tous ceux qui aiment un entraînement cérébral calme et concentré. Glissez les tuyaux de chaque extrémité colorée vers son paire correspondante, remplissez chaque cellule du plateau et écoutez le doux clic lorsque la grille se verrouille.
+Votre pire ennemi, c'est vous, il y a deux mouvements.
 
-🧠 UN PUZZLE CALME À LA FOIS
-Chaque niveau a une seule solution élégante. Pas de chronomètres, pas de vies perdues sur des mouvements délicats — juste vous, la grille, et l'une des 150 énigmes conçues à la main qui attendent d'être résolues.
+Afterimage est un puzzle de planification de mouvements avec une règle qui change tout : un écho corail rejoue vos mouvements, avec un retard de deux tours. Vous contrôlez le cube cyan. L'écho vous copie — votre chemin passé, avec un délai. Gagnez en vous tenant sur la sortie pendant que votre écho active la plaque de pression, au même tour.
 
-✨ L'AMBIANCE
-• Animations de routage de tuyaux fluides et satisfaisantes
-• Design sonore de style ASMR — clics doux, tonalités de confirmation apaisantes
-• Retour haptique léger à chaque connexion
-• Palette de couleurs chaleureuse conçue pour de longues sessions du soir
-• Entièrement hors ligne — jouez en vol, dans la file d'attente, partout
+Cela semble simple. Puis vous essayez de garer une copie de votre propre passé quelque part où elle sera utile.
 
-🎯 CE QUE VOUS TROUVEREZ
-• 150 niveaux gratuits faits à la main, des grilles accessibles de 5×5 aux tableaux déroutants de 10×10
-• 6 thèmes de tuyaux déblocables — gagnez-les en atteignant des jalons
-• Défi Quotidien avec des récompenses de connexion
-• Missions Quotidiennes — trois nouveaux objectifs toutes les 24 heures
-• Bouton de Pièces Gratuites (publicité récompensée, 25 pièces toutes les 4 heures)
-• Écran de statistiques suivant les puzzles résolus, les courses parfaites et votre plus longue série
-• Système de vies avec régénération gratuite — pas de mur payant pour le jeu principal
-• Tournoi Hebdomadaire avec niveaux de classement synthétiques
+Chaque niveau affiche le Par — le véritable nombre optimal de mouvements, calculé par un résolveur, et non pas une supposition. Égalisez-le pour obtenir trois étoiles. La campagne propose 500 niveaux conçus à la main, allant des échauffements doux aux fins réellement compliquées, et le puzzle quotidien offre à tous le même plateau avec une série à protéger.
 
-🎁 SUPPLÉMENTS (OPTIONNELS)
-• Pack de Démarrage — 100 pièces + 5 indices + 5 vies + Publicités Désactivées pour 0,99 $
-• Pass de Saison — sans publicité + 100 pièces/jour + tous les thèmes + indices illimités
-• Packs de pièces de 100 à 2 000 pièces, packs d'indices, recharges de vies
+CARACTÉRISTIQUES
+• 500 niveaux vérifiés par le résolveur — Le Par est le véritable optimum, chaque niveau est prouvé solvable
+• L'écho : vos propres mouvements, rejoués avec un retard de deux tours
+• Puzzle quotidien — même plateau pour tous, récompenses de séries, partage sans spoilers
+• Mode infini pour des tableaux d'entraînement illimités
+• Annulation complète et réinitialisation — les collisions ne vous font jamais perdre le niveau
+• Indices qui révèlent le prochain mouvement optimal, directement du résolveur
+• 7 thèmes de plateau déblocables, styles lumineux et nuit
+• Relaxant, hors ligne, sans minuterie — réfléchissez aussi longtemps que vous le souhaitez
 
-🎮 COMMENT JOUER
-• Touchez et faites glisser d'un point coloré à son partenaire correspondant
-• Les trajets ne peuvent pas se croiser
-• Remplissez chaque cellule du plateau pour résoudre le niveau
-• Gagnez trois étoiles en résolvant sans revenir en arrière
-
-Le plateau est un petit nœud silencieux — et vous allez le défaire.
-
-Fait avec soin par Pegasus Games.
+Une grille. Deux de vous. Sortez en toute sécurité.
 </fr-FR>
 
 <hi-IN>
-Pipe Connect में आपका स्वागत है, एक सुंदर शांत लॉजिक पज़ल जो किसी भी व्यक्ति के लिए है जो एक शांत, केंद्रित मस्तिष्क के वर्कआउट का आनंद लेता है। हर रंग के अंत बिंदु से पाइप खींचें और इसे उसके संगत जोड़ी पर ले जाएं, बोर्ड के हर सेल को भरें, और जब ग्रिड बंद होता है तब सुनहरी क्लिक सुनें।
+आपका सबसे बड़ा दुश्मन आप ही हैं, दो चाल पहले।
 
-🧠 एक समय में एक शांत पहेली  
-हर स्तर में केवल एक सुंदर समाधान होता है। कोई टाइमर नहीं, पेचीदा चालों पर कोई जीवन नहीं खोता — सिर्फ आप, ग्रिड, और 150 हस्तनिर्मित पहेलियाँ जो सुलझाने के लिए इंतजार कर रही हैं।
+Afterimage एक चाल-योजना पहेली है जिसमें एक नियम है जो सब कुछ बदल देता है: एक मूंगा प्रतिध्वनि आपकी चालों को, बिल्कुल दो चाल बाद, पुनः प्रस्तुत करती है। आप स्यान क्यूब को संचालित करते हैं। प्रतिध्वनि आपकी नकल करती है - आपकी पिछली राह, एक देरी पर। बाहर निकलने पर खड़े होकर जीतें जबकि आपकी प्रतिध्वनि दबाव प्लेट को पकड़े हुए है, उसी चाल पर।
 
-✨ एहसास  
-• चिकनी, संतोषजनक पाइप रूटिंग एनीमेशन  
-• ASMR-शैली की ध्वनि डिज़ाइन — नरम क्लिक, हल्की पुष्टि की ध्वनियाँ  
-• हर कनेक्शन पर हल्का हैप्टिक फीडबैक  
-• लंबे शाम के सत्रों के लिए गर्म रंगों की पैलेट  
-• पूरी तरह से ऑफलाइन — उड़ानों में, लाइन में, कहीं भी खेलें  
+यह सरल लगता है। फिर आप अपनी खुद की पिछली चाल को किसी उपयोगी जगह पर पार्क करने की कोशिश करते हैं।
 
-🎯 इसमें क्या है  
-• 150 मुफ्त हस्तनिर्मित स्तर, सरल 5×5 ग्रिड से लेकर दिमाग को मोड़ने वाले 10×10 बोर्ड तक  
-• 6 अनलॉक होने वाले पाइप थीम — मील के पत्थर को साफ करके कमाएं  
-• दैनिक चुनौती के साथ लॉगिन श्रृंखला पुरस्कार  
-• दैनिक मिशन — हर 24 घंटे में तीन नए उद्देश्य  
-• मुफ्त सिक्के बटन (पुरস্কृत विज्ञापन, हर 4 घंटे में 25 सिक्के)  
-• सांख्यिकी स्क्रीन जो हल की गई पहेलियों, परफेक्ट रन, और आपकी सबसे लंबी श्रृंखला को ट्रैक करती है  
-• मुफ्त पुनर्जनन के साथ जीवन प्रणाली — मुख्य खेल पर कोई भुगतान दीवार नहीं  
-• साप्ताहिक टूर्नामेंट के साथ सिंथेटिक लीडरबोर्ड स्तर  
+हर स्तर पर पार दिखाया जाता है - सच्ची इष्टतम चालों की संख्या, जो एक हल करने वाले द्वारा गणना की जाती है, अनुमान नहीं। इसे तीन तारे के लिए मिलाएं। अभियान 500 हाथ से बंधे स्तरों का प्रबंधन करता है, जो हल्के वार्म-अप से लेकर वास्तविक पेचीदा अंत गेम तक है, और दैनिक पहेली सभी को समान बोर्ड देती है, जिसमें एक स्ट्राइक की रक्षा करनी होती है।
 
-🎁 अतिरिक्त (वैकल्पिक)  
-• स्टार्टर पैक — 100 सिक्के + 5 संकेत + 5 जीवन + विज्ञापनों के बिना $0.99 में  
-• सीज़न पास — विज्ञापन-मुक्त + 100 सिक्के/दिन + सभी थीम + अनलिमिटेड संकेत  
-• 100 से 2000 सिक्कों के सिक्का पैक, संकेत पैक, जीवन पुनः भरना  
+विशेषताएँ
+• 500 हल करने योग्य स्तर - पार वास्तव में इष्टतम है, हर स्तर को प्रमाणित किया जाता है
+• प्रतिध्वनि: आपकी खुद की चालें, दो चाल पीछे
+• दैनिक पहेली - हर किसी के लिए समान बोर्ड, स्ट्राइक पुरस्कार, स्पॉयलर-फ्री साझाकरण
+• अनगिनत अभ्यास बोर्डों के लिए अंतहीन मोड
+• पूर्ण पूर्ववत और रीसेट - टकराव कभी भी आपको स्तर से नहीं हटा सकते
+• अगले इष्टतम चाल को प्रकट करने वाले संकेत, सीधे हल करने वाले से
+• 7 अनलॉक करने योग्य बोर्ड थीम, हल्के और मध्यरात्रि के लुक
+• शांत, ऑफ़लाइन, कोई टाइमर नहीं - जितना चाहें सोचें
 
-🎮 खेलना कैसे है  
-• एक रंगीन बिंदु पर टैप करें और उसे उसकी संगत साथी पर खींचें  
-• मार्ग क्रॉस नहीं कर सकते  
-• स्तर को हल करने के लिए बोर्ड के हर सेल को भरें  
-• बिना फिर से ट्रेस किए हल करने पर तीन सितारे कमाएं  
-
-बोर्ड एक शांत छोटा गाँठ है — और आपको इसे खोलना है।  
-
-पीगासस गेम्स द्वारा ध्यान से बनाया गया।
+एक ग्रिड। आपमें से दो। साफ-सुथरे बाहर निकलें।
 </hi-IN>
 
 <id>
-Selamat datang di Pipe Connect, teka-teki logika yang tenang dan indah untuk siapa saja yang menyukai latihan otak yang fokus. Seret pipa dari setiap titik warna ke pasangan yang cocok, isi setiap sel di papan, dan dengarkan suara lembut saat grid terhubung.
+Musuh terburukmu adalah dirimu sendiri, dua langkah yang lalu.
 
-🧠 SATU TEKA-TEKI TENANG SEKALIGUS
-Setiap level memiliki satu solusi elegan. Tanpa batas waktu, tanpa kehilangan nyawa atas gerakan sulit — hanya Anda, grid, dan salah satu dari 150 teka-teki yang telah disesuaikan menunggu untuk dipecahkan.
+Afterimage adalah teka-teki perencanaan gerakan dengan satu aturan yang mengubah segalanya: gema karang memutar ulang gerakanmu, tepat dua giliran terlambat. Kamu mengendalikan kubus cyan. Gema menyalin kamu — jalurmu yang lalu, dengan penundaan. Menanglah dengan berdiri di pintu keluar sementara gema-mu menekan pelat tekanan, di giliran yang sama.
 
-✨ PERASAAN
-• Animasi jalur pipa yang halus dan memuaskan
-• Desain suara gaya ASMR — klik lembut, nada konfirmasi yang lembut
-• Umpan balik haptik ringan pada setiap koneksi
-• Palet warna hangat yang dibuat untuk sesi malam yang panjang
-• Sepenuhnya offline — mainkan di pesawat, dalam antrean, di mana saja
+Kedengarannya sederhana. Kemudian kamu mencoba memarkir salinan dari masa lalumu di tempat yang berguna.
 
-🎯 APA YANG ADA DI DALAMNYA
-• 150 level gratis yang dibuat dengan tangan, dari grid 5×5 yang lembut hingga papan 10×10 yang menantang
-• 6 tema pipa yang dapat dibuka — dapatkan dengan menyelesaikan tonggak
-• Tantangan Harian dengan hadiah streak login
-• Misi Harian — tiga tujuan baru setiap 24 jam
-• Tombol Koin Gratis (iklan berhadiah, 25 koin setiap 4 jam)
-• Layar statistik yang melacak teka-teki yang diselesaikan, run sempurna, dan streak terpanjang Anda
-• Sistem nyawa dengan regenerasi gratis — tidak ada dinding bayar pada permainan inti
-• Turnamen Mingguan dengan tier papan peringkat sintetis
+Setiap level menunjukkan Par — jumlah gerakan optimal yang sebenarnya, dihitung oleh pemecah, bukan tebak-tebakan. Sesuaikan untuk mendapatkan tiga bintang. Kampanye ini terdiri dari 500 level yang dirancang dengan tangan, dari pemanasan lembut hingga akhir yang benar-benar rumit, dan teka-teki harian memberikan papan yang sama untuk semua orang dengan streak yang perlu dijaga.
 
-🎁 EKSTRA (OPSIONAL)
-• Paket Pemula — 100 koin + 5 petunjuk + 5 nyawa + Iklan Dimatikan seharga $0,99
-• Season Pass — tanpa iklan + 100 koin/hari + semua tema + petunjuk tak terbatas
-• Paket koin dari 100 hingga 2.000 koin, paket petunjuk, pengisian nyawa
+FITUR
+• 500 level yang diverifikasi pemecah — Par adalah yang benar-benar optimal, setiap level terbukti dapat diselesaikan
+• Gema: gerakanmu sendiri, diputar ulang dua giliran di belakang
+• Teka-teki harian — papan yang sama untuk semua, hadiah streak, berbagi tanpa spoiler
+• Mode tanpa akhir untuk papan latihan tak terbatas
+• Undo dan reset penuh — tabrakan tidak pernah membuatmu kehilangan level
+• Petunjuk yang mengungkap gerakan optimal berikutnya, langsung dari pemecah
+• 7 tema papan yang dapat dibuka, tampilan terang dan tengah malam
+• Santai, offline, tanpa timer — berpikir selama yang kamu mau
 
-🎮 CARA BERMAIN
-• Ketuk dan seret dari titik berwarna ke pasangan yang cocok
-• Jalur tidak dapat bersilangan
-• Isi setiap sel di papan untuk menyelesaikan level
-• Dapatkan tiga bintang dengan menyelesaikan tanpa mengulangi langkah
-
-Papan adalah simpul kecil yang tenang — dan Anda bisa mengikatnya.
-
-Dibuat dengan hati-hati oleh Pegasus Games.
+Satu grid. Dua darimu. Keluar dengan bersih.
 </id>
 
 <it-IT>
-Benvenuto in Pipe Connect, un puzzle logico splendidamente rilassante per chi ama un allenamento mentale tranquillo e concentrato. Trascina i tubi da ciascun estremità colorata alla sua coppia corrispondente, riempi ogni cella della griglia e ascolta il dolce clic quando la griglia si chiude.
+Il tuo peggior nemico sei tu, due mosse fa.
 
-🧠 UN PUZZLE TRANQUILLO ALLA VOLTA
-Ogni livello ha una sola elegante soluzione. Niente timer, nessuna vita persa in mosse complicate: solo tu, la griglia e uno dei 150 puzzle creati a mano in attesa di essere risolti.
+Afterimage è un puzzle di pianificazione delle mosse con una regola che cambia tutto: un’eco corallina riproduce le tue mosse, esattamente con due turni di ritardo. Tu controlli il cubo ciano. L'eco ti copia — il tuo percorso passato, con un ritardo. Vinci posizionandoti sull'uscita mentre la tua eco preme il pulsante di pressione, nello stesso turno.
 
-✨ L'ATMOFERA
-• Animazioni fluide e soddisfacenti del percorso dei tubi
-• Design sonoro in stile ASMR — clic delicati, toni di conferma morbidi
-• Leggero feedback aptico a ogni connessione
-• Palette di colori calda pensata per lunghe sessioni serali
-• Completamente offline — gioca in volo, in coda, ovunque
+Sembra semplice. Poi provi a parcheggiare una copia del tuo passato in un luogo utile.
 
-🎯 COSA C'È DENTRO
-• 150 livelli gratuiti fatti a mano, da griglie dolci 5×5 a tabelloni 10×10 che sfidano la mente
-• 6 temi di tubi sbloccabili — guadagnali completando traguardi
-• Sfida Giornaliera con ricompense per accesso continuo
-• Missioni Giornalieri — tre nuovi obiettivi ogni 24 ore
-• Pulsante Monete gratuito (video promozionale, 25 monete ogni 4 ore)
-• Schermata statistiche per tenere traccia dei puzzle risolti, dei percorsi perfetti e della tua serie più lunga
-• Sistema di vite con rigenerazione gratuita — nessun muro di pagamento nel gioco principale
-• Torneo Settimanale con livelli della classifica sintetica
+Ogni livello mostra il Par — il vero numero ottimale di mosse, calcolato da un risolutore, non un'ipotesi. Eguagliarlo per ottenere tre stelle. La campagna comprende 500 livelli selezionati a mano che vanno da riscaldamenti delicati a finali veramente intricati, e il puzzle quotidiano offre a tutti la stessa tavola con una striscia da proteggere.
 
-🎁 EXTRA (OPZIONALI)
-• Pacchetto Iniziale — 100 monete + 5 suggerimenti + 5 vite + Annunci disattivati per $0.99
-• Pass Stagionale — senza pubblicità + 100 monete/giorno + tutti i temi + suggerimenti illimitati
-• Pacchetti Monete da 100 a 2.000 monete, pacchetti di suggerimenti, ricariche di vite
+CARATTERISTICHE
+• 500 livelli verificati dal risolutore — il Par è l’ottimale reale, ogni livello è provabilmente risolvibile
+• L'eco: le tue mosse, riprodotte con due turni di ritardo
+• Puzzle quotidiano — stessa tavola per tutti, premi in striscia, condivisione senza spoiler
+• Modalità infinita per tavole di pratica illimitate
+• Annulla completo e reset — le collisioni non ti costeranno mai il livello
+• Suggerimenti che rivelano la prossima mossa ottimale, direttamente dal risolutore
+• 7 temi di tavola sbloccabili, stili chiari e di mezzanotte
+• Rilassante, offline, senza timer — pensa quanto vuoi
 
-🎮 COME GIOCARE
-• Tocca e trascina da un punto colorato al suo partner
-• I percorsi non possono incrociarsi
-• Riempi ogni cella della griglia per completare il livello
-• Guadagna tre stelle risolvendo senza mai tornare indietro
-
-La griglia è un piccolo nodo tranquillo — e tu hai il compito di scioglierlo.
-
-Realizzato con cura da Pegasus Games.
+Un griglia. Due di voi. Uscite puliti.
 </it-IT>
 
 <ja-JP>
-パイプコネクトへようこそ。静かで集中できる頭の体操を楽しむ人のための美しい論理パズルです。各色のエンドポイントから対応するペアにパイプをドラッグし、ボード上のすべてのセルを埋め、グリッドが閉じるときの柔らかなクリック音を楽しんでください。
+あなたの最も悪い敵は、二手前の自分です。
 
-🧠 一度に一つの静かなパズル
-すべてのレベルには、わずかに優雅な解法があります。タイマーなし、難しい動きで命を失うこともなし — あなたとグリッド、そして150の手作りのパズルのうちの一つがあります。
+Afterimageは、全てを変える唯一のルールを持つ動き計画パズルです：サンゴのエコーは、あなたの動きをちょうど二ターン遅れで再生します。シアンのキューブを操作します。エコーはあなたをコピーします - あなたの過去の道を、遅れて。エコーが圧力プレートを押している間に出口に立つことで勝利します。同じターンで。
 
-✨ 感触
-• 滑らかで満足感のあるパイプルーティングアニメーション
-• ASMRスタイルのサウンドデザイン — 穏やかなクリック音、優しい確認音
-• すべての接続で軽いハプティックフィードバック
-• 長時間の夕方セッションに最適な暖かいカラーパレット
-• 完全オフライン — 飛行機内や列の中、どこでもプレイ可能
+聞こえはシンプルです。しかし、過去の自分のコピーをどこか有用な場所に停めることを試みると、難しさが増します。
 
-🎯 何が含まれているか
-• 優しい5×5グリッドから脳をひねる10×10ボードまで、150の無料ハンドクラフトレベル
-• 6つの解除可能なパイプテーマ — マイルストーンをクリアすることで獲得
-• ログインボーナスがあるデイリーチャレンジ
-• デイリーミッション — 24時間ごとに新しい三つの目標
-• 無料コインボタン（広告視聴で獲得、4時間ごとに25コイン）
-• 解決したパズルの数、パーフェクトなプレイ、最長の連続記録を追跡する統計画面
-• 無料再生可能なライフシステム — コアゲームに支払いの壁なし
-• 合成リーダーボード階層を持つ週刊トーナメント
+各レベルには、Parが表示されます - 真の最適動作数で、解決策によって計算されたもので、推測ではありません。それに一致させて三つ星を獲得します。キャンペーンは、優しいウォームアップから本当に複雑なエンドゲームまで、500の手作りレベルを用意しています。そして、日替わりパズルは、誰にでも同じボードを提供し、連勝を守るためのものです。
 
-🎁 エクストラ（オプション）
-• スターティングパック — 100コイン + 5ヒント + 5ライフ + 広告オフ $0.99
-• シーズンパス — 広告なし + 1日100コイン + すべてのテーマ + 無限ヒント
-• 100から2000コインのコインパック、ヒントパック、ライフ補充
+特徴
+• 解決策で確認された500のレベル — Parは本当の最適で、すべてのレベルが証明可能
+• エコー：あなたの動きが、二ターン遅れて再生される
+• 日替わりパズル — 皆に同じボード、連勝報酬、ネタバレのない共有
+• 限りない練習ボードのためのエンドレスモード
+• 完全な元に戻すとリセット - 衝突してもレベルを失うことはない
+• 解決策から直接の次の最適動きを示すヒント
+• 7つの解除可能なボードテーマ、明るいと真夜中のルック
+• リラックスできるオフライン、タイマーなし — 思いのまま考えてください
 
-🎮 プレイ方法
-• 色付きのドットから対応するパートナーにタップしてドラッグ
-• ルートが交差することはできません
-• レベルを解決するにはボード上のすべてのセルを埋める
-• 引き返さずに解決すると三つ星を獲得
-
-ボードは小さな静かな結び目 — そしてあなたがそれをほぐすことができます。
-
-ペガサスゲームズによって丁寧に作られました。
+一つのグリッド。二人のあなた。クリーンに脱出しましょう。
 </ja-JP>
 
 <pt-BR>
-Bem-vindo ao Pipe Connect, um puzzle lógico calmamente bonito para quem gosta de um exercício cerebral tranquilo e focado. Arraste canos de cada extremidade colorida para seu par correspondente, preencha cada célula do tabuleiro e ouça o suave clique quando a grade se fechar.
+Seu pior inimigo é você, duas jogadas atrás.
 
-🧠 UM PUZZLE SILENCIOSO POR VEZ  
-Cada nível possui uma única solução elegante. Sem cronômetros, sem vidas perdidas em movimentos complicados — apenas você, a grade e um dos 150 puzzles cuidadosamente elaborados esperando para serem desvendados.
+Afterimage é um quebra-cabeça de planejamento de movimentos com uma regra que muda tudo: um eco coral reproduz suas jogadas, exatamente com um atraso de duas turnos. Você controla o cubo ciano. O eco o copia — seu caminho passado, com um atraso. Vença ao ficar na saída enquanto seu eco pisa na placa de pressão, na mesma jogada.
 
-✨ A SENSÇÃO  
-• Animações de roteamento de canos suaves e satisfatórias  
-• Design de som estilo ASMR — cliques suaves, tons de confirmação delicados  
-• Feedback tátil leve em cada conexão  
-• Paleta de cores quentes, ideal para longas sessões noturnas  
-• Totalmente offline — jogue durante voos, em filas, em qualquer lugar  
+Parece simples. Então você tenta estacionar uma cópia do seu próprio passado em algum lugar útil.
 
-🎯 O QUE TEM NELE  
-• 150 níveis gratuitos feitos à mão, desde grades suaves de 5×5 até tabuleiros desafiadores de 10×10  
-• 6 temas de canos desbloqueáveis — ganhe ao atingir marcos  
-• Desafio Diário com recompensas por sequência de login  
-• Missões Diárias — três objetivos novos a cada 24 horas  
-• Botão de Moedas Gratuitas (anúncio recompensado, 25 moedas a cada 4 horas)  
-• Tela de estatísticas rastreando puzzles resolvidos, corridas perfeitas e sua maior sequência  
-• Sistema de vidas com regeneração gratuita — sem limite de pagamento no jogo principal  
-• Torneio Semanal com níveis de leaderboard sintéticos  
+Cada nível mostra o Par — a verdadeira contagem de movimentos ótima, calculada por uma solução, não por um palpite. Iguale para conquistar três estrelas. A campanha inclui 500 níveis elaborados, desde aquecimentos gentis até finais genuinamente complicados, e o quebra-cabeça diário oferece a mesma tabuleiro para todos, com uma sequência a proteger.
 
-🎁 EXTRAS (OPCIONAL)  
-• Pacote Inicial — 100 moedas + 5 dicas + 5 vidas + Ads Off por $0,99  
-• Passe de Temporada — sem anúncios + 100 moedas/dia + todos os temas + dicas ilimitadas  
-• Pacotes de moedas de 100 a 2.000 moedas, pacotes de dicas, recargas de vidas  
+RECURSOS
+• 500 níveis verificados por soluções — Par é o real ótimo, cada nível comprovadamente solucionável
+• O eco: seus próprios movimentos, reproduzidos com um atraso de duas jogadas
+• Quebra-cabeça diário — mesmo tabuleiro para todos, recompensas de sequência, compartilhamento sem spoilers
+• Modo infinito para tabuleiros de prática ilimitada
+• Desfazer e reiniciar completos — colisões nunca custam o nível
+• Dicas que revelam o próximo movimento ótimo, diretamente do solucionador
+• 7 temas de tabuleiro desbloqueáveis, visuais claros e noturnos
+• Relaxante, offline, sem cronômetro — pense pelo tempo que precisar
 
-🎮 COMO JOGAR  
-• Toque e arraste de um ponto colorido para seu parceiro correspondente  
-• Os trajetos não podem se cruzar  
-• Preencha cada célula do tabuleiro para resolver o nível  
-• Ganhe três estrelas ao resolver sem retrazar  
-
-O tabuleiro é um pequeno nó silencioso — e você vai desamarrá-lo.
-
-Feito com cuidado pela Pegasus Games.
+Uma grade. Dois de vocês. Saia limpo.
 </pt-BR>
 
 <tr-TR>
-Pipe Connect'e hoş geldiniz, sessiz, odaklanmış bir beyin egzersizi arayan herkes için huzurlu bir mantık bulmacası. Renkli uçlardan boruları eşleşen çiftine sürükleyin, tahtadaki her hücreyi doldurun ve ızgaranın kapandığında çıkan yumuşak tıklamayı dinleyin.
+En büyük düşmanınız sizsiniz, iki hamle öncesi.
 
-🧠 BİR SESSİZ BULMACA
-Her seviyenin tek bir zarif çözümü vardır. Süre sınırlaması yok, zor hamlelerde yaşam kaybı yok — sadece siz, ızgara ve çözüme kavuşmayı bekleyen 150 el yapımı bulmacadan biri.
+Afterimage, her şeyi değiştiren bir kuralı olan bir hamle planlama bulmacasıdır: bir mercan yankısı hamlelerinizi, tam iki tur gecikmeli olarak tekrar oynatır. Siyan küpü yönlendirin. Yankı sizi kopyalar — geçmiş yolunuz, gecikmeli olarak. Çıkışın üzerinde durarak, yankınız basınç plakasını tutarken, aynı turda kazanabilirsiniz.
 
-✨ HİSSİ
-• Akıcı, tatmin edici boru yönlendirme animasyonları
-• ASMR tarzı ses tasarımı — nazik tıklamalar, yumuşak onay sesleri
-• Her bağlantıda hafif dokunsal geri bildirim
-• Uzun akşam seanslarına uygun sıcak renk paleti
-• Tamamen çevrimdışı — uçuşta, sırada, her yerde oynayın
+Basit gibi görünüyor. Sonra kendi geçmişinizin bir kopyasını kullanışlı bir yere park etmeyi deniyorsunuz.
 
-🎯 İÇİNDE NE VAR
-• 5×5 hafif ızgaralardan 10×10 kafa karıştırıcı tahtalara kadar 150 ücretsiz el yapımı seviye
-• 6 açılabilir boru teması — kilometre taşlarını temizleyerek kazanın
-• Günlük meydan okuma ile giriş streak ödülleri
-• Günlük görevler — her 24 saatte üç yeni hedef
-• Ücretsiz Madeni Para butonu (ödüllü reklam, her 4 saatte 25 madeni para)
-• Çözülen bulmacalar, mükemmel oyunlar ve en uzun serinizi takip eden istatistik ekranı
-• Ücretsiz yenilenme ile yaşam sistemi — ana oyunda ödeme duvarı yok
-• Sentetik liderlik seviyeleri ile haftalık turnuva
+Her seviyede Par gösterilir — gerçek optimum hamle sayısı, bir çözücü tarafından hesaplanır, tahmin değil. Üç yıldız için eşleşin. Kampanya, nazik ısınmalardan gerçekten karmaşık son oyunlara kadar 500 elle hazırlanmış seviyeden oluşur ve günlük bulmaca, herkesin koruması gereken bir seriye sahip olduğu aynı tahtayı verir.
 
-🎁 EKSTRA (İSTEĞE BAĞLI)
-• Başlangıç Paketi — 100 madeni para + 5 ipucu + 5 yaşam + Reklamsız 0,99 dolara
-• Sezon Pass — reklamsız + günlük 100 madeni para + tüm temalar + sınırsız ipuçları
-• 100’den 2.000 madeni paraya kadar madeni para paketleri, ipucu paketleri, yaşam yenilemeleri
+ÖZELLİKLER
+• 500 çözücü tarafından doğrulanmış seviye — Par gerçek optimum, her seviye kanıtlanabilir şekilde çözülmüş
+• Yankı: kendi hamleleriniz, iki tur geriden tekrar oynatılır
+• Günlük bulmaca — herkes için aynı tahta, seriyi koruyarak ödüller, spoiler içermeyen paylaşım
+• Sınırsız pratik tahtaları için sonsuz mod
+• Tam geri alma ve sıfırlama — çarpışmalar asla seviyenizi kaybetmenizi sağlamaz
+• Çözücünden gelen bir sonraki optimum hamleyi açığa çıkaran ipuçları
+• 7 açılabilir tahta teması, açık ve gece temaları
+• Rahatlatıcı, çevrimdışı, zamanlayıcı yok — istediğiniz kadar düşünün
 
-🎮 OYNAMA ŞEKLİ
-• Renkli bir noktaya dokunun ve eşleşen partnerine sürükleyin
-• Yollar kesişemez
-• Seviyeyi çözmek için tahtadaki her hücreyi doldurun
-• Geriye dönmeden çözerek üç yıldız kazanın
-
-Tahta sessiz bir düğüm — ve onu çözmek sizin elinizde.
-
-Pegasus Oyunları tarafından özenle hazırlanmıştır.
+Bir ızgara. İkilik. Temiz çıkın.
 </tr-TR>
 
 <uk>
-Ласкаво просимо до Pipe Connect, спокійної логічної головоломки для тих, хто любить тихе та зосереджене тренування розуму. Перетягуйте труби з кожної кольорової точки до відповідної пари, заповніть кожну клітину на полі та слухайте ніжний клацання, коли сітка закривається.
+Вашим найгіршим ворогом є ви, два ходи тому.
 
-🧠 ОДНА СПОКІЙНА ГОЛОВОЛОМКА ЗА РАЗ
-Кожен рівень має єдине елегантне рішення. Без таймерів, без втрати життів через складні ходи — лише ви, сітка та одна з 150 ручно налаштованих головоломок, які чекають на розв'язання.
+Afterimage — це головоломка з плануванням рухів, з одним правилом, яке змінює все: коралова ехо повторює ваші рухи, рівно через два ходи. Ви керуєте цианним кубом. Ехо копіює вас — ваш минулий шлях, з затримкою. Переможіть, ставши на вихід, поки ваше ехо утримує тискову пластину в той же хід.
 
-✨ ВІДЧУТТЯ
-• Плавні, задовольняючі анімації прокладання труб
-• Дизайн звуку в стилі ASMR — м'які клацання, ніжні підтверджувальні звуки
-• Легкий дотик на кожному з’єднанні
-• Тепла кольорова палітра, створена для довгих вечірніх сесій
-• Повністю офлайн — грайте в літаках, у чергах, будь-де
+Це звучить просто. А потім ви намагаєтеся припаркувати копію свого минулого десь корисно.
 
-🎯 ЩО В ТОМУ
-• 150 безкоштовних рівнів ручної роботи, від легких 5×5 до заплутаних 10×10
-• 6 тем труби, що відкриваються — отримуйте їх за досягнення етапів
-• Щоденний виклик з винагородами за послідовності входу
-• Щоденні місії — три нові завдання кожні 24 години
-• Кнопка безкоштовних монет (реклама, 25 монет кожні 4 години)
-• Екран статистики з відстеженням вирішених головоломок, ідеальних серій та найтривалішої послідовності
-• Система життів з безкоштовним відновленням — без платних вхідних на основну гру
-• Щотижневий турнір з синтетичними категоріями лідерів
+Кожен рівень показує Пар — справжню оптимальну кількість ходів, обчислену розв'язувачем, а не за здогадкою. Вирівняйте його для трьох зірок. Кампанія складається з 500 рівнів, перевірених вручну, від ніжних розминок до справжніх заплутаних кінцевих ігор, а щоденна головоломка пропонує всім однакову дошку з серією, яку потрібно зберегти.
 
-🎁 ДОПОЛНЕННЯ (НЕ ОБОВ'ЯЗКОВО)
-• Стартовий пакет — 100 монет + 5 підказок + 5 життів + відсутність реклами за $0.99
-• Сезонний пропуск — без реклами + 100 монет/день + всі теми + безлімітні підказки
-• Пакети монет від 100 до 2000 монет, пакети підказок, поповнення життів
+ОСОБЛИВОСТІ
+• 500 рівнів, підтверджених розв'язувачем — Пар є справжньою оптимою, кожен рівень доведено розв'язуваний
+• Ехо: ваші власні рухи, повторені через два ходи
+• Щоденна головоломка — однакова дошка для всіх, бонуси за серію, обмін без спойлерів
+• Безкінечний режим для необмежених практичних дошок
+• Повне скасування і скидання — зіткнення ніколи не коштує вам рівня
+• Підказки, які виявляють наступний оптимальний хід, прямо від розв'язувача
+• 7 розблокованих тем дошки, світлі та північні варіанти
+• Релаксуючий, офлайн, без таймера — думайте так довго, як хочете
 
-🎮 ЯК ГРАТИ
-• Торкніться та перетягніть з кольорової точки до відповідної пари
-• Маршрути не можуть перетинатися
-• Заповніть кожну клітину на полі, щоб вирішити рівень
-• Заражайте три зірки, вирішуючи без повторних ходів
-
-Поле — це тихий вузлик — а ви розв'яжете його.
-
-Створено з увагою компанією Pegasus Games.
+Одна сітка. Два з вас. Вийдіть без проблем.
 </uk>
 
 <zh-CN>
-欢迎来到流水管连接，这是一款优雅宁静的逻辑益智游戏，适合喜欢安静、专注思考的玩家。将每个颜色端点的管道拖动到匹配的另一端，填满棋盘上的每一个单元格，当网格闭合时可以听到轻柔的点击声。
+你的最大敌人是你，两个回合前的自己。
 
-🧠 一次解一个安静的谜题
-每个关卡都有一个优雅的解法。没有计时器，也不会因难度而失去生命 — 只有你、棋盘和等待被解开的150个精心调校的谜题。
+《余晖》是一款计划移动的解谜游戏，具有一个改变一切的规则：一个珊瑚色的回声会在你移动后的两个回合后重现你的行动。你操控青色立方体。回声复制你——你的过去路径，伴随延迟。在同一回合内，当你的回声踩在压板上时，站在出口即可获胜。
 
-✨ 游戏体验
-• 平滑、令人满意的管道布局动画
-• ASMR风格的音效设计 — 柔和的点击声，轻柔的确认音
-• 每次连接都有轻微的触觉反馈
-• 温暖的色调，适合长时间的夜间游戏
-• 完全离线 — 可在飞行中、排队时随时畅玩
+听起来简单。然后你尝试将自己过去的一个副本停放在某个有用的地方。
 
-🎯 游戏内容
-• 150个免费手工制作的关卡，从简单的5×5网格到难度较高的10×10布局
-• 6个可解锁的管道主题 — 通过完成里程碑来获得它们
-• 每日挑战，登录连击奖励
-• 每日任务 — 每24小时更新三个新目标
-• 免费金币按钮（奖励广告，每4小时获得25个金币）
-• 统计屏幕，跟踪已解谜题数量、完美通关和最长连击
-• 生命系统可免费再生 — 核心游戏无付费墙
-• 每周锦标赛，设有合成排行榜等级
+每一个关卡都会显示最优解——真实的最优移动次数，由求解器计算，而非猜测。匹配这个次数可获得三颗星。游戏包含500个精心设计的关卡，从轻松的热身到真正困难的残局，此外，每日解谜挑战为所有人提供同样的棋盘，保护连胜记录。
 
-🎁 额外功能（可选）
-• 起始包 — 100金币 + 5个提示 + 5条生命 + 关掉广告，仅需$0.99
-• 赛季通行证 — 无广告 + 每日100金币 + 所有主题 + 无限制提示
-• 从100到2000金币的金币包、提示包、生命补给包
+特性
+• 500个经过求解器验证的关卡——每个关卡均可证明可解，最优移动次数为真实值
+• 回声：你自己的动作，在延迟的两个回合后重现
+• 每日拼图——所有玩家共享相同棋盘，提供连胜奖励，无剧透分享
+• 无限模式，提供无尽练习棋盘
+• 完整的撤销和重置——碰撞不会让你失去该关卡
+• 提供下一个最优移动的提示，直接来自求解器
+• 7个可解锁的棋盘主题，清新与午夜的风格
+• 放松，无需联网，没有计时器——思考尽可能长的时间
 
-🎮 游戏方式
-• 从一个彩色点拖动到匹配的伙伴
-• 路径不能交叉
-• 填满棋盘上的每一个单元格以完成关卡
-• 在不回溯的情况下获得三颗星
-
-棋盘是一个安静的小结——而你将解开它。
-
-由佩加索斯游戏公司倾心制作。
+一个棋盘。两个你。顺利脱身。
 </zh-CN>
 
 ---
@@ -653,55 +432,55 @@ Pegasus Oyunları tarafından özenle hazırlanmıştır.
 _Apple App Store Connect → App Information → Subtitle_
 
 <en-US>
-Connect the colored pipes and
+Your echo, two moves behind
 </en-US>
 
 <ar>
-وصل الأنابيب الملونة و
+صوتك، خطوتان متأخرًا
 </ar>
 
 <de-DE>
-Verbinde Rohre nach Farben
+Dein Echo, zwei Schritte weg
 </de-DE>
 
 <es-419>
-Conecta tuberías de color y
+Tu eco, dos pasos atrás
 </es-419>
 
 <fr-FR>
-Reliez les tuyaux colorés et
+Votre écho, deux pas en retard
 </fr-FR>
 
 <hi-IN>
-रंगीन पाइप जोड़ें और
+आपकी गूंज, दो कदम पीछे
 </hi-IN>
 
 <id>
-Sambungkan pipa berwarna dan
+Gema Anda, dua langkah mundur
 </id>
 
 <it-IT>
-Collega i tubi colorati e
+Il tuo eco, due passi indietro
 </it-IT>
 
 <ja-JP>
-色付きパイプをつなげよう
+あなたのエコー、二手遅れ
 </ja-JP>
 
 <pt-BR>
-Conecte os canos coloridos e
+Seu eco, dois passos atrás
 </pt-BR>
 
 <tr-TR>
-Renkli boruları bağlayın ve
+Eko, iki adım geride
 </tr-TR>
 
 <uk>
-З'єднайте кольорові труби і
+Твоє відлуння — 2 ходи позаду
 </uk>
 
 <zh-CN>
-连接彩色管道并
+你的回声，落后两步
 </zh-CN>
 
 ---
@@ -711,55 +490,55 @@ Renkli boruları bağlayın ve
 _Apple App Store Connect → Version → Keywords_
 
 <en-US>
-pipe puzzle,flow free,connect pipes,color connect,brain puzzle,relaxing,offline
+puzzle,logic,echo,clone,maze,brain,move,planning,offline,minimalist
 </en-US>
 
 <ar>
-لعبة أنابيب, تدفق حر, ربط الأنابيب, توصيل الألوان, لغز ذهني, استرخاء, بدون اتصال
+ألغاز، منطق، صدى، استنساخ، متاهة، عقل، حركة، تخطيط، غير متصل، بسيط
 </ar>
 
 <de-DE>
-rohrrätsel,flussfrei,rohre verbinden,färbe verbinden,hirnspiel,entspannend,offline
+rätsel,logik,eho,klon,labyrinth,geist,bewege,planung,offline,minimalistisch
 </de-DE>
 
 <es-419>
-rompecabezas de tuberías, conectar tuberías, conexión de colores, desafío, relajante, sin conexión
+rompecabezas,lógica,eco,clon,laberinto,mente,mover,planificación,offline,minimalista
 </es-419>
 
 <fr-FR>
-casse-tête de tuyaux, relier et connecter les couleurs, jeu de réflexion, détente, hors ligne
+casse-tête,logique,résonance,clone,labyrinthe,cerveau,mouvement,planification,hors ligne,minimaliste
 </fr-FR>
 
 <hi-IN>
-पाइप पहेली,फ्लो फ्री,पाइप कनेक्ट,रंग कनेक्ट,दिमागी पहेली,आरामदायक,ऑफलाइन
+पहेली, तर्क, गूंज, क्लोन, भूलभुलैया, मस्तिष्क, आंदोलन, योजना, ऑफ़लाइन, न्यूनतावादी
 </hi-IN>
 
 <id>
-pipa teka-teki,aliran bebas,hubungkan pipa,sambungkan warna,teka-teki otak,rela,offline
+teka-teki,logika,gema,klon,labirin,pikiran,gerak,perencanaan,offline,minimalis
 </id>
 
 <it-IT>
-puzzle tubi, flusso libero, collegare tubi,collegamento colori, rompicapo, rilassante, offline
+puzzle,logica,eco,clone,labirinto,mente,movimento,strategia,offline,minimalista
 </it-IT>
 
 <ja-JP>
-パイプパズル, フローフリー, パイプ接続, カラー接続, 脳トレ, リラックス, オフライン
+パズル, 論理, エコー, クローン, 迷路, 脳, 移動, 計画, オフライン, ミニマリスト
 </ja-JP>
 
 <pt-BR>
-quebra-cabeça de tubo,conectar tubos,jogo de lógica,relaxante,offline
+quebra-cabeça,lógica,eco,clone,máquina,cérebro,mover,planejamento,offline,minimalista
 </pt-BR>
 
 <tr-TR>
-boru bulmacası,akış serbest,boruları bağla,renk bağla,zihin bulmacası,rahatlatıcı,çevrimdışı
+bulmaca,lojik,ö echo,yansıtma,labirent,beyin,hareket,planlama,çevrimdışı,minimalist
 </tr-TR>
 
 <uk>
-пазл труби,вільний потік,з'єднати труби,кольорове з'єднання,головоломка,відпочинок,офлайн
+головоломка,логіка,відлуння,клон,лабіринт,мозок,рух,планування,офлайн,мінімалізм
 </uk>
 
 <zh-CN>
-管道谜题,自由流动,连接管道,色彩连接,脑力游戏,放松,离线
+拼图, 逻辑, 回声, 复制, 迷宫, 大脑, 移动, 规划, 离线, 极简
 </zh-CN>
 
 ---
@@ -769,55 +548,55 @@ boru bulmacası,akış serbest,boruları bağla,renk bağla,zihin bulmacası,rah
 _Apple App Store Connect → Version → Promotional Text_
 
 <en-US>
-Connect matching colored endpoints with pipes.
+A clone replays your moves two turns late. Park it on the plate, reach the exit — same turn. Solver-verified levels with true Par.
 </en-US>
 
 <ar>
-قم بتوصيل النقاط النهائية المتطابقة بالألوان باستخدام الأنابيب.
+نسخة مكررة تعيد لقطاتك بعد دورتين. ضعها على اللوحة، واغتنم المخرج — بنفس الدورة. مستويات تم التحقق منها مع بار حقيقي.
 </ar>
 
 <de-DE>
-Verbinde passende farbige Endpunkte mit Rohren.
+Ein Klon spielt deine Züge mit zwei Zügen Verzögerung nach. Stelle ihn auf die Platte und erreiche den Ausgang - im selben Zug. Level wurden von einem Solver geprüft.
 </de-DE>
 
 <es-419>
-Conecta los extremos de colores coincidentes con tuberías.
+Un clon reproduce tus movimientos con un retraso de dos turnos. Colócalo en el plato y alcanza la salida en el mismo turno. Niveles verificados con Par real.
 </es-419>
 
 <fr-FR>
-Reliez les extrémités de couleur correspondantes avec des tuyaux.
+Un clone répète vos mouvements avec deux tours de retard. Gare-le sur l'assiette, atteins la sortie — au même tour. Niveaux vérifiés avec un vrai Par.
 </fr-FR>
 
 <hi-IN>
-रंगीन अंत बिंदुओं को पाइप्स से जोड़ें।
+एक क्लोन आपकी चालों को दो टर्न बाद दोहराता है। इसे प्लेट पर पार्क करें, निकास तक पहुंचें — एक ही टर्न में। सॉल्वर-प्रमाणित स्तर सही पार के साथ।
 </hi-IN>
 
 <id>
-Hubungkan titik ujung berwarna yang cocok dengan pipa.
+Sebuah klon mengulang gerakan Anda dua giliran kemudian. Parkir di tempat, capai pintu keluar — dalam satu giliran. Level terverifikasi Solver dengan Par yang benar.
 </id>
 
 <it-IT>
-Collega i punti finali colorati con tubi.
+Un clone ripete le tue mosse con due turni di ritardo. Posizionalo sul piatto, raggiungi l'uscita — stesso turno. Livelli verificati da Solver con vero Par.
 </it-IT>
 
 <ja-JP>
-色の合った端点をパイプでつなげてください。
+クローンがあなたの動きを2ターン遅れて再生します。プレートに置き、出口へ — 同じターンで。解決者確認済みのレベルで真のパー。
 </ja-JP>
 
 <pt-BR>
-Conecte terminais coloridos correspondentes com tubos.
+Um clone reproduz seus movimentos com duas jogadas de atraso. Estacione no prato, chegue à saída — na mesma jogada. Níveis verificados pelo solver com Par verdadeiro.
 </pt-BR>
 
 <tr-TR>
-Renkli uç noktaları borularla birbirine bağlayın.
+Bir klon, hamlelerinizi iki hamle sonra tekrar eder. Tabakta park et, çıkışa ulaş — aynı hamle. Solver onaylı seviyeler, gerçek Par ile.
 </tr-TR>
 
 <uk>
-З'єднуйте кінцеві точки одного кольору трубами.
+Клон відтворює ваші дії з двома ходами затримки. Ставте на тарілку, досягайте виходу — за той самий хід. Рівні, перевірені розв'язувачем, з реальним паром.
 </uk>
 
 <zh-CN>
-用管道连接相同颜色的端点。
+一个克隆将在你行动两步后重放你的动作。将其放在盘子上，同时到达出口。经过求解器验证的关卡，真实标准。
 </zh-CN>
 
 ---

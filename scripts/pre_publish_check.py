@@ -2043,6 +2043,7 @@ def main():
         ('check_level_cap.py', 'level cap / progress copy vs level count'),
         ('check_app_version_display.py', 'displayed version == versionName'),
         ('check_live_events.py', 'live-ops calendar (12 months, no fake banners)'),
+        ('check_store_paste_fresh.py', 'STORE_PASTE.md belongs to this app + matches metadata'),
     ]:
         try:
             _r = _subprocess.run(

@@ -7407,7 +7407,8 @@ if(typeof window.watchAdForLife!=='function')window.watchAdForLife=function(){if
     var r = REWARDS[i], b = (window.gGame && window.gGame.cfg && window.gGame.cfg.booster) || {};
     if (r.trophy) return '🏆 + ' + r.coins + ' 🪙';
     if (r.coins) return r.coins + ' 🪙';
-    if (r.booster) return (b.emoji || '💡') + ' ×' + r.booster;
+    // Games without a stored booster are paid its coin value — say so.
+    if (r.booster) return b.field ? (b.emoji || '💡') + ' ×' + r.booster : ((b.coins || 25) * r.booster) + ' 🪙';
     if (r.lives) return tr('lives');
     return '';
   }

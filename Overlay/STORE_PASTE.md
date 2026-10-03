@@ -1,4 +1,4 @@
-# PipeConnect — store paste sheet
+# Overlay — store paste sheet
 
 One file with every translated string for every locale, wrapped in
 `<locale>…</locale>` blocks. Open in Play Console / App Store Connect,
@@ -24,55 +24,55 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-Initial release.
+Initial release · 500 guaranteed-solvable picture puzzles · A new themed event every month · Daily picture with streaks · Endless mode · Colorblind-friendly shape markers · 7 gel palettes · Fully offline.
 </en-US>
 
 <ar>
-الإصدار الأول.
+الإصدار الأول · 500 لغز صور مضمون الحل · فعالية جديدة بموضوع مختلف كل شهر · صورة يومية مع سلاسل · وضع لا نهائي · علامات أشكال مناسبة لعمى الألوان · 7 لوحات ألوان هلامية · تعمل دون إنترنت بالكامل.
 </ar>
 
 <de-DE>
-Erstveröffentlichung.
+Erstveröffentlichung · 500 garantiert lösbare Bildrätsel · Jeden Monat ein neues Themen-Event · Tägliches Bild mit Serien · Endlosmodus · Farbenblind-freundliche Formmarkierungen · 7 Gel-Paletten · Komplett offline.
 </de-DE>
 
 <es-419>
-Lanzamiento inicial.
+Lanzamiento inicial · 500 puzzles de imágenes con solución garantizada · Un evento temático nuevo cada mes · Imagen diaria con rachas · Modo infinito · Marcadores de forma aptos para daltónicos · 7 paletas de gel · Totalmente sin conexión.
 </es-419>
 
 <fr-FR>
-Version initiale.
+Première version · 500 puzzles d'images à solution garantie · Un nouvel événement à thème chaque mois · Image du jour avec séries · Mode infini · Repères de formes adaptés au daltonisme · 7 palettes gel · Entièrement hors ligne.
 </fr-FR>
 
 <hi-IN>
-प्रारंभिक विमोचन।
+पहला रिलीज़ · 500 पक्के हल वाली तस्वीर पहेलियाँ · हर महीने नया थीम वाला इवेंट · स्ट्रीक वाली दैनिक तस्वीर · अंतहीन मोड · रंग-अंधता के अनुकूल आकार चिह्न · 7 जेल पैलेट · पूरी तरह ऑफ़लाइन।
 </hi-IN>
 
 <id>
-Rilis awal.
+Rilis perdana · 500 teka-teki gambar yang pasti bisa diselesaikan · Event bertema baru setiap bulan · Gambar harian dengan runtunan · Mode tanpa akhir · Penanda bentuk ramah buta warna · 7 palet gel · Sepenuhnya offline.
 </id>
 
 <it-IT>
-Rilascio iniziale.
+Prima versione · 500 puzzle di immagini con soluzione garantita · Un nuovo evento a tema ogni mese · Immagine del giorno con serie · Modalità infinita · Indicatori di forma adatti ai daltonici · 7 palette gel · Completamente offline.
 </it-IT>
 
 <ja-JP>
-初版リリース。
+初回リリース · 必ず解ける500のピクチャーパズル · 毎月新しいテーマイベント · 連続記録つきデイリーピクチャー · エンドレスモード · 色覚多様性に配慮した形マーカー · 7種のジェルパレット · 完全オフライン。
 </ja-JP>
 
 <pt-BR>
-Lançamento inicial.
+Lançamento inicial · 500 quebra-cabeças de imagem com solução garantida · Um evento temático novo todo mês · Imagem diária com sequências · Modo infinito · Marcadores de forma acessíveis para daltônicos · 7 paletas de gel · Totalmente offline.
 </pt-BR>
 
 <tr-TR>
-Başlangıç sürümü.
+İlk sürüm · Çözümü garantili 500 resim bulmacası · Her ay yeni temalı bir etkinlik · Serili günlük resim · Sonsuz mod · Renk körlüğü dostu şekil işaretleri · 7 jel paleti · Tamamen çevrimdışı.
 </tr-TR>
 
 <uk>
-Початковий випуск.
+Перший випуск · 500 головоломок-картинок із гарантованим розв'язком · Щомісяця нова тематична подія · Щоденна картинка із серіями · Нескінченний режим · Позначки-форми для людей із дальтонізмом · 7 гелевих палітр · Повністю офлайн.
 </uk>
 
 <zh-CN>
-初始版本。
+首次发布 · 500 道保证有解的图片谜题 · 每月全新主题活动 · 每日图片，连续挑战 · 无尽模式 · 色弱友好的形状标记 · 7 种凝胶调色板 · 完全离线。
 </zh-CN>
 
 ---
@@ -82,55 +82,55 @@ Başlangıç sürümü.
 _Grow → Store presence → Main store listing → Short description_
 
 <en-US>
-Connect the colored pipes and fill the grid! Relaxing logic puzzle.
+Slide three see-through sheets until the hidden picture develops. Calm logic.
 </en-US>
 
 <ar>
-قم بتوصيل الأنابيب الملونة واملأ الشبكة! أحجية منطقية مريحة.
+انزلق عبر ثلاث أوراق شفافة حتى يظهر الصورة المخفية. منطق هادئ.
 </ar>
 
 <de-DE>
-Verbinde die farbigen Rohre und fülle das Gitter! Entspannendes Logikspiel.
+Schiebe drei Blätter, bis das versteckte Bild erscheint. Logisches Denken!
 </de-DE>
 
 <es-419>
-¡Conecta las tuberías de colores y llena la cuadrícula! Rompecabezas lógico.
+Desliza tres hojas hasta que aparezca la imagen oculta. ¡Lógica tranquila!
 </es-419>
 
 <fr-FR>
-Connectez les tuyaux colorés et remplissez la grille ! Casse-tête relaxant.
+Faites glisser trois feuilles jusqu'à ce que l'image cachée se révèle.
 </fr-FR>
 
 <hi-IN>
-रंगीन पाइपों को जोड़ें और ग्रिड भरें! आरामदायक लॉजिकल पहेली।
+तीन पारदर्शी शीट्स खिसकाएँ और छिपी हुई तस्वीर सामने आएगी। शांति!
 </hi-IN>
 
 <id>
-Sambungkan pipa berwarna dan isi grid! Teka-teki logika yang santai.
+Geser tiga lembar transparan hingga gambar tersembunyi muncul. Logika tenang.
 </id>
 
 <it-IT>
-Collega i tubi colorati e riempi la griglia! Puzzle di logica rilassante.
+Fai scorrere tre fogli trasparenti finché non appare l'immagine segreta!
 </it-IT>
 
 <ja-JP>
-色付きのパイプをつなげて、グリッドを埋めよう！リラックスできる論理パズル。
+透けるシートをスライドして隠れた絵を見つけよう！論理的に楽しもう！
 </ja-JP>
 
 <pt-BR>
-Conecte os tubos coloridos e preencha a grade! Enigma relaxante.
+Deslize três folhas transparentes até a imagem oculta aparecer. Lógica calma.
 </pt-BR>
 
 <tr-TR>
-Renkli boruları birleştir ve ızgarayı doldur! Rahatlatıcı mantık bulmacası.
+Üç şeffaf sayfayı kaydır, gizli resmi ortaya çıkar! Sakin mantık!
 </tr-TR>
 
 <uk>
-З'єднуйте кольорові труби та заповнюйте сітку! Логічна головоломка.
+Пересувати три прозорі аркуші, поки з'явиться приховане зображення.
 </uk>
 
 <zh-CN>
-连接彩色管道，填满网格！轻松的逻辑谜题。
+滑动三张透明纸，直到隐藏图片显现。冷静的逻辑。
 </zh-CN>
 
 ---
@@ -140,510 +140,289 @@ Renkli boruları birleştir ve ızgarayı doldur! Rahatlatıcı mantık bulmacas
 _Grow → Store presence → Main store listing → Full description_
 
 <en-US>
-Welcome to Pipe Connect, a beautifully calm logic puzzle for anyone who likes a quiet, focused brain workout. Drag pipes from each colored endpoint to its matching pair, fill every cell on the board, and listen for the soft click when the grid clicks shut.
+Slide the sheets. Watch the picture develop.
 
-🧠 ONE QUIET PUZZLE AT A TIME
-Every level has a single elegant solution. No timers, no lives lost on tricky moves — just you, the grid, and one of 150 hand-tuned puzzles waiting to be untangled.
+Overlay puts three transparent sheets on a light table. Each sheet carries a few colored cells; where they stack, the upper sheet wins. Drag the sheets until the composite matches the target — and the moment it does, the picture blooms into focus like film in a developing tray.
 
-✨ THE FEEL
-• Smooth, satisfying pipe routing animations
-• ASMR-style sound design — gentle clicks, soft confirmation tones
-• Light haptic feedback on every connection
-• Warm color palette built for long evening sessions
-• Fully offline — play on flights, in line, anywhere
+No timer. No tricks. Just three sheets, a target, and the quiet satisfaction of the exact right slide.
 
-🎯 WHAT'S IN IT
-• 150 free hand-crafted levels, from gentle 5×5 grids up to brain-bending 10×10 boards
-• 6 unlockable pipe themes — earn them by clearing milestones
-• Daily Challenge with login streak rewards
-• Daily Missions — three fresh objectives every 24 hours
-• Free Coins button (rewarded ad, 25 coins every 4 hours)
-• Stats screen tracking puzzles solved, perfect runs, and your longest streak
-• Lives system with free regeneration — no paywall on the core game
-• Weekly Tournament with synthetic leaderboard tiers
+Targets are built to be pictures, not noise — connected, symmetric shapes that snap into meaning when you find them. The campaign ramps from two-color warm-ups to dense three-color stacks, the daily hands everyone the same picture, and endless mode keeps dealing new ones.
 
-🎁 EXTRAS (OPTIONAL)
-• Starter Pack — 100 coins + 5 hints + 5 lives + Ads Off for $0.99
-• Season Pass — ad-free + 100 coins/day + all themes + unlimited hints
-• Coin packs from 100 to 2,000 coins, hint packs, life refills
+FEATURES
+• 500 levels, every one guaranteed solvable
+• Topmost-wins stacking — sheet 3 covers 2 covers 1
+• Daily picture — same for everyone, streaks, spoiler-free sharing
+• Endless mode with unlimited generated pictures
+• Ghost outlines show exactly which cells still miss
+• Shape markers on every color — fully colorblind-friendly, toggle anytime
+• 7 gel palettes including the darkroom Midnight look
+• Calm, offline, one-handed play
 
-🎮 HOW TO PLAY
-• Tap and drag from a colored dot to its matching partner
-• Routes can't cross
-• Fill every cell on the board to solve the level
-• Earn three stars by solving without retracing
-
-The board is a quiet little knot — and you get to untie it.
-
-Made with care by Pegasus Games.
+Three sheets. One picture. Slide until it develops.
 </en-US>
 
 <ar>
-مرحبًا بك في Pipe Connect، لغز منطق هادئ وجميل لأي شخص يحب تمرين عقل هادئ ومركز. قم بسحب الأنابيب من كل نقطة ملونة إلى زوجها المطابق، واملأ كل خلية على اللوحة، واستمع إلى النقرات اللينة عندما تنغلق الشبكة.
+قم بزلق الأوراق. شاهد الصورة تتطور.
 
-🧠 لُغز هادئ واحد في كل مرة
-كل مستوى له حل أنيق وحيد. لا توقيتات، ولا حياة تضيع في الحركات المعقدة — فقط أنت والشبكة وأحد 150 لغزًا تم ضبطه يدويًا في انتظار أن تحلّه.
+تُعِدّ Overlay ثلاث أوراق شفافة على طاولة مضيئة. كل ورقة تحمل عددًا من الخلايا الملونة؛ حيث تتداخل الأوراق، تفوز الورقة العليا. اسحب الأوراق حتى تتطابق الصورة المركبة مع الهدف — وعندما يحدث ذلك، تتفتح الصورة في التركيز مثل الفيلم في حوض التطوير.
 
-✨ الإحساس
-• رسوم متحركة سلسة ومُرضية لتوجيه الأنابيب
-• تصميم صوتي على نمط ASMR — نقرات لطيفة، وأصوات تأكيد هادئة
-• ردود فعل لمسية خفيفة في كل اتصال
-• لوحة ألوان دافئة مصممة لجلسات مسائية طويلة
-• بالكامل غير متصل بالإنترنت — العب أثناء الرحلات، وفي الطوابير، في أي مكان
+لا مؤقت. لا خدع. فقط ثلاث أوراق، هدف، والرضا الهادئ للتزليق الدقيق الصحيح.
 
-🎯 ما الذي يحتويه
-• 150 مستوى مجاني مصمم يدويًا، من شبكات 5×5 السهلة إلى ألواح 10×10 المحيرة
-• 6 ثيمات أنابيب قابلة للتفتح — اكسبها عن طريق اجتياز المعالم
-• تحدي يومي مع جوائز لمن يحقق موجات تسجيل الدخول
-• مهام يومية — ثلاثة أهداف جديدة كل 24 ساعة
-• زر العملات المجانية (إعلان مكافأة، 25 عملة كل 4 ساعات)
-• شاشة إحصاءات تتعقب الألغاز المحلولة، والمشاريع المثالية، وأطول سلسلة لك
-• نظام حياة مع تجديد مجاني — لا توجد نقطة دفع على اللعبة الأساسية
-• بطولة أسبوعية مع مستويات تصنيف اصطناعية
+تُبنى الأهداف لتكون صورًا، لا ضوضاء — أشكال متصلة ومتناظرة تنبض بالمعنى عندما تجدها. تبدأ الحملة من تمارين ثنائية اللون إلى كومات كثيفة ثلاثية الألوان، والصورة اليومية تُعطى للجميع، ووضعية اللانهاية تستمر بتوزيع صور جديدة.
 
-🎁 إضافات (اختياري)
-• حزمة البداية — 100 عملة + 5 تلميحات + 5 أرواح + إعلانات بدون 0.99 دولار
-• التذكرة الموسمية — بدون إعلانات + 100 عملة/يوم + جميع الثيمات + تلميحات غير محدودة
-• حزم العملات من 100 إلى 2000 عملة، حزم التلميحات، تجديد الأرواح
+الميزات
+• 500 مستوى، كل منها مضمون الحل
+• فوز الورقة العليا عند التكديس — الورقة 3 تغطي 2 تغطي 1
+• صورة يومية — نفس الشيء للجميع، سلسلة، مشاركة بدون حرق
+• وضع اللانهاية مع صور غير محدودة تم إنشاؤها
+• خطوط الأشباح تُظهر بالضبط أي الخلايا ما زالت مفقودة
+• علامات الشكل على كل لون — داعم تمامًا لعمى الألوان، يمكن التحويل في أي وقت
+• 7 لوحات هلامية بما في ذلك مظهر غرفة الظلام منتصف الليل
+• لعب هادئ، بدون اتصال، بيد واحدة
 
-🎮 كيفية اللعب
-• انقر واسحب من نقطة ملونة إلى شريكها المطابق
-• لا يمكن أن تتقاطع المسارات
-• املأ كل خلية على اللوحة لحل المستوى
-• احصل على ثلاث نجوم عن طريق الحل بدون الرجوع للخلف
-
-اللوحة هي عقدة صغيرة هادئة — وأنت من سيفككها.
-
-صُنعت بعناية من قبل Pegasus Games.
+ثلاث أوراق. صورة واحدة. انزلق حتى تتطور.
 </ar>
 
 <de-DE>
-Willkommen bei Pipe Connect, einem wunderschön ruhigen Logikrätsel für alle, die ein stilles, fokussiertes Gehirntraining mögen. Ziehen Sie Rohre von jedem farbigen Endpunkt zu seinem passenden Paar, füllen Sie jede Zelle auf dem Brett und hören Sie auf das sanfte Klicken, wenn das Raster sich schließt.
+SCHIEBE DIE FOLIEN. BEOBACHTE, WIE DAS BILD ENTSTEHT.
 
-🧠 EINE RUHIGE RÄTSELN NACH DER ANDEREN
-Jede Stufe hat eine elegante Lösung. Keine Timer, keine Leben, die bei kniffligen Zügen verloren gehen — nur Sie, das Raster und eines von 150 handverfeinerten Rätseln, die darauf warten, entwirrt zu werden.
+Overlay bringt drei transparente Folien auf einen Lichttisch. Jede Folie trägt einige farbige Zellen; wo sie sich stapeln, gewinnt die oberste Folie. Ziehe die Folien, bis das Komposit dem Zielbild entspricht — und in dem Moment, in dem es passt, blüht das Bild in den Fokus wie Film in einem Entwicklungsfach.
 
-✨ DAS GEFÜHL
-• Sanfte, zufriedenstellende Animationen beim Rohrverlegen
-• ASMR-ähnliches Sounddesign — sanfte Klicks, leise Bestätigungstöne
-• Leichtes haptisches Feedback bei jeder Verbindung
-• Warme Farbpalette, die für lange Abendsitzungen gedacht ist
-• Vollständig offline — spielen Sie im Flugzeug, in der Warteschlange, überall
+KEIN TIMER. KEINE TRICKS. NUR DREI FOLIEN, EIN ZIEL UND DIE RUHIGE ZUFRIEDENHEIT DES GENAU RICHTIGEN SCHRITTS.
 
-🎯 WAS IST ENTHALTEN
-• 150 kostenlose, handgefertigte Level, von sanften 5×5 Rastern bis zu herausfordernden 10×10 Brettern
-• 6 freischaltbare Rohr-Themen — verdienen Sie diese durch das Erreichen von Meilensteinen
-• Tägliche Herausforderung mit Belohnungen für Anmeldereihen
-• Tägliche Missionen — drei neue Ziele alle 24 Stunden
-• Kostenloser Münzen-Button (belohnte Werbung, 25 Münzen alle 4 Stunden)
-• Statistiken zur Verfolgung gelöster Rätsel, perfekter Läufe und Ihrer längsten Reihe
-• Lebenssystem mit kostenloser Regeneration — keine Bezahlschranke im Hauptspiel
-• Wöchentlicher Wettbewerb mit synthetischen Bestenlisten
+Ziele sind so gestaltet, dass sie Bilder und keine Geräusche sind — verbundene, symmetrische Formen, die Bedeutung annehmen, wenn du sie findest. Die Kampagne beginnt mit zweifarbigen Aufwärmübungen und steigert sich zu dichten dreifarbigen Stapeln; der tägliche Bildbeitrag ist für alle gleich, und der Endlosmodus bietet unendliche neue Bilder.
 
-🎁 EXTRAS (OPTIONAL)
-• Starter-Paket — 100 Münzen + 5 Hinweise + 5 Leben + Werbung aus für 0,99 $
-• Saisonpass — werbefrei + 100 Münzen/Tag + alle Themen + unbegrenzte Hinweise
-• Münzpakete von 100 bis 2.000 Münzen, Hinweis-Pakete, Lebensauffüllungen
+MERKMALE
+• 500 LEVEL – JEDES GARANTIERT LÖSBAR
+• DAS OBERSTE GEWINNT – FOLIE 3 ÜBERDECKT 2 ÜBERDECKT 1
+• TÄGLICHES BILD – FÜR ALLE GLEICH, STREAKS, SPOILERFREIES TEILEN
+• ENDLOSMODUS MIT UNBEGRENZTEN GENERIERTEN BILDERN
+• GHOST-KONTUREN WEISEN GENAU AUS, WELCHE ZELLEN NOCH FEHLEN
+• FORMENMARKIERER FÜR JEDINE FARBE – VOLLSTÄNDIG FARBENBLIND-FREUNDLICH, JEDERZEIT UMLEITBAR
+• 7 GEL-PALLETTEN, EINSCHLIEßLICH DES DUNKELKAMMER-MIDNIGHT-LOOKS
+• RUHIGES, offline spielbares EINHAND-ERLEBNIS
 
-🎮 SO SPIELEN SIE
-• Tippen und ziehen Sie von einem farbigen Punkt zu seinem passenden Partner
-• Routen dürfen sich nicht kreuzen
-• Füllen Sie jede Zelle auf dem Brett, um das Level zu lösen
-• Verdienen Sie drei Sterne, indem Sie ohne Rückverfolgung lösen
-
-Das Brett ist ein ruhiger kleiner Knoten — und Sie dürfen ihn entknüpfen.
-
-Mit Sorgfalt von Pegasus Games erstellt.
+DREI FOLIEN. EIN BILD. SCHIEBE, BIS ES ENTSTEHT.
 </de-DE>
 
 <es-419>
-Bienvenido a Pipe Connect, un hermoso puzzle lógico y tranquilo para quienes disfrutan de un ejercicio mental enfocado. Arrastra tuberías desde cada extremo de color hasta su pareja correspondiente, llena cada celda en el tablero y escucha el suave clic cuando la rejilla se cierra.
+Desliza las capas. Observa cómo la imagen se desarrolla.
 
-🧠 UN PUZZLE TRANQUILO A LA VEZ  
-Cada nivel tiene una única solución elegante. Sin temporizadores, sin vidas perdidas en movimientos complicados, solo tú, la rejilla y uno de los 150 puzzles diseñados a mano esperando ser desmadejados.
+Overlay coloca tres láminas transparentes sobre una mesa iluminada. Cada lámina tiene algunas celdas de colores; donde se superponen, la lámina superior gana. Arrastra las láminas hasta que el compuesto coincida con el objetivo — y en el momento en que lo haga, la imagen florece en foco como una película en un tanque de revelado.
 
-✨ LA SENSACIÓN  
-• Animaciones de enrutamiento de tuberías suaves y satisfactorias  
-• Diseño de sonido estilo ASMR — clics suaves, tonos de confirmación delicados  
-• Ligera retroalimentación háptica en cada conexión  
-• Paleta de colores cálida pensada para largas sesiones nocturnas  
-• Totalmente offline — juega en vuelos, en fila, en cualquier lugar  
+Sin temporizador. Sin trucos. Solo tres láminas, un objetivo y la tranquila satisfacción de la combinación perfecta.
 
-🎯 ¿QUÉ HAY DENTRO?  
-• 150 niveles gratuitos hechos a mano, desde suaves rejillas de 5×5 hasta complicados tableros de 10×10  
-• 6 temas de tuberías desbloqueables — consíguelos al completar hitos  
-• Desafío diario con recompensas por rachas de inicio de sesión  
-• Misiones diarias — tres objetivos nuevos cada 24 horas  
-• Botón de monedas gratis (anuncio recompensado, 25 monedas cada 4 horas)  
-• Pantalla de estadísticas que rastrea puzzles resueltos, carreras perfectas y tu racha más larga  
-• Sistema de vidas con regeneración gratuita — sin muro de pago en el juego principal  
-• Torneos semanales con niveles de clasificaciones sintéticas  
+Los objetivos están diseñados para ser imágenes, no ruido — formas conectadas y simétricas que cobran sentido cuando las encuentras. La campaña comienza con ejercicios de dos colores y pasa a apilamientos densos de tres colores, la imagen diaria es la misma para todos, y el modo infinito sigue ofreciendo nuevas imágenes.
 
-🎁 EXTRAS (OPCIONALES)  
-• Paquete inicial — 100 monedas + 5 pistas + 5 vidas + sin anuncios por $0.99  
-• Pase de temporada — sin anuncios + 100 monedas/día + todos los temas + pistas ilimitadas  
-• Paquetes de monedas de 100 a 2,000 monedas, paquetes de pistas, recargas de vidas  
+CARACTERÍSTICAS
+• 500 niveles, cada uno garantizado resoluble
+• Apilamiento por superposición — la lámina 3 cubre a la 2 que cubre a la 1
+• Imagen diaria — la misma para todos, rachas, compartición sin spoilers
+• Modo infinito con imágenes generadas ilimitadas
+• Contornos fantasma que muestran exactamente qué celdas faltan
+• Marcadores de forma en cada color — completamente amigable para daltónicos, cambia en cualquier momento
+• 7 paletas de gel, incluida la apariencia Midnight del cuarto oscuro
+• Juego tranquilo, fuera de línea, con una sola mano
 
-🎮 CÓMO JUGAR  
-• Toca y arrastra desde un punto de color hasta su pareja correspondiente  
-• Las rutas no pueden cruzarse  
-• Llena cada celda en el tablero para resolver el nivel  
-• Gana tres estrellas resolviendo sin dar marcha atrás  
-
-El tablero es un pequeño nudo silencioso — y tú tienes que desatarlo.  
-
-Hecho con cuidado por Pegasus Games.
+Tres láminas. Una imagen. Desliza hasta que se desarrolle.
 </es-419>
 
 <fr-FR>
-Bienvenue dans Pipe Connect, un puzzle logique apaisant pour tous ceux qui aiment un entraînement cérébral calme et concentré. Glissez les tuyaux de chaque extrémité colorée vers son paire correspondante, remplissez chaque cellule du plateau et écoutez le doux clic lorsque la grille se verrouille.
+Faites glisser les feuilles. Regardez l'image se développer.
 
-🧠 UN PUZZLE CALME À LA FOIS
-Chaque niveau a une seule solution élégante. Pas de chronomètres, pas de vies perdues sur des mouvements délicats — juste vous, la grille, et l'une des 150 énigmes conçues à la main qui attendent d'être résolues.
+Overlay place trois feuilles transparentes sur une table lumineuse. Chaque feuille comporte quelques cellules colorées ; là où elles se superposent, la feuille du dessus l'emporte. Faites glisser les feuilles jusqu'à ce que le composite corresponde à l'objectif — et au moment où il le fait, l'image s'épanouit comme un film dans un bac de développement.
 
-✨ L'AMBIANCE
-• Animations de routage de tuyaux fluides et satisfaisantes
-• Design sonore de style ASMR — clics doux, tonalités de confirmation apaisantes
-• Retour haptique léger à chaque connexion
-• Palette de couleurs chaleureuse conçue pour de longues sessions du soir
-• Entièrement hors ligne — jouez en vol, dans la file d'attente, partout
+Pas de chronomètre. Pas de trucs. Juste trois feuilles, un objectif, et la satisfaction tranquille du glissement exactement parfait.
 
-🎯 CE QUE VOUS TROUVEREZ
-• 150 niveaux gratuits faits à la main, des grilles accessibles de 5×5 aux tableaux déroutants de 10×10
-• 6 thèmes de tuyaux déblocables — gagnez-les en atteignant des jalons
-• Défi Quotidien avec des récompenses de connexion
-• Missions Quotidiennes — trois nouveaux objectifs toutes les 24 heures
-• Bouton de Pièces Gratuites (publicité récompensée, 25 pièces toutes les 4 heures)
-• Écran de statistiques suivant les puzzles résolus, les courses parfaites et votre plus longue série
-• Système de vies avec régénération gratuite — pas de mur payant pour le jeu principal
-• Tournoi Hebdomadaire avec niveaux de classement synthétiques
+Les cibles sont conçues pour être des images, pas du bruit — des formes connectées et symétriques qui prennent un sens quand vous les trouvez. La campagne passe des échauffements à deux couleurs à des piles denses à trois couleurs, la main quotidienne offrant à tous la même image, et le mode infini continue de distribuer de nouvelles images.
 
-🎁 SUPPLÉMENTS (OPTIONNELS)
-• Pack de Démarrage — 100 pièces + 5 indices + 5 vies + Publicités Désactivées pour 0,99 $
-• Pass de Saison — sans publicité + 100 pièces/jour + tous les thèmes + indices illimités
-• Packs de pièces de 100 à 2 000 pièces, packs d'indices, recharges de vies
+CARACTÉRISTIQUES
+• 500 niveaux, tous garantis résolvables
+• Superposition à l'emporte-pièce — la feuille 3 couvre 2 qui couvre 1
+• Image quotidienne — la même pour tous, séries, partage sans spoiler
+• Mode infini avec images générées illimitées
+• Contours fantômes montrant exactement quelles cellules manquent
+• Marqueurs de forme sur chaque couleur — entièrement adapté aux personnes daltoniennes, activable à tout moment
+• 7 palettes de gel et un look sombre de chambre noire
+• Jeu calme, hors ligne, à une main
 
-🎮 COMMENT JOUER
-• Touchez et faites glisser d'un point coloré à son partenaire correspondant
-• Les trajets ne peuvent pas se croiser
-• Remplissez chaque cellule du plateau pour résoudre le niveau
-• Gagnez trois étoiles en résolvant sans revenir en arrière
-
-Le plateau est un petit nœud silencieux — et vous allez le défaire.
-
-Fait avec soin par Pegasus Games.
+Trois feuilles. Une image. Glissez jusqu'à ce qu'elle se développe.
 </fr-FR>
 
 <hi-IN>
-Pipe Connect में आपका स्वागत है, एक सुंदर शांत लॉजिक पज़ल जो किसी भी व्यक्ति के लिए है जो एक शांत, केंद्रित मस्तिष्क के वर्कआउट का आनंद लेता है। हर रंग के अंत बिंदु से पाइप खींचें और इसे उसके संगत जोड़ी पर ले जाएं, बोर्ड के हर सेल को भरें, और जब ग्रिड बंद होता है तब सुनहरी क्लिक सुनें।
+चादरों को स्लाइड करें। चित्र को विकसित होता देखें।
 
-🧠 एक समय में एक शांत पहेली  
-हर स्तर में केवल एक सुंदर समाधान होता है। कोई टाइमर नहीं, पेचीदा चालों पर कोई जीवन नहीं खोता — सिर्फ आप, ग्रिड, और 150 हस्तनिर्मित पहेलियाँ जो सुलझाने के लिए इंतजार कर रही हैं।
+ओवरले एक लाइट टेबल पर तीन पारदर्शी चादरों को रखता है। प्रत्येक चादर में कुछ रंगीन कोशिकाएं होती हैं; जहाँ वे ढेर होते हैं, शीर्ष चादर जीतता है। चादरों को खींचें जब तक संयोजन लक्ष्य से मेल नहीं खाता — और जैसे ही यह मेल खाता है, चित्र विकसित करने की ट्रे में फिल्म की तरह स्पष्टता में खिलता है।
 
-✨ एहसास  
-• चिकनी, संतोषजनक पाइप रूटिंग एनीमेशन  
-• ASMR-शैली की ध्वनि डिज़ाइन — नरम क्लिक, हल्की पुष्टि की ध्वनियाँ  
-• हर कनेक्शन पर हल्का हैप्टिक फीडबैक  
-• लंबे शाम के सत्रों के लिए गर्म रंगों की पैलेट  
-• पूरी तरह से ऑफलाइन — उड़ानों में, लाइन में, कहीं भी खेलें  
+कोई टाइमर नहीं। कोई चालें नहीं। केवल तीन चादरें, एक लक्ष्य, और सही स्लाइड का शांत संतोष।
 
-🎯 इसमें क्या है  
-• 150 मुफ्त हस्तनिर्मित स्तर, सरल 5×5 ग्रिड से लेकर दिमाग को मोड़ने वाले 10×10 बोर्ड तक  
-• 6 अनलॉक होने वाले पाइप थीम — मील के पत्थर को साफ करके कमाएं  
-• दैनिक चुनौती के साथ लॉगिन श्रृंखला पुरस्कार  
-• दैनिक मिशन — हर 24 घंटे में तीन नए उद्देश्य  
-• मुफ्त सिक्के बटन (पुरস্কृत विज्ञापन, हर 4 घंटे में 25 सिक्के)  
-• सांख्यिकी स्क्रीन जो हल की गई पहेलियों, परफेक्ट रन, और आपकी सबसे लंबी श्रृंखला को ट्रैक करती है  
-• मुफ्त पुनर्जनन के साथ जीवन प्रणाली — मुख्य खेल पर कोई भुगतान दीवार नहीं  
-• साप्ताहिक टूर्नामेंट के साथ सिंथेटिक लीडरबोर्ड स्तर  
+लक्ष्य चित्र बनाने के लिए बनाए गए हैं, शोर के लिए नहीं — जुड़े हुए, सममित आकार जो जब आप उन्हें खोजते हैं तो अर्थ में बदल जाते हैं। अभियान दो रंगों से शुरू होकर घने तीन रंगों के ढेर तक बढ़ता है, दैनिक स्तर सभी को वही चित्र देता है, और अंतहीन मोड नए चित्रों का वितरण करता है।
 
-🎁 अतिरिक्त (वैकल्पिक)  
-• स्टार्टर पैक — 100 सिक्के + 5 संकेत + 5 जीवन + विज्ञापनों के बिना $0.99 में  
-• सीज़न पास — विज्ञापन-मुक्त + 100 सिक्के/दिन + सभी थीम + अनलिमिटेड संकेत  
-• 100 से 2000 सिक्कों के सिक्का पैक, संकेत पैक, जीवन पुनः भरना  
+विशेषताएँ
+• 500 स्तर, हर एक हल करने की गारंटी 
+• शीर्ष पर जीतने वाले ढेर — चादर 3, 2 को ढकती है, जो 1 को ढकती है 
+• दैनिक चित्र — सभी के लिए समान, क्रम, बिना स्पॉइलर के साझा करना 
+• अंतहीन मोड जिसमें अनलिमिटेड उत्पन्न चित्र होते हैं 
+• भूत की रेखाएँ दिखाती हैं कि कौन सी कोशिकाएँ अभी भी गायब हैं 
+• हर रंग पर आकार के मार्कर — पूरी तरह से रंग अंधता के अनुकूल, कभी भी टॉगल करें 
+• 7 जेल पैलेट जिनमें डार्करूम मिडनाइट लुक शामिल है 
+• शांत, ऑफलाइन, एक हाथ से खेलने योग्य 
 
-🎮 खेलना कैसे है  
-• एक रंगीन बिंदु पर टैप करें और उसे उसकी संगत साथी पर खींचें  
-• मार्ग क्रॉस नहीं कर सकते  
-• स्तर को हल करने के लिए बोर्ड के हर सेल को भरें  
-• बिना फिर से ट्रेस किए हल करने पर तीन सितारे कमाएं  
-
-बोर्ड एक शांत छोटा गाँठ है — और आपको इसे खोलना है।  
-
-पीगासस गेम्स द्वारा ध्यान से बनाया गया।
+तीन चादरें। एक चित्र। स्लाइड करें जब तक कि यह विकसित न हो जाए।
 </hi-IN>
 
 <id>
-Selamat datang di Pipe Connect, teka-teki logika yang tenang dan indah untuk siapa saja yang menyukai latihan otak yang fokus. Seret pipa dari setiap titik warna ke pasangan yang cocok, isi setiap sel di papan, dan dengarkan suara lembut saat grid terhubung.
+GESER KERTASNYA. LIHAT GAMBARNYA BERKEMBANG.
 
-🧠 SATU TEKA-TEKI TENANG SEKALIGUS
-Setiap level memiliki satu solusi elegan. Tanpa batas waktu, tanpa kehilangan nyawa atas gerakan sulit — hanya Anda, grid, dan salah satu dari 150 teka-teki yang telah disesuaikan menunggu untuk dipecahkan.
+Overlay menempatkan tiga lembar transparan di atas meja cahaya. Setiap lembar membawa beberapa sel berwarna; di mana mereka bertumpuk, lembar paling atas menang. Seret lembar-lembar sampai kompositnya cocok dengan target — dan saat itu terjadi, gambar akan mekar kembali menjadi fokus seperti film dalam nampan pengembang.
 
-✨ PERASAAN
-• Animasi jalur pipa yang halus dan memuaskan
-• Desain suara gaya ASMR — klik lembut, nada konfirmasi yang lembut
-• Umpan balik haptik ringan pada setiap koneksi
-• Palet warna hangat yang dibuat untuk sesi malam yang panjang
-• Sepenuhnya offline — mainkan di pesawat, dalam antrean, di mana saja
+Tanpa timer. Tanpa trik. Hanya tiga lembar, satu target, dan kepuasan tenang dari geseran yang tepat.
 
-🎯 APA YANG ADA DI DALAMNYA
-• 150 level gratis yang dibuat dengan tangan, dari grid 5×5 yang lembut hingga papan 10×10 yang menantang
-• 6 tema pipa yang dapat dibuka — dapatkan dengan menyelesaikan tonggak
-• Tantangan Harian dengan hadiah streak login
-• Misi Harian — tiga tujuan baru setiap 24 jam
-• Tombol Koin Gratis (iklan berhadiah, 25 koin setiap 4 jam)
-• Layar statistik yang melacak teka-teki yang diselesaikan, run sempurna, dan streak terpanjang Anda
-• Sistem nyawa dengan regenerasi gratis — tidak ada dinding bayar pada permainan inti
-• Turnamen Mingguan dengan tier papan peringkat sintetis
+Target dirancang untuk menjadi gambar, bukan kebisingan — bentuk yang terhubung dan simetris yang segera memiliki makna saat kamu menemukannya. Kampanye dimulai dari pemanasan dua warna ke tumpukan tiga warna yang padat, gambar harian yang sama untuk semua, dan mode tanpa akhir terus menawarkan yang baru.
 
-🎁 EKSTRA (OPSIONAL)
-• Paket Pemula — 100 koin + 5 petunjuk + 5 nyawa + Iklan Dimatikan seharga $0,99
-• Season Pass — tanpa iklan + 100 koin/hari + semua tema + petunjuk tak terbatas
-• Paket koin dari 100 hingga 2.000 koin, paket petunjuk, pengisian nyawa
+FITUR
+• 500 level, setiap level dijamin dapat diselesaikan
+• Tumpukan dengan yang atas menang — lembar 3 menutupi 2 menutupi 1
+• Gambar harian — sama untuk semua, streak, berbagi tanpa spoiler
+• Mode tanpa akhir dengan gambar yang dihasilkan tanpa batas
+• Garis hantu menunjukkan sel mana yang masih kurang
+• Penanda bentuk di setiap warna — sepenuhnya ramah buta warna, aktifkan kapan saja
+• 7 palet gel termasuk tampilan Midnight di ruang gelap
+• Permainan santai, offline, dengan satu tangan
 
-🎮 CARA BERMAIN
-• Ketuk dan seret dari titik berwarna ke pasangan yang cocok
-• Jalur tidak dapat bersilangan
-• Isi setiap sel di papan untuk menyelesaikan level
-• Dapatkan tiga bintang dengan menyelesaikan tanpa mengulangi langkah
-
-Papan adalah simpul kecil yang tenang — dan Anda bisa mengikatnya.
-
-Dibuat dengan hati-hati oleh Pegasus Games.
+Tiga lembar. Satu gambar. Geser sampai ia berkembang.
 </id>
 
 <it-IT>
-Benvenuto in Pipe Connect, un puzzle logico splendidamente rilassante per chi ama un allenamento mentale tranquillo e concentrato. Trascina i tubi da ciascun estremità colorata alla sua coppia corrispondente, riempi ogni cella della griglia e ascolta il dolce clic quando la griglia si chiude.
+FAI SCIVOLARE LE LASTRE. GUARDA L'IMMAGINE SVILUPPARSI.
 
-🧠 UN PUZZLE TRANQUILLO ALLA VOLTA
-Ogni livello ha una sola elegante soluzione. Niente timer, nessuna vita persa in mosse complicate: solo tu, la griglia e uno dei 150 puzzle creati a mano in attesa di essere risolti.
+Overlay mette tre lastre trasparenti su un tavolo luminoso. Ogni lastra contiene alcune celle colorate; dove si sovrappongono, la lastra superiore vince. Fai scorrere le lastre finché il composito non corrisponde all'obiettivo — e nel momento in cui lo fa, l'immagine fiorisce a fuoco come un film in un vassoio di sviluppo.
 
-✨ L'ATMOFERA
-• Animazioni fluide e soddisfacenti del percorso dei tubi
-• Design sonoro in stile ASMR — clic delicati, toni di conferma morbidi
-• Leggero feedback aptico a ogni connessione
-• Palette di colori calda pensata per lunghe sessioni serali
-• Completamente offline — gioca in volo, in coda, ovunque
+Nessun timer. Nessun trucco. Solo tre lastre, un obiettivo e la soddisfazione tranquilla del perfetto scivolamento.
 
-🎯 COSA C'È DENTRO
-• 150 livelli gratuiti fatti a mano, da griglie dolci 5×5 a tabelloni 10×10 che sfidano la mente
-• 6 temi di tubi sbloccabili — guadagnali completando traguardi
-• Sfida Giornaliera con ricompense per accesso continuo
-• Missioni Giornalieri — tre nuovi obiettivi ogni 24 ore
-• Pulsante Monete gratuito (video promozionale, 25 monete ogni 4 ore)
-• Schermata statistiche per tenere traccia dei puzzle risolti, dei percorsi perfetti e della tua serie più lunga
-• Sistema di vite con rigenerazione gratuita — nessun muro di pagamento nel gioco principale
-• Torneo Settimanale con livelli della classifica sintetica
+Gli obiettivi sono costruiti per essere immagini, non rumore — forme connesse e simmetriche che acquisiscono significato quando le trovi. La campagna inizia con due colori di riscaldamento e passa a stack densi di tre colori, il "giornaliero" offre a tutti la stessa immagine, e la modalità infinita continua a distribuire nuove immagini.
 
-🎁 EXTRA (OPZIONALI)
-• Pacchetto Iniziale — 100 monete + 5 suggerimenti + 5 vite + Annunci disattivati per $0.99
-• Pass Stagionale — senza pubblicità + 100 monete/giorno + tutti i temi + suggerimenti illimitati
-• Pacchetti Monete da 100 a 2.000 monete, pacchetti di suggerimenti, ricariche di vite
+CARATTERISTICHE
+• 500 livelli, ognuno garantito risolvibile
+• Sovrapposizione che vince — la lastra 3 copre 2 che copre 1
+• Immagine quotidiana — la stessa per tutti, serie, condivisione senza spoiler
+• Modalità infinita con immagini generate illimitate
+• Contorni fantasma mostrano esattamente quali celle mancano
+• Marker di forma su ogni colore — completamente accessibile ai daltonici, attivabile in qualsiasi momento
+• 7 palette gel, incluso l’aspetto darkroom “Midnight”
+• Gioco tranquillo, offline, con una mano
 
-🎮 COME GIOCARE
-• Tocca e trascina da un punto colorato al suo partner
-• I percorsi non possono incrociarsi
-• Riempi ogni cella della griglia per completare il livello
-• Guadagna tre stelle risolvendo senza mai tornare indietro
-
-La griglia è un piccolo nodo tranquillo — e tu hai il compito di scioglierlo.
-
-Realizzato con cura da Pegasus Games.
+Tre lastre. Un'immagine. Scivola finché non si sviluppa.
 </it-IT>
 
 <ja-JP>
-パイプコネクトへようこそ。静かで集中できる頭の体操を楽しむ人のための美しい論理パズルです。各色のエンドポイントから対応するペアにパイプをドラッグし、ボード上のすべてのセルを埋め、グリッドが閉じるときの柔らかなクリック音を楽しんでください。
+シートをスライドさせる。絵が現れるのを見よう。
 
-🧠 一度に一つの静かなパズル
-すべてのレベルには、わずかに優雅な解法があります。タイマーなし、難しい動きで命を失うこともなし — あなたとグリッド、そして150の手作りのパズルのうちの一つがあります。
+Overlayは、ライトテーブルに透明なシートを3枚重ねます。各シートにはいくつかの色付きセルがあり、重なった部分では上のシートが勝ちます。シートをドラッグして合成がターゲットと一致するまでスライドさせ、ぴったり合った瞬間、絵は現像トレイでフィルムが現れるように焦点が合います。
 
-✨ 感触
-• 滑らかで満足感のあるパイプルーティングアニメーション
-• ASMRスタイルのサウンドデザイン — 穏やかなクリック音、優しい確認音
-• すべての接続で軽いハプティックフィードバック
-• 長時間の夕方セッションに最適な暖かいカラーパレット
-• 完全オフライン — 飛行機内や列の中、どこでもプレイ可能
+タイマーなし。トリックなし。シート3枚、ターゲット、そして正確なスライドの静かな満足感だけです。
 
-🎯 何が含まれているか
-• 優しい5×5グリッドから脳をひねる10×10ボードまで、150の無料ハンドクラフトレベル
-• 6つの解除可能なパイプテーマ — マイルストーンをクリアすることで獲得
-• ログインボーナスがあるデイリーチャレンジ
-• デイリーミッション — 24時間ごとに新しい三つの目標
-• 無料コインボタン（広告視聴で獲得、4時間ごとに25コイン）
-• 解決したパズルの数、パーフェクトなプレイ、最長の連続記録を追跡する統計画面
-• 無料再生可能なライフシステム — コアゲームに支払いの壁なし
-• 合成リーダーボード階層を持つ週刊トーナメント
+ターゲットはノイズではなく絵になるように設計されています。見つけると意味を持つ、つながった対称的な形です。キャンペーンは2色のウォームアップから始まり、3色の複雑なスタックに進みます。毎日同じ絵が配られ、エンドレスモードでは新しい絵が無限に生成され続けます。
 
-🎁 エクストラ（オプション）
-• スターティングパック — 100コイン + 5ヒント + 5ライフ + 広告オフ $0.99
-• シーズンパス — 広告なし + 1日100コイン + すべてのテーマ + 無限ヒント
-• 100から2000コインのコインパック、ヒントパック、ライフ補充
+特徴
+• 500のレベル、どれも解決可能
+• 一番上が勝つスタッキング — シート3がシート2をカバーし、シート2がシート1をカバー
+• 毎日の絵 — 誰でも同じ、連勝、ネタバレなしの共有
+• 無限モードで無制限の生成された絵
+• 幽霊のアウトラインが、まだ欠けているセルを正確に示します
+• すべての色に形マーカー — 完全に色盲フレンドリー、いつでも切り替え可能
+• ダークルームのミッドナイトルックを含む7つのジェルパレット
+• 落ち着いた、オフライン、一手でのプレイ
 
-🎮 プレイ方法
-• 色付きのドットから対応するパートナーにタップしてドラッグ
-• ルートが交差することはできません
-• レベルを解決するにはボード上のすべてのセルを埋める
-• 引き返さずに解決すると三つ星を獲得
-
-ボードは小さな静かな結び目 — そしてあなたがそれをほぐすことができます。
-
-ペガサスゲームズによって丁寧に作られました。
+3枚のシート。1枚の絵。現れるまでスライドしよう。
 </ja-JP>
 
 <pt-BR>
-Bem-vindo ao Pipe Connect, um puzzle lógico calmamente bonito para quem gosta de um exercício cerebral tranquilo e focado. Arraste canos de cada extremidade colorida para seu par correspondente, preencha cada célula do tabuleiro e ouça o suave clique quando a grade se fechar.
+Deslize as folhas. Assista a imagem se desenvolver.
 
-🧠 UM PUZZLE SILENCIOSO POR VEZ  
-Cada nível possui uma única solução elegante. Sem cronômetros, sem vidas perdidas em movimentos complicados — apenas você, a grade e um dos 150 puzzles cuidadosamente elaborados esperando para serem desvendados.
+Overlay coloca três folhas transparentes em uma mesa de luz. Cada folha possui algumas células coloridas; onde se sobrepõem, a folha de cima vence. Arraste as folhas até que o composto corresponda ao alvo — e no momento em que isso acontecer, a imagem floresce em foco como filme em um tanque de revelação.
 
-✨ A SENSÇÃO  
-• Animações de roteamento de canos suaves e satisfatórias  
-• Design de som estilo ASMR — cliques suaves, tons de confirmação delicados  
-• Feedback tátil leve em cada conexão  
-• Paleta de cores quentes, ideal para longas sessões noturnas  
-• Totalmente offline — jogue durante voos, em filas, em qualquer lugar  
+Sem temporizador. Sem truques. Apenas três folhas, um alvo e a satisfação silenciosa do deslize exato.
 
-🎯 O QUE TEM NELE  
-• 150 níveis gratuitos feitos à mão, desde grades suaves de 5×5 até tabuleiros desafiadores de 10×10  
-• 6 temas de canos desbloqueáveis — ganhe ao atingir marcos  
-• Desafio Diário com recompensas por sequência de login  
-• Missões Diárias — três objetivos novos a cada 24 horas  
-• Botão de Moedas Gratuitas (anúncio recompensado, 25 moedas a cada 4 horas)  
-• Tela de estatísticas rastreando puzzles resolvidos, corridas perfeitas e sua maior sequência  
-• Sistema de vidas com regeneração gratuita — sem limite de pagamento no jogo principal  
-• Torneio Semanal com níveis de leaderboard sintéticos  
+Os alvos são feitos para serem imagens, não ruídos — formas conectadas e simétricas que se tornam significativas quando você as encontra. A campanha começa com aquecimentos de duas cores e avança para densas combinações de três cores, o modo diário entrega a mesma imagem a todos, e o modo infinito continua a gerar novas.
 
-🎁 EXTRAS (OPCIONAL)  
-• Pacote Inicial — 100 moedas + 5 dicas + 5 vidas + Ads Off por $0,99  
-• Passe de Temporada — sem anúncios + 100 moedas/dia + todos os temas + dicas ilimitadas  
-• Pacotes de moedas de 100 a 2.000 moedas, pacotes de dicas, recargas de vidas  
+CARACTERÍSTICAS
+• 500 níveis, cada um garantidamente solucionável
+• Empilhamento onde a de cima ganha — a folha 3 cobre 2 que cobre 1
+• Imagem diária — a mesma para todos, sequências, compartilhamento sem spoilers
+• Modo infinito com imagens geradas ilimitadas
+• Contornos fantasmas mostram exatamente quais células ainda faltam
+• Marcadores de forma em cada cor — totalmente amigável para daltônicos, alternar a qualquer momento
+• 7 paletas de gel incluindo o visual de laboratório escuro Midnight
+• Jogo calmo, offline e com uma mão
 
-🎮 COMO JOGAR  
-• Toque e arraste de um ponto colorido para seu parceiro correspondente  
-• Os trajetos não podem se cruzar  
-• Preencha cada célula do tabuleiro para resolver o nível  
-• Ganhe três estrelas ao resolver sem retrazar  
-
-O tabuleiro é um pequeno nó silencioso — e você vai desamarrá-lo.
-
-Feito com cuidado pela Pegasus Games.
+Três folhas. Uma imagem. Deslize até se desenvolver.
 </pt-BR>
 
 <tr-TR>
-Pipe Connect'e hoş geldiniz, sessiz, odaklanmış bir beyin egzersizi arayan herkes için huzurlu bir mantık bulmacası. Renkli uçlardan boruları eşleşen çiftine sürükleyin, tahtadaki her hücreyi doldurun ve ızgaranın kapandığında çıkan yumuşak tıklamayı dinleyin.
+Yaprakları kaydır. Resmin nasıl geliştiğini izle.
 
-🧠 BİR SESSİZ BULMACA
-Her seviyenin tek bir zarif çözümü vardır. Süre sınırlaması yok, zor hamlelerde yaşam kaybı yok — sadece siz, ızgara ve çözüme kavuşmayı bekleyen 150 el yapımı bulmacadan biri.
+Overlay, bir ışık masası üzerinde üç saydam yaprak yerleştirir. Her yaprak, birkaç renkli hücre taşır; üstteki yaprak, paçaları üst üste geldiğinde kazanır. Yaprakları sürükleyin, bileşik hedefe ulaşana kadar — ve tam o anda, resim, bir geliştirme tepsisindeki film gibi odaklanarak açılır.
 
-✨ HİSSİ
-• Akıcı, tatmin edici boru yönlendirme animasyonları
-• ASMR tarzı ses tasarımı — nazik tıklamalar, yumuşak onay sesleri
-• Her bağlantıda hafif dokunsal geri bildirim
-• Uzun akşam seanslarına uygun sıcak renk paleti
-• Tamamen çevrimdışı — uçuşta, sırada, her yerde oynayın
+Zamanlayıcı yok. Hiçbir hile yok. Sadece üç yaprak, bir hedef ve tam doğru kaydırmanın sessiz tatmini.
 
-🎯 İÇİNDE NE VAR
-• 5×5 hafif ızgaralardan 10×10 kafa karıştırıcı tahtalara kadar 150 ücretsiz el yapımı seviye
-• 6 açılabilir boru teması — kilometre taşlarını temizleyerek kazanın
-• Günlük meydan okuma ile giriş streak ödülleri
-• Günlük görevler — her 24 saatte üç yeni hedef
-• Ücretsiz Madeni Para butonu (ödüllü reklam, her 4 saatte 25 madeni para)
-• Çözülen bulmacalar, mükemmel oyunlar ve en uzun serinizi takip eden istatistik ekranı
-• Ücretsiz yenilenme ile yaşam sistemi — ana oyunda ödeme duvarı yok
-• Sentetik liderlik seviyeleri ile haftalık turnuva
+Hedefler, gürültü değil resim olmayı amaçlar — bulduğunuzda anlama dönüşen bağlı ve simetrik şekiller. Kampanya, iki renkten başlangıçlara yoğun üç renkli yığınlara kadar rampalar, günlük eller herkese aynı resmi verir ve sonsuz mod, sürekli yeni resimler dağıtır.
 
-🎁 EKSTRA (İSTEĞE BAĞLI)
-• Başlangıç Paketi — 100 madeni para + 5 ipucu + 5 yaşam + Reklamsız 0,99 dolara
-• Sezon Pass — reklamsız + günlük 100 madeni para + tüm temalar + sınırsız ipuçları
-• 100’den 2.000 madeni paraya kadar madeni para paketleri, ipucu paketleri, yaşam yenilemeleri
+ÖZELLİKLER
+• Her biri çözümü garanti 500 seviye
+• En üstte kazanan yığın — yaprak 3, 2'yi kaplar, 2 yaprak 1'i kaplar
+• Günlük resim — herkes için aynı, seriler, spoiler içermeyen paylaşım
+• Sınırsız üretilmiş resimlerle sonsuz mod
+• Hangi hücrelerin eksik olduğunu tam olarak gösteren hayalet hatları
+• Her renkte şekil işaretleri — tamamen renk körlüğü dostu, istediğiniz zaman geçiş yapın
+• Karanlık odada Midnight görünümü de dahil 7 jel paleti
+• Huzurlu, çevrimdışı, tek elle oynama
 
-🎮 OYNAMA ŞEKLİ
-• Renkli bir noktaya dokunun ve eşleşen partnerine sürükleyin
-• Yollar kesişemez
-• Seviyeyi çözmek için tahtadaki her hücreyi doldurun
-• Geriye dönmeden çözerek üç yıldız kazanın
-
-Tahta sessiz bir düğüm — ve onu çözmek sizin elinizde.
-
-Pegasus Oyunları tarafından özenle hazırlanmıştır.
+Üç yaprak. Bir resim. Gelişene kadar kaydır.
 </tr-TR>
 
 <uk>
-Ласкаво просимо до Pipe Connect, спокійної логічної головоломки для тих, хто любить тихе та зосереджене тренування розуму. Перетягуйте труби з кожної кольорової точки до відповідної пари, заповніть кожну клітину на полі та слухайте ніжний клацання, коли сітка закривається.
+СЛИЗГУЙТЕ ЛИСТИ. ДИВІТЬСЯ, ЯК ЗОБРАЖЕННЯ РОЗВИВАЄТЬСЯ.
 
-🧠 ОДНА СПОКІЙНА ГОЛОВОЛОМКА ЗА РАЗ
-Кожен рівень має єдине елегантне рішення. Без таймерів, без втрати життів через складні ходи — лише ви, сітка та одна з 150 ручно налаштованих головоломок, які чекають на розв'язання.
+Overlay розміщує три прозорі листи на світловій таблиці. Кожен лист містить кілька кольорових осередків; де вони накладаються, виграє верхній лист. Перетягуйте листи, поки складне зображення не збігнеться з метою — і в момент, коли це станеться, зображення фокусується, мов плівка в процесі проявлення.
 
-✨ ВІДЧУТТЯ
-• Плавні, задовольняючі анімації прокладання труб
-• Дизайн звуку в стилі ASMR — м'які клацання, ніжні підтверджувальні звуки
-• Легкий дотик на кожному з’єднанні
-• Тепла кольорова палітра, створена для довгих вечірніх сесій
-• Повністю офлайн — грайте в літаках, у чергах, будь-де
+Без таймера. Без прийомів. Лише три листи, мета та тихе задоволення від точної слайс-сесії.
 
-🎯 ЩО В ТОМУ
-• 150 безкоштовних рівнів ручної роботи, від легких 5×5 до заплутаних 10×10
-• 6 тем труби, що відкриваються — отримуйте їх за досягнення етапів
-• Щоденний виклик з винагородами за послідовності входу
-• Щоденні місії — три нові завдання кожні 24 години
-• Кнопка безкоштовних монет (реклама, 25 монет кожні 4 години)
-• Екран статистики з відстеженням вирішених головоломок, ідеальних серій та найтривалішої послідовності
-• Система життів з безкоштовним відновленням — без платних вхідних на основну гру
-• Щотижневий турнір з синтетичними категоріями лідерів
+Мети створені для того, щоб бути зображеннями, а не шумом — з'єднані, симетричні форми, які стають зрозумілими, коли ви їх знаходите. Кампанія починається з простих двоколірних завдань до щільних трьохколірних комбінацій, щоденний виклик всім дає одне й те ж зображення, а безкінечний режим пропонує нові.
 
-🎁 ДОПОЛНЕННЯ (НЕ ОБОВ'ЯЗКОВО)
-• Стартовий пакет — 100 монет + 5 підказок + 5 життів + відсутність реклами за $0.99
-• Сезонний пропуск — без реклами + 100 монет/день + всі теми + безлімітні підказки
-• Пакети монет від 100 до 2000 монет, пакети підказок, поповнення життів
+ОСОБЛИВОСТІ
+• 500 рівнів, кожен гарантовано розв'язуваний
+• Накладання листів — лист 3 покриває 2, а той — 1
+• Щоденне зображення — однакове для всіх, серії, обмін без спойлерів
+• Безкінечний режим з необмеженою кількістю згенерованих зображень
+• Привиди контурів показують, які осередки ще потрібно заповнити
+• Позначки форм на кожному кольорі — повністю дружні до кольорових сліпих, перемикайте в будь-який час
+• 7 гелевих паліт, включаючи темний вигляд "Серед ночі"
+• Спокійна, офлайн гра однією рукою
 
-🎮 ЯК ГРАТИ
-• Торкніться та перетягніть з кольорової точки до відповідної пари
-• Маршрути не можуть перетинатися
-• Заповніть кожну клітину на полі, щоб вирішити рівень
-• Заражайте три зірки, вирішуючи без повторних ходів
-
-Поле — це тихий вузлик — а ви розв'яжете його.
-
-Створено з увагою компанією Pegasus Games.
+Три листи. Одне зображення. Слизгайте, поки воно не розвине.
 </uk>
 
 <zh-CN>
-欢迎来到流水管连接，这是一款优雅宁静的逻辑益智游戏，适合喜欢安静、专注思考的玩家。将每个颜色端点的管道拖动到匹配的另一端，填满棋盘上的每一个单元格，当网格闭合时可以听到轻柔的点击声。
+滑动纸张。观看图像发展。
 
-🧠 一次解一个安静的谜题
-每个关卡都有一个优雅的解法。没有计时器，也不会因难度而失去生命 — 只有你、棋盘和等待被解开的150个精心调校的谜题。
+Overlay将三张透明纸放在光桌上。每张纸上都有一些彩色单元；它们叠加在一起时，顶层的纸张胜出。拖动纸张，直到组合与目标匹配——一旦匹配，图像就像在显影盘中显现出来般清晰。
 
-✨ 游戏体验
-• 平滑、令人满意的管道布局动画
-• ASMR风格的音效设计 — 柔和的点击声，轻柔的确认音
-• 每次连接都有轻微的触觉反馈
-• 温暖的色调，适合长时间的夜间游戏
-• 完全离线 — 可在飞行中、排队时随时畅玩
+没有计时器。没有花招。只有三张纸、一个目标，和精准滑动带来的宁静满足感。
 
-🎯 游戏内容
-• 150个免费手工制作的关卡，从简单的5×5网格到难度较高的10×10布局
-• 6个可解锁的管道主题 — 通过完成里程碑来获得它们
-• 每日挑战，登录连击奖励
-• 每日任务 — 每24小时更新三个新目标
-• 免费金币按钮（奖励广告，每4小时获得25个金币）
-• 统计屏幕，跟踪已解谜题数量、完美通关和最长连击
-• 生命系统可免费再生 — 核心游戏无付费墙
-• 每周锦标赛，设有合成排行榜等级
+目标设计为图像，而非杂音——连接和对称的形状，一旦找到便瞬间具备意义。挑战从两个颜色的热身开始，逐渐过渡到密集的三色叠加，每天都为每个人提供相同的图像，而无尽模式持续发放新的图像。
 
-🎁 额外功能（可选）
-• 起始包 — 100金币 + 5个提示 + 5条生命 + 关掉广告，仅需$0.99
-• 赛季通行证 — 无广告 + 每日100金币 + 所有主题 + 无限制提示
-• 从100到2000金币的金币包、提示包、生命补给包
+特点
+• 500个关卡，每个关卡保证可解
+• 最高者胜出的叠加——第三张纸覆盖第二张，第二张覆盖第一张
+• 每日图像——人人共享，连胜记录，免剧透分享
+• 无限模式，生成无限图像
+• 幽灵轮廓显示确切缺失的单元
+• 每种颜色都有形状标记——完全支持色盲，随时切换
+• 包含七种胶水调色板，包括暗房的午夜风格
+• 平静的离线单手游戏体验
 
-🎮 游戏方式
-• 从一个彩色点拖动到匹配的伙伴
-• 路径不能交叉
-• 填满棋盘上的每一个单元格以完成关卡
-• 在不回溯的情况下获得三颗星
-
-棋盘是一个安静的小结——而你将解开它。
-
-由佩加索斯游戏公司倾心制作。
+三张纸。一个图像。滑动，直到它显现。
 </zh-CN>
 
 ---
@@ -653,55 +432,55 @@ Pegasus Oyunları tarafından özenle hazırlanmıştır.
 _Apple App Store Connect → App Information → Subtitle_
 
 <en-US>
-Connect the colored pipes and
+Slide sheets, reveal pictures
 </en-US>
 
 <ar>
-وصل الأنابيب الملونة و
+أزل الأوراق، اكتشف الصور
 </ar>
 
 <de-DE>
-Verbinde Rohre nach Farben
+RUTSCHEN UND BILDER ENTHÜLLEN
 </de-DE>
 
 <es-419>
-Conecta tuberías de color y
+¡DESLIZA Y DESCUBRE IMÁGENES!
 </es-419>
 
 <fr-FR>
-Reliez les tuyaux colorés et
+Glissez, révélez l'image
 </fr-FR>
 
 <hi-IN>
-रंगीन पाइप जोड़ें और
+चित्रों को प्रकट करें
 </hi-IN>
 
 <id>
-Sambungkan pipa berwarna dan
+Gulir Lembar, Pancarkan Gambar
 </id>
 
 <it-IT>
-Collega i tubi colorati e
+SCORRI E SCOPRI IMMAGINI!
 </it-IT>
 
 <ja-JP>
-色付きパイプをつなげよう
+スライドシートで画像を表示
 </ja-JP>
 
 <pt-BR>
-Conecte os canos coloridos e
+DESLIZE, REVELE IMAGENS!
 </pt-BR>
 
 <tr-TR>
-Renkli boruları bağlayın ve
+Kaydır, resimleri açığa çıkar!
 </tr-TR>
 
 <uk>
-З'єднайте кольорові труби і
+СЛИЗЬКИ, РОЗКРИЙ ЗНІМКИ
 </uk>
 
 <zh-CN>
-连接彩色管道并
+滑动画面，展现图像
 </zh-CN>
 
 ---
@@ -711,55 +490,55 @@ Renkli boruları bağlayın ve
 _Apple App Store Connect → Version → Keywords_
 
 <en-US>
-pipe puzzle,flow free,connect pipes,color connect,brain puzzle,relaxing,offline
+puzzle,layers,sheets,color,match,picture,logic,calm,offline,visual
 </en-US>
 
 <ar>
-لعبة أنابيب, تدفق حر, ربط الأنابيب, توصيل الألوان, لغز ذهني, استرخاء, بدون اتصال
+لعبة, ألغاز, طبقات, أوراق, ألوان, تطابق, صورة, منطق, هدوء, أوف لاين, بصري
 </ar>
 
 <de-DE>
-rohrrätsel,flussfrei,rohre verbinden,färbe verbinden,hirnspiel,entspannend,offline
+rätsel,schichten,bilder,farbe,übereinstimmung,logik,entspannen,offline,visuell
 </de-DE>
 
 <es-419>
-rompecabezas de tuberías, conectar tuberías, conexión de colores, desafío, relajante, sin conexión
+rompecabeza,capas,hojas,color,coincidir,imagen,lógica,tranquilo,sin conexión,visual
 </es-419>
 
 <fr-FR>
-casse-tête de tuyaux, relier et connecter les couleurs, jeu de réflexion, détente, hors ligne
+casse-tête,couches,feuilles,couleur,associer,image,logique,détente,hors ligne,visuel
 </fr-FR>
 
 <hi-IN>
-पाइप पहेली,फ्लो फ्री,पाइप कनेक्ट,रंग कनेक्ट,दिमागी पहेली,आरामदायक,ऑफलाइन
+पहेली, परतें, शीट्स, रंग, मिलाना, चित्र, तर्क, शांत, ऑफ़लाइन, दृश्य
 </hi-IN>
 
 <id>
-pipa teka-teki,aliran bebas,hubungkan pipa,sambungkan warna,teka-teki otak,rela,offline
+teka-teki,lapisan,lembar,warna,serasi,gambar,logika,tenang,offline,visual
 </id>
 
 <it-IT>
-puzzle tubi, flusso libero, collegare tubi,collegamento colori, rompicapo, rilassante, offline
+rompicapi,layers,sfoglie,colore,abbina,immagine,logica,riposo,offline,visivo
 </it-IT>
 
 <ja-JP>
-パイプパズル, フローフリー, パイプ接続, カラー接続, 脳トレ, リラックス, オフライン
+パズル,レイヤー,シート,色,マッチ,画像,論理,リラックス,オフライン,ビジュアル
 </ja-JP>
 
 <pt-BR>
-quebra-cabeça de tubo,conectar tubos,jogo de lógica,relaxante,offline
+quebra-cabeça,camadas,planos,cor,combinar,imagem,lógica,calma,offline,visual
 </pt-BR>
 
 <tr-TR>
-boru bulmacası,akış serbest,boruları bağla,renk bağla,zihin bulmacası,rahatlatıcı,çevrimdışı
+bulmacalar,katmanlar,şeritler,renk,eşleştir,görüntü,zeka,sakin,çevrimdışı,görsel
 </tr-TR>
 
 <uk>
-пазл труби,вільний потік,з'єднати труби,кольорове з'єднання,головоломка,відпочинок,офлайн
+пазл,шари,аркуші,колір,збіг,картинка,логіка,спокійний,офлайн,візуальний
 </uk>
 
 <zh-CN>
-管道谜题,自由流动,连接管道,色彩连接,脑力游戏,放松,离线
+拼图,图层,纸张,色彩,匹配,图像,逻辑,宁静,离线,视觉
 </zh-CN>
 
 ---
@@ -769,55 +548,55 @@ boru bulmacası,akış serbest,boruları bağla,renk bağla,zihin bulmacası,rah
 _Apple App Store Connect → Version → Promotional Text_
 
 <en-US>
-Connect matching colored endpoints with pipes.
+Three see-through sheets, one hidden picture. Slide until the stack matches and watch it develop. Calm, clever, colorblind-friendly.
 </en-US>
 
 <ar>
-قم بتوصيل النقاط النهائية المتطابقة بالألوان باستخدام الأنابيب.
+ثلاث أوراق شفافة، صورة مخفية واحدة. انزلق حتى يتطابق المكدس وشاهدها تتطور. هادئ، ذكي، مناسب لذوي عمى الألوان.
 </ar>
 
 <de-DE>
-Verbinde passende farbige Endpunkte mit Rohren.
+DREI TRANSPARENTE BLÄTTER, EINEN VERSTECKTEN BILD. SCHIEBE, BIS DER STAPEL ÜBEREINSTIMMT, UND SCHAU ZU, WIE ES SICH ENTWICKELT. RUHIG, CLEVER, FARBTAUGLICH.
 </de-DE>
 
 <es-419>
-Conecta los extremos de colores coincidentes con tuberías.
+¡TRES HOJAS TRANSPARENTES, UNA IMAGEN OCULTA! ¡DESLIZA HASTA QUE LA MONTÓN COINCIDA Y OBSERVA CÓMO SE DESARROLLA! CALMA, INTELIGENTE Y AMIGABLE PARA DALTÓNICOS.
 </es-419>
 
 <fr-FR>
-Reliez les extrémités de couleur correspondantes avec des tuyaux.
+TROIS FEUILLES TRANSPARENTE, UNE IMAGE CACHÉE. GLISSEZ JUSQU'À LA SUPERPOSITION ET REGARDEZ-LE SE DÉVELOPPER. APAISANT, ASTUCIEUX, ACCESSIBLE AUX DALTONIENS.
 </fr-FR>
 
 <hi-IN>
-रंगीन अंत बिंदुओं को पाइप्स से जोड़ें।
+तीन पारदर्शी चादरें, एक छिपी हुई तस्वीर। ढेर को मिलाने तक खिसकाएं और इसे विकसित होते देखें। शांत, चतुर, रंग अंधे के लिए अनुकूल।
 </hi-IN>
 
 <id>
-Hubungkan titik ujung berwarna yang cocok dengan pipa.
+Tiga lembar transparan, satu gambar tersembunyi. Geser hingga tumpukan cocok dan saksikan saat itu berkembang. Tenang, cerdas, ramah bagi penyandang buta warna.
 </id>
 
 <it-IT>
-Collega i punti finali colorati con tubi.
+TRE LASTRE TRASPARENTI, UN'IMMAGINE NASCOSTA. SLACCIA FINO A CHE IL MONTAGGIO NON SI ABBINI E GUARDA COME SI SVILUPPA! CALMO, INTELLIGENTE, AMICO DEI DALTONICI.
 </it-IT>
 
 <ja-JP>
-色の合った端点をパイプでつなげてください。
+三枚の透けたシート、一つの隠れた絵。スライドして重ねると、絵が現れる。穏やかで、賢く、色覚障害に優しい。
 </ja-JP>
 
 <pt-BR>
-Conecte terminais coloridos correspondentes com tubos.
+TRÊS FOLHAS TRANSPARENTES, UMA IMAGEM OCULTA. DESLIZE ATÉ O MONTANTE SE IGUALAR E ASSISTA A DESENVOLVER. CALMO, INTELIGENTE, AMIGO DE DALTONISMO.
 </pt-BR>
 
 <tr-TR>
-Renkli uç noktaları borularla birbirine bağlayın.
+ÜÇ ŞEFFAF SAYFA, BİR GİZLİ RESİM. YIĞINI EŞLEŞTİRMEK İÇİN KAYDIR VE GELİŞİMİ GÖR! SAKİN, ZEKİ, RENK KÖRLERİ İÇİN UYGUN.
 </tr-TR>
 
 <uk>
-З'єднуйте кінцеві точки одного кольору трубами.
+Три прозорі аркуші, одне приховане зображення. Пересуньте до збігу, спостерігайте за розвитком. Спокійно, розумно, дружньо до кольоросліпих.
 </uk>
 
 <zh-CN>
-用管道连接相同颜色的端点。
+三张透明纸，一幅隐藏的图画。滑动直到堆叠匹配，看看它如何呈现。宁静，聪明，色盲友好。
 </zh-CN>
 
 ---

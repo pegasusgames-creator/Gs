@@ -24,55 +24,55 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-Polish & fixes.
+New: monthly events! Merge big tiles (128+) to collect pumpkins in the Pumpkin Hunt — a fresh themed event every month — and win coins, undos, unlimited lives and a trophy. Weekend Rush doubles your tokens and Golden Hour (7–8 pm) adds bonus coins. Big tiles now pay coins (512 and up), daily missions finally track your games and points, and your best score goes to the Play Games leaderboard. Keep merging!
 </en-US>
 
 <ar>
-تلميع وإصلاحات.
+جديد: فعاليات كل شهر! ادمج المربعات الكبيرة (128+) لتجمع اليقطين في «البحث عن اليقطين» — فعالية بموضوع جديد كل شهر — واربح عملات وتراجعات وأرواحًا غير محدودة وكأسًا. اندفاعة نهاية الأسبوع تضاعف رموزك، والساعة الذهبية (7–8 مساءً) تمنحك عملات إضافية. المربعات الكبيرة تمنح عملات الآن (من 512)، والمهام اليومية تحتسب ألعابك ونقاطك، وأفضل نتيجة تُرسل إلى لوحة صدارة ألعاب Play.
 </ar>
 
 <de-DE>
-Politur & Fehlerbehebungen.
+Neu: monatliche Events! Verschmelze große Kacheln (128+), um bei der Kürbisjagd Kürbisse zu sammeln – jeden Monat ein neues Themen-Event – und gewinne Münzen, Rückgängig-Züge, unendliche Leben und eine Trophäe. Der Wochenend-Rausch verdoppelt deine Marken, die Goldene Stunde (19–20 Uhr) bringt Bonusmünzen. Große Kacheln bringen jetzt Münzen (ab 512), Tagesmissionen zählen deine Spiele und Punkte, und dein Rekord landet in der Play-Games-Bestenliste.
 </de-DE>
 
 <es-419>
-Pulido y correcciones.
+¡Nuevo: eventos cada mes! Combina fichas grandes (128+) para juntar calabazas en la Caza de calabazas —un evento temático nuevo cada mes— y gana monedas, deshacer, vidas ilimitadas y un trofeo. La Fiebre de fin de semana duplica tus fichas y la Hora dorada (19–20 h) da monedas extra. Las fichas grandes ahora dan monedas (desde 512), las misiones diarias cuentan tus partidas y puntos, y tu récord va a la tabla de Play Juegos.
 </es-419>
 
 <fr-FR>
-Améliorations et corrections.
+Nouveau : des événements chaque mois ! Fusionne de grosses tuiles (128+) pour récolter des citrouilles pendant la Chasse aux citrouilles – un nouvel événement à thème chaque mois – et gagne pièces, annulations, vies illimitées et un trophée. Le Rush du week-end double tes jetons, l'Heure dorée (19 h–20 h) offre des pièces bonus. Les grosses tuiles rapportent des pièces (dès 512), les missions suivent tes parties et ton record va au classement Play Jeux.
 </fr-FR>
 
 <hi-IN>
-सुधार और बग फिक्स।
+नया: हर महीने इवेंट! बड़ी टाइलें (128+) बनाकर कद्दू खोज में कद्दू जमा करें — हर महीने नया थीम वाला इवेंट — और सिक्के, अनडू, असीमित जीवन व ट्रॉफी जीतें। वीकेंड रश टोकन दोगुने करता है और गोल्डन आवर (शाम 7–8 बजे) बोनस सिक्के देता है। बड़ी टाइलें (512 से) अब सिक्के देती हैं, दैनिक मिशन आपके गेम और अंक गिनते हैं, और सबसे अच्छा स्कोर Play Games लीडरबोर्ड पर जाता है।
 </hi-IN>
 
 <id>
-Penyempurnaan & perbaikan.
+Baru: event setiap bulan! Gabungkan ubin besar (128+) untuk mengumpulkan labu di Berburu Labu — event bertema baru tiap bulan — dan menangkan koin, undo, nyawa tak terbatas, dan trofi. Serbu Akhir Pekan menggandakan tokenmu dan Jam Emas (19.00–20.00) memberi koin bonus. Ubin besar kini memberi koin (mulai 512), misi harian menghitung permainan dan poinmu, dan skor terbaikmu masuk papan peringkat Play Games.
 </id>
 
 <it-IT>
-Rifiniture e correzioni.
+Novità: eventi ogni mese! Unisci tessere grandi (128+) per raccogliere zucche nella Caccia alle zucche – un nuovo evento a tema ogni mese – e vinci monete, annullamenti, vite infinite e un trofeo. La Corsa del weekend raddoppia i gettoni e l'Ora d'oro (19–20) regala monete bonus. Le tessere grandi ora danno monete (da 512), le missioni contano partite e punti e il tuo record va nella classifica Play Giochi.
 </it-IT>
 
 <ja-JP>
-改善とバグ修正。
+新機能：毎月のイベント！大きなタイル（128以上）を作ってパンプキンハント（毎月テーマが変わります）でカボチャを集め、コイン、元に戻す、無限ライフ、トロフィーをゲット。週末ラッシュでトークン2倍、ゴールデンアワー（19〜20時）でボーナスコイン。大きなタイル（512以上）でコインがもらえるように。デイリーミッションがゲームとスコアを集計し、ベストスコアは Play ゲームのリーダーボードへ。
 </ja-JP>
 
 <pt-BR>
-Polimento e correções.
+Novidade: eventos todo mês! Junte peças grandes (128+) para colher abóboras na Caça às Abóboras — um evento temático novo a cada mês — e ganhe moedas, desfazer, vidas infinitas e um troféu. A Corrida de Fim de Semana dobra suas fichas e a Hora de Ouro (19h–20h) dá moedas extras. Peças grandes agora rendem moedas (a partir de 512), missões diárias contam suas partidas e pontos, e seu recorde vai para o ranking do Play Games.
 </pt-BR>
 
 <tr-TR>
-İyileştirmeler ve düzeltmeler.
+Yeni: her ay etkinlik! Balkabağı Avı'nda balkabağı toplamak için büyük karoları (128+) birleştir – her ay yeni temalı bir etkinlik – altın, geri alma, sınırsız can ve kupa kazan. Hafta Sonu Telaşı jetonlarını ikiye katlar, Altın Saat (19.00–20.00) ek altın verir. Büyük karolar artık altın kazandırır (512 ve üstü), günlük görevler oyunlarını ve puanlarını sayar, rekorun Play Games sıralamasına gider.
 </tr-TR>
 
 <uk>
-Покращення та виправлення.
+Нове: щомісячні події! Об'єднуй великі плитки (128+), щоб збирати гарбузи в «Полюванні на гарбузи» — щомісяця нова тематична подія — і вигравай монети, скасування, безлімітні життя та трофей. Вихідний ривок подвоює жетони, а Золота година (19:00–20:00) дає бонусні монети. Великі плитки тепер приносять монети (від 512), щоденні місії рахують ігри й очки, а рекорд потрапляє в таблицю Play Ігор.
 </uk>
 
 <zh-CN>
-优化和错误修复。
+全新每月活动！合成大方块（128+）在「南瓜大搜寻」中收集南瓜——每月都有全新主题活动——赢取金币、撤销、无限生命和奖杯。周末狂欢让代币翻倍，黄金时段（19–20点）额外送金币。大方块现在会奖励金币（512起），每日任务会统计你的对局和分数，最高分将提交到 Play 游戏排行榜。继续合成吧！
 </zh-CN>
 
 ---
