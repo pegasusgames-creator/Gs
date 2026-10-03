@@ -24,55 +24,55 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-New: monthly events! Collect pumpkins in the Pumpkin Hunt — a fresh themed event every month — to win coins, hints, unlimited lives and a trophy. Weekend Rush doubles your tokens and Golden Hour (7–8 pm) adds bonus coins. Fixed: Season Pass now removes all ads and unlocks every theme and unlimited hints, daily streaks count correctly, reminders and Streak Shields work, and your progress shows on the Play Games leaderboard.
+New: monthly events! Collect pumpkins in the Pumpkin Hunt — a fresh themed event every month — to win coins, hints, unlimited lives and a trophy. Weekend Rush doubles your tokens and Golden Hour (7–8 pm) adds bonus coins. Fixed: Season Pass now removes all ads and unlocks every theme and unlimited hints, daily streaks count correctly, reminders and Streak Shields work, and your progress shows on the Play Games leaderboard. Big boards now render sharp and support pinch-to-zoom.
 </en-US>
 
 <ar>
-جديد: فعاليات كل شهر! اجمع اليقطين في «البحث عن اليقطين» — فعالية بموضوع جديد كل شهر — واربح عملات وتلميحات وأرواحًا غير محدودة وكأسًا. اندفاعة نهاية الأسبوع تضاعف رموزك، والساعة الذهبية (7–8 مساءً) تمنحك عملات إضافية. تم الإصلاح: تذكرة الموسم تزيل الآن كل الإعلانات وتفتح جميع السمات والتلميحات غير المحدودة، والسلاسل اليومية تُحتسب بشكل صحيح، والتذكيرات ودرع السلسلة تعمل.
+جديد: فعاليات كل شهر! اجمع اليقطين في «البحث عن اليقطين» — فعالية بموضوع جديد كل شهر — واربح عملات وتلميحات وأرواحًا غير محدودة وكأسًا. اندفاعة نهاية الأسبوع تضاعف رموزك، والساعة الذهبية (7–8 مساءً) تمنحك عملات إضافية. تم الإصلاح: تذكرة الموسم تزيل الآن كل الإعلانات وتفتح جميع السمات والتلميحات غير المحدودة، والسلاسل اليومية تُحتسب بشكل صحيح، والتذكيرات ودرع السلسلة تعمل. أصبحت اللوحات الكبيرة أوضح وتدعم التكبير بإصبعين.
 </ar>
 
 <de-DE>
-Neu: monatliche Events! Sammle Kürbisse bei der Kürbisjagd – jeden Monat ein neues Themen-Event – und gewinne Münzen, Hinweise, unendliche Leben und eine Trophäe. Wochenend-Rausch verdoppelt deine Marken, die Goldene Stunde (19–20 Uhr) bringt Bonusmünzen. Behoben: Der Saisonpass entfernt jetzt alle Werbung und schaltet alle Designs und unbegrenzte Hinweise frei, Tagesserien zählen korrekt, Erinnerungen und Serienschutz funktionieren.
+Neu: monatliche Events! Sammle Kürbisse bei der Kürbisjagd – jeden Monat ein neues Themen-Event – und gewinne Münzen, Hinweise, unendliche Leben und eine Trophäe. Wochenend-Rausch verdoppelt deine Marken, die Goldene Stunde (19–20 Uhr) bringt Bonusmünzen. Behoben: Der Saisonpass entfernt jetzt alle Werbung und schaltet alle Designs und unbegrenzte Hinweise frei, Tagesserien zählen korrekt, Erinnerungen und Serienschutz funktionieren. Große Rätsel jetzt scharf und mit Pinch-Zoom.
 </de-DE>
 
 <es-419>
-¡Nuevo: eventos cada mes! Junta calabazas en la Caza de calabazas —un evento temático nuevo cada mes— y gana monedas, pistas, vidas ilimitadas y un trofeo. La Fiebre de fin de semana duplica tus fichas y la Hora dorada (19–20 h) da monedas extra. Corregido: el Pase de temporada quita todos los anuncios y desbloquea todos los temas y pistas ilimitadas, las rachas cuentan bien y los recordatorios y escudos funcionan.
+¡Nuevo: eventos cada mes! Junta calabazas en la Caza de calabazas —un evento temático nuevo cada mes— y gana monedas, pistas, vidas ilimitadas y un trofeo. La Fiebre de fin de semana duplica tus fichas y la Hora dorada (19–20 h) da monedas extra. Corregido: el Pase de temporada quita todos los anuncios y desbloquea todos los temas y pistas ilimitadas, las rachas cuentan bien y los recordatorios y escudos funcionan. Los tableros grandes ahora se ven nítidos y admiten zoom.
 </es-419>
 
 <fr-FR>
-Nouveau : des événements chaque mois ! Récolte des citrouilles pendant la Chasse aux citrouilles – un nouvel événement chaque mois – pour gagner pièces, indices, vies illimitées et un trophée. Rush du week-end : jetons ×2 ; Heure dorée (19 h–20 h) : pièces bonus. Corrigé : le Pass saison supprime toutes les pubs et débloque tous les thèmes et des indices illimités, les séries se comptent bien, rappels et boucliers fonctionnent.
+Nouveau : des événements chaque mois ! Récolte des citrouilles pendant la Chasse aux citrouilles – un nouvel événement chaque mois – pour gagner pièces, indices, vies illimitées et un trophée. Rush du week-end : jetons ×2 ; Heure dorée (19 h–20 h) : pièces bonus. Corrigé : le Pass saison supprime toutes les pubs et débloque tous les thèmes et des indices illimités, les séries se comptent bien, rappels et boucliers fonctionnent. Les grandes grilles sont plus nettes et zoomables.
 </fr-FR>
 
 <hi-IN>
-नया: हर महीने इवेंट! कद्दू खोज में कद्दू जमा करें — हर महीने नया थीम वाला इवेंट — और सिक्के, संकेत, असीमित जीवन व ट्रॉफी जीतें। वीकेंड रश टोकन दोगुने करता है और गोल्डन आवर (शाम 7–8 बजे) बोनस सिक्के देता है। सुधार: सीज़न पास अब सारे विज्ञापन हटाता है और सभी थीम व असीमित संकेत खोलता है, दैनिक स्ट्रीक सही गिनी जाती है, रिमाइंडर और स्ट्रीक शील्ड काम करते हैं।
+नया: हर महीने इवेंट! कद्दू खोज में कद्दू जमा करें — हर महीने नया थीम वाला इवेंट — और सिक्के, संकेत, असीमित जीवन व ट्रॉफी जीतें। वीकेंड रश टोकन दोगुने करता है और गोल्डन आवर (शाम 7–8 बजे) बोनस सिक्के देता है। सुधार: सीज़न पास अब सारे विज्ञापन हटाता है और सभी थीम व असीमित संकेत खोलता है, दैनिक स्ट्रीक सही गिनी जाती है, रिमाइंडर और स्ट्रीक शील्ड काम करते हैं। बड़े बोर्ड अब साफ़ दिखते हैं और ज़ूम होते हैं।
 </hi-IN>
 
 <id>
-Baru: event setiap bulan! Kumpulkan labu di Berburu Labu — event bertema baru tiap bulan — dan menangkan koin, petunjuk, nyawa tak terbatas, dan trofi. Serbu Akhir Pekan menggandakan tokenmu dan Jam Emas (19.00–20.00) memberi koin bonus. Diperbaiki: Season Pass kini menghapus semua iklan serta membuka semua tema dan petunjuk tanpa batas, runtunan harian dihitung benar, pengingat dan Perisai Runtunan berfungsi.
+Baru: event setiap bulan! Kumpulkan labu di Berburu Labu — event bertema baru tiap bulan — dan menangkan koin, petunjuk, nyawa tak terbatas, dan trofi. Serbu Akhir Pekan menggandakan tokenmu dan Jam Emas (19.00–20.00) memberi koin bonus. Diperbaiki: Season Pass kini menghapus semua iklan serta membuka semua tema dan petunjuk tanpa batas, runtunan harian dihitung benar, pengingat dan Perisai Runtunan berfungsi. Papan besar kini tajam dan bisa di-zoom dengan dua jari.
 </id>
 
 <it-IT>
-Novità: eventi ogni mese! Raccogli zucche nella Caccia alle zucche – un nuovo evento a tema ogni mese – e vinci monete, suggerimenti, vite infinite e un trofeo. La Corsa del weekend raddoppia i gettoni e l'Ora d'oro (19–20) regala monete bonus. Corretto: il Pass stagionale ora rimuove tutta la pubblicità e sblocca tutti i temi e suggerimenti illimitati, le serie si contano bene e promemoria e scudi funzionano.
+Novità: eventi ogni mese! Raccogli zucche nella Caccia alle zucche – un nuovo evento a tema ogni mese – e vinci monete, suggerimenti, vite infinite e un trofeo. La Corsa del weekend raddoppia i gettoni e l'Ora d'oro (19–20) regala monete bonus. Corretto: il Pass stagionale ora rimuove tutta la pubblicità e sblocca tutti i temi e suggerimenti illimitati, le serie si contano bene e promemoria e scudi funzionano. Le griglie grandi ora sono nitide e si possono zoomare.
 </it-IT>
 
 <ja-JP>
-新機能：毎月のイベント！パンプキンハント（毎月テーマが変わります）でカボチャを集めて、コイン、ヒント、無限ライフ、トロフィーをゲット。週末ラッシュでトークン2倍、ゴールデンアワー（19〜20時）でボーナスコイン。修正：シーズンパスで広告がすべて消え、全テーマと無制限ヒントが解放されるように。デイリー連続記録が正しくカウントされ、リマインダーと連続記録シールドも動作します。
+新機能：毎月のイベント！パンプキンハント（毎月テーマが変わります）でカボチャを集めて、コイン、ヒント、無限ライフ、トロフィーをゲット。週末ラッシュでトークン2倍、ゴールデンアワー（19〜20時）でボーナスコイン。修正：シーズンパスで広告がすべて消え、全テーマと無制限ヒントが解放されるように。デイリー連続記録が正しくカウントされ、リマインダーと連続記録シールドも動作します。 大きな盤面がくっきり表示され、ピンチで拡大できるようになりました。
 </ja-JP>
 
 <pt-BR>
-Novidade: eventos todo mês! Junte abóboras na Caça às Abóboras — um evento temático novo a cada mês — e ganhe moedas, dicas, vidas infinitas e um troféu. A Corrida de Fim de Semana dobra suas fichas e a Hora de Ouro (19h–20h) dá moedas extras. Corrigido: o Passe de Temporada agora remove todos os anúncios e libera todos os temas e dicas ilimitadas, as sequências contam certo e lembretes e escudos funcionam.
+Novidade: eventos todo mês! Junte abóboras na Caça às Abóboras — um evento temático novo a cada mês — e ganhe moedas, dicas, vidas infinitas e um troféu. A Corrida de Fim de Semana dobra suas fichas e a Hora de Ouro (19h–20h) dá moedas extras. Corrigido: o Passe de Temporada agora remove todos os anúncios e libera todos os temas e dicas ilimitadas, as sequências contam certo e lembretes e escudos funcionam. Tabuleiros grandes agora ficam nítidos e têm zoom com dois dedos.
 </pt-BR>
 
 <tr-TR>
-Yeni: her ay etkinlik! Balkabağı Avı'nda balkabağı topla – her ay yeni temalı bir etkinlik – altın, ipucu, sınırsız can ve kupa kazan. Hafta Sonu Telaşı jetonlarını ikiye katlar, Altın Saat (19.00–20.00) ek altın verir. Düzeltildi: Sezon Kartı artık tüm reklamları kaldırır, tüm temaları ve sınırsız ipucunu açar; günlük seriler doğru sayılır, hatırlatıcılar ve seri kalkanı çalışır.
+Yeni: her ay etkinlik! Balkabağı Avı'nda balkabağı topla – her ay yeni temalı bir etkinlik – altın, ipucu, sınırsız can ve kupa kazan. Hafta Sonu Telaşı jetonlarını ikiye katlar, Altın Saat (19.00–20.00) ek altın verir. Düzeltildi: Sezon Kartı artık tüm reklamları kaldırır, tüm temaları ve sınırsız ipucunu açar; günlük seriler doğru sayılır, hatırlatıcılar ve seri kalkanı çalışır. Büyük tahtalar artık net ve iki parmakla yakınlaştırılabiliyor.
 </tr-TR>
 
 <uk>
-Нове: щомісячні події! Збирай гарбузи в «Полюванні на гарбузи» — щомісяця нова тематична подія — і вигравай монети, підказки, безлімітні життя та трофей. Вихідний ривок подвоює жетони, а Золота година (19:00–20:00) дає бонусні монети. Виправлено: сезонний пропуск тепер прибирає всю рекламу й відкриває всі теми та безлімітні підказки, щоденні серії рахуються правильно, нагадування й щит серії працюють.
+Нове: щомісячні події! Збирай гарбузи в «Полюванні на гарбузи» — щомісяця нова тематична подія — і вигравай монети, підказки, безлімітні життя та трофей. Вихідний ривок подвоює жетони, а Золота година (19:00–20:00) дає бонусні монети. Виправлено: сезонний пропуск тепер прибирає всю рекламу й відкриває всі теми та безлімітні підказки, щоденні серії рахуються правильно, нагадування й щит серії працюють. Великі поля тепер чіткі й масштабуються двома пальцями.
 </uk>
 
 <zh-CN>
-全新每月活动！在「南瓜大搜寻」中收集南瓜——每月都有全新主题活动——赢取金币、提示、无限生命和奖杯。周末狂欢让代币翻倍，黄金时段（19–20点）额外送金币。修复：季票现在会移除所有广告，并解锁全部主题和无限提示；每日连胜计数正确；提醒和连胜护盾正常工作；你的进度会显示在 Play 游戏排行榜上。
+全新每月活动！在「南瓜大搜寻」中收集南瓜——每月都有全新主题活动——赢取金币、提示、无限生命和奖杯。周末狂欢让代币翻倍，黄金时段（19–20点）额外送金币。修复：季票现在会移除所有广告，并解锁全部主题和无限提示；每日连胜计数正确；提醒和连胜护盾正常工作；你的进度会显示在 Play 游戏排行榜上。大棋盘现在更清晰，并支持双指缩放。
 </zh-CN>
 
 ---

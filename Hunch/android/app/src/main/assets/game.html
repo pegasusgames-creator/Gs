@@ -2810,7 +2810,7 @@ window.LANG_NAMES = {
   ru:'Русский', ja:'日本語', ko:'한국어', zh:'中文', ar:'العربية',
   tr:'Türkçe', it:'Italiano', nl:'Nederlands', pl:'Polski', sv:'Svenska',
   no:'Norsk', da:'Dansk', fi:'Suomi', th:'ภาษาไทย', vi:'Tiếng Việt',
-  id:'Bahasa Indonesia', hi:'हिन्दी',
+  id:'Bahasa Indonesia', hi:'हिन्दी', uk:'Українська',
 };
 
 window.i18n = {
@@ -4932,17 +4932,37 @@ window.addEventListener('load',function(){
     document.body.appendChild(ov);
     setTimeout(function(){ ov.remove(); }, 2700);
 
+    // Pinned near the top (was top:30% — it sat on the win card's title and
+    // first lines) and localized; fades out instead of popping.
     var msg = document.createElement('div');
-    msg.style.cssText = 'position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);' +
-      'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border:1px solid var(--border, #d4e2ec);border-radius:18px;padding:18px 22px;' +
-      'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index:var(--z-tutorial, 500);font-family:inherit;pointer-events:none;';
+    msg.style.cssText = 'position:fixed;top:calc(env(safe-area-inset-top, 0px) + 64px);left:50%;transform:translateX(-50%);max-width:88vw;box-sizing:border-box;' +
+      'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border:1px solid var(--border, #d4e2ec);border-radius:18px;padding:14px 22px;' +
+      'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index:var(--z-tutorial, 500);font-family:inherit;pointer-events:none;' +
+      'transition:opacity .4s ease;';
     var cfg = (window.gGame && window.gGame.cfg) || {};
-    var sub = (cfg.kind === 'score') ? 'Next stop: 2048!'
-            : ((cfg.totalLevels ? (cfg.totalLevels - 1) : 499) + ' more puzzles to go.');
-    msg.innerHTML = "🎉 You've got this!<br><span style='font-weight:600;font-size:0.9rem;color:var(--text-mute, #5a7390);'>" + sub + "</span>";
+    var L = FIRST_CLEAR[String((window.gGame && window.gGame.lang()) || 'en').toLowerCase().split('-')[0]] || FIRST_CLEAR.en;
+    var left = cfg.totalLevels ? (cfg.totalLevels - 1) : 499;
+    var sub = (cfg.kind === 'score') ? L.score : L.more.split('{n}').join(String(left));
+    msg.innerHTML = '🎉 ' + L.head + "<br><span style='font-weight:600;font-size:0.9rem;color:var(--text-mute, #5a7390);'>" + sub + '</span>';
     document.body.appendChild(msg);
-    setTimeout(function(){ msg.remove(); }, 2400);
+    setTimeout(function(){ msg.style.opacity = '0'; }, 2300);
+    setTimeout(function(){ msg.remove(); }, 2750);
   }
+  var FIRST_CLEAR = {
+    en:{head:"You've got this!", more:'{n} more puzzles to go.', score:'Next stop: 2048!'},
+    de:{head:'Du schaffst das!', more:'Noch {n} Rätsel warten.', score:'Nächster Halt: 2048!'},
+    fr:{head:'Tu gères !', more:'Encore {n} puzzles à résoudre.', score:'Prochain arrêt : 2048 !'},
+    es:{head:'¡Lo tienes!', more:'Quedan {n} puzles más.', score:'Próxima parada: ¡2048!'},
+    pt:{head:'Você consegue!', more:'Mais {n} quebra-cabeças pela frente.', score:'Próxima parada: 2048!'},
+    it:{head:'Ce la fai!', more:'Ancora {n} puzzle da risolvere.', score:'Prossima tappa: 2048!'},
+    tr:{head:'Harikasın!', more:'Önünde {n} bulmaca daha var.', score:'Sıradaki durak: 2048!'},
+    id:{head:'Kamu bisa!', more:'Masih ada {n} teka-teki lagi.', score:'Perhentian berikutnya: 2048!'},
+    uk:{head:'У тебе виходить!', more:'Попереду ще {n} головоломок.', score:'Наступна зупинка: 2048!'},
+    ja:{head:'その調子！', more:'残り{n}パズル。', score:'次の目標：2048！'},
+    zh:{head:'你真棒！', more:'还有 {n} 个谜题等你挑战。', score:'下一站：2048！'},
+    ar:{head:'أحسنت!', more:'تبقّى {n} لغزًا.', score:'المحطة التالية: 2048!'},
+    hi:{head:'शाबाश!', more:'अभी {n} और पहेलियाँ बाकी हैं।', score:'अगला पड़ाव: 2048!'}
+  };
 
   function maybeDay2Nudge(){
     var alreadyShown = lsGet('_growthDay2NudgeShown','0');

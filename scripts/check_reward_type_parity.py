@@ -47,6 +47,14 @@ def check_app(app: str):
         return blocking, warnings
     body = m.group(1)
     handled = set(BRANCH_RE.findall(body)) | set(CASE_RE.findall(body))
+    # Wrapper handlers chained onto window.onAdReward by name (the REWARDS
+    # growth shim: `var nr = function(type){ if (type === 'double_coins') …;
+    # return origR.apply(…) }; window.onAdReward = nr;`) handle their own
+    # types and delegate the rest — count their branches too.
+    for name in set(re.findall(r"window\.onAdReward\s*=\s*([A-Za-z_$][\w$]*)\s*;", src)):
+        for wb in re.findall(r"(?:var|let|const)\s+" + re.escape(name) +
+                             r"\s*=\s*function\s*\([^)]*\)\s*\{([\s\S]*?)\n\s*\};", src):
+            handled |= set(BRANCH_RE.findall(wb)) | set(CASE_RE.findall(wb))
 
     # Callback-queue model: if onAdReward drains a `_pendingAdCallbacks` /
     # `_pendingRewardCbs` queue, the reward is delivered by the queued

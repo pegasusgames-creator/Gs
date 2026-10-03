@@ -394,6 +394,10 @@
   }
   .overlay-btns { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; width: 100%; }
   .overlay-btns .btn { flex: 1; min-width: 120px; }
+  /* Win-card buttons stay on one line ("Next Level →" wrapped its arrow onto a
+     second line at 412 px, worse in de/es/fr). Primary gets the larger share. */
+  .overlay-btns .btn { white-space: nowrap; padding-left: clamp(0.6rem, 2.4vw, 1.2rem) !important; padding-right: clamp(0.6rem, 2.4vw, 1.2rem) !important; }
+  .overlay-btns .btn-primary { flex: 1.6 1 0; }
 
   /* ===== LEVEL SELECT ===== */
   #screen-levelselect {
@@ -1025,7 +1029,7 @@ html[data-theme="midnight"]{ --m-bg-top:#241f1b; --m-vignette:rgba(0,0,0,.45); -
       <div class="overlay-msg" id="win-time-text">Solved in 0:42</div>
       <div class="overlay-btns">
         <button class="btn btn-secondary" onclick="backFromGame()">Menu</button>
-        <button class="btn btn-primary" onclick="nextLevel()">Next Level →</button>
+        <button class="btn btn-primary" onclick="nextLevel()"><span>Next Level</span>&nbsp;→</button>
       </div>
     </div>
   </div>
@@ -3293,7 +3297,7 @@ function winPuzzle() {
     saveState();
     try { if (window.gGame) window.gGame.clear({ level: lvlId, stars: newStars, isNew: wasNew, perfect: newStars === 3, coins: wasNew ? coinsEarned : 0 }); } catch(e) {}
     document.getElementById('win-coins-text').textContent = '+' + coinsEarned + ' 🪙';
-    document.getElementById('win-time-text').textContent = 'Solved in ' + m + ':' + String(s).padStart(2,'0');
+    document.getElementById('win-time-text').textContent = ((window.i18n && window.i18n.t('solvedIn', '%d') !== 'solvedIn') ? window.i18n.t('solvedIn', m + ':' + String(s).padStart(2,'0')) : 'Solved in ' + m + ':' + String(s).padStart(2,'0'));
     showOverlay('overlay-win');
     if (window.Android) window.Android.logEvent('level_complete', 'level=' + lvlId + '&size=' + gridSize);
   }
@@ -3440,36 +3444,58 @@ function resizeCanvas() {
   // No artificial cap — let cells fill whatever portrait/landscape
   // canvas space the layout offers. Floor at 12px so degenerate cases
   // don't render unreadable.
-  let cellSize = Math.max(12, Math.min(maxCellW, maxCellH));
+  // Integer cell size, and every derived length computed from it — rounding
+  // the cell UP after sizing the canvas from the float overflowed the canvas
+  // by up to a cell (the 20x20 board's last column was clipped; audit
+  // 2026-10-03).
+  const cellSize = Math.max(12, Math.floor(Math.min(maxCellW, maxCellH)));
+  const clueW = Math.round(cellSize * maxRowClues * CLUE_SLOT);
+  const clueH = Math.round(cellSize * maxColClues * CLUE_SLOT);
+  const totalW = clueW + cellSize * size;
+  const totalH = clueH + cellSize * size;
 
-  const clueW = cellSize * maxRowClues * CLUE_SLOT;
-  const clueH = cellSize * maxColClues * CLUE_SLOT;
-  const gridW = cellSize * size;
-  const gridH = cellSize * size;
-
-  const totalW = clueW + gridW;
-  const totalH = clueH + gridH;
-
-  canvas.width = Math.round(totalW);
-  canvas.height = Math.round(totalH);
-  canvas.style.width = canvas.width + 'px';
-  canvas.style.height = canvas.height + 'px';
+  // Render at the device pixel ratio (was 1x and upscaled → blurry clue
+  // numbers / grid lines on every modern phone). Layout stays in CSS px;
+  // getCanvasCell() divides the backing-store scale back out.
+  const dpr = Math.min(3, Math.max(1, window.devicePixelRatio || 1));
+  canvas.__dpr = dpr;
+  canvas.width = Math.round(totalW * dpr);
+  canvas.height = Math.round(totalH * dpr);
+  canvas.style.width = totalW + 'px';
+  canvas.style.height = totalH + 'px';
+  ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
 
   layout = {
-    clueW: Math.round(clueW), clueH: Math.round(clueH),
-    cellSize: Math.round(cellSize),
+    clueW: clueW, clueH: clueH,
+    cellSize: cellSize,
     cols: size, rows: size,
-    totalW: Math.round(totalW), totalH: Math.round(totalH),
+    totalW: totalW, totalH: totalH,
     maxRowClues: maxRowClues, maxColClues: maxColClues
   };
+  if (typeof nonoResetZoom === 'function') nonoResetZoom();
   drawCanvas();
+  if (size >= 15) {
+    try {
+      if (!localStorage.getItem('nonoZoomTip')) {
+        localStorage.setItem('nonoZoomTip', '1');
+        setTimeout(function(){ if (typeof showToast === 'function') showToast('Tip: pinch with two fingers to zoom 🔍'); }, 900);
+      }
+    } catch (e) {}
+  }
 }
 
 function drawCanvas(flashError) {
   if (!currentLevelData) return;
   const { solution, size, rowClues, colClues } = currentLevelData;
-  const { clueW, clueH, cellSize } = layout;
+  const { clueW, clueH } = layout;
   const W = canvas.width, H = canvas.height;
+  // Pinch-zoom view (nonoZoomView): cells scale by s and pan by (ox, oy)
+  // inside the grid area while the clue strips stay pinned at the edges and
+  // follow their row/column — clues never scroll out of sight.
+  const zv = nonoZoomView();
+  const cellSize = layout.cellSize * zv.s;
+  const gx0 = clueW + zv.x, gy0 = clueH + zv.y;
+  const gridW = layout.cellSize * size, gridH = layout.cellSize * size;
 
   ctx2d.clearRect(0, 0, W, H);
 
@@ -3488,10 +3514,13 @@ function drawCanvas(flashError) {
   ctx2d.fillRect(clueW, clueH, W - clueW, H - clueH);
 
   // Draw cells
+  ctx2d.save();
+  ctx2d.beginPath(); ctx2d.rect(clueW, clueH, gridW, gridH); ctx2d.clip();
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
-      const x = clueW + c * cellSize;
-      const y = clueH + r * cellSize;
+      const x = gx0 + c * cellSize;
+      const y = gy0 + r * cellSize;
+      if (x + cellSize < clueW || y + cellSize < clueH || x > clueW + gridW || y > clueH + gridH) continue;
       const val = currentGrid[r * size + c];
       const sol = solution[r * size + c];
 
@@ -3525,7 +3554,7 @@ function drawCanvas(flashError) {
         } else {
           ctx2d.fillStyle = '#bdb091';
           ctx2d.beginPath();
-          ctx2d.arc(x + cellSize/2, y + cellSize/2, 2, 0, Math.PI*2);
+          ctx2d.arc(x + cellSize/2, y + cellSize/2, 2 * zv.s, 0, Math.PI*2);
           ctx2d.fill();
         }
       }
@@ -3537,22 +3566,23 @@ function drawCanvas(flashError) {
   ctx2d.lineWidth = 0.5;
 
   for (let r = 0; r <= size; r++) {
-    const y = clueH + r * cellSize;
+    const y = gy0 + r * cellSize;
     // Thicker every 5 cells
     ctx2d.lineWidth = (r % 5 === 0) ? 1.5 : 0.5;
     ctx2d.strokeStyle = (r % 5 === 0) ? '#bdb091' : '#dcd3bd';
     ctx2d.beginPath();
-    ctx2d.moveTo(clueW, y); ctx2d.lineTo(W, y);
+    ctx2d.moveTo(clueW, y); ctx2d.lineTo(clueW + gridW, y);
     ctx2d.stroke();
   }
   for (let c = 0; c <= size; c++) {
-    const x = clueW + c * cellSize;
+    const x = gx0 + c * cellSize;
     ctx2d.lineWidth = (c % 5 === 0) ? 1.5 : 0.5;
     ctx2d.strokeStyle = (c % 5 === 0) ? '#bdb091' : '#dcd3bd';
     ctx2d.beginPath();
-    ctx2d.moveTo(x, clueH); ctx2d.lineTo(x, H);
+    ctx2d.moveTo(x, clueH); ctx2d.lineTo(x, clueH + gridH);
     ctx2d.stroke();
   }
+  ctx2d.restore();
 
   // Row/Col clue separator
   ctx2d.strokeStyle = '#bdb091';
@@ -3564,16 +3594,20 @@ function drawCanvas(flashError) {
 
   // Draw clues — Round-17b: scale with cellSize, capped at 36 so the
   // clue strip stays readable but not oversized on big-cell boards.
-  const fontSize = Math.max(12, Math.min(cellSize * 0.55, 36));
+  const fitCell = layout.cellSize;
+  const fontSize = Math.max(12, Math.min(fitCell * 0.55, 36));
   ctx2d.font = `700 ${fontSize}px system-ui, -apple-system, sans-serif`;
   ctx2d.textAlign = 'center';
   ctx2d.textBaseline = 'middle';
 
-  // Row clues
+  // Row clues (pinned strip, clipped to the grid's rows)
+  ctx2d.save();
+  ctx2d.beginPath(); ctx2d.rect(0, clueH, clueW, gridH); ctx2d.clip();
   for (let r = 0; r < size; r++) {
     const clue = rowClues[r];
+    const cy = gy0 + r * cellSize + cellSize / 2;
+    if (cy < clueH - cellSize || cy > clueH + gridH + cellSize) continue;
     const satisfied = isRowSatisfied(r);
-    const cy = clueH + r * cellSize + cellSize / 2;
     const nums = clue.filter(n => n !== 0);
 
     if (nums.length === 0 || (nums.length === 1 && nums[0] === 0)) {
@@ -3581,7 +3615,7 @@ function drawCanvas(flashError) {
       ctx2d.fillText('0', clueW / 2, cy);
     } else {
       const totalNums = nums.length;
-      const spacing = Math.min(cellSize * 0.9, clueW / (totalNums + 0.5));
+      const spacing = Math.min(fitCell * 0.9, clueW / (totalNums + 0.5));
       const startX = clueW - spacing * totalNums + spacing / 2;
       nums.forEach((n, i) => {
         ctx2d.fillStyle = satisfied ? (window.NONO_FILL||'#c83838') : '#5a4f43';
@@ -3589,12 +3623,16 @@ function drawCanvas(flashError) {
       });
     }
   }
+  ctx2d.restore();
 
-  // Column clues
+  // Column clues (pinned strip, clipped to the grid's columns)
+  ctx2d.save();
+  ctx2d.beginPath(); ctx2d.rect(clueW, 0, gridW, clueH); ctx2d.clip();
   for (let c = 0; c < size; c++) {
     const clue = colClues[c];
+    const cx = gx0 + c * cellSize + cellSize / 2;
+    if (cx < clueW - cellSize || cx > clueW + gridW + cellSize) continue;
     const satisfied = isColSatisfied(c);
-    const cx = clueW + c * cellSize + cellSize / 2;
     const nums = clue.filter(n => n !== 0);
 
     if (nums.length === 0 || (nums.length === 1 && nums[0] === 0)) {
@@ -3602,7 +3640,7 @@ function drawCanvas(flashError) {
       ctx2d.fillText('0', cx, clueH / 2);
     } else {
       const totalNums = nums.length;
-      const spacing = Math.min(cellSize * 0.9, clueH / (totalNums + 0.5));
+      const spacing = Math.min(fitCell * 0.9, clueH / (totalNums + 0.5));
       const startY = clueH - spacing * totalNums + spacing / 2;
       nums.forEach((n, i) => {
         ctx2d.fillStyle = satisfied ? (window.NONO_FILL||'#c83838') : '#5a4f43';
@@ -3610,6 +3648,7 @@ function drawCanvas(flashError) {
       });
     }
   }
+  ctx2d.restore();
 }
 
 function getRowRuns(r) {
@@ -3655,15 +3694,19 @@ function getCanvasCell(clientX, clientY) {
   const rect = canvas.getBoundingClientRect();
   const x = clientX - rect.left;
   const y = clientY - rect.top;
-  // Scale if canvas CSS size differs
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
+  // Map client px → layout (CSS) px (undo the DPR backing-store scale), then
+  // invert the pinch-zoom view drawCanvas() renders with.
+  const dpr = canvas.__dpr || 1;
+  const scaleX = (canvas.width / dpr) / rect.width;
+  const scaleY = (canvas.height / dpr) / rect.height;
   const px = x * scaleX;
   const py = y * scaleY;
-  const { clueW, clueH, cellSize, cols, rows } = layout;
+  const { clueW, clueH, cols, rows } = layout;
   if (px < clueW || py < clueH) return null;
-  const c = Math.floor((px - clueW) / cellSize);
-  const r = Math.floor((py - clueH) / cellSize);
+  const zv = nonoZoomView();
+  const cellSize = layout.cellSize * zv.s;
+  const c = Math.floor((px - clueW - zv.x) / cellSize);
+  const r = Math.floor((py - clueH - zv.y) / cellSize);
   if (r < 0 || r >= rows || c < 0 || c >= cols) return null;
   return { r, c };
 }
@@ -3782,6 +3825,72 @@ canvas.addEventListener('touchcancel', () => {
   clearTimeout(longPressTimer);
   dragMode = null;
   touchStartCell = null;
+}, { passive: false });
+
+// ── Pinch-to-zoom + two-finger pan (audit 2026-10-03). 15x15 / 20x20 boards
+// (levels 151-500) rendered ~15 px cells on a phone — too small to tap.
+// One finger still paints exactly as before; two fingers zoom (1x–3.2x) and
+// pan. The zoom is drawn INSIDE the canvas (drawCanvas reads nonoZoomView())
+// so the row/column clue strips stay pinned and aligned while zoomed — a CSS
+// transform scrolled the clues off-screen. getCanvasCell() inverts the same
+// view. A "Fit" chip resets; every new level starts un-zoomed.
+var nonoZoom = { s: 1, x: 0, y: 0, g: null };
+function nonoZoomView() {
+  return (typeof nonoZoom !== 'undefined' && nonoZoom) ? nonoZoom : { s: 1, x: 0, y: 0 };
+}
+function nonoApplyZoom() {
+  if (!nonoZoom) return;
+  canvas.style.transform = '';
+  if (currentLevelData && layout && layout.cellSize) drawCanvas();
+  let fit = document.getElementById('nonoFitBtn');
+  if (!fit) {
+    fit = document.createElement('button');
+    fit.id = 'nonoFitBtn';
+    fit.type = 'button';
+    fit.textContent = '⤢ Fit';
+    fit.style.cssText = 'position:absolute;top:8px;right:8px;z-index:var(--z-banner, 200);padding:6px 12px;border-radius:99px;' +
+      'border:1px solid var(--border, rgba(0,0,0,0.15));background:var(--surface, #fff);color:var(--text, #2a2620);font:inherit;font-weight:700;font-size:0.8rem;display:none;';
+    fit.addEventListener('click', function(){ nonoResetZoom(); });
+    const wrap = document.querySelector('.canvas-wrap');
+    if (wrap) { if (getComputedStyle(wrap).position === 'static') wrap.style.position = 'relative'; wrap.appendChild(fit); }
+  }
+  fit.style.display = nonoZoom.s > 1.02 ? 'block' : 'none';
+}
+function nonoResetZoom() { if (!nonoZoom) return; nonoZoom.s = 1; nonoZoom.x = 0; nonoZoom.y = 0; nonoZoom.g = null; nonoApplyZoom(); }
+function nonoClampZoom() {
+  const gw = (layout.cellSize || 0) * (layout.cols || 0), gh = (layout.cellSize || 0) * (layout.rows || 0);
+  nonoZoom.x = Math.min(0, Math.max(gw - gw * nonoZoom.s, nonoZoom.x));
+  nonoZoom.y = Math.min(0, Math.max(gh - gh * nonoZoom.s, nonoZoom.y));
+}
+function nonoTouchDist(a, b) { return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY) || 1; }
+// client px → grid-local layout px (origin = top-left of the grid area)
+function nonoGridPoint(cx, cy) {
+  const r = canvas.getBoundingClientRect();
+  const kx = (layout.totalW || r.width) / (r.width || 1), ky = (layout.totalH || r.height) / (r.height || 1);
+  return { x: (cx - r.left) * kx - layout.clueW, y: (cy - r.top) * ky - layout.clueH };
+}
+canvas.addEventListener('touchstart', (e) => {
+  if (e.touches.length !== 2 || !currentLevelData) return;
+  // A second finger cancels any paint/long-press the first finger began.
+  clearTimeout(longPressTimer); dragMode = null; touchStartCell = null; lastTouchedCell = null;
+  const a = e.touches[0], b = e.touches[1];
+  const m = nonoGridPoint((a.clientX + b.clientX) / 2, (a.clientY + b.clientY) / 2);
+  // fit-scale board point under the fingers' midpoint — kept there while pinching
+  nonoZoom.g = { d: nonoTouchDist(a, b), s: nonoZoom.s,
+                 bx: (m.x - nonoZoom.x) / nonoZoom.s, by: (m.y - nonoZoom.y) / nonoZoom.s };
+}, { passive: false });
+canvas.addEventListener('touchmove', (e) => {
+  if (e.touches.length !== 2 || !nonoZoom.g) return;
+  e.preventDefault();
+  const g = nonoZoom.g, a = e.touches[0], b = e.touches[1];
+  const s = Math.min(3.2, Math.max(1, g.s * nonoTouchDist(a, b) / g.d));
+  const m = nonoGridPoint((a.clientX + b.clientX) / 2, (a.clientY + b.clientY) / 2);
+  nonoZoom.s = s; nonoZoom.x = m.x - g.bx * s; nonoZoom.y = m.y - g.by * s;
+  nonoClampZoom(); nonoApplyZoom();
+}, { passive: false });
+canvas.addEventListener('touchend', (e) => {
+  if (e.touches.length < 2) nonoZoom.g = null;
+  if (nonoZoom.s < 1.05 && nonoZoom.s !== 1) nonoResetZoom();
 }, { passive: false });
 
 // ===================================================================
@@ -4063,7 +4172,7 @@ window.__nonoFillSolution = function(ratio) {
 <script>
 /* ===== I18N TRANSLATIONS MODULE ===== */
 window.GAME_I18N = {
-  en: {
+  en: { solvedIn:'Solved in %d',
     play:'Play', levels:'Levels', levelSelect:'Level Select', shop:'Shop',
     settings:'Settings', dailyChallenge:'Daily Challenge', back:'Back',
     sound:'Sound', music:'Music', resetProgress:'Reset Progress',
@@ -4085,7 +4194,7 @@ window.GAME_I18N = {
     ls_ach14:'💎 Two Weeks! +%d 🪙',
     ls_ach30:'👑 Legend! +%d 🪙',
   },
-  de: { ls_week:'Eine Woche!',
+  de: { solvedIn:'Gelöst in %d', ls_week:'Eine Woche!',
     play:'Spielen', levels:'Level', levelSelect:'Level Auswahl', shop:'Shop',
     settings:'Einstellungen', dailyChallenge:'Tägliche Aufgabe', back:'Zurück',
     sound:'Ton', music:'Musik', resetProgress:'Fortschritt Zurücksetzen',
@@ -4104,7 +4213,7 @@ window.GAME_I18N = {
     ls_ach14:'💎 Zwei Wochen! +%d 🪙',
     ls_ach30:'👑 Legende! +%d 🪙',
   },
-  fr: { ls_week:'Une semaine !',
+  fr: { solvedIn:'Résolu en %d', ls_week:'Une semaine !',
     play:'Jouer', levels:'Niveaux', levelSelect:'Choisir un Niveau', shop:'Boutique',
     settings:'Paramètres', dailyChallenge:'Défi du Jour', back:'Retour',
     sound:'Son', music:'Musique', resetProgress:'Réinitialiser',
@@ -4123,7 +4232,7 @@ window.GAME_I18N = {
     ls_ach14:'💎 Deux Semaines! +%d 🪙',
     ls_ach30:'👑 Légende! +%d 🪙',
   },
-  es: { ls_week:'¡Una semana!',
+  es: { solvedIn:'Resuelto en %d', ls_week:'¡Una semana!',
     play:'Jugar', levels:'Niveles', levelSelect:'Seleccionar Nivel', shop:'Tienda',
     settings:'Ajustes', dailyChallenge:'Reto Diario', back:'Volver',
     sound:'Sonido', music:'Música', resetProgress:'Reiniciar Progreso',
@@ -4142,7 +4251,7 @@ window.GAME_I18N = {
     ls_ach14:'💎 ¡Dos semanas! +%d 🪙',
     ls_ach30:'👑 ¡Leyenda! +%d 🪙',
   },
-  pt: { ls_week:'Uma semana!',
+  pt: { solvedIn:'Resolvido em %d', ls_week:'Uma semana!',
     play:'Jogar', levels:'Níveis', levelSelect:'Selecionar Nível', shop:'Loja',
     settings:'Configurações', dailyChallenge:'Desafio Diário', back:'Voltar',
     sound:'Som', music:'Música', resetProgress:'Redefinir Progresso',
@@ -4161,7 +4270,7 @@ window.GAME_I18N = {
     ls_ach14:'💎 Duas semanas! +%d 🪙',
     ls_ach30:'👑 Lenda! +%d 🪙',
   },
-  ru: { ls_week:'Неделя!',
+  ru: { solvedIn:'Решено за %d', ls_week:'Неделя!',
     play:'Играть', levels:'Уровни', levelSelect:'Выбор Уровня', shop:'Магазин',
     settings:'Настройки', dailyChallenge:'Ежедневный Вызов', back:'Назад',
     sound:'Звук', music:'Музыка', resetProgress:'Сбросить Прогресс',
@@ -4180,7 +4289,7 @@ window.GAME_I18N = {
     ls_ach14:'💎 Две недели! +%d 🪙',
     ls_ach30:'👑 Легенда! +%d 🪙',
   },
-  ja: { ls_week:'1週間達成！',
+  ja: { solvedIn:'%d でクリア', ls_week:'1週間達成！',
     play:'プレイ', levels:'レベル', levelSelect:'レベル選択', shop:'ショップ',
     settings:'設定', dailyChallenge:'デイリーチャレンジ', back:'戻る',
     sound:'サウンド', music:'音楽', resetProgress:'進行状況をリセット',
@@ -4199,7 +4308,7 @@ window.GAME_I18N = {
     ls_ach14:'💎 2週間！ +%d 🪙',
     ls_ach30:'👑 レジェンド！ +%d 🪙',
   },
-  ko: { ls_week:'일주일!',
+  ko: { solvedIn:'%d 만에 완성', ls_week:'일주일!',
     play:'플레이', levels:'레벨', levelSelect:'레벨 선택', shop:'상점',
     settings:'설정', dailyChallenge:'일일 도전', back:'뒤로',
     sound:'사운드', music:'음악', resetProgress:'진행 초기화',
@@ -4218,7 +4327,7 @@ window.GAME_I18N = {
     ls_ach14:'💎 2주 완료! +%d 🪙',
     ls_ach30:'👑 레전드! +%d 🪙',
   },
-  zh: { ls_week:'一周达成！',
+  zh: { solvedIn:'用时 %d', ls_week:'一周达成！',
     play:'开始游戏', levels:'关卡', levelSelect:'选择关卡', shop:'商店',
     settings:'设置', dailyChallenge:'每日挑战', back:'返回',
     sound:'音效', music:'音乐', resetProgress:'重置进度',
@@ -4237,7 +4346,7 @@ window.GAME_I18N = {
     ls_ach14:'💎 两周！ +%d 🪙',
     ls_ach30:'👑 传奇！ +%d 🪙',
   },
-  ar: { ls_week:'أسبوع كامل!',
+  ar: { solvedIn:'حُلّت في %d', ls_week:'أسبوع كامل!',
     play:'العب', levels:'المستويات', levelSelect:'اختر المستوى', shop:'المتجر',
     settings:'الإعدادات', dailyChallenge:'التحدي اليومي', back:'رجوع',
     sound:'الصوت', music:'الموسيقى', resetProgress:'إعادة التعيين',
@@ -4256,7 +4365,7 @@ window.GAME_I18N = {
     ls_ach14:'💎 أسبوعان! +%d 🪙',
     ls_ach30:'👑 أسطورة! +%d 🪙',
   },
-  tr: { ls_week:'Bir Hafta!',
+  tr: { solvedIn:'%d içinde çözüldü', ls_week:'Bir Hafta!',
     play:'Oyna', levels:'Seviyeler', levelSelect:'Seviye Seç', shop:'Mağaza',
     settings:'Ayarlar', dailyChallenge:'Günlük Görev', back:'Geri',
     sound:'Ses', music:'Müzik', resetProgress:'İlerlemeyi Sıfırla',
@@ -4275,7 +4384,7 @@ window.GAME_I18N = {
     ls_ach14:'💎 İki hafta! +%d 🪙',
     ls_ach30:'👑 Efsane! +%d 🪙',
   },
-  it: { ls_week:'Una settimana!',
+  it: { solvedIn:'Risolto in %d', ls_week:'Una settimana!',
     play:'Gioca', levels:'Livelli', levelSelect:'Scegli Livello', shop:'Negozio',
     settings:'Impostazioni', dailyChallenge:'Sfida Quotidiana', back:'Indietro',
     sound:'Suono', music:'Musica', resetProgress:'Azzera Progressi',
@@ -4393,7 +4502,7 @@ window.GAME_I18N = {
     ls_ach3:'🌟 3 ngày! +%d 🪙', ls_ach7:'🏆 Một tuần đầy đủ! +%d 🪙',
     ls_ach14:'💎 Hai tuần! +%d 🪙', ls_ach30:'👑 Huyền thoại! +%d 🪙',
   },
-  id: { noLives:'Nyawa habis', watchAd:'Tonton iklan untuk nyawa', lives:'Nyawa', coins:'Koin', buy:'Beli', owned:'Dimiliki', next:'Level berikutnya', retry:'Coba lagi', ls_week:'Satu Minggu!', 
+  id: { solvedIn:'Selesai dalam %d', noLives:'Nyawa habis', watchAd:'Tonton iklan untuk nyawa', lives:'Nyawa', coins:'Koin', buy:'Beli', owned:'Dimiliki', next:'Level berikutnya', retry:'Coba lagi', ls_week:'Satu Minggu!', 
     play:'Mainkan', levels:'Level', levelSelect:'Pilih Level', shop:'Toko',
     settings:'Pengaturan', dailyChallenge:'Tantangan Harian', back:'Kembali',
     sound:'Suara', music:'Musik', resetProgress:'Reset Progres',
@@ -4405,7 +4514,7 @@ window.GAME_I18N = {
     ls_ach3:'🌟 3 hari! +%d 🪙', ls_ach7:'🏆 Satu minggu penuh! +%d 🪙',
     ls_ach14:'💎 Dua minggu! +%d 🪙', ls_ach30:'👑 Legenda! +%d 🪙',
   },
-  hi: { noLives:'कोई जीवन नहीं बचा', watchAd:'जीवन के लिए विज्ञापन देखें', lives:'जीवन', coins:'सिक्के', buy:'खरीदें', owned:'खरीदा हुआ', next:'अगला स्तर', retry:'फिर कोशिश करें', ls_week:'एक सप्ताह!', 
+  hi: { solvedIn:'%d में हल किया', noLives:'कोई जीवन नहीं बचा', watchAd:'जीवन के लिए विज्ञापन देखें', lives:'जीवन', coins:'सिक्के', buy:'खरीदें', owned:'खरीदा हुआ', next:'अगला स्तर', retry:'फिर कोशिश करें', ls_week:'एक सप्ताह!', 
     play:'खेलें', levels:'स्तर', levelSelect:'स्तर चुनें', shop:'दुकान',
     settings:'सेटिंग्स', dailyChallenge:'दैनिक चुनौती', back:'वापस',
     sound:'ध्वनि', music:'संगीत', resetProgress:'प्रगति रीसेट करें',
@@ -4417,7 +4526,7 @@ window.GAME_I18N = {
     ls_ach3:'🌟 3 दिन! +%d 🪙', ls_ach7:'🏆 पूरा एक सप्ताह! +%d 🪙',
     ls_ach14:'💎 दो सप्ताह! +%d 🪙', ls_ach30:'👑 लीजेंड! +%d 🪙',
   },
-  uk:{ play:'Грати', levels:'Рівні', levelSelect:'Вибір рівня', shop:'Магазин', settings:'Налаштування', dailyChallenge:'Щоденний виклик', back:'Назад', sound:'Звук', music:'Музика', resetProgress:'Скинути прогрес', removeAds:'Прибрати рекламу', language:'Мова', levelComplete:'Рівень пройдено!', gameOver:'Гру закінчено', hint:'Підказка', undo:'Скасувати', skip:'Пропустити', quit:'Вийти', menu:'Меню', noLives:'Немає життів', watchAd:'Переглянути рекламу за життя', lives:'Життя', coins:'Монети', buy:'Купити', owned:'Придбано', next:'Наступний рівень', retry:'Спробувати ще', ls_title:'Серія %d днів!', ls_sub:'Заходьте щодня за більшими нагородами', ls_bonus:'Сьогоднішній бонус', ls_claim:'Отримати нагороду!', ls_week:'Один тиждень!', ls_ach3:'🌟 Серія 3 дні! +%d 🪙', ls_ach7:'🏆 Цілий тиждень! +%d 🪙', ls_ach14:'💎 Два тижні! +%d 🪙', ls_ach30:'👑 Легенда! +%d 🪙' },
+  uk:{ solvedIn:'Розв’язано за %d', play:'Грати', levels:'Рівні', levelSelect:'Вибір рівня', shop:'Магазин', settings:'Налаштування', dailyChallenge:'Щоденний виклик', back:'Назад', sound:'Звук', music:'Музика', resetProgress:'Скинути прогрес', removeAds:'Прибрати рекламу', language:'Мова', levelComplete:'Рівень пройдено!', gameOver:'Гру закінчено', hint:'Підказка', undo:'Скасувати', skip:'Пропустити', quit:'Вийти', menu:'Меню', noLives:'Немає життів', watchAd:'Переглянути рекламу за життя', lives:'Життя', coins:'Монети', buy:'Купити', owned:'Придбано', next:'Наступний рівень', retry:'Спробувати ще', ls_title:'Серія %d днів!', ls_sub:'Заходьте щодня за більшими нагородами', ls_bonus:'Сьогоднішній бонус', ls_claim:'Отримати нагороду!', ls_week:'Один тиждень!', ls_ach3:'🌟 Серія 3 дні! +%d 🪙', ls_ach7:'🏆 Цілий тиждень! +%d 🪙', ls_ach14:'💎 Два тижні! +%d 🪙', ls_ach30:'👑 Легенда! +%d 🪙' },
   };
 
 window.LANG_NAMES = {
@@ -4425,7 +4534,7 @@ window.LANG_NAMES = {
   ru:'Русский', ja:'日本語', ko:'한국어', zh:'中文', ar:'العربية',
   tr:'Türkçe', it:'Italiano', nl:'Nederlands', pl:'Polski', sv:'Svenska',
   no:'Norsk', da:'Dansk', fi:'Suomi', th:'ภาษาไทย', vi:'Tiếng Việt',
-  id:'Bahasa Indonesia', hi:'हिन्दी',
+  id:'Bahasa Indonesia', hi:'हिन्दी', uk:'Українська',
 };
 
 window.i18n = {
@@ -6794,17 +6903,37 @@ window.addEventListener('load',function(){
     document.body.appendChild(ov);
     setTimeout(function(){ ov.remove(); }, 2700);
 
+    // Pinned near the top (was top:30% — it sat on the win card's title and
+    // first lines) and localized; fades out instead of popping.
     var msg = document.createElement('div');
-    msg.style.cssText = 'position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);' +
-      'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border:1px solid var(--border, #d4e2ec);border-radius:18px;padding:18px 22px;' +
-      'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index:var(--z-tutorial, 500);font-family:inherit;pointer-events:none;';
+    msg.style.cssText = 'position:fixed;top:calc(env(safe-area-inset-top, 0px) + 64px);left:50%;transform:translateX(-50%);max-width:88vw;box-sizing:border-box;' +
+      'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border:1px solid var(--border, #d4e2ec);border-radius:18px;padding:14px 22px;' +
+      'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index:var(--z-tutorial, 500);font-family:inherit;pointer-events:none;' +
+      'transition:opacity .4s ease;';
     var cfg = (window.gGame && window.gGame.cfg) || {};
-    var sub = (cfg.kind === 'score') ? 'Next stop: 2048!'
-            : ((cfg.totalLevels ? (cfg.totalLevels - 1) : 499) + ' more puzzles to go.');
-    msg.innerHTML = "🎉 You've got this!<br><span style='font-weight:600;font-size:0.9rem;color:var(--text-mute, #5a7390);'>" + sub + "</span>";
+    var L = FIRST_CLEAR[String((window.gGame && window.gGame.lang()) || 'en').toLowerCase().split('-')[0]] || FIRST_CLEAR.en;
+    var left = cfg.totalLevels ? (cfg.totalLevels - 1) : 499;
+    var sub = (cfg.kind === 'score') ? L.score : L.more.split('{n}').join(String(left));
+    msg.innerHTML = '🎉 ' + L.head + "<br><span style='font-weight:600;font-size:0.9rem;color:var(--text-mute, #5a7390);'>" + sub + '</span>';
     document.body.appendChild(msg);
-    setTimeout(function(){ msg.remove(); }, 2400);
+    setTimeout(function(){ msg.style.opacity = '0'; }, 2300);
+    setTimeout(function(){ msg.remove(); }, 2750);
   }
+  var FIRST_CLEAR = {
+    en:{head:"You've got this!", more:'{n} more puzzles to go.', score:'Next stop: 2048!'},
+    de:{head:'Du schaffst das!', more:'Noch {n} Rätsel warten.', score:'Nächster Halt: 2048!'},
+    fr:{head:'Tu gères !', more:'Encore {n} puzzles à résoudre.', score:'Prochain arrêt : 2048 !'},
+    es:{head:'¡Lo tienes!', more:'Quedan {n} puzles más.', score:'Próxima parada: ¡2048!'},
+    pt:{head:'Você consegue!', more:'Mais {n} quebra-cabeças pela frente.', score:'Próxima parada: 2048!'},
+    it:{head:'Ce la fai!', more:'Ancora {n} puzzle da risolvere.', score:'Prossima tappa: 2048!'},
+    tr:{head:'Harikasın!', more:'Önünde {n} bulmaca daha var.', score:'Sıradaki durak: 2048!'},
+    id:{head:'Kamu bisa!', more:'Masih ada {n} teka-teki lagi.', score:'Perhentian berikutnya: 2048!'},
+    uk:{head:'У тебе виходить!', more:'Попереду ще {n} головоломок.', score:'Наступна зупинка: 2048!'},
+    ja:{head:'その調子！', more:'残り{n}パズル。', score:'次の目標：2048！'},
+    zh:{head:'你真棒！', more:'还有 {n} 个谜题等你挑战。', score:'下一站：2048！'},
+    ar:{head:'أحسنت!', more:'تبقّى {n} لغزًا.', score:'المحطة التالية: 2048!'},
+    hi:{head:'शाबाश!', more:'अभी {n} और पहेलियाँ बाकी हैं।', score:'अगला पड़ाव: 2048!'}
+  };
 
   function maybeDay2Nudge(){
     var alreadyShown = lsGet('_growthDay2NudgeShown','0');

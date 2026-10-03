@@ -2069,6 +2069,7 @@ def main():
         ('check_live_events.py', 'live-ops calendar (12 months, no fake banners)'),
         ('check_store_paste_fresh.py', 'STORE_PASTE.md belongs to this app + matches metadata'),
         ('check_reward_types_native.py', 'rewarded types requested by JS are whitelisted in Java'),
+        ('check_lang_picker.py', 'every translated listing locale is selectable in the language picker'),
     ]:
         try:
             _r = _subprocess.run(
