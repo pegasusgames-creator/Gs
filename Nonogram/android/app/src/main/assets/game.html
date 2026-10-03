@@ -1420,13 +1420,21 @@ window.onPurchaseComplete = function(productId) {
     var _nb = document.getElementById('admob-banner'); if (_nb) _nb.style.display = 'none';
     if (window.Android && window.Android.hideBannerAd) window.Android.hideBannerAd();
   } else if (productId === 'season_pass_monthly') {
+    var _wasActive_seasonPassUntil = !!(state.seasonPassUntil && Date.now() < state.seasonPassUntil);
     state.seasonPassUntil = Date.now() + 30 * 86400 * 1000;
-    state.removeAds = true; state.lastSeasonGrantDate = '';
+    // Pass = temporary perks (ad-free via adsRemoved() → isPremium()). It no longer sets the
+    // permanent removeAds flag (one $1.99 week used to buy ad-free forever), and the launch-time
+    // restore of an active sub no longer re-arms today's daily coins (relaunch coin farm).
+    if (!_wasActive_seasonPassUntil) state.lastSeasonGrantDate = '';
     var _nb2 = document.getElementById('admob-banner'); if (_nb2) _nb2.style.display = 'none';
     if (window.Android && window.Android.hideBannerAd) window.Android.hideBannerAd();
   } else if (productId === 'weekly_pass') {
+    var _wasActive_weeklyPassUntil = !!(state.weeklyPassUntil && Date.now() < state.weeklyPassUntil);
     state.weeklyPassUntil = Date.now() + 7 * 86400 * 1000;
-    state.removeAds = true; state.lastWeeklyGrantDate = '';
+    // Pass = temporary perks (ad-free via adsRemoved() → isPremium()). It no longer sets the
+    // permanent removeAds flag (one $1.99 week used to buy ad-free forever), and the launch-time
+    // restore of an active sub no longer re-arms today's daily coins (relaunch coin farm).
+    if (!_wasActive_weeklyPassUntil) state.lastWeeklyGrantDate = '';
     var _nb3 = document.getElementById('admob-banner'); if (_nb3) _nb3.style.display = 'none';
     if (window.Android && window.Android.hideBannerAd) window.Android.hideBannerAd();
   } else if (productId === 'five_lives') {
@@ -5346,9 +5354,11 @@ function injectStarterModal(){
     '<div class="starter-card">'+
     '<div class="starter-badge">🎁</div>'+
     '<div class="starter-title">Starter Pack</div>'+
-    '<div class="starter-subtitle">Limited time offer</div>'+
-    '<div class="starter-price-row"><span class="starter-old-price">$4.99</span><span class="starter-new-price">$0.99</span></div>'+
-    '<div class="starter-perks">✅ Remove Ads forever<br>✅ 100 bonus coins<br>✅ 1 hour unlimited lives</div>'+
+    '<div class="starter-subtitle">One-time welcome bundle</div>'+
+    '<div class="starter-price-row"><span class="starter-new-price">$0.99</span></div>'+
+    // Lists exactly what onPurchaseSuccess('starter_pack') grants (it used to promise "1 hour
+    // unlimited lives" and show a made-up "$4.99" was-price — misleading-pricing risk).
+    '<div class="starter-perks">✅ Remove Ads forever<br>✅ 100 bonus coins<br>✅ 5 hints + 5 lives</div>'+
     '<button class="starter-buy-btn" onclick="buyStarterPack()">Get for $0.99!</button>'+
     '<button class="starter-skip" onclick="closeStarterPack()">Maybe later</button>'+
     '</div>';

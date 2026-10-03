@@ -40,7 +40,7 @@ CFG = {
                             booster=dict(field="undoPack", name="Undo", emoji="↩️", coins=30)),
     "UnblockPuzzle":   dict(pkg="com.pegasusgames.unblockpuzzle", name="Unblock Puzzle",
                             saveKey="unblock_save", levelBase=1, kind="levels", totalLevels=500, live=True,
-                            booster=dict(name="Hint", emoji="💡", coins=30)),
+                            booster=dict(field="hintCount", name="Hint", emoji="💡", coins=30)),
     "PipeConnect":     dict(pkg="com.pegasusgames.pipeconnect", name="Pipe Connect",
                             saveKey="pipeconnect_save", levelBase=0, kind="levels", totalLevels=500, live=False,
                             booster=dict(field="hintCount", name="Hint", emoji="💡", coins=25)),
