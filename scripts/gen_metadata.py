@@ -8,6 +8,13 @@ Overwrites init_app_metadata.py TODO placeholders with real content.
 Usage:
   python3 gen_metadata.py           # process all apps
   python3 gen_metadata.py App1 App2 # process specific apps
+  python3 gen_metadata.py App --force  # overwrite hand-written metadata too
+
+Only fills metadata that is missing or still an init_app_metadata.py TODO
+placeholder. An app whose metadata/en-US/full_description.txt is real copy
+is SKIPPED unless --force (audit 2026-10-03: a bare run would have replaced
+the 8 shipping games' hand-written listings with legacy store-listing.txt
+text — and Afterimage / Hunch / Overlay's legacy files were PipeConnect's).
 """
 import json, os, re, sys, textwrap
 
@@ -264,6 +271,12 @@ def process_app(app):
 
     if not os.path.exists(listing):
         return f'{app}: no store-listing.txt'
+    existing = os.path.join(meta_dir, 'full_description.txt')
+    if not FORCE and os.path.exists(existing):
+        with open(existing, encoding='utf-8') as f:
+            cur = f.read()
+        if cur.strip() and 'TODO' not in cur:
+            return f'{app}: skipped — hand-written metadata exists (use --force to overwrite)'
 
     parsed = parse_store_listing(listing)
     app_name  = parsed['app_name'] or app
@@ -313,8 +326,12 @@ def list_apps():
     return apps
 
 
+FORCE = False
+
 if __name__ == '__main__':
-    target = sys.argv[1:] if len(sys.argv) > 1 else list_apps()
+    FORCE = '--force' in sys.argv
+    args = [a for a in sys.argv[1:] if not a.startswith('--')]
+    target = args if args else list_apps()
     for app in target:
         print(process_app(app))
     print('Done')

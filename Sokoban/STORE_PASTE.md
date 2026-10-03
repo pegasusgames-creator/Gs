@@ -24,81 +24,55 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-• 100 new levels
-• Themed visual styles
-• Move/push counter
+Initial release · 500 solver-verified push puzzles, from gentle to brain-bending · Daily challenge with streak rewards · Weekly tournament and leaderboards · 5 unlockable visual themes · Move and push counters · Undo and restart anytime · Plays fully offline.
 </en-US>
 
 <ar>
-• 100 مستوى جديد  
-• أنماط بصرية متنوعة  
-• عداد التحركات/الضغط
+الإصدار الأول · 500 لغز دفع تم التحقق منها بالحل، من السهل إلى المُحيّر · تحدٍّ يومي مع مكافآت السلسلة · بطولة أسبوعية ولوحات صدارة · 5 سمات بصرية قابلة للفتح · عدّادات الحركة والدفع · تراجع وإعادة بدء في أي وقت · يعمل بلا إنترنت تمامًا.
 </ar>
 
 <de-DE>
-• 100 NEUE LEVEL  
-• THEMENBEZOGENE VISUELLE STILE  
-• BEWEGEN/DRÜCKEN ZÄHLER
+Erstveröffentlichung · 500 lösungsgeprüfte Schiebe-Rätsel, von sanft bis knifflig · Tägliche Herausforderung mit Serien-Belohnungen · Wöchentliches Turnier und Bestenlisten · 5 freischaltbare Designs · Zug- und Schub-Zähler · Jederzeit rückgängig machen und neu starten · Komplett offline spielbar.
 </de-DE>
 
 <es-419>
-• 100 niveles nuevos  
-• Estilos visuales temáticos  
-• Contador de movimientos/empujones
+Lanzamiento inicial · 500 rompecabezas de empuje verificados, de suaves a desafiantes · Desafío diario con recompensas por racha · Torneo semanal y tablas de clasificación · 5 temas visuales desbloqueables · Contadores de movimientos y empujes · Deshacer y reiniciar cuando quieras · Totalmente sin conexión.
 </es-419>
 
 <fr-FR>
-• 100 NOUVEAUX NIVEAUX  
-• STYLES VISUELS THÉMATIQUES  
-• COMPTEUR DE MOUVEMENTS/PUSH
+Première version · 500 puzzles de poussée vérifiés, du doux au casse-tête · Défi quotidien avec récompenses de série · Tournoi hebdomadaire et classements · 5 thèmes visuels à débloquer · Compteurs de coups et de poussées · Annuler et recommencer à tout moment · Entièrement hors ligne.
 </fr-FR>
 
 <hi-IN>
-• 100 नए स्तर  
-• थीम्ड विजुअल स्टाइल  
-• मूव/पुश काउंटर
+पहला रिलीज़ · 500 हल-सत्यापित पुश पहेलियाँ, आसान से दिमाग़ घुमाने वाली तक · स्ट्रीक इनाम के साथ रोज़ाना चुनौती · साप्ताहिक टूर्नामेंट और लीडरबोर्ड · 5 अनलॉक होने वाली विज़ुअल थीम · चाल और पुश काउंटर · कभी भी पूर्ववत करें और फिर से शुरू करें · पूरी तरह ऑफ़लाइन।
 </hi-IN>
 
 <id>
-• 100 LEVEL BARU  
-• GAYA VISUAL BERTEMA  
-• HITUNGAN GERAK/TEKAN
+Rilis perdana · 500 teka-teki dorong terverifikasi, dari ringan hingga memutar otak · Tantangan harian dengan hadiah streak · Turnamen mingguan dan papan peringkat · 5 tema visual yang bisa dibuka · Penghitung langkah dan dorongan · Urungkan dan mulai ulang kapan saja · Sepenuhnya offline.
 </id>
 
 <it-IT>
-• 100 NUOVI LIVELLI  
-• STILI VISIVI TEMATICI  
-• CONTATORE MOSSE/IMPULSI
+Versione iniziale · 500 rompicapi a spinta verificati, dai più dolci ai rompicapo · Sfida giornaliera con ricompense per la serie · Torneo settimanale e classifiche · 5 temi visivi sbloccabili · Contatori di mosse e spinte · Annulla e ricomincia quando vuoi · Completamente offline.
 </it-IT>
 
 <ja-JP>
-• 100の新しいレベル  
-• テーマ別のビジュアルスタイル  
-• 移動/プッシュカウント
+初回リリース · 解答検証済みの押し込みパズル500問（やさしいものから頭をひねるものまで）· 連続記録報酬付きのデイリーチャレンジ · 週替わりトーナメントとリーダーボード · 解放できる5つのビジュアルテーマ · 移動数・押し込み数カウンター · いつでも取り消し＆やり直し · 完全オフライン対応。
 </ja-JP>
 
 <pt-BR>
-• 100 NOVOS NÍVEIS  
-• ESTILOS VISUAIS TEMÁTICOS  
-• CONTADOR DE MOVIMENTOS/PUSHES
+Lançamento inicial · 500 quebra-cabeças de empurrar verificados, do suave ao alucinante · Desafio diário com recompensas por sequência · Torneio semanal e placares · 5 temas visuais desbloqueáveis · Contadores de movimentos e empurrões · Desfazer e reiniciar a qualquer momento · Totalmente offline.
 </pt-BR>
 
 <tr-TR>
-• 100 YENİ SEVİYE  
-• Temalı görsel stiller  
-• Hareket/itme sayacı
+İlk sürüm · Çözümü doğrulanmış 500 itme bulmacası, yumuşaktan zorlayıcıya · Seri ödüllü günlük görev · Haftalık turnuva ve lider tabloları · Açılabilir 5 görsel tema · Hamle ve itme sayaçları · İstediğiniz zaman geri al ve yeniden başla · Tamamen çevrimdışı.
 </tr-TR>
 
 <uk>
-• 100 НОВИХ РІВНІВ  
-• Тематичні візуальні стилі  
-• Лічильник руху/штовхання
+Перший випуск · 500 перевірених розв'язувачем головоломок-штовхалок, від простих до складних · Щоденний виклик із нагородами за серію · Щотижневий турнір і таблиці лідерів · 5 візуальних тем, які можна відкрити · Лічильники ходів і поштовхів · Скасування та перезапуск будь-коли · Повністю офлайн.
 </uk>
 
 <zh-CN>
-• 100 个全新关卡  
-• 主题视觉风格  
-• 移动/推动计数器
+首次发布 · 500 个经求解器验证的推箱谜题，从轻松到烧脑 · 每日挑战和连续奖励 · 每周锦标赛和排行榜 · 5 个可解锁视觉主题 · 步数和推动计数 · 随时撤销和重来 · 完全离线。
 </zh-CN>
 
 ---
@@ -174,16 +148,16 @@ Tap the directional arrows or swipe to move. Walk into a box to push it. You can
 ✨ THE FEEL
 • Tactile haptic feedback on every push
 • Crunchy retro pixel art with smooth animations
-• 50 hand-tuned levels from gentle warm-ups to brain-bending knots
+• 500 hand-tuned levels from gentle warm-ups to brain-bending knots
 • Works fully offline — play on planes, in line, anywhere
 • ASMR-style sound design — soft pushes, satisfying box-on-target thumps
 
 🎯 WHAT'S IN IT
-• 50 classic Sokoban levels (more coming via free updates)
+• 500 classic Sokoban levels (more coming via free updates)
 • Daily Challenge with login streak rewards
 • 5 unlockable visual themes — Classic, Wood, Industrial, Temple, Space
 • Free Coins button (rewarded ad, 25 coins every 4 hours)
-• Stats screen tracking levels solved, daily streak, global rank
+• Stats screen tracking levels solved, daily streak, weekly standings
 • Weekly Tournament with synthetic leaderboard tiers
 • Hint system — gentle nudge when you're stuck
 • Full undo + restart on every level
@@ -207,16 +181,16 @@ Made with care by Pegasus Games.
 ✨ الإحساس
 • ردود فعل لمسية حسية على كل دفع
 • فن بكسل قديم مقرمش مع رسوم متحركة سلسة
-• 50 مستوى مصقول يدويًا من التدريبات اللطيفة إلى العقد العقلية المحيرة
+• 500 مستوى مصقول يدويًا من التدريبات اللطيفة إلى العقد العقلية المحيرة
 • يعمل بالكامل دون اتصال بالإنترنت — العب في الطائرات، وفي الصف، في أي مكان
 • تصميم صوتي بأسلوب ASMR — دفقات ناعمة، وضربات مرضية للصندوق على الهدف
 
 🎯 ما يحتويه
-• 50 مستوى كلاسيكي من Sokoban (المزيد قادم عبر تحديثات مجانية)
+• 500 مستوى كلاسيكي من Sokoban (المزيد قادم عبر تحديثات مجانية)
 • تحدي يومي مع مكافآت لمتابعة تسجيل الدخول
 • 5 موضوعات بصرية قابلة للفتح — كلاسيكي، خشبي، صناعي، معبد، فضاء
 • زر العملات المجانية (إعلان مكافأة، 25 عملة كل 4 ساعات)
-• شاشة إحصائيات تتبع المستويات التي تم حلها، والمجموعات اليومية، والترتيب العالمي
+• شاشة إحصائيات تتبع المستويات التي تم حلها، والمجموعات اليومية، والترتيب الأسبوعي
 • بطولة أسبوعية مع مستويات متسابقين صناعية
 • نظام تلميحات — دفعة لطيفة عندما تكون عالقًا
 • التراجع الكامل + إعادة التشغيل على كل مستوى
@@ -240,16 +214,16 @@ Tippe auf die Richtungspfeile oder wische, um dich zu bewegen. Gehe in eine Box,
 ✨ DAS GEFÜHL
 • Taktile haptische Rückmeldung bei jedem Schub
 • Knackige Retro-Pixelgrafik mit flüssigen Animationen
-• 50 handgefertigte Levels von sanften Aufwärmübungen bis zu kniffligen Knoten
+• 500 handgefertigte Levels von sanften Aufwärmübungen bis zu kniffligen Knoten
 • Vollständig offline spielbar — spiele im Flugzeug, in der Warteschlange, überall
 • ASMR-artiges Sounddesign — sanfte Schube, befriedigende Geräusche beim Boxenaufsetzen
 
 🎯 DAS IST DRIN
-• 50 klassische Sokoban-Levels (weitere kommen über kostenlose Updates)
+• 500 klassische Sokoban-Levels (weitere kommen über kostenlose Updates)
 • Tägliche Herausforderung mit Belohnungen für Anmeldereihen
 • 5 freischaltbare visuelle Themen — Klassisch, Holz, Industrie, Tempel, Weltraum
 • Kostenlose Coins-Schaltfläche (belohnte Werbung, 25 Münzen alle 4 Stunden)
-• Statistiken, die gelöste Level, tägliche Reihen und globale Ränge verfolgen
+• Statistiken, die gelöste Level, tägliche Reihen und wöchentliche Platzierungen verfolgen
 • Wöchentlicher Wettkampf mit einer synthetischen Rangliste
 • Tipp-System — sanfter Hinweis, wenn du feststeckst
 • Vollständige Rückgängig-Funktion + Neustart für jedes Level
@@ -273,16 +247,16 @@ Toca las flechas direccionales o desliza para moverte. Camina hacia una caja par
 ✨ LA SENSACIÓN
 • Retroalimentación háptica táctil en cada empujón
 • Arte de píxeles retro crujiente con animaciones suaves
-• 50 niveles ajustados a mano, desde suaves calentamientos hasta nudos mentales
+• 500 niveles ajustados a mano, desde suaves calentamientos hasta nudos mentales
 • Funciona completamente sin conexión — juega en aviones, en la fila, ¡en cualquier lugar!
 • Diseño de sonido al estilo ASMR — empujones suaves, satisfactorios golpes de caja en el objetivo
 
 🎯 LO QUE ENCUENTRAS
-• 50 niveles clásicos de Sokoban (más por venir en actualizaciones gratuitas)
+• 500 niveles clásicos de Sokoban (más por venir en actualizaciones gratuitas)
 • Desafío Diario con recompensas por rachas de inicio de sesión
 • 5 temas visuales desbloqueables — Clásico, Madera, Industrial, Templo, Espacio
 • Botón de Monedas Gratis (anuncio recompensado, 25 monedas cada 4 horas)
-• Pantalla de estadísticas que rastrea niveles resueltos, racha diaria, rango global
+• Pantalla de estadísticas que rastrea niveles resueltos, racha diaria, clasificación semanal
 • Torneo Semanal con niveles de tabla de clasificación sintética
 • Sistema de pistas — un suave empujón cuando estás atascado
 • Deshacer total + reiniciar en cada nivel
@@ -306,16 +280,16 @@ Tape sur les flèches directionnelles ou glisse pour te déplacer. Marche dans u
 ✨ L’EXPÉRIENCE  
 • Retour haptique tactile à chaque poussée  
 • Pixel art rétro croustillant avec des animations fluides  
-• 50 niveaux soigneusement conçus, des échauffements doux aux défis tordus  
+• 500 niveaux soigneusement conçus, des échauffements doux aux défis tordus  
 • Fonctionne entièrement hors ligne — joue dans les avions, dans la queue, partout  
 • Design sonore de type ASMR — poussées douces, bruits satisfaisants de boîte sur cible  
 
 🎯 CE QUI EST DANS LE JEU  
-• 50 niveaux classiques de Sokoban (plus à venir via des mises à jour gratuites)  
+• 500 niveaux classiques de Sokoban (plus à venir via des mises à jour gratuites)  
 • Défi quotidien avec des récompenses de connexion  
 • 5 thèmes visuels déblocables — Classique, Bois, Industriel, Temple, Espace  
 • Bouton de pièces gratuites (publicité récompensée, 25 pièces toutes les 4 heures)  
-• Écran de statistiques suivi des niveaux résolus, série quotidienne, classement mondial  
+• Écran de statistiques suivi des niveaux résolus, série quotidienne, classement hebdomadaire  
 • Tournoi hebdomadaire avec niveaux de classement synthétiques  
 • Système d'indices — coup de pouce doux quand tu es bloqué  
 • Annulation complète + redémarrage à chaque niveau  
@@ -339,16 +313,16 @@ Fait avec soin par Pegasus Games.
 ✨ एहसास
 • हर धक्के पर स्पर्शकारी हैप्टिक फ़ीडबैक
 • कुरकुरा रेट्रो पिक्सल कला के साथ चिकनी एनिमेशन
-• 50 हाथ-समायोजित स्तर जो हल्के गर्म-up से लेकर दिमाग़ को मोड़ने वाले गांठों तक
+• 500 हाथ-समायोजित स्तर जो हल्के गर्म-up से लेकर दिमाग़ को मोड़ने वाले गांठों तक
 • पूरी तरह से ऑफ़लाइन कार्य करता है — विमान, लाइन में, कहीं भी खेलें
 • ASMR-शैली की ध्वनि डिजाइन — नरम धक्के, संतोषजनक बॉक्स-ऑन-टारगेट धव्स
 
 🎯 इसमें क्या है
-• 50 क्लासिक सोकोबन स्तर (निःशुल्क अपडेट के माध्यम से और भी आ रहे हैं)
+• 500 क्लासिक सोकोबन स्तर (निःशुल्क अपडेट के माध्यम से और भी आ रहे हैं)
 • दैनिक चुनौती लॉगिन श्रंखला पुरस्कारों के साथ
 • 5 अनलॉक करने योग्य दृश्य थीम — क्लासिक, लकड़ी, औद्योगिक, मंदिर, अंतरिक्ष
 • निःशुल्क सिक्के बटन (पुरस्कृत विज्ञापन, हर 4 घंटे में 25 सिक्के)
-• आँकड़े स्क्रीन जो हल हुए स्तर, दैनिक श्रंखला, वैश्विक रैंक को ट्रैक करता है
+• आँकड़े स्क्रीन जो हल हुए स्तर, दैनिक श्रंखला, साप्ताहिक रैंकिंग को ट्रैक करता है
 • साप्ताहिक टूर्नामेंट जिसमें कृत्रिम लीडरबोर्ड स्तर
 • संकेत प्रणाली — जब आप फंस जाएं तो हलका धक्का
 • हर स्तर पर पूर्ण पूर्ववत + पुनः आरंभ
@@ -372,16 +346,16 @@ Ketuk tombol arah atau geser untuk bergerak. Masuk ke dalam kotak untuk mendoron
 ✨ PERASAANNYA
 • Umpan balik haptic taktil di setiap dorongan
 • Seni piksel retro yang renyah dengan animasi yang halus
-• 50 level yang disesuaikan dari pemanasan lembut hingga tantangan memutar otak
+• 500 level yang disesuaikan dari pemanasan lembut hingga tantangan memutar otak
 • Bekerja sepenuhnya secara offline — bermain di pesawat, dalam antrean, di mana saja
 • Desain suara gaya ASMR — dorongan lembut, suara kotak yang memuaskan saat tepat sasaran
 
 🎯 APA YANG ADA DI DALAMNYA
-• 50 level Sokoban klasik (lebih banyak akan datang melalui pembaruan gratis)
+• 500 level Sokoban klasik (lebih banyak akan datang melalui pembaruan gratis)
 • Tantangan Harian dengan hadiah streak login
 • 5 tema visual yang dapat dibuka — Klasik, Kayu, Industri, Kuil, Luar Angkasa
 • Tombol Koin Gratis (Iklan yang dihargai, 25 koin setiap 4 jam)
-• Layar statistik yang melacak level yang diselesaikan, streak harian, peringkat global
+• Layar statistik yang melacak level yang diselesaikan, streak harian, peringkat mingguan
 • Turnamen Mingguan dengan tier papan peringkat sintetis
 • Sistem petunjuk — dorongan lembut saat Anda terjebak
 • Batalkan penuh + mulai ulang di setiap level
@@ -405,16 +379,16 @@ Tocca le frecce direzionali o scorri per muoverti. Cammina in una scatola per sp
 ✨ LA SENSAZIONE
 • Feedback tattile su ogni spinta
 • Grafica retro in pixel croccante con animazioni fluide
-• 50 livelli calibrati a mano, da dolci riscaldamenti a nodi cervellotici
+• 500 livelli calibrati a mano, da dolci riscaldamenti a nodi cervellotici
 • Funziona completamente offline — gioca su aerei, in fila, ovunque
 • Design sonoro in stile ASMR — spinte morbide, colpi soddisfacenti della scatola sul bersaglio
 
 🎯 COSA C'È DENTRO
-• 50 livelli classici di Sokoban (altri in arrivo con aggiornamenti gratuiti)
+• 500 livelli classici di Sokoban (altri in arrivo con aggiornamenti gratuiti)
 • Sfida Giornaliera con ricompense per la costanza nel login
 • 5 temi visivi sbloccabili — Classico, Legno, Industriale, Tempio, Spazio
 • Pulsante Monete Gratis (pubblicità premiata, 25 monete ogni 4 ore)
-• Schermata statistiche che tiene traccia dei livelli risolti, della serie giornaliera, del rank globale
+• Schermata statistiche che tiene traccia dei livelli risolti, della serie giornaliera, del classifica settimanale
 • Torneo Settimanale con livelli della classifica sintetica
 • Sistema di suggerimenti — incoraggiamento gentile quando sei bloccato
 • Annulla totale + riavvia ad ogni livello
@@ -438,16 +412,16 @@ Realizzato con cura da Pegasus Games.
 ✨ 感覚
 • すべての押下での触覚フィードバック
 • スムーズなアニメーション付きのクリンチーなレトロピクセルアート
-• やさしいウォーミングアップから頭をひねるノットまで、手作業で調整された50のレベル
+• やさしいウォーミングアップから頭をひねるノットまで、手作業で調整された500のレベル
 • 完全オフラインで動作 — 飛行機の中や列に並んでいる時など、どこでもプレイ可能
 • ソフトな押し込み音や満足感のあるターゲットに当たる音で構成されたASMRスタイルの音デザイン
 
 🎯 内容物
-• 50のクラシックソコバンレベル（追加の無料アップデートでさらに登場）
+• 500のクラシックソコバンレベル（追加の無料アップデートでさらに登場）
 • ログイン連続報酬付きのデイリーチャレンジ
 • アンロック可能な5つのビジュアルテーマ — クラシック、ウッド、インダストリアル、寺院、宇宙
 • 無料コインボタン（広告賞、4時間ごとに25コイン）
-• 解決したレベル、デイリーストリーク、グローバルランクを追跡する統計画面
+• 解決したレベル、デイリーストリーク、週間ランキングを追跡する統計画面
 • 合成リーダーボードティア付きの週刊トーナメント
 • 行き詰まった時のためのヒントシステム — やさしい助け舟
 • 各レベルでの完全アンドゥ + 再スタート
@@ -471,12 +445,12 @@ Toque nas setas de direção ou deslize para mover. Ande em uma caixa para empur
 ✨ A SENSAÇÃO
 • Feedback tátil em cada empurrão
 • Arte pixel retro com animações suaves
-• 50 níveis ajustados, desde aquecimentos suaves até nó mágico para o cérebro
+• 500 níveis ajustados, desde aquecimentos suaves até nó mágico para o cérebro
 • Funciona totalmente offline — jogue em aviões, em filas, em qualquer lugar
 • Design sonoro estilo ASMR — empurrões suaves, batidas satisfatórias da caixa no alvo
 
 🎯 O QUE TEM NELE
-• 50 níveis clássicos de Sokoban (mais chegando através de atualizações gratuitas)
+• 500 níveis clássicos de Sokoban (mais chegando através de atualizações gratuitas)
 • Desafio Diário com recompensas por sequência de login
 • 5 temas visuais desbloqueáveis — Clássico, Madeira, Industrial, Templo, Espaço
 • Botão de Moedas Grátis (anúncio recompensado, 25 moedas a cada 4 horas)
@@ -504,16 +478,16 @@ Yön oklarına dokunun veya kaydırarak hareket edin. Bir kutuya yürüyerek ite
 ✨ HİS
 • Her itişte dokunsal geri bildirim
 • Duyusal animasyonlarla birlikte kıtır kıtır retro piksel sanatı
-• Nazik ısınmalardan zihin bükücü düğümlere kadar 50 elle ayarlanmış seviye
+• Nazik ısınmalardan zihin bükücü düğümlere kadar 500 elle ayarlanmış seviye
 • Tamamen çevrimdışı çalışır — uçakta, sırada, her yerde oynayın
 • ASMR tarzı ses tasarımı — yumuşak itilimler, tatmin edici kutu-hedef vuruşları
 
 🎯 İÇİNDE KİMLER VAR
-• 50 klasik Sokoban seviyesi (ücretsiz güncellemelerle daha fazlası gelecek)
+• 500 klasik Sokoban seviyesi (ücretsiz güncellemelerle daha fazlası gelecek)
 • Günlük Mücadele ile giriş streak ödülleri
 • 5 kilidi açılabilir görsel tema — Klasik, Ahşap, Endüstriyel, Tapınak, Uzay
 • Ücretsiz Paralar butonu (ödüllü reklam, her 4 saatte 25 para)
-• Çözülen seviyeleri, günlük streak'i, küresel sıralamayı takip eden istatistik ekranı
+• Çözülen seviyeleri, günlük streak'i, haftalık sıralamayı takip eden istatistik ekranı
 • Sentetik liderlik katmanlarına sahip Haftalık Turnuva
 • İpucu sistemi — sıkıştığınızda nazik bir itme
 • Her seviyede tam geri alma + yeniden başlatma
@@ -537,16 +511,16 @@ Pegasus Games tarafından titizlikle hazırlandı.
 ✨ ВІДЧУТТЯ
 • Тактильний відгук на кожне штовхання
 • Хрустка ретро-піксельна графіка з плавною анімацією
-• 50 ретельно налаштованих рівнів — від м'яких розминок до складних завдань
+• 500 ретельно налаштованих рівнів — від м'яких розминок до складних завдань
 • Повністю працює офлайн — грайте в літаку, в черзі, будь-де
 • Звуковий дизайн в стилі ASMR — м'які штовхання, задовільні удари коробки по цілі
 
 🎯 ЩО ВСЕРЕДИНІ
-• 50 класичних рівнів Sokoban (більше надійдуть з безкоштовними оновленнями)
+• 500 класичних рівнів Sokoban (більше надійдуть з безкоштовними оновленнями)
 • Щоденний виклик з винагородами за активність
 • 5 розблоковуваних візуальних тем — Класика, Дерево, Промисловість, Храм, Космос
 • Кнопка безкоштовних монет (реклама-винагорода, 25 монет кожні 4 години)
-• Екран статистики, що відстежує розв'язані рівні, щоденну активність, глобальний рейтинг
+• Екран статистики, що відстежує розв'язані рівні, щоденну активність, щотижневий рейтинг змагань
 • Щотижневий турнір з синтетичними лідербордами
 • Система підказок — м'який натиск, коли ви застрягли
 • Повне повернення дій + перезапуск на кожному рівні
@@ -570,16 +544,16 @@ Pegasus Games tarafından titizlikle hazırlandı.
 ✨ 游戏体验 
 • 每次推动都有触觉反馈 
 • 复古像素艺术与流畅动画的完美结合 
-• 50 个精心调校的关卡，从轻松热身到令人费解的挑战 
+• 500 个精心调校的关卡，从轻松热身到令人费解的挑战 
 • 完全离线运行 — 可在飞机上、排队时、任何地方游玩 
 • ASMR 风格的声音设计 — 柔和的推动声和令人满意的箱子落位声 
 
 🎯 游戏内容 
-• 50 个经典推箱子关卡（更多将在免费更新中推出） 
+• 500 个经典推箱子关卡（更多将在免费更新中推出） 
 • 每日挑战和登录连胜奖励 
 • 5 个可解锁的视觉主题 — 经典、木头、工业、寺庙、太空 
 • 免费金币按钮（观看广告可获得奖励，每4小时25金币） 
-• 统计屏幕跟踪已解决关卡、每日连胜、全球排名 
+• 统计屏幕跟踪已解决关卡、每日连胜、每周排行榜名次 
 • 每周锦标赛，带有合成排行榜分层 
 • 提示系统 — 当你卡住时轻轻提示 
 • 每个关卡都有完整的撤销 + 重新开始功能 

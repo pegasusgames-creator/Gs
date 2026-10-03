@@ -15,6 +15,11 @@ BLOCKS when STORE_PASTE.md exists and:
     DESCRIPTION differs from metadata/<locale>/<field>.txt.
 Fix: python3 scripts/gen_store_paste.py <App> --force
 
+Also BLOCKS a legacy store/store-listing.txt whose "APP NAME:" differs from
+metadata/en-US/title.txt (Afterimage / Hunch / Overlay carried PipeConnect's;
+gen_metadata.py --force would have copied it onto their listings). Fix:
+delete the legacy file once metadata/ is the source of truth.
+
 Standalone:  python3 scripts/check_store_paste_fresh.py [App ...]
 """
 import re
@@ -32,12 +37,26 @@ SECTIONS = {
 TAG_DIR = {"id": "id", "uk": "uk"}
 
 
+def check_legacy_listing(app: str):
+    p = BASE / app / "store" / "store-listing.txt"
+    t = BASE / app / "metadata" / "en-US" / "title.txt"
+    if not (p.exists() and t.exists()):
+        return []
+    m = re.search(r"^APP NAME:\s*(.+)$", p.read_text(encoding="utf-8", errors="replace"), re.M)
+    title = t.read_text(encoding="utf-8", errors="replace").strip()
+    norm = lambda x: re.sub(r"[^a-z0-9]", "", x.lower())
+    if m and title and "TODO" not in title and norm(m.group(1)) not in norm(title) and norm(title) not in norm(m.group(1)):
+        return [f"{app}: store/store-listing.txt is \"{m.group(1).strip()}\"'s listing, not {title}'s — delete it (metadata/ is the source of truth)"]
+    return []
+
+
 def check_app(app: str):
+    legacy = check_legacy_listing(app)
     p = BASE / app / "STORE_PASTE.md"
     if not p.exists():
-        return [], []
+        return legacy, []
     s = p.read_text(encoding="utf-8", errors="replace")
-    bad = []
+    bad = list(legacy)
     first = s.splitlines()[0] if s else ""
     m = re.match(r"#\s*(\S+)\s+—", first)
     if m and m.group(1) != app:
