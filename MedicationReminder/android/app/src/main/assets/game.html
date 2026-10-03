@@ -129,8 +129,8 @@ function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCoun
 if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
 
 var meds=JSON.parse(localStorage.getItem('med_meds')||'[]');
-var history=JSON.parse(localStorage.getItem('med_hist')||'[]');
-function save(){localStorage.setItem('med_meds',JSON.stringify(meds));localStorage.setItem('med_hist',JSON.stringify(history));}
+var appHistory=JSON.parse(localStorage.getItem('med_hist')||'[]');
+function save(){localStorage.setItem('med_meds',JSON.stringify(meds));localStorage.setItem('med_hist',JSON.stringify(appHistory));}
 function todayKey(){return new Date().toISOString().slice(0,10);}
 var freqLabels={daily:'Once daily',twice:'Twice daily',thrice:'3x daily',weekly:'Weekly',asneeded:'As needed'};
 function fmtT(ts){var d=new Date(ts);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
@@ -157,8 +157,8 @@ function render(){
       if(!m.taken)m.taken=[];
       var today2=todayKey();
       if(m.taken.indexOf(today2)<0){m.taken.push(today2);if(m.taken.length>100)m.taken=m.taken.slice(-100);}
-      history.unshift({name:m.name,dose:m.dose,ts:Date.now()});
-      if(history.length>100)history=history.slice(0,100);
+      appHistory.unshift({name:m.name,dose:m.dose,ts:Date.now()});
+      if(appHistory.length>100)appHistory=appHistory.slice(0,100);
       save();render();renderHistory();maybeInterstitial();
     });
   });
@@ -172,8 +172,8 @@ function render(){
 
 function renderHistory(){
   var el=document.getElementById('history-list');
-  if(!history.length){el.innerHTML='<div class="empty">No history yet.</div>';return;}
-  el.innerHTML=history.slice(0,20).map(function(h){
+  if(!appHistory.length){el.innerHTML='<div class="empty">No appHistory yet.</div>';return;}
+  el.innerHTML=appHistory.slice(0,20).map(function(h){
     return '<div class="history-row"><span>'+h.name+' '+h.dose+'</span><span style="color:var(--muted);">'+fmtT(h.ts)+'</span></div>';
   }).join('');
 }

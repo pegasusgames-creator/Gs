@@ -64,6 +64,18 @@ function randomSecret() {
   return Array.from({length:4},()=>Math.floor(Math.random()*COLORS.length));
 }
 
+// Interstitial every 3rd new game (was an undefined call that threw on
+// launch and stopped the game from ever starting).
+var _gamesSinceAd = 0;
+function _showInterstitial() {
+  if (state.removeAds) return;
+  _gamesSinceAd++;
+  if (_gamesSinceAd >= 3 && window.Android && window.Android.showInterstitial) {
+    _gamesSinceAd = 0;
+    try { window.Android.showInterstitial(); } catch (e) {}
+  }
+}
+
 function newGame() {
   _showInterstitial();
   state.secret = randomSecret();

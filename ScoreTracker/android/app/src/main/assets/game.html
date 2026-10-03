@@ -90,7 +90,7 @@ input:focus { box-shadow:0 0 0 2px var(--accent); }
 
 var state = { useCount:0, removeAds:false, step:1 };
 var players = [];
-var history = [];
+var appHistory = [];
 var nextId = 0;
 
 function getStep(){
@@ -116,8 +116,8 @@ function changeScore(id, delta){
   var p=players.find(function(p){ return p.id===id; });
   if(!p) return;
   p.score+=delta;
-  history.unshift({name:p.name, change:delta, score:p.score});
-  if(history.length>20) history.pop();
+  appHistory.unshift({name:p.name, change:delta, score:p.score});
+  if(appHistory.length>20) appHistory.pop();
   renderHistory();
   renderPlayers();
   maybeInterstitial();
@@ -142,9 +142,9 @@ function renderPlayers(){
 
 function renderHistory(){
   var list=document.getElementById('history-list');
-  if(history.length===0){ list.innerHTML='<div class="empty-hist">No score changes yet.</div>'; return; }
+  if(appHistory.length===0){ list.innerHTML='<div class="empty-hist">No score changes yet.</div>'; return; }
   list.innerHTML='';
-  history.forEach(function(h){
+  appHistory.forEach(function(h){
     var div=document.createElement('div');
     div.className='history-item';
     div.innerHTML='<span class="hist-name">'+escH(h.name)+'</span><span class="hist-change '+(h.change>=0?'hist-pos':'hist-neg')+'">'+(h.change>=0?'+':'')+h.change+' → '+h.score+'</span>';
@@ -181,7 +181,7 @@ document.getElementById('step-row').addEventListener('click',function(e){
 document.getElementById('btn-add-player').addEventListener('click', addPlayer);
 document.getElementById('btn-reset-all').addEventListener('click',function(){
   players.forEach(function(p){ p.score=0; });
-  history=[];
+  appHistory=[];
   render();
 });
 

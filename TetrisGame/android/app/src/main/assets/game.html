@@ -252,7 +252,7 @@ function loop(ts){
   // Board
   for(var r=0;r<ROWS;r++){
     for(var c=0;c<COLS;c++){
-      if(state.board[r][c])drawCell(ctx,c,r,state.board[r][c],CELL);
+      if(state.board[r]&&state.board[r][c])drawCell(ctx,c,r,state.board[r][c],CELL);
     }
   }
 

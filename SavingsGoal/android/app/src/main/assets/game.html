@@ -91,10 +91,10 @@ input:focus { box-shadow:0 0 0 2px var(--accent); }
 var state = { useCount:0, removeAds:false };
 var STORAGE_KEY = 'savings_goal_v1';
 var goalData = null;
-var history = [];
+var appHistory = [];
 
-function load(){ try{ var d=localStorage.getItem(STORAGE_KEY); if(d){ var p=JSON.parse(d); goalData=p.goal||null; history=p.history||[]; }}catch(e){} }
-function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify({goal:goalData,history:history})); }catch(e){} }
+function load(){ try{ var d=localStorage.getItem(STORAGE_KEY); if(d){ var p=JSON.parse(d); goalData=p.goal||null; appHistory=p.history||[]; }}catch(e){} }
+function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify({goal:goalData,history:appHistory})); }catch(e){} }
 function fmt(n){ return '$'+(n||0).toFixed(2); }
 
 function daysUntil(dateStr){
@@ -128,11 +128,11 @@ function render(){
     '<div class="stat-box"><div class="stat-label">Save / Month</div><div class="stat-value">'+fmt(perMonth)+'</div></div>'+
     '</div>';
   // History
-  if(history.length>0){
+  if(appHistory.length>0){
     document.getElementById('history-card').style.display='';
     var hlist=document.getElementById('history-list');
     hlist.innerHTML='';
-    history.slice().reverse().slice(0,20).forEach(function(h){
+    appHistory.slice().reverse().slice(0,20).forEach(function(h){
       var div=document.createElement('div');
       div.className='history-item';
       div.innerHTML='<span>'+escH(h.note||'Savings added')+'</span><span class="history-date">'+h.date+'</span><span class="history-amount">+'+fmt(h.amount)+'</span>';
@@ -166,7 +166,7 @@ document.getElementById('btn-add-savings').addEventListener('click',function(){
   if(amt<=0) return;
   goalData.saved += amt;
   var today=new Date(); var ds=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
-  history.push({amount:amt,date:ds,note:'Savings added'});
+  appHistory.push({amount:amt,date:ds,note:'Savings added'});
   save();
   document.getElementById('savings-add-amt').value='';
   render();

@@ -151,7 +151,7 @@ function maybeInterstitial(){state.useCount++;if(!state.removeAds&&state.useCoun
 if(!window.Android&&!state.removeAds)document.getElementById('admob-banner').style.display='flex';
 
 var count=0, setNum=1, totalWO=0;
-var history=JSON.parse(localStorage.getItem('pu_hist')||'[]');
+var appHistory=JSON.parse(localStorage.getItem('pu_hist')||'[]');
 var statsD=JSON.parse(localStorage.getItem('pu_stats')||'{"today":0,"pb":0,"all":0,"date":""}');
 var today=new Date().toDateString();
 if(statsD.date!==today){statsD.today=0;statsD.date=today;saveStats();}
@@ -159,7 +159,7 @@ var restTimer=null;
 var PLANS={beginner:{label:'3 sets of 5 reps. 90s rest. Focus on form.',sets:3,reps:5,rest:90},intermediate:{label:'4 sets of 10 reps. 60s rest. Controlled pace.',sets:4,reps:10,rest:60},advanced:{label:'5 sets of 20 reps. 45s rest. Full range of motion.',sets:5,reps:20,rest:45}};
 
 function saveStats(){localStorage.setItem('pu_stats',JSON.stringify(statsD));}
-function saveHist(){localStorage.setItem('pu_hist',JSON.stringify(history));}
+function saveHist(){localStorage.setItem('pu_hist',JSON.stringify(appHistory));}
 function updateUI(){document.getElementById('tap-count').textContent=count;document.getElementById('si-reps').textContent=count;document.getElementById('si-set').textContent=setNum;document.getElementById('si-total').textContent=totalWO;}
 
 document.getElementById('tap-btn').addEventListener('click',function(){count++;totalWO++;updateUI();});
@@ -172,8 +172,8 @@ document.getElementById('btn-complete-set').addEventListener('click',function(){
   statsD.all+=count;
   if(count>statsD.pb)statsD.pb=count;
   saveStats();
-  history.unshift({reps:count,set:setNum,t:Date.now()});
-  if(history.length>100)history=history.slice(0,100);
+  appHistory.unshift({reps:count,set:setNum,t:Date.now()});
+  if(appHistory.length>100)appHistory=appHistory.slice(0,100);
   saveHist();
   var prevCount=count; count=0; setNum++;
   updateUI(); renderStats(); renderHist();
@@ -209,8 +209,8 @@ function renderStats(){
 }
 function renderHist(){
   var el=document.getElementById('hist-list');
-  if(!history.length){el.innerHTML='<div class="empty">No workouts yet.</div>';return;}
-  el.innerHTML=history.slice(0,15).map(function(h){
+  if(!appHistory.length){el.innerHTML='<div class="empty">No workouts yet.</div>';return;}
+  el.innerHTML=appHistory.slice(0,15).map(function(h){
     var d=new Date(h.t);
     return '<div class="hist-item"><span>Set '+h.set+': '+h.reps+' reps</span><span style="color:var(--muted);">'+d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</span></div>';
   }).join('');

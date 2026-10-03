@@ -109,6 +109,9 @@ BLOCKED_APPS = {
     "ScrewPuzzle", "SlidingTiles", "SolarSystem", "SportsQuiz",
     "Sumplete", "TripleMatch", "UkuleleChords", "WordScramble",
     "WordSearch",
+    # 2026-10-03 audit: BlockPuzzle's game.html is the Dice Roller placeholder
+    # with ONE byte changed (99.9% identical) and was never listed.
+    "BlockPuzzle",
 }
 
 # Reference Dice Roller game.html hash, computed on first run and cached
@@ -891,10 +894,31 @@ def check_blocked_apps(apps):
         if os.path.exists(ref_path):
             _DICE_ROLLER_HASH_CACHE = md5_of(ref_path)
 
+    ref_text = None
+    ref_path = os.path.join(BASE, "DiceRoller", "android/app/src/main/assets/game.html")
+    if os.path.exists(ref_path):
+        with open(ref_path, encoding="utf-8", errors="replace") as fh:
+            ref_text = fh.read()
+
     for app in apps:
+        gh = os.path.join(BASE, app, "android/app/src/main/assets/game.html")
+        # Near-clone guard (audit 2026-10-03): a 1-byte edit used to defeat the
+        # md5-only check, and an unlisted near-copy (BlockPuzzle) slipped by.
+        # ANY app whose game.html is >=90% similar to the placeholder blocks.
+        if ref_text and app != "DiceRoller" and os.path.exists(gh):
+            import difflib
+            with open(gh, encoding="utf-8", errors="replace") as fh:
+                txt = fh.read()
+            if abs(len(txt) - len(ref_text)) < 0.15 * len(ref_text):
+                sm = difflib.SequenceMatcher(None, ref_text, txt, autojunk=False)
+                if sm.real_quick_ratio() >= 0.9 and sm.quick_ratio() >= 0.9 and sm.ratio() >= 0.9:
+                    blocking.append(
+                        f"{app}: game.html is {sm.ratio():.0%} identical to the Dice Roller "
+                        f"placeholder — rewrite it with real, distinct game logic before publishing."
+                    )
+                    continue
         if app not in BLOCKED_APPS:
             continue
-        gh = os.path.join(BASE, app, "android/app/src/main/assets/game.html")
         if not os.path.exists(gh):
             blocking.append(
                 f"{app}: on the BLOCKED_APPS placeholder list and its "
