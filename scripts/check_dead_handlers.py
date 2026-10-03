@@ -5,7 +5,7 @@ element ids (a duplicate-id can make the first handler unreachable)."""
 import re, glob, os
 from collections import Counter
 
-BASE = "/home/user/Documents/Gs"
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SKIP = ("_", ".")
 # JS keywords / globals that may appear as bare-call-looking tokens
 KEYWORDS = {"if", "for", "while", "return", "function", "switch", "catch",
@@ -58,7 +58,7 @@ def syntax_botch(html):
 
 
 def gate_main():
-    base = "/home/user/Documents/Gs"
+    base = BASE
     apps = _sys.argv[1:]
     if not apps or apps == ["--all"]:
         apps = sorted(d for d in os.listdir(base)

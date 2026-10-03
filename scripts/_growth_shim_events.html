@@ -1,0 +1,439 @@
+<!-- Growth shim — EVENTS (live-ops calendar). Idempotent: data-growth-shim="EVENTS".
+     Replaces the per-app SEASONAL_EVENTS stubs (audit 2026-10-03: their
+     banners promised "pumpkin theme + 5 bonus levels" / "1.5x" / "try the
+     Halloween theme" — none of which existed) with ONE real, shared system:
+
+       1. Monthly collection event — a themed event every month (12/year).
+          Clearing NEW levels collects the event token (+1, +1 more for a
+          perfect/3-star clear, +3 for the daily puzzle; 2048: tile
+          milestones 128+). 8 milestone rewards: coins, the game's booster,
+          30 min unlimited lives, and a Grand Prize trophy for the trophy case.
+       2. Weekend Rush — Saturday + Sunday: ×2 tokens and +5 🪙 per clear.
+       3. Golden Hour — 19:00–20:00 local every day: +5 🪙 per clear.
+       4. Season/Weekly Pass perk — ×2 event tokens while active.
+
+     UI: a slim ribbon under the Daily button (rendered by the MENU shim via
+     window.gEvents.renderRibbon — no competing injector), a bottom sheet
+     with the milestone track / boosts / trophy case, queued reward cards
+     (gPopupQueue + CORE choreography guard), small toasts on every clear.
+     All copy is localized for the 13 store locales (fallback English);
+     colors are theme tokens only. Depends on CORE (window.gGame).
+-->
+<script data-growth-shim="EVENTS">
+(function(){
+  if (window.__growthShimEvents) return;
+  window.__growthShimEvents = true;
+
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v = LS.getItem(k); return v == null ? d : v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { LS.setItem(k, v); } catch(e){} }
+  function jget(k, d){ try { var v = JSON.parse(lsGet(k, 'null')); return v == null ? d : v; } catch(e){ return d; } }
+  function jset(k, v){ lsSet(k, JSON.stringify(v)); }
+  function safe(fn){ try { return fn(); } catch(e){} }
+  function $(id){ return document.getElementById(id); }
+
+  // ── Calendar: one event per month (local time), whole month long.
+  // check_seasonal_events.py reads this table (month:10 / 12 / 2 present).
+  var SEASONAL_EVENTS = [
+    { month:1,  id:'fireworks', token:'🎆' },
+    { month:2,  id:'bloom',     token:'🌸' },   // Spring
+    { month:3,  id:'clover',    token:'🍀' },
+    { month:4,  id:'eggs',      token:'🥚' },
+    { month:5,  id:'butterfly', token:'🦋' },
+    { month:6,  id:'sunny',     token:'☀️' },
+    { month:7,  id:'seashell',  token:'🐚' },
+    { month:8,  id:'melon',     token:'🍉' },
+    { month:9,  id:'maple',     token:'🍁' },
+    { month:10, id:'pumpkin',   token:'🎃' },   // Halloween
+    { month:11, id:'acorn',     token:'🌰' },
+    { month:12, id:'snowflake', token:'❄️' }    // Winter
+  ];
+  var TARGETS = [5, 12, 20, 30, 45, 60, 80, 100];
+  // Reward per milestone. 'booster' pays GROWTH_CFG.booster (or its coin value).
+  var REWARDS = [
+    { coins:40 }, { booster:1 }, { coins:60 }, { lives:30 },
+    { coins:100 }, { booster:2 }, { coins:150 }, { coins:250, trophy:true }
+  ];
+  var BONUS_COINS = 5; // Weekend Rush / Golden Hour per qualifying clear
+
+  // ── i18n (13 store locales; anything else falls back to English) ──
+  var NAMES = {
+    en:['Firework Fest','Spring Bloom','Lucky Clover Hunt','Egg Hunt','Butterfly Garden','Sunny Days','Seashell Summer','Melon Rush','Maple Harvest','Pumpkin Hunt','Cozy Acorns','Snowflake Season'],
+    de:['Feuerwerk-Fest','Frühlingsblüte','Glücksklee-Jagd','Eiersuche','Schmetterlingsgarten','Sonnentage','Muschelsommer','Melonen-Rausch','Ahornernte','Kürbisjagd','Gemütliche Eicheln','Schneeflockenzeit'],
+    fr:['Fête des feux d\'artifice','Floraison printanière','Chasse au trèfle','Chasse aux œufs','Jardin des papillons','Jours ensoleillés','Été des coquillages','Ruée vers les melons','Récolte d\'érable','Chasse aux citrouilles','Glands douillets','Saison des flocons'],
+    es:['Fiesta de fuegos artificiales','Flor de primavera','Caza del trébol','Búsqueda de huevos','Jardín de mariposas','Días soleados','Verano de conchas','Fiebre del melón','Cosecha de arce','Caza de calabazas','Bellotas acogedoras','Temporada de copos'],
+    pt:['Festa dos Fogos','Florada de Primavera','Caça ao Trevo','Caça aos Ovos','Jardim das Borboletas','Dias de Sol','Verão das Conchas','Febre do Melão','Colheita do Bordo','Caça às Abóboras','Bolotas Aconchegantes','Temporada de Flocos'],
+    it:['Festa dei fuochi','Fioritura di primavera','Caccia al quadrifoglio','Caccia alle uova','Giardino delle farfalle','Giornate di sole','Estate delle conchiglie','Corsa ai meloni','Raccolto d\'acero','Caccia alle zucche','Ghiande accoglienti','Stagione dei fiocchi'],
+    tr:['Havai Fişek Şenliği','Bahar Çiçeği','Şanslı Yonca Avı','Yumurta Avı','Kelebek Bahçesi','Güneşli Günler','Deniz Kabuğu Yazı','Kavun Telaşı','Akçaağaç Hasadı','Balkabağı Avı','Sıcak Palamutlar','Kar Tanesi Mevsimi'],
+    id:['Festival Kembang Api','Mekar Musim Semi','Perburuan Semanggi','Berburu Telur','Taman Kupu-kupu','Hari Cerah','Musim Kerang','Demam Semangka','Panen Maple','Berburu Labu','Biji Ek Hangat','Musim Kepingan Salju'],
+    uk:['Феєрверк-фест','Весняне цвітіння','Полювання на конюшину','Пошук яєць','Сад метеликів','Сонячні дні','Літо мушель','Кавунова лихоманка','Кленовий урожай','Полювання на гарбузи','Затишні жолуді','Сезон сніжинок'],
+    ja:['花火フェス','春の花まつり','幸運のクローバー探し','エッグハント','蝶の庭','晴れの日','貝がらの夏','メロンラッシュ','もみじの収穫','パンプキンハント','どんぐりの秋','雪の結晶シーズン'],
+    zh:['烟花节','春日花开','幸运四叶草','寻蛋活动','蝴蝶花园','阳光日','贝壳之夏','西瓜狂欢','枫叶丰收','南瓜大搜寻','温暖橡果','雪花季'],
+    ar:['مهرجان الألعاب النارية','تفتّح الربيع','البحث عن البرسيم','البحث عن البيض','حديقة الفراشات','أيام مشمسة','صيف الأصداف','حمّى البطيخ','حصاد القيقب','البحث عن اليقطين','البلوط الدافئ','موسم ندف الثلج'],
+    hi:['आतिशबाज़ी उत्सव','वसंत बहार','भाग्यशाली तिपतिया खोज','अंडा खोज','तितली बाग़','धूप भरे दिन','सीपियों की गर्मी','तरबूज़ धमाल','मेपल फ़सल','कद्दू खोज','गर्म बलूत','हिमकण मौसम']
+  };
+  var T = {
+    en:{ends:'Ends in {t}',claim:'Claim',claimAll:'Claim rewards',claimed:'Claimed',how:'How to earn',eNew:'New level',ePerfect:'3 stars',eDaily:'Daily puzzle',eTile:'Tile 128+',boosts:'Boosts',weekend:'Weekend Rush',weekendD:'×2 {k} and +5 🪙 every clear',weekendN:'Saturday & Sunday',golden:'Golden Hour',goldenD:'+5 🪙 every clear · {h}',pass:'Season Pass',passD:'×2 {k} while active',getPass:'Get',on:'ON',trophies:'Trophy case',noTrophies:'Finish an event to win its trophy.',introT:'{n} is here!',introB:'Collect {k} by clearing levels. 8 rewards to unlock — coins, boosters, unlimited lives and the {n} trophy!',introB2048:'Collect {k} with big tiles (128+). 8 rewards to unlock — coins, undos and the {n} trophy!',go:'Let\'s go!',reward:'Reward unlocked!',close:'Close',last:'Last chance — {t} left!',grand:'Grand prize',lives:'∞ lives 30 min',trophy:'Trophy',left:'{t} left'},
+    de:{ends:'Endet in {t}',claim:'Abholen',claimAll:'Belohnungen abholen',claimed:'Abgeholt',how:'So sammelst du',eNew:'Neues Level',ePerfect:'3 Sterne',eDaily:'Tagesrätsel',eTile:'Kachel 128+',boosts:'Boosts',weekend:'Wochenend-Rausch',weekendD:'×2 {k} und +5 🪙 pro Level',weekendN:'Samstag & Sonntag',golden:'Goldene Stunde',goldenD:'+5 🪙 pro Level · {h}',pass:'Saisonpass',passD:'×2 {k}, solange aktiv',getPass:'Holen',on:'AN',trophies:'Trophäenvitrine',noTrophies:'Schließe ein Event ab, um seine Trophäe zu gewinnen.',introT:'{n} ist da!',introB:'Sammle {k}, indem du Level löst. 8 Belohnungen – Münzen, Booster, unendliche Leben und die {n}-Trophäe!',introB2048:'Sammle {k} mit großen Kacheln (128+). 8 Belohnungen – Münzen, Rückgängig und die {n}-Trophäe!',go:'Los geht\'s!',reward:'Belohnung freigeschaltet!',close:'Schließen',last:'Letzte Chance – noch {t}!',grand:'Hauptpreis',lives:'∞ Leben 30 Min.',trophy:'Trophäe',left:'noch {t}'},
+    fr:{ends:'Fin dans {t}',claim:'Récupérer',claimAll:'Récupérer',claimed:'Récupéré',how:'Comment gagner',eNew:'Nouveau niveau',ePerfect:'3 étoiles',eDaily:'Puzzle du jour',eTile:'Tuile 128+',boosts:'Bonus',weekend:'Rush du week-end',weekendD:'×2 {k} et +5 🪙 par niveau',weekendN:'Samedi et dimanche',golden:'Heure dorée',goldenD:'+5 🪙 par niveau · {h}',pass:'Pass saison',passD:'×2 {k} tant qu\'il est actif',getPass:'Obtenir',on:'ACTIF',trophies:'Vitrine des trophées',noTrophies:'Termine un événement pour gagner son trophée.',introT:'{n} commence !',introB:'Récolte des {k} en terminant des niveaux. 8 récompenses : pièces, bonus, vies illimitées et le trophée {n} !',introB2048:'Récolte des {k} avec de grosses tuiles (128+). 8 récompenses : pièces, annulations et le trophée {n} !',go:'C\'est parti !',reward:'Récompense débloquée !',close:'Fermer',last:'Dernière chance — encore {t} !',grand:'Grand prix',lives:'∞ vies 30 min',trophy:'Trophée',left:'encore {t}'},
+    es:{ends:'Termina en {t}',claim:'Reclamar',claimAll:'Reclamar premios',claimed:'Reclamado',how:'Cómo ganar',eNew:'Nivel nuevo',ePerfect:'3 estrellas',eDaily:'Puzzle diario',eTile:'Ficha 128+',boosts:'Potenciadores',weekend:'Fiebre de fin de semana',weekendD:'×2 {k} y +5 🪙 por nivel',weekendN:'Sábado y domingo',golden:'Hora dorada',goldenD:'+5 🪙 por nivel · {h}',pass:'Pase de temporada',passD:'×2 {k} mientras esté activo',getPass:'Obtener',on:'ACTIVO',trophies:'Vitrina de trofeos',noTrophies:'Completa un evento para ganar su trofeo.',introT:'¡Llega {n}!',introB:'Consigue {k} superando niveles. 8 premios: monedas, potenciadores, vidas ilimitadas y el trofeo {n}.',introB2048:'Consigue {k} con fichas grandes (128+). 8 premios: monedas, deshacer y el trofeo {n}.',go:'¡Vamos!',reward:'¡Premio desbloqueado!',close:'Cerrar',last:'¡Última oportunidad: quedan {t}!',grand:'Gran premio',lives:'∞ vidas 30 min',trophy:'Trofeo',left:'quedan {t}'},
+    pt:{ends:'Termina em {t}',claim:'Resgatar',claimAll:'Resgatar prêmios',claimed:'Resgatado',how:'Como ganhar',eNew:'Nível novo',ePerfect:'3 estrelas',eDaily:'Desafio diário',eTile:'Peça 128+',boosts:'Bônus',weekend:'Corrida de Fim de Semana',weekendD:'×2 {k} e +5 🪙 por nível',weekendN:'Sábado e domingo',golden:'Hora de Ouro',goldenD:'+5 🪙 por nível · {h}',pass:'Passe de Temporada',passD:'×2 {k} enquanto ativo',getPass:'Obter',on:'ATIVO',trophies:'Estante de troféus',noTrophies:'Conclua um evento para ganhar o troféu.',introT:'{n} chegou!',introB:'Junte {k} passando de nível. 8 prêmios: moedas, bônus, vidas infinitas e o troféu {n}!',introB2048:'Junte {k} com peças grandes (128+). 8 prêmios: moedas, desfazer e o troféu {n}!',go:'Vamos lá!',reward:'Prêmio desbloqueado!',close:'Fechar',last:'Última chance — faltam {t}!',grand:'Grande prêmio',lives:'∞ vidas 30 min',trophy:'Troféu',left:'faltam {t}'},
+    it:{ends:'Termina tra {t}',claim:'Riscatta',claimAll:'Riscatta premi',claimed:'Riscattato',how:'Come guadagnare',eNew:'Nuovo livello',ePerfect:'3 stelle',eDaily:'Puzzle del giorno',eTile:'Tessera 128+',boosts:'Bonus',weekend:'Corsa del weekend',weekendD:'×2 {k} e +5 🪙 a livello',weekendN:'Sabato e domenica',golden:'Ora d\'oro',goldenD:'+5 🪙 a livello · {h}',pass:'Pass stagionale',passD:'×2 {k} finché attivo',getPass:'Ottieni',on:'ATTIVO',trophies:'Bacheca dei trofei',noTrophies:'Completa un evento per vincere il suo trofeo.',introT:'È arrivato {n}!',introB:'Raccogli {k} completando livelli. 8 premi: monete, bonus, vite infinite e il trofeo {n}!',introB2048:'Raccogli {k} con tessere grandi (128+). 8 premi: monete, annullamenti e il trofeo {n}!',go:'Si parte!',reward:'Premio sbloccato!',close:'Chiudi',last:'Ultima occasione: mancano {t}!',grand:'Primo premio',lives:'∞ vite 30 min',trophy:'Trofeo',left:'mancano {t}'},
+    tr:{ends:'{t} sonra bitiyor',claim:'Al',claimAll:'Ödülleri al',claimed:'Alındı',how:'Nasıl kazanılır',eNew:'Yeni bölüm',ePerfect:'3 yıldız',eDaily:'Günlük bulmaca',eTile:'128+ karo',boosts:'Güçlendirmeler',weekend:'Hafta Sonu Telaşı',weekendD:'×2 {k} ve bölüm başına +5 🪙',weekendN:'Cumartesi ve pazar',golden:'Altın Saat',goldenD:'Bölüm başına +5 🪙 · {h}',pass:'Sezon Kartı',passD:'Aktifken ×2 {k}',getPass:'Al',on:'AÇIK',trophies:'Kupa dolabı',noTrophies:'Kupasını kazanmak için bir etkinliği tamamla.',introT:'{n} başladı!',introB:'Bölüm geçerek {k} topla. 8 ödül: altın, güçlendirme, sınırsız can ve {n} kupası!',introB2048:'Büyük karolarla (128+) {k} topla. 8 ödül: altın, geri alma ve {n} kupası!',go:'Hadi başlayalım!',reward:'Ödül açıldı!',close:'Kapat',last:'Son şans — {t} kaldı!',grand:'Büyük ödül',lives:'∞ can 30 dk',trophy:'Kupa',left:'{t} kaldı'},
+    id:{ends:'Berakhir dalam {t}',claim:'Klaim',claimAll:'Klaim hadiah',claimed:'Diklaim',how:'Cara mendapatkan',eNew:'Level baru',ePerfect:'3 bintang',eDaily:'Teka-teki harian',eTile:'Ubin 128+',boosts:'Bonus',weekend:'Serbu Akhir Pekan',weekendD:'×2 {k} dan +5 🪙 tiap level',weekendN:'Sabtu & Minggu',golden:'Jam Emas',goldenD:'+5 🪙 tiap level · {h}',pass:'Season Pass',passD:'×2 {k} selama aktif',getPass:'Dapatkan',on:'AKTIF',trophies:'Lemari trofi',noTrophies:'Selesaikan event untuk memenangkan trofinya.',introT:'{n} telah tiba!',introB:'Kumpulkan {k} dengan menyelesaikan level. 8 hadiah: koin, booster, nyawa tak terbatas, dan trofi {n}!',introB2048:'Kumpulkan {k} dengan ubin besar (128+). 8 hadiah: koin, undo, dan trofi {n}!',go:'Ayo!',reward:'Hadiah terbuka!',close:'Tutup',last:'Kesempatan terakhir — sisa {t}!',grand:'Hadiah utama',lives:'∞ nyawa 30 mnt',trophy:'Trofi',left:'sisa {t}'},
+    uk:{ends:'Завершиться через {t}',claim:'Забрати',claimAll:'Забрати нагороди',claimed:'Отримано',how:'Як заробити',eNew:'Новий рівень',ePerfect:'3 зірки',eDaily:'Щоденна головоломка',eTile:'Плитка 128+',boosts:'Бонуси',weekend:'Вихідний ривок',weekendD:'×2 {k} і +5 🪙 за рівень',weekendN:'Субота й неділя',golden:'Золота година',goldenD:'+5 🪙 за рівень · {h}',pass:'Сезонний пропуск',passD:'×2 {k}, поки активний',getPass:'Отримати',on:'УВІМК.',trophies:'Вітрина трофеїв',noTrophies:'Заверши подію, щоб виграти її трофей.',introT:'{n} вже тут!',introB:'Збирай {k}, проходячи рівні. 8 нагород: монети, бустери, безлімітні життя і трофей «{n}»!',introB2048:'Збирай {k} великими плитками (128+). 8 нагород: монети, скасування і трофей «{n}»!',go:'Поїхали!',reward:'Нагороду відкрито!',close:'Закрити',last:'Останній шанс — лишилось {t}!',grand:'Головний приз',lives:'∞ життя 30 хв',trophy:'Трофей',left:'лишилось {t}'},
+    ja:{ends:'終了まで {t}',claim:'受け取る',claimAll:'報酬を受け取る',claimed:'受け取り済み',how:'集め方',eNew:'新しいレベル',ePerfect:'星3つ',eDaily:'デイリーパズル',eTile:'128以上のタイル',boosts:'ブースト',weekend:'週末ラッシュ',weekendD:'{k}×2、クリアごとに+5 🪙',weekendN:'土曜・日曜',golden:'ゴールデンアワー',goldenD:'クリアごとに+5 🪙 · {h}',pass:'シーズンパス',passD:'有効中は{k}×2',getPass:'入手',on:'有効',trophies:'トロフィー棚',noTrophies:'イベントを完了するとトロフィーを獲得できます。',introT:'{n} 開催中！',introB:'レベルをクリアして{k}を集めよう。コイン、ブースター、無限ライフ、{n}トロフィーなど8つの報酬！',introB2048:'大きなタイル（128以上）で{k}を集めよう。コイン、元に戻す、{n}トロフィーなど8つの報酬！',go:'はじめる！',reward:'報酬ゲット！',close:'閉じる',last:'ラストチャンス — 残り{t}！',grand:'グランプリ',lives:'∞ライフ 30分',trophy:'トロフィー',left:'残り{t}'},
+    zh:{ends:'{t}后结束',claim:'领取',claimAll:'领取奖励',claimed:'已领取',how:'获取方式',eNew:'新关卡',ePerfect:'3星',eDaily:'每日谜题',eTile:'128+方块',boosts:'加成',weekend:'周末狂欢',weekendD:'{k}×2，每关+5 🪙',weekendN:'周六和周日',golden:'黄金时段',goldenD:'每关+5 🪙 · {h}',pass:'季票',passD:'有效期间{k}×2',getPass:'获取',on:'已开启',trophies:'奖杯柜',noTrophies:'完成活动即可赢得奖杯。',introT:'{n}开始啦！',introB:'通关收集{k}。8份奖励：金币、道具、无限生命和{n}奖杯！',introB2048:'用大方块（128+）收集{k}。8份奖励：金币、撤销和{n}奖杯！',go:'出发！',reward:'奖励已解锁！',close:'关闭',last:'最后机会——还剩{t}！',grand:'大奖',lives:'∞生命 30分钟',trophy:'奖杯',left:'还剩{t}'},
+    ar:{ends:'ينتهي خلال {t}',claim:'استلام',claimAll:'استلم المكافآت',claimed:'تم الاستلام',how:'كيف تجمع',eNew:'مستوى جديد',ePerfect:'3 نجوم',eDaily:'لغز اليوم',eTile:'مربع 128+',boosts:'المعززات',weekend:'اندفاعة نهاية الأسبوع',weekendD:'×2 {k} و‎+5 🪙 لكل مستوى',weekendN:'السبت والأحد',golden:'الساعة الذهبية',goldenD:'‎+5 🪙 لكل مستوى · {h}',pass:'تذكرة الموسم',passD:'×2 {k} أثناء التفعيل',getPass:'احصل',on:'مفعّل',trophies:'خزانة الكؤوس',noTrophies:'أكمل حدثًا لتفوز بكأسه.',introT:'وصل {n}!',introB:'اجمع {k} بإنهاء المستويات. 8 مكافآت: عملات ومعززات وأرواح غير محدودة وكأس {n}!',introB2048:'اجمع {k} بالمربعات الكبيرة (128+). 8 مكافآت: عملات وتراجع وكأس {n}!',go:'هيا بنا!',reward:'تم فتح مكافأة!',close:'إغلاق',last:'الفرصة الأخيرة — تبقّى {t}!',grand:'الجائزة الكبرى',lives:'∞ أرواح 30 د',trophy:'كأس',left:'تبقّى {t}'},
+    hi:{ends:'{t} में समाप्त',claim:'लें',claimAll:'इनाम लें',claimed:'ले लिया',how:'कैसे कमाएँ',eNew:'नया लेवल',ePerfect:'3 सितारे',eDaily:'दैनिक पहेली',eTile:'टाइल 128+',boosts:'बूस्ट',weekend:'वीकेंड रश',weekendD:'×2 {k} और हर लेवल पर +5 🪙',weekendN:'शनिवार और रविवार',golden:'गोल्डन आवर',goldenD:'हर लेवल पर +5 🪙 · {h}',pass:'सीज़न पास',passD:'सक्रिय रहने तक ×2 {k}',getPass:'पाएँ',on:'चालू',trophies:'ट्रॉफी कैबिनेट',noTrophies:'ट्रॉफी जीतने के लिए कोई इवेंट पूरा करें।',introT:'{n} आ गया!',introB:'लेवल पूरे करके {k} जमा करें। 8 इनाम: सिक्के, बूस्टर, असीमित जीवन और {n} ट्रॉफी!',introB2048:'बड़ी टाइलों (128+) से {k} जमा करें। 8 इनाम: सिक्के, अनडू और {n} ट्रॉफी!',go:'चलो शुरू करें!',reward:'इनाम खुला!',close:'बंद करें',last:'आख़िरी मौका — {t} बचे!',grand:'महा इनाम',lives:'∞ जीवन 30 मिनट',trophy:'ट्रॉफी',left:'{t} बचे'}
+  };
+  function lang(){ var l = (window.gGame && window.gGame.lang()) || 'en'; l = String(l).toLowerCase().split('-')[0]; return T[l] ? l : 'en'; }
+  function tr(k, vars){
+    var s = (T[lang()] && T[lang()][k]) || T.en[k] || k;
+    if (vars) for (var v in vars) s = s.split('{' + v + '}').join(vars[v]);
+    return s;
+  }
+  function evName(ev){ var n = NAMES[lang()] || NAMES.en; return n[ev.month - 1] || NAMES.en[ev.month - 1]; }
+  function fmtLeft(ms){
+    var l = lang(), d = Math.floor(ms / 86400000), h = Math.floor((ms % 86400000) / 3600000), m = Math.max(1, Math.floor((ms % 3600000) / 60000));
+    function u(n, unit){
+      try { return new Intl.NumberFormat(l, { style:'unit', unit:unit, unitDisplay:'narrow' }).format(n); }
+      catch(e){ return n + ({ day:'d', hour:'h', minute:'m' })[unit]; }
+    }
+    if (d >= 1) return u(d, 'day') + (d < 3 && h ? ' ' + u(h, 'hour') : '');
+    if (h >= 1) return u(h, 'hour') + ' ' + u(m, 'minute');
+    return u(m, 'minute');
+  }
+  function fmtHour(h){
+    var d = new Date(); d.setHours(h, 0, 0, 0);
+    try { return new Intl.DateTimeFormat(lang(), { hour:'numeric', minute:'2-digit' }).format(d); }
+    catch(e){ return (h < 10 ? '0' : '') + h + ':00'; }
+  }
+
+  // ── time model ──
+  function current(now){
+    now = now || new Date();
+    var ev = SEASONAL_EVENTS[now.getMonth()];
+    var start = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+    var end = new Date(now.getFullYear(), now.getMonth() + 1, 1).getTime();
+    return { ev: ev, key: ev.id + '_' + now.getFullYear(), start: start, end: end, left: end - now.getTime() };
+  }
+  function isWeekend(now){ var d = (now || new Date()).getDay(); return d === 0 || d === 6; }
+  // Golden Hour is a fixed daily appointment (19:00–20:00 local) — the same
+  // window every day so players learn it. (Keying it to the player's usual
+  // play hour made it "on" for almost every session, so it meant nothing.)
+  function goldenHour(){ return 19; }
+  function inGolden(now){ return (now || new Date()).getHours() === goldenHour(); }
+  function premium(){ return !!(window.gGame && window.gGame.isPremium()); }
+  function multiplier(){ return 1 + (isWeekend() ? 1 : 0) + (premium() ? 1 : 0); }
+
+  // ── persistent state ──
+  function stKey(c){ return 'gEv_' + c.key; }
+  function load(c){ var s = jget(stKey(c), null); if (!s || typeof s !== 'object') s = { pts:0, claimed:[], intro:0, last:0 }; if (!Array.isArray(s.claimed)) s.claimed = []; return s; }
+  function store(c, s){ jset(stKey(c), s); }
+  function reachedCount(pts){ var n = 0; for (var i = 0; i < TARGETS.length; i++) if (pts >= TARGETS[i]) n++; return n; }
+  function pending(c, s){ var n = reachedCount(s.pts), out = []; for (var i = 0; i < n; i++) if (!s.claimed[i]) out.push(i); return out; }
+  function trophies(){ var t = jget('gEvTrophies', []); return Array.isArray(t) ? t : []; }
+
+  // ── rewards ──
+  function rewardLabel(i){
+    var r = REWARDS[i], b = (window.gGame && window.gGame.cfg && window.gGame.cfg.booster) || {};
+    if (r.trophy) return '🏆 + ' + r.coins + ' 🪙';
+    if (r.coins) return r.coins + ' 🪙';
+    if (r.booster) return (b.emoji || '💡') + ' ×' + r.booster;
+    if (r.lives) return tr('lives');
+    return '';
+  }
+  function grant(c, i){
+    var G = window.gGame, r = REWARDS[i];
+    if (!G) return;
+    if (r.coins) G.addCoins(r.coins);
+    if (r.booster) G.addBooster(r.booster);
+    if (r.lives) G.addUnlimitedLives(r.lives);
+    if (r.trophy){
+      var t = trophies();
+      if (!t.some(function(x){ return x.key === c.key; })) { t.push({ key:c.key, month:c.ev.month, token:c.ev.token, year:new Date(c.start).getFullYear() }); jset('gEvTrophies', t); }
+    }
+  }
+  function claimAll(c){
+    var s = load(c), p = pending(c, s), coins = 0;
+    p.forEach(function(i){ grant(c, i); s.claimed[i] = true; coins += (REWARDS[i].coins || 0); });
+    store(c, s);
+    if (window.gGame) window.gGame.refresh();
+    return p.length;
+  }
+
+  // ── earning ──
+  function tokensFor(d){
+    var kind = window.gGame && window.gGame.cfg && window.gGame.cfg.kind;
+    if (kind === 'score'){
+      var tile = d.tile | 0; if (tile < 128) return 0;
+      return tile >= 4096 ? 8 : tile >= 2048 ? 5 : tile >= 1024 ? 3 : tile >= 512 ? 2 : 1;
+    }
+    if (d.endless) return 0;
+    if (d.daily) return 3;
+    if (d.inferred) return 1;
+    if (!d.isNew) return 0;
+    return 1 + (d.perfect ? 1 : 0);
+  }
+  function qualifiesForBonus(d){
+    var kind = window.gGame && window.gGame.cfg && window.gGame.cfg.kind;
+    if (kind === 'score') return (d.tile | 0) >= 256;
+    return !d.endless && (d.daily || d.isNew || d.inferred);
+  }
+  function onClear(d){
+    var G = window.gGame; if (!G) return;
+    var c = current(), s = load(c);
+    var before = reachedCount(s.pts);
+    var base = tokensFor(d), mult = multiplier(), got = base * mult;
+    var bonus = 0;
+    if (qualifiesForBonus(d)){
+      if (isWeekend()) bonus += BONUS_COINS;
+      if (inGolden()) bonus += BONUS_COINS;
+    }
+    if (got > 0){ s.pts += got; store(c, s); }
+    if (bonus > 0) G.addCoins(bonus);
+    if (got > 0 || bonus > 0){
+      var tags = [];
+      if (got > 0) tags.push('+' + got + ' ' + c.ev.token + (mult > 1 ? ' (×' + mult + ')' : ''));
+      if (bonus > 0) tags.push('+' + bonus + ' 🪙 ' + (inGolden() ? '🌟' : '⚡'));
+      setTimeout(function(){ G.toast(tags.join('  ·  ')); }, 900);
+    }
+    var after = reachedCount(s.pts);
+    if (after > before) setTimeout(function(){ queueRewardCard(c); }, 1800);
+    if (!s.intro) setTimeout(maybeIntro, 3200);
+    renderRibbonNow();
+  }
+
+  // ── UI helpers (theme tokens only) ──
+  var CARD_BG = 'var(--surface, var(--bg, #ffffff))';
+  var CARD_FG = 'var(--text, var(--page-fg, #1e3a5f))';
+  var MUTE = 'var(--text-mute, var(--text-muted, inherit))';
+  var TILE = 'var(--menu-tile-bg, var(--surface2, var(--surface, transparent)))';
+  var LINE = 'var(--menu-tile-border, var(--border, rgba(127,127,127,0.25)))';
+  var CTA = 'var(--g-play, var(--accent, #3b6db8))';
+  var ON_CTA = 'var(--on-accent, #fff)';
+  function el(html){ var d = document.createElement('div'); d.innerHTML = html; return d.firstChild; }
+  function bar(pct, h){
+    return '<div style="height:' + h + 'px;border-radius:99px;background:' + LINE + ';overflow:hidden;">' +
+      '<div style="height:100%;width:' + Math.max(3, Math.min(100, pct)) + '%;border-radius:99px;background:' + CTA + ';transition:width .5s ease;"></div></div>';
+  }
+  function card(inner, onClose){
+    var bg = document.createElement('div');
+    bg.setAttribute('data-growth-card', '1');
+    bg.setAttribute('data-growth-events-card', '1');
+    bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:var(--z-modal, 700);font-family:inherit;';
+    bg.innerHTML = '<div style="background:' + CARD_BG + ';color:' + CARD_FG + ';border:1px solid ' + LINE + ';border-radius:22px;padding:24px 22px 18px;width:86%;max-width:350px;text-align:center;box-shadow:0 16px 48px rgba(0,0,0,0.35);">' + inner + '</div>';
+    document.body.appendChild(bg);
+    var done = false;
+    function close(){ if (done) return; done = true; bg.remove(); if (onClose) onClose(); }
+    bg.addEventListener('click', function(e){ if (e.target === bg) close(); });
+    return { root: bg, close: close };
+  }
+  function bigToken(tok){
+    return '<div style="width:84px;height:84px;margin:0 auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:48px;line-height:1;' +
+      'background:' + TILE + ';box-shadow:inset 0 0 0 2px ' + LINE + ';">' + tok + '</div>';
+  }
+
+  // ── reward card (queued) ──
+  function queueRewardCard(c){
+    if (window.__gEvRewardQueued) return;
+    window.__gEvRewardQueued = true;
+    var show = function(done){
+      window.__gEvRewardQueued = false;
+      var s = load(c), p = pending(c, s);
+      if (!p.length){ done(); return; }
+      var list = p.map(function(i){ return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin-top:6px;border-radius:12px;background:' + TILE + ';border:1px solid ' + LINE + ';font-weight:700;"><span>' + TARGETS[i] + ' ' + c.ev.token + '</span><span>' + rewardLabel(i) + '</span></div>'; }).join('');
+      var k = card(bigToken(c.ev.token) +
+        '<div style="font-size:1.25rem;font-weight:800;margin-bottom:4px;">' + tr('reward') + '</div>' +
+        '<div style="font-size:0.9rem;color:' + MUTE + ';margin-bottom:8px;">' + evName(c.ev) + '</div>' + list +
+        '<button data-ev-claim type="button" style="display:block;width:100%;margin-top:14px;border:none;padding:13px;border-radius:14px;background:' + CTA + ';color:' + ON_CTA + ';font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;">' + tr('claimAll') + '</button>', done);
+      k.root.querySelector('[data-ev-claim]').addEventListener('click', function(){ claimAll(c); renderRibbonNow(); k.close(); });
+    };
+    if (window.gPopupQueue) window.gPopupQueue.enqueue(show); else show(function(){});
+  }
+
+  // ── intro / last-chance card (once per event each) ──
+  function maybeIntro(){
+    var c = current(), s = load(c);
+    var is2048 = window.gGame && window.gGame.cfg && window.gGame.cfg.kind === 'score';
+    var lastChance = c.left < 3 * 86400000;
+    var mode = !s.intro ? 'intro' : (lastChance && !s.last ? 'last' : null);
+    if (!mode || window.__gEvIntroQueued) return;
+    // A brand-new player meets the event after their first clear, never on
+    // top of the tutorial.
+    if (mode === 'intro' && window.gGame && window.gGame.totalClears() < 1 && window.gGame.clears() < 1) return;
+    window.__gEvIntroQueued = true;
+    var show = function(done){
+      window.__gEvIntroQueued = false;
+      var s2 = load(c);
+      s2.intro = 1; if (lastChance) s2.last = 1;
+      store(c, s2);
+      var body = mode === 'last' ? tr('last', { t: fmtLeft(c.left) })
+                                 : tr(is2048 ? 'introB2048' : 'introB', { k: c.ev.token, n: evName(c.ev) });
+      var k = card(bigToken(c.ev.token) +
+        '<div style="font-size:1.3rem;font-weight:800;margin-bottom:6px;">' + (mode === 'last' ? evName(c.ev) : tr('introT', { n: evName(c.ev) })) + '</div>' +
+        '<div style="font-size:0.95rem;color:' + MUTE + ';line-height:1.45;margin-bottom:6px;">' + body + '</div>' +
+        '<div style="font-size:0.8rem;font-weight:700;color:' + MUTE + ';margin-bottom:14px;">⏳ ' + tr('ends', { t: fmtLeft(c.left) }) + '</div>' +
+        '<button data-ev-go type="button" style="display:block;width:100%;border:none;padding:13px;border-radius:14px;background:' + CTA + ';color:' + ON_CTA + ';font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;">' + tr('go') + '</button>', done);
+      k.root.querySelector('[data-ev-go]').addEventListener('click', function(){ k.close(); openSheet(); });
+    };
+    if (window.gPopupQueue) window.gPopupQueue.enqueue(show); else show(function(){});
+  }
+
+  // ── leftovers from last month: auto-pay reached-but-unclaimed rewards ──
+  function settlePrevious(){
+    var now = new Date();
+    var prev = current(new Date(now.getFullYear(), now.getMonth(), 0, 12));
+    var s = jget(stKey(prev), null);
+    if (!s || s.settled) return;
+    var p = pending(prev, s);
+    p.forEach(function(i){ grant(prev, i); s.claimed[i] = true; });
+    s.settled = 1; store(prev, s);
+    if (p.length && window.gGame) window.gGame.toast(prev.ev.token + ' ' + evName(prev.ev) + ': +' + p.length + ' 🎁');
+  }
+
+  // ── bottom sheet ──
+  function openSheet(){
+    var c = current(), s = load(c);
+    var old = $('xEventsSheet'); if (old) old.remove();
+    var pts = s.pts, maxT = TARGETS[TARGETS.length - 1];
+    var is2048 = window.gGame && window.gGame.cfg && window.gGame.cfg.kind === 'score';
+    var rows = TARGETS.map(function(t, i){
+      var reached = pts >= t, got = !!s.claimed[i];
+      var right = got ? '<span style="font-weight:800;color:' + MUTE + ';">✓ ' + tr('claimed') + '</span>'
+                : reached ? '<button data-ev-claim-one type="button" style="border:none;padding:7px 14px;border-radius:12px;background:' + CTA + ';color:' + ON_CTA + ';font-weight:800;cursor:pointer;font-family:inherit;">' + tr('claim') + '</button>'
+                : '<span style="font-weight:700;color:' + MUTE + ';">🔒 ' + t + '</span>';
+      var grand = REWARDS[i].trophy ? '<div style="font-size:0.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:' + MUTE + ';">' + tr('grand') + '</div>' : '';
+      return '<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;margin-bottom:8px;background:' + TILE + ';border:1px solid ' + (reached && !got ? 'var(--accent, ' + LINE + ')' : LINE) + ';opacity:' + (reached || got ? '1' : '0.72') + ';">' +
+        '<div style="min-width:44px;text-align:center;font-weight:800;font-size:0.9rem;">' + t + '<div style="font-size:1rem;line-height:1;">' + c.ev.token + '</div></div>' +
+        '<div style="flex:1;text-align:start;font-weight:800;">' + grand + rewardLabel(i) + '</div>' + right + '</div>';
+    }).join('');
+    var wk = isWeekend(), gh = inGolden(), pm = premium();
+    function boost(icon, title, desc, active, extra){
+      return '<div style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;background:' + TILE + ';border:1px solid ' + LINE + ';margin-bottom:6px;">' +
+        '<div style="font-size:1.3rem;">' + icon + '</div><div style="flex:1;text-align:start;"><div style="font-weight:800;font-size:0.92rem;">' + title + '</div><div style="font-size:0.78rem;color:' + MUTE + ';">' + desc + '</div></div>' +
+        (active ? '<span style="font-size:0.72rem;font-weight:800;padding:4px 8px;border-radius:99px;background:' + CTA + ';color:' + ON_CTA + ';">' + tr('on') + '</span>' : (extra || '')) + '</div>';
+    }
+    var h = goldenHour();
+    var boosts =
+      boost('⚡', tr('weekend'), tr('weekendD', { k: c.ev.token }) + (wk ? '' : ' · ' + tr('weekendN')), wk) +
+      boost('🌟', tr('golden'), tr('goldenD', { h: fmtHour(h) + '–' + fmtHour((h + 1) % 24) }), gh) +
+      boost('👑', tr('pass'), tr('passD', { k: c.ev.token }), pm, '<button data-ev-pass type="button" style="border:1px solid ' + LINE + ';background:transparent;color:inherit;padding:6px 12px;border-radius:12px;font-weight:800;cursor:pointer;font-family:inherit;">' + tr('getPass') + '</button>');
+    var tro = trophies();
+    var trophyHtml = tro.length
+      ? '<div style="display:flex;flex-wrap:wrap;gap:8px;">' + tro.slice(-12).map(function(t){ return '<div title="' + (NAMES[lang()] || NAMES.en)[t.month - 1] + ' ' + t.year + '" style="width:46px;height:46px;border-radius:12px;background:' + TILE + ';border:1px solid ' + LINE + ';display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.3rem;line-height:1;">' + t.token + '<span style="font-size:0.55rem;font-weight:800;margin-top:2px;">' + String(t.year).slice(2) + '</span></div>'; }).join('') + '</div>'
+      : '<div style="font-size:0.85rem;color:' + MUTE + ';">' + tr('noTrophies') + '</div>';
+    var earn = is2048 ? '<span>' + tr('eTile') + ' +1…+8</span>'
+      : '<span>' + tr('eNew') + ' +1</span><span>' + tr('ePerfect') + ' +1</span><span>' + tr('eDaily') + ' +3</span>';
+    var sheet = document.createElement('div');
+    sheet.id = 'xEventsSheet';
+    sheet.setAttribute('role', 'dialog');
+    sheet.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:flex-end;justify-content:center;z-index:var(--z-modal, 700);font-family:inherit;';
+    sheet.innerHTML =
+      '<div style="background:' + CARD_BG + ';color:' + CARD_FG + ';border-top-left-radius:22px;border-top-right-radius:22px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;padding:18px 16px calc(16px + env(safe-area-inset-bottom, 0px));box-shadow:0 -10px 36px rgba(0,0,0,0.3);">' +
+        '<div style="width:40px;height:4px;border-radius:99px;background:' + LINE + ';margin:0 auto 14px;"></div>' +
+        '<div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">' +
+          '<div style="width:64px;height:64px;flex:0 0 64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;background:' + TILE + ';box-shadow:inset 0 0 0 2px ' + LINE + ';">' + c.ev.token + '</div>' +
+          '<div style="flex:1;min-width:0;"><div style="font-size:1.25rem;font-weight:800;line-height:1.2;">' + evName(c.ev) + '</div>' +
+          '<div style="font-size:0.82rem;font-weight:700;color:' + MUTE + ';margin-top:2px;">⏳ ' + tr('ends', { t: fmtLeft(c.left) }) + '</div></div></div>' +
+        '<div style="display:flex;justify-content:space-between;font-weight:800;font-size:0.9rem;margin-bottom:6px;"><span>' + c.ev.token + ' ' + pts + ' / ' + maxT + '</span>' + (multiplier() > 1 ? '<span>×' + multiplier() + '</span>' : '') + '</div>' +
+        bar(pts / maxT * 100, 10) +
+        '<div style="display:flex;flex-wrap:wrap;gap:6px 12px;font-size:0.78rem;font-weight:700;color:' + MUTE + ';margin:10px 0 14px;"><span>' + tr('how') + ':</span>' + earn + '</div>' +
+        rows +
+        '<div style="font-size:0.8rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:' + MUTE + ';margin:14px 0 8px;">' + tr('boosts') + '</div>' + boosts +
+        '<div style="font-size:0.8rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:' + MUTE + ';margin:14px 0 8px;">' + tr('trophies') + '</div>' + trophyHtml +
+        '<button data-ev-close type="button" style="display:block;width:100%;margin-top:16px;background:transparent;color:inherit;border:1px solid ' + LINE + ';border-radius:14px;padding:11px;font-weight:700;cursor:pointer;font-family:inherit;">' + tr('close') + '</button>' +
+      '</div>';
+    document.body.appendChild(sheet);
+    function close(){ sheet.remove(); renderRibbonNow(); }
+    sheet.addEventListener('click', function(e){ if (e.target === sheet) close(); });
+    sheet.querySelector('[data-ev-close]').addEventListener('click', close);
+    sheet.querySelectorAll('[data-ev-claim-one]').forEach(function(b){
+      b.addEventListener('click', function(){ claimAll(c); openSheet(); });
+    });
+    var pb = sheet.querySelector('[data-ev-pass]');
+    if (pb) pb.addEventListener('click', function(){
+      close();
+      if (window.Android && typeof window.Android.purchase === 'function') safe(function(){ window.Android.purchase('season_pass_monthly'); });
+    });
+  }
+
+  // ── menu ribbon (rendered by the MENU shim's renderMenu) ──
+  var lastHost = null, lastAnchor = null;
+  function ribbonHtml(c, s){
+    var maxT = TARGETS[TARGETS.length - 1], pend = pending(c, s).length;
+    var lastDays = c.left < 3 * 86400000;
+    var pill = function(txt){ return '<span style="flex:0 0 auto;font-size:0.7rem;font-weight:800;padding:2px 7px;border-radius:99px;background:' + CTA + ';color:' + ON_CTA + ';">' + txt + '</span>'; };
+    var extra = '';
+    if (lastDays) extra = pill('⏳ ' + fmtLeft(c.left));
+    else if (inGolden()) extra = pill('🌟');
+    else if (isWeekend()) extra = pill('⚡×2');
+    return '<span style="font-size:1.05rem;line-height:1;flex:0 0 auto;">' + c.ev.token + '</span>' +
+      '<span style="flex:1 1 auto;min-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:start;">' + evName(c.ev) + '</span>' +
+      '<span style="width:38px;flex:0 0 38px;">' + bar(s.pts / maxT * 100, 5) + '</span>' +
+      '<span style="flex:0 0 auto;font-variant-numeric:tabular-nums;">' + Math.min(s.pts, maxT) + '/' + maxT + '</span>' +
+      extra + (pend ? '<span aria-label="!" style="width:8px;height:8px;border-radius:50%;background:#b8332b;flex:0 0 8px;"></span>' : '');
+  }
+  function renderRibbon(menu, anchor){
+    lastHost = menu || lastHost; lastAnchor = anchor || lastAnchor;
+    menu = lastHost; anchor = lastAnchor;
+    if (!menu || !window.gGame) return;
+    // retire the old per-app seasonal banners (they made false promises)
+    ['xSeasonBanner', 'xSeasonBanner2048', 'xSeasonalBanner'].forEach(function(id){ var e = $(id); if (e) e.remove(); });
+    var c = current(), s = load(c);
+    var r = $('xEventRibbon');
+    if (!r){
+      r = document.createElement('button');
+      r.id = 'xEventRibbon';
+      r.type = 'button';
+      r.setAttribute('data-menu-event-ribbon', '1');
+      r.style.cssText = 'display:flex;align-items:center;gap:7px;width:clamp(260px, 78vw, 380px);max-width:94vw;min-height:32px;margin:8px auto 0;' +
+        'padding:6px 12px;border-radius:99px;border:1px solid ' + LINE + ';background:' + TILE + ';color:var(--menu-tile-fg, ' + CARD_FG + ');' +
+        'font:inherit;font-size:0.8rem;font-weight:800;cursor:pointer;box-sizing:border-box;';
+      r.addEventListener('click', openSheet);
+    }
+    var target = anchor && anchor.parentNode ? anchor : null;
+    if (target){
+      if (r.previousSibling !== target || r.parentNode !== target.parentNode) target.parentNode.insertBefore(r, target.nextSibling);
+    } else if (r.parentNode !== menu){
+      menu.appendChild(r);
+    }
+    var html = ribbonHtml(c, s);
+    if (r.getAttribute('data-rendered') !== html){ r.innerHTML = html; r.setAttribute('data-rendered', html); }
+    r.setAttribute('aria-label', evName(c.ev));
+  }
+  function renderRibbonNow(){ if (lastHost) safe(function(){ renderRibbon(); }); }
+  // countdown text refresh — TEXT ONLY (same contract as the free-coins ticker)
+  setInterval(function(){ if ($('xEventRibbon')) renderRibbonNow(); }, 60000);
+
+  // ── win-back line for Part A's Day-3 push ──
+  function winBackLine(days){
+    var c = current(), s = load(c);
+    if (c.left < (days + 1) * 86400000) return null;
+    var maxT = TARGETS[TARGETS.length - 1];
+    return { title: c.ev.token + ' ' + evName(c.ev), body: tr('ends', { t: fmtLeft(c.left - days * 86400000) }) + ' · ' + Math.min(s.pts, maxT) + '/' + maxT + ' ' + c.ev.token };
+  }
+
+  window.gEvents = {
+    SEASONAL_EVENTS: SEASONAL_EVENTS,
+    current: current,
+    renderRibbon: renderRibbon,
+    open: openSheet,
+    winBackLine: winBackLine,
+    points: function(){ return load(current()).pts; },
+    isWeekend: isWeekend,
+    inGolden: inGolden,
+    multiplier: multiplier
+  };
+
+  (function boot(){
+    if (!window.gGame){ setTimeout(boot, 60); return; }
+    window.gGame.on('clear', onClear);
+    settlePrevious();
+    setTimeout(maybeIntro, 2500);
+    var c = current(), s = load(c);
+    if (pending(c, s).length) setTimeout(function(){ queueRewardCard(c); }, 3000);
+  })();
+})();
+</script>

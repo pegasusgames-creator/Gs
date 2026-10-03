@@ -30,6 +30,7 @@ BASE = Path(__file__).resolve().parent.parent
 CFG = {
     "WaterSortPuzzle": dict(pkg="com.pegasusgames.watersortpuzzle", name="Water Sort Puzzle",
                             saveKey="watersort_save", levelBase=0, kind="levels", totalLevels=500, live=True,
+                            ownHaptics=True,
                             booster=dict(field="hintCount", name="Color Reveal", emoji="💡", coins=30)),
     "Nonogram":        dict(pkg="com.pegasusgames.nonogram", name="Nonogram",
                             saveKey="nonogram_state", levelBase=1, kind="levels", totalLevels=500, live=True,

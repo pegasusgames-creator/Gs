@@ -8,7 +8,7 @@ import os, sys
 from collections import Counter
 from PIL import Image
 
-REPO = "/home/user/Documents/Gs"
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DENS = {"mdpi":1,"hdpi":1.5,"xhdpi":2,"xxhdpi":3,"xxxhdpi":4}
 FG_FRAC = 1.0    # full-bleed: art fills the masked shape edge-to-edge (no bg-colour margin)
 

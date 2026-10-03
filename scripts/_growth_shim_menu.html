@@ -1200,6 +1200,8 @@
     hideNativeLevelLabels();
     slimSeasonBanner();
     renderChips();
+    // Live-ops ribbon (EVENTS shim) sits right under the Daily button.
+    if (window.gEvents && typeof window.gEvents.renderRibbon === 'function') safe(function(){ window.gEvents.renderRibbon(menuEl(), tier2Btn()); });
     injectMenuMotif();
     injectMenuIllustration();
     layoutTileGrid();
@@ -1564,6 +1566,7 @@
     ensureTopBarIcons();
     injectMenuMotif();
     layoutTileGrid();
+    if (window.gEvents && typeof window.gEvents.renderRibbon === 'function') safe(function(){ window.gEvents.renderRibbon(menuEl(), tier2Btn()); });
   }
   [400, 900, 1800, 3500].forEach(function(d){
     setTimeout(function(){ if (onMenu()) lateRenderSweep(); }, d);

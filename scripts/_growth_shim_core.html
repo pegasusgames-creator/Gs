@@ -224,7 +224,9 @@
         s.lives = s.maxLives || 5;
       });
     },
-    adGateOk: function(){ return total() >= 3 || clears() >= 3; },
+    // Evaluated right after a clear is counted → strictly MORE than 3 clears.
+    haptic: haptic,
+    adGateOk: function(){ return total() > 3 || clears() > 3; },
     isPremium: function(){
       try { if (typeof isPremium === 'function') return !!isPremium(); } catch(e){}
       var s = st(); var now = Date.now();
@@ -259,6 +261,20 @@
     if (d.daily) mp('daily', 1);
   });
   on('hint', function(){ mp('hint', 1); });
+
+  // ── Win haptic (needs android.permission.VIBRATE in the manifest — no game
+  // had it, so every vibrate call was a silent no-op). Games with their own
+  // haptics engine (GROWTH_CFG.ownHaptics) are left alone; a saved
+  // hapticsEnabled:false is always respected.
+  function haptic(pattern){
+    var s = st();
+    if (s && s.hapticsEnabled === false) return;
+    try { if (navigator.vibrate) navigator.vibrate(pattern); } catch(e){}
+  }
+  on('clear', function(d){
+    if (CFG.ownHaptics) return;
+    haptic(d.perfect ? [22, 40, 22, 40, 34] : [24, 36, 24]);
+  });
 
   // ── Popup choreography guard (CLAUDE.md: first-launch popups QUEUE, never
   // stack). Unsolicited modals — login ladder, starter pack, theme-unlock

@@ -63,6 +63,46 @@
     return I.link ? (line + '\n' + I.link) : line;
   }
 
+  // ── Rate ask: a neutral, non-incentivized nudge to the Play listing at a
+  // happy moment (a perfect clear after 12+ total clears, or a 1024+ tile).
+  // At most 2 asks per install, 30 days apart, live apps only. No sentiment
+  // gating, no reward — Play's ratings policy.
+  function maybeAskRating(d){
+    var G = window.gGame; if (!G || !G.playLink) return;
+    var asks = parseInt(lsGet('_rateAsks','0'),10) || 0;
+    var last = parseInt(lsGet('_rateAskAt','0'),10) || 0;
+    if (asks >= 2 || lsGet('_rateDone','0') === '1') return;
+    if (last && Date.now() - last < 30 * 86400000) return;
+    var happy = (d && d.perfect && G.totalClears() >= 12) || (d && d.tile >= 1024);
+    if (!happy) return;
+    try { localStorage.setItem('_rateAsks', String(asks + 1)); localStorage.setItem('_rateAskAt', String(Date.now())); } catch(e){}
+    var ask = function(done){
+      var bg = document.createElement('div');
+      bg.setAttribute('data-growth-card', '1');
+      bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:var(--z-modal, 700);font-family:inherit;';
+      bg.innerHTML = '<div style="background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border-radius:20px;padding:24px 22px 18px;width:86%;max-width:340px;text-align:center;box-shadow:0 14px 44px rgba(0,0,0,0.35);">' +
+        '<div style="font-size:30px;letter-spacing:2px;margin-bottom:10px;">⭐⭐⭐⭐⭐</div>' +
+        '<div style="font-size:1.2rem;font-weight:800;margin-bottom:6px;">Enjoying ' + info().name + '?</div>' +
+        '<div style="font-size:0.95rem;color:var(--text-mute, inherit);margin-bottom:16px;">A quick rating on Google Play helps a small studio a lot. Thank you!</div>' +
+        '<button data-rate-yes type="button" style="display:block;width:100%;border:none;padding:13px;border-radius:14px;background:var(--g-play, #3b6db8);color:var(--on-accent, #fff);font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;">Rate on Google Play</button>' +
+        '<button data-rate-no type="button" style="display:block;width:100%;margin-top:8px;border:none;background:transparent;color:var(--text-mute, inherit);padding:8px;font-weight:700;cursor:pointer;font-family:inherit;">Not now</button></div>';
+      document.body.appendChild(bg);
+      function close(){ bg.remove(); done(); }
+      bg.querySelector('[data-rate-yes]').addEventListener('click', function(){
+        try { localStorage.setItem('_rateDone','1'); } catch(e){}
+        if (api('openPlayStore')) safe(function(){ Android.openPlayStore(G.pkg); });
+        else if (api('openUrl')) safe(function(){ Android.openUrl(G.playLink); });
+        close();
+      });
+      bg.querySelector('[data-rate-no]').addEventListener('click', close);
+    };
+    setTimeout(function(){ if (window.gPopupQueue) window.gPopupQueue.enqueue(ask); else ask(function(){}); }, 2600);
+  }
+  (function withCoreRate(){
+    if (!window.gGame) { setTimeout(withCoreRate, 50); return; }
+    window.gGame.on('clear', maybeAskRating);
+  })();
+
   function doShare(text){
     if (!text) return;
     if (api('shareText')) { safe(function(){ Android.shareText(text); }); return; }
