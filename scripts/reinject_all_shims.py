@@ -7,7 +7,8 @@ For each target app's game.html:
     HTML comment immediately preceding it, if any) is replaced verbatim with
     the master copy.
   - Shims the app doesn't have yet are APPENDED before </body> in canonical
-    order (A, B, D, E, F, G, MENU, SUBS).
+    order (A, B, D, E, F, G, MENU, SUBS, EVENTS); a missing CORE goes right
+    before Part A instead.
   - Afterwards run scripts/wire_leaderboards.py to re-bake per-app
     LEADERBOARD_IDs (the master G shim carries UnblockPuzzle's literal).
 
@@ -22,10 +23,13 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 
 DEFAULT_APPS = ["WaterSortPuzzle", "Nonogram", "Puzzle2048", "UnblockPuzzle",
-                "PipeConnect"]
+                "PipeConnect", "Afterimage", "Hunch", "Overlay"]
 
-# Canonical injection order.
+# Canonical injection order. CORE (the shared gGame adapter) must precede
+# every other shim; a missing CORE is inserted right before Part A — run
+# wire_growth_core.py first so the per-app GROWTH_CFG block exists.
 SHIMS = [
+    ("CORE", "_growth_shim_core.html"),
     ("A",    "_growth_shim_a.html"),
     ("B",    "_growth_shim_b.html"),
     ("D",    "_growth_shim_d.html"),
@@ -104,6 +108,11 @@ def process(app: str) -> None:
             if normalized(m.group(0)) != normalized(block):
                 s = s[:m.start()] + block + s[m.end():]
                 replaced.append(key)
+        elif key == "CORE":
+            a = shim_block_re("A").search(s)
+            assert a, f"{app}: Part A not found — cannot place CORE"
+            s = s[:a.start()] + block + "\n" + s[a.start():]
+            appended.append(key)
         else:
             i = s.rfind("</body>")
             assert i > 0, f"{app}: </body> not found"

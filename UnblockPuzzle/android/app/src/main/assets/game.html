@@ -702,7 +702,7 @@ html[data-theme="midnight"]{
     <div class="set-row"><span class="set-label">🎨 Block Theme</span><button onclick="showScreen('themeScreen')" id="themeBtn" style="background:var(--menu-tile-bg);border:1px solid var(--menu-tile-border);border-radius:10px;padding:7px 16px;color:var(--text-head, var(--text));font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Classic</button></div>
     <div class="set-row"><span class="set-label">Restore Purchases</span><button class="ov-btn ov-retry" style="width:auto;padding:8px 20px;font-size:0.85rem" onclick="restorePurchasesUI()">Restore</button></div>
     <div class="set-row"><span class="set-label">Privacy Policy</span><button class="ov-btn ov-retry" style="width:auto;padding:8px 20px;font-size:0.85rem" onclick="openPrivacyPolicy()">View</button></div>
-    <div class="set-row"><span class="set-label">App Version</span><span style="color:var(--text-faint);font-size:0.85rem">1.1.1</span></div>
+    <div class="set-row"><span class="set-label">App Version</span><span data-app-version style="color:var(--text-faint);font-size:0.85rem">1.3.0</span></div>
     <div class="set-row"><span class="set-label">Reset Progress</span><button class="ov-btn ov-retry" style="width:auto;padding:8px 20px;font-size:0.85rem" onclick="confirmReset()">Reset All</button></div>
   </div>
 </div>
@@ -1996,8 +1996,8 @@ function updateMenuScreen(){
     const played = state.currentLevel > 1 ||
       Object.keys(state.completedLevels || {}).length > 0;
     sub.textContent = played
-      ? 'Continue — Level ' + state.currentLevel + ' of 150'
-      : 'Start — Level 1 of 150';
+      ? 'Continue — Level ' + state.currentLevel + ' of ' + LEVELS.length
+      : 'Start — Level 1 of ' + LEVELS.length;
   }
   // Daily button label — user spec: show the DATE, not the streak
   // count. ✓ shows only when COMPLETED today. The streak chip lives
@@ -2487,23 +2487,36 @@ function triggerWin(){
   else if(moveCount <= Math.ceil(optimal * 2)) stars = 2;
 
   // Save progress
+  let wasNew = false;
   if(!isDailyMode){
     const idx = currentLevelIdx;
+    wasNew = !state.completedLevels[idx];
     state.completedLevels[idx] = true;
     if(!state.levelStars[idx] || state.levelStars[idx] < stars) state.levelStars[idx] = stars;
     if(!state.levelMoves[idx] || state.levelMoves[idx] > moveCount) state.levelMoves[idx] = moveCount;
     if(idx + 1 >= state.currentLevel) state.currentLevel = idx + 2;
-    state.currentLevel = Math.min(state.currentLevel, 150);
+    // Cap at the real level count (was a stale 150 → levels 151-500 stayed
+    // locked after clearing 150; audit 2026-10-03).
+    state.currentLevel = Math.min(state.currentLevel, LEVELS.length);
   } else {
     // Round-15: only mark Daily as completed when the player actually
     // wins it (was incorrectly marking on entry via startDailyChallenge).
-    state.dailyChallengeCompletedDate = new Date().toISOString().slice(0,10);
+    // The streak also advances on the WIN now, not on opening the puzzle.
+    const today = new Date().toISOString().slice(0,10);
+    const yesterday = new Date(Date.now()-86400000).toISOString().slice(0,10);
+    if(state.dailyChallengeCompletedDate !== today){
+      if(state.dailyChallengeDate === yesterday) state.dailyChallengeStreak = (state.dailyChallengeStreak||0) + 1;
+      else if(state.dailyChallengeDate !== today) state.dailyChallengeStreak = 1;
+      state.dailyChallengeDate = today;
+    }
+    state.dailyChallengeCompletedDate = today;
   }
 
   // Coins reward
   const coinReward = stars * 5 + 10;
   addCoins(coinReward);
   saveState();
+  try { if (window.gGame) window.gGame.clear(isDailyMode ? { daily: true, stars: stars, moves: moveCount, isNew: true } : { level: currentLevelIdx + 1, stars: stars, isNew: wasNew, perfect: stars === 3, moves: moveCount }); } catch(e) {}
 
   // Show overlay — fill new structured win UI
   const starStr = '⭐'.repeat(stars) + '☆'.repeat(3-stars);
@@ -2525,7 +2538,9 @@ function triggerWin(){
   startAnim();
 
   // Interstitial every 3 levels
-  if(!isDailyMode && (currentLevelIdx + 1) % 3 === 0 && !state.removeAds){
+  // adsRemoved() also covers Season/Weekly Pass holders ("ad-free"); the old
+  // removeAds-only check showed interstitials to subscribers.
+  if(!isDailyMode && (currentLevelIdx + 1) % 3 === 0 && !adsRemoved() && (!window.gAdGateOk || window.gAdGateOk())){
     setTimeout(()=>{
       if(window.Android){
         Android.showInterstitial();
@@ -2602,6 +2617,7 @@ function useHint(){
 }
 
 function showHint(){
+  try{if(window.gGame)window.gGame.emit('hint');}catch(e){}
   // Find a block that can move to help the red block
   const red = blocks.find(b=>b.isRed);
   // First try: find direct blocker of red on row 2
@@ -2731,12 +2747,7 @@ function startDailyChallenge(){
   const seed = today.split('-').reduce((a,b)=>a*100+parseInt(b), 0);
   const idx = seed % LEVELS.length;
 
-  // Update streak
-  const yesterday = new Date(Date.now()-86400000).toISOString().slice(0,10);
-  if(state.dailyChallengeDate === yesterday) state.dailyChallengeStreak++;
-  else if(state.dailyChallengeDate !== today) state.dailyChallengeStreak = 1;
-  state.dailyChallengeDate = today;
-  saveState();
+  // Streak now advances when the daily is WON (see triggerWin), not here.
 
   showScreen('gameScreen');
 initGame(idx, true);
@@ -4010,7 +4021,7 @@ function renderStats(){
   var completed=Object.keys(state.completedLevels||{}).length;
   var perfect=Object.values(state.levelStars||{}).filter(function(s){return s>=3;}).length;
   var totalMoves=Object.values(state.levelMoves||{}).reduce(function(a,b){return a+(b||0);},0);
-  var pct=Math.min(100,Math.round(completed/150*100));
+  var pct=Math.min(100,Math.round(completed/LEVELS.length*100));
   var hero='<div class="stat-hero"><div class="stat-hero-label">Levels Completed</div><div class="stat-hero-value">'+completed+' / 500</div><div class="stat-hero-sub">'+pct+'% of the puzzle pack solved</div></div>';
   var rows=[
     {icon:'⭐',label:'Perfect Solves',sub:'finished in minimum moves',value:perfect},
@@ -4056,7 +4067,8 @@ function renderMissionsExtras(){
     {icon:'🥉',label:'First 10',unlock:10},
     {icon:'🥈',label:'50 Solved',unlock:50},
     {icon:'🥇',label:'100 Solved',unlock:100},
-    {icon:'🏆',label:'All 150',unlock:150},
+    {icon:'💎',label:'250 Solved',unlock:250},
+    {icon:'🏆',label:'All 500',unlock:500},
   ];
   var arow=document.getElementById('achievementsRow');
   if(arow){
@@ -4273,16 +4285,9 @@ function renderMissionsExtras(){
   };
 })();
 
-/* Wire missionProgress into level complete */
-(function(){
-  var origNextLevel=window.nextLevel;
-  if(typeof origNextLevel==='function'){
-    window.nextLevel=function(){
-      window.missionProgress&&window.missionProgress('levels',1);
-      origNextLevel.apply(this,arguments);
-    };
-  }
-})();
+/* Mission progress is fed by the growth CORE clear bus (every win, hint,
+   daily, perfect solve and move count) — the old nextLevel wrapper only
+   counted wins when the player tapped Next, and no other track moved. */
 </script>
 
 
@@ -4367,7 +4372,10 @@ var G = {
     if(typeof updateCoinDisplays==='function') updateCoinDisplays();
     else if(typeof updateUI==='function') updateUI();
   },
-  completed: function(){ var s=this.st(); if(!s) return 0; return (s.completedLevels||[]).length; },
+  // Counts real completions for both save shapes: arrays of ids/indices
+  // (Nonogram, PipeConnect family) and {index:true} maps (WaterSort, Unblock)
+  // — `.length` was undefined on maps, so "completed() < 5" gates misfired.
+  completed: function(){ var s=this.st(); if(!s) return 0; var c=s.completedLevels||[]; if(Array.isArray(c)) return c.filter(function(v){ return v!==false&&v!=null; }).length; var n=0; for(var k in c){ if(c[k]) n++; } return n; },
   currentLevel: function(){ var s=this.st(); return s?(s.currentLevel||1):1; },
   flag: function(k){ try{return localStorage.getItem(k);}catch(e){return null;} },
   setFlag: function(k,v){ try{localStorage.setItem(k,v);}catch(e){} }
@@ -5006,16 +5014,346 @@ window.addEventListener('load',function(){
 })();
 </script>
 
+<script data-growth-config>window.GROWTH_CFG={"app":"UnblockPuzzle","pkg":"com.pegasusgames.unblockpuzzle","name":"Unblock Puzzle","saveKey":"unblock_save","levelBase":1,"kind":"levels","totalLevels":500,"live":true,"booster":{"name":"Hint","emoji":"💡","coins":30}};</script>
+<!-- Growth shim — CORE (shared game adapter + clear-event bus). Idempotent: data-growth-shim="CORE".
+     Injected FIRST (before Part A). Every other growth shim reads/writes the
+     game through window.gGame instead of probing localStorage keys.
+
+     Why (audit 2026-10-03): Parts A/B/D/E/F/G probed the generic keys
+     ['save','state','gameState','progress'] — no shipping game uses any of
+     them — so the notification pre-prompt, Day-7 win-back coins, cross-promo
+     welcome bonus, streak shield, first-clear flow, share text and Play Games
+     score submission were all silently inert in every app. Worse, writing a
+     save blob behind the game's back is overwritten by the game's next save.
+     gGame mutates the LIVE in-memory state and persists via the game's own
+     save function, so grants stick and the HUD refreshes immediately.
+
+     Per-app facts live in window.GROWTH_CFG (a tiny per-app block injected
+     just before this shim): pkg, name, saveKey, levelBase (0 = currentLevel
+     is an index, 1 = currentLevel is the level number), kind ('levels' |
+     'score'), live (published on Play), booster {field, name, emoji, coins}.
+
+     Public API (window.gGame):
+       state()            live save object (falls back to the stored blob)
+       persist()/refresh()
+       coins() / addCoins(n[, toastMsg])
+       clears()           lifetime completed levels (score games: games played)
+       displayLevel()     the level number the Continue button resumes
+       best() / streak() / setStreak(n)
+       addBooster(n) / addLives(n) / addUnlimitedLives(minutes)
+       clear(info)        games call this on every win → emits 'clear'
+                          info: {level, stars, isNew, perfect, daily, moves,
+                          endless, tile (2048 milestone)}
+       emit('gameover', {score, daily}) / emit('hint') / emit('best')
+       on(evt, fn) / emit(evt, data)   (also feeds window.missionProgress)
+       adGateOk()         false during the first 3 lifetime clears
+       absenceDays        whole days since the previous session (0 = none)
+       toast(msg) / lang() / pkg / name / playLink / cfg
+-->
+<script data-growth-shim="CORE">
+(function(){
+  if (window.gGame) return;
+  var CFG = window.GROWTH_CFG || {};
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v = LS.getItem(k); return v == null ? d : v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { LS.setItem(k, v); } catch(e){} }
+  function safe(fn){ try { return fn(); } catch(e){} }
+
+  var KEYS = [CFG.saveKey, 'watersort_save', 'nonogram_state', 'puzzle2048_save',
+              'unblock_save', 'pipeconnect_save', 'afterimage_save', 'hunch_save',
+              'overlay_save', 'sokoban_save'].filter(Boolean);
+
+  // Top-level `let/const State|state|save` are global lexical bindings —
+  // visible here by name even though they are not window properties.
+  function live(){
+    try { if (typeof State !== 'undefined' && State && typeof State === 'object' && 'coins' in State) return State; } catch(e){}
+    try { if (typeof state !== 'undefined' && state && typeof state === 'object' && 'coins' in state) return state; } catch(e){}
+    try { if (typeof save !== 'undefined' && save && typeof save === 'object' && 'coins' in save) return save; } catch(e){}
+    return null;
+  }
+  function stored(){
+    for (var i = 0; i < KEYS.length; i++){
+      var raw = lsGet(KEYS[i], null);
+      if (!raw) continue;
+      try { var o = JSON.parse(raw); if (o && typeof o === 'object') return { key: KEYS[i], obj: (o.state && typeof o.state === 'object') ? o.state : o }; } catch(e){}
+    }
+    return null;
+  }
+  function st(){ var s = live(); if (s) return s; var d = stored(); return d ? d.obj : {}; }
+
+  function persist(){
+    if (live()){
+      try { if (typeof State !== 'undefined' && State && typeof State.save === 'function'){ State.save(); return; } } catch(e){}
+      if (typeof window.saveState === 'function'){ safe(function(){ window.saveState(); }); return; }
+      if (typeof window.persist === 'function'){ safe(function(){ window.persist(); }); return; }
+    }
+    var d = stored(); if (d) lsSet(d.key, JSON.stringify(d.obj));
+  }
+  function refresh(){
+    var fns = ['updateCoinDisplays', 'updateAllUI', 'updateHUD', 'updateUI'];
+    for (var i = 0; i < fns.length; i++){
+      if (typeof window[fns[i]] === 'function'){ safe(function(){ window[fns[i]](); }); break; }
+    }
+    try { if (typeof Game !== 'undefined' && Game && typeof Game.updateUI === 'function') Game.updateUI(); } catch(e){}
+    safe(function(){ if (typeof window.__growthMenuRefresh === 'function') window.__growthMenuRefresh(); });
+    emit('refresh', {});
+  }
+  function mutate(fn){
+    var s = live();
+    if (s){ fn(s); persist(); refresh(); return true; }
+    var d = stored();
+    if (d){ fn(d.obj); lsSet(d.key, JSON.stringify(d.obj)); return true; }
+    return false;
+  }
+
+  function countDone(v){
+    if (Array.isArray(v)){
+      var n = 0;
+      for (var i = 0; i < v.length; i++){ var x = v[i]; if (x === true || typeof x === 'number' || (typeof x === 'string' && x)) n++; }
+      return n;
+    }
+    if (v && typeof v === 'object'){ var m = 0; for (var k in v){ if (v[k]) m++; } return m; }
+    return 0;
+  }
+
+  var subs = {};
+  function on(evt, fn){ (subs[evt] = subs[evt] || []).push(fn); }
+  function emit(evt, data){
+    var l = subs[evt] || [];
+    for (var i = 0; i < l.length; i++){ (function(f){ safe(function(){ f(data || {}); }); })(l[i]); }
+  }
+
+  function toast(msg){
+    if (typeof window.showToast === 'function'){ safe(function(){ window.showToast(msg); }); return; }
+    if (typeof window.xToast === 'function'){ safe(function(){ window.xToast(msg); }); return; }
+    if (typeof window.toast === 'function'){ safe(function(){ window.toast(msg); }); return; }
+    var t = document.createElement('div');
+    t.textContent = msg;
+    t.style.cssText = 'position:fixed;left:50%;bottom:18%;transform:translateX(-50%);max-width:86vw;' +
+      'background:var(--surface, var(--bg, #161b22));color:var(--text, #e6edf3);border:1px solid var(--border, rgba(127,127,127,0.3));' +
+      'border-radius:14px;padding:10px 16px;font-weight:700;font-size:0.92rem;text-align:center;' +
+      'box-shadow:0 8px 28px rgba(0,0,0,0.28);z-index:var(--z-toast, 300);font-family:inherit;pointer-events:none;';
+    document.body.appendChild(t);
+    setTimeout(function(){ t.remove(); }, 2400);
+  }
+
+  // ── lifetime clear counter (drives the first-3-clears ad grace + E) ──
+  var TOTAL_KEY = '_growthClearsTotal';
+  function total(){ return parseInt(lsGet(TOTAL_KEY, '0'), 10) || 0; }
+  function clears(){
+    var s = st();
+    if (CFG.kind === 'score') return (s.gamesPlayed | 0);
+    return countDone(s.completedLevels || s.completed);
+  }
+  var lastCount = -1, lastExplicit = 0;
+  function clear(info){
+    info = info || {};
+    lastExplicit = Date.now();
+    lsSet(TOTAL_KEY, String(total() + 1));
+    lastCount = clears();
+    info.total = total();
+    emit('clear', info);
+  }
+  // Fallback detector for any win path a game forgot to report: a rise in
+  // the completed-level count with no explicit clear() in the last 4 s.
+  setInterval(function(){
+    if (CFG.kind === 'score') return;
+    var c = clears();
+    if (lastCount < 0){ lastCount = c; return; }
+    if (c > lastCount){
+      var jump = c - lastCount; lastCount = c;
+      if (Date.now() - lastExplicit > 4000 && jump <= 3){
+        lsSet(TOTAL_KEY, String(total() + 1));
+        emit('clear', { inferred: true, isNew: true, total: total() });
+      }
+    }
+  }, 1500);
+
+  // ── session clock: how long was the player away? ──
+  var SEEN_KEY = '_gLastSeenAt';
+  var prevSeen = parseInt(lsGet(SEEN_KEY, '0'), 10) || 0;
+  var absenceDays = prevSeen ? Math.floor((Date.now() - prevSeen) / 86400000) : 0;
+  function stamp(){ lsSet(SEEN_KEY, String(Date.now())); }
+  stamp();
+  setInterval(function(){ if (document.visibilityState !== 'hidden') stamp(); }, 60000);
+  document.addEventListener('visibilitychange', function(){ stamp(); });
+
+  function streakField(s){
+    var ks = ['dailyChallengeStreak', 'loginStreak', 'streak'];
+    for (var i = 0; i < ks.length; i++){ if (typeof s[ks[i]] === 'number') return ks[i]; }
+    return 'dailyChallengeStreak';
+  }
+
+  var G = {
+    cfg: CFG,
+    pkg: CFG.pkg || '',
+    name: CFG.name || document.title || 'Pegasus Games',
+    playLink: (CFG.live && CFG.pkg) ? 'https://play.google.com/store/apps/details?id=' + CFG.pkg : '',
+    absenceDays: absenceDays,
+    state: st,
+    live: live,
+    persist: persist,
+    refresh: refresh,
+    on: on,
+    emit: emit,
+    toast: toast,
+    clear: clear,
+    clears: clears,
+    totalClears: total,
+    coins: function(){ var s = st(); return typeof s.coins === 'number' ? s.coins : (typeof s.currency === 'number' ? s.currency : 0); },
+    addCoins: function(n, msg){
+      n = n | 0; if (!n) return false;
+      var ok = mutate(function(s){ s.coins = Math.max(0, (s.coins | 0) + n); });
+      if (ok && msg) toast(msg);
+      if (ok) emit('coins', { delta: n });
+      return ok;
+    },
+    spendCoins: function(n){
+      n = n | 0; if (G.coins() < n) return false;
+      return mutate(function(s){ s.coins = (s.coins | 0) - n; });
+    },
+    // Mirrors what every game's Continue button loads: save.currentLevel
+    // (index or number per GROWTH_CFG.levelBase). lastLevelProgress.level is
+    // NOT used — its meaning differs per game (index in some, number in others).
+    displayLevel: function(){
+      if (typeof window.gContinueLevel === 'function'){ var o = safe(window.gContinueLevel); if (o > 0) return o | 0; }
+      var s = st();
+      var cur = (typeof s.currentLevel === 'number') ? s.currentLevel : 0;
+      var n = (CFG.levelBase === 0) ? cur + 1 : cur;
+      return Math.max(1, n | 0);
+    },
+    best: function(){ var s = st(); return (s.bestScore || s.highScore || 0) | 0; },
+    streak: function(){ var s = st(); return (s[streakField(s)] | 0); },
+    setStreak: function(n){ return mutate(function(s){ s[streakField(s)] = n | 0; }); },
+    addBooster: function(n){
+      var b = CFG.booster || {};
+      if (b.field){ return mutate(function(s){ s[b.field] = (s[b.field] | 0) + n; }); }
+      return G.addCoins((b.coins || 25) * n);
+    },
+    addLives: function(n){
+      return mutate(function(s){ var mx = s.maxLives || 5; s.lives = Math.min(mx, (s.lives | 0) + n); });
+    },
+    addUnlimitedLives: function(minutes){
+      return mutate(function(s){
+        var f = ('unlimitedLivesUntil' in s) ? 'unlimitedLivesUntil' : 'unlimitedLivesExpiry';
+        var base = Math.max(Date.now(), s[f] || 0);
+        s[f] = base + minutes * 60000;
+        s.lives = s.maxLives || 5;
+      });
+    },
+    adGateOk: function(){ return total() >= 3 || clears() >= 3; },
+    isPremium: function(){
+      try { if (typeof isPremium === 'function') return !!isPremium(); } catch(e){}
+      var s = st(); var now = Date.now();
+      return !!((s.seasonPassUntil && now < s.seasonPassUntil) || s.seasonPassForever || (s.weeklyPassUntil && now < s.weeklyPassUntil));
+    },
+    adsRemoved: function(){
+      try { if (typeof adsRemoved === 'function') return !!adsRemoved(); } catch(e){}
+      var s = st(); return !!s.removeAds || G.isPremium();
+    },
+    lang: function(){
+      try { if (window.i18n && typeof window.i18n.getLang === 'function') return window.i18n.getLang() || 'en'; } catch(e){}
+      return 'en';
+    }
+  };
+  // ── Daily-missions bridge. Games that define window.missionProgress(track,
+  // amount) (P2048, Unblock, PipeConnect family) never called it — their
+  // Missions screens sat at 0/3 forever (audit 2026-10-03). Every mission
+  // track is now fed from the clear bus + 'gameover' + 'hint' events.
+  function mp(track, n){ if (typeof window.missionProgress === 'function' && n > 0) safe(function(){ window.missionProgress(track, n); }); }
+  on('clear', function(d){
+    if (CFG.kind === 'score'){ if (d.tile === 128) mp('tile128', 1); return; }
+    if (d.endless) return;
+    mp('levels', 1);
+    if (d.perfect) mp('perfect', 1);
+    if (d.daily) mp('daily', 1);
+    if ((d.stars | 0) >= 2) mp('fill', 1);
+    if (d.moves) mp('moves', d.moves | 0);
+  });
+  on('gameover', function(d){
+    mp('levels', 1);
+    mp('score', d.score | 0);
+    if (d.daily) mp('daily', 1);
+  });
+  on('hint', function(){ mp('hint', 1); });
+
+  // ── Popup choreography guard (CLAUDE.md: first-launch popups QUEUE, never
+  // stack). Unsolicited modals — login ladder, starter pack, theme-unlock
+  // card, legacy streak overlay and every growth card — are shown one at a
+  // time: a newcomer that appears while another is up is hidden and released
+  // in arrival order once the screen is clear. User-opened sheets (Ranks,
+  // Shield) and gameplay overlays are never touched.
+  var POPUP_IDS = ['starterPackModal', 'xLoginPanel', 'xThemeUnlockCard', 'xThemeCard', 'ls-overlay'];
+  var held = [];
+  function isPopup(el){
+    return !!(el && el.nodeType === 1 && (POPUP_IDS.indexOf(el.id) >= 0 || el.hasAttribute('data-growth-card')));
+  }
+  function shownPopup(el){
+    if (!el || !el.isConnected || el.__gHeld) return false;
+    var cs = getComputedStyle(el);
+    return cs.display !== 'none' && cs.visibility !== 'hidden' && parseFloat(cs.opacity || '1') > 0.01;
+  }
+  function popups(){
+    var out = [];
+    POPUP_IDS.forEach(function(id){ var e = document.getElementById(id); if (e) out.push(e); });
+    var cards = document.querySelectorAll('[data-growth-card]');
+    for (var i = 0; i < cards.length; i++) out.push(cards[i]);
+    return out;
+  }
+  var owner = null;
+  function arbitrate(){
+    if (owner && !shownPopup(owner)) owner = null;
+    var vis = popups().filter(shownPopup);
+    if (!owner && vis.length) owner = vis[0];
+    vis.forEach(function(el){
+      if (el === owner) return;
+      el.__gHeld = { display: el.style.getPropertyValue('display'), prio: el.style.getPropertyPriority('display') };
+      el.style.setProperty('display', 'none', 'important');
+      held.push(el);
+    });
+    if (!owner && held.length){
+      var nx = held.shift();
+      var h = nx.__gHeld; nx.__gHeld = null;
+      if (!nx.isConnected) { setTimeout(arbitrate, 0); return; }
+      if (h && h.display && h.display !== 'none') nx.style.setProperty('display', h.display, h.prio);
+      else nx.style.removeProperty('display');
+      owner = nx;
+    }
+  }
+  var arbQueued = false;
+  function soon(){ if (arbQueued) return; arbQueued = true; setTimeout(function(){ arbQueued = false; arbitrate(); }, 250); }
+  var attrObs = new MutationObserver(soon);
+  function watch(el){ if (el.__gWatched) return; el.__gWatched = true; attrObs.observe(el, { attributes: true, attributeFilter: ['style', 'class'] }); }
+  function scanWatch(){ popups().forEach(watch); soon(); }
+  if (document.body) new MutationObserver(function(muts){
+    var hit = false;
+    for (var i = 0; i < muts.length && !hit; i++){
+      var m = muts[i];
+      for (var j = 0; j < m.addedNodes.length; j++){ if (isPopup(m.addedNodes[j])) { watch(m.addedNodes[j]); hit = true; } }
+      if (m.removedNodes.length) hit = true;
+    }
+    if (hit) soon();
+  }).observe(document.body, { childList: true });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scanWatch); else scanWatch();
+  setTimeout(scanWatch, 1500);
+
+  window.gGame = G;
+  // Legacy name used by a few games' win paths.
+  if (typeof window.gEmitClear !== 'function') window.gEmitClear = function(info){ G.clear(info); };
+})();
+</script>
 <!-- Growth shim — Part A (notifications). Idempotent: keyed by data-growth-shim="A".
      Appended to game.html in WaterSort / Nonogram / Puzzle2048 / UnblockPuzzle.
      Behaviorally wires notifications without touching each app's clear/win code:
        - On app open + visibilitychange: cancelAllNotifications then reschedule
          the win-back chain (d3/d7/d14/d30), the daily reminder at the user's
          rolling-average play hour, and the streak-at-risk ping (if streak ≥ 3).
-       - First level cleared (detected via localStorage save inspection) →
-         single-shot permission pre-prompt + schedule.
-       - On Day-7 win-back fire: pendingWinBackReward flag set; granted as 100
-         coins on next open.
+       - First level cleared (CORE 'clear' event) → themed in-app pre-prompt
+         (max 2 asks, 3-day cooldown) → system permission dialog.
+       - Day-7 win-back: 100 coins paid on the first open after a real ≥7-day
+         absence (gGame.absenceDays), with a welcome-back card.
+       - Reads/writes go through window.gGame (CORE shim) — never a guessed
+         localStorage key.
        - Settings panel: a "🔔 Notifications" toggle row appended at runtime
          (DOM scan; covers every per-app Settings markup variant).
        - Exposed for per-app integration when game logic wants to opt in:
@@ -5050,55 +5388,63 @@ window.addEventListener('load',function(){
     return (isNaN(h) || h<0 || h>23) ? 19 : h;
   }
 
-  // ── 2. Win-back coin pickup (Day 7).
+  // ── 2. Win-back coin pickup (Day 7). Paid only when the player really
+  // was away ≥7 days (gGame.absenceDays, measured from the last foreground
+  // stamp) — the Day-7 push promises exactly this. Once per absence.
+  // (Audit 2026-10-03: previously flagged "pending" on EVERY open and then
+  // credited a save key no game uses, so the promise was never kept.)
   function grantPendingWinBack(){
-    if (lsGet('pendingWinBackReward','0') !== '1') return;
-    lsSet('pendingWinBackReward','0');
-    // Try the conventional save shapes (WaterSort: state, Nonogram/UB: save).
-    var keys = ['save','state','gameState','progress'];
-    for (var i=0;i<keys.length;i++){
-      var raw = lsGet(keys[i], null);
-      if (!raw) continue;
-      try {
-        var o = JSON.parse(raw);
-        if (typeof o.coins === 'number') {
-          o.coins += 100;
-          lsSet(keys[i], JSON.stringify(o));
-          if (window.showToast) safe(function(){ showToast('🎁 Welcome back! +100 coins'); });
-          break;
-        }
-      } catch(e){}
-    }
+    var G = window.gGame; if (!G) return;
+    if (G.absenceDays < 7) return;
+    var stampKey = '_winBackPaidFor';
+    var token = String(Math.floor(Date.now() / 86400000));
+    if (lsGet(stampKey, '') === token) return;
+    lsSet(stampKey, token);
+    lsSet('pendingWinBackReward', '0');
+    var pay = function(done){
+      G.addCoins(100);
+      showCard('🎁', 'Welcome back!', 'We saved your progress. Here are 100 🪙 to jump back in.', 'Collect +100 🪙', done);
+    };
+    if (window.gPopupQueue) window.gPopupQueue.enqueue(pay); else pay(function(){});
   }
 
-  // ── 3. Streak read — common keys across games.
+  // Shared themed card (token colours only) — used for the welcome-back gift
+  // and the notification pre-prompt. Returns via done() when dismissed.
+  function showCard(emoji, title, body, cta, done, secondary){
+    var bg = document.createElement('div');
+    bg.setAttribute('data-growth-card', '1');
+    bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:var(--z-modal, 700);font-family:inherit;';
+    bg.innerHTML =
+      '<div style="background:var(--surface, var(--bg, #ffffff));color:var(--text, #1e3a5f);border:1px solid var(--border, rgba(127,127,127,0.25));border-radius:20px;padding:24px 22px 18px;width:86%;max-width:340px;text-align:center;box-shadow:0 14px 44px rgba(0,0,0,0.35);">' +
+        '<div style="font-size:44px;line-height:1;margin-bottom:10px;">' + emoji + '</div>' +
+        '<div style="font-size:1.25rem;font-weight:800;margin-bottom:6px;">' + title + '</div>' +
+        '<div style="font-size:0.95rem;color:var(--text-mute, var(--text-muted, inherit));margin-bottom:16px;line-height:1.4;">' + body + '</div>' +
+        '<button data-card-ok type="button" style="display:block;width:100%;border:none;padding:13px;border-radius:14px;background:var(--g-play, var(--accent, #3b6db8));color:var(--on-accent, #fff);font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;">' + cta + '</button>' +
+        (secondary ? '<button data-card-no type="button" style="display:block;width:100%;margin-top:8px;border:none;background:transparent;color:var(--text-mute, var(--text-muted, inherit));padding:8px;font-weight:700;cursor:pointer;font-family:inherit;">' + secondary + '</button>' : '') +
+      '</div>';
+    document.body.appendChild(bg);
+    var closed = false;
+    function close(ok){ if (closed) return; closed = true; bg.remove(); try { done(ok); } catch(e){} }
+    bg.querySelector('[data-card-ok]').addEventListener('click', function(){ close(true); });
+    var no = bg.querySelector('[data-card-no]'); if (no) no.addEventListener('click', function(){ close(false); });
+    bg.addEventListener('click', function(ev){ if (ev.target === bg) close(false); });
+  }
+
+  // ── 3. Streak read — the game's own daily streak via gGame.
   function readStreak(){
-    var k = ['dailyChallengeStreak','loginStreak','streak'];
-    for (var i=0;i<k.length;i++){
-      var v = parseInt(lsGet(k[i],'0'),10);
-      if (!isNaN(v) && v>0) return v;
-    }
-    return 0;
+    var G = window.gGame;
+    return G ? G.streak() : 0;
   }
 
   // ── 4. First-clear detection — used to gate the permission pre-prompt.
   function hasClearedFirstLevel(){
-    var keys = ['save','state','gameState','progress'];
-    for (var i=0;i<keys.length;i++){
-      var raw = lsGet(keys[i], null);
-      if (!raw) continue;
-      try {
-        var o = JSON.parse(raw);
-        // completedLevels array, currentLevel > 0, or stars object — any wins.
-        if (Array.isArray(o.completedLevels) && o.completedLevels.length > 0) return true;
-        if (typeof o.currentLevel === 'number' && o.currentLevel > 0) return true;
-        if (typeof o.levelsCompleted === 'number' && o.levelsCompleted > 0) return true;
-        if (o.levelStars && Object.keys(o.levelStars).length > 0) return true;
-      } catch(e){}
-    }
-    return false;
+    var G = window.gGame; if (!G) return false;
+    return G.totalClears() > 0 || G.clears() > 0;
   }
 
+  // Soft pre-prompt (QUALITY_PLAYBOOK §11.1): an in-app themed card AFTER a
+  // positive moment, never the raw system dialog cold. "Not now" re-asks once
+  // after 3 days; at most 2 asks per install. Queued so it never stacks.
   function maybeAskNotifPerm(){
     if (lsGet('notifPrePromptShown','0') === '1') return;
     if (!hasClearedFirstLevel()) return;
@@ -5107,15 +5453,26 @@ window.addEventListener('load',function(){
       lsSet('notifPrePromptShown','1');
       return;
     }
-    // Soft pre-prompt — confirm() respects the user; if they say no, we don't
-    // hit the system dialog at all.
-    var ok = false;
-    try { ok = window.confirm("Get a daily reminder so you don't miss your streak?"); }
-    catch(e){ ok = false; }
-    lsSet('notifPrePromptShown','1');
-    if (ok && api('requestNotificationPermission')) {
-      safe(function(){ Android.requestNotificationPermission(); });
-    }
+    var asks = parseInt(lsGet('notifPrePromptAsks','0'),10) || 0;
+    var lastAt = parseInt(lsGet('notifPrePromptAt','0'),10) || 0;
+    if (asks >= 2) { lsSet('notifPrePromptShown','1'); return; }
+    if (lastAt && Date.now() - lastAt < 3 * 86400000) return;
+    if (window.__notifAskQueued) return;
+    window.__notifAskQueued = true;
+    var ask = function(done){
+      lsSet('notifPrePromptAsks', String(asks + 1));
+      lsSet('notifPrePromptAt', String(Date.now()));
+      showCard('🔔', 'Never lose your streak', 'Get one friendly reminder a day, plus a heads-up before your streak or an event ends.', 'Turn on reminders', function(ok){
+        window.__notifAskQueued = false;
+        if (ok) {
+          lsSet('notifPrePromptShown','1');
+          if (api('setNotificationsEnabled')) safe(function(){ Android.setNotificationsEnabled(true); });
+          if (api('requestNotificationPermission')) safe(function(){ Android.requestNotificationPermission(); });
+        }
+        done();
+      }, 'Not now');
+    };
+    if (window.gPopupQueue) window.gPopupQueue.enqueue(ask); else ask(function(){});
   }
 
   // Round-15: auto-schedule a "lives are full" ping by reading the
@@ -5123,30 +5480,17 @@ window.addEventListener('load',function(){
   // { lives, maxLives (default 5), lastLifeTime }. Per-app save keys
   // differ, so probe the known set.
   function scheduleLivesIfBelowMax(){
-    if (!api('scheduleLivesRefilled')) return;
-    var SAVE_KEYS = [
-      'unblock_save','watersort_save','puzzle2048_save','nonogram_state',
-      'pipeconnect_save','afterimage_save','overlay_save','hunch_save','save','state','gameState','progress'
-    ];
+    if (!api('scheduleLivesRefilled') || !window.gGame) return;
     var REGEN_MS = 30 * 60 * 1000; // every shipping game uses 30 min
-    for (var i=0;i<SAVE_KEYS.length;i++){
-      var raw = lsGet(SAVE_KEYS[i], null);
-      if (!raw) continue;
-      try {
-        var s = JSON.parse(raw);
-        var inner = (s && s.state) ? s.state : s;
-        var lives    = (inner.lives != null)    ? inner.lives    : null;
-        var maxLives = (inner.maxLives != null) ? inner.maxLives : 5;
-        var lastLife = inner.lastLifeTime || inner.lastLifeMs || inner.lifeRegenAt || 0;
-        if (lives == null || lastLife <= 0) continue;
-        if (lives >= maxLives) return; // already full, nothing to schedule
-        var needed = maxLives - lives;
-        var refillAt = lastLife + needed * REGEN_MS;
-        if (refillAt <= Date.now()) return; // would've already refilled
-        safe(function(){ Android.scheduleLivesRefilled(refillAt); });
-        return;
-      } catch(e){}
-    }
+    var inner = window.gGame.state();
+    var lives    = (inner.lives != null)    ? inner.lives    : null;
+    var maxLives = (inner.maxLives != null) ? inner.maxLives : 5;
+    var lastLife = inner.lastLifeTime || inner.lastLifeMs || inner.lifeRegenAt || 0;
+    if (lives == null || lastLife <= 0) return;
+    if (lives >= maxLives) return; // already full, nothing to schedule
+    var refillAt = lastLife + (maxLives - lives) * REGEN_MS;
+    if (refillAt <= Date.now()) return; // would've already refilled
+    safe(function(){ Android.scheduleLivesRefilled(refillAt); });
   }
 
   // ── 5. Reschedule the full chain.
@@ -5156,12 +5500,11 @@ window.addEventListener('load',function(){
     safe(function(){ Android.cancelAllNotifications(); });
     if (api('scheduleDailyReminder')) safe(function(){ Android.scheduleDailyReminder(getPlayHour(), 0); });
     if (api('scheduleWinBack')) {
-      safe(function(){ Android.scheduleWinBack(3,  "Your puzzles miss you", "Pick up right where you left off."); });
+      var d3 = (window.gEvents && typeof window.gEvents.winBackLine === 'function') ? window.gEvents.winBackLine(3) : null;
+      safe(function(){ Android.scheduleWinBack(3,  d3 ? d3.title : "Your puzzles miss you", d3 ? d3.body : "Pick up right where you left off."); });
       safe(function(){ Android.scheduleWinBack(7,  "Come back for 100 coins", "A welcome-back gift is waiting."); });
       safe(function(){ Android.scheduleWinBack(14, "New themes await", "Unlocks are ready to claim."); });
       safe(function(){ Android.scheduleWinBack(30, "We saved everything", "Your progress and streak shield are still here."); });
-      // Mark the Day-7 reward as pending so the next-open path will pay out 100c.
-      lsSet('pendingWinBackReward','1');
     }
     // Round-15: schedule streak-at-risk from day 1+ (was day 3+). Even
     // a one-day streak is worth not losing — and reward keeps growing
@@ -5253,11 +5596,18 @@ window.addEventListener('load',function(){
   window.gScheduleLivesRefilled = function(refillAtMillis){
     if (api('scheduleLivesRefilled')) safe(function(){ Android.scheduleLivesRefilled(refillAtMillis); });
   };
-  window.gOnAnyClear = function(){
-    recordPlayHour();
-    maybeAskNotifPerm();
-    rescheduleAll();
+  // Legacy hook some win paths still call — forwards to the CORE clear bus
+  // (which fires the 'clear' subscribers below exactly once).
+  window.gOnAnyClear = function(info){
+    if (window.gGame) window.gGame.clear(info || { legacy: true });
   };
+  function onClear(){
+    recordPlayHour();
+    // Let the win overlay breathe before asking.
+    setTimeout(maybeAskNotifPerm, 2200);
+    rescheduleAll();
+  }
+  (function withCore(){ if (window.gGame) window.gGame.on('clear', onClear); else setTimeout(withCore, 50); })();
   window.gOnDailyDone = function(){
     recordPlayHour();
     rescheduleAll();
@@ -5308,19 +5658,19 @@ window.addEventListener('load',function(){
   setInterval(injectNotifToggle, 1500);
 
   // ── 8. Boot path: schedule on first load + on every return-to-foreground.
-  function onAppOpen(){
-    grantPendingWinBack();
+  function onAppOpen(first){
+    if (first) grantPendingWinBack();
     recordPlayHour();
-    maybeAskNotifPerm();
+    if (first) setTimeout(maybeAskNotifPerm, 4000);
     rescheduleAll();
   }
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function(){ setTimeout(onAppOpen, 400); });
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(function(){ onAppOpen(true); }, 400); });
   } else {
-    setTimeout(onAppOpen, 400);
+    setTimeout(function(){ onAppOpen(true); }, 400);
   }
   document.addEventListener('visibilitychange', function(){
-    if (document.visibilityState === 'visible') setTimeout(onAppOpen, 200);
+    if (document.visibilityState === 'visible') setTimeout(function(){ onAppOpen(false); }, 200);
   });
 })();
 </script>
@@ -5350,9 +5700,9 @@ window.addEventListener('load',function(){
   function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
   function safe(fn){ try { return fn(); } catch(e){} }
 
-  // PROMO_TARGETS — per the 2026-05-25 growth spec. UnblockPuzzle + PipeConnect
-  // are explicitly EXCLUDED as targets (pre-release). When either ships, edit
-  // the matching entry's TODO line in this file and uncomment.
+  // PROMO_TARGETS — LIVE portfolio apps only (CLAUDE.md: pre-release apps
+  // are never cross-promo targets). When a pre-release app goes live, add
+  // it here AND to each app's CROSS_PROMO_PACKAGES / <queries>.
   var ALL_PROMO = [
     { pkg:'com.pegasusgames.watersortpuzzle', name:'Water Sort Puzzle',
       tagline:'Pour colors to sort. Calm puzzle bliss.' },
@@ -5362,28 +5712,17 @@ window.addEventListener('load',function(){
       tagline:'Merge tiles. Hit 2048 and beyond.' },
     { pkg:'com.pegasusgames.unblockpuzzle',   name:'Unblock Puzzle',
       tagline:'Slide blocks to clear the red one.' },
-    // TODO post-release: add PipeConnect once it has a Play link:
-    //   { pkg:'com.pegasusgames.pipeconnect', name:'Pipe Connect',
-    //     tagline:'Route every pipe. Fill every grid.' },
   ];
 
   function currentPkg(){
+    if (window.gGame && window.gGame.pkg) return window.gGame.pkg;
     var meta = document.querySelector('meta[name="app-package"]');
-    if (meta) return meta.content;
-    // Fall back to a heuristic — title text or hardcoded.
-    var t = (document.title||'').toLowerCase();
-    if (t.indexOf('water') >= 0) return 'com.pegasusgames.watersortpuzzle';
-    if (t.indexOf('nonogram') >= 0) return 'com.pegasusgames.nonogram';
-    if (t.indexOf('2048') >= 0) return 'com.pegasusgames.puzzle2048';
-    if (t.indexOf('unblock') >= 0) return 'com.pegasusgames.unblockpuzzle';
-    if (t.indexOf('pipe') >= 0) return 'com.pegasusgames.pipeconnect';
-    if (t.indexOf('afterimage') >= 0) return 'com.pegasusgames.afterimage';
-    if (t.indexOf('overlay') >= 0) return 'com.pegasusgames.overlay';
-    if (t.indexOf('hunch') >= 0) return 'com.pegasusgames.hunch';
-    return '';
+    return meta ? meta.content : '';
   }
   var CUR = currentPkg();
   var TARGETS = ALL_PROMO.filter(function(g){ return g.pkg !== CUR; });
+  // Never promote a game the player already has.
+  function notInstalled(t){ try { return !(api('isAppInstalled') && window.Android.isAppInstalled(t.pkg)); } catch(e){ return true; } }
   window._GROWTH_PROMO_TARGETS = TARGETS;
 
   // ── 1. Welcome bonus on first launch if any sibling app is installed.
@@ -5397,48 +5736,32 @@ window.addEventListener('load',function(){
       catch(e){}
     }
     if (!sourceName) return;
+    if (!window.gGame) return;
     lsSet('welcomeBonusClaimed','1');
-    // Try to credit common save shapes with +100 coins.
-    var keys = ['save','state','gameState','progress'];
-    for (var j=0;j<keys.length;j++){
-      var raw = lsGet(keys[j],null);
-      if (!raw) continue;
-      try {
-        var o = JSON.parse(raw);
-        if (typeof o.coins === 'number') {
-          o.coins += 100;
-          lsSet(keys[j], JSON.stringify(o));
-          if (window.showToast) safe(function(){ showToast('Welcome from Pegasus Games — +100 🪙'); });
-          else alert('Welcome from Pegasus Games — +100 coins from ' + sourceName + '!');
-          return;
-        }
-      } catch(e){}
-    }
+    var src = sourceName;
+    var pay = function(done){
+      window.gGame.addCoins(100);
+      var bg = document.createElement('div');
+      bg.setAttribute('data-growth-card', '1');
+      bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:var(--z-modal, 700);font-family:inherit;';
+      bg.innerHTML = '<div style="background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border-radius:20px;padding:24px 22px 18px;width:86%;max-width:340px;text-align:center;box-shadow:0 14px 44px rgba(0,0,0,0.35);">' +
+        '<div style="font-size:44px;line-height:1;margin-bottom:10px;">🤝</div>' +
+        '<div style="font-size:1.2rem;font-weight:800;margin-bottom:6px;">Welcome, ' + src + ' player!</div>' +
+        '<div style="font-size:0.95rem;color:var(--text-mute, inherit);margin-bottom:16px;">A thank-you from Pegasus Games: +100 🪙 to start.</div>' +
+        '<button type="button" style="display:block;width:100%;border:none;padding:13px;border-radius:14px;background:var(--g-play, #3b6db8);color:var(--on-accent, #fff);font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;">Collect +100 🪙</button></div>';
+      document.body.appendChild(bg);
+      bg.querySelector('button').addEventListener('click', function(){ bg.remove(); done(); });
+    };
+    if (window.gPopupQueue) window.gPopupQueue.enqueue(pay); else pay(function(){});
   }
 
-  // ── 2. Clear-count tracker — polls save state, fires on every increment.
-  var lastSeenClears = -1;
-  function readClearCount(){
-    var keys = ['save','state','gameState','progress'];
-    for (var i=0;i<keys.length;i++){
-      var raw = lsGet(keys[i],null);
-      if (!raw) continue;
-      try {
-        var o = JSON.parse(raw);
-        if (Array.isArray(o.completedLevels)) return o.completedLevels.length;
-        if (typeof o.levelsCompleted === 'number') return o.levelsCompleted;
-        if (typeof o.totalSolves === 'number') return o.totalSolves;
-        if (typeof o.currentLevel === 'number') return o.currentLevel;
-      } catch(e){}
-    }
-    return null;
-  }
-
+  // ── 2. Clear counter — CORE 'clear' events (new + replayed wins).
   function pickPromoTarget(){
-    if (!TARGETS.length) return null;
+    var pool = TARGETS.filter(notInstalled);
+    if (!pool.length) return null;
     var idx = parseInt(lsGet('_crossPromoIdx','0'),10) || 0;
-    var t = TARGETS[idx % TARGETS.length];
-    lsSet('_crossPromoIdx', String((idx + 1) % TARGETS.length));
+    var t = pool[idx % pool.length];
+    lsSet('_crossPromoIdx', String((idx + 1) % pool.length));
     return t;
   }
 
@@ -5446,8 +5769,9 @@ window.addEventListener('load',function(){
   function buildPromoCard(target){
     var bg = document.createElement('div');
     bg.setAttribute('data-growth-promo-card','1');
+    bg.setAttribute('data-growth-card','1');
     bg.style.cssText =
-      'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
+      'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:var(--z-modal, 700);font-family:inherit;';
     var card = document.createElement('div');
     card.style.cssText =
       'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border-radius:18px;padding:22px 22px 18px;width:88%;max-width:340px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
@@ -5498,25 +5822,19 @@ window.addEventListener('load',function(){
     lsSet('lastCrossPromoShownSession', sessionId);
   }
 
-  // ── 4. Poll for clear-count increments — fires the break-point card on
-  // every N=5 clears (cumulative). Cheap: 1.5s poll, no DOM mutation needed.
-  setInterval(function(){
-    var c = readClearCount();
-    if (c == null) return;
-    if (lastSeenClears < 0) { lastSeenClears = c; return; }
-    if (c > lastSeenClears) {
-      var deltas = c - lastSeenClears;
-      lastSeenClears = c;
-      // Use a stored "since-last-promo" counter — robust to multi-clear jumps.
-      var since = parseInt(lsGet('_crossPromoSinceLast','0'),10) || 0;
-      since += deltas;
-      if (since >= 5) {
-        since = 0;
-        maybeShowBreakPointPromo();
-      }
-      lsSet('_crossPromoSinceLast', String(since));
+  // ── 4. Every 5th clear (cumulative) → break-point card, via the popup queue.
+  function onClear(){
+    var since = (parseInt(lsGet('_crossPromoSinceLast','0'),10) || 0) + 1;
+    if (since >= 5) {
+      since = 0;
+      setTimeout(function(){
+        if (window.gPopupQueue) window.gPopupQueue.enqueueWithSelector('[data-growth-promo-card]', maybeShowBreakPointPromo);
+        else maybeShowBreakPointPromo();
+      }, 2600);
     }
-  }, 1500);
+    lsSet('_crossPromoSinceLast', String(since));
+  }
+  (function withCore(){ if (window.gGame) window.gGame.on('clear', onClear); else setTimeout(withCore, 50); })();
 
   // ── 5. Session bookkeeping — bump on visibility-change so we don't loop on
   // a single foreground.
@@ -5542,10 +5860,11 @@ window.addEventListener('load',function(){
 
      BEHAVIORAL HALF ONLY (2026-05-27 consolidation, see CLAUDE.md
      "No competing runtime shims"):
-       - state._streakFreezes (default 1). If the app's streak counter drops
-         from N>0 to 0 and exactly 1 day has elapsed since the last seen N,
-         consume a freeze and restore the streak.
-       - Refill 1 free freeze every 7 days of maintained streak.
+       - _streakFreezes (default 1, cap 3). Games reset the daily streak to 1
+         on the first completion after a miss; when that happens after
+         exactly ONE missed day, a shield is spent and the streak restored.
+       - Refill 1 free shield at every 7 days of maintained streak.
+       - All state reads/writes go through window.gGame (CORE shim).
 
      The menu-render half (chips + buy-shield button + next-milestone label)
      lives in the MENU shim now, alongside Free Coins / Ranks / Tier-1/2/3
@@ -5577,38 +5896,28 @@ window.addEventListener('load',function(){
     { day:100,reward:'🏆 Legendary status + 5000 🪙'},
   ];
 
-  var SAVE_KEYS = ['save','state','gameState','progress'];
+  // Live game state via the CORE adapter (window.gGame). readSave/writeSave
+  // keep their old {key, obj} shape for the MENU shim's callers.
   function readSave(){
-    for (var i=0;i<SAVE_KEYS.length;i++){
-      var raw = lsGet(SAVE_KEYS[i],null);
-      if (!raw) continue;
-      try { return { key:SAVE_KEYS[i], obj:JSON.parse(raw) }; } catch(e){}
-    }
-    return null;
+    var G = window.gGame; if (!G) return null;
+    return { key: (G.cfg && G.cfg.saveKey) || '', obj: G.state() };
   }
   function writeSave(s){
-    if (!s) return;
-    try { lsSet(s.key, JSON.stringify(s.obj)); } catch(e){}
+    var G = window.gGame; if (!G || !s) return;
+    G.persist(); G.refresh();
   }
   function readStreak(){
-    var s = readSave(); if (!s) return 0;
-    var keys = ['dailyChallengeStreak','loginStreak','streak'];
-    for (var i=0;i<keys.length;i++){
-      if (typeof s.obj[keys[i]] === 'number' && s.obj[keys[i]] > 0) return s.obj[keys[i]];
-    }
-    return 0;
+    var G = window.gGame; return G ? G.streak() : 0;
   }
-  function writeStreakIfFound(value){
-    var s = readSave(); if (!s) return false;
-    var keys = ['dailyChallengeStreak','loginStreak','streak'];
-    for (var i=0;i<keys.length;i++){
-      if (typeof s.obj[keys[i]] === 'number') {
-        s.obj[keys[i]] = value;
-        writeSave(s);
-        return true;
-      }
-    }
-    return false;
+  function localDay(d){
+    d = d || new Date();
+    return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  }
+  function daysBetween(a, b){
+    var pa = a.split('-'), pb = b.split('-');
+    var ta = new Date(+pa[0], +pa[1] - 1, +pa[2]).getTime();
+    var tb = new Date(+pb[0], +pb[1] - 1, +pb[2]).getTime();
+    return Math.round((tb - ta) / 86400000);
   }
 
   function getFreezes(){ return parseInt(lsGet('_streakFreezes','1'),10) || 0; }
@@ -5620,36 +5929,39 @@ window.addEventListener('load',function(){
     return null;
   }
 
-  // ── Shield-restore: only if streak just dropped to 0 AND it was exactly
-  // one missed day since the last seen non-zero streak.
+  // ── Shield-restore. Games never zero the streak on a miss — they reset it
+  // to 1 on the next daily completion. So: if the streak we last saw was N≥2
+  // on day D, and today (D+2, exactly one day missed) the game shows 1,
+  // spend a shield and restore N+1. Watched on open + every few seconds.
   function maybeRestoreStreak(){
+    var G = window.gGame; if (!G) return;
     var nowStreak = readStreak();
     var lastSeen  = parseInt(lsGet('_lastSeenStreak','0'),10) || 0;
     var lastDate  = lsGet('_lastSeenStreakDate', null);
-    var todayStr  = new Date().toISOString().slice(0,10);
-    if (nowStreak === 0 && lastSeen > 0 && lastDate) {
-      var d1 = new Date(lastDate).getTime();
-      var d2 = new Date(todayStr).getTime();
-      var diffDays = Math.round((d2 - d1) / 86400000);
-      if (diffDays === 1 || diffDays === 2) {
-        if (getFreezes() > 0) {
-          setFreezes(getFreezes() - 1);
-          if (writeStreakIfFound(lastSeen)) {
-            if (window.showToast) safe(function(){ showToast('🛡 Streak shield used — your ' + lastSeen + '-day streak is safe!'); });
-            else if (window.alert) safe(function(){ alert('🛡 Streak shield used — your ' + lastSeen + '-day streak is safe!'); });
-          }
-        }
+    var todayStr  = localDay();
+    if (lastDate && lastSeen >= 2 && nowStreak === 1 && lastDate !== todayStr) {
+      var gap = daysBetween(lastDate, todayStr);
+      if (gap === 2 && getFreezes() > 0) {
+        setFreezes(getFreezes() - 1);
+        G.setStreak(lastSeen + 1);
+        G.toast('🛡 Streak Shield saved your ' + lastSeen + '-day streak!');
+        nowStreak = lastSeen + 1;
       }
     }
     var prevRefillStreak = parseInt(lsGet('_streakFreezeRefillAt','0'),10) || 0;
-    var curStreak = readStreak();
-    if (curStreak > 0 && curStreak >= prevRefillStreak + 7) {
-      lsSet('_streakFreezeRefillAt', String(curStreak));
-      setFreezes(getFreezes() + 1);
-      if (window.showToast) safe(function(){ showToast('🛡 +1 Streak shield earned!'); });
+    if (nowStreak < prevRefillStreak) { prevRefillStreak = 0; lsSet('_streakFreezeRefillAt','0'); }
+    if (nowStreak > 0 && nowStreak >= prevRefillStreak + 7) {
+      lsSet('_streakFreezeRefillAt', String(nowStreak));
+      if (prevRefillStreak > 0 || nowStreak >= 7) {
+        setFreezes(Math.min(3, getFreezes() + 1));
+        G.toast('🛡 +1 Streak Shield earned!');
+      }
     }
-    if (curStreak > 0) {
-      lsSet('_lastSeenStreak', String(curStreak));
+    // Date stamp moves only when the streak VALUE changes (≈ the day of the
+    // last daily completion) — opening the app without playing must not
+    // make a missed day look like no gap.
+    if (nowStreak > 0 && (nowStreak !== lastSeen || !lastDate)) {
+      lsSet('_lastSeenStreak', String(nowStreak));
       lsSet('_lastSeenStreakDate', todayStr);
     }
   }
@@ -5663,20 +5975,18 @@ window.addEventListener('load',function(){
     readSave: readSave,
     writeSave: writeSave,
     buyFreeze: function(cb){
-      var s = readSave();
-      if (!s || typeof s.obj.coins !== 'number') return;
-      if (s.obj.coins < 200) {
-        if (window.showToast) safe(function(){ showToast('Need ' + (200 - s.obj.coins) + ' more 🪙'); });
-        return;
-      }
-      s.obj.coins -= 200; writeSave(s);
+      var G = window.gGame; if (!G) return;
+      if (G.coins() < 200) { G.toast('Need ' + (200 - G.coins()) + ' more 🪙'); return; }
+      if (!G.spendCoins(200)) return;
       setFreezes(getFreezes() + 1);
-      if (window.showToast) safe(function(){ showToast('🛡 +1 Streak shield'); });
+      G.toast('🛡 +1 Streak Shield');
       if (typeof cb === 'function') cb();
     }
   };
 
   function onAppOpen(){ maybeRestoreStreak(); }
+  // Daily completions move the streak mid-session — re-check shortly after.
+  setInterval(maybeRestoreStreak, 5000);
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function(){ setTimeout(onAppOpen, 500); });
   } else {
@@ -5689,9 +5999,9 @@ window.addEventListener('load',function(){
 </script>
 
 <!-- Growth shim — Part E (first-session retention). Idempotent: data-growth-shim="E".
-     - No interstitial on the first 3 clears: wraps Android.showInterstitial
-       and swallows the first 3 calls while still incrementing the cumulative
-       "clears since launch" counter. After 3, original behavior resumes.
+     - No interstitial on the first 3 clears: window.gAdGateOk() (CORE
+       lifetime clear count) is consulted by every game's own interstitial
+       function. The Java bridge is never monkey-patched.
      - Loud first-clear celebration: emoji-confetti overlay on the first
        detected clear (subsequent clears use the app's normal flow).
      - First-session retention hook: when session 1 ends with currentLevel>=3
@@ -5711,40 +6021,19 @@ window.addEventListener('load',function(){
   function lsSet(k, v){ try { LS.setItem(k,v); } catch(e){} }
   function safe(fn){ try { return fn(); } catch(e){} }
 
-  // ── 1. First-3-clears interstitial suppression. Cumulative across sessions.
-  var clearsCount = parseInt(lsGet('_growthClearsTotal','0'),10) || 0;
-  if (window.Android && typeof window.Android.showInterstitial === 'function') {
-    var orig = window.Android.showInterstitial.bind(window.Android);
-    window.Android.showInterstitial = function(){
-      var c = parseInt(lsGet('_growthClearsTotal','0'),10) || 0;
-      if (c < 3) return; // swallow on first 3 clears
-      return orig();
-    };
-  }
+  // ── 1. First-3-clears interstitial grace. Each game's own interstitial
+  // function asks window.gAdGateOk() before calling the bridge. (The old
+  // approach — overwriting window.Android.showInterstitial — is shadowed by
+  // the Java bridge's named-property interceptor on real WebViews, so it
+  // never ran; and where it did, it keyed off a counter nothing advanced.)
+  window.gAdGateOk = function(){ return !window.gGame || window.gGame.adGateOk(); };
 
-  // ── 2. Clear-count tracker (same pattern as Part B). Fires:
+  // ── 2. CORE 'clear' events drive:
   //   (a) confetti on the FIRST clear ever,
-  //   (b) increments _growthClearsTotal so suppression de-arms,
-  //   (c) at session-1 end (≥3 clears + tutorialDone), shows the day-2 nudge.
-  var SAVE_KEYS = ['save','state','gameState','progress'];
-  function readClearCount(){
-    for (var i=0;i<SAVE_KEYS.length;i++){
-      var raw = lsGet(SAVE_KEYS[i],null);
-      if (!raw) continue;
-      try {
-        var o = JSON.parse(raw);
-        if (Array.isArray(o.completedLevels)) return o.completedLevels.length;
-        if (typeof o.levelsCompleted === 'number') return o.levelsCompleted;
-        if (typeof o.totalSolves === 'number') return o.totalSolves;
-        if (typeof o.currentLevel === 'number') return o.currentLevel;
-      } catch(e){}
-    }
-    return null;
-  }
-  var lastSeen = -1;
+  //   (b) at session-1 end (≥3 clears + tutorialDone), the day-2 nudge.
   function showConfetti(){
     var ov = document.createElement('div');
-    ov.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;font-family:inherit;';
+    ov.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:var(--z-toast, 300);font-family:inherit;';
     var emojis = ['🎉','✨','⭐','🎊','💫'];
     for (var i=0;i<24;i++){
       var span = document.createElement('span');
@@ -5766,8 +6055,11 @@ window.addEventListener('load',function(){
     var msg = document.createElement('div');
     msg.style.cssText = 'position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);' +
       'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border:1px solid var(--border, #d4e2ec);border-radius:18px;padding:18px 22px;' +
-      'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index:9999;font-family:inherit;';
-    msg.innerHTML = "🎉 You've got this!<br><span style='font-weight:600;font-size:0.9rem;color:var(--text-mute, #5a7390);'>499 more puzzles to go.</span>";
+      'box-shadow:0 12px 40px rgba(0,0,0,0.25);font-weight:800;font-size:1.05rem;text-align:center;z-index:var(--z-tutorial, 500);font-family:inherit;pointer-events:none;';
+    var cfg = (window.gGame && window.gGame.cfg) || {};
+    var sub = (cfg.kind === 'score') ? 'Next stop: 2048!'
+            : ((cfg.totalLevels ? (cfg.totalLevels - 1) : 499) + ' more puzzles to go.');
+    msg.innerHTML = "🎉 You've got this!<br><span style='font-weight:600;font-size:0.9rem;color:var(--text-mute, #5a7390);'>" + sub + "</span>";
     document.body.appendChild(msg);
     setTimeout(function(){ msg.remove(); }, 2400);
   }
@@ -5780,22 +6072,19 @@ window.addEventListener('load',function(){
     if (c < 3) return;
     if (!tutorialDone) return;
     lsSet('_growthDay2NudgeShown','1');
-    if (window.showToast) safe(function(){ showToast('Come back tomorrow for your daily bonus 🔥'); });
+    if (window.gGame) window.gGame.toast('Come back tomorrow for your daily bonus 🔥');
   }
 
-  setInterval(function(){
-    var c = readClearCount();
-    if (c == null) return;
-    if (lastSeen < 0) { lastSeen = c; return; }
-    if (c > lastSeen) {
-      var firstEver = (parseInt(lsGet('_growthClearsTotal','0'),10) || 0) === 0;
-      lastSeen = c;
-      var total = (parseInt(lsGet('_growthClearsTotal','0'),10) || 0) + 1;
-      lsSet('_growthClearsTotal', String(total));
-      if (firstEver) setTimeout(showConfetti, 300);
-      setTimeout(maybeDay2Nudge, 1200);
-    }
-  }, 1200);
+  function onClear(info){
+    var total = (info && info.total) || (window.gGame ? window.gGame.totalClears() : 0);
+    // Veterans updating the app also start the counter at 0 — only a player
+    // whose save shows at most one completed level is truly on clear #1.
+    var firstEver = total === 1 && lsGet('_growthFirstConfetti','0') !== '1' &&
+                    (!window.gGame || window.gGame.clears() <= 1);
+    if (firstEver) { lsSet('_growthFirstConfetti','1'); setTimeout(showConfetti, 300); }
+    setTimeout(maybeDay2Nudge, 1200);
+  }
+  (function withCore(){ if (window.gGame) window.gGame.on('clear', onClear); else setTimeout(withCore, 50); })();
 
   // ── 3. Coachmark — opt-in via document.body data attribute.
   // The per-app injection layer below sets data-growth-coachmark for Nonogram
@@ -5849,7 +6138,8 @@ window.addEventListener('load',function(){
       function next(){
         if (i >= steps.length) { allDoneCb(); return; }
         var bg = document.createElement('div');
-        bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
+        bg.setAttribute('data-growth-card','1');
+        bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:var(--z-tutorial, 500);font-family:inherit;';
         var card = document.createElement('div');
         card.style.cssText = 'background:var(--bg, var(--surface, #ffffff));color:var(--page-fg, var(--text, #1e3a5f));border-radius:18px;padding:22px;max-width:320px;width:88%;text-align:center;border:1px solid var(--menu-tile-border, var(--border, rgba(255,255,255,0.18)));box-shadow:0 14px 44px rgba(0,0,0,0.4);';
         var s = steps[i];
@@ -5890,8 +6180,8 @@ window.addEventListener('load',function(){
 
 <!-- Growth shim — Part F (share virality). Idempotent: data-growth-shim="F".
      - Share-a-win: when a level-complete / win overlay shows up, inject a
-       "🔁 Share" button. Composes a one-tap message (with Play link for live
-       apps; UnblockPuzzle ships the no-link wording until it goes live).
+       "🔁 Share" button. Composes a one-tap message with the solved level /
+       best score and the Play link (GROWTH_CFG.live) or a store-search line.
      - Wordle-style daily result: same Share button on the daily-completion
        overlay produces a spoiler-free recap line.
      - Native bridge: window.Android.shareText. shareImage is best-effort and
@@ -5908,59 +6198,49 @@ window.addEventListener('load',function(){
   function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
 
   // Game-name + Play link per package.
-  var GAME_INFO = {
-    'com.pegasusgames.watersortpuzzle': { name:'Water Sort Puzzle', link:'https://play.google.com/store/apps/details?id=com.pegasusgames.watersortpuzzle' },
-    'com.pegasusgames.nonogram':        { name:'Nonogram',           link:'https://play.google.com/store/apps/details?id=com.pegasusgames.nonogram' },
-    'com.pegasusgames.puzzle2048':      { name:'2048 Puzzle',         link:'https://play.google.com/store/apps/details?id=com.pegasusgames.puzzle2048' },
-    // TODO post-release: replace empty link with the real Play URL once UnblockPuzzle is live.
-    'com.pegasusgames.unblockpuzzle':   { name:'Unblock Puzzle',      link:'' },
-    'com.pegasusgames.pipeconnect':     { name:'Pipe Connect',        link:'' },
-  };
-
-  function detectPkg(){
-    var t = (document.title||'').toLowerCase();
-    if (t.indexOf('water') >= 0) return 'com.pegasusgames.watersortpuzzle';
-    if (t.indexOf('nonogram') >= 0) return 'com.pegasusgames.nonogram';
-    if (t.indexOf('2048') >= 0) return 'com.pegasusgames.puzzle2048';
-    if (t.indexOf('unblock') >= 0) return 'com.pegasusgames.unblockpuzzle';
-    if (t.indexOf('pipe') >= 0) return 'com.pegasusgames.pipeconnect';
-    return '';
+  // Name + Play link come from the CORE adapter (GROWTH_CFG): live apps get
+  // their store link, pre-release apps a "search for it" line instead.
+  function info(){
+    var G = window.gGame || {};
+    return { name: G.name || document.title || 'Pegasus Games', link: G.playLink || '' };
   }
-  var PKG = detectPkg();
-  var INFO = GAME_INFO[PKG] || { name:'Pegasus Games', link:'' };
-
-  function readSave(){
-    var keys = ['save','state','gameState','progress'];
-    for (var i=0;i<keys.length;i++){
-      var raw = lsGet(keys[i],null);
-      if (!raw) continue;
-      try { return JSON.parse(raw); } catch(e){}
-    }
-    return {};
+  var IS_SCORE = function(){ return !!(window.gGame && window.gGame.cfg && window.gGame.cfg.kind === 'score'); };
+  // Remember the level the player just solved (CORE clear event payload).
+  var lastSolved = 0, lastDailyMoves = 0;
+  (function withCore(){
+    if (!window.gGame) { setTimeout(withCore, 50); return; }
+    window.gGame.on('clear', function(d){
+      if (d && d.level) lastSolved = d.level | 0;
+      if (d && d.daily && d.moves) lastDailyMoves = d.moves | 0;
+    });
+  })();
+  function withLink(line){
+    var I = info();
+    return I.link ? (line + ' ' + I.link)
+                  : (line + ' Find "' + I.name + '" by Pegasus Games on Google Play.');
   }
 
   function composeWin(){
-    var s = readSave();
-    var lvl = s.currentLevel || (Array.isArray(s.completedLevels) ? s.completedLevels.length : 0) || 0;
-    var brag = 'I just solved Level ' + lvl + ' on ' + INFO.name + '! Can you beat me?';
-    return INFO.link
-      ? (brag + ' ' + INFO.link)
-      : (brag + ' — search "' + INFO.name + '" by Pegasus Games on Google Play.');
+    var I = info();
+    var lvl = lastSolved || Math.max(1, ((window.gGame && window.gGame.displayLevel()) || 2) - 1);
+    return withLink('I just solved Level ' + lvl + ' in ' + I.name + '! 🧩 Can you beat it?');
   }
 
   function compose2048Score(){
-    var s = readSave();
-    var score = s.bestScore || s.highScore || s.score || 0;
-    var brag = 'New high score on ' + INFO.name + ': ' + score + '. Beat that!';
-    return INFO.link ? (brag + ' ' + INFO.link) : brag;
+    var I = info();
+    var G = window.gGame;
+    var score = G ? Math.max(G.best(), (G.state().score | 0)) : 0;
+    return withLink('My best in ' + I.name + ': ' + score + ' points. 🔥 Beat that!');
   }
 
   function composeDaily(){
-    var s = readSave();
-    var date = new Date().toISOString().slice(0,10);
-    var moves = s.lastDailyMoves || s.dailyMoves || '?';
-    var line = INFO.name + ' Daily ' + date + ' ✅  solved in ' + moves + ' moves';
-    return INFO.link ? (line + '\n' + INFO.link) : line;
+    var I = info();
+    var d = new Date();
+    var date = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+    var line = I.name + ' Daily ' + date + ' ✅' + (lastDailyMoves ? ' solved in ' + lastDailyMoves + ' moves' : ' solved');
+    var streak = window.gGame ? window.gGame.streak() : 0;
+    if (streak > 1) line += ' · 🔥' + streak;
+    return I.link ? (line + '\n' + I.link) : line;
   }
 
   function doShare(text){
@@ -5969,7 +6249,7 @@ window.addEventListener('load',function(){
     if (navigator.share) {
       try { navigator.share({ text: text }); return; } catch(e){}
     }
-    safe(function(){ window.prompt('Copy and share:', text); });
+    if (window.gGame) window.gGame.toast('Sharing isn\'t available on this device');
   }
 
   function buildShareButton(label, getter){
@@ -6033,7 +6313,7 @@ window.addEventListener('load',function(){
         } else if (id.indexOf('highscore') >= 0 || id.indexOf('high') >= 0) {
           injectInto(els[j], compose2048Score, '🔁 Share new high score');
         } else {
-          var getter = (PKG === 'com.pegasusgames.puzzle2048') ? compose2048Score : composeWin;
+          var getter = IS_SCORE() ? compose2048Score : composeWin;
           injectInto(els[j], getter, '🔁 Share win');
         }
       }
@@ -6055,6 +6335,7 @@ window.addEventListener('load',function(){
   window.__growthShimG = true;
 
   function lsGet(k, d){ try { var v=localStorage.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
   function safe(fn){ try { return fn(); } catch(e){} }
   function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
 
@@ -6069,35 +6350,35 @@ window.addEventListener('load',function(){
   // Exported so the MENU shim's Ranks sheet can open the matching leaderboard.
   window._GROWTH_LEADERBOARD_ID = LEADERBOARD_ID;
 
-  // ── On every clear, submit the relevant metric to PGS (no-op until configured).
-  var lastSeen = -1;
-  function readClearMetric(){
-    var keys = ['save','state','gameState','progress'];
-    for (var i=0;i<keys.length;i++){
-      var raw = lsGet(keys[i], null);
-      if (!raw) continue;
-      try {
-        var o = JSON.parse(raw);
-        var t = (document.title||'').toLowerCase();
-        if (t.indexOf('2048') >= 0) {
-          return parseInt(o.bestScore || o.highScore || o.score || 0, 10);
-        }
-        if (Array.isArray(o.completedLevels)) return o.completedLevels.length;
-        if (typeof o.levelsCompleted === 'number') return o.levelsCompleted;
-        if (typeof o.currentLevel === 'number') return o.currentLevel;
-      } catch(e){}
-    }
-    return null;
+  // ── Submit the leaderboard metric on every CORE clear (levels games:
+  // lifetime levels completed; score games: best score), plus once per day
+  // on open so players who progressed before this fix get backfilled.
+  // (Audit 2026-10-03: the old poller read a save key no game uses, so no
+  // score was ever submitted and every real leaderboard stayed empty.)
+  function metric(){
+    var G = window.gGame; if (!G) return 0;
+    return (G.cfg && G.cfg.kind === 'score') ? G.best() : G.clears();
   }
-  setInterval(function(){
-    var m = readClearMetric();
-    if (m == null) return;
-    if (lastSeen < 0) { lastSeen = m; return; }
-    if (m > lastSeen) {
-      lastSeen = m;
-      if (api('submitScore')) safe(function(){ Android.submitScore(LEADERBOARD_ID, m); });
-    }
-  }, 1500);
+  var lastSent = -1;
+  function submit(force){
+    var m = metric();
+    if (!(m > 0)) return;
+    if (!force && m <= lastSent) return;
+    if (!api('submitScore') || !LEADERBOARD_ID || /TODO|PLACEHOLDER|ENTER_/.test(LEADERBOARD_ID)) return;
+    lastSent = m;
+    safe(function(){ Android.submitScore(LEADERBOARD_ID, m); });
+  }
+  (function withCore(){
+    if (!window.gGame) { setTimeout(withCore, 50); return; }
+    window.gGame.on('clear', function(){ setTimeout(function(){ submit(false); }, 300); });
+    window.gGame.on('best', function(){ submit(false); });
+    var today = new Date().toISOString().slice(0, 10);
+    setTimeout(function(){
+      if (lsGet('_pgsBackfillDay', '') === today) return;
+      lsSet('_pgsBackfillDay', today);
+      submit(true);
+    }, 3000);
+  })();
 })();
 </script>
 
@@ -6364,26 +6645,19 @@ window.addEventListener('load',function(){
            m.querySelector('[onclick*="DailyChallenge"], [onclick*="startDailyChallenge"], [onclick*="dailyChallenge"]');
   }
   function readSave(){
-    // Per-app localStorage keys (each app uses its own):
-    //   WaterSort:    watersort_save
-    //   Nonogram:     state
-    //   Puzzle2048:   puzzle2048_save
-    //   UnblockPuzzle: unblock_save
-    //   PipeConnect:  pipeconnect_save
-    //   Afterimage:   afterimage_save
-    //   Overlay:      overlay_save
-    //   Hunch:        hunch_save
-    var keys = ['save','state','gameState','progress','State',
-                'watersort_save','puzzle2048_save','unblock_save',
+    // LIVE game state first (CORE adapter) — a fresh install has no save
+    // blob yet, and a stored blob can lag the in-memory state by one move.
+    // (Audit 2026-10-03: UnblockPuzzle's top bar read ❤0 🪙0 on first
+    // launch because `let state` is not a window property.)
+    if (window.gGame) { var live = window.gGame.state(); if (live && typeof live === 'object') return live; }
+    var keys = ['watersort_save','puzzle2048_save','unblock_save',
                 'nonogram_state','nonogram_save','pipeconnect_save',
-                'afterimage_save','overlay_save','hunch_save'];
+                'afterimage_save','overlay_save','hunch_save','sokoban_save'];
     for (var i=0;i<keys.length;i++){
       var raw = lsGet(keys[i], null);
       if (!raw) continue;
       try { return JSON.parse(raw); } catch(e){}
     }
-    // Live state objects — apps expose them as window.State (caps) or
-    // window.state (lower). Read whichever exists.
     if (window.State && typeof window.State === 'object') return window.State;
     if (window.state && typeof window.state === 'object') return window.state;
     return {};
@@ -6437,9 +6711,11 @@ window.addEventListener('load',function(){
       var sc = s.score || s.currentScore || 0;
       return 'Continue · ' + sc;
     }
-    var n = (s.lastLevelProgress && s.lastLevelProgress.level)
-         || s.currentLevel
-         || (Array.isArray(s.completedLevels) ? s.completedLevels.length + 1 : 1);
+    // gGame.displayLevel() knows whether currentLevel is an index (WaterSort,
+    // PipeConnect family) or a level number (Nonogram, Unblock) — the old
+    // raw read showed "Level 4" for a button that opened Level 5.
+    var n = window.gGame ? window.gGame.displayLevel()
+          : ((s.lastLevelProgress && s.lastLevelProgress.level) || s.currentLevel || 1);
     return 'Continue · Level ' + n;
   }
 
@@ -6833,8 +7109,10 @@ window.addEventListener('load',function(){
     if (!txt) {
       // Compute a basic line from current best level / score.
       var s = readSave();
-      var best = s.currentLevel || s.bestScore || s.score || 1;
-      txt = '🏆 Best this week · ' + best + '\nResets Monday — beat your best to earn coins.';
+      var G = window.gGame;
+      var isScore = G && G.cfg && G.cfg.kind === 'score';
+      var best = isScore ? (G.best() || s.score || 0) : (G ? G.clears() : (s.currentLevel || 0));
+      txt = (isScore ? '🏆 Best score · ' : '🏆 Levels solved · ') + best + '\nResets Monday — beat your best to earn coins.';
     }
     return '<div style="white-space:pre-line;padding:6px 4px;opacity:0.95;">' + txt + '</div>';
   }
@@ -6963,7 +7241,8 @@ window.addEventListener('load',function(){
       var sc = s.bestScore || s.highScore || s.score || s.currentScore || 0;
       return { value: parseInt(sc,10) || 0, label: 'Score', is2048: true };
     }
-    var v = (s.completedLevels && s.completedLevels.length) ||
+    var v = (window.gGame && window.gGame.clears()) ||
+            (s.completedLevels && s.completedLevels.length) ||
             s.levelsCompleted || s.currentLevel || 1;
     return { value: parseInt(v,10) || 1, label: 'Level', is2048: false };
   }
@@ -7727,6 +8006,9 @@ window.addEventListener('load',function(){
   // shipped earlier already nukes the legacy inject calls; this is a
   // backup entry point if any later hook calls it).
   window._growthRenderMenu = renderMenu;
+  // CORE gGame.refresh() calls this after any grant so the top bar and the
+  // Continue label update immediately (text-only, no re-layout).
+  window.__growthMenuRefresh = function(){ safe(function(){ refreshLeftStats(); patchMenuButtons(); }); };
 })();
 </script>
 

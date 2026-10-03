@@ -10,6 +10,7 @@
   window.__growthShimG = true;
 
   function lsGet(k, d){ try { var v=localStorage.getItem(k); return v==null?d:v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
   function safe(fn){ try { return fn(); } catch(e){} }
   function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
 
@@ -24,34 +25,34 @@
   // Exported so the MENU shim's Ranks sheet can open the matching leaderboard.
   window._GROWTH_LEADERBOARD_ID = LEADERBOARD_ID;
 
-  // ── On every clear, submit the relevant metric to PGS (no-op until configured).
-  var lastSeen = -1;
-  function readClearMetric(){
-    var keys = ['save','state','gameState','progress'];
-    for (var i=0;i<keys.length;i++){
-      var raw = lsGet(keys[i], null);
-      if (!raw) continue;
-      try {
-        var o = JSON.parse(raw);
-        var t = (document.title||'').toLowerCase();
-        if (t.indexOf('2048') >= 0) {
-          return parseInt(o.bestScore || o.highScore || o.score || 0, 10);
-        }
-        if (Array.isArray(o.completedLevels)) return o.completedLevels.length;
-        if (typeof o.levelsCompleted === 'number') return o.levelsCompleted;
-        if (typeof o.currentLevel === 'number') return o.currentLevel;
-      } catch(e){}
-    }
-    return null;
+  // ── Submit the leaderboard metric on every CORE clear (levels games:
+  // lifetime levels completed; score games: best score), plus once per day
+  // on open so players who progressed before this fix get backfilled.
+  // (Audit 2026-10-03: the old poller read a save key no game uses, so no
+  // score was ever submitted and every real leaderboard stayed empty.)
+  function metric(){
+    var G = window.gGame; if (!G) return 0;
+    return (G.cfg && G.cfg.kind === 'score') ? G.best() : G.clears();
   }
-  setInterval(function(){
-    var m = readClearMetric();
-    if (m == null) return;
-    if (lastSeen < 0) { lastSeen = m; return; }
-    if (m > lastSeen) {
-      lastSeen = m;
-      if (api('submitScore')) safe(function(){ Android.submitScore(LEADERBOARD_ID, m); });
-    }
-  }, 1500);
+  var lastSent = -1;
+  function submit(force){
+    var m = metric();
+    if (!(m > 0)) return;
+    if (!force && m <= lastSent) return;
+    if (!api('submitScore') || !LEADERBOARD_ID || /TODO|PLACEHOLDER|ENTER_/.test(LEADERBOARD_ID)) return;
+    lastSent = m;
+    safe(function(){ Android.submitScore(LEADERBOARD_ID, m); });
+  }
+  (function withCore(){
+    if (!window.gGame) { setTimeout(withCore, 50); return; }
+    window.gGame.on('clear', function(){ setTimeout(function(){ submit(false); }, 300); });
+    window.gGame.on('best', function(){ submit(false); });
+    var today = new Date().toISOString().slice(0, 10);
+    setTimeout(function(){
+      if (lsGet('_pgsBackfillDay', '') === today) return;
+      lsSet('_pgsBackfillDay', today);
+      submit(true);
+    }, 3000);
+  })();
 })();
 </script>

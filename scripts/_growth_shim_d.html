@@ -3,10 +3,11 @@
 
      BEHAVIORAL HALF ONLY (2026-05-27 consolidation, see CLAUDE.md
      "No competing runtime shims"):
-       - state._streakFreezes (default 1). If the app's streak counter drops
-         from N>0 to 0 and exactly 1 day has elapsed since the last seen N,
-         consume a freeze and restore the streak.
-       - Refill 1 free freeze every 7 days of maintained streak.
+       - _streakFreezes (default 1, cap 3). Games reset the daily streak to 1
+         on the first completion after a miss; when that happens after
+         exactly ONE missed day, a shield is spent and the streak restored.
+       - Refill 1 free shield at every 7 days of maintained streak.
+       - All state reads/writes go through window.gGame (CORE shim).
 
      The menu-render half (chips + buy-shield button + next-milestone label)
      lives in the MENU shim now, alongside Free Coins / Ranks / Tier-1/2/3
@@ -38,38 +39,28 @@
     { day:100,reward:'🏆 Legendary status + 5000 🪙'},
   ];
 
-  var SAVE_KEYS = ['save','state','gameState','progress'];
+  // Live game state via the CORE adapter (window.gGame). readSave/writeSave
+  // keep their old {key, obj} shape for the MENU shim's callers.
   function readSave(){
-    for (var i=0;i<SAVE_KEYS.length;i++){
-      var raw = lsGet(SAVE_KEYS[i],null);
-      if (!raw) continue;
-      try { return { key:SAVE_KEYS[i], obj:JSON.parse(raw) }; } catch(e){}
-    }
-    return null;
+    var G = window.gGame; if (!G) return null;
+    return { key: (G.cfg && G.cfg.saveKey) || '', obj: G.state() };
   }
   function writeSave(s){
-    if (!s) return;
-    try { lsSet(s.key, JSON.stringify(s.obj)); } catch(e){}
+    var G = window.gGame; if (!G || !s) return;
+    G.persist(); G.refresh();
   }
   function readStreak(){
-    var s = readSave(); if (!s) return 0;
-    var keys = ['dailyChallengeStreak','loginStreak','streak'];
-    for (var i=0;i<keys.length;i++){
-      if (typeof s.obj[keys[i]] === 'number' && s.obj[keys[i]] > 0) return s.obj[keys[i]];
-    }
-    return 0;
+    var G = window.gGame; return G ? G.streak() : 0;
   }
-  function writeStreakIfFound(value){
-    var s = readSave(); if (!s) return false;
-    var keys = ['dailyChallengeStreak','loginStreak','streak'];
-    for (var i=0;i<keys.length;i++){
-      if (typeof s.obj[keys[i]] === 'number') {
-        s.obj[keys[i]] = value;
-        writeSave(s);
-        return true;
-      }
-    }
-    return false;
+  function localDay(d){
+    d = d || new Date();
+    return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  }
+  function daysBetween(a, b){
+    var pa = a.split('-'), pb = b.split('-');
+    var ta = new Date(+pa[0], +pa[1] - 1, +pa[2]).getTime();
+    var tb = new Date(+pb[0], +pb[1] - 1, +pb[2]).getTime();
+    return Math.round((tb - ta) / 86400000);
   }
 
   function getFreezes(){ return parseInt(lsGet('_streakFreezes','1'),10) || 0; }
@@ -81,36 +72,39 @@
     return null;
   }
 
-  // ── Shield-restore: only if streak just dropped to 0 AND it was exactly
-  // one missed day since the last seen non-zero streak.
+  // ── Shield-restore. Games never zero the streak on a miss — they reset it
+  // to 1 on the next daily completion. So: if the streak we last saw was N≥2
+  // on day D, and today (D+2, exactly one day missed) the game shows 1,
+  // spend a shield and restore N+1. Watched on open + every few seconds.
   function maybeRestoreStreak(){
+    var G = window.gGame; if (!G) return;
     var nowStreak = readStreak();
     var lastSeen  = parseInt(lsGet('_lastSeenStreak','0'),10) || 0;
     var lastDate  = lsGet('_lastSeenStreakDate', null);
-    var todayStr  = new Date().toISOString().slice(0,10);
-    if (nowStreak === 0 && lastSeen > 0 && lastDate) {
-      var d1 = new Date(lastDate).getTime();
-      var d2 = new Date(todayStr).getTime();
-      var diffDays = Math.round((d2 - d1) / 86400000);
-      if (diffDays === 1 || diffDays === 2) {
-        if (getFreezes() > 0) {
-          setFreezes(getFreezes() - 1);
-          if (writeStreakIfFound(lastSeen)) {
-            if (window.showToast) safe(function(){ showToast('🛡 Streak shield used — your ' + lastSeen + '-day streak is safe!'); });
-            else if (window.alert) safe(function(){ alert('🛡 Streak shield used — your ' + lastSeen + '-day streak is safe!'); });
-          }
-        }
+    var todayStr  = localDay();
+    if (lastDate && lastSeen >= 2 && nowStreak === 1 && lastDate !== todayStr) {
+      var gap = daysBetween(lastDate, todayStr);
+      if (gap === 2 && getFreezes() > 0) {
+        setFreezes(getFreezes() - 1);
+        G.setStreak(lastSeen + 1);
+        G.toast('🛡 Streak Shield saved your ' + lastSeen + '-day streak!');
+        nowStreak = lastSeen + 1;
       }
     }
     var prevRefillStreak = parseInt(lsGet('_streakFreezeRefillAt','0'),10) || 0;
-    var curStreak = readStreak();
-    if (curStreak > 0 && curStreak >= prevRefillStreak + 7) {
-      lsSet('_streakFreezeRefillAt', String(curStreak));
-      setFreezes(getFreezes() + 1);
-      if (window.showToast) safe(function(){ showToast('🛡 +1 Streak shield earned!'); });
+    if (nowStreak < prevRefillStreak) { prevRefillStreak = 0; lsSet('_streakFreezeRefillAt','0'); }
+    if (nowStreak > 0 && nowStreak >= prevRefillStreak + 7) {
+      lsSet('_streakFreezeRefillAt', String(nowStreak));
+      if (prevRefillStreak > 0 || nowStreak >= 7) {
+        setFreezes(Math.min(3, getFreezes() + 1));
+        G.toast('🛡 +1 Streak Shield earned!');
+      }
     }
-    if (curStreak > 0) {
-      lsSet('_lastSeenStreak', String(curStreak));
+    // Date stamp moves only when the streak VALUE changes (≈ the day of the
+    // last daily completion) — opening the app without playing must not
+    // make a missed day look like no gap.
+    if (nowStreak > 0 && (nowStreak !== lastSeen || !lastDate)) {
+      lsSet('_lastSeenStreak', String(nowStreak));
       lsSet('_lastSeenStreakDate', todayStr);
     }
   }
@@ -124,20 +118,18 @@
     readSave: readSave,
     writeSave: writeSave,
     buyFreeze: function(cb){
-      var s = readSave();
-      if (!s || typeof s.obj.coins !== 'number') return;
-      if (s.obj.coins < 200) {
-        if (window.showToast) safe(function(){ showToast('Need ' + (200 - s.obj.coins) + ' more 🪙'); });
-        return;
-      }
-      s.obj.coins -= 200; writeSave(s);
+      var G = window.gGame; if (!G) return;
+      if (G.coins() < 200) { G.toast('Need ' + (200 - G.coins()) + ' more 🪙'); return; }
+      if (!G.spendCoins(200)) return;
       setFreezes(getFreezes() + 1);
-      if (window.showToast) safe(function(){ showToast('🛡 +1 Streak shield'); });
+      G.toast('🛡 +1 Streak Shield');
       if (typeof cb === 'function') cb();
     }
   };
 
   function onAppOpen(){ maybeRestoreStreak(); }
+  // Daily completions move the streak mid-session — re-check shortly after.
+  setInterval(maybeRestoreStreak, 5000);
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function(){ setTimeout(onAppOpen, 500); });
   } else {

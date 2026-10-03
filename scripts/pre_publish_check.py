@@ -2037,6 +2037,11 @@ def main():
         ('check_dead_handlers.py', 'dead onclick handlers'),
         ('check_orphan_else.py', 'orphaned else (script parse error)'),
         ('check_icon_white_border.py', 'icon white border'),
+        # 2026-10-03 audit gates
+        ('check_growth_core.py', 'growth core (shims reach the real save)'),
+        ('check_ads_respect_pass.py', 'interstitials respect Season/Weekly Pass'),
+        ('check_level_cap.py', 'level cap / progress copy vs level count'),
+        ('check_app_version_display.py', 'displayed version == versionName'),
     ]:
         try:
             _r = _subprocess.run(

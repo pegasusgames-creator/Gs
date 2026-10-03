@@ -4,10 +4,12 @@
        - On app open + visibilitychange: cancelAllNotifications then reschedule
          the win-back chain (d3/d7/d14/d30), the daily reminder at the user's
          rolling-average play hour, and the streak-at-risk ping (if streak ≥ 3).
-       - First level cleared (detected via localStorage save inspection) →
-         single-shot permission pre-prompt + schedule.
-       - On Day-7 win-back fire: pendingWinBackReward flag set; granted as 100
-         coins on next open.
+       - First level cleared (CORE 'clear' event) → themed in-app pre-prompt
+         (max 2 asks, 3-day cooldown) → system permission dialog.
+       - Day-7 win-back: 100 coins paid on the first open after a real ≥7-day
+         absence (gGame.absenceDays), with a welcome-back card.
+       - Reads/writes go through window.gGame (CORE shim) — never a guessed
+         localStorage key.
        - Settings panel: a "🔔 Notifications" toggle row appended at runtime
          (DOM scan; covers every per-app Settings markup variant).
        - Exposed for per-app integration when game logic wants to opt in:
@@ -42,55 +44,63 @@
     return (isNaN(h) || h<0 || h>23) ? 19 : h;
   }
 
-  // ── 2. Win-back coin pickup (Day 7).
+  // ── 2. Win-back coin pickup (Day 7). Paid only when the player really
+  // was away ≥7 days (gGame.absenceDays, measured from the last foreground
+  // stamp) — the Day-7 push promises exactly this. Once per absence.
+  // (Audit 2026-10-03: previously flagged "pending" on EVERY open and then
+  // credited a save key no game uses, so the promise was never kept.)
   function grantPendingWinBack(){
-    if (lsGet('pendingWinBackReward','0') !== '1') return;
-    lsSet('pendingWinBackReward','0');
-    // Try the conventional save shapes (WaterSort: state, Nonogram/UB: save).
-    var keys = ['save','state','gameState','progress'];
-    for (var i=0;i<keys.length;i++){
-      var raw = lsGet(keys[i], null);
-      if (!raw) continue;
-      try {
-        var o = JSON.parse(raw);
-        if (typeof o.coins === 'number') {
-          o.coins += 100;
-          lsSet(keys[i], JSON.stringify(o));
-          if (window.showToast) safe(function(){ showToast('🎁 Welcome back! +100 coins'); });
-          break;
-        }
-      } catch(e){}
-    }
+    var G = window.gGame; if (!G) return;
+    if (G.absenceDays < 7) return;
+    var stampKey = '_winBackPaidFor';
+    var token = String(Math.floor(Date.now() / 86400000));
+    if (lsGet(stampKey, '') === token) return;
+    lsSet(stampKey, token);
+    lsSet('pendingWinBackReward', '0');
+    var pay = function(done){
+      G.addCoins(100);
+      showCard('🎁', 'Welcome back!', 'We saved your progress. Here are 100 🪙 to jump back in.', 'Collect +100 🪙', done);
+    };
+    if (window.gPopupQueue) window.gPopupQueue.enqueue(pay); else pay(function(){});
   }
 
-  // ── 3. Streak read — common keys across games.
+  // Shared themed card (token colours only) — used for the welcome-back gift
+  // and the notification pre-prompt. Returns via done() when dismissed.
+  function showCard(emoji, title, body, cta, done, secondary){
+    var bg = document.createElement('div');
+    bg.setAttribute('data-growth-card', '1');
+    bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:var(--z-modal, 700);font-family:inherit;';
+    bg.innerHTML =
+      '<div style="background:var(--surface, var(--bg, #ffffff));color:var(--text, #1e3a5f);border:1px solid var(--border, rgba(127,127,127,0.25));border-radius:20px;padding:24px 22px 18px;width:86%;max-width:340px;text-align:center;box-shadow:0 14px 44px rgba(0,0,0,0.35);">' +
+        '<div style="font-size:44px;line-height:1;margin-bottom:10px;">' + emoji + '</div>' +
+        '<div style="font-size:1.25rem;font-weight:800;margin-bottom:6px;">' + title + '</div>' +
+        '<div style="font-size:0.95rem;color:var(--text-mute, var(--text-muted, inherit));margin-bottom:16px;line-height:1.4;">' + body + '</div>' +
+        '<button data-card-ok type="button" style="display:block;width:100%;border:none;padding:13px;border-radius:14px;background:var(--g-play, var(--accent, #3b6db8));color:var(--on-accent, #fff);font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;">' + cta + '</button>' +
+        (secondary ? '<button data-card-no type="button" style="display:block;width:100%;margin-top:8px;border:none;background:transparent;color:var(--text-mute, var(--text-muted, inherit));padding:8px;font-weight:700;cursor:pointer;font-family:inherit;">' + secondary + '</button>' : '') +
+      '</div>';
+    document.body.appendChild(bg);
+    var closed = false;
+    function close(ok){ if (closed) return; closed = true; bg.remove(); try { done(ok); } catch(e){} }
+    bg.querySelector('[data-card-ok]').addEventListener('click', function(){ close(true); });
+    var no = bg.querySelector('[data-card-no]'); if (no) no.addEventListener('click', function(){ close(false); });
+    bg.addEventListener('click', function(ev){ if (ev.target === bg) close(false); });
+  }
+
+  // ── 3. Streak read — the game's own daily streak via gGame.
   function readStreak(){
-    var k = ['dailyChallengeStreak','loginStreak','streak'];
-    for (var i=0;i<k.length;i++){
-      var v = parseInt(lsGet(k[i],'0'),10);
-      if (!isNaN(v) && v>0) return v;
-    }
-    return 0;
+    var G = window.gGame;
+    return G ? G.streak() : 0;
   }
 
   // ── 4. First-clear detection — used to gate the permission pre-prompt.
   function hasClearedFirstLevel(){
-    var keys = ['save','state','gameState','progress'];
-    for (var i=0;i<keys.length;i++){
-      var raw = lsGet(keys[i], null);
-      if (!raw) continue;
-      try {
-        var o = JSON.parse(raw);
-        // completedLevels array, currentLevel > 0, or stars object — any wins.
-        if (Array.isArray(o.completedLevels) && o.completedLevels.length > 0) return true;
-        if (typeof o.currentLevel === 'number' && o.currentLevel > 0) return true;
-        if (typeof o.levelsCompleted === 'number' && o.levelsCompleted > 0) return true;
-        if (o.levelStars && Object.keys(o.levelStars).length > 0) return true;
-      } catch(e){}
-    }
-    return false;
+    var G = window.gGame; if (!G) return false;
+    return G.totalClears() > 0 || G.clears() > 0;
   }
 
+  // Soft pre-prompt (QUALITY_PLAYBOOK §11.1): an in-app themed card AFTER a
+  // positive moment, never the raw system dialog cold. "Not now" re-asks once
+  // after 3 days; at most 2 asks per install. Queued so it never stacks.
   function maybeAskNotifPerm(){
     if (lsGet('notifPrePromptShown','0') === '1') return;
     if (!hasClearedFirstLevel()) return;
@@ -99,15 +109,26 @@
       lsSet('notifPrePromptShown','1');
       return;
     }
-    // Soft pre-prompt — confirm() respects the user; if they say no, we don't
-    // hit the system dialog at all.
-    var ok = false;
-    try { ok = window.confirm("Get a daily reminder so you don't miss your streak?"); }
-    catch(e){ ok = false; }
-    lsSet('notifPrePromptShown','1');
-    if (ok && api('requestNotificationPermission')) {
-      safe(function(){ Android.requestNotificationPermission(); });
-    }
+    var asks = parseInt(lsGet('notifPrePromptAsks','0'),10) || 0;
+    var lastAt = parseInt(lsGet('notifPrePromptAt','0'),10) || 0;
+    if (asks >= 2) { lsSet('notifPrePromptShown','1'); return; }
+    if (lastAt && Date.now() - lastAt < 3 * 86400000) return;
+    if (window.__notifAskQueued) return;
+    window.__notifAskQueued = true;
+    var ask = function(done){
+      lsSet('notifPrePromptAsks', String(asks + 1));
+      lsSet('notifPrePromptAt', String(Date.now()));
+      showCard('🔔', 'Never lose your streak', 'Get one friendly reminder a day, plus a heads-up before your streak or an event ends.', 'Turn on reminders', function(ok){
+        window.__notifAskQueued = false;
+        if (ok) {
+          lsSet('notifPrePromptShown','1');
+          if (api('setNotificationsEnabled')) safe(function(){ Android.setNotificationsEnabled(true); });
+          if (api('requestNotificationPermission')) safe(function(){ Android.requestNotificationPermission(); });
+        }
+        done();
+      }, 'Not now');
+    };
+    if (window.gPopupQueue) window.gPopupQueue.enqueue(ask); else ask(function(){});
   }
 
   // Round-15: auto-schedule a "lives are full" ping by reading the
@@ -115,30 +136,17 @@
   // { lives, maxLives (default 5), lastLifeTime }. Per-app save keys
   // differ, so probe the known set.
   function scheduleLivesIfBelowMax(){
-    if (!api('scheduleLivesRefilled')) return;
-    var SAVE_KEYS = [
-      'unblock_save','watersort_save','puzzle2048_save','nonogram_state',
-      'pipeconnect_save','afterimage_save','overlay_save','hunch_save','save','state','gameState','progress'
-    ];
+    if (!api('scheduleLivesRefilled') || !window.gGame) return;
     var REGEN_MS = 30 * 60 * 1000; // every shipping game uses 30 min
-    for (var i=0;i<SAVE_KEYS.length;i++){
-      var raw = lsGet(SAVE_KEYS[i], null);
-      if (!raw) continue;
-      try {
-        var s = JSON.parse(raw);
-        var inner = (s && s.state) ? s.state : s;
-        var lives    = (inner.lives != null)    ? inner.lives    : null;
-        var maxLives = (inner.maxLives != null) ? inner.maxLives : 5;
-        var lastLife = inner.lastLifeTime || inner.lastLifeMs || inner.lifeRegenAt || 0;
-        if (lives == null || lastLife <= 0) continue;
-        if (lives >= maxLives) return; // already full, nothing to schedule
-        var needed = maxLives - lives;
-        var refillAt = lastLife + needed * REGEN_MS;
-        if (refillAt <= Date.now()) return; // would've already refilled
-        safe(function(){ Android.scheduleLivesRefilled(refillAt); });
-        return;
-      } catch(e){}
-    }
+    var inner = window.gGame.state();
+    var lives    = (inner.lives != null)    ? inner.lives    : null;
+    var maxLives = (inner.maxLives != null) ? inner.maxLives : 5;
+    var lastLife = inner.lastLifeTime || inner.lastLifeMs || inner.lifeRegenAt || 0;
+    if (lives == null || lastLife <= 0) return;
+    if (lives >= maxLives) return; // already full, nothing to schedule
+    var refillAt = lastLife + (maxLives - lives) * REGEN_MS;
+    if (refillAt <= Date.now()) return; // would've already refilled
+    safe(function(){ Android.scheduleLivesRefilled(refillAt); });
   }
 
   // ── 5. Reschedule the full chain.
@@ -148,12 +156,11 @@
     safe(function(){ Android.cancelAllNotifications(); });
     if (api('scheduleDailyReminder')) safe(function(){ Android.scheduleDailyReminder(getPlayHour(), 0); });
     if (api('scheduleWinBack')) {
-      safe(function(){ Android.scheduleWinBack(3,  "Your puzzles miss you", "Pick up right where you left off."); });
+      var d3 = (window.gEvents && typeof window.gEvents.winBackLine === 'function') ? window.gEvents.winBackLine(3) : null;
+      safe(function(){ Android.scheduleWinBack(3,  d3 ? d3.title : "Your puzzles miss you", d3 ? d3.body : "Pick up right where you left off."); });
       safe(function(){ Android.scheduleWinBack(7,  "Come back for 100 coins", "A welcome-back gift is waiting."); });
       safe(function(){ Android.scheduleWinBack(14, "New themes await", "Unlocks are ready to claim."); });
       safe(function(){ Android.scheduleWinBack(30, "We saved everything", "Your progress and streak shield are still here."); });
-      // Mark the Day-7 reward as pending so the next-open path will pay out 100c.
-      lsSet('pendingWinBackReward','1');
     }
     // Round-15: schedule streak-at-risk from day 1+ (was day 3+). Even
     // a one-day streak is worth not losing — and reward keeps growing
@@ -245,11 +252,18 @@
   window.gScheduleLivesRefilled = function(refillAtMillis){
     if (api('scheduleLivesRefilled')) safe(function(){ Android.scheduleLivesRefilled(refillAtMillis); });
   };
-  window.gOnAnyClear = function(){
-    recordPlayHour();
-    maybeAskNotifPerm();
-    rescheduleAll();
+  // Legacy hook some win paths still call — forwards to the CORE clear bus
+  // (which fires the 'clear' subscribers below exactly once).
+  window.gOnAnyClear = function(info){
+    if (window.gGame) window.gGame.clear(info || { legacy: true });
   };
+  function onClear(){
+    recordPlayHour();
+    // Let the win overlay breathe before asking.
+    setTimeout(maybeAskNotifPerm, 2200);
+    rescheduleAll();
+  }
+  (function withCore(){ if (window.gGame) window.gGame.on('clear', onClear); else setTimeout(withCore, 50); })();
   window.gOnDailyDone = function(){
     recordPlayHour();
     rescheduleAll();
@@ -300,19 +314,19 @@
   setInterval(injectNotifToggle, 1500);
 
   // ── 8. Boot path: schedule on first load + on every return-to-foreground.
-  function onAppOpen(){
-    grantPendingWinBack();
+  function onAppOpen(first){
+    if (first) grantPendingWinBack();
     recordPlayHour();
-    maybeAskNotifPerm();
+    if (first) setTimeout(maybeAskNotifPerm, 4000);
     rescheduleAll();
   }
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function(){ setTimeout(onAppOpen, 400); });
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(function(){ onAppOpen(true); }, 400); });
   } else {
-    setTimeout(onAppOpen, 400);
+    setTimeout(function(){ onAppOpen(true); }, 400);
   }
   document.addEventListener('visibilitychange', function(){
-    if (document.visibilityState === 'visible') setTimeout(onAppOpen, 200);
+    if (document.visibilityState === 'visible') setTimeout(function(){ onAppOpen(false); }, 200);
   });
 })();
 </script>

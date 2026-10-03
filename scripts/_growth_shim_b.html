@@ -23,9 +23,9 @@
   function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
   function safe(fn){ try { return fn(); } catch(e){} }
 
-  // PROMO_TARGETS — per the 2026-05-25 growth spec. UnblockPuzzle + PipeConnect
-  // are explicitly EXCLUDED as targets (pre-release). When either ships, edit
-  // the matching entry's TODO line in this file and uncomment.
+  // PROMO_TARGETS — LIVE portfolio apps only (CLAUDE.md: pre-release apps
+  // are never cross-promo targets). When a pre-release app goes live, add
+  // it here AND to each app's CROSS_PROMO_PACKAGES / <queries>.
   var ALL_PROMO = [
     { pkg:'com.pegasusgames.watersortpuzzle', name:'Water Sort Puzzle',
       tagline:'Pour colors to sort. Calm puzzle bliss.' },
@@ -35,28 +35,17 @@
       tagline:'Merge tiles. Hit 2048 and beyond.' },
     { pkg:'com.pegasusgames.unblockpuzzle',   name:'Unblock Puzzle',
       tagline:'Slide blocks to clear the red one.' },
-    // TODO post-release: add PipeConnect once it has a Play link:
-    //   { pkg:'com.pegasusgames.pipeconnect', name:'Pipe Connect',
-    //     tagline:'Route every pipe. Fill every grid.' },
   ];
 
   function currentPkg(){
+    if (window.gGame && window.gGame.pkg) return window.gGame.pkg;
     var meta = document.querySelector('meta[name="app-package"]');
-    if (meta) return meta.content;
-    // Fall back to a heuristic — title text or hardcoded.
-    var t = (document.title||'').toLowerCase();
-    if (t.indexOf('water') >= 0) return 'com.pegasusgames.watersortpuzzle';
-    if (t.indexOf('nonogram') >= 0) return 'com.pegasusgames.nonogram';
-    if (t.indexOf('2048') >= 0) return 'com.pegasusgames.puzzle2048';
-    if (t.indexOf('unblock') >= 0) return 'com.pegasusgames.unblockpuzzle';
-    if (t.indexOf('pipe') >= 0) return 'com.pegasusgames.pipeconnect';
-    if (t.indexOf('afterimage') >= 0) return 'com.pegasusgames.afterimage';
-    if (t.indexOf('overlay') >= 0) return 'com.pegasusgames.overlay';
-    if (t.indexOf('hunch') >= 0) return 'com.pegasusgames.hunch';
-    return '';
+    return meta ? meta.content : '';
   }
   var CUR = currentPkg();
   var TARGETS = ALL_PROMO.filter(function(g){ return g.pkg !== CUR; });
+  // Never promote a game the player already has.
+  function notInstalled(t){ try { return !(api('isAppInstalled') && window.Android.isAppInstalled(t.pkg)); } catch(e){ return true; } }
   window._GROWTH_PROMO_TARGETS = TARGETS;
 
   // ── 1. Welcome bonus on first launch if any sibling app is installed.
@@ -70,48 +59,32 @@
       catch(e){}
     }
     if (!sourceName) return;
+    if (!window.gGame) return;
     lsSet('welcomeBonusClaimed','1');
-    // Try to credit common save shapes with +100 coins.
-    var keys = ['save','state','gameState','progress'];
-    for (var j=0;j<keys.length;j++){
-      var raw = lsGet(keys[j],null);
-      if (!raw) continue;
-      try {
-        var o = JSON.parse(raw);
-        if (typeof o.coins === 'number') {
-          o.coins += 100;
-          lsSet(keys[j], JSON.stringify(o));
-          if (window.showToast) safe(function(){ showToast('Welcome from Pegasus Games — +100 🪙'); });
-          else alert('Welcome from Pegasus Games — +100 coins from ' + sourceName + '!');
-          return;
-        }
-      } catch(e){}
-    }
+    var src = sourceName;
+    var pay = function(done){
+      window.gGame.addCoins(100);
+      var bg = document.createElement('div');
+      bg.setAttribute('data-growth-card', '1');
+      bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:var(--z-modal, 700);font-family:inherit;';
+      bg.innerHTML = '<div style="background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border-radius:20px;padding:24px 22px 18px;width:86%;max-width:340px;text-align:center;box-shadow:0 14px 44px rgba(0,0,0,0.35);">' +
+        '<div style="font-size:44px;line-height:1;margin-bottom:10px;">🤝</div>' +
+        '<div style="font-size:1.2rem;font-weight:800;margin-bottom:6px;">Welcome, ' + src + ' player!</div>' +
+        '<div style="font-size:0.95rem;color:var(--text-mute, inherit);margin-bottom:16px;">A thank-you from Pegasus Games: +100 🪙 to start.</div>' +
+        '<button type="button" style="display:block;width:100%;border:none;padding:13px;border-radius:14px;background:var(--g-play, #3b6db8);color:var(--on-accent, #fff);font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;">Collect +100 🪙</button></div>';
+      document.body.appendChild(bg);
+      bg.querySelector('button').addEventListener('click', function(){ bg.remove(); done(); });
+    };
+    if (window.gPopupQueue) window.gPopupQueue.enqueue(pay); else pay(function(){});
   }
 
-  // ── 2. Clear-count tracker — polls save state, fires on every increment.
-  var lastSeenClears = -1;
-  function readClearCount(){
-    var keys = ['save','state','gameState','progress'];
-    for (var i=0;i<keys.length;i++){
-      var raw = lsGet(keys[i],null);
-      if (!raw) continue;
-      try {
-        var o = JSON.parse(raw);
-        if (Array.isArray(o.completedLevels)) return o.completedLevels.length;
-        if (typeof o.levelsCompleted === 'number') return o.levelsCompleted;
-        if (typeof o.totalSolves === 'number') return o.totalSolves;
-        if (typeof o.currentLevel === 'number') return o.currentLevel;
-      } catch(e){}
-    }
-    return null;
-  }
-
+  // ── 2. Clear counter — CORE 'clear' events (new + replayed wins).
   function pickPromoTarget(){
-    if (!TARGETS.length) return null;
+    var pool = TARGETS.filter(notInstalled);
+    if (!pool.length) return null;
     var idx = parseInt(lsGet('_crossPromoIdx','0'),10) || 0;
-    var t = TARGETS[idx % TARGETS.length];
-    lsSet('_crossPromoIdx', String((idx + 1) % TARGETS.length));
+    var t = pool[idx % pool.length];
+    lsSet('_crossPromoIdx', String((idx + 1) % pool.length));
     return t;
   }
 
@@ -119,8 +92,9 @@
   function buildPromoCard(target){
     var bg = document.createElement('div');
     bg.setAttribute('data-growth-promo-card','1');
+    bg.setAttribute('data-growth-card','1');
     bg.style.cssText =
-      'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:inherit;';
+      'position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:var(--z-modal, 700);font-family:inherit;';
     var card = document.createElement('div');
     card.style.cssText =
       'background:var(--surface, #ffffff);color:var(--text, #1e3a5f);border-radius:18px;padding:22px 22px 18px;width:88%;max-width:340px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.3);';
@@ -171,25 +145,19 @@
     lsSet('lastCrossPromoShownSession', sessionId);
   }
 
-  // ── 4. Poll for clear-count increments — fires the break-point card on
-  // every N=5 clears (cumulative). Cheap: 1.5s poll, no DOM mutation needed.
-  setInterval(function(){
-    var c = readClearCount();
-    if (c == null) return;
-    if (lastSeenClears < 0) { lastSeenClears = c; return; }
-    if (c > lastSeenClears) {
-      var deltas = c - lastSeenClears;
-      lastSeenClears = c;
-      // Use a stored "since-last-promo" counter — robust to multi-clear jumps.
-      var since = parseInt(lsGet('_crossPromoSinceLast','0'),10) || 0;
-      since += deltas;
-      if (since >= 5) {
-        since = 0;
-        maybeShowBreakPointPromo();
-      }
-      lsSet('_crossPromoSinceLast', String(since));
+  // ── 4. Every 5th clear (cumulative) → break-point card, via the popup queue.
+  function onClear(){
+    var since = (parseInt(lsGet('_crossPromoSinceLast','0'),10) || 0) + 1;
+    if (since >= 5) {
+      since = 0;
+      setTimeout(function(){
+        if (window.gPopupQueue) window.gPopupQueue.enqueueWithSelector('[data-growth-promo-card]', maybeShowBreakPointPromo);
+        else maybeShowBreakPointPromo();
+      }, 2600);
     }
-  }, 1500);
+    lsSet('_crossPromoSinceLast', String(since));
+  }
+  (function withCore(){ if (window.gGame) window.gGame.on('clear', onClear); else setTimeout(withCore, 50); })();
 
   // ── 5. Session bookkeeping — bump on visibility-change so we don't loop on
   // a single foreground.

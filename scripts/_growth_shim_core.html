@@ -1,0 +1,327 @@
+<!-- Growth shim — CORE (shared game adapter + clear-event bus). Idempotent: data-growth-shim="CORE".
+     Injected FIRST (before Part A). Every other growth shim reads/writes the
+     game through window.gGame instead of probing localStorage keys.
+
+     Why (audit 2026-10-03): Parts A/B/D/E/F/G probed the generic keys
+     ['save','state','gameState','progress'] — no shipping game uses any of
+     them — so the notification pre-prompt, Day-7 win-back coins, cross-promo
+     welcome bonus, streak shield, first-clear flow, share text and Play Games
+     score submission were all silently inert in every app. Worse, writing a
+     save blob behind the game's back is overwritten by the game's next save.
+     gGame mutates the LIVE in-memory state and persists via the game's own
+     save function, so grants stick and the HUD refreshes immediately.
+
+     Per-app facts live in window.GROWTH_CFG (a tiny per-app block injected
+     just before this shim): pkg, name, saveKey, levelBase (0 = currentLevel
+     is an index, 1 = currentLevel is the level number), kind ('levels' |
+     'score'), live (published on Play), booster {field, name, emoji, coins}.
+
+     Public API (window.gGame):
+       state()            live save object (falls back to the stored blob)
+       persist()/refresh()
+       coins() / addCoins(n[, toastMsg])
+       clears()           lifetime completed levels (score games: games played)
+       displayLevel()     the level number the Continue button resumes
+       best() / streak() / setStreak(n)
+       addBooster(n) / addLives(n) / addUnlimitedLives(minutes)
+       clear(info)        games call this on every win → emits 'clear'
+                          info: {level, stars, isNew, perfect, daily, moves,
+                          endless, tile (2048 milestone)}
+       emit('gameover', {score, daily}) / emit('hint') / emit('best')
+       on(evt, fn) / emit(evt, data)   (also feeds window.missionProgress)
+       adGateOk()         false during the first 3 lifetime clears
+       absenceDays        whole days since the previous session (0 = none)
+       toast(msg) / lang() / pkg / name / playLink / cfg
+-->
+<script data-growth-shim="CORE">
+(function(){
+  if (window.gGame) return;
+  var CFG = window.GROWTH_CFG || {};
+  var LS = window.localStorage;
+  function lsGet(k, d){ try { var v = LS.getItem(k); return v == null ? d : v; } catch(e){ return d; } }
+  function lsSet(k, v){ try { LS.setItem(k, v); } catch(e){} }
+  function safe(fn){ try { return fn(); } catch(e){} }
+
+  var KEYS = [CFG.saveKey, 'watersort_save', 'nonogram_state', 'puzzle2048_save',
+              'unblock_save', 'pipeconnect_save', 'afterimage_save', 'hunch_save',
+              'overlay_save', 'sokoban_save'].filter(Boolean);
+
+  // Top-level `let/const State|state|save` are global lexical bindings —
+  // visible here by name even though they are not window properties.
+  function live(){
+    try { if (typeof State !== 'undefined' && State && typeof State === 'object' && 'coins' in State) return State; } catch(e){}
+    try { if (typeof state !== 'undefined' && state && typeof state === 'object' && 'coins' in state) return state; } catch(e){}
+    try { if (typeof save !== 'undefined' && save && typeof save === 'object' && 'coins' in save) return save; } catch(e){}
+    return null;
+  }
+  function stored(){
+    for (var i = 0; i < KEYS.length; i++){
+      var raw = lsGet(KEYS[i], null);
+      if (!raw) continue;
+      try { var o = JSON.parse(raw); if (o && typeof o === 'object') return { key: KEYS[i], obj: (o.state && typeof o.state === 'object') ? o.state : o }; } catch(e){}
+    }
+    return null;
+  }
+  function st(){ var s = live(); if (s) return s; var d = stored(); return d ? d.obj : {}; }
+
+  function persist(){
+    if (live()){
+      try { if (typeof State !== 'undefined' && State && typeof State.save === 'function'){ State.save(); return; } } catch(e){}
+      if (typeof window.saveState === 'function'){ safe(function(){ window.saveState(); }); return; }
+      if (typeof window.persist === 'function'){ safe(function(){ window.persist(); }); return; }
+    }
+    var d = stored(); if (d) lsSet(d.key, JSON.stringify(d.obj));
+  }
+  function refresh(){
+    var fns = ['updateCoinDisplays', 'updateAllUI', 'updateHUD', 'updateUI'];
+    for (var i = 0; i < fns.length; i++){
+      if (typeof window[fns[i]] === 'function'){ safe(function(){ window[fns[i]](); }); break; }
+    }
+    try { if (typeof Game !== 'undefined' && Game && typeof Game.updateUI === 'function') Game.updateUI(); } catch(e){}
+    safe(function(){ if (typeof window.__growthMenuRefresh === 'function') window.__growthMenuRefresh(); });
+    emit('refresh', {});
+  }
+  function mutate(fn){
+    var s = live();
+    if (s){ fn(s); persist(); refresh(); return true; }
+    var d = stored();
+    if (d){ fn(d.obj); lsSet(d.key, JSON.stringify(d.obj)); return true; }
+    return false;
+  }
+
+  function countDone(v){
+    if (Array.isArray(v)){
+      var n = 0;
+      for (var i = 0; i < v.length; i++){ var x = v[i]; if (x === true || typeof x === 'number' || (typeof x === 'string' && x)) n++; }
+      return n;
+    }
+    if (v && typeof v === 'object'){ var m = 0; for (var k in v){ if (v[k]) m++; } return m; }
+    return 0;
+  }
+
+  var subs = {};
+  function on(evt, fn){ (subs[evt] = subs[evt] || []).push(fn); }
+  function emit(evt, data){
+    var l = subs[evt] || [];
+    for (var i = 0; i < l.length; i++){ (function(f){ safe(function(){ f(data || {}); }); })(l[i]); }
+  }
+
+  function toast(msg){
+    if (typeof window.showToast === 'function'){ safe(function(){ window.showToast(msg); }); return; }
+    if (typeof window.xToast === 'function'){ safe(function(){ window.xToast(msg); }); return; }
+    if (typeof window.toast === 'function'){ safe(function(){ window.toast(msg); }); return; }
+    var t = document.createElement('div');
+    t.textContent = msg;
+    t.style.cssText = 'position:fixed;left:50%;bottom:18%;transform:translateX(-50%);max-width:86vw;' +
+      'background:var(--surface, var(--bg, #161b22));color:var(--text, #e6edf3);border:1px solid var(--border, rgba(127,127,127,0.3));' +
+      'border-radius:14px;padding:10px 16px;font-weight:700;font-size:0.92rem;text-align:center;' +
+      'box-shadow:0 8px 28px rgba(0,0,0,0.28);z-index:var(--z-toast, 300);font-family:inherit;pointer-events:none;';
+    document.body.appendChild(t);
+    setTimeout(function(){ t.remove(); }, 2400);
+  }
+
+  // ── lifetime clear counter (drives the first-3-clears ad grace + E) ──
+  var TOTAL_KEY = '_growthClearsTotal';
+  function total(){ return parseInt(lsGet(TOTAL_KEY, '0'), 10) || 0; }
+  function clears(){
+    var s = st();
+    if (CFG.kind === 'score') return (s.gamesPlayed | 0);
+    return countDone(s.completedLevels || s.completed);
+  }
+  var lastCount = -1, lastExplicit = 0;
+  function clear(info){
+    info = info || {};
+    lastExplicit = Date.now();
+    lsSet(TOTAL_KEY, String(total() + 1));
+    lastCount = clears();
+    info.total = total();
+    emit('clear', info);
+  }
+  // Fallback detector for any win path a game forgot to report: a rise in
+  // the completed-level count with no explicit clear() in the last 4 s.
+  setInterval(function(){
+    if (CFG.kind === 'score') return;
+    var c = clears();
+    if (lastCount < 0){ lastCount = c; return; }
+    if (c > lastCount){
+      var jump = c - lastCount; lastCount = c;
+      if (Date.now() - lastExplicit > 4000 && jump <= 3){
+        lsSet(TOTAL_KEY, String(total() + 1));
+        emit('clear', { inferred: true, isNew: true, total: total() });
+      }
+    }
+  }, 1500);
+
+  // ── session clock: how long was the player away? ──
+  var SEEN_KEY = '_gLastSeenAt';
+  var prevSeen = parseInt(lsGet(SEEN_KEY, '0'), 10) || 0;
+  var absenceDays = prevSeen ? Math.floor((Date.now() - prevSeen) / 86400000) : 0;
+  function stamp(){ lsSet(SEEN_KEY, String(Date.now())); }
+  stamp();
+  setInterval(function(){ if (document.visibilityState !== 'hidden') stamp(); }, 60000);
+  document.addEventListener('visibilitychange', function(){ stamp(); });
+
+  function streakField(s){
+    var ks = ['dailyChallengeStreak', 'loginStreak', 'streak'];
+    for (var i = 0; i < ks.length; i++){ if (typeof s[ks[i]] === 'number') return ks[i]; }
+    return 'dailyChallengeStreak';
+  }
+
+  var G = {
+    cfg: CFG,
+    pkg: CFG.pkg || '',
+    name: CFG.name || document.title || 'Pegasus Games',
+    playLink: (CFG.live && CFG.pkg) ? 'https://play.google.com/store/apps/details?id=' + CFG.pkg : '',
+    absenceDays: absenceDays,
+    state: st,
+    live: live,
+    persist: persist,
+    refresh: refresh,
+    on: on,
+    emit: emit,
+    toast: toast,
+    clear: clear,
+    clears: clears,
+    totalClears: total,
+    coins: function(){ var s = st(); return typeof s.coins === 'number' ? s.coins : (typeof s.currency === 'number' ? s.currency : 0); },
+    addCoins: function(n, msg){
+      n = n | 0; if (!n) return false;
+      var ok = mutate(function(s){ s.coins = Math.max(0, (s.coins | 0) + n); });
+      if (ok && msg) toast(msg);
+      if (ok) emit('coins', { delta: n });
+      return ok;
+    },
+    spendCoins: function(n){
+      n = n | 0; if (G.coins() < n) return false;
+      return mutate(function(s){ s.coins = (s.coins | 0) - n; });
+    },
+    // Mirrors what every game's Continue button loads: save.currentLevel
+    // (index or number per GROWTH_CFG.levelBase). lastLevelProgress.level is
+    // NOT used — its meaning differs per game (index in some, number in others).
+    displayLevel: function(){
+      if (typeof window.gContinueLevel === 'function'){ var o = safe(window.gContinueLevel); if (o > 0) return o | 0; }
+      var s = st();
+      var cur = (typeof s.currentLevel === 'number') ? s.currentLevel : 0;
+      var n = (CFG.levelBase === 0) ? cur + 1 : cur;
+      return Math.max(1, n | 0);
+    },
+    best: function(){ var s = st(); return (s.bestScore || s.highScore || 0) | 0; },
+    streak: function(){ var s = st(); return (s[streakField(s)] | 0); },
+    setStreak: function(n){ return mutate(function(s){ s[streakField(s)] = n | 0; }); },
+    addBooster: function(n){
+      var b = CFG.booster || {};
+      if (b.field){ return mutate(function(s){ s[b.field] = (s[b.field] | 0) + n; }); }
+      return G.addCoins((b.coins || 25) * n);
+    },
+    addLives: function(n){
+      return mutate(function(s){ var mx = s.maxLives || 5; s.lives = Math.min(mx, (s.lives | 0) + n); });
+    },
+    addUnlimitedLives: function(minutes){
+      return mutate(function(s){
+        var f = ('unlimitedLivesUntil' in s) ? 'unlimitedLivesUntil' : 'unlimitedLivesExpiry';
+        var base = Math.max(Date.now(), s[f] || 0);
+        s[f] = base + minutes * 60000;
+        s.lives = s.maxLives || 5;
+      });
+    },
+    adGateOk: function(){ return total() >= 3 || clears() >= 3; },
+    isPremium: function(){
+      try { if (typeof isPremium === 'function') return !!isPremium(); } catch(e){}
+      var s = st(); var now = Date.now();
+      return !!((s.seasonPassUntil && now < s.seasonPassUntil) || s.seasonPassForever || (s.weeklyPassUntil && now < s.weeklyPassUntil));
+    },
+    adsRemoved: function(){
+      try { if (typeof adsRemoved === 'function') return !!adsRemoved(); } catch(e){}
+      var s = st(); return !!s.removeAds || G.isPremium();
+    },
+    lang: function(){
+      try { if (window.i18n && typeof window.i18n.getLang === 'function') return window.i18n.getLang() || 'en'; } catch(e){}
+      return 'en';
+    }
+  };
+  // ── Daily-missions bridge. Games that define window.missionProgress(track,
+  // amount) (P2048, Unblock, PipeConnect family) never called it — their
+  // Missions screens sat at 0/3 forever (audit 2026-10-03). Every mission
+  // track is now fed from the clear bus + 'gameover' + 'hint' events.
+  function mp(track, n){ if (typeof window.missionProgress === 'function' && n > 0) safe(function(){ window.missionProgress(track, n); }); }
+  on('clear', function(d){
+    if (CFG.kind === 'score'){ if (d.tile === 128) mp('tile128', 1); return; }
+    if (d.endless) return;
+    mp('levels', 1);
+    if (d.perfect) mp('perfect', 1);
+    if (d.daily) mp('daily', 1);
+    if ((d.stars | 0) >= 2) mp('fill', 1);
+    if (d.moves) mp('moves', d.moves | 0);
+  });
+  on('gameover', function(d){
+    mp('levels', 1);
+    mp('score', d.score | 0);
+    if (d.daily) mp('daily', 1);
+  });
+  on('hint', function(){ mp('hint', 1); });
+
+  // ── Popup choreography guard (CLAUDE.md: first-launch popups QUEUE, never
+  // stack). Unsolicited modals — login ladder, starter pack, theme-unlock
+  // card, legacy streak overlay and every growth card — are shown one at a
+  // time: a newcomer that appears while another is up is hidden and released
+  // in arrival order once the screen is clear. User-opened sheets (Ranks,
+  // Shield) and gameplay overlays are never touched.
+  var POPUP_IDS = ['starterPackModal', 'xLoginPanel', 'xThemeUnlockCard', 'xThemeCard', 'ls-overlay'];
+  var held = [];
+  function isPopup(el){
+    return !!(el && el.nodeType === 1 && (POPUP_IDS.indexOf(el.id) >= 0 || el.hasAttribute('data-growth-card')));
+  }
+  function shownPopup(el){
+    if (!el || !el.isConnected || el.__gHeld) return false;
+    var cs = getComputedStyle(el);
+    return cs.display !== 'none' && cs.visibility !== 'hidden' && parseFloat(cs.opacity || '1') > 0.01;
+  }
+  function popups(){
+    var out = [];
+    POPUP_IDS.forEach(function(id){ var e = document.getElementById(id); if (e) out.push(e); });
+    var cards = document.querySelectorAll('[data-growth-card]');
+    for (var i = 0; i < cards.length; i++) out.push(cards[i]);
+    return out;
+  }
+  var owner = null;
+  function arbitrate(){
+    if (owner && !shownPopup(owner)) owner = null;
+    var vis = popups().filter(shownPopup);
+    if (!owner && vis.length) owner = vis[0];
+    vis.forEach(function(el){
+      if (el === owner) return;
+      el.__gHeld = { display: el.style.getPropertyValue('display'), prio: el.style.getPropertyPriority('display') };
+      el.style.setProperty('display', 'none', 'important');
+      held.push(el);
+    });
+    if (!owner && held.length){
+      var nx = held.shift();
+      var h = nx.__gHeld; nx.__gHeld = null;
+      if (!nx.isConnected) { setTimeout(arbitrate, 0); return; }
+      if (h && h.display && h.display !== 'none') nx.style.setProperty('display', h.display, h.prio);
+      else nx.style.removeProperty('display');
+      owner = nx;
+    }
+  }
+  var arbQueued = false;
+  function soon(){ if (arbQueued) return; arbQueued = true; setTimeout(function(){ arbQueued = false; arbitrate(); }, 250); }
+  var attrObs = new MutationObserver(soon);
+  function watch(el){ if (el.__gWatched) return; el.__gWatched = true; attrObs.observe(el, { attributes: true, attributeFilter: ['style', 'class'] }); }
+  function scanWatch(){ popups().forEach(watch); soon(); }
+  if (document.body) new MutationObserver(function(muts){
+    var hit = false;
+    for (var i = 0; i < muts.length && !hit; i++){
+      var m = muts[i];
+      for (var j = 0; j < m.addedNodes.length; j++){ if (isPopup(m.addedNodes[j])) { watch(m.addedNodes[j]); hit = true; } }
+      if (m.removedNodes.length) hit = true;
+    }
+    if (hit) soon();
+  }).observe(document.body, { childList: true });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scanWatch); else scanWatch();
+  setTimeout(scanWatch, 1500);
+
+  window.gGame = G;
+  // Legacy name used by a few games' win paths.
+  if (typeof window.gEmitClear !== 'function') window.gEmitClear = function(info){ G.clear(info); };
+})();
+</script>

@@ -261,26 +261,19 @@
            m.querySelector('[onclick*="DailyChallenge"], [onclick*="startDailyChallenge"], [onclick*="dailyChallenge"]');
   }
   function readSave(){
-    // Per-app localStorage keys (each app uses its own):
-    //   WaterSort:    watersort_save
-    //   Nonogram:     state
-    //   Puzzle2048:   puzzle2048_save
-    //   UnblockPuzzle: unblock_save
-    //   PipeConnect:  pipeconnect_save
-    //   Afterimage:   afterimage_save
-    //   Overlay:      overlay_save
-    //   Hunch:        hunch_save
-    var keys = ['save','state','gameState','progress','State',
-                'watersort_save','puzzle2048_save','unblock_save',
+    // LIVE game state first (CORE adapter) — a fresh install has no save
+    // blob yet, and a stored blob can lag the in-memory state by one move.
+    // (Audit 2026-10-03: UnblockPuzzle's top bar read ❤0 🪙0 on first
+    // launch because `let state` is not a window property.)
+    if (window.gGame) { var live = window.gGame.state(); if (live && typeof live === 'object') return live; }
+    var keys = ['watersort_save','puzzle2048_save','unblock_save',
                 'nonogram_state','nonogram_save','pipeconnect_save',
-                'afterimage_save','overlay_save','hunch_save'];
+                'afterimage_save','overlay_save','hunch_save','sokoban_save'];
     for (var i=0;i<keys.length;i++){
       var raw = lsGet(keys[i], null);
       if (!raw) continue;
       try { return JSON.parse(raw); } catch(e){}
     }
-    // Live state objects — apps expose them as window.State (caps) or
-    // window.state (lower). Read whichever exists.
     if (window.State && typeof window.State === 'object') return window.State;
     if (window.state && typeof window.state === 'object') return window.state;
     return {};
@@ -334,9 +327,11 @@
       var sc = s.score || s.currentScore || 0;
       return 'Continue · ' + sc;
     }
-    var n = (s.lastLevelProgress && s.lastLevelProgress.level)
-         || s.currentLevel
-         || (Array.isArray(s.completedLevels) ? s.completedLevels.length + 1 : 1);
+    // gGame.displayLevel() knows whether currentLevel is an index (WaterSort,
+    // PipeConnect family) or a level number (Nonogram, Unblock) — the old
+    // raw read showed "Level 4" for a button that opened Level 5.
+    var n = window.gGame ? window.gGame.displayLevel()
+          : ((s.lastLevelProgress && s.lastLevelProgress.level) || s.currentLevel || 1);
     return 'Continue · Level ' + n;
   }
 
@@ -730,8 +725,10 @@
     if (!txt) {
       // Compute a basic line from current best level / score.
       var s = readSave();
-      var best = s.currentLevel || s.bestScore || s.score || 1;
-      txt = '🏆 Best this week · ' + best + '\nResets Monday — beat your best to earn coins.';
+      var G = window.gGame;
+      var isScore = G && G.cfg && G.cfg.kind === 'score';
+      var best = isScore ? (G.best() || s.score || 0) : (G ? G.clears() : (s.currentLevel || 0));
+      txt = (isScore ? '🏆 Best score · ' : '🏆 Levels solved · ') + best + '\nResets Monday — beat your best to earn coins.';
     }
     return '<div style="white-space:pre-line;padding:6px 4px;opacity:0.95;">' + txt + '</div>';
   }
@@ -860,7 +857,8 @@
       var sc = s.bestScore || s.highScore || s.score || s.currentScore || 0;
       return { value: parseInt(sc,10) || 0, label: 'Score', is2048: true };
     }
-    var v = (s.completedLevels && s.completedLevels.length) ||
+    var v = (window.gGame && window.gGame.clears()) ||
+            (s.completedLevels && s.completedLevels.length) ||
             s.levelsCompleted || s.currentLevel || 1;
     return { value: parseInt(v,10) || 1, label: 'Level', is2048: false };
   }
@@ -1624,5 +1622,8 @@
   // shipped earlier already nukes the legacy inject calls; this is a
   // backup entry point if any later hook calls it).
   window._growthRenderMenu = renderMenu;
+  // CORE gGame.refresh() calls this after any grant so the top bar and the
+  // Continue label update immediately (text-only, no re-layout).
+  window.__growthMenuRefresh = function(){ safe(function(){ refreshLeftStats(); patchMenuButtons(); }); };
 })();
 </script>

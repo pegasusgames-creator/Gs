@@ -1,7 +1,7 @@
 <!-- Growth shim — Part F (share virality). Idempotent: data-growth-shim="F".
      - Share-a-win: when a level-complete / win overlay shows up, inject a
-       "🔁 Share" button. Composes a one-tap message (with Play link for live
-       apps; UnblockPuzzle ships the no-link wording until it goes live).
+       "🔁 Share" button. Composes a one-tap message with the solved level /
+       best score and the Play link (GROWTH_CFG.live) or a store-search line.
      - Wordle-style daily result: same Share button on the daily-completion
        overlay produces a spoiler-free recap line.
      - Native bridge: window.Android.shareText. shareImage is best-effort and
@@ -18,59 +18,49 @@
   function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
 
   // Game-name + Play link per package.
-  var GAME_INFO = {
-    'com.pegasusgames.watersortpuzzle': { name:'Water Sort Puzzle', link:'https://play.google.com/store/apps/details?id=com.pegasusgames.watersortpuzzle' },
-    'com.pegasusgames.nonogram':        { name:'Nonogram',           link:'https://play.google.com/store/apps/details?id=com.pegasusgames.nonogram' },
-    'com.pegasusgames.puzzle2048':      { name:'2048 Puzzle',         link:'https://play.google.com/store/apps/details?id=com.pegasusgames.puzzle2048' },
-    // TODO post-release: replace empty link with the real Play URL once UnblockPuzzle is live.
-    'com.pegasusgames.unblockpuzzle':   { name:'Unblock Puzzle',      link:'' },
-    'com.pegasusgames.pipeconnect':     { name:'Pipe Connect',        link:'' },
-  };
-
-  function detectPkg(){
-    var t = (document.title||'').toLowerCase();
-    if (t.indexOf('water') >= 0) return 'com.pegasusgames.watersortpuzzle';
-    if (t.indexOf('nonogram') >= 0) return 'com.pegasusgames.nonogram';
-    if (t.indexOf('2048') >= 0) return 'com.pegasusgames.puzzle2048';
-    if (t.indexOf('unblock') >= 0) return 'com.pegasusgames.unblockpuzzle';
-    if (t.indexOf('pipe') >= 0) return 'com.pegasusgames.pipeconnect';
-    return '';
+  // Name + Play link come from the CORE adapter (GROWTH_CFG): live apps get
+  // their store link, pre-release apps a "search for it" line instead.
+  function info(){
+    var G = window.gGame || {};
+    return { name: G.name || document.title || 'Pegasus Games', link: G.playLink || '' };
   }
-  var PKG = detectPkg();
-  var INFO = GAME_INFO[PKG] || { name:'Pegasus Games', link:'' };
-
-  function readSave(){
-    var keys = ['save','state','gameState','progress'];
-    for (var i=0;i<keys.length;i++){
-      var raw = lsGet(keys[i],null);
-      if (!raw) continue;
-      try { return JSON.parse(raw); } catch(e){}
-    }
-    return {};
+  var IS_SCORE = function(){ return !!(window.gGame && window.gGame.cfg && window.gGame.cfg.kind === 'score'); };
+  // Remember the level the player just solved (CORE clear event payload).
+  var lastSolved = 0, lastDailyMoves = 0;
+  (function withCore(){
+    if (!window.gGame) { setTimeout(withCore, 50); return; }
+    window.gGame.on('clear', function(d){
+      if (d && d.level) lastSolved = d.level | 0;
+      if (d && d.daily && d.moves) lastDailyMoves = d.moves | 0;
+    });
+  })();
+  function withLink(line){
+    var I = info();
+    return I.link ? (line + ' ' + I.link)
+                  : (line + ' Find "' + I.name + '" by Pegasus Games on Google Play.');
   }
 
   function composeWin(){
-    var s = readSave();
-    var lvl = s.currentLevel || (Array.isArray(s.completedLevels) ? s.completedLevels.length : 0) || 0;
-    var brag = 'I just solved Level ' + lvl + ' on ' + INFO.name + '! Can you beat me?';
-    return INFO.link
-      ? (brag + ' ' + INFO.link)
-      : (brag + ' — search "' + INFO.name + '" by Pegasus Games on Google Play.');
+    var I = info();
+    var lvl = lastSolved || Math.max(1, ((window.gGame && window.gGame.displayLevel()) || 2) - 1);
+    return withLink('I just solved Level ' + lvl + ' in ' + I.name + '! 🧩 Can you beat it?');
   }
 
   function compose2048Score(){
-    var s = readSave();
-    var score = s.bestScore || s.highScore || s.score || 0;
-    var brag = 'New high score on ' + INFO.name + ': ' + score + '. Beat that!';
-    return INFO.link ? (brag + ' ' + INFO.link) : brag;
+    var I = info();
+    var G = window.gGame;
+    var score = G ? Math.max(G.best(), (G.state().score | 0)) : 0;
+    return withLink('My best in ' + I.name + ': ' + score + ' points. 🔥 Beat that!');
   }
 
   function composeDaily(){
-    var s = readSave();
-    var date = new Date().toISOString().slice(0,10);
-    var moves = s.lastDailyMoves || s.dailyMoves || '?';
-    var line = INFO.name + ' Daily ' + date + ' ✅  solved in ' + moves + ' moves';
-    return INFO.link ? (line + '\n' + INFO.link) : line;
+    var I = info();
+    var d = new Date();
+    var date = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+    var line = I.name + ' Daily ' + date + ' ✅' + (lastDailyMoves ? ' solved in ' + lastDailyMoves + ' moves' : ' solved');
+    var streak = window.gGame ? window.gGame.streak() : 0;
+    if (streak > 1) line += ' · 🔥' + streak;
+    return I.link ? (line + '\n' + I.link) : line;
   }
 
   function doShare(text){
@@ -79,7 +69,7 @@
     if (navigator.share) {
       try { navigator.share({ text: text }); return; } catch(e){}
     }
-    safe(function(){ window.prompt('Copy and share:', text); });
+    if (window.gGame) window.gGame.toast('Sharing isn\'t available on this device');
   }
 
   function buildShareButton(label, getter){
@@ -143,7 +133,7 @@
         } else if (id.indexOf('highscore') >= 0 || id.indexOf('high') >= 0) {
           injectInto(els[j], compose2048Score, '🔁 Share new high score');
         } else {
-          var getter = (PKG === 'com.pegasusgames.puzzle2048') ? compose2048Score : composeWin;
+          var getter = IS_SCORE() ? compose2048Score : composeWin;
           injectInto(els[j], getter, '🔁 Share win');
         }
       }
