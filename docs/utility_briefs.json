@@ -1,0 +1,457 @@
+[
+ {
+  "app": "AgeCalculator",
+  "name": "Age Calculator",
+  "brief": "Exact age in years/months/days/hours, next-birthday countdown, date difference, zodiac + Chinese zodiac, milestones (10,000 days), saved people list."
+ },
+ {
+  "app": "AspectRatio",
+  "name": "Aspect Ratio Calculator",
+  "brief": "Resize keeping ratio, common presets (16:9, 4:5, 9:16 social, print sizes), lock W/H, visual preview frame, pixel/inch/DPI conversions."
+ },
+ {
+  "app": "BMICalculator",
+  "name": "BMI Calculator",
+  "brief": "BMI with metric/imperial, WHO category bands with neutral wording, healthy-weight range, history chart, body-fat estimate with clear 'estimate' labels; no medical advice."
+ },
+ {
+  "app": "BillSplit",
+  "name": "Bill Split",
+  "brief": "Multi-person itemised split: add items, assign to people, shared items, tax/tip distribution, per-person totals, share summary text; distinct from TipCalculator (single bill tip)."
+ },
+ {
+  "app": "BloodPressureLog",
+  "name": "Blood Pressure Log",
+  "brief": "Log systolic/diastolic/pulse with time and arm, category colouring per published guideline ranges with neutral wording, charts, averages, export CSV/PDF-like text for a doctor; local-only data; no diagnosis."
+ },
+ {
+  "app": "BloodSugarLog",
+  "name": "Blood Sugar Log",
+  "brief": "Log glucose (mg/dL or mmol/L) with meal context, target ranges set by the user, charts, averages by time of day, export; local-only; no dosing advice."
+ },
+ {
+  "app": "BreathingExercise",
+  "name": "Breathing Exercise",
+  "brief": "Guided breathing patterns (box, 4-7-8, resonance) with animated shape, haptic cues, session timer, streak calendar, gentle sounds; no medical claims."
+ },
+ {
+  "app": "BudgetPlanner",
+  "name": "Budget Planner",
+  "brief": "Monthly envelopes/categories planning with income, planned vs actual, rollover, goals; distinct from ExpenseTracker (quick logging of what you spent)."
+ },
+ {
+  "app": "CharadesApp",
+  "name": "Charades",
+  "brief": "Team charades with word decks by category (original word lists), round timer, team scoring, skip/correct buttons, pass-the-phone flow; distinct from TiltGuess (phone-on-forehead tilt)."
+ },
+ {
+  "app": "ChessClock",
+  "name": "Chess Clock",
+  "brief": "Two-player game clock with Fischer increment, Bronstein delay, hourglass, presets for blitz/rapid/classical, move counter, big tap zones, sounds, pause."
+ },
+ {
+  "app": "ChoreChart",
+  "name": "Chore Chart",
+  "brief": "Family chore board: members, recurring chores, points and weekly rewards, completion check-offs, simple leaderboard per household (local)."
+ },
+ {
+  "app": "CocktailGuide",
+  "name": "Cocktail Guide",
+  "brief": "Classic cocktail recipes (original descriptions) with ingredients, method and glass, filter by spirit/what I have, measures oz/ml, favourites; adults-only audience (18+), responsible-drinking note; no brand names."
+ },
+ {
+  "app": "CoffeeGuide",
+  "name": "Coffee Guide",
+  "brief": "Brew-method guides (pour-over, French press, AeroPress-style immersion — no trademarked brand names in titles) with ratio calculator, brew timer with pour steps, grind chart, bean log."
+ },
+ {
+  "app": "CoinFlip",
+  "name": "Coin Flip",
+  "brief": "3D coin flip with realistic physics animation, best-of series, streak stats and history, custom coin faces; fair randomness via crypto.getRandomValues; distinct from DiceRoller/RandomNumber."
+ },
+ {
+  "app": "CompoundInterest",
+  "name": "Compound Interest Calculator",
+  "brief": "Growth with contributions, compounding frequency, inflation-adjusted view, chart and year table, goal solver (how long / how much monthly)."
+ },
+ {
+  "app": "CurrencyConverter",
+  "name": "Currency Converter",
+  "brief": "Convert 30+ major currencies with daily reference rates fetched from a free no-key source (e.g. ECB via frankfurter.app), cached for offline with the rate date shown honestly, favourites, calculator keypad."
+ },
+ {
+  "app": "DartsScorer",
+  "name": "Darts Scorer",
+  "brief": "501/301/Cricket scoring for up to 4 players, checkout suggestions, averages, undo, big number pad."
+ },
+ {
+  "app": "DecisionMaker",
+  "name": "Decision Maker",
+  "brief": "Weighted decision wheel and lists (saved), elimination mode, pros/cons scoring helper; distinct from SpinBottle (party bottle)."
+ },
+ {
+  "app": "DiceRoller",
+  "name": "Dice Roller",
+  "brief": "RPG dice sets d4-d100 with 3D-feel roll animation, notation input (2d6+3), saved rolls, history, advantage/disadvantage; rewrite fully — the old file was the blocked placeholder."
+ },
+ {
+  "app": "DotArt",
+  "name": "Dot Art",
+  "brief": "Creative dot-drawing canvas: symmetric dot brushes, palettes, layers-lite, export image to share sheet; distinct from PixelArt (color-by-number) and Kaleidoscope."
+ },
+ {
+  "app": "DrumMachine",
+  "name": "Drum Machine",
+  "brief": "16-step sequencer with synthesized kits, swing, tempo, pattern chaining, save/load patterns; distinct from KidsDrum."
+ },
+ {
+  "app": "ExpenseTracker",
+  "name": "Expense Tracker",
+  "brief": "Quick expense logging with categories, monthly summary chart, search, recurring expenses, CSV export; distinct from BudgetPlanner."
+ },
+ {
+  "app": "EyeRest",
+  "name": "Eye Rest",
+  "brief": "20-20-20 screen-break reminders with gentle notifications, eye-exercise animations, break streaks; no medical claims."
+ },
+ {
+  "app": "FastingTimer",
+  "name": "Fasting Timer",
+  "brief": "Intermittent fasting timer with plans (16:8, 18:6, 20:4, OMAD), progress ring, history, streaks, reminders; neutral non-medical wording."
+ },
+ {
+  "app": "Fireworks",
+  "name": "Fireworks",
+  "brief": "Interactive fireworks show toy: tap/drag to launch shells with many burst types, music-synced show mode (synth), photo-like long exposure mode; relaxing; distinct from other creative toys."
+ },
+ {
+  "app": "FishingLog",
+  "name": "Fishing Log",
+  "brief": "Catch log with species list, weight/length, bait, location label, weather notes, photos not required, personal records, season stats."
+ },
+ {
+  "app": "FlashcardMaker",
+  "name": "Flashcard Maker",
+  "brief": "Create decks, spaced-repetition review (SM-2-style), import/export text, study stats; distinct from TimesTable/PhoneticApp trainers."
+ },
+ {
+  "app": "FlashlightSOS",
+  "name": "Flashlight SOS",
+  "brief": "Torch on/off via a native setTorch bridge (CameraManager.setTorchMode, no camera permission), SOS and Morse signalling, strobe with a photosensitivity warning, screen-light colours; rewrite fully (blocked placeholder); distinct from MorseCode trainer."
+ },
+ {
+  "app": "GPACalculator",
+  "name": "GPA Calculator",
+  "brief": "Courses with credits and grades, multiple grading scales (4.0, 4.3, percentage), semester/cumulative GPA, what-if target planner."
+ },
+ {
+  "app": "GolfScorecard",
+  "name": "Golf Scorecard",
+  "brief": "9/18-hole scorecards for up to 4 players, par per hole, strokes/putts, stats, saved courses."
+ },
+ {
+  "app": "GroceryList",
+  "name": "Grocery List",
+  "brief": "Smart list with aisle categories, quantities, quick-add suggestions from history, check-off with undo, multiple lists, share as text."
+ },
+ {
+  "app": "GuitarChords",
+  "name": "Guitar Chords",
+  "brief": "Chord library with diagrams for all keys and voicings, left-handed mode, synthesized strum playback (Karplus-Strong), chord finder, tuner-free reference; rewrite fully (blocked placeholder)."
+ },
+ {
+  "app": "IceBreaker",
+  "name": "Ice Breaker",
+  "brief": "Conversation decks for teams, classrooms and first meetings (original questions), timer per speaker, favourite cards; distinct from party apps (work-friendly tone)."
+ },
+ {
+  "app": "Kaleidoscope",
+  "name": "Kaleidoscope",
+  "brief": "Symmetry drawing toy with 5+ symmetry modes, palettes, glow brushes, animated playback, export image."
+ },
+ {
+  "app": "LoanCalculator",
+  "name": "Loan Calculator",
+  "brief": "Loan/mortgage EMI with amortization schedule, extra payments, comparison of two loans, charts."
+ },
+ {
+  "app": "MandalaColor",
+  "name": "Mandala Color",
+  "brief": "Adult mandala colouring with 100+ generated mandalas (procedural geometry), gradient fills, relaxing sounds; distinct from KidsColoring."
+ },
+ {
+  "app": "MedicationReminder",
+  "name": "Medication Reminder",
+  "brief": "Medication schedules with multiple daily reminders (inexact alarms; exact only if the user grants), taken/skipped log, refill reminders, history export; local-only; no dosing advice; health-apps declaration notes."
+ },
+ {
+  "app": "Metronome",
+  "name": "Metronome",
+  "brief": "Accurate WebAudio-scheduled metronome 30-300 BPM, time signatures, subdivisions, accents, tap tempo, setlists, visual pendulum; rewrite fully (blocked placeholder)."
+ },
+ {
+  "app": "MoodTracker",
+  "name": "Mood Tracker",
+  "brief": "Daily mood check-in with emotions and notes, calendar, trends, gentle reminders; no therapy claims; local-only."
+ },
+ {
+  "app": "MorseCode",
+  "name": "Morse Code",
+  "brief": "Morse trainer and translator: text<->Morse, audio and vibration playback, Koch-method lessons, speed (WPM) settings; distinct from FlashlightSOS."
+ },
+ {
+  "app": "MusicTheory",
+  "name": "Music Theory",
+  "brief": "Lessons + interactive quizzes: notes on staff, intervals, scales, chords, ear-training with synthesized audio, progress tracking; rewrite fully (blocked placeholder)."
+ },
+ {
+  "app": "NeverHaveIEver",
+  "name": "Never Have I Ever",
+  "brief": "Fingers-down rounds with players, 3 spice levels (family/party/spicy — no explicit sexual content), original prompts, custom prompts."
+ },
+ {
+  "app": "NumberBase",
+  "name": "Number Base Converter",
+  "brief": "Binary/octal/decimal/hex (and any base 2-36) with live conversion, bit view, two's complement, ASCII table."
+ },
+ {
+  "app": "PackingChecklist",
+  "name": "Packing Checklist",
+  "brief": "Reusable checklists for any routine (gym bag, before leaving home, workday), templates, reset per use; distinct from PackingList (trip planner)."
+ },
+ {
+  "app": "PackingList",
+  "name": "Packing List",
+  "brief": "Trip planner: destination type, weather, duration and activities generate a packing list with quantities, multiple travellers, progress; distinct from PackingChecklist."
+ },
+ {
+  "app": "PasswordGen",
+  "name": "Password Generator",
+  "brief": "Strong passwords and passphrases (public word list) via crypto.getRandomValues, strength meter with entropy, options, copy with auto-clear note; nothing stored remotely; rewrite fully (blocked placeholder)."
+ },
+ {
+  "app": "PercentageCalc",
+  "name": "Percentage Calculator",
+  "brief": "Percent toolkit: X% of Y, percent change, increase/decrease, ratio to percent, margin/markup; distinct from Tip/VAT calculators."
+ },
+ {
+  "app": "PeriodTracker",
+  "name": "Period Tracker",
+  "brief": "Cycle tracking with predictions from the user's own history, symptoms log, reminders, local-only data with a clear privacy note; no contraception or medical claims; health-apps declaration notes."
+ },
+ {
+  "app": "PhoneticApp",
+  "name": "Phonetic Alphabet",
+  "brief": "NATO phonetic alphabet trainer: spell-out tool, listen-and-type quizzes with speech synthesis, flash practice; distinct from MorseCode."
+ },
+ {
+  "app": "Phrasebook",
+  "name": "Phrasebook",
+  "brief": "Travel phrasebook: essential phrases across 10+ languages with categories, speech-synthesis pronunciation, favourites; translations checked."
+ },
+ {
+  "app": "PianoKeyboard",
+  "name": "Piano Keyboard",
+  "brief": "Full 3+ octave piano with synthesized samples, chord/scale overlay, lessons for public-domain pieces with falling-note guide, recording; rewrite fully (blocked placeholder); distinct from KidsPiano."
+ },
+ {
+  "app": "PlantWater",
+  "name": "Plant Water",
+  "brief": "Plant care reminders per plant (watering interval, light, notes), schedule calendar, care log."
+ },
+ {
+  "app": "PomodoroTimer",
+  "name": "Pomodoro Timer",
+  "brief": "Focus timer with custom work/break cycles, tasks, daily focus stats and streak, gentle sounds, reminders."
+ },
+ {
+  "app": "PostureReminder",
+  "name": "Posture Reminder",
+  "brief": "Periodic posture check reminders with stretch routines (animated), streaks; no medical claims."
+ },
+ {
+  "app": "PushUpCounter",
+  "name": "Push-Up Counter",
+  "brief": "Count push-ups by touching the screen with your nose/chest (honest — no 'automatic' camera claim unless implemented), training plans, history, records."
+ },
+ {
+  "app": "QRCodeGen",
+  "name": "QR Code Generator",
+  "brief": "Generate QR codes (URL, text, Wi-Fi, contact) with an embedded encoder, colours, save/share image; implement scanning only if you add camera support properly (WebView permission + runtime permission + decoder); otherwise drop 'scanner' from all copy; rewrite fully (blocked placeholder)."
+ },
+ {
+  "app": "QuitSmoking",
+  "name": "Quit Smoking",
+  "brief": "Smoke-free counter: time, money saved, cigarettes avoided, milestones, cravings log, motivation cards; neutral health wording."
+ },
+ {
+  "app": "RandomName",
+  "name": "Random Name Generator",
+  "brief": "Name generator by style (fantasy, sci-fi, baby names by origin, pets, usernames) from bundled lists, favourites; rewrite fully (blocked placeholder)."
+ },
+ {
+  "app": "RandomNumber",
+  "name": "Random Number Generator",
+  "brief": "Ranges, multiple numbers, no-repeat draws, lottery-style picker, list picker; crypto randomness; rewrite fully (blocked placeholder); distinct from DiceRoller/CoinFlip."
+ },
+ {
+  "app": "RandomRecipe",
+  "name": "Random Recipe",
+  "brief": "Dinner idea picker from a bundled library of original recipes with filters (time, diet), shopping list export, favourites; rewrite fully (blocked placeholder)."
+ },
+ {
+  "app": "RecipeConverter",
+  "name": "Recipe Converter",
+  "brief": "Scale recipes by servings, unit conversions (cups/grams per ingredient density table), oven temperature, pan-size conversions."
+ },
+ {
+  "app": "RomanNumeralConverter",
+  "name": "Roman Numeral Converter",
+  "brief": "Roman <-> Arabic with rules explained, dates to Roman, practice quiz."
+ },
+ {
+  "app": "SalaryCalculator",
+  "name": "Salary Calculator",
+  "brief": "Hourly/daily/monthly/annual conversions, overtime, simple tax estimate with user-entered rate (no country tax-law claims), take-home breakdown."
+ },
+ {
+  "app": "SatisfyingSlime",
+  "name": "Satisfying Slime",
+  "brief": "Soft-body slime simulation toy with poke/stretch/swirl, textures and colours, ASMR-style synthesized sounds, haptics."
+ },
+ {
+  "app": "SavingsGoal",
+  "name": "Savings Goal",
+  "brief": "Multiple savings goals with deposits, progress rings, target date projections, celebration milestones."
+ },
+ {
+  "app": "ScientificCalc",
+  "name": "Scientific Calculator",
+  "brief": "Full scientific calculator with expression input, history, trig in deg/rad, constants, memory, engineering notation."
+ },
+ {
+  "app": "ScoreTracker",
+  "name": "Score Tracker",
+  "brief": "Score keeping for any game with up to 8 players/teams, rounds, history, winners, presets for common card/board game formats (generic names only)."
+ },
+ {
+  "app": "SleepTracker",
+  "name": "Sleep Tracker",
+  "brief": "Manual sleep log (bed/wake, quality, notes), sleep debt, weekly trends, bedtime reminder; no sensor claims unless implemented."
+ },
+ {
+  "app": "SobrietyCounter",
+  "name": "Sobriety Counter",
+  "brief": "Sober-days counter with milestones, money saved, journal, daily pledge, support resources note; supportive non-clinical tone."
+ },
+ {
+  "app": "SolarSystem",
+  "name": "Solar System",
+  "brief": "Interactive solar system explorer with to-scale/readable modes, planet facts checked, orbits animation, quiz; rewrite fully (blocked placeholder)."
+ },
+ {
+  "app": "SoundBoard",
+  "name": "Soundboard",
+  "brief": "Soundboard of synthesized effects (only claim the number you actually ship), categories, favourites, custom boards."
+ },
+ {
+  "app": "SpinBottle",
+  "name": "Spin the Bottle",
+  "brief": "Physics bottle spin for groups with player names around the circle, optional truth-or-dare-style prompts kept friendly; distinct from DecisionMaker."
+ },
+ {
+  "app": "StepCounter",
+  "name": "Step Counter",
+  "brief": "Daily steps via a native step-counter sensor bridge (TYPE_STEP_COUNTER + ACTIVITY_RECOGNITION permission asked in context), goals, distance/calorie estimates labelled as estimates, history."
+ },
+ {
+  "app": "StopwatchTimer",
+  "name": "Stopwatch Timer",
+  "brief": "Stopwatch with laps and splits, multiple countdown timers, interval timer, session history, background-safe timing."
+ },
+ {
+  "app": "TallyCounter",
+  "name": "Tally Counter",
+  "brief": "Multi-counter tool with big tap zones, steps, limits, history, volume-button counting via the bridge if feasible; distinct from CountingApp (kids game)."
+ },
+ {
+  "app": "TextCase",
+  "name": "Text Case",
+  "brief": "Text tools: case conversions, trim/clean, word/character counts, sort lines, remove duplicates, find/replace, copy/share."
+ },
+ {
+  "app": "ThisOrThat",
+  "name": "This or That",
+  "brief": "Bracket tournament of choices with original prompt decks, group voting tallies on one phone; distinct from WouldYouRather."
+ },
+ {
+  "app": "TiltGuess",
+  "name": "Tilt Guess",
+  "brief": "Phone-on-forehead guessing party game: tilt down for correct, up to pass (DeviceOrientation), original word decks, round timer, results recap; never use 'Heads Up'."
+ },
+ {
+  "app": "TimesTable",
+  "name": "Times Table",
+  "brief": "Adult/teen study tool for 1-20 tables: drills, spaced review of weak facts, speed tests, stats; distinct from MultiplicationGame (kids)."
+ },
+ {
+  "app": "TimezoneConverter",
+  "name": "Timezone Converter",
+  "brief": "Meeting planner across zones: pick cities, slide a time bar, see working hours overlap, DST-aware via Intl, share a meeting time; distinct from WorldClock."
+ },
+ {
+  "app": "TipCalculator",
+  "name": "Tip Calculator",
+  "brief": "Single-bill tip with presets, rounding, split evenly, service-quality slider; distinct from BillSplit (itemised multi-person)."
+ },
+ {
+  "app": "TruthOrDare",
+  "name": "Truth or Dare",
+  "brief": "Player turns with categories (family/party/couples-light — no explicit content), original prompts, custom prompts, skip limits."
+ },
+ {
+  "app": "TwoTruthsOneLie",
+  "name": "Two Truths One Lie",
+  "brief": "Bluff party game: each player enters statements, group votes on one phone, scoring and rounds."
+ },
+ {
+  "app": "UnitConverter",
+  "name": "Unit Converter",
+  "brief": "20+ categories with accurate factors, favourites, recent conversions, calculator input."
+ },
+ {
+  "app": "VATCalculator",
+  "name": "VAT Calculator",
+  "brief": "Add/remove VAT/GST with country rate presets labelled as user-editable defaults, invoice line totals; distinct from PercentageCalc."
+ },
+ {
+  "app": "WaterReminder",
+  "name": "Water Reminder",
+  "brief": "Hydration tracker with goal from user input, quick-add cups, reminders through the day, history; neutral wording."
+ },
+ {
+  "app": "WhiteNoise",
+  "name": "White Noise",
+  "brief": "Synthesized white/pink/brown noise plus procedural rain, waves, fan, fire; mixer, sleep timer, background playback limits stated honestly."
+ },
+ {
+  "app": "WorkoutLog",
+  "name": "Workout Log",
+  "brief": "Strength training log: exercises, sets/reps/weight, templates, PRs, volume charts, rest timer."
+ },
+ {
+  "app": "WorldClock",
+  "name": "World Clock",
+  "brief": "Live clocks for chosen cities with day/night, alarms-free reference, DST-aware via Intl, widgets-like home list; distinct from TimezoneConverter."
+ },
+ {
+  "app": "WouldYouRather",
+  "name": "Would You Rather",
+  "brief": "Dilemma cards with group votes tallied on one phone (no fake global percentages), categories, custom cards."
+ },
+ {
+  "app": "ZenGarden",
+  "name": "Zen Garden",
+  "brief": "Rake sand patterns with physics-like grooves, place stones/plants, calm ambient synth, save gardens."
+ }
+]
