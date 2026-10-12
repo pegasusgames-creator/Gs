@@ -292,7 +292,7 @@ THEMES = {
         "texture":          "T8",
     },
 
-    "WordleClone": {
+    "WordGuess": {
         "bg_top_left":  (250, 250, 250),  # bright white
         "bg_top_right": (235, 240, 235),
         "bg_bottom":    (200, 210, 200),
@@ -307,7 +307,7 @@ THEMES = {
         "texture":          "T3",
     },
 
-    "Connections": {
+    "WordGroups": {
         "bg_top_left":  (255, 245, 215),  # warm cream
         "bg_top_right": (255, 230, 180),  # soft yellow
         "bg_bottom":    (220, 200, 160),
@@ -1196,7 +1196,7 @@ THEMES = {
         "voice":            "V3",
         "texture":          "T3",
     },
-    "HarryPotterFan": {
+    "MythQuiz": {
         "bg_top_left":  (52, 178, 71),
         "bg_top_right": (69, 201, 129),
         "bg_bottom":    (35, 107, 31),
@@ -1210,7 +1210,7 @@ THEMES = {
         "voice":            "V7",
         "texture":          "T5",
     },
-    "HeadsUpGame": {
+    "TiltGuess": {
         "bg_top_left":  (45, 210, 76),
         "bg_top_right": (78, 218, 146),
         "bg_bottom":    (30, 135, 29),
@@ -1350,7 +1350,7 @@ THEMES = {
         "voice":            "V5",
         "texture":          "T2",
     },
-    "LogoQuiz": {
+    "SymbolQuiz": {
         "bg_top_left":  (52, 178, 129),
         "bg_top_right": (69, 201, 189),
         "bg_bottom":    (31, 107, 62),
@@ -1378,7 +1378,7 @@ THEMES = {
         "voice":            "V5",
         "texture":          "T5",
     },
-    "Mastermind": {
+    "CodeBreaker": {
         "bg_top_left":  (17, 95, 73),
         "bg_top_right": (24, 137, 139),
         "bg_bottom":    (9, 52, 31),
@@ -2120,7 +2120,7 @@ THEMES = {
         "voice":            "V8",
         "texture":          "T4",
     },
-    "SpellingBee": {
+    "WordHive": {
         "bg_top_left":  (232, 224, 235),
         "bg_top_right": (225, 213, 225),
         "bg_bottom":    (185, 168, 199),
@@ -2246,7 +2246,7 @@ THEMES = {
         "voice":            "V6",
         "texture":          "T6",
     },
-    "TetrisGame": {
+    "BlockDrop": {
         "bg_top_left":  (89, 13, 83),
         "bg_top_right": (134, 19, 90),
         "bg_bottom":    (40, 6, 45),

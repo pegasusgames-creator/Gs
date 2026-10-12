@@ -30,9 +30,9 @@ KIDS = {"ABCLearning", "BasicMathKids", "CountingApp", "KidsColoring",
 
 TRIVIA = {"AnimalQuiz", "BibleQuiz", "CapitalCities", "EmojiQuiz", "FlagQuiz",
           "FoodQuiz", "FootballQuiz", "GeneralQuiz", "GeographyQuiz",
-          "HistoryQuiz", "LogoQuiz", "MentalMathQuiz", "MovieTrivia",
+          "HistoryQuiz", "SymbolQuiz", "MentalMathQuiz", "MovieTrivia",
           "MusicTheory", "ScienceQuiz", "SolarSystem", "SportsQuiz",
-          "TrueOrFalse", "HarryPotterFan"}
+          "TrueOrFalse", "MythQuiz"}
 
 TRACKER = {"BloodPressureLog", "BloodSugarLog", "BudgetPlanner",
            "ChoreChart", "ExpenseTracker", "FastingTimer", "FishingLog",
@@ -58,16 +58,16 @@ WELLNESS = {"BreathingExercise", "EyeRest", "WhiteNoise", "ZenGarden",
 CREATIVE = {"DotArt", "PixelArt", "MandalaColor", "Kaleidoscope",
             "FlashcardMaker", "Fireworks"}
 
-SOCIAL_PARTY = {"CharadesApp", "HeadsUpGame", "IceBreaker", "NeverHaveIEver",
+SOCIAL_PARTY = {"CharadesApp", "TiltGuess", "IceBreaker", "NeverHaveIEver",
                 "SpinBottle", "ThisOrThat", "TruthOrDare", "TwentyQuestions",
                 "TwoTruthsOneLie", "WouldYouRather"}
 
-WORD = {"Connections", "Cryptogram", "Hangman", "SpellingBee", "WordConnect",
-        "WordLadder", "WordleClone", "WordScramble", "WordSearch"}
+WORD = {"WordGroups", "Cryptogram", "Hangman", "WordHive", "WordConnect",
+        "WordLadder", "WordGuess", "WordScramble", "WordSearch"}
 
 ARCADE = {"BalloonPop", "BrickBreaker", "BubbleShooter", "FlappyWings",
           "NumberTap", "ReactionTime", "SnakeGame", "StroopTest", "TapColor",
-          "TetrisGame", "WhackaMole", "ColorFill", "Minesweeper"}
+          "BlockDrop", "WhackaMole", "ColorFill", "Minesweeper"}
 
 MUSIC = {"DrumMachine", "GuitarChords", "Metronome", "MorseCode",
          "PianoKeyboard", "SoundBoard"}

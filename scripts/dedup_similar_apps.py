@@ -107,7 +107,7 @@ CLUSTER_RULES = {
     # ===== WORD GAMES — WORDLE-LIKE =====
     "word_guess": {
         "members": [
-            ("WordleClone",     1),  # if exists; Wordle = #1
+            ("WordGuess",     1),  # if exists; Wordle = #1
             ("WordScramble",    2),
             ("AnagramFinder",   3),
         ],
@@ -129,7 +129,7 @@ CLUSTER_RULES = {
     # ===== WORD PUZZLES — STRUCTURAL =====
     "word_structural": {
         "members": [
-            ("Connections",     1),  # NYT-style category grouping
+            ("WordGroups",     1),  # NYT-style category grouping
             ("Cryptogram",      2),  # decode cipher
         ],
         "keep_top_n": 2,
