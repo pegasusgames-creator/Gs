@@ -1,81 +1,30 @@
-// -------------------------------------------------------
-// app/build.gradle
-// -------------------------------------------------------
-plugins {
-    id 'com.android.application'
-}
-
-// Load signing credentials from keystore.properties (never commit that file)
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
-
+plugins { id 'com.android.application' }
+def kpf = rootProject.file("keystore.properties"); def kp = new Properties(); if (kpf.exists()) { kp.load(new FileInputStream(kpf)) }
 android {
     compileSdk 36
-
     namespace "com.pegasusgames.abclearning"
-
     defaultConfig {
         applicationId "com.pegasusgames.abclearning"
         minSdk 24
         targetSdk 36
-        versionCode 13
-        versionName "1.7.1"
+        versionCode 14
+        versionName "2.0.0"
     }
-
-    signingConfigs {
-        release {
-            storeFile rootProject.file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-        }
-    }
-
+    signingConfigs { release { if (kp['storeFile']) { storeFile rootProject.file(kp['storeFile']); storePassword kp['storePassword']; keyAlias kp['keyAlias']; keyPassword kp['keyPassword'] } } }
     buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-        debug {
-            applicationIdSuffix ".debug"
-            debuggable true
-        }
+        release { minifyEnabled true; proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'; signingConfig signingConfigs.release }
+        debug { debuggable true }
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    packaging {
-        jniLibs {
-            useLegacyPackaging = false
-        }
-    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 }
+    packaging { jniLibs { useLegacyPackaging = false } }
 }
-
+// KIDS SHELL (Google Play Families) — docs/KIDS_SHELL.md: AdMob only (no
+// mediation adapters: not all are Families-certified), no Play Games
+// Services, no Firebase. scripts/check_families_compliance.py blocks them.
 dependencies {
-    // Google Mobile Ads (AdMob) + UMP consent
     implementation 'com.google.android.gms:play-services-ads:25.3.0'
     implementation 'com.google.android.ump:user-messaging-platform:3.2.0'
-
-    // Google Play Billing
     implementation 'com.android.billingclient:billing:8.3.0'
-
-    // Firebase Analytics — requires google-services.json in this folder
-    // Setup: Firebase Console → Add Android app → download google-services.json → place in app/
-    implementation platform('com.google.firebase:firebase-bom:34.12.0')
-    implementation 'com.google.firebase:firebase-analytics'
-
-    // Core Android
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.12.0'
 }
-
-// Must be at bottom — apply after dependencies declared
-// Firebase is optional: drop app/google-services.json in to enable analytics.
-if (file('google-services.json').exists()) { apply plugin: 'com.google.gms.google-services' }

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Full screen, no title bar, matches game background color -->
-    <style name="Theme.PegasusGames" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">#1a1a2e</item>
-        <item name="android:statusBarColor">#1a1a2e</item>
-        <item name="android:navigationBarColor">#1a1a2e</item>
+    <style name="Theme.ABCLearning" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">#fff6df</item>
+        <item name="android:statusBarColor">#fff6df</item>
+        <item name="android:navigationBarColor">#fff6df</item>
         <item name="android:windowFullscreen">false</item>
     </style>
 </resources>
