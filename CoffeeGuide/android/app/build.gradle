@@ -19,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId "com.pegasusgames.coffeeguide"
-        minSdk 23
+        minSdk 24
         targetSdk 36
         versionCode 13
         versionName "1.7.1"
@@ -59,9 +59,9 @@ android {
 }
 
 dependencies {
-    // AppLovin MAX (replaces AdMob; AdMob still used as mediation adapter)
-    implementation 'com.applovin:applovin-sdk:13.+'
-    implementation 'com.applovin.mediation:google-adapter:23.+'
+    // Google Mobile Ads (AdMob) + UMP consent
+    implementation 'com.google.android.gms:play-services-ads:25.3.0'
+    implementation 'com.google.android.ump:user-messaging-platform:3.2.0'
 
     // Google Play Billing
     implementation 'com.android.billingclient:billing:8.3.0'
@@ -77,4 +77,5 @@ dependencies {
 }
 
 // Must be at bottom — apply after dependencies declared
-apply plugin: 'com.google.gms.google-services'
+// Firebase is optional: drop app/google-services.json in to enable analytics.
+if (file('google-services.json').exists()) { apply plugin: 'com.google.gms.google-services' }

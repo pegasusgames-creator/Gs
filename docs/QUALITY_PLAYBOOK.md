@@ -1307,7 +1307,7 @@ The portfolio breaks down approximately as:
   AnimalSounds, MorseCode, DartsScorer, etc.)
 - **~6 kids apps** (ABCLearning, BasicMathKids, KidsColoring, KidsPiano,
   KidsDrum, CountingApp)
-- **~4 timer / utility games** (DontTapWhite, FlappyBird, DiceRoller,
+- **~4 timer / utility games** (DontTapWhite, FlappyWings, DiceRoller,
   CoinFlip)
 
 These compete with completely different sets of analogs. Quality bar

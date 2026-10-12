@@ -1,8 +1,32 @@
 package com.pegasusgames.sokoban;
 
-import com.applovin.sdk.AppLovinMediationProvider;
-import com.applovin.sdk.AppLovinSdkInitializationConfiguration;
-import com.android.billingclient.api.ProductDetails;
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import androidx.core.content.ContextCompat;
+
+// AdMob fallback
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+
+// Google Play Billing
 import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -10,89 +34,55 @@ import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.PendingPurchasesParams;
+import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.QueryProductDetailsParams;
+import com.android.billingclient.api.QueryProductDetailsResult;
 import com.android.billingclient.api.QueryPurchasesParams;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.os.Bundle;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import androidx.core.content.ContextCompat;
-import android.Manifest;
-import android.util.Log;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.RelativeLayout;
 
-import com.applovin.mediation.MaxAd;
-import com.applovin.mediation.MaxAdListener;
-import com.applovin.mediation.MaxAdViewAdListener;
-import com.applovin.mediation.MaxError;
-import com.applovin.mediation.MaxReward;
-import com.applovin.mediation.MaxRewardedAdListener;
-import com.applovin.mediation.ads.MaxAdView;
-import com.applovin.mediation.ads.MaxInterstitialAd;
-import com.applovin.mediation.ads.MaxRewardedAd;
-import com.applovin.sdk.AppLovinSdk;
-
+// Firebase
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import android.util.Base64;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 
 public class MainActivity extends Activity {
 
-    // -------------------------------------------------------
-    // AppLovin MAX ad unit IDs — create in MAX dashboard
-    // -------------------------------------------------------
-    private static final String BANNER_AD_UNIT_ID       = ""; // TODO: paste once AppLovin is approved
-    private static final String INTERSTITIAL_AD_UNIT_ID = ""; // TODO: paste once AppLovin is approved
-    private static final String REWARDED_AD_UNIT_ID     = ""; // TODO: paste once AppLovin is approved
+    // ── AdMob fallback ────────────────────────────────────────────────────────
+    // Get from: apps.admob.com → Your App → Ad Units
+    private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-3940256099942544/6300978111";
+    private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
+    private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-3940256099942544/5224354917";
 
-    // WebView background colour — Sunset Orange theme
-    private static final int WEBVIEW_BG_COLOR = 0xFF1a1400;
+    // Play Console → Monetization setup → Licensing → base64-encoded RSA public
+    // key. Used by verifyPurchaseSignature() to validate every purchase locally
+    // before the reward is granted. Per-app and unique (never shared). Replace
+    // the PASTE_ placeholder with this app's real key at release handoff.
+    private static final String LICENSE_PUBLIC_KEY = "PASTE_LICENSE_PUBLIC_KEY";
 
-    // -------------------------------------------------------
-    // IAP PRODUCT IDs — must match Google Play Console
-    // -------------------------------------------------------
-    private static final String PRODUCT_REMOVE_ADS = "remove_ads";
-    private static final String MAX_SDK_KEY = ""; // TODO: paste SDK key once AppLovin is approved
-    private static final Set<String> VALID_PRODUCTS =
-        new HashSet<>(Arrays.asList(
+    // ── IAP ───────────────────────────────────────────────────────────────────
+    private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
         "coins_small", "coins_medium", "coins_large", "coins_mega",
         "five_lives", "hint_pack", "remove_ads",
         "season_pass_monthly", "starter_pack", "unlimited_lives_1h",
         "unlimited_lives_forever", "weekly_pass"
     ));
-    // Subscriptions — routed through launchSubscription() (SUBS), never INAPP.
-    private static final Set<String> SUBSCRIPTION_PRODUCTS = new HashSet<>(Arrays.asList(
-        "season_pass_monthly", "weekly_pass"));
 
-    // ── Notification scheduling (NOTIFICATIONS_IMPL.md §1) ───────────────────
-    private static final int REQ_DAILY_REMINDER       = 1001;
-    private static final int REQ_STREAK_AT_RISK       = 1002;
-    private static final int REQ_LIVES_REFILLED       = 1003;
-    private static final int REQ_RETURN_AFTER_ABSENCE = 1004;
-    private static final int REQ_WIN_BACK_D3          = 1005;
-    private static final int REQ_WIN_BACK_D7          = 1006;
-    private static final int REQ_WIN_BACK_D14         = 1007;
-    private static final int REQ_WIN_BACK_D30         = 1008;
-    private static final String PREF_NOTIFS_ENABLED   = "notifications_enabled";
-    private static final String PREF_LAST_PLAYED      = "last_played_ts";
-    private static final int NOTIF_CAP_PER_DAY        = 2;
-    private static final int POST_NOTIFS_REQUEST_CODE = 9001;
-    // Cross-promo targets — LIVE Play Store apps only, excludes self.
-    private static final java.util.Set<String> CROSS_PROMO_PACKAGES =
-        new java.util.HashSet<>(java.util.Arrays.asList(
-            "com.pegasusgames.watersortpuzzle",
-            "com.pegasusgames.nonogram",
-            "com.pegasusgames.puzzle2048",
-            "com.pegasusgames.unblockpuzzle"));
+    // Subscription SKUs — routed through launchSubscription(), never the
+    // one-time INAPP flow.
+    private static final Set<String> SUBSCRIPTION_PRODUCTS = new HashSet<>(Arrays.asList(
+        "season_pass_monthly", "weekly_pass"
+    ));
+
     // SKUs that are CONSUMABLE — must be consumed via consumeAsync after each
     // purchase, otherwise the user can buy once and never re-buy. Anything in
     // VALID_PRODUCTS but NOT in this set is non-consumable / subscription and
@@ -103,234 +93,412 @@ public class MainActivity extends Activity {
         "five_lives", "hint_pack", "starter_pack", "unlimited_lives_1h"
     ));
 
+        // Every reward type game.html requests MUST be listed — an unlisted type is dropped
+    // silently (no ad, no reward) and, in WaterSort, left a pending callback that blocked
+    // every later rewarded ad that session (audit 2026-10-03: free_coins / hint / extra_tube /
+    // magic_wand were missing). Gate: scripts/check_reward_types_native.py
+private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
+        "undo", "skip", "life", "free_coins", "hint", "extra_life", "double_coins"
+    ));
 
-    private WebView           webView;
-    private MaxAdView         bannerAd;
-    private MaxInterstitialAd interstitialAd;
-    private MaxRewardedAd     rewardedAd;
-    private String            pendingRewardType = null;
-    private BillingClient     billingClient;
+    private static final int WEBVIEW_BG_COLOR = 0xFFeef4f8;
+
+    // ── Notification scheduling (NOTIFICATIONS_IMPL.md §1) ────────────────────
+    private static final int REQ_DAILY_REMINDER       = 1001;
+    private static final int REQ_STREAK_AT_RISK       = 1002;
+    private static final int REQ_LIVES_REFILLED       = 1003;
+    private static final int REQ_RETURN_AFTER_ABSENCE = 1004;
+    // Win-back chain — d3 / d7 / d14 / d30 fire if the user goes dark.
+    private static final int REQ_WIN_BACK_D3          = 1005;
+    private static final int REQ_WIN_BACK_D7          = 1006;
+    private static final int REQ_WIN_BACK_D14         = 1007;
+    private static final int REQ_WIN_BACK_D30         = 1008;
+    private static final String PREF_NOTIFS_ENABLED   = "notifications_enabled";
+    private static final String PREF_LAST_PLAYED      = "last_played_ts";
+    private static final int NOTIF_CAP_PER_DAY        = 2;
+    private static final int POST_NOTIFS_REQUEST_CODE = 9001;
+    // Cross-promo install verification — must match CROSS_PROMO list in game.html
+    // and the <queries> entries in AndroidManifest.xml. Targets are LIVE Play
+    // Store apps only. Pre-release siblings (PipeConnect) added
+    // here ONLY after they have Play links.
+    private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(
+        "com.pegasusgames.watersortpuzzle",
+        "com.pegasusgames.nonogram",
+        "com.pegasusgames.puzzle2048",
+        "com.pegasusgames.unblockpuzzle"
+    ));
+
+    // AdMob objects
+    private com.google.android.gms.ads.AdView admobBanner;
+    private InterstitialAd admobInterstitial;
+    private RewardedAd     admobRewarded;
+
+    private WebView      webView;
+    private FrameLayout  bannerContainer;
+    private BillingClient billingClient;
+    // ── Ad state (Part 2: FIFO reward queue + backoff + freshness + cadence) ──
+    private final java.util.ArrayDeque<String> pendingRewardTypes = new java.util.ArrayDeque<>();
+    private boolean interstitialLoading = false;
+    private boolean rewardedLoading = false;
+    private long interstitialLoadedAt = 0L;
+    private long rewardedLoadedAt = 0L;
+    private long lastInterstitialAt = 0L;
+    private int interstitialFails = 0;
+    private int rewardedFails = 0;
+    private static final long AD_FRESH_MS = 50L * 60L * 1000L;        // discard ads >50 min old
+    private static final long INTERSTITIAL_MIN_GAP_MS = 60L * 1000L;  // >=60s between interstitials
     private FirebaseAnalytics firebaseAnalytics;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Play Games Services v2 must be initialized before any PlayGames.*
+        // client call; without this every PGS bridge method throws and no-ops.
         try { com.google.android.gms.games.PlayGamesSdk.initialize(this); }
-        catch (Throwable e) { android.util.Log.d("PGS", "init no-op: "+e.getMessage()); }
+        catch (Throwable e) { Log.d("PGS", "PlayGamesSdk.initialize no-op: " + e.getMessage()); }
 
         RelativeLayout layout = new RelativeLayout(this);
         setContentView(layout);
 
+        // Banner container at bottom
+        bannerContainer = new FrameLayout(this);
+        bannerContainer.setId(android.view.View.generateViewId());
+        RelativeLayout.LayoutParams bp = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT, dpToPx(50));
+        bp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        layout.addView(bannerContainer, bp);
 
-        // Banner ad (50 dp, pinned to bottom)
-        int bannerId = android.view.View.generateViewId();
-        bannerAd = new MaxAdView(BANNER_AD_UNIT_ID, this);
-        bannerAd.setId(bannerId);
-        int bannerHeightPx = (int) (50 * getResources().getDisplayMetrics().density);
-        RelativeLayout.LayoutParams bannerParams = new RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.MATCH_PARENT, bannerHeightPx);
-        bannerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        layout.addView(bannerAd, bannerParams);
-
-        // WebView fills above the banner
+        // WebView above banner
         webView = new WebView(this);
-        RelativeLayout.LayoutParams webParams = new RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.MATCH_PARENT,
-            RelativeLayout.LayoutParams.MATCH_PARENT);
-        webParams.addRule(RelativeLayout.ABOVE, bannerId);
-        layout.addView(webView, webParams);
+        RelativeLayout.LayoutParams wp = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        // ALIGN_PARENT_TOP + ABOVE so WebView height is unambiguously
+        // (screen - banner) instead of MATCH_PARENT; banner must draw on top.
+        wp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        wp.addRule(RelativeLayout.ABOVE, bannerContainer.getId());
+        layout.addView(webView, wp);
+        bannerContainer.bringToFront();
 
-        WebView.setWebContentsDebuggingEnabled(false);
+        if (0 != (getApplicationInfo().flags & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE))
+            WebView.setWebContentsDebuggingEnabled(true);
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);
         ws.setDomStorageEnabled(true);
+        ws.setMediaPlaybackRequiresUserGesture(false);
         ws.setCacheMode(WebSettings.LOAD_DEFAULT);
+        ws.setAllowFileAccess(true);
         ws.setAllowFileAccessFromFileURLs(false);
         ws.setAllowUniversalAccessFromFileURLs(false);
-
         webView.setBackgroundColor(WEBVIEW_BG_COLOR);
+
         NativeBridge bridge = new NativeBridge();
         webView.addJavascriptInterface(bridge, "Android");
-        webView.addJavascriptInterface(bridge, "NativeBridge");
         webView.setWebViewClient(new WebViewClient() {
+            @Override public boolean shouldOverrideUrlLoading(WebView view, android.webkit.WebResourceRequest req) {
+                String _u = (req != null && req.getUrl() != null) ? req.getUrl().toString() : "";
+                if (_u.startsWith("file:///android_asset")) return false;   // keep in-app nav in the WebView
+                try { startActivity(new android.content.Intent(android.content.Intent.ACTION_VIEW,
+                    android.net.Uri.parse(_u))); } catch (Exception ignored) {}
+                return true;   // external links open in the browser, never the game WebView
+            }
             @Override public void onPageFinished(WebView view, String url) {
                 runOnUiThread(() ->
-                    webView.evaluateJavascript(
-                        "window.onNativeBridgeReady && window.onNativeBridgeReady();", null));
+                    webView.evaluateJavascript("window.onAdMobLoaded && window.onAdMobLoaded();", null));
             }
         });
         webView.loadUrl("file:///android_asset/game.html");
 
-        // Prime window before SDK init to prevent NPE on mDecor
+        // Prime the window so SDK calls don't NPE on mDecor before onWindowFocusChanged
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             try { getWindow().setDecorFitsSystemWindows(false); } catch (Exception ignored) {}
         }
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        try { firebaseAnalytics = FirebaseAnalytics.getInstance(this); }
+        catch (Throwable t) { firebaseAnalytics = null; } // no google-services.json
 
-        // Init AppLovin MAX (skipped until SDK key is provided).
-        if (!MAX_SDK_KEY.isEmpty()) {
-            AppLovinSdkInitializationConfiguration initConfig =
-                AppLovinSdkInitializationConfiguration.builder(MAX_SDK_KEY, this)
-                    .setMediationProvider(AppLovinMediationProvider.MAX)
-                    .build();
-            AppLovinSdk.getInstance(this).initialize(initConfig, sdkConfig -> runOnUiThread(() -> {
-                runOnUiThread(() -> bannerAd.startAutoRefresh());
-                bannerAd.loadAd();
-                setupInterstitial();
-                setupRewarded();
-            }));
-        }
+        // Notification channel only. The runtime POST_NOTIFICATIONS request
+        // is NOT made here — growth spec: the JS shim pre-prompts AFTER the
+        // first level clear, then calls requestNotificationPermission().
+        NotificationHelper.createChannel(this);
 
+        initAdMob();
         setupBilling();
     }
 
-    // -------------------------------------------------------
-    // Interstitial
-    // -------------------------------------------------------
-    private void setupInterstitial() {
-        interstitialAd = new MaxInterstitialAd(INTERSTITIAL_AD_UNIT_ID, this);
-        interstitialAd.setListener(new MaxAdListener() {
-            @Override public void onAdLoaded(MaxAd ad) {}
-            @Override public void onAdDisplayed(MaxAd ad) {}
-            @Override public void onAdHidden(MaxAd ad) { interstitialAd.loadAd(); }
-            @Override public void onAdClicked(MaxAd ad) {}
-            @Override public void onAdLoadFailed(String id, MaxError e) {
-                new android.os.Handler(android.os.Looper.getMainLooper())
-                    .postDelayed(() -> interstitialAd.loadAd(), 3000);
-            }
-            @Override public void onAdDisplayFailed(MaxAd ad, MaxError e) { interstitialAd.loadAd(); }
-        });
-        interstitialAd.loadAd();
+    // ── AdMob fallback ────────────────────────────────────────────────────────
+    private boolean _adsInitialized = false;
+
+    // Google UMP consent must resolve BEFORE ads initialize (EEA/UK requirement).
+    private void initAdMob() {
+        com.google.android.ump.ConsentRequestParameters.Builder _pB =
+            new com.google.android.ump.ConsentRequestParameters.Builder();
+        boolean _dbg = (getApplicationInfo().flags
+            & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0;   // debug-only geography
+        if (_dbg) {
+            _pB.setConsentDebugSettings(
+                new com.google.android.ump.ConsentDebugSettings.Builder(this)
+                    .setDebugGeography(com.google.android.ump.ConsentDebugSettings
+                        .DebugGeography.DEBUG_GEOGRAPHY_EEA)
+                    .build());
+        }
+        com.google.android.ump.ConsentInformation _ci =
+            com.google.android.ump.UserMessagingPlatform.getConsentInformation(this);
+        _ci.requestConsentInfoUpdate(this, _pB.build(),
+            () -> com.google.android.ump.UserMessagingPlatform
+                .loadAndShowConsentFormIfRequired(this, e -> initAdsAfterConsent()),
+            e -> initAdsAfterConsent());
     }
 
+    // Original ad init, now gated behind consent.
+    private void initAdsAfterConsent() {
+        if (_adsInitialized) return;
+        _adsInitialized = true;
+        // Family puzzle game — cap served creatives at G (never adult/suggestive).
+        // TODO: tagForChildDirectedTreatment / tagForUnderAgeOfConsent is a SEPARATE
+        // manual COPPA / Play-Families decision — do NOT set it here without that call.
+        MobileAds.setRequestConfiguration(
+            new com.google.android.gms.ads.RequestConfiguration.Builder()
+                .setMaxAdContentRating(
+                    com.google.android.gms.ads.RequestConfiguration.MAX_AD_CONTENT_RATING_G)
+                .build());
+        MobileAds.initialize(this, s -> runOnUiThread(() -> {
+            loadAdmobBanner(); loadAdmobInterstitial(); // rewarded is lazy-loaded (preloadRewarded)
+        }));
+    }
+
+    private void loadAdmobBanner() {
+        admobBanner = new com.google.android.gms.ads.AdView(this);
+        admobBanner.setAdSize(AdSize.BANNER);
+        admobBanner.setAdUnitId(ADMOB_BANNER_UNIT_ID);
+        bannerContainer.addView(admobBanner, new FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT,
+            android.view.Gravity.CENTER));
+        admobBanner.loadAd(new AdRequest.Builder().build());
+    }
+
+    private void loadAdmobInterstitial() {
+        if (admobInterstitial != null || interstitialLoading) return; // one in flight/loaded at a time
+        interstitialLoading = true;
+        InterstitialAd.load(this, ADMOB_INTERSTITIAL_UNIT_ID, new AdRequest.Builder().build(),
+            new InterstitialAdLoadCallback() {
+                @Override public void onAdLoaded(InterstitialAd ad) {
+                    admobInterstitial = ad;
+                    interstitialLoading = false;
+                    interstitialLoadedAt = System.currentTimeMillis();
+                    interstitialFails = 0;
+                    ad.setFullScreenContentCallback(new FullScreenContentCallback() {
+                        @Override public void onAdDismissedFullScreenContent() {
+                            admobInterstitial = null; loadAdmobInterstitial();
+                        }
+                        @Override public void onAdFailedToShowFullScreenContent(com.google.android.gms.ads.AdError e) {
+                            admobInterstitial = null; loadAdmobInterstitial();
+                        }
+                    });
+                }
+                @Override public void onAdFailedToLoad(LoadAdError e) {
+                    admobInterstitial = null;
+                    interstitialLoading = false;
+                    // back off 8s/16s/32s/64s instead of re-requesting immediately
+                    new android.os.Handler(android.os.Looper.getMainLooper())
+                        .postDelayed(MainActivity.this::loadAdmobInterstitial, backoffMs(interstitialFails++));
+                }
+            });
+    }
+
+    private void loadAdmobRewarded() {
+        if (admobRewarded != null || rewardedLoading) return; // one in flight/loaded at a time
+        rewardedLoading = true;
+        RewardedAd.load(this, ADMOB_REWARDED_UNIT_ID, new AdRequest.Builder().build(),
+            new RewardedAdLoadCallback() {
+                @Override public void onAdLoaded(RewardedAd ad) {
+                    admobRewarded = ad;
+                    rewardedLoading = false;
+                    rewardedLoadedAt = System.currentTimeMillis();
+                    rewardedFails = 0;
+                    ad.setFullScreenContentCallback(new FullScreenContentCallback() {
+                        @Override public void onAdDismissedFullScreenContent() {
+                            pendingRewardTypes.clear();
+                            admobRewarded = null; loadAdmobRewarded();
+                        }
+                        @Override public void onAdFailedToShowFullScreenContent(com.google.android.gms.ads.AdError e) {
+                            pendingRewardTypes.clear();
+                            admobRewarded = null; loadAdmobRewarded();
+                        }
+                    });
+                }
+                @Override public void onAdFailedToLoad(LoadAdError e) {
+                    admobRewarded = null;
+                    rewardedLoading = false;
+                    new android.os.Handler(android.os.Looper.getMainLooper())
+                        .postDelayed(MainActivity.this::loadAdmobRewarded, backoffMs(rewardedFails++));
+                }
+            });
+    }
+
+    // Exponential backoff for ad re-requests: 8s, 16s, 32s, then capped at 64s.
+    private long backoffMs(int fails) {
+        return Math.min(64000L, 8000L * (1L << Math.min(fails, 3)));
+    }
+
+    // ── Banner show/hide ──────────────────────────────────────────────────────
+    private void hideBanner() {
+        runOnUiThread(() -> {
+            bannerContainer.setVisibility(android.view.View.GONE);
+            if (admobBanner != null) admobBanner.pause();   // PART 1C: pause the AdView while hidden (menu/settings or ads-removed)
+        });
+    }
+    private void showBanner() {
+        runOnUiThread(() -> {
+            bannerContainer.setVisibility(android.view.View.VISIBLE);
+            if (admobBanner != null && bannerContainer.getVisibility() == android.view.View.VISIBLE) admobBanner.resume(); // PART 1C: don't resume a menu-hidden banner  // PART 1C: resume when shown on a gameplay screen
+        });
+    }
+
+    // ── Interstitial show ─────────────────────────────────────────────────────
     private void showInterstitialAd() {
         runOnUiThread(() -> {
-            if (interstitialAd != null && interstitialAd.isReady())
-                interstitialAd.showAd();
+            long now = System.currentTimeMillis();
+            if (now - lastInterstitialAt < INTERSTITIAL_MIN_GAP_MS) return; // >=60s apart
+            if (admobInterstitial != null && now - interstitialLoadedAt > AD_FRESH_MS) {
+                admobInterstitial = null; loadAdmobInterstitial(); return;  // stale -> refresh, skip
+            }
+            if (admobInterstitial != null) {
+                lastInterstitialAt = now;
+                admobInterstitial.show(MainActivity.this);
+            } else {
+                loadAdmobInterstitial();
+            }
         });
     }
 
-    // -------------------------------------------------------
-    // Rewarded
-    // -------------------------------------------------------
-    private void setupRewarded() {
-        rewardedAd = MaxRewardedAd.getInstance(REWARDED_AD_UNIT_ID, this);
-        rewardedAd.setListener(new MaxRewardedAdListener() {
-            @Override public void onAdLoaded(MaxAd ad) {}
-            @Override public void onAdDisplayed(MaxAd ad) {}
-            @Override public void onAdHidden(MaxAd ad) { rewardedAd.loadAd(); }
-            @Override public void onAdClicked(MaxAd ad) {}
-            @Override public void onAdLoadFailed(String id, MaxError e) {
-                new android.os.Handler(android.os.Looper.getMainLooper())
-                    .postDelayed(() -> rewardedAd.loadAd(), 3000);
-            }
-            @Override public void onAdDisplayFailed(MaxAd ad, MaxError e) {
-                pendingRewardType = null;
-                rewardedAd.loadAd();
-            }
-            @Override public void onUserRewarded(MaxAd ad, MaxReward reward) {
-                // Grant reward ONLY here — never in onAdHidden
-                final String type = pendingRewardType;
-                pendingRewardType = null;
-                if (type != null) {
-                    runOnUiThread(() ->
-                        webView.evaluateJavascript(
-                            "window.onAdReward && window.onAdReward('" + type + "');", null));
-                }
-            }
-        });
-        rewardedAd.loadAd();
-    }
-
+    // ── Rewarded show ─────────────────────────────────────────────────────────
+    // Reward is granted ONLY in the reward callback, never in dismiss.
     private void showRewardedAd(String rewardType) {
+        // extra_life is a synonym for life — route to the existing life branch.
+        if ("extra_life".equals(rewardType)) rewardType = "life";
+        if (!VALID_REWARD_TYPES.contains(rewardType)) return;
+        final String type = rewardType;
         runOnUiThread(() -> {
-            if (rewardedAd != null && rewardedAd.isReady()) {
-                pendingRewardType = rewardType;
-                rewardedAd.showAd();
+            long now = System.currentTimeMillis();
+            if (admobRewarded != null && now - rewardedLoadedAt > AD_FRESH_MS) {
+                admobRewarded = null; loadAdmobRewarded();              // stale -> refresh
+                webView.evaluateJavascript("window.onAdNotReady && window.onAdNotReady();", null);
+                return;
+            }
+            if (admobRewarded != null) {
+                pendingRewardTypes.addLast(type);   // FIFO: back-to-back triggers can't drop a reward
+                admobRewarded.show(MainActivity.this, item -> {
+                    String t = pendingRewardTypes.pollFirst();
+                    if (t == null) return;
+                    webView.evaluateJavascript(
+                        "window.onAdReward && window.onAdReward('" + t + "');", null);
+                });
+            } else {
+                loadAdmobRewarded();                // lazy: nothing ready -> start a load for next time
+                webView.evaluateJavascript("window.onAdNotReady && window.onAdNotReady();", null);
             }
         });
     }
 
-    // -------------------------------------------------------
-    // Billing
-    // -------------------------------------------------------
+    // ── Google Play Billing ───────────────────────────────────────────────────
     private void setupBilling() {
         billingClient = BillingClient.newBuilder(this)
-            .setListener((result, purchases) -> {
-                if (result.getResponseCode() == BillingClient.BillingResponseCode.OK
-                        && purchases != null)
+            .setListener((r, purchases) -> {
+                if (r.getResponseCode() == BillingClient.BillingResponseCode.OK && purchases != null)
                     for (Purchase p : purchases) handlePurchase(p);
             })
-            .enablePendingPurchases(
-                PendingPurchasesParams.newBuilder().enableOneTimeProducts().build()
-            ).build();
+            .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
+            .build();
 
-        BillingClientStateListener listener = new BillingClientStateListener() {
+        BillingClientStateListener l = new BillingClientStateListener() {
             @Override public void onBillingSetupFinished(BillingResult r) {
-                if (r.getResponseCode() == BillingClient.BillingResponseCode.OK)
-                    restorePurchases();
+                if (r.getResponseCode() == BillingClient.BillingResponseCode.OK) { restorePurchases(); queryAndPushPrices(); }
             }
             @Override public void onBillingServiceDisconnected() {
                 final BillingClientStateListener self = this;
-                new android.os.Handler(android.os.Looper.getMainLooper())
-                    .postDelayed(() -> {
-                        if (billingClient != null && !isFinishing())
-                            billingClient.startConnection(self);
-                    }, 3000);
+                new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                    if (billingClient != null && !isFinishing()) billingClient.startConnection(self);
+                }, 3000);
             }
         };
-        billingClient.startConnection(listener);
-    }
-
-    private void launchSubscription(String productId) {
-        billingClient.queryProductDetailsAsync(
-            QueryProductDetailsParams.newBuilder().setProductList(Arrays.asList(
-                QueryProductDetailsParams.Product.newBuilder()
-                    .setProductId(productId)
-                    .setProductType(BillingClient.ProductType.SUBS).build()
-            )).build(),
-            (r, queryResult) -> {
-                List<ProductDetails> details = queryResult.getProductDetailsList();
-                if (details.isEmpty()) return;
-                ProductDetails pd = details.get(0);
-                List<ProductDetails.SubscriptionOfferDetails> offers = pd.getSubscriptionOfferDetails();
-                if (offers == null || offers.isEmpty()) return;
-                runOnUiThread(() ->
-                    billingClient.launchBillingFlow(this,
-                        BillingFlowParams.newBuilder().setProductDetailsParamsList(Arrays.asList(
-                            BillingFlowParams.ProductDetailsParams.newBuilder()
-                                .setProductDetails(pd)
-                                .setOfferToken(offers.get(0).getOfferToken()).build()
-                        )).build()));
-            });
+        billingClient.startConnection(l);
     }
 
     private void launchPurchase(String productId) {
         if (!VALID_PRODUCTS.contains(productId)) return;
         if (SUBSCRIPTION_PRODUCTS.contains(productId)) { launchSubscription(productId); return; }
-        List<QueryProductDetailsParams.Product> list = Arrays.asList(
-            QueryProductDetailsParams.Product.newBuilder()
-                .setProductId(productId).setProductType(BillingClient.ProductType.INAPP).build());
         billingClient.queryProductDetailsAsync(
-            QueryProductDetailsParams.newBuilder().setProductList(list).build(),
-            (billingResult, queryResult) -> {
-                List<ProductDetails> details = queryResult.getProductDetailsList();
-                if (!details.isEmpty())
-                    runOnUiThread(() -> billingClient.launchBillingFlow(this,
-                        BillingFlowParams.newBuilder().setProductDetailsParamsList(
-                            Arrays.asList(BillingFlowParams.ProductDetailsParams.newBuilder()
-                                .setProductDetails(details.get(0)).build())).build()));
+            QueryProductDetailsParams.newBuilder().setProductList(Arrays.asList(
+                QueryProductDetailsParams.Product.newBuilder()
+                    .setProductId(productId).setProductType(BillingClient.ProductType.INAPP).build()
+            )).build(),
+            (r, queryResult) -> {
+                java.util.List<ProductDetails> details = queryResult.getProductDetailsList();
+                if (!details.isEmpty()) runOnUiThread(() ->
+                    billingClient.launchBillingFlow(MainActivity.this,
+                        BillingFlowParams.newBuilder().setProductDetailsParamsList(Arrays.asList(
+                            BillingFlowParams.ProductDetailsParams.newBuilder()
+                                .setProductDetails(details.get(0)).build()
+                        )).build()));
             });
     }
-    private void hideBanner() {
-        runOnUiThread(() -> { if (bannerAd != null) bannerAd.setVisibility(android.view.View.GONE); });
+
+    // PART 3B — localized IAP pricing: push BillingClient's locale-formatted
+    // prices to the WebView (hardcoded $-strings are the fallback).
+    private final java.util.Map<String, String> _localizedPrices =
+        new java.util.concurrent.ConcurrentHashMap<>();
+
+    private void queryAndPushPrices() {
+        queryPriceType(BillingClient.ProductType.INAPP);
+        queryPriceType(BillingClient.ProductType.SUBS);
     }
 
+    private void queryPriceType(String type) {
+        boolean wantSub = BillingClient.ProductType.SUBS.equals(type);
+        java.util.List<QueryProductDetailsParams.Product> prods = new java.util.ArrayList<>();
+        for (String sku : VALID_PRODUCTS) {
+            if (SUBSCRIPTION_PRODUCTS.contains(sku) != wantSub) continue;
+            prods.add(QueryProductDetailsParams.Product.newBuilder()
+                .setProductId(sku).setProductType(type).build());
+        }
+        if (prods.isEmpty() || billingClient == null) return;
+        billingClient.queryProductDetailsAsync(
+            QueryProductDetailsParams.newBuilder().setProductList(prods).build(),
+            (res, qpdr) -> {
+                for (ProductDetails pd : qpdr.getProductDetailsList()) {
+                    String price = null;
+                    if (pd.getOneTimePurchaseOfferDetails() != null) {
+                        price = pd.getOneTimePurchaseOfferDetails().getFormattedPrice();
+                    } else if (pd.getSubscriptionOfferDetails() != null
+                               && !pd.getSubscriptionOfferDetails().isEmpty()) {
+                        java.util.List<ProductDetails.PricingPhase> ph =
+                            pd.getSubscriptionOfferDetails().get(0)
+                              .getPricingPhases().getPricingPhaseList();
+                        if (!ph.isEmpty()) price = ph.get(ph.size() - 1).getFormattedPrice();
+                    }
+                    if (price != null) _localizedPrices.put(pd.getProductId(), price);
+                }
+                pushPricesToWeb();
+            });
+    }
+
+    private void pushPricesToWeb() {
+        if (_localizedPrices.isEmpty() || webView == null) return;
+        final String json = new org.json.JSONObject(_localizedPrices).toString();
+        runOnUiThread(() -> {
+            if (webView != null) webView.evaluateJavascript(
+                "window.onLocalizedPrices && window.onLocalizedPrices(" + json + ")", null);
+        });
+    }
 
         private void handlePurchase(Purchase purchase) {
         if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED) return;
+        if (!verifyPurchaseSignature(purchase)) {
+            Log.w("IAP", "Signature verification failed; reward NOT granted.");
+            return;
+        }
 
         boolean isConsumable = false;
         for (String id : purchase.getProducts()) {
@@ -370,39 +538,94 @@ public class MainActivity extends Activity {
             if ("remove_ads".equals(id)) hideBanner();
         }
     }
+
+    // RSA-SHA1 signature check against the app's Play Console public key.
+    // Returns true if verified, false if invalid. Returns true (skip) when the
+    // public key is still a placeholder so local debug builds work before the
+    // real key is pasted in.
+    private boolean verifyPurchaseSignature(Purchase purchase) {
+        if (LICENSE_PUBLIC_KEY == null || LICENSE_PUBLIC_KEY.startsWith("PASTE_")) {
+            Log.w("IAP", "LICENSE_PUBLIC_KEY is placeholder — signature check skipped.");
+            if ((getApplicationInfo().flags
+                & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) == 0) {
+                return false;  // PART 3A fail-closed: never grant on a placeholder key in release
+            }
+            return true;
+        }
+        String signedData = purchase.getOriginalJson();
+        String signature  = purchase.getSignature();
+        if (signedData == null || signature == null || signature.isEmpty()) return false;
+        try {
+            byte[] keyBytes = Base64.decode(LICENSE_PUBLIC_KEY, Base64.DEFAULT);
+            PublicKey pub = KeyFactory.getInstance("RSA")
+                .generatePublic(new X509EncodedKeySpec(keyBytes));
+            Signature sig = Signature.getInstance("SHA1withRSA");
+            sig.initVerify(pub);
+            sig.update(signedData.getBytes("UTF-8"));
+            return sig.verify(Base64.decode(signature, Base64.DEFAULT));
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException
+                 | java.security.SignatureException | java.security.InvalidKeyException
+                 | java.io.UnsupportedEncodingException | IllegalArgumentException e) {
+            Log.w("IAP", "Purchase signature verify error: " + e.getMessage());
+            return false;
+        }
+    }
+    private void launchSubscription(String productId) {
+        billingClient.queryProductDetailsAsync(
+            QueryProductDetailsParams.newBuilder().setProductList(Arrays.asList(
+                QueryProductDetailsParams.Product.newBuilder()
+                    .setProductId(productId)
+                    .setProductType(BillingClient.ProductType.SUBS).build()
+            )).build(),
+            (r, queryResult) -> {
+                List<ProductDetails> details = queryResult.getProductDetailsList();
+                if (details.isEmpty()) return;
+                ProductDetails pd = details.get(0);
+                List<ProductDetails.SubscriptionOfferDetails> offers = pd.getSubscriptionOfferDetails();
+                if (offers == null || offers.isEmpty()) return;
+                runOnUiThread(() ->
+                    billingClient.launchBillingFlow(MainActivity.this,
+                        BillingFlowParams.newBuilder().setProductDetailsParamsList(Arrays.asList(
+                            BillingFlowParams.ProductDetailsParams.newBuilder()
+                                .setProductDetails(pd)
+                                .setOfferToken(offers.get(0).getOfferToken()).build()
+                        )).build()));
+            });
+    }
+
     private void restorePurchases() {
         billingClient.queryPurchasesAsync(
-            QueryPurchasesParams.newBuilder()
-                .setProductType(BillingClient.ProductType.INAPP).build(),
+            QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build(),
+            (r, purchases) -> { for (Purchase p : purchases) handlePurchase(p); });
+        billingClient.queryPurchasesAsync(
+            QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build(),
             (r, purchases) -> { for (Purchase p : purchases) handlePurchase(p); });
     }
 
-    // -------------------------------------------------------
-    // JS Bridge — registered as both "Android" and "NativeBridge"
-    // -------------------------------------------------------
+    // ── JS Bridge ─────────────────────────────────────────────────────────────
     private class NativeBridge {
-        @JavascriptInterface
-        public void showInterstitial() { showInterstitialAd(); }
+        @JavascriptInterface public void showInterstitial()              { showInterstitialAd(); }
+        @JavascriptInterface public void showRewarded(String type)       { showRewardedAd(type); }
+        @JavascriptInterface public void preloadRewarded()              { runOnUiThread(() -> loadAdmobRewarded()); }
+        @JavascriptInterface public void purchase(String id)             { launchPurchase(id); }
+        @JavascriptInterface public void hideBannerAd()                  { hideBanner(); }
+        @JavascriptInterface public void showBannerAd()                  { showBanner(); }
+        @JavascriptInterface public void log(String msg)                 { /* disabled in release */ }
+        @JavascriptInterface public void restorePurchases()              { MainActivity.this.restorePurchases(); }
+        @JavascriptInterface public void openUrl(String url)             { try { startActivity(new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))); } catch (Exception e) {} }
 
         @JavascriptInterface
-        public void showRewarded(String type) { showRewardedAd(type); }
-
-        @JavascriptInterface
-        public void hideBannerAd() {
-            runOnUiThread(() -> bannerAd.setVisibility(android.view.View.GONE));
+        public void scheduleNotification(String title, String body, long delayMs) {
+            int mins = Math.max(1, (int)(delayMs / 60000L));
+            NotificationHelper.schedule(MainActivity.this, mins);
         }
 
         @JavascriptInterface
-        public void showBannerAd() {
-            runOnUiThread(() -> bannerAd.setVisibility(android.view.View.VISIBLE));
+        public void cancelNotification() {
+            NotificationHelper.cancel(MainActivity.this);
         }
 
         @JavascriptInterface
-        public void purchase(String productId) { launchPurchase(productId); }
-
-        @JavascriptInterface
-        public void log(String msg) { /* disabled in release */ }
-
         public void requestNotificationPermission() {
             if (Build.VERSION.SDK_INT >= 33) {
                 if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
@@ -639,11 +862,83 @@ public class MainActivity extends Activity {
                 return t != null && t.isComplete() && t.getResult() != null && t.getResult().isAuthenticated();
             } catch (Throwable e) { return false; }
         }
+
+        @JavascriptInterface
+        public void logEvent(String eventName, String params) {
+            if (firebaseAnalytics == null) return;
+            if (!eventName.matches("[a-zA-Z0-9_]{1,40}")) return;
+            android.os.Bundle bundle = new android.os.Bundle();
+            if (params != null && !params.isEmpty()) {
+                for (String pair : params.split("&")) {
+                    String[] kv = pair.split("=", 2);
+                    if (kv.length == 2 && kv[0].matches("[a-zA-Z0-9_]{1,40}")) {
+                        String val = kv[1].length() > 100 ? kv[1].substring(0, 100) : kv[1];
+                        bundle.putString(kv[0], val);
+                    }
+                }
+            }
+            firebaseAnalytics.logEvent(eventName, bundle);
+        }
     }
 
-    // -------------------------------------------------------
-    // Lifecycle
-    // -------------------------------------------------------
+    // ── Fullscreen ────────────────────────────────────────────────────────────
+    private void applyFullscreen() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            getWindow().setDecorFitsSystemWindows(false);
+            android.view.WindowInsetsController ic = getWindow().getInsetsController();
+            if (ic != null) {
+                ic.hide(android.view.WindowInsets.Type.statusBars() |
+                        android.view.WindowInsets.Type.navigationBars());
+                ic.setSystemBarsBehavior(
+                    android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+            }
+        } else {
+            //noinspection deprecation
+            getWindow().getDecorView().setSystemUiVisibility(
+                android.view.View.SYSTEM_UI_FLAG_FULLSCREEN |
+                android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        }
+    }
+
+    @Override public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) applyFullscreen();
+    }
+
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
+    @Override protected void onResume() {
+        super.onResume();
+        if (admobBanner != null) admobBanner.resume();
+        if (webView != null) webView.onResume();
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        if (admobBanner != null) admobBanner.pause();
+        if (webView != null) webView.onPause();
+    }
+
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        if (admobBanner != null) admobBanner.destroy();
+        if (webView != null) { webView.stopLoading(); webView.destroy(); }
+        if (billingClient != null) billingClient.endConnection();
+    }
+
+    @Override public void onBackPressed() {
+        webView.evaluateJavascript("window.onBackPressed && window.onBackPressed();",
+            v -> { if (v == null || v.equals("null") || v.equals("false")) super.onBackPressed(); });
+    }
+
+    private int dpToPx(int dp) {
+        return (int) (dp * getResources().getDisplayMetrics().density);
+    }
+
+    // ── Notifications helpers (NOTIFICATIONS_IMPL.md §3) ──────────────────────
     private void scheduleAlarm(int requestCode, long triggerAtMillis,
                                 String type, String title, String body) {
         android.content.Intent intent = new android.content.Intent(this, NotificationReceiver.class);
@@ -681,8 +976,8 @@ public class MainActivity extends Activity {
         }
     }
 
-    private String getDailyReminderTitle() { return "Pipe Connect"; }
-    private String getDailyReminderBody()  { return "Your daily pipe puzzle is ready!"; }
+    private String getDailyReminderTitle() { return "Afterimage"; }
+    private String getDailyReminderBody()  { return "A fresh warehouse puzzle is waiting. Push it!"; }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -699,47 +994,4 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void applyFullscreen() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            getWindow().setDecorFitsSystemWindows(false);
-            android.view.WindowInsetsController ic = getWindow().getInsetsController();
-            if (ic != null) {
-                ic.hide(android.view.WindowInsets.Type.statusBars() |
-                        android.view.WindowInsets.Type.navigationBars());
-                ic.setSystemBarsBehavior(
-                    android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-            }
-        } else {
-            //noinspection deprecation
-            getWindow().getDecorView().setSystemUiVisibility(
-                android.view.View.SYSTEM_UI_FLAG_FULLSCREEN |
-                android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            applyFullscreen();
-        }
-    }
-
-    @Override protected void onResume() {
-        super.onResume();
-        if (bannerAd != null) bannerAd.startAutoRefresh();
-        if (webView != null) webView.onResume();
-    }
-    @Override protected void onPause() {
-        super.onPause();
-        if (bannerAd != null) bannerAd.stopAutoRefresh();
-        if (webView != null) webView.onPause();
-    }
-    @Override protected void onDestroy() {
-        super.onDestroy();
-        if (bannerAd != null) bannerAd.destroy();
-        if (webView != null) { webView.stopLoading(); webView.destroy(); }
-        if (billingClient != null) billingClient.endConnection();
-    }
 }

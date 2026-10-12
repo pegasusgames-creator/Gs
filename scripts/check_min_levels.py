@@ -7,7 +7,7 @@ apps released under the old bar are grandfathered to a WARN (expand on the
 next content update — never regress a live level set in a rush).
 
 Non-leveled games (no CAMPAIGN/LEVELS array — e.g. 2048 score-chase,
-FlappyBird) have nothing to count and are skipped.
+FlappyWings) have nothing to count and are skipped.
 """
 from __future__ import annotations
 import re

@@ -65,7 +65,7 @@ SOCIAL_PARTY = {"CharadesApp", "HeadsUpGame", "IceBreaker", "NeverHaveIEver",
 WORD = {"Connections", "Cryptogram", "Hangman", "SpellingBee", "WordConnect",
         "WordLadder", "WordleClone", "WordScramble", "WordSearch"}
 
-ARCADE = {"BalloonPop", "BrickBreaker", "BubbleShooter", "FlappyBird",
+ARCADE = {"BalloonPop", "BrickBreaker", "BubbleShooter", "FlappyWings",
           "NumberTap", "ReactionTime", "SnakeGame", "StroopTest", "TapColor",
           "TetrisGame", "WhackaMole", "ColorFill", "Minesweeper"}
 

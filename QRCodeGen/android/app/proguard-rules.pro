@@ -37,8 +37,6 @@
 -keep class com.google.firebase.** { *; }
 -keep class com.google.android.gms.internal.firebase_analytics.** { *; }
 
-# AppLovin MAX — suppress missing Amazon Privacy Pass stubs (optional dependency)
--dontwarn com.amazon.privacypass.**
--dontwarn com.amazon.**
+# Optional-dependency stubs
 -dontwarn kotlin.**
 -dontwarn org.jetbrains.**

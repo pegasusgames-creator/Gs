@@ -33,7 +33,7 @@ REPO = Path(__file__).resolve().parent.parent
 KNOWN_APPS = [
     "PipeConnect", "WaterSortPuzzle", "Nonogram", "Puzzle2048",
     "UnblockPuzzle", "Afterimage", "Hunch", "Overlay", "Sokoban",
-    "FlappyBird",
+    "FlappyWings",
 ]
 
 

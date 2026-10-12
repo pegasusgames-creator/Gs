@@ -1000,7 +1000,7 @@ THEMES = {
         "voice":            "V7",
         "texture":          "T5",
     },
-    "FlappyBird": {
+    "FlappyWings": {
         "bg_top_left":  (42, 89, 13),
         "bg_top_right": (28, 134, 19),
         "bg_bottom":    (28, 45, 6),

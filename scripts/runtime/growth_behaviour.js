@@ -27,6 +27,14 @@ const WIN = {
   Hunch: `(()=>{ loadLevel(0); gTests=2; winLevel(); })()`,
   Overlay: `(()=>{ loadLevel(0); gMoves=L.lower; winLevel(); })()`,
 };
+// Apps not listed above keep their win expression in <App>/test/runtime_win.js
+// (one JS expression that runs the game's REAL win path), so adding a game
+// never needs an edit to this shared file.
+function winPath(app) {
+  if (WIN[app]) return WIN[app];
+  const f = path.join(REPO, app, 'test', 'runtime_win.js');
+  return fs.existsSync(f) ? fs.readFileSync(f, 'utf8').trim() : null;
+}
 function gameUrl(app) {
   const f = path.join(REPO, app, 'android/app/src/main/assets/game.html');
   if (app !== 'WaterSortPuzzle') return 'file://' + f;
@@ -67,7 +75,8 @@ async function open(browser, app, { pre = '', mockRet = {} } = {}) {
     let { ctx, p, errs } = await open(browser, app, { mockRet: { hasNotificationPermission: false } });
     const before = await p.evaluate(() => ({ pts: window.gEvents ? gEvents.points() : -1 }));
     await p.evaluate(() => { window.__calls.length = 0; });
-    try { await p.evaluate(WIN[app]); } catch (e) { errs.push('win path: ' + e.message.slice(0, 120)); }
+    const wp = winPath(app); if (!wp) { check(app, 'win path defined', false, 'add WIN entry or test/runtime_win.js'); await ctx.close(); continue; }
+    try { await p.evaluate(wp); } catch (e) { errs.push('win path: ' + e.message.slice(0, 120)); }
     await p.waitForTimeout(3300);
     const ok = await p.$('[data-growth-card] [data-card-ok]');
     if (ok) { try { await ok.click({ timeout: 3000 }); } catch (e) {} await p.waitForTimeout(300); }

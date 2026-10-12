@@ -1,7 +1,19 @@
 package com.pegasusgames.plantwaterapp;
 
-import com.applovin.sdk.AppLovinMediationProvider;
-import com.applovin.sdk.AppLovinSdkInitializationConfiguration;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.ump.ConsentInformation;
+import com.google.android.ump.ConsentRequestParameters;
+import com.google.android.ump.UserMessagingPlatform;
 import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.BillingClient;
@@ -23,16 +35,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 
-import com.applovin.mediation.MaxAd;
-import com.applovin.mediation.MaxAdListener;
-import com.applovin.mediation.MaxAdViewAdListener;
-import com.applovin.mediation.MaxError;
-import com.applovin.mediation.MaxReward;
-import com.applovin.mediation.MaxRewardedAdListener;
-import com.applovin.mediation.ads.MaxAdView;
-import com.applovin.mediation.ads.MaxInterstitialAd;
-import com.applovin.mediation.ads.MaxRewardedAd;
-import com.applovin.sdk.AppLovinSdk;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -44,11 +46,12 @@ import java.util.Set;
 public class MainActivity extends Activity {
 
     // -------------------------------------------------------
-    // AppLovin MAX ad unit IDs — create in MAX dashboard
+    // AdMob ad unit IDs — Google TEST units until scripts/set_app_ids.py
+    // sets the real ones (pre_publish_check blocks test IDs).
     // -------------------------------------------------------
-    private static final String BANNER_AD_UNIT_ID       = "ENTER_BANNER_AD_UNIT_ID";
-    private static final String INTERSTITIAL_AD_UNIT_ID = "ENTER_INTERSTITIAL_AD_UNIT_ID";
-    private static final String REWARDED_AD_UNIT_ID     = "ENTER_REWARDED_AD_UNIT_ID";
+    private static final String BANNER_AD_UNIT_ID       = "ca-app-pub-3940256099942544/6300978111";
+    private static final String INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
+    private static final String REWARDED_AD_UNIT_ID     = "ca-app-pub-3940256099942544/5224354917";
 
     // WebView background colour — Sunset Orange theme
     private static final int WEBVIEW_BG_COLOR = 0xFF081408;
@@ -76,9 +79,9 @@ public class MainActivity extends Activity {
 
 
     private WebView           webView;
-    private MaxAdView         bannerAd;
-    private MaxInterstitialAd interstitialAd;
-    private MaxRewardedAd     rewardedAd;
+    private AdView            bannerAd;
+    private InterstitialAd    interstitialAd;
+    private RewardedAd        rewardedAd;
     private String            pendingRewardType = null;
     private BillingClient     billingClient;
     private FirebaseAnalytics firebaseAnalytics;
@@ -94,7 +97,9 @@ public class MainActivity extends Activity {
 
         // Banner ad (50 dp, pinned to bottom)
         int bannerId = android.view.View.generateViewId();
-        bannerAd = new MaxAdView(BANNER_AD_UNIT_ID, this);
+        bannerAd = new AdView(this);
+        bannerAd.setAdUnitId(BANNER_AD_UNIT_ID);
+        bannerAd.setAdSize(AdSize.BANNER);
         bannerAd.setId(bannerId);
         int bannerHeightPx = (int) (50 * getResources().getDisplayMetrics().density);
         RelativeLayout.LayoutParams bannerParams = new RelativeLayout.LayoutParams(
@@ -136,87 +141,107 @@ public class MainActivity extends Activity {
             try { getWindow().setDecorFitsSystemWindows(false); } catch (Exception ignored) {}
         }
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        try { firebaseAnalytics = FirebaseAnalytics.getInstance(this); }
+        catch (Throwable t) { firebaseAnalytics = null; } // no google-services.json
 
-        // Init AppLovin MAX
-        AppLovinSdkInitializationConfiguration initConfig =
-            AppLovinSdkInitializationConfiguration.builder("ENTER_YOUR_APPLOVIN_SDK_KEY_HERE", this)
-                .setMediationProvider(AppLovinMediationProvider.MAX)
-                .build();
-        AppLovinSdk.getInstance(this).initialize(initConfig, sdkConfig -> runOnUiThread(() -> {
-            runOnUiThread(() -> bannerAd.startAutoRefresh());
-            bannerAd.loadAd();
-            setupInterstitial();
-            setupRewarded();
-        }));
+        // Google UMP consent first (EEA/UK requirement), then AdMob.
+        final ConsentInformation consent = UserMessagingPlatform.getConsentInformation(this);
+        consent.requestConsentInfoUpdate(this, new ConsentRequestParameters.Builder().build(),
+            () -> UserMessagingPlatform.loadAndShowConsentFormIfRequired(this, formError -> startAds(consent)),
+            requestError -> startAds(consent));
+        if (consent.canRequestAds()) startAds(consent);
 
         setupBilling();
     }
 
     // -------------------------------------------------------
+    // AdMob start (after consent)
+    // -------------------------------------------------------
+    private boolean adsStarted = false;
+    private void startAds(ConsentInformation consent) {
+        if (adsStarted || !consent.canRequestAds()) return;
+        adsStarted = true;
+        MobileAds.initialize(this, status -> runOnUiThread(() -> {
+            bannerAd.loadAd(new AdRequest.Builder().build());
+            loadInterstitial();
+            loadRewarded();
+        }));
+    }
+
+    private static long backoffMs(int attempt) { return Math.min(60000L, 3000L << Math.min(attempt, 4)); }
+
+    // -------------------------------------------------------
     // Interstitial
     // -------------------------------------------------------
-    private void setupInterstitial() {
-        interstitialAd = new MaxInterstitialAd(INTERSTITIAL_AD_UNIT_ID, this);
-        interstitialAd.setListener(new MaxAdListener() {
-            @Override public void onAdLoaded(MaxAd ad) {}
-            @Override public void onAdDisplayed(MaxAd ad) {}
-            @Override public void onAdHidden(MaxAd ad) { interstitialAd.loadAd(); }
-            @Override public void onAdClicked(MaxAd ad) {}
-            @Override public void onAdLoadFailed(String id, MaxError e) {
-                new android.os.Handler(android.os.Looper.getMainLooper())
-                    .postDelayed(() -> interstitialAd.loadAd(), 3000);
-            }
-            @Override public void onAdDisplayFailed(MaxAd ad, MaxError e) { interstitialAd.loadAd(); }
-        });
-        interstitialAd.loadAd();
+    private int interstitialRetry = 0;
+    private void loadInterstitial() {
+        InterstitialAd.load(this, INTERSTITIAL_AD_UNIT_ID, new AdRequest.Builder().build(),
+            new InterstitialAdLoadCallback() {
+                @Override public void onAdLoaded(InterstitialAd ad) { interstitialAd = ad; interstitialRetry = 0; }
+                @Override public void onAdFailedToLoad(LoadAdError e) {
+                    interstitialAd = null;
+                    new android.os.Handler(android.os.Looper.getMainLooper())
+                        .postDelayed(MainActivity.this::loadInterstitial, backoffMs(interstitialRetry++));
+                }
+            });
     }
 
     private void showInterstitialAd() {
         runOnUiThread(() -> {
-            if (interstitialAd != null && interstitialAd.isReady())
-                interstitialAd.showAd();
+            if (interstitialAd == null) return;
+            InterstitialAd ad = interstitialAd;
+            interstitialAd = null;
+            ad.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override public void onAdDismissedFullScreenContent() { loadInterstitial(); }
+                @Override public void onAdFailedToShowFullScreenContent(AdError e) { loadInterstitial(); }
+            });
+            ad.show(MainActivity.this);
         });
     }
 
     // -------------------------------------------------------
     // Rewarded
     // -------------------------------------------------------
-    private void setupRewarded() {
-        rewardedAd = MaxRewardedAd.getInstance(REWARDED_AD_UNIT_ID, this);
-        rewardedAd.setListener(new MaxRewardedAdListener() {
-            @Override public void onAdLoaded(MaxAd ad) {}
-            @Override public void onAdDisplayed(MaxAd ad) {}
-            @Override public void onAdHidden(MaxAd ad) { rewardedAd.loadAd(); }
-            @Override public void onAdClicked(MaxAd ad) {}
-            @Override public void onAdLoadFailed(String id, MaxError e) {
-                new android.os.Handler(android.os.Looper.getMainLooper())
-                    .postDelayed(() -> rewardedAd.loadAd(), 3000);
-            }
-            @Override public void onAdDisplayFailed(MaxAd ad, MaxError e) {
-                pendingRewardType = null;
-                rewardedAd.loadAd();
-            }
-            @Override public void onUserRewarded(MaxAd ad, MaxReward reward) {
-                // Grant reward ONLY here — never in onAdHidden
-                final String type = pendingRewardType;
-                pendingRewardType = null;
-                if (type != null) {
-                    runOnUiThread(() ->
-                        webView.evaluateJavascript(
-                            "window.onAdReward && window.onAdReward('" + type + "');", null));
+    private int rewardedRetry = 0;
+    private void loadRewarded() {
+        RewardedAd.load(this, REWARDED_AD_UNIT_ID, new AdRequest.Builder().build(),
+            new RewardedAdLoadCallback() {
+                @Override public void onAdLoaded(RewardedAd ad) { rewardedAd = ad; rewardedRetry = 0; }
+                @Override public void onAdFailedToLoad(LoadAdError e) {
+                    rewardedAd = null;
+                    new android.os.Handler(android.os.Looper.getMainLooper())
+                        .postDelayed(MainActivity.this::loadRewarded, backoffMs(rewardedRetry++));
                 }
-            }
-        });
-        rewardedAd.loadAd();
+            });
+    }
+
+    private void notifyAdNotReady(String type) {
+        runOnUiThread(() -> webView.evaluateJavascript(
+            "window.onAdNotReady && window.onAdNotReady('" + type + "');", null));
     }
 
     private void showRewardedAd(String rewardType) {
+        final String rt = rewardType == null ? "" : rewardType.replaceAll("[^A-Za-z0-9_]", "");
         runOnUiThread(() -> {
-            if (rewardedAd != null && rewardedAd.isReady()) {
-                pendingRewardType = rewardType;
-                rewardedAd.showAd();
-            }
+            if (rewardedAd == null) { notifyAdNotReady(rt); return; }
+            RewardedAd ad = rewardedAd;
+            rewardedAd = null;
+            pendingRewardType = rt;
+            ad.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override public void onAdDismissedFullScreenContent() { pendingRewardType = null; loadRewarded(); }
+                @Override public void onAdFailedToShowFullScreenContent(AdError e) {
+                    pendingRewardType = null;
+                    loadRewarded();
+                    notifyAdNotReady(rt);
+                }
+            });
+            ad.show(MainActivity.this, rewardItem -> {
+                // Grant reward ONLY here — never on dismiss.
+                final String type = pendingRewardType;
+                pendingRewardType = null;
+                if (type != null) runOnUiThread(() -> webView.evaluateJavascript(
+                    "window.onAdReward && window.onAdReward('" + type + "');", null));
+            });
         });
     }
 
@@ -379,12 +404,12 @@ public class MainActivity extends Activity {
 
     @Override protected void onResume() {
         super.onResume();
-        if (bannerAd != null) bannerAd.startAutoRefresh();
+        if (bannerAd != null) bannerAd.resume();
         if (webView != null) webView.onResume();
     }
     @Override protected void onPause() {
         super.onPause();
-        if (bannerAd != null) bannerAd.stopAutoRefresh();
+        if (bannerAd != null) bannerAd.pause();
         if (webView != null) webView.onPause();
     }
     @Override protected void onDestroy() {
