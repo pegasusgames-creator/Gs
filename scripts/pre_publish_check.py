@@ -2048,7 +2048,7 @@ def main():
         ('check_footer_clearance.py',     'footer clearance'),
         ('check_leaderboard_floor.py',    'leaderboard floor'),
         ('check_games_app_id.py',         'games app id'),
-        ('check_ad_network_switch.py',    'ad network switch'),
+        ('check_no_applovin.py',          'no AppLovin anywhere (AdMob only)'),
         ('check_pgs_init.py',             'pgs init'),
         ('check_cross_promo_pkgs.py',     'cross-promo pkgs'),
         ('check_cross_promo_pkg_field.py', 'cross-promo pkg field'),

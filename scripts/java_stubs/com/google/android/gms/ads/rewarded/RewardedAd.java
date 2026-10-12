@@ -1,0 +1,2 @@
+package com.google.android.gms.ads.rewarded;
+public abstract class RewardedAd { public static void load(android.content.Context c, String id, com.google.android.gms.ads.AdRequest r, RewardedAdLoadCallback cb){} public abstract void setFullScreenContentCallback(com.google.android.gms.ads.FullScreenContentCallback c); public abstract void show(android.app.Activity a, com.google.android.gms.ads.OnUserEarnedRewardListener l); }

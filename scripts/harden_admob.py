@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""harden_admob.py — Part 2 of the AppLovin->AdMob migration.
+"""harden_admob.py — Part 2 of the AdMob migration (AppLovin has since been removed portfolio-wide).
 
 Stops wasted ad requests and fixes the rewarded show-rate on the 8 AdMob apps.
 The AdMob load/show methods are byte-identical across all 8 (verified), so the

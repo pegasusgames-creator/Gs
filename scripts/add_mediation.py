@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""add_mediation.py — Part 3 of the AppLovin->AdMob migration.
+"""add_mediation.py — Part 3 of the AdMob migration (AppLovin has since been removed portfolio-wide).
 
 Adds the latest stable AdMob mediation adapters (Meta Audience Network, Unity
 Ads, Mintegral, Pangle, InMobi) to the 8 AdMob apps, wires the two extra Maven

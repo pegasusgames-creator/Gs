@@ -309,29 +309,37 @@ solution. Test plan:
 
 ## Phase 2 — Wrapper integration (mostly templated)
 
-1. **Create per-app package directories under
-   `<AppName>/android/app/src/main/java/com/pegasusgames/<lowername>/`.**
-   `<lowername>` is the lowercase no-spaces version of the app name.
-
-2. **Copy and rename `MainActivity.java` and `NotificationReceiver.java`**
-   from `_template/` (or from a known-good source app like
-   BallSortPuzzle) into the new package directory. Update the `package`
-   statement on line 1 of each file.
-
-3. **Update `applicationId` in
-   `<AppName>/android/app/build.gradle`:**
+1. **Scaffold the AdMob family wrapper + game shell** (one command; the
+   portfolio is AdMob-only — AppLovin was removed everywhere on 2026-10-12
+   and `check_no_applovin` blocks it coming back):
    ```
-   applicationId "com.pegasusgames.<lowername>"
-   versionCode   1
-   versionName   "1.0.0"
+   python3 scripts/scaffold_flagship.py <AppName> --name "<Store name>" \
+       --version-name 1.0.0 [--pkg com.pegasusgames.<lowername>] [--from Afterimage] \
+       --reminder "<daily reminder notification text>"
    ```
+   It copies MainActivity / NotificationHelper / NotificationReceiver
+   (package from the app's `applicationId`; `--pkg` for a brand-new folder),
+   manifest, gradle, res and the full `game.html` shell (menus, shop, IAP,
+   lives, settings, overlays, every growth shim) from a finished family
+   game, bumps `versionCode`, and resets every console ID to a value the
+   gates catch: Google TEST AdMob IDs, `PASTE_LICENSE_PUBLIC_KEY`,
+   `TODO_LEADERBOARD_ID`. Firebase is optional (the google-services plugin
+   applies only when `app/google-services.json` exists). The SOURCE game's
+   core is still inside `game.html` — replace it in Phase 1.5.
 
-4. **Update `android:label` and AdMob `APPLICATION_ID` in
-   `<AppName>/android/app/src/main/AndroidManifest.xml`.** The AdMob
-   APPLICATION_ID is a placeholder until Phase 4 — leave it as
-   `__ADMOB_APP_ID_PLACEHOLDER__` for now. Same for the AppLovin SDK key
-   meta-data — disable it (wrap in `if (false)` in MainActivity) until
-   AppLovin is approved.
+2. **Paste real console IDs later with one command** (Phase 6, Step 6):
+   `python3 scripts/set_app_ids.py <AppName> --admob-app ... --banner ...
+   --interstitial ... --rewarded ... --license ... --leaderboard ...`
+   (validates formats, refuses Google test IDs and any AdMob ID already used
+   by another app).
+
+3. **Check the Java compiles** before the first Gradle build:
+   `python3 scripts/java_compile_check.py <AppName>` (javac against the
+   Android framework + SDK signature stubs; no Android SDK needed).
+
+4. **Long-tail apps still on the old thin wrapper** already run AdMob + UMP
+   (`scripts/remove_applovin_longtail.py`); moving one up to flagship means
+   step 1 above.
 
 5. **Generate a dedicated keystore for this app** (per-app, not shared —
    per CLAUDE.md "Keystore management"):
@@ -1189,10 +1197,13 @@ fill these answers:
 
 ## Step 6 — Update local code with the AdMob IDs from Step 1, then rebuild (3 min)
 
-Once Steps 1-5 are done, rebuild the AAB so it has the real AdMob IDs
-baked in:
+Once Steps 1-5 are done, paste the IDs (validated, written to manifest +
+MainActivity + leaderboard map) and rebuild the AAB:
 
 ```
+python3 scripts/set_app_ids.py <AppName> --admob-app ca-app-pub-...~... \
+    --banner ca-app-pub-.../... --interstitial ca-app-pub-.../... \
+    --rewarded ca-app-pub-.../... --license MIIB... --leaderboard CgkI...
 cd <AppName>/android
 ./gradlew bundleRelease
 ```

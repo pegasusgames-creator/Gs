@@ -27,9 +27,14 @@ still belongs to SOURCE and must be replaced — this script only lays the
 shell. metadata/iaps.json is replaced with SOURCE's catalog only when it is
 a superset of TARGET's (never drop a SKU — restore must keep working).
 
+A brand-new TARGET folder (no android/ yet) needs --pkg com.pegasusgames.<x>;
+it starts at versionCode 1 and gets SOURCE's launcher icons as placeholders
+(regenerate them from store/ with sync_launcher_icons.py).
+
 Usage:
     python3 scripts/scaffold_flagship.py TARGET --name "Display Name" \\
-        --version-name 2.0.0 [--from Afterimage] [--reminder "..."] [--dry-run]
+        --version-name 2.0.0 [--from Afterimage] [--pkg com.pegasusgames.x] \\
+        [--reminder "..."] [--dry-run]
 """
 import argparse
 import json
@@ -58,8 +63,11 @@ WRAPPER_FILES = [
 ]
 
 
-def pkg_of(app: str) -> str:
-    g = (BASE / app / "android/app/build.gradle").read_text(encoding="utf-8")
+def pkg_of(app: str, default: str = "") -> str:
+    gp = BASE / app / "android/app/build.gradle"
+    if not gp.exists() and default:
+        return default
+    g = gp.read_text(encoding="utf-8")
     m = re.search(r'applicationId\s+["\']([^"\']+)["\']', g)
     if not m:
         raise SystemExit(f"{app}: no applicationId in app/build.gradle")
@@ -67,7 +75,10 @@ def pkg_of(app: str) -> str:
 
 
 def version_code_of(app: str) -> int:
-    g = (BASE / app / "android/app/build.gradle").read_text(encoding="utf-8")
+    gp = BASE / app / "android/app/build.gradle"
+    if not gp.exists():
+        return 0
+    g = gp.read_text(encoding="utf-8")
     m = re.search(r"versionCode\s+(\d+)", g)
     return int(m.group(1)) if m else 0
 
@@ -133,13 +144,17 @@ def main() -> int:
     ap.add_argument("--version-name", required=True)
     ap.add_argument("--from", dest="src", default="Afterimage")
     ap.add_argument("--reminder", default="", help="daily reminder notification text")
+    ap.add_argument("--pkg", default="", help="applicationId for a brand-new folder")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
     app, src_app = a.target, a.src
-    if not (BASE / app / "android").is_dir():
-        raise SystemExit(f"{app}: no android/ folder")
-    src_pkg, pkg = pkg_of(src_app), pkg_of(app)
+    new_app = not (BASE / app / "android/app/build.gradle").exists()
+    if new_app and not a.pkg:
+        raise SystemExit(f"{app}: no android/ project yet — pass --pkg com.pegasusgames.<name>")
+    if new_app and not (BASE / app).is_dir():
+        raise SystemExit(f"{app}: create the folder first (and its metadata via init_app_metadata.py)")
+    src_pkg, pkg = pkg_of(src_app), pkg_of(app, a.pkg)
     vc = version_code_of(app) + 1
     src_android, dst_android = BASE / src_app / "android", BASE / app / "android"
     src_name = re.search(r'android:label="([^"]+)"',
@@ -174,6 +189,13 @@ def main() -> int:
         out = rewrite_java(out, src_pkg, pkg, a.reminder) if f.name == "MainActivity.java" else out.replace(src_pkg, pkg)
         plan.append((dj / f.name, out))
 
+    # New folder: SOURCE's launcher icons as placeholders (manifest needs @mipmap/ic_launcher).
+    if new_app:
+        for f in sorted((src_android / "app/src/main/res").glob("mipmap*/*")) + \
+                 [src_android / "app/src/main/res/values/ic_launcher_colors.xml"]:
+            if f.is_file():
+                plan.append((dst_android / f.relative_to(src_android), f.read_bytes()))
+
     # game.html shell.
     sh = BASE / src_app / "android/app/src/main/assets/game.html"
     plan.append((BASE / app / "android/app/src/main/assets/game.html",
@@ -187,6 +209,7 @@ def main() -> int:
                      mp.read_text(encoding="utf-8").replace(src_name, a.name).replace(src_app, app)))
 
     # IAP catalog: SOURCE's only when it is a superset of TARGET's.
+    (BASE / app / "metadata").mkdir(parents=True, exist_ok=True) if not a.dry_run else None
     si, di = BASE / src_app / "metadata/iaps.json", BASE / app / "metadata/iaps.json"
     skus = lambda d: {p.get("id") for k in ("one_time_products", "subscriptions") for p in d.get(k, [])}
     sd = json.loads(si.read_text(encoding="utf-8"))
@@ -218,6 +241,8 @@ def main() -> int:
         if f.name not in {p.name for p in sj.glob('*.java')}:
             f.unlink()
     shutil.copymode(src_android / "gradlew", dst_android / "gradlew")
+    if new_app:
+        print(f"  next: python3 scripts/migrate_to_per_app_keystores.py --app {app}  (own keystore — never copy another app's)")
     return 0
 
 

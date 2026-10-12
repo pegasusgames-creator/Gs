@@ -1,0 +1,2 @@
+package com.google.android.gms.ads;
+public class MobileAds { public static void initialize(android.content.Context c, com.google.android.gms.ads.initialization.OnInitializationCompleteListener l){} public static void initialize(android.content.Context c){} public static void setRequestConfiguration(RequestConfiguration r){} public static RequestConfiguration getRequestConfiguration(){return null;} }

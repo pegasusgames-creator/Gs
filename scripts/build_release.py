@@ -146,7 +146,7 @@ def phase_8_verify(app_name, aab_path):
             # Check for unreplaced placeholders
             placeholders = [
                 b"__ADMOB_APP_ID_PLACEHOLDER__",
-                b"ENTER_YOUR_APPLOVIN_SDK_KEY_HERE",
+                b"ca-app-pub-3940256099942544",   # Google TEST app ID — a release built with it earns $0
                 b"ENTER_BANNER_AD_UNIT_ID",
                 b"ENTER_INTERSTITIAL_AD_UNIT_ID",
                 b"ENTER_REWARDED_AD_UNIT_ID",
