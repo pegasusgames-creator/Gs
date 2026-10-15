@@ -149,6 +149,9 @@ def main() -> int:
     ap.add_argument("--from", dest="src", default="Afterimage")
     ap.add_argument("--reminder", default="", help="daily reminder notification text")
     ap.add_argument("--pkg", default="", help="applicationId for a brand-new folder")
+    ap.add_argument("--replace-iaps", action="store_true",
+                    help="take SOURCE's iaps.json even when TARGET has other SKUs "
+                         "(only for apps never published — nothing to restore)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
@@ -218,7 +221,7 @@ def main() -> int:
     skus = lambda d: {p.get("id") for k in ("one_time_products", "subscriptions") for p in d.get(k, [])}
     sd = json.loads(si.read_text(encoding="utf-8"))
     dd = json.loads(di.read_text(encoding="utf-8")) if di.exists() else {}
-    if skus(dd) <= skus(sd):
+    if skus(dd) <= skus(sd) or a.replace_iaps:
         plan.append((di, json.dumps(sd, indent=2, ensure_ascii=False) + "\n"))
     else:
         print(f"  ! {app}: iaps.json has SKUs outside {src_app}'s catalog {sorted(skus(dd) - skus(sd))} — kept as is")
@@ -245,8 +248,12 @@ def main() -> int:
         if f.name not in {p.name for p in sj.glob('*.java')}:
             f.unlink()
     shutil.copymode(src_android / "gradlew", dst_android / "gradlew")
-    subprocess.run([sys.executable, str(BASE / "scripts/mark_shell_regions.py"), app], check=False)
-    subprocess.run([sys.executable, str(BASE / "scripts/reinject_all_shims.py"), app], check=False)
+    # Family game shell only: re-mark regions and re-sync the growth shims
+    # (kids / utility shells carry no game growth stack — never inject it).
+    shell = (BASE / app / "android/app/src/main/assets/game.html").read_text(encoding="utf-8")
+    if 'data-growth-shim="CORE"' in shell:
+        subprocess.run([sys.executable, str(BASE / "scripts/mark_shell_regions.py"), app], check=False)
+        subprocess.run([sys.executable, str(BASE / "scripts/reinject_all_shims.py"), app], check=False)
     if new_app:
         print(f"  next: python3 scripts/migrate_to_per_app_keystores.py --app {app}  (own keystore — never copy another app's)")
     return 0

@@ -16,6 +16,9 @@ here, in one place, so parallel builders never race on them:
 Usage:
   python3 scripts/register_flagship.py App [--gate scripts/check_x.py "label"]
       [--archetype-file entry.txt] [--dry-run]
+  python3 scripts/register_flagship.py App --json App/test/register.json
+      (builder hand-off: {"gate": [script, label], "app_theme": {...}};
+       RGB lists become tuples)
 """
 import argparse
 import ast
@@ -112,8 +115,17 @@ def main() -> int:
     ap.add_argument("app")
     ap.add_argument("--gate", nargs=2, metavar=("SCRIPT", "LABEL"))
     ap.add_argument("--archetype-file")
+    ap.add_argument("--json", help="builder hand-off file with gate + app_theme")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
+    theme_literal = None
+    if a.json:
+        h = json.loads(Path(a.json).read_text(encoding="utf-8"))
+        if h.get("gate") and not a.gate:
+            a.gate = list(h["gate"])
+        if h.get("app_theme"):
+            t = {k: tuple(v) if isinstance(v, list) else v for k, v in h["app_theme"].items()}
+            theme_literal = repr(t)
     app = a.app
     if not (BASE / app / "android").is_dir():
         raise SystemExit(f"{app}: not an app folder")
@@ -132,8 +144,10 @@ def main() -> int:
         s = upd_gate(a.gate[0], a.gate[1], s)
     edits[p] = s
     if a.archetype_file:
+        theme_literal = Path(a.archetype_file).read_text(encoding="utf-8")
+    if theme_literal:
         p = S / "app_themes.py"
-        edits[p] = upd_themes(app, Path(a.archetype_file).read_text(encoding="utf-8"), read(p))
+        edits[p] = upd_themes(app, theme_literal, read(p))
     p = S / "check_growth_features.py"
     edits[p] = upd_prerelease(pkg_of(app), read(p))
     for p, s in edits.items():
