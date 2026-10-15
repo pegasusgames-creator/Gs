@@ -30,6 +30,7 @@ def _array_len(html: str, name: str):
     depth = 0
     commas = 0
     nonempty = False           # any non-space char between the outer [ ]
+    last = ""                  # last significant char seen at depth 1
     n = len(html)
     while i < n:
         c = html[i]
@@ -53,10 +54,13 @@ def _array_len(html: str, name: str):
             commas += 1
         if depth >= 1 and not c.isspace() and c != "[":
             nonempty = True
+        if depth == 1 and not c.isspace():
+            last = c
         i += 1
     if not nonempty:
         return 0
-    return commas + 1
+    # a trailing comma ("{...},\n];") is not another element
+    return commas + (0 if last == "," else 1)
 
 
 def _level_count(html: str):

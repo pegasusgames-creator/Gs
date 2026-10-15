@@ -1514,18 +1514,17 @@ function showLevelSelect(){
 function buildLevelSelect(){
   const scroll=document.getElementById('ls-scroll');
   scroll.innerHTML='';
-  const sections=[
-    {label:'5×5 Beginner',range:[0,20]},
-    {label:'6×6 Easy',range:[20,41]},
-    {label:'7×7 Medium',range:[41,61]},
-    {label:'8×8 Hard',range:[61,81]},
-    {label:'9×9 Expert',range:[81,101]},
-    {label:'10×10 Master',range:[101,122]},
-    {label:'6×6 Marathon',range:[122,200]},
-    {label:'7×7 Marathon',range:[200,300]},
-    {label:'8×8 Gauntlet',range:[300,400]},
-    {label:'9×9 Legend',range:[400,500]}
-  ];
+  // Chapters of 50 covering every level. Each label names the board sizes
+  // actually inside it — sizes interleave after level 20, so the old fixed
+  // "6×6 Easy … 10×10 Master" labels did not match the boards (and the
+  // generator never makes a 10×10).
+  const _CH=50,_NAMES=['First Flows','Warm-Up','Crossroads','Tangles','Long Pipes','Mazeworks','Gridlock','Masterflow','Pipe Dreams','Legend'];
+  const sections=[];
+  for(let s=0;s<LEVELS.length;s+=_CH){
+    const e=Math.min(LEVELS.length,s+_CH);let lo=99,hi=0;
+    for(let k=s;k<e;k++){const z=LEVELS[k].size;if(z<lo)lo=z;if(z>hi)hi=z;}
+    sections.push({label:(_NAMES[s/_CH]||('Chapter '+(s/_CH+1)))+' · '+(lo===hi?lo+'×'+lo:lo+'×'+lo+'–'+hi+'×'+hi)+' — '+(s+1)+'–'+e,range:[s,e]});
+  }
   sections.forEach(sec=>{
     const title=document.createElement('div');
     title.className='ls-section-title';
@@ -6331,6 +6330,14 @@ window.addEventListener('load',function(){
     if (t.indexOf('afterimage') >= 0) return 6;
     if (t.indexOf('overlay') >= 0) return 7;
     if (t.indexOf('hunch') >= 0) return 8;
+    // Any other app: a stable offset from its GROWTH_CFG.app name, so two
+    // portfolio games never render the same standings side by side.
+    var cfg = window.GROWTH_CFG;
+    if (cfg && cfg.app && t.indexOf('water') < 0) {
+      var h = 0, s = String(cfg.app);
+      for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+      return 9 + (Math.abs(h) % 9973);
+    }
     return 1;
   }
   // Part D: assert no game-themed words sneak into the pools. Logs
@@ -6827,6 +6834,9 @@ window.addEventListener('load',function(){
   // the top"). ~7-9 shapes per app, ≥3 in the top band (viewBox y<280), the
   // rest mid-edges + bottom. ~13% stroke so it stays a watermark.
   function motifSilhouettes(t){
+    // Per-app hook: an app may declare its own watermark shapes (an SVG
+    // <g> string in a 430x880 viewBox) as window.MENU_MOTIF.
+    if (typeof window.MENU_MOTIF === 'string' && window.MENU_MOTIF) return window.MENU_MOTIF;
     if (t.indexOf('water') >= 0)
       return '<g fill="none" stroke="currentColor" stroke-width="8" stroke-opacity="0.13" stroke-linecap="round">'+
         '<rect x="-28" y="-60" width="76" height="240" rx="38"/><rect x="118" y="-84" width="66" height="196" rx="33"/>'+
@@ -6909,7 +6919,11 @@ window.addEventListener('load',function(){
     var t = (document.title||'').toLowerCase();
     if (t.indexOf('2048') >= 0) return; // 2048 already has a native preview grid
     var svg = '';
-    if (t.indexOf('water') >= 0) {
+    // Per-app hook: an app may declare its emblem (one <svg> string that
+    // reads the core mechanic at a glance) as window.MENU_EMBLEM.
+    if (typeof window.MENU_EMBLEM === 'string' && window.MENU_EMBLEM) {
+      svg = window.MENU_EMBLEM;
+    } else if (t.indexOf('water') >= 0) {
       // 3 mini flasks. Tube outline radius is 8 — interior radius is 7
       // (stroke-width 2 means inner boundary is 1px in). Layers fill
       // the FULL tube interior (no gap to the rounded base, no gap to

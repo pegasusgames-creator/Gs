@@ -819,6 +819,14 @@
     if (t.indexOf('afterimage') >= 0) return 6;
     if (t.indexOf('overlay') >= 0) return 7;
     if (t.indexOf('hunch') >= 0) return 8;
+    // Any other app: a stable offset from its GROWTH_CFG.app name, so two
+    // portfolio games never render the same standings side by side.
+    var cfg = window.GROWTH_CFG;
+    if (cfg && cfg.app && t.indexOf('water') < 0) {
+      var h = 0, s = String(cfg.app);
+      for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+      return 9 + (Math.abs(h) % 9973);
+    }
     return 1;
   }
   // Part D: assert no game-themed words sneak into the pools. Logs
@@ -1315,6 +1323,9 @@
   // the top"). ~7-9 shapes per app, ≥3 in the top band (viewBox y<280), the
   // rest mid-edges + bottom. ~13% stroke so it stays a watermark.
   function motifSilhouettes(t){
+    // Per-app hook: an app may declare its own watermark shapes (an SVG
+    // <g> string in a 430x880 viewBox) as window.MENU_MOTIF.
+    if (typeof window.MENU_MOTIF === 'string' && window.MENU_MOTIF) return window.MENU_MOTIF;
     if (t.indexOf('water') >= 0)
       return '<g fill="none" stroke="currentColor" stroke-width="8" stroke-opacity="0.13" stroke-linecap="round">'+
         '<rect x="-28" y="-60" width="76" height="240" rx="38"/><rect x="118" y="-84" width="66" height="196" rx="33"/>'+
@@ -1397,7 +1408,11 @@
     var t = (document.title||'').toLowerCase();
     if (t.indexOf('2048') >= 0) return; // 2048 already has a native preview grid
     var svg = '';
-    if (t.indexOf('water') >= 0) {
+    // Per-app hook: an app may declare its emblem (one <svg> string that
+    // reads the core mechanic at a glance) as window.MENU_EMBLEM.
+    if (typeof window.MENU_EMBLEM === 'string' && window.MENU_EMBLEM) {
+      svg = window.MENU_EMBLEM;
+    } else if (t.indexOf('water') >= 0) {
       // 3 mini flasks. Tube outline radius is 8 — interior radius is 7
       // (stroke-width 2 means inner boundary is 1px in). Layers fill
       // the FULL tube interior (no gap to the rounded base, no gap to

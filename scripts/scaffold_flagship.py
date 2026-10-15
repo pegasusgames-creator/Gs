@@ -24,7 +24,10 @@ created inside try/catch, so the app builds and runs without that file.
 
 After this, the game core inside game.html (level data, board, input, win)
 still belongs to SOURCE and must be replaced — this script only lays the
-shell. metadata/iaps.json is replaced with SOURCE's catalog only when it is
+shell. The replaceable parts are marked regions (@@REGION NAME); the
+contract is docs/GAME_SHELL.md and scripts/shell_region.py reads/replaces
+one region at a time. The growth shims are re-synced to the masters
+afterwards (the package rename must not touch shim bodies). metadata/iaps.json is replaced with SOURCE's catalog only when it is
 a superset of TARGET's (never drop a SKU — restore must keep working).
 
 A brand-new TARGET folder (no android/ yet) needs --pkg com.pegasusgames.<x>;
@@ -40,6 +43,7 @@ import argparse
 import json
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -241,6 +245,8 @@ def main() -> int:
         if f.name not in {p.name for p in sj.glob('*.java')}:
             f.unlink()
     shutil.copymode(src_android / "gradlew", dst_android / "gradlew")
+    subprocess.run([sys.executable, str(BASE / "scripts/mark_shell_regions.py"), app], check=False)
+    subprocess.run([sys.executable, str(BASE / "scripts/reinject_all_shims.py"), app], check=False)
     if new_app:
         print(f"  next: python3 scripts/migrate_to_per_app_keystores.py --app {app}  (own keystore — never copy another app's)")
     return 0

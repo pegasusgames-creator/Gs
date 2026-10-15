@@ -137,6 +137,7 @@ body.midnight .modal p{color:#7d93b6;}
 .btn-settings{background:#d4e2ec;color:#5a7390;}
 .btn-moregames{background:linear-gradient(135deg,#e040fb,#448aff);color:#fff;}
 /* §3.1 menu hierarchy: V8 minimal + T6 neon — hero Play, secondary pair, glowing tertiary icons. */
+/*@@REGION PALETTE*/
 :root{
   /* Daylight = light blueprint paper (portfolio rule: no dark defaults).
      The spec's dark-navy "blueprint-echo" mood ships as Midnight below. */
@@ -164,6 +165,7 @@ body.midnight{
   --plate:#f2c14e; --exit:#9be37d;
   --accent:#37e0e0;
 }
+/*@@END PALETTE*/
 .menu-primary{width:240px;padding:18px 0;border:none;border-radius:32px;font-family:'Poppins',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:2px;cursor:pointer;background:linear-gradient(135deg,#448aff,#69f0ae);color:#0f1923;box-shadow:0 0 24px rgba(105,240,174,0.35),0 0 60px rgba(68,138,255,0.25);transition:transform 0.1s;}
 .menu-primary:active{transform:scale(0.97);}
 .menu-primary .play-sub{display:block;font-size:0.78rem;font-weight:600;letter-spacing:1px;opacity:0.82;margin-top:3px;text-transform:none;}
@@ -250,6 +252,7 @@ body.midnight{
 .modal-btn.danger{background:#ff5252;color:#fff;}
 .stars-display{font-size:2rem;margin-bottom:16px;letter-spacing:4px;}
 
+/*@@REGION BOARD_CSS*/
 /* ── Afterimage board ─────────────────────────────────────────── */
 .board-zone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:4px 14px;}
 .par-row{display:flex;gap:8px;}
@@ -284,6 +287,7 @@ body.midnight{
 @media (min-width:600px){.dpad{grid-template-columns:repeat(3,62px);grid-template-rows:repeat(2,62px);}}
 @media (prefers-reduced-motion:reduce){.ent,.trail{transition:none!important;}.shake{animation:none!important;}}
 
+/*@@END BOARD_CSS*/
 /* ============ 2026-06-10 round-1: adaptive sizing via clamp() ============ */
 .game-footer {
   /* footer reserves room for the banner: +6px buffer for AdMob adaptive
@@ -493,6 +497,7 @@ body.midnight{
   #screen-menu *, #menuScreen *{ animation: none !important; }
 }
 /* =================== END SHARED MENU SKIN v2 =================== */
+/*@@REGION IDENTITY_CSS*/
 /* PART6: faint board-grid motif fills the empty menu space (skin masks center, behind content, pointer-events:none) */
 :root{ --m-motif-size:240px 240px; --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg stroke='%230fb5c9' stroke-width='2' opacity='0.10'%3E%3Cpath d='M0 60H240M0 120H240M0 180H240M60 0V240M120 0V240M180 0V240'/%3E%3C/g%3E%3C/svg%3E"); }
 
@@ -510,6 +515,7 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
   /* --m-* defaults resolve at html scope and cannot see body.midnight
      token overrides — restate the tile fill here explicitly. */
   --m-tile-grad:#1b2942; --m-tile-icon:#8fb4e8; }
+/*@@END IDENTITY_CSS*/
 </style>
 <script>try{if(window.Android)window.NativeBridge=window.Android;}catch(e){}</script>
 </head>
@@ -519,8 +525,10 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
 <div id="screen-menu" class="active">
   <div class="menu-lives" id="menu-lives">❤️ 5</div>
   <div class="menu-coins" id="menu-coins">🪙 0</div>
+<!--@@REGION MENU_TITLE-->
   <div class="menu-logo">AFTERIMAGE</div>
   <div class="menu-sub">Your echo moves two behind. Use it.</div>
+<!--@@END MENU_TITLE-->
   <button class="menu-primary" onclick="startGame()"><span>PLAY</span><span class="play-sub" id="aim-play-sub">Level 1</span></button>
   <button class="menu-pair" id="dailyChallengeBtn" onclick="startDailyChallenge()" style="width:240px;margin-top:14px">Daily puzzle</button>
   <div class="menu-icon-row">
@@ -550,6 +558,7 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
     <div class="hdr-lives" id="hdr-lives">❤️❤️❤️❤️❤️</div>
     <div class="hdr-coins" id="hdr-coins">🪙 0</div>
   </div>
+<!--@@REGION BOARD_HTML-->
   <div class="board-zone">
     <div class="par-row">
       <div class="chip">Moves <b id="hud-moves">0</b></div>
@@ -564,12 +573,16 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
       <button class="pad-r" data-d="R" aria-label="Right">→</button>
     </div>
   </div>
+<!--@@END BOARD_HTML-->
+<!--@@REGION FOOTER-->
   <div class="game-footer">
     <button class="foot-btn" onclick="goMenu()">← Menu</button>
     <button class="foot-btn" onclick="undoMove()">↶ Undo</button>
     <button class="foot-btn" onclick="useHint()">💡 Hint</button>
     <button class="foot-btn warn" onclick="resetLevel()">↺ Reset</button>
   </div>
+<!--@@END FOOTER-->
+<!--@@REGION TUTORIAL_HTML-->
   <div id="tutorialOverlay" style="display:none;position:absolute;bottom:90px;left:0;right:0;justify-content:center;pointer-events:none;z-index:50">
     <div style="background:var(--surface,#fff);border:1.5px solid var(--you,#0fb5c9);border-radius:18px;padding:16px 22px;max-width:290px;text-align:center;pointer-events:all;box-shadow:0 14px 40px rgba(10,20,40,0.25)">
       <div id="tut-title" style="color:var(--you,#0fb5c9);font-size:15px;font-weight:800;margin-bottom:6px">🟦 Two behind</div>
@@ -577,6 +590,7 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
       <div id="tut-foot" style="color:var(--text-mute,#5b6c8a);font-size:11px;margin-top:10px">Tap to continue · 1/3</div>
     </div>
   </div>
+<!--@@END TUTORIAL_HTML-->
 </div>
 
 <!-- LEVEL SELECT -->
@@ -751,13 +765,16 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
 // ============================================================
 // Entity palette — keys are roles, not colors. Theme palettes assign into
 // this (same contract as the rest of the portfolio's PIPE_COLORS).
+//@@REGION ROLES
 const PIPE_COLORS = {
   you:   'var(--you)',
   echo:  'var(--echo)',
   plate: 'var(--plate)',
   exit:  'var(--exit)'
 };
+//@@END ROLES
 
+//@@REGION SHOP
 const VALID_PRODUCTS = new Set([
   'remove_ads','coins_small','coins_medium','coins_large','coins_mega',
   'hint_pack','five_lives','unlimited_lives_1h','unlimited_lives_forever',
@@ -780,8 +797,10 @@ const SHOP_PRODUCTS = [
   {id:'unlimited_lives_1h',icon:'⚡',name:'Unlimited Lives 1hr',  desc:'Play without limits for 1 hour',         price:'$1.99'},
   {id:'unlimited_lives_forever',icon:'♾️',name:'Unlimited Lives Forever',desc:'Never run out of lives again',   price:'$4.99'}
 ];
+//@@END SHOP
 
 // ============================================================
+//@@REGION LEVELS
 // LEVELS (150 levels)
 // ============================================================
 // 500-level campaign: deterministic generator seeds, mined + verified by
@@ -1291,6 +1310,7 @@ const CAMPAIGN = [
 ];
 const LEVELS = CAMPAIGN; // length contract for level-select/addendum
 const BANDS={easy:{par:[5,8],walls:[4,6]},med:{par:[9,13],walls:[6,9]},hard:{par:[14,20],walls:[8,12]}};
+//@@END LEVELS
 
 // ============================================================
 // SAVE STATE
@@ -1563,11 +1583,13 @@ function showLevelSelect(){
 function buildLevelSelect(){
   const scroll=document.getElementById('ls-scroll');
   scroll.innerHTML='';
-  const sections=[
-    {label:'Echo Basics — 1–20',range:[0,20]},
-    {label:'Detours — 21–40',range:[20,40]},
-    {label:'Knots — 41–60',range:[40,60]}
-  ];
+  // Chapters of 50 covering EVERY level (the old fixed list stopped at 60 of 500).
+  const _N=(typeof LEVELS!=='undefined'?LEVELS:CAMPAIGN).length,_CH=50;
+//@@REGION CHAPTERS
+  const _NAMES=['Chapter 1','Chapter 2','Chapter 3','Chapter 4','Chapter 5','Chapter 6','Chapter 7','Chapter 8','Chapter 9','Chapter 10'];
+//@@END CHAPTERS
+  const sections=[];
+  for(let s=0;s<_N;s+=_CH){const e=Math.min(_N,s+_CH);sections.push({label:(_NAMES[s/_CH]||('Chapter '+(s/_CH+1)))+' — '+(s+1)+'–'+e,range:[s,e]});}
   sections.forEach(sec=>{
     const title=document.createElement('div');
     title.className='ls-section-title';
@@ -1853,6 +1875,18 @@ function addLives(n){
   save.lastLifeTime=Date.now();
   persist();
 }
+// Fail-state games call spendLife() when a run is lost. Returns false (and
+// opens the no-lives sheet) when the player is out of lives; unlimited-lives
+// holders never spend one. Pure puzzles with undo/reset never call it.
+function spendLife(){
+  regenLives();
+  if(hasUnlimitedLives())return true;
+  if(save.lives<=0){showOverlay('overlay-nolives');return false;}
+  if(save.lives>=save.maxLives)save.lastLifeTime=Date.now();
+  save.lives--;persist();updateAllUI();
+  try{if(window.gScheduleLivesRefilled)window.gScheduleLivesRefilled(save.lastLifeTime+(save.maxLives-save.lives)*30*60*1000);}catch(e){}
+  return true;
+}
 
 // ============================================================
 // ADMOB BRIDGE
@@ -1916,6 +1950,7 @@ window.onBackPressed=function(){
 };
 
 // ============================================================
+//@@REGION ENGINE
 // GAME ENGINE
 // ============================================================
 // ━━ AFTERIMAGE CORE — ported verbatim from docs/prototypes/ditto.html ━━
@@ -2228,6 +2263,7 @@ function maybeShowTutorial(){
   show();
 }
 window.replayTutorial=function(){localStorage.removeItem('aim_tutorialDone');showScreen('game');loadLevel(0);};
+//@@END ENGINE
 
 
 function confirmReset(){showOverlay('overlay-confirm-reset');}
@@ -3017,6 +3053,7 @@ window.renderPipeStats=function(){
   var list=document.getElementById('statsList'); if(!list) return;
   var completed=(save.completedLevels||[]).length;
   var perfect=Object.values(save.levelStars||{}).filter(function(s){return s>=3;}).length;
+//@@REGION STATS
   var stats=[
     {icon:'🎯',label:'Levels Synced',sub:'echo + exit together',value:completed},
     {icon:'⭐',label:'Perfect Levels',sub:'no resets',value:perfect},
@@ -3024,6 +3061,7 @@ window.renderPipeStats=function(){
     {icon:'🪙',label:'Coins',sub:'current balance',value:save.coins||0},
     {icon:'📋',label:'Current Level',sub:'keep flowing!',value:(save.currentLevel||0)+1},
   ];
+//@@END STATS
   list.innerHTML=stats.map(function(s){return '<div class="stat-card"><div class="stat-icon">'+s.icon+'</div><div class="stat-info"><h3>'+s.label+'</h3><p>'+s.sub+'</p></div><div class="stat-value">'+s.value+'</div></div>';}).join('');
 };
 
@@ -3034,6 +3072,7 @@ window.renderPipeStats=function(){
   //   coinCost    : N  → unlocked by spending N in-game coins (one-time)
   //                      Listed in save.unlockedThemes once bought.
   // No theme is sold via paid IAP — Midnight is a coin sink. (2026-05-25 user policy.)
+//@@REGION THEMES
   var THEMES=[
     {id:'default',name:'Blueprint',emoji:'📘',unlockLevel:0,palette:{you:'#0fb5c9',echo:'#e85d5d',plate:'#d29922',exit:'#2ea043'}},
     {id:'mint',name:'Mint',emoji:'🌿',unlockLevel:10,palette:{you:'#2ea871',echo:'#d96941',plate:'#c9a227',exit:'#3a86ff'}},
@@ -3043,6 +3082,7 @@ window.renderPipeStats=function(){
     {id:'ember',name:'Ember',emoji:'🔥',unlockLevel:45,palette:{you:'#ff8c1a',echo:'#c0392b',plate:'#ffd166',exit:'#7fc97f'}},
     {id:'mono',name:'Ink',emoji:'🖋️',unlockLevel:60,palette:{you:'#3a4a63',echo:'#8a93a6',plate:'#b08d2f',exit:'#4f7d52'}},
   ];
+//@@END THEMES
   window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel,coinCost:t.coinCost};});
 
   function isUnlocked(t){
@@ -3092,8 +3132,8 @@ window.renderPipeStats=function(){
         }
         save.activeTheme=t.id; persist();
         Object.assign(PIPE_COLORS,t.palette);
-    ['you','echo','plate','exit'].forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
-        ['you','echo','plate','exit'].forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
+    Object.keys(PIPE_COLORS).forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
+        Object.keys(PIPE_COLORS).forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
         applyMidnightChrome(t.id==='midnight');
         var btn=document.getElementById('themeBtn'); if(btn) btn.textContent=t.name;
         window.renderThemes();
@@ -3106,7 +3146,7 @@ window.renderPipeStats=function(){
   setTimeout(function(){
     var t=THEMES.find(function(x){return x.id===save.activeTheme;})||THEMES[0];
     Object.assign(PIPE_COLORS,t.palette);
-    ['you','echo','plate','exit'].forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
+    Object.keys(PIPE_COLORS).forEach(function(k){if(t.palette[k])document.body.style.setProperty('--'+k,t.palette[k]);});
     applyMidnightChrome(t.id==='midnight');
     var btn=document.getElementById('themeBtn'); if(btn) btn.textContent=t.name;
   },400);
@@ -3470,7 +3510,9 @@ function injectDragonTheme(){
   if(window._THEMES_META.find(function(t){return t.id==='dragon';})) return;
   window._THEMES_META.push({
     id:'dragon', name:'Dragon 🐉', unlock:0, coinCost:300,
+//@@REGION EVENT_THEME
     colors:['#ff4444','#ff8800','#ffdd00','#2ea043','#cc2200'], palette:{you:'#ff8800',echo:'#cc2200',plate:'#ffdd00',exit:'#2ea043'}
+//@@END EVENT_THEME
   });
 
   // Patch selectTheme to handle coinCost
@@ -3934,7 +3976,7 @@ window.addEventListener('load',function(){
   function safe(fn){ try { return fn(); } catch(e){} }
 
   var KEYS = [CFG.saveKey, 'watersort_save', 'nonogram_state', 'puzzle2048_save',
-              'unblock_save', 'pipeconnect_save', 'flappybird_save', 'hunch_save',
+              'unblock_save', 'pipeconnect_save', 'afterimage_save', 'hunch_save',
               'overlay_save', 'sokoban_save'].filter(Boolean);
 
   // Top-level `let/const State|state|save` are global lexical bindings —
@@ -5295,13 +5337,13 @@ window.addEventListener('load',function(){
   function api(name){ return !!(window.Android) && typeof window.Android[name]==='function'; }
 
   // PER-APP LEADERBOARD IDS (PGS project 225819574531, wired 2026-05-27):
-  //   WaterSortPuzzle  TODO_LEADERBOARD_ID
-  //   Nonogram         TODO_LEADERBOARD_ID
-  //   Puzzle2048       TODO_LEADERBOARD_ID
-  //   UnblockPuzzle    TODO_LEADERBOARD_ID
+  //   WaterSortPuzzle  CgkIg4KVn8kGEAIQAw
+  //   Nonogram         CgkIg4KVn8kGEAIQBA
+  //   Puzzle2048       CgkIg4KVn8kGEAIQBQ
+  //   UnblockPuzzle    CgkIg4KVn8kGEAIQBg
   // The literal below is patched in each per-app game.html — use
   // scripts/wire_leaderboards.py to (re)apply after a shim re-inject.
-  var LEADERBOARD_ID = 'TODO_LEADERBOARD_ID';
+  var LEADERBOARD_ID = 'TODO_FROM_PLAY_CONSOLE';
   // Exported so the MENU shim's Ranks sheet can open the matching leaderboard.
   window._GROWTH_LEADERBOARD_ID = LEADERBOARD_ID;
 
@@ -5608,7 +5650,7 @@ window.addEventListener('load',function(){
     if (window.gGame) { var live = window.gGame.state(); if (live && typeof live === 'object') return live; }
     var keys = ['watersort_save','puzzle2048_save','unblock_save',
                 'nonogram_state','nonogram_save','pipeconnect_save',
-                'flappybird_save','overlay_save','hunch_save','sokoban_save'];
+                'afterimage_save','overlay_save','hunch_save','sokoban_save'];
     for (var i=0;i<keys.length;i++){
       var raw = lsGet(keys[i], null);
       if (!raw) continue;
@@ -6159,6 +6201,14 @@ window.addEventListener('load',function(){
     if (t.indexOf('afterimage') >= 0) return 6;
     if (t.indexOf('overlay') >= 0) return 7;
     if (t.indexOf('hunch') >= 0) return 8;
+    // Any other app: a stable offset from its GROWTH_CFG.app name, so two
+    // portfolio games never render the same standings side by side.
+    var cfg = window.GROWTH_CFG;
+    if (cfg && cfg.app && t.indexOf('water') < 0) {
+      var h = 0, s = String(cfg.app);
+      for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+      return 9 + (Math.abs(h) % 9973);
+    }
     return 1;
   }
   // Part D: assert no game-themed words sneak into the pools. Logs
@@ -6655,6 +6705,9 @@ window.addEventListener('load',function(){
   // the top"). ~7-9 shapes per app, ≥3 in the top band (viewBox y<280), the
   // rest mid-edges + bottom. ~13% stroke so it stays a watermark.
   function motifSilhouettes(t){
+    // Per-app hook: an app may declare its own watermark shapes (an SVG
+    // <g> string in a 430x880 viewBox) as window.MENU_MOTIF.
+    if (typeof window.MENU_MOTIF === 'string' && window.MENU_MOTIF) return window.MENU_MOTIF;
     if (t.indexOf('water') >= 0)
       return '<g fill="none" stroke="currentColor" stroke-width="8" stroke-opacity="0.13" stroke-linecap="round">'+
         '<rect x="-28" y="-60" width="76" height="240" rx="38"/><rect x="118" y="-84" width="66" height="196" rx="33"/>'+
@@ -6737,7 +6790,11 @@ window.addEventListener('load',function(){
     var t = (document.title||'').toLowerCase();
     if (t.indexOf('2048') >= 0) return; // 2048 already has a native preview grid
     var svg = '';
-    if (t.indexOf('water') >= 0) {
+    // Per-app hook: an app may declare its emblem (one <svg> string that
+    // reads the core mechanic at a glance) as window.MENU_EMBLEM.
+    if (typeof window.MENU_EMBLEM === 'string' && window.MENU_EMBLEM) {
+      svg = window.MENU_EMBLEM;
+    } else if (t.indexOf('water') >= 0) {
       // 3 mini flasks. Tube outline radius is 8 — interior radius is 7
       // (stroke-width 2 means inner boundary is 1px in). Layers fill
       // the FULL tube interior (no gap to the rounded base, no gap to
