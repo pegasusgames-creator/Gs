@@ -1,5 +1,5 @@
 # Keep JavaScript interface methods (registered as both "Android" and "NativeBridge")
--keepclassmembers class com.pegasusgames.pipeconnect.MainActivity$NativeBridge {
+-keepclassmembers class com.pegasusgames.habittracker.MainActivity$NativeBridge {
     public *;
 }
 

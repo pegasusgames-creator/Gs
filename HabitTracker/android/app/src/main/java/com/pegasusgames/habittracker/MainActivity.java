@@ -1,12 +1,34 @@
 package com.pegasusgames.habittracker;
 
+// ─────────────────────────────────────────────────────────────────────────────
+// UTILITY SHELL wrapper (docs/UTILITY_SHELL.md). Scaffold new tools from this
+// app:  python3 scripts/scaffold_flagship.py <App> --from HabitTracker ...
+//
+// Differences from the game wrapper (Afterimage family):
+//   * system bars stay VISIBLE (a tool must not hide the clock); the root view
+//     is padded by the system-bar / cutout / keyboard insets, and game.html
+//     colours the bars through setSystemBarColors(hex, lightBackground);
+//   * no Play Games Services (PGS is for games only);
+//   * user reminders: scheduleReminder(slot, h, m, daysMask, title, body) —
+//     persisted, re-armed after every fire, after reboot and after updates;
+//   * haptic(kind), copyToClipboard / readClipboard, getFontScale(),
+//     openNotificationSettings() for the tool UI;
+//   * IAP = remove_ads + pro_lifetime (both non-consumable, no subscriptions).
+// ─────────────────────────────────────────────────────────────────────────────
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -15,7 +37,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import androidx.core.content.ContextCompat;
 
-// AdMob fallback
+// AdMob
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -40,7 +62,7 @@ import com.android.billingclient.api.QueryProductDetailsParams;
 import com.android.billingclient.api.QueryProductDetailsResult;
 import com.android.billingclient.api.QueryPurchasesParams;
 
-// Firebase
+// Firebase (optional — only active when app/google-services.json exists)
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Arrays;
@@ -57,8 +79,8 @@ import java.security.spec.X509EncodedKeySpec;
 
 public class MainActivity extends Activity {
 
-    // ── AdMob fallback ────────────────────────────────────────────────────────
-    // Get from: apps.admob.com → Your App → Ad Units
+    // ── AdMob ─────────────────────────────────────────────────────────────────
+    // Get from: apps.admob.com → Your App → Ad Units (scripts/set_app_ids.py)
     private static final String ADMOB_BANNER_UNIT_ID       = "ca-app-pub-3940256099942544/6300978111";
     private static final String ADMOB_INTERSTITIAL_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
     private static final String ADMOB_REWARDED_UNIT_ID     = "ca-app-pub-3940256099942544/5224354917";
@@ -70,57 +92,57 @@ public class MainActivity extends Activity {
     private static final String LICENSE_PUBLIC_KEY = "PASTE_LICENSE_PUBLIC_KEY";
 
     // ── IAP ───────────────────────────────────────────────────────────────────
+    // Generated from metadata/iaps.json — never hand-curate (IAP invariant 1).
     private static final Set<String> VALID_PRODUCTS = new HashSet<>(Arrays.asList(
-        "coins_small", "coins_medium", "coins_large", "coins_mega",
-        "five_lives", "hint_pack", "remove_ads",
-        "season_pass_monthly", "starter_pack", "unlimited_lives_1h",
-        "unlimited_lives_forever", "weekly_pass"
+        "remove_ads", "pro_lifetime"
     ));
 
-    // Subscription SKUs — routed through launchSubscription(), never the
-    // one-time INAPP flow.
+    // The utility shell sells no subscriptions. A future SUBS SKU must be added
+    // here AND to iaps.json "subscriptions" so it routes through launchSubscription().
     private static final Set<String> SUBSCRIPTION_PRODUCTS = new HashSet<>(Arrays.asList(
-        "season_pass_monthly", "weekly_pass"
+        /* none — utility apps sell one-time unlocks only */
     ));
 
-    // SKUs that are CONSUMABLE — must be consumed via consumeAsync after each
-    // purchase, otherwise the user can buy once and never re-buy. Anything in
-    // VALID_PRODUCTS but NOT in this set is non-consumable / subscription and
-    // acknowledged via acknowledgePurchase. Both flows must complete within
-    // Play's 3-day window or the purchase is auto-refunded.
+    // SKUs that are CONSUMABLE — consumed via consumeAsync after each purchase.
+    // Anything in VALID_PRODUCTS but NOT in this set is non-consumable and
+    // acknowledged via acknowledgePurchase (Play auto-refunds after 3 days
+    // otherwise). Both utility SKUs are permanent unlocks.
     private static final Set<String> CONSUMABLE_PRODUCTS = new HashSet<>(Arrays.asList(
-        "coins_small", "coins_medium", "coins_large", "coins_mega",
-        "five_lives", "hint_pack", "starter_pack", "unlimited_lives_1h"
+        /* none — remove_ads and pro_lifetime are non-consumable */
     ));
 
-        // Every reward type game.html requests MUST be listed — an unlisted type is dropped
-    // silently (no ad, no reward) and, in WaterSort, left a pending callback that blocked
-    // every later rewarded ad that session (audit 2026-10-03: free_coins / hint / extra_tube /
-    // magic_wand were missing). Gate: scripts/check_reward_types_native.py
-private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
-        "undo", "skip", "life", "free_coins", "hint", "extra_life", "double_coins"
+    // Purchases that turn the banner + interstitials off for good.
+    private static final Set<String> AD_FREE_PRODUCTS = new HashSet<>(Arrays.asList(
+        "remove_ads", "pro_lifetime"
     ));
 
-    private static final int WEBVIEW_BG_COLOR = 0xFFeef4f8;
+    // Every reward type game.html requests MUST be listed — an unlisted type is
+    // dropped silently (no ad, no reward). Gate: scripts/check_reward_types_native.py
+    private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asList(
+        "theme_trial"
+    ));
+
+    // Launch colour (before game.html paints): the Daylight background.
+    private static final int WEBVIEW_BG_COLOR = 0xFFF3F0FA;
 
     // ── Notification scheduling (NOTIFICATIONS_IMPL.md §1) ────────────────────
     private static final int REQ_DAILY_REMINDER       = 1001;
     private static final int REQ_STREAK_AT_RISK       = 1002;
     private static final int REQ_LIVES_REFILLED       = 1003;
     private static final int REQ_RETURN_AFTER_ABSENCE = 1004;
-    // Win-back chain — d3 / d7 / d14 / d30 fire if the user goes dark.
     private static final int REQ_WIN_BACK_D3          = 1005;
     private static final int REQ_WIN_BACK_D7          = 1006;
     private static final int REQ_WIN_BACK_D14         = 1007;
     private static final int REQ_WIN_BACK_D30         = 1008;
     private static final String PREF_NOTIFS_ENABLED   = "notifications_enabled";
     private static final String PREF_LAST_PLAYED      = "last_played_ts";
-    private static final int NOTIF_CAP_PER_DAY        = 2;
+    private static final String PREF_AD_FREE          = "ad_free";
+    private static final String PREF_BAR_COLOR        = "bar_color";
+    private static final String PREF_BAR_LIGHT        = "bar_light";
     private static final int POST_NOTIFS_REQUEST_CODE = 9001;
-    // Cross-promo install verification — must match CROSS_PROMO list in game.html
-    // and the <queries> entries in AndroidManifest.xml. Targets are LIVE Play
-    // Store apps only. Pre-release siblings (PipeConnect) added
-    // here ONLY after they have Play links.
+    // Cross-promo install verification — LIVE Play Store apps only (wrapper
+    // infra shared with the game track; the utility shell links to the
+    // developer page instead, so this list is informational here).
     private static final Set<String> CROSS_PROMO_PACKAGES = new HashSet<>(Arrays.asList(
         "com.pegasusgames.watersortpuzzle",
         "com.pegasusgames.nonogram",
@@ -133,10 +155,11 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
     private InterstitialAd admobInterstitial;
     private RewardedAd     admobRewarded;
 
+    private RelativeLayout rootLayout;
     private WebView      webView;
     private FrameLayout  bannerContainer;
     private BillingClient billingClient;
-    // ── Ad state (Part 2: FIFO reward queue + backoff + freshness + cadence) ──
+    // ── Ad state (FIFO reward queue + backoff + freshness + cadence) ──────────
     private final java.util.ArrayDeque<String> pendingRewardTypes = new java.util.ArrayDeque<>();
     private boolean interstitialLoading = false;
     private boolean rewardedLoading = false;
@@ -145,8 +168,11 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
     private long lastInterstitialAt = 0L;
     private int interstitialFails = 0;
     private int rewardedFails = 0;
-    private static final long AD_FRESH_MS = 50L * 60L * 1000L;        // discard ads >50 min old
-    private static final long INTERSTITIAL_MIN_GAP_MS = 60L * 1000L;  // >=60s between interstitials
+    private static final long AD_FRESH_MS = 50L * 60L * 1000L;             // discard ads >50 min old
+    private static final long INTERSTITIAL_MIN_GAP_MS = 3L * 60L * 1000L;  // >=3 min between interstitials
+    // Banner visibility = wanted by game.html AND keyboard closed AND not ad-free.
+    private boolean bannerWanted = true;
+    private boolean imeVisible = false;
     private FirebaseAnalytics firebaseAnalytics;
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -154,21 +180,17 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Play Games Services v2 must be initialized before any PlayGames.*
-        // client call; without this every PGS bridge method throws and no-ops.
-        try { com.google.android.gms.games.PlayGamesSdk.initialize(this); }
-        catch (Throwable e) { Log.d("PGS", "PlayGamesSdk.initialize no-op: " + e.getMessage()); }
-
-        RelativeLayout layout = new RelativeLayout(this);
-        setContentView(layout);
+        rootLayout = new RelativeLayout(this);
+        setContentView(rootLayout);
 
         // Banner container at bottom
         bannerContainer = new FrameLayout(this);
-        bannerContainer.setId(android.view.View.generateViewId());
+        bannerContainer.setId(View.generateViewId());
         RelativeLayout.LayoutParams bp = new RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT, dpToPx(50));
         bp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        layout.addView(bannerContainer, bp);
+        rootLayout.addView(bannerContainer, bp);
+        if (isAdFree()) { bannerWanted = false; bannerContainer.setVisibility(View.GONE); }
 
         // WebView above banner
         webView = new WebView(this);
@@ -178,8 +200,11 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
         // (screen - banner) instead of MATCH_PARENT; banner must draw on top.
         wp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         wp.addRule(RelativeLayout.ABOVE, bannerContainer.getId());
-        layout.addView(webView, wp);
+        rootLayout.addView(webView, wp);
         bannerContainer.bringToFront();
+        webView.setVerticalScrollBarEnabled(false);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
         if (0 != (getApplicationInfo().flags & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE))
             WebView.setWebContentsDebuggingEnabled(true);
@@ -191,7 +216,17 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
         ws.setAllowFileAccess(true);
         ws.setAllowFileAccessFromFileURLs(false);
         ws.setAllowUniversalAccessFromFileURLs(false);
-        webView.setBackgroundColor(WEBVIEW_BG_COLOR);
+        // game.html scales its own type from getFontScale() (rem-based layout),
+        // so the WebView must not multiply it a second time.
+        ws.setTextZoom(100);
+
+        // System bars: visible, coloured from the last theme game.html chose.
+        SharedPreferences gp = getSharedPreferences("game", MODE_PRIVATE);
+        int barColor = gp.getInt(PREF_BAR_COLOR, WEBVIEW_BG_COLOR);
+        boolean barLight = gp.getBoolean(PREF_BAR_LIGHT, true);
+        webView.setBackgroundColor(barColor);
+        setupSystemBars();
+        applySystemBarColors(barColor, barLight);
 
         NativeBridge bridge = new NativeBridge();
         webView.addJavascriptInterface(bridge, "Android");
@@ -201,7 +236,7 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
                 if (_u.startsWith("file:///android_asset")) return false;   // keep in-app nav in the WebView
                 try { startActivity(new android.content.Intent(android.content.Intent.ACTION_VIEW,
                     android.net.Uri.parse(_u))); } catch (Exception ignored) {}
-                return true;   // external links open in the browser, never the game WebView
+                return true;   // external links open in the browser, never the app WebView
             }
             @Override public void onPageFinished(WebView view, String url) {
                 runOnUiThread(() ->
@@ -210,24 +245,72 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
         });
         webView.loadUrl("file:///android_asset/game.html");
 
-        // Prime the window so SDK calls don't NPE on mDecor before onWindowFocusChanged
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            try { getWindow().setDecorFitsSystemWindows(false); } catch (Exception ignored) {}
-        }
-
         try { firebaseAnalytics = FirebaseAnalytics.getInstance(this); }
         catch (Throwable t) { firebaseAnalytics = null; } // no google-services.json
 
-        // Notification channel only. The runtime POST_NOTIFICATIONS request
-        // is NOT made here — growth spec: the JS shim pre-prompts AFTER the
-        // first level clear, then calls requestNotificationPermission().
+        // Notification channel only. POST_NOTIFICATIONS is requested in context
+        // by game.html (after the user turns a reminder on) via
+        // requestNotificationPermission() — never at launch.
         NotificationHelper.createChannel(this);
+        // Re-arm user reminders (covers force-stop / alarms dropped by the OS).
+        NotificationHelper.rearmAll(this);
 
         initAdMob();
         setupBilling();
     }
 
-    // ── AdMob fallback ────────────────────────────────────────────────────────
+    // ── System bars + insets ──────────────────────────────────────────────────
+    // API 30+: draw behind the bars and pad the root by systemBars | cutout,
+    // bottom = max(navigation bar, keyboard) so the focused input stays visible.
+    // API 24-29: the decor keeps fitting the bars (adjustResize in the manifest
+    // handles the keyboard) and only the bar colours are set.
+    private void setupSystemBars() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return;
+        try {
+            getWindow().setDecorFitsSystemWindows(false);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+            getWindow().setNavigationBarColor(Color.TRANSPARENT);
+            getWindow().setNavigationBarContrastEnforced(false);
+        } catch (Exception ignored) {}
+        rootLayout.setOnApplyWindowInsetsListener((v, insets) -> {
+            android.graphics.Insets bars = insets.getInsets(
+                android.view.WindowInsets.Type.systemBars()
+                | android.view.WindowInsets.Type.displayCutout());
+            android.graphics.Insets ime = insets.getInsets(android.view.WindowInsets.Type.ime());
+            boolean imeOpen = ime.bottom > bars.bottom;
+            v.setPadding(bars.left, bars.top, bars.right, Math.max(bars.bottom, ime.bottom));
+            if (imeOpen != imeVisible) { imeVisible = imeOpen; applyBannerVisibility(); }
+            return insets;
+        });
+        rootLayout.requestApplyInsets();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void applySystemBarColors(int color, boolean lightBackground) {
+        rootLayout.setBackgroundColor(color);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            android.view.WindowInsetsController c = getWindow().getInsetsController();
+            if (c != null) {
+                int mask = android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                         | android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS;
+                c.setSystemBarsAppearance(lightBackground ? mask : 0, mask);
+            }
+            return;
+        }
+        getWindow().setStatusBarColor(color);
+        getWindow().setNavigationBarColor(color);
+        View decor = getWindow().getDecorView();
+        int f = decor.getSystemUiVisibility();
+        int light = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) light |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+        decor.setSystemUiVisibility(lightBackground ? (f | light) : (f & ~light));
+    }
+
+    private boolean isAdFree() {
+        return getSharedPreferences("game", MODE_PRIVATE).getBoolean(PREF_AD_FREE, false);
+    }
+
+    // ── AdMob ─────────────────────────────────────────────────────────────────
     private boolean _adsInitialized = false;
 
     // Google UMP consent must resolve BEFORE ads initialize (EEA/UK requirement).
@@ -251,12 +334,11 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
             e -> initAdsAfterConsent());
     }
 
-    // Original ad init, now gated behind consent.
     private void initAdsAfterConsent() {
         if (_adsInitialized) return;
         _adsInitialized = true;
-        // Family puzzle game — cap served creatives at G (never adult/suggestive).
-        // TODO: tagForChildDirectedTreatment / tagForUnderAgeOfConsent is a SEPARATE
+        // General-audience tool — cap served creatives at G.
+        // tagForChildDirectedTreatment / tagForUnderAgeOfConsent is a SEPARATE
         // manual COPPA / Play-Families decision — do NOT set it here without that call.
         MobileAds.setRequestConfiguration(
             new com.google.android.gms.ads.RequestConfiguration.Builder()
@@ -264,11 +346,14 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
                     com.google.android.gms.ads.RequestConfiguration.MAX_AD_CONTENT_RATING_G)
                 .build());
         MobileAds.initialize(this, s -> runOnUiThread(() -> {
-            loadAdmobBanner(); loadAdmobInterstitial(); // rewarded is lazy-loaded (preloadRewarded)
+            // Ad-free owners never load a banner or interstitial; rewarded stays
+            // lazy (preloadRewarded) for the optional theme trial.
+            if (!isAdFree()) { loadAdmobBanner(); loadAdmobInterstitial(); }
         }));
     }
 
     private void loadAdmobBanner() {
+        if (admobBanner != null) return;
         admobBanner = new com.google.android.gms.ads.AdView(this);
         admobBanner.setAdSize(AdSize.BANNER);
         admobBanner.setAdUnitId(ADMOB_BANNER_UNIT_ID);
@@ -279,7 +364,7 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
     }
 
     private void loadAdmobInterstitial() {
-        if (admobInterstitial != null || interstitialLoading) return; // one in flight/loaded at a time
+        if (admobInterstitial != null || interstitialLoading || isAdFree()) return;
         interstitialLoading = true;
         InterstitialAd.load(this, ADMOB_INTERSTITIAL_UNIT_ID, new AdRequest.Builder().build(),
             new InterstitialAdLoadCallback() {
@@ -300,7 +385,6 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
                 @Override public void onAdFailedToLoad(LoadAdError e) {
                     admobInterstitial = null;
                     interstitialLoading = false;
-                    // back off 8s/16s/32s/64s instead of re-requesting immediately
                     new android.os.Handler(android.os.Looper.getMainLooper())
                         .postDelayed(MainActivity.this::loadAdmobInterstitial, backoffMs(interstitialFails++));
                 }
@@ -308,7 +392,7 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
     }
 
     private void loadAdmobRewarded() {
-        if (admobRewarded != null || rewardedLoading) return; // one in flight/loaded at a time
+        if (admobRewarded != null || rewardedLoading) return;
         rewardedLoading = true;
         RewardedAd.load(this, ADMOB_REWARDED_UNIT_ID, new AdRequest.Builder().build(),
             new RewardedAdLoadCallback() {
@@ -321,17 +405,19 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
                         @Override public void onAdDismissedFullScreenContent() {
                             pendingRewardTypes.clear();
                             admobRewarded = null; loadAdmobRewarded();
+                            webView.evaluateJavascript("window.onAdDismissed && window.onAdDismissed();", null);
                         }
                         @Override public void onAdFailedToShowFullScreenContent(com.google.android.gms.ads.AdError e) {
                             pendingRewardTypes.clear();
                             admobRewarded = null; loadAdmobRewarded();
+                            webView.evaluateJavascript("window.onAdNotReady && window.onAdNotReady();", null);
                         }
                     });
                 }
                 @Override public void onAdFailedToLoad(LoadAdError e) {
                     admobRewarded = null;
                     rewardedLoading = false;
-                    new android.os.Handler(android.os.Looper.getMainLooper())
+                    if (rewardedFails < 4) new android.os.Handler(android.os.Looper.getMainLooper())
                         .postDelayed(MainActivity.this::loadAdmobRewarded, backoffMs(rewardedFails++));
                 }
             });
@@ -343,24 +429,28 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
     }
 
     // ── Banner show/hide ──────────────────────────────────────────────────────
-    private void hideBanner() {
+    private void applyBannerVisibility() {
         runOnUiThread(() -> {
-            bannerContainer.setVisibility(android.view.View.GONE);
-            if (admobBanner != null) admobBanner.pause();   // PART 1C: pause the AdView while hidden (menu/settings or ads-removed)
+            boolean show = bannerWanted && !imeVisible && !isAdFree();
+            bannerContainer.setVisibility(show ? View.VISIBLE : View.GONE);
+            if (admobBanner != null) { if (show) admobBanner.resume(); else admobBanner.pause(); }
         });
     }
+    private void hideBanner() { bannerWanted = false; applyBannerVisibility(); }
     private void showBanner() {
-        runOnUiThread(() -> {
-            bannerContainer.setVisibility(android.view.View.VISIBLE);
-            if (admobBanner != null && bannerContainer.getVisibility() == android.view.View.VISIBLE) admobBanner.resume(); // PART 1C: don't resume a menu-hidden banner  // PART 1C: resume when shown on a gameplay screen
-        });
+        bannerWanted = true;
+        runOnUiThread(() -> { if (_adsInitialized && admobBanner == null && !isAdFree()) loadAdmobBanner(); });
+        applyBannerVisibility();
     }
 
     // ── Interstitial show ─────────────────────────────────────────────────────
+    // game.html decides WHEN (Ads.naturalBreak: natural break, not first
+    // session, >=3 min apart, never for ad-free owners); this is the native floor.
     private void showInterstitialAd() {
         runOnUiThread(() -> {
+            if (isAdFree()) return;
             long now = System.currentTimeMillis();
-            if (now - lastInterstitialAt < INTERSTITIAL_MIN_GAP_MS) return; // >=60s apart
+            if (now - lastInterstitialAt < INTERSTITIAL_MIN_GAP_MS) return;
             if (admobInterstitial != null && now - interstitialLoadedAt > AD_FRESH_MS) {
                 admobInterstitial = null; loadAdmobInterstitial(); return;  // stale -> refresh, skip
             }
@@ -376,9 +466,10 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
     // ── Rewarded show ─────────────────────────────────────────────────────────
     // Reward is granted ONLY in the reward callback, never in dismiss.
     private void showRewardedAd(String rewardType) {
-        // extra_life is a synonym for life — route to the existing life branch.
-        if ("extra_life".equals(rewardType)) rewardType = "life";
-        if (!VALID_REWARD_TYPES.contains(rewardType)) return;
+        if (!VALID_REWARD_TYPES.contains(rewardType)) {
+            runOnUiThread(() -> webView.evaluateJavascript("window.onAdNotReady && window.onAdNotReady();", null));
+            return;
+        }
         final String type = rewardType;
         runOnUiThread(() -> {
             long now = System.currentTimeMillis();
@@ -396,6 +487,7 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
                         "window.onAdReward && window.onAdReward('" + t + "');", null);
                 });
             } else {
+                rewardedFails = 0;
                 loadAdmobRewarded();                // lazy: nothing ready -> start a load for next time
                 webView.evaluateJavascript("window.onAdNotReady && window.onAdNotReady();", null);
             }
@@ -408,6 +500,8 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
             .setListener((r, purchases) -> {
                 if (r.getResponseCode() == BillingClient.BillingResponseCode.OK && purchases != null)
                     for (Purchase p : purchases) handlePurchase(p);
+                else if (r.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED)
+                    restorePurchases();
             })
             .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
             .build();
@@ -429,6 +523,11 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
     private void launchPurchase(String productId) {
         if (!VALID_PRODUCTS.contains(productId)) return;
         if (SUBSCRIPTION_PRODUCTS.contains(productId)) { launchSubscription(productId); return; }
+        if (billingClient == null || !billingClient.isReady()) {
+            runOnUiThread(() -> webView.evaluateJavascript(
+                "window.onPurchaseUnavailable && window.onPurchaseUnavailable('" + productId + "');", null));
+            return;
+        }
         billingClient.queryProductDetailsAsync(
             QueryProductDetailsParams.newBuilder().setProductList(Arrays.asList(
                 QueryProductDetailsParams.Product.newBuilder()
@@ -442,11 +541,13 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
                             BillingFlowParams.ProductDetailsParams.newBuilder()
                                 .setProductDetails(details.get(0)).build()
                         )).build()));
+                else runOnUiThread(() -> webView.evaluateJavascript(
+                    "window.onPurchaseUnavailable && window.onPurchaseUnavailable('" + productId + "');", null));
             });
     }
 
-    // PART 3B — localized IAP pricing: push BillingClient's locale-formatted
-    // prices to the WebView (hardcoded $-strings are the fallback).
+    // Localized IAP pricing: push BillingClient's locale-formatted prices to the
+    // WebView (the $-strings in game.html's PRODUCTS table are the fallback).
     private final java.util.Map<String, String> _localizedPrices =
         new java.util.concurrent.ConcurrentHashMap<>();
 
@@ -493,7 +594,7 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
         });
     }
 
-        private void handlePurchase(Purchase purchase) {
+    private void handlePurchase(Purchase purchase) {
         if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED) return;
         if (!verifyPurchaseSignature(purchase)) {
             Log.w("IAP", "Signature verification failed; reward NOT granted.");
@@ -533,22 +634,25 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
 
         for (String id : purchase.getProducts()) {
             if (!VALID_PRODUCTS.contains(id)) continue;
+            if (AD_FREE_PRODUCTS.contains(id)) {
+                getSharedPreferences("game", MODE_PRIVATE).edit().putBoolean(PREF_AD_FREE, true).apply();
+                hideBanner();
+            }
             runOnUiThread(() -> webView.evaluateJavascript(
                 "window.onPurchaseSuccess && window.onPurchaseSuccess('" + id + "');", null));
-            if ("remove_ads".equals(id)) hideBanner();
         }
     }
 
     // RSA-SHA1 signature check against the app's Play Console public key.
     // Returns true if verified, false if invalid. Returns true (skip) when the
-    // public key is still a placeholder so local debug builds work before the
-    // real key is pasted in.
+    // public key is still a placeholder AND the build is debuggable, so local
+    // debug builds work before the real key is pasted in.
     private boolean verifyPurchaseSignature(Purchase purchase) {
         if (LICENSE_PUBLIC_KEY == null || LICENSE_PUBLIC_KEY.startsWith("PASTE_")) {
             Log.w("IAP", "LICENSE_PUBLIC_KEY is placeholder — signature check skipped.");
             if ((getApplicationInfo().flags
                 & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) == 0) {
-                return false;  // PART 3A fail-closed: never grant on a placeholder key in release
+                return false;  // fail-closed: never grant on a placeholder key in release
             }
             return true;
         }
@@ -570,6 +674,7 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
             return false;
         }
     }
+
     private void launchSubscription(String productId) {
         billingClient.queryProductDetailsAsync(
             QueryProductDetailsParams.newBuilder().setProductList(Arrays.asList(
@@ -594,12 +699,14 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
     }
 
     private void restorePurchases() {
+        if (billingClient == null || !billingClient.isReady()) return;
         billingClient.queryPurchasesAsync(
             QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build(),
-            (r, purchases) -> { for (Purchase p : purchases) handlePurchase(p); });
-        billingClient.queryPurchasesAsync(
-            QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build(),
-            (r, purchases) -> { for (Purchase p : purchases) handlePurchase(p); });
+            (r, purchases) -> {
+                for (Purchase p : purchases) handlePurchase(p);
+                runOnUiThread(() -> webView.evaluateJavascript(
+                    "window.onRestoreComplete && window.onRestoreComplete(" + purchases.size() + ");", null));
+            });
     }
 
     // ── JS Bridge ─────────────────────────────────────────────────────────────
@@ -614,6 +721,59 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
         @JavascriptInterface public void restorePurchases()              { MainActivity.this.restorePurchases(); }
         @JavascriptInterface public void openUrl(String url)             { try { startActivity(new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))); } catch (Exception e) {} }
 
+        // System-bar colours follow the in-app theme (hex "#rrggbb").
+        @JavascriptInterface
+        public void setSystemBarColors(String hex, boolean lightBackground) {
+            final int c;
+            try { c = Color.parseColor(hex); } catch (Exception e) { return; }
+            getSharedPreferences("game", MODE_PRIVATE).edit()
+                .putInt(PREF_BAR_COLOR, c).putBoolean(PREF_BAR_LIGHT, lightBackground).apply();
+            runOnUiThread(() -> { applySystemBarColors(c, lightBackground); webView.setBackgroundColor(c); });
+        }
+
+        // System font scale (Settings → Display → Font size); game.html scales rem from it.
+        @JavascriptInterface
+        public float getFontScale() { return getResources().getConfiguration().fontScale; }
+
+        // Haptics through the view — honours the system "touch feedback" setting,
+        // needs no VIBRATE permission. kind: "tap" | "success" | "reject".
+        @JavascriptInterface
+        public void haptic(String kind) {
+            runOnUiThread(() -> {
+                if (webView == null) return;
+                int c = HapticFeedbackConstants.KEYBOARD_TAP;
+                if ("success".equals(kind)) {
+                    c = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+                        ? HapticFeedbackConstants.CONFIRM : HapticFeedbackConstants.LONG_PRESS;
+                } else if ("reject".equals(kind)) {
+                    c = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+                        ? HapticFeedbackConstants.REJECT : HapticFeedbackConstants.LONG_PRESS;
+                }
+                webView.performHapticFeedback(c);
+            });
+        }
+
+        @JavascriptInterface
+        public void copyToClipboard(String text) {
+            if (text == null) return;
+            runOnUiThread(() -> {
+                ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                if (cm != null) cm.setPrimaryClip(ClipData.newPlainText("Habit Tracker", text));
+            });
+        }
+
+        @JavascriptInterface
+        public String readClipboard() {
+            try {
+                ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                if (cm == null || !cm.hasPrimaryClip()) return "";
+                ClipData cd = cm.getPrimaryClip();
+                if (cd == null || cd.getItemCount() == 0) return "";
+                CharSequence s = cd.getItemAt(0).coerceToText(MainActivity.this);
+                return s == null ? "" : s.toString();
+            } catch (Exception e) { return ""; }
+        }
+
         @JavascriptInterface
         public void scheduleNotification(String title, String body, long delayMs) {
             int mins = Math.max(1, (int)(delayMs / 60000L));
@@ -625,23 +785,64 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
             NotificationHelper.cancel(MainActivity.this);
         }
 
+        // In-context permission ask (game.html calls this only after the user
+        // turns a reminder on). Always answers through
+        // window.onNotificationPermissionResult(granted).
         @JavascriptInterface
         public void requestNotificationPermission() {
-            if (Build.VERSION.SDK_INT >= 33) {
-                if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1001);
+            runOnUiThread(() -> {
+                if (Build.VERSION.SDK_INT >= 33
+                        && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                           != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        POST_NOTIFS_REQUEST_CODE);
+                } else {
+                    webView.evaluateJavascript("window.onNotificationPermissionResult && "
+                        + "window.onNotificationPermissionResult(" + hasNotificationPermission() + ");", null);
                 }
-            }
+            });
         }
 
         @JavascriptInterface
         public boolean hasNotificationPermission() {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true;
-            return ContextCompat.checkSelfPermission(
-                MainActivity.this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED;
+            boolean granted = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+                || ContextCompat.checkSelfPermission(MainActivity.this,
+                       Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+            android.app.NotificationManager nm =
+                (android.app.NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            return granted && (nm == null || nm.areNotificationsEnabled());
+        }
+
+        @JavascriptInterface
+        public void openNotificationSettings() {
+            runOnUiThread(() -> {
+                android.content.Intent i;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    i = new android.content.Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                    i.putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, getPackageName());
+                } else {
+                    i = new android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        android.net.Uri.parse("package:" + getPackageName()));
+                }
+                try { startActivity(i); } catch (Exception ignored) {}
+            });
+        }
+
+        // ── User reminders (utility shell) ────────────────────────────────────
+        // slot 0..63 (0 = the app-wide daily check-in); daysMask bit 0 = Sunday …
+        // bit 6 = Saturday (0 or 127 = every day). Persisted in SharedPreferences
+        // "reminders" and re-armed after each fire, reboot and app update.
+        @JavascriptInterface
+        public void scheduleReminder(int slot, int hourOfDay, int minute, int daysMask,
+                                     String title, String body) {
+            if (slot < 0 || slot > NotificationHelper.MAX_SLOT || title == null || body == null) return;
+            NotificationHelper.saveReminder(MainActivity.this, slot, hourOfDay, minute, daysMask, title, body);
+            NotificationHelper.armReminder(MainActivity.this, slot);
+        }
+
+        @JavascriptInterface
+        public void cancelReminder(int slot) {
+            NotificationHelper.removeReminder(MainActivity.this, slot);
         }
 
         @JavascriptInterface
@@ -676,19 +877,14 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
             if (cal.getTimeInMillis() <= System.currentTimeMillis()) {
                 cal.add(java.util.Calendar.DAY_OF_YEAR, 1);
             }
-            String body = "Your " + streakDays + "-day streak ends in 4 hours — keep it alive! 🔥";
+            String body = "Your " + streakDays + "-day streak ends at midnight.";
             scheduleAlarm(REQ_STREAK_AT_RISK, cal.getTimeInMillis(),
-                "streak_at_risk", "Don't break your streak!", body);
+                "streak_at_risk", getDailyReminderTitle(), body);
         }
 
         @JavascriptInterface
         public void scheduleLivesRefilled(long whenMillis) {
-            cancelScheduledAlarm(REQ_LIVES_REFILLED);
-            if (!getSharedPreferences("game", MODE_PRIVATE)
-                    .getBoolean(PREF_NOTIFS_ENABLED, true)) return;
-            if (whenMillis <= System.currentTimeMillis()) return;
-            scheduleAlarm(REQ_LIVES_REFILLED, whenMillis,
-                "lives_refilled", "Your lives are back!", "Ready for another round? ❤️");
+            cancelScheduledAlarm(REQ_LIVES_REFILLED);   // games only — kept for wrapper parity
         }
 
         @JavascriptInterface
@@ -724,6 +920,7 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
             cancelScheduledAlarm(REQ_WIN_BACK_D7);
             cancelScheduledAlarm(REQ_WIN_BACK_D14);
             cancelScheduledAlarm(REQ_WIN_BACK_D30);
+            NotificationHelper.removeAllReminders(MainActivity.this);
         }
 
         @JavascriptInterface
@@ -743,7 +940,6 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
         public void recordLastPlayed() {
             getSharedPreferences("game", MODE_PRIVATE).edit()
                 .putLong(PREF_LAST_PLAYED, System.currentTimeMillis()).apply();
-            cancelScheduledAlarm(REQ_DAILY_REMINDER);
         }
 
         // Cross-promo "installed?" check — scoped to the sister-app allowlist
@@ -761,7 +957,7 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
 
         @JavascriptInterface
         public void openPlayStore(String pkg) {
-            if (pkg == null || !CROSS_PROMO_PACKAGES.contains(pkg)) return;
+            if (pkg == null || !(CROSS_PROMO_PACKAGES.contains(pkg) || pkg.equals(getPackageName()))) return;
             runOnUiThread(() -> {
                 android.content.Intent i = new android.content.Intent(
                     android.content.Intent.ACTION_VIEW,
@@ -786,81 +982,10 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
             });
         }
 
-        // shareImage(base64) — best-effort. The JS share-a-win shim treats
-        // shareImage as optional; the text-only path always works.
+        // shareImage(base64) — best-effort text share (kept for wrapper parity).
         @JavascriptInterface
         public void shareImage(String base64Png, String caption) {
-            if (caption == null) caption = "";
-            final String body = caption;
-            runOnUiThread(() -> {
-                android.content.Intent send = new android.content.Intent(android.content.Intent.ACTION_SEND);
-                send.setType("text/plain");
-                send.putExtra(android.content.Intent.EXTRA_TEXT, body);
-                try {
-                    startActivity(android.content.Intent.createChooser(send, "Share"));
-                } catch (android.content.ActivityNotFoundException e) {
-                    Log.w("Share", "no chooser available", e);
-                }
-            });
-        }
-
-        @JavascriptInterface
-        public void setLeaderboardSize(int n) {
-          final int v = Math.max(1000, n);
-          runOnUiThread(() -> {
-            if (webView != null) {
-              webView.evaluateJavascript(
-                "window.LEADERBOARD_TOTAL_OVERRIDE = " + v + ";", null);
-            }
-          });
-        }
-
-        // ── Play Games Services bridge (PGS v2) ───────────────────────────────
-        // Defensive — no-op while the leaderboard isn't yet created in Play
-        // Console (JS LEADERBOARD_ID ships as TODO_ placeholder). The synthetic
-        // weekly-tournament fallback in game.html stays active until then.
-        @JavascriptInterface
-        public void submitScore(String leaderboardId, long score) {
-            if (leaderboardId == null || leaderboardId.isEmpty()) return;
-            if (leaderboardId.startsWith("TODO_")) return;
-            try {
-                com.google.android.gms.games.PlayGames.getLeaderboardsClient(MainActivity.this)
-                    .submitScore(leaderboardId, score);
-            } catch (Throwable e) { Log.d("PGS", "submitScore no-op: " + e.getMessage()); }
-        }
-
-        @JavascriptInterface
-        public void showLeaderboard(String leaderboardId) {
-            if (leaderboardId == null || leaderboardId.isEmpty()) return;
-            if (leaderboardId.startsWith("TODO_")) return;
-            try {
-                com.google.android.gms.games.PlayGames.getLeaderboardsClient(MainActivity.this)
-                    .getLeaderboardIntent(leaderboardId)
-                    .addOnSuccessListener(intent -> runOnUiThread(() -> {
-                        try { startActivityForResult(intent, 9991); }
-                        catch (Throwable e) { Log.w("PGS", "leaderboard intent failed", e); }
-                    }));
-            } catch (Throwable e) { Log.d("PGS", "showLeaderboard no-op: " + e.getMessage()); }
-        }
-
-        @JavascriptInterface
-        public boolean signInPlayGames() {
-            try {
-                com.google.android.gms.games.PlayGames.getGamesSignInClient(MainActivity.this).signIn();
-                return true;
-            } catch (Throwable e) {
-                Log.d("PGS", "signInPlayGames no-op: " + e.getMessage());
-                return false;
-            }
-        }
-
-        @JavascriptInterface
-        public boolean isPlayGamesAuthenticated() {
-            try {
-                com.google.android.gms.tasks.Task<com.google.android.gms.games.AuthenticationResult> t =
-                    com.google.android.gms.games.PlayGames.getGamesSignInClient(MainActivity.this).isAuthenticated();
-                return t != null && t.isComplete() && t.getResult() != null && t.getResult().isAuthenticated();
-            } catch (Throwable e) { return false; }
+            shareText(caption == null ? "" : caption);
         }
 
         @JavascriptInterface
@@ -881,45 +1006,23 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
         }
     }
 
-    // ── Fullscreen ────────────────────────────────────────────────────────────
-    private void applyFullscreen() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            getWindow().setDecorFitsSystemWindows(false);
-            android.view.WindowInsetsController ic = getWindow().getInsetsController();
-            if (ic != null) {
-                ic.hide(android.view.WindowInsets.Type.statusBars() |
-                        android.view.WindowInsets.Type.navigationBars());
-                ic.setSystemBarsBehavior(
-                    android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-            }
-        } else {
-            //noinspection deprecation
-            getWindow().getDecorView().setSystemUiVisibility(
-                android.view.View.SYSTEM_UI_FLAG_FULLSCREEN |
-                android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        }
-    }
-
-    @Override public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) applyFullscreen();
-    }
-
     // ── Lifecycle ─────────────────────────────────────────────────────────────
     @Override protected void onResume() {
         super.onResume();
-        if (admobBanner != null) admobBanner.resume();
-        if (webView != null) webView.onResume();
+        if (admobBanner != null && bannerContainer.getVisibility() == View.VISIBLE) admobBanner.resume();
+        if (webView != null) {
+            webView.onResume();
+            webView.evaluateJavascript("window.onAppResume && window.onAppResume();", null);
+        }
     }
 
     @Override protected void onPause() {
         super.onPause();
         if (admobBanner != null) admobBanner.pause();
-        if (webView != null) webView.onPause();
+        if (webView != null) {
+            webView.evaluateJavascript("window.onAppPause && window.onAppPause();", null);
+            webView.onPause();
+        }
     }
 
     @Override protected void onDestroy() {
@@ -976,7 +1079,7 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
         }
     }
 
-    private String getDailyReminderTitle() { return "Afterimage"; }
+    private String getDailyReminderTitle() { return "Habit Tracker"; }
     private String getDailyReminderBody()  { return "Time to check in on today's habits."; }
 
     @Override

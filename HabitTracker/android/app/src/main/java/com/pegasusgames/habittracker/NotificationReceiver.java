@@ -16,17 +16,31 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context ctx, Intent intent) {
-        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) return;
+        String action = intent.getAction();
+        // Alarms are dropped on reboot / app update — re-arm the stored user reminders.
+        if (Intent.ACTION_BOOT_COMPLETED.equals(action)
+                || Intent.ACTION_MY_PACKAGE_REPLACED.equals(action)) {
+            NotificationHelper.rearmAll(ctx);
+            return;
+        }
         createChannels(ctx);
 
         String type  = intent.getStringExtra("type");
         String title = intent.getStringExtra("title");
         String body  = intent.getStringExtra("body");
         int reqCode  = intent.getIntExtra("requestCode", 0);
+        int slot     = intent.getIntExtra("slot", -1);
         if (title == null || body == null) return;
 
-        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        String channelId = (hour >= 21 || hour < 9) ? CHANNEL_ID_SILENT : CHANNEL_ID_LOUD;
+        // A reminder the user set fires at the time they chose (normal channel);
+        // app-initiated nudges go quiet in the evening.
+        String channelId;
+        if (slot >= 0) {
+            channelId = NotificationHelper.CHANNEL_REMINDERS;
+        } else {
+            int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+            channelId = (hour >= 21 || hour < 9) ? CHANNEL_ID_SILENT : CHANNEL_ID_LOUD;
+        }
 
         Intent launch = ctx.getPackageManager().getLaunchIntentForPackage(ctx.getPackageName());
         if (launch != null) {
@@ -38,7 +52,8 @@ public class NotificationReceiver extends BroadcastReceiver {
         PendingIntent contentIntent = PendingIntent.getActivity(ctx, reqCode, launch, piFlags);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_stat_check)
+            .setColor(0xFF6A4FD6)
             .setContentTitle(title)
             .setContentText(body)
             .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
@@ -49,6 +64,9 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         NotificationManager nm = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
         if (nm != null) nm.notify(reqCode, builder.build());
+
+        // Repeating user reminder: schedule its next occurrence.
+        if (slot >= 0) NotificationHelper.armReminder(ctx, slot);
     }
 
     private void createChannels(Context ctx) {
@@ -57,7 +75,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         if (nm == null) return;
         NotificationChannel loud = new NotificationChannel(CHANNEL_ID_LOUD, "Reminders",
             NotificationManager.IMPORTANCE_DEFAULT);
-        loud.setDescription("Daily challenges, streak reminders, and game news");
+        loud.setDescription("Daily check-in reminders");
         nm.createNotificationChannel(loud);
         NotificationChannel silent = new NotificationChannel(CHANNEL_ID_SILENT, "Evening reminders",
             NotificationManager.IMPORTANCE_LOW);
@@ -65,5 +83,6 @@ public class NotificationReceiver extends BroadcastReceiver {
         silent.setSound(null, null);
         silent.enableVibration(false);
         nm.createNotificationChannel(silent);
+        NotificationHelper.createChannel(ctx);
     }
 }

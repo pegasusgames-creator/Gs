@@ -83,7 +83,9 @@ public class MainActivity extends Activity {
 
     // Kids catalog has no consumables and no subscriptions: every SKU is a
     // non-consumable acknowledged via acknowledgePurchase (within 3 days).
-    private static final Set<String> CONSUMABLE_PRODUCTS = Collections.emptySet();
+    // Declared (empty) so the consumeAsync path stays wired if a kids app
+    // ever adds a consumable — list it here AND in iaps.json.
+    private static final Set<String> CONSUMABLE_PRODUCTS = new HashSet<>(Arrays.asList(new String[0]));
 
     // SKUs whose purchase removes the banner.
     private static final Set<String> AD_FREE_PRODUCTS = new HashSet<>(Arrays.asList(
