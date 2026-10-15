@@ -32,6 +32,7 @@ const ok = (cond, msg) => { console.log(`  ${cond ? '✓' : '✗'} ${msg}`); if 
   const ev = (fn, a) => p.evaluate(fn, a);
   const calls = name => ev(n => window.__calls.filter(c => c[0] === n), name);
   async function tap(sel) {
+    await p.locator(sel).first().scrollIntoViewIfNeeded().catch(() => {});
     const b = await p.locator(sel).first().boundingBox();
     if (!b) throw new Error('not visible: ' + sel);
     await p.mouse.click(b.x + b.width / 2, b.y + b.height / 2); await p.waitForTimeout(420);
