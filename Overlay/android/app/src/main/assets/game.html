@@ -1561,11 +1561,11 @@ function showLevelSelect(){
 function buildLevelSelect(){
   const scroll=document.getElementById('ls-scroll');
   scroll.innerHTML='';
-  const sections=[
-    {label:'Two Colors — 1–20',range:[0,20]},
-    {label:'Three Colors — 21–40',range:[20,40]},
-    {label:'Dense Stacks — 41–60',range:[40,60]}
-  ];
+  // Chapters of 50 covering EVERY level (the old fixed list stopped at 60 of 500).
+  const _N=(typeof LEVELS!=='undefined'?LEVELS:CAMPAIGN).length,_CH=50;
+  const _NAMES=['First Layers', 'Stacking', 'Overlaps', 'Masking', 'Patterns', 'Dense Stacks', 'Translucent', 'Layer Logic', 'Master Stacks', 'Grand Overlay'];
+  const sections=[];
+  for(let s=0;s<_N;s+=_CH){const e=Math.min(_N,s+_CH);sections.push({label:(_NAMES[s/_CH]||('Chapter '+(s/_CH+1)))+' — '+(s+1)+'–'+e,range:[s,e]});}
   sections.forEach(sec=>{
     const title=document.createElement('div');
     title.className='ls-section-title';
