@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-"""gen_levels.py — Sokoban level generator (regenerates the LEVELS array in
-android/app/src/main/assets/game.html to the 500-level release floor).
+"""gen_levels.py — Sokoban ONBOARDING level generator (the original 2026-06
+500-level pull-generated set; chapters 1-2 of the campaign are curated from it).
 
 Solvable BY CONSTRUCTION via REVERSE generation: start from a SOLVED state
 (every box on a target) and apply random player walks + box *pulls*. A pull
 is the exact inverse of a push, so the reversed pull-sequence is a valid push
 solution — every generated level is guaranteed solvable. A bounded forward
-A* solver double-checks the smaller levels and yields the push-count used to
-band difficulty. The existing hand-authored levels are kept as the gentle
-prefix; generated levels are appended with a rising box-count / size ramp.
+A* solver double-checks each level.
 
-    python3 Sokoban/test/gen_levels.py            # rewrites the LEVELS array
+Deterministic (fixed seed) — reproduces the 500 maps the old Sokoban shipped
+byte-for-byte. The campaign pipeline (see build_levels.py) curates the 100
+gentlest-to-hardest of these for levels 1-100 and appends the 400 deeper
+levels mined by gen_campaign.js.
 
-Deterministic (fixed seed). check_sokoban_solvable.py is the permanent gate.
+    python3 Sokoban/test/gen_levels.py > /tmp/onboarding.json   # JSON list
 """
 import re
 import sys
@@ -20,7 +21,6 @@ import heapq
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent.parent
-GAME = REPO / "Sokoban/android/app/src/main/assets/game.html"
 DIRS = [(0, -1), (0, 1), (-1, 0), (1, 0)]
 
 
@@ -190,22 +190,10 @@ def solve(walls, targets, boxes, player, budget=200000):
     return -1
 
 
-# ───────────────────────── build the 500 campaign ─────────────────────────
-def existing_levels(html):
-    m = re.search(r"const LEVELS=\[(.*?)\];", html, re.S)
-    if not m:
-        return []
-    return re.findall(r"`([^`]*)`", m.group(1))
-
-
-def main():
-    html = GAME.read_text()
-    # The existing 50 hand-authored levels have NO player char (@) — the
-    # parser defaults the player to (0,0), a wall, so they are unplayable.
-    # Regenerate the whole set with valid, player-placed, solvable levels.
+# ───────────────────────── build the 500 onboarding maps ─────────────────────────
+def build_levels():
+    """The 500 onboarding maps, in generation order (deterministic)."""
     keep = []
-    print(f"existing levels discarded (no player char): "
-          f"{len(existing_levels(html))}")
     # difficulty ramp (count, w, h, boxes, interior walls, scramble pulls)
     SCHEDULE = [
         (100, 6, 6, 1, 0, 18),
@@ -218,9 +206,7 @@ def main():
     rng = RNG(20260618)
     need = 500 - len(keep)
     out = []
-    si = 0
     counts = [c[0] for c in SCHEDULE]
-    made_per = [0] * len(SCHEDULE)
     while len(out) < need:
         # pick the current schedule band
         band = 0
@@ -247,15 +233,15 @@ def main():
             continue                       # too trivial
         out.append(ascii_map)
         if len(out) % 50 == 0:
-            print(f"  generated {len(out)}/{need}")
-    campaign = keep + out
-    print(f"TOTAL {len(campaign)} levels")
-    body = ",\n".join("`" + m + "`" for m in campaign)
-    block = "const LEVELS=[\n" + body + "\n];"
-    new, n = re.subn(r"const LEVELS=\[.*?\];", block, html, count=1, flags=re.S)
-    assert n == 1
-    GAME.write_text(new)
-    print("wrote LEVELS array")
+            print(f"  generated {len(out)}/{need}", file=sys.stderr)
+    return keep + out
+
+
+def main():
+    import json
+    levels = build_levels()
+    print(f"TOTAL {len(levels)} levels", file=sys.stderr)
+    json.dump(levels, sys.stdout)
 
 
 if __name__ == "__main__":

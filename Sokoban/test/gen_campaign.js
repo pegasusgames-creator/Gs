@@ -18,7 +18,8 @@
 // Move-optimal LURD solutions are computed afterwards by solve_levels.py,
 // and scripts/check_sokoban_solvable.py re-proves every level with A*.
 //
-//   node Sokoban/test/gen_campaign.js > /tmp/new_levels.json
+//   node Sokoban/test/gen_campaign.js > Sokoban/test/data/mined.json
+//   node Sokoban/test/gen_campaign.js daily > Sokoban/test/data/daily.json
 'use strict';
 
 function mulberry32(a) {
@@ -285,11 +286,22 @@ function genLevel(rnd, band) {
   return null;
 }
 
+// Daily pool (mode "daily"): three weekday tiers mined with a different seed,
+// so the daily board is never a campaign level. The game picks
+// DAILY[tier][day % n] and applies one of the 8 board symmetries.
+const DAILY_BANDS = [
+  { n: 60, w: [6, 7], h: [6, 7], boxes: [2, 3], push: [10, 16], open: 3, wall: [0.16, 0.24] },   // Mon/Tue
+  { n: 60, w: [7, 8], h: [7, 8], boxes: [3, 4], push: [16, 25], open: 1, wall: [0.20, 0.28] },   // Wed-Fri
+  { n: 60, w: [8, 9], h: [7, 9], boxes: [4, 4], push: [22, 34], open: 1, wall: [0.20, 0.30] },   // Sat/Sun
+];
+
 function main() {
-  const rnd = mulberry32(20261012);
+  const daily = process.argv[2] === 'daily';
+  const bands = daily ? DAILY_BANDS : BANDS;
+  const rnd = mulberry32(daily ? 20261015 : 20261012);
   const out = [];
   const seenMaps = new Set();
-  BANDS.forEach((band, bi) => {
+  bands.forEach((band, bi) => {
     let made = 0, fails = 0;
     while (made < band.n) {
       const L = genLevel(rnd, band);
@@ -304,4 +316,4 @@ function main() {
   process.stdout.write(JSON.stringify(out));
 }
 if (require.main === module) main();
-module.exports = { mulberry32, BANDS, genLevel, reverseSearch, makeRoom };
+module.exports = { mulberry32, BANDS, DAILY_BANDS, genLevel, reverseSearch, makeRoom, switches, toAscii, pickGoals, roomOk };
