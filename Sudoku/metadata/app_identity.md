@@ -1,42 +1,44 @@
 # Sudoku Identity
 
-- **Category**: puzzle
-- **Layout archetype**: B (map / journey screen)
-- **Mascot pattern**: M0 (no mascot — game elements carry the personality)
-- **Voice**: V4 (snarky / dry)
-- **Texture**: T8 (brutalist / minimal)
-- **Mood string**: puzzle-deep
+Shipping name **Sudoku** (store title "Sudoku: Logic Number Puzzle").
+Analog: the category-leading classic Sudoku apps — matched on feel (big
+readable grid, notes, remaining counts, mistakes limit, daily puzzle),
+differentiated by technique-graded difficulty and hints that teach.
 
-The app should feel like: thoughtful and tactile; each app's mechanic is the star.
+- Category: puzzle (logic / number placement)
+- Layout: G (daily-puzzle-led — Daily puzzle tier + streak under the hero CTA)
+- Mascot: M0 (no mascot — minimalist genre; the grid is the character)
+- Voice: V8 (direct / minimal) — "Nine digits. One right answer."
+- Texture: T3 (subtle paper grain under the board, notebook ruling in the menu motif)
+- Mood string: ink-lilac
 
-## Anti-pattern audit (APP_ARCHETYPES.md §5)
+Indigo ink on lilac notebook paper. Daylight `#ebe8f7` paper, `#fbfaff`
+surfaces, `#1d1a45` ink text and an indigo accent `#4f46c8` — a family no
+sibling uses (WaterSort ocean blue, Nonogram cream/coral, 2048 sand/gold,
+Unblock mint, PipeConnect sky, Afterimage blueprint cyan, Hunch sage,
+Overlay pink-grey). Midnight (800 coins) is a deep ink-blue desk
+`#141530`. Seven board themes recolour every board role (cells, box lines,
+givens, entries, notes, highlights, conflicts): Ink, Pencil, Matcha,
+Midnight, Coral, Ocean, Espresso.
 
-This file was auto-generated during the 2026-04-30 portfolio archetype
-assignment pass. The four archetypes above were chosen so the app does
-NOT default to the template signature (A/M0/V1/T1).
+Content: 500 puzzles mined by `test/gen_levels.py` and verified by
+`scripts/check_sudoku_unique.py` — exactly one solution each, graded by a
+technique solver into Easy (singles) / Medium (pointing, claiming, pairs) /
+Hard (triples, quads, X-Wing) / Expert (XY-Wing, XYZ-Wing, Swordfish).
+Daily (Mon Easy → Sun Expert) and Endless draw from a 120-puzzle pool
+through a seeded relabel + row/column shuffle that keeps uniqueness and
+grade. Hints fill a correct cell and name the technique that finds it.
 
-When the app's `game.html` is next touched (or built fresh), audit the
-in-app design against the §5 anti-patterns:
+Anti-patterns check: board-first game screen with a 9-key pad and tool row
+(not a generic button stack); celebration is a unit-completion ripple
+across the finished row/column/box, not a generic star burst; no
+templated currency framing (lives are "second chances" after 3 mistakes).
 
-- [ ] Center-aligned everything → use offset weight
-- [ ] Same SVG icon set as other apps → vary icon family per app
-- [ ] All-caps headlines on every screen → mixed case for body
-- [ ] Generic templated currency icon → make it match the app theme
-- [ ] Identical button shapes / sizes / spacings → vary
-- [ ] Symmetric vertical column layout → break with side panels / FAB
-- [ ] Generic "Level Complete!" celebration → app-specific phrasing
-- [ ] Same loading / transition patterns → vary
-- [ ] Identical settings screen → reorder, rename, add app-specific options
-
-If 3+ of the above are hit, redesign before the next ship.
-
-## Phase 8 self-check
-
-Before declaring this app release-ready, all four of:
-
-1. Side-by-side test (vs other shipped apps, do they look like different products?)
-2. Voice-specificity test (does the menu copy reflect this app's voice archetype?)
-3. Identity-element test (a single recognizable visual element)
-4. Anonymous-screenshot test (could a user identify this app without title/name?)
-
-must pass. See APP_ARCHETYPES.md §8.
+## Menu-must-pass checklist (skin v2 — see CLAUDE.md)
+- [x] Icon tiles filled & brand-tinted with depth (never outline-on-white)
+- [x] Motif felt (~12-16%) and masked out of the center; no dead mid-section
+- [x] Emblem reads the core mechanic in one glance (3×3 box mid-solve)
+- [x] Hero CTA dominates (gradient + depth + glyph + shine)
+- [x] Wordmark gradient clean (2 stops indigo ink, ≥4.5:1)
+- [x] Family-consistent yet distinct vs every sibling
+- [x] Light + midnight correct; reduced-motion respected; no competing shim

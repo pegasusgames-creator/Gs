@@ -101,7 +101,7 @@ private static final Set<String> VALID_REWARD_TYPES = new HashSet<>(Arrays.asLis
         "undo", "skip", "life", "free_coins", "hint", "extra_life", "double_coins"
     ));
 
-    private static final int WEBVIEW_BG_COLOR = 0xFFeef4f8;
+    private static final int WEBVIEW_BG_COLOR = 0xFFebe8f7;
 
     // ── Notification scheduling (NOTIFICATIONS_IMPL.md §1) ────────────────────
     private static final int REQ_DAILY_REMINDER       = 1001;

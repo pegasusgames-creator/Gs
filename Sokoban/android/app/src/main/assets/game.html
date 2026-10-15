@@ -139,31 +139,34 @@ body.midnight .modal p{color:#7d93b6;}
 /* §3.1 menu hierarchy: V8 minimal + T6 neon — hero Play, secondary pair, glowing tertiary icons. */
 /*@@REGION PALETTE*/
 :root{
-  /* Daylight = light blueprint paper (portfolio rule: no dark defaults).
-     The spec's dark-navy "blueprint-echo" mood ships as Midnight below. */
-  --bg:#dbe4f3; --app-bg:#dbe4f3; --surface:#ffffff;
-  --text:#13233f; --text-mute:#5b6c8a;
-  --border:rgba(19,35,63,0.14);
-  --g-play:linear-gradient(135deg,#0fb5c9,#2563b0); --on-accent:#ffffff;
-  --btn-neutral-bg:#d3ddef;
-  --menu-tile-bg:#eef2fa; --menu-tile-border:#c6d3ea; --menu-tile-fg:#2b4a86;
-  --board-bg:#f4f7fc; --board-line:#c6d3ea; --wall:#2a3c5e;
-  --you:#0fb5c9; --you-dim:#0c8a99; --echo:#e85d5d; --echo-dim:#b03c3c;
-  --plate:#d29922; --exit:#2ea043;
-  --accent:#0fb5c9; --accent-dim:#0c8a99;
+  /* Daylight = warm terracotta clay: a cosy brick warehouse with honey-wood
+     crates and teal docks (own family — no sibling uses clay/terracotta). */
+  --bg:#f6e6da; --app-bg:#f6e6da; --surface:#fffaf6; --chrome:#f0d9c9;
+  --text:#3a2117; --text-mute:#7a4b39;
+  --border:rgba(58,33,23,0.14);
+  --g-play:linear-gradient(135deg,#c0582f,#8f3a1b); --on-accent:#ffffff;
+  --btn-neutral-bg:#ecd3c3;
+  --menu-tile-bg:#fbeee5; --menu-tile-border:#e5c6b2; --menu-tile-fg:#8f3d1d;
+  --accent:#b4532c; --accent-dim:#8f3d1d; --accent-ink:#8f3d1d; --danger:#c83838;
+  /* board roles (themes recolour these) */
+  --floor:#f8ecdf; --plank:#ead6c3; --wall:#9c4f33; --wall-top:#c26d4a;
+  --crate:#e0a052; --crate-edge:#8e5a24; --crate-done:#58a68c;
+  --dock:#2a8a7d; --keeper:#3b6fb6;
+  --eye:#ffffff; --pupil:#1d2433; --hint:#2a8a7d;
 }
 body.midnight{
-  /* the prototype's blueprint-echo navy, verbatim */
-  --bg:#0e1726; --app-bg:#0e1726; --surface:#1b2942;
-  --text:#dce8fb; --text-mute:#7d93b6;
-  --border:rgba(220,232,251,0.13);
-  --on-accent:#04222a;
-  --btn-neutral-bg:#24395e;
-  --menu-tile-bg:#1b2942; --menu-tile-border:#24395e; --menu-tile-fg:#8fb4e8;
-  --board-bg:#1b2942; --board-line:#24395e; --wall:#0a1120;
-  --you:#37e0e0; --you-dim:#1d8f8f; --echo:#ff6b6b; --echo-dim:#a83b3b;
-  --plate:#f2c14e; --exit:#9be37d;
-  --accent:#37e0e0;
+  /* Midnight (800-coin unlock): the warehouse after hours, warm charcoal */
+  --bg:#1d1613; --app-bg:#1d1613; --surface:#3a2c25; --chrome:#251c18;
+  --text:#f4e6dc; --text-mute:#c7a796;
+  --border:rgba(244,230,220,0.13);
+  --g-play:linear-gradient(135deg,#f08a5d,#c95f35); --on-accent:#2a1208;
+  --btn-neutral-bg:#46362d;
+  --menu-tile-bg:#2b211c; --menu-tile-border:#46362d; --menu-tile-fg:#f4a27e;
+  --accent:#f08a5d; --accent-dim:#c95f35; --accent-ink:#f4a27e; --danger:#ff6b6b;
+  --floor:#2b221d; --plank:#352a23; --wall:#5a4436; --wall-top:#7a5e4b;
+  --crate:#c98a4b; --crate-edge:#6e4520; --crate-done:#4fae92;
+  --dock:#ffcf5a; --keeper:#7fb2ff;
+  --eye:#fff7ef; --pupil:#16110e; --hint:#ffcf5a;
 }
 /*@@END PALETTE*/
 .menu-primary{width:240px;padding:18px 0;border:none;border-radius:32px;font-family:'Poppins',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:2px;cursor:pointer;background:linear-gradient(135deg,#448aff,#69f0ae);color:#0f1923;box-shadow:0 0 24px rgba(105,240,174,0.35),0 0 60px rgba(68,138,255,0.25);transition:transform 0.1s;}
@@ -253,40 +256,100 @@ body.midnight{
 .stars-display{font-size:2rem;margin-bottom:16px;letter-spacing:4px;}
 
 /*@@REGION BOARD_CSS*/
-/* ── Afterimage board ─────────────────────────────────────────── */
-.board-zone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:4px 14px;}
-.par-row{display:flex;gap:8px;}
-.chip{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:5px 11px;font-size:0.78rem;font-weight:700;color:var(--text-mute);}
-.chip b{color:var(--text);}
-#board{position:relative;background:
-    repeating-linear-gradient(0deg,transparent 0 calc(100%/6 - 1px),var(--board-line) calc(100%/6 - 1px) calc(100%/6)),
-    repeating-linear-gradient(90deg,transparent 0 calc(100%/6 - 1px),var(--board-line) calc(100%/6 - 1px) calc(100%/6)),
-    var(--board-bg);
-  border:2px solid var(--board-line);border-radius:16px;overflow:hidden;box-shadow:0 16px 36px -18px rgba(10,20,40,0.45);touch-action:none;}
-.ent{position:absolute;border-radius:9px;transition:transform .13s cubic-bezier(.3,1.4,.5,1);}
-.wallc{position:absolute;background:var(--wall);border-radius:7px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.12);}
-.exitc{position:absolute;border-radius:9px;border:2.5px dashed var(--exit);box-shadow:inset 0 0 14px -2px var(--exit);transition:box-shadow .2s;}
-.exitc.armed{box-shadow:inset 0 0 18px 0 var(--exit),0 0 12px -2px var(--exit);}
-.platec{position:absolute;border-radius:50%;border:3px solid var(--plate);opacity:.85;transition:box-shadow .2s,background .2s;}
-.platec.held{background:radial-gradient(circle,var(--plate) 0%,transparent 70%);box-shadow:0 0 18px -2px var(--plate);}
-.youc{background:linear-gradient(160deg,var(--you),var(--you-dim));box-shadow:0 4px 10px -2px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.55);z-index:3;}
-.echoc{background:linear-gradient(160deg,var(--echo),var(--echo-dim));box-shadow:0 4px 10px -2px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.4);z-index:2;opacity:.93;}
-.echoc::after{content:"";position:absolute;inset:0;border-radius:9px;border:1.5px dashed rgba(255,255,255,0.6);opacity:.55;}
-.trail{position:absolute;border-radius:9px;background:var(--echo);opacity:.18;pointer-events:none;transition:opacity .5s;}
-.shake{animation:aim-sh .32s;}
-@keyframes aim-sh{0%,100%{transform:translate(var(--tx),var(--ty))}25%{transform:translate(calc(var(--tx) - 5px),var(--ty))}75%{transform:translate(calc(var(--tx) + 5px),var(--ty))}}
-.queue{display:flex;gap:6px;align-items:center;justify-content:center;height:24px;color:var(--echo);font-size:.74rem;}
-.queue .lbl{color:var(--text-mute);}
-.q{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--echo-dim);display:grid;place-items:center;font-weight:800;}
-.q.empty{opacity:.32;border-style:dashed;}
-.dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(2,52px);gap:6px;margin-top:2px;}
-.dpad button{background:var(--surface);border:1px solid var(--border);border-radius:13px;color:var(--text);font-size:1.25rem;font-weight:800;cursor:pointer;transition:transform .08s,background .12s,box-shadow .12s;}
-.dpad button:active{transform:scale(.92);}
-.dpad button.hinted{box-shadow:0 0 0 2px var(--you),0 0 14px -2px var(--you);}
+/* ── Sokoban board: brick walls, plank floor, wooden crates, teal docks ── */
+.board-zone{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 10px 8px;touch-action:none;user-select:none;-webkit-user-select:none;}
+.sk-hud{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;flex:0 0 auto;}
+.chip{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:5px 12px;font-size:clamp(0.76rem,2.7vw,0.92rem);font-weight:700;color:var(--text-mute);}
+.chip b{color:var(--text);font-variant-numeric:tabular-nums;}
+.sk-stage{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;}
+#board{position:relative;flex:0 0 auto;--cell:40px;--sk-step:95ms;filter:drop-shadow(0 10px 14px rgba(0,0,0,0.16));}
+#board>div,#sk-hint>div{position:absolute;left:0;top:0;width:var(--cell);height:var(--cell);}
+#sk-hint{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none;}
+.sk-floor{background:repeating-linear-gradient(180deg,var(--floor) 0 calc(var(--cell)/3 - 2px),var(--plank) calc(var(--cell)/3 - 2px) calc(var(--cell)/3));}
+.sk-floor.alt{box-shadow:inset 0 0 0 999px rgba(0,0,0,0.025);}
+.sk-wall{background:var(--wall);border-radius:calc(var(--cell)*0.08);
+  background-image:linear-gradient(90deg,transparent calc(50% - 1px),rgba(0,0,0,0.16) calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px));
+  background-size:100% 50%;background-repeat:no-repeat;
+  box-shadow:inset 0 calc(var(--cell)*-0.1) 0 rgba(0,0,0,0.2),inset 0 -1px 0 rgba(0,0,0,0.12);}
+.sk-wall.top{box-shadow:inset 0 calc(var(--cell)*0.18) 0 var(--wall-top),inset 0 calc(var(--cell)*-0.1) 0 rgba(0,0,0,0.2);}
+.sk-dock::before{content:"";position:absolute;inset:20%;border-radius:50%;border:max(2px,calc(var(--cell)*0.07)) dashed var(--dock);opacity:.9;}
+.sk-dock::after{content:"";position:absolute;inset:39%;border-radius:50%;background:var(--dock);opacity:.45;animation:sk-glow 2.4s ease-in-out infinite;}
+@keyframes sk-glow{0%,100%{opacity:.3;transform:scale(.85)}50%{opacity:.6;transform:scale(1.1)}}
+.sk-crate,.sk-keeper{will-change:transform;transition:transform var(--sk-step) cubic-bezier(.25,.8,.35,1);}
+.sk-instant .sk-crate,.sk-instant .sk-keeper{transition:none!important;}
+.sk-box{position:absolute;inset:7%;border-radius:calc(var(--cell)*0.14);background-color:var(--crate);
+  border:max(2px,calc(var(--cell)*0.07)) solid var(--crate-edge);
+  background-image:linear-gradient(45deg,transparent 45%,var(--crate-edge) 45% 55%,transparent 55%),linear-gradient(-45deg,transparent 45%,var(--crate-edge) 45% 55%,transparent 55%);
+  box-shadow:0 calc(var(--cell)*0.06) 0 rgba(0,0,0,0.2),inset 0 2px 0 rgba(255,255,255,0.28);transition:background-color .2s,box-shadow .2s;}
+.sk-face{position:absolute;inset:0;opacity:0;transition:opacity .2s;}
+.sk-face b{position:absolute;top:30%;width:14%;height:14%;border-radius:50%;background:var(--pupil);}
+.sk-face b:first-child{left:27%}.sk-face b:nth-child(2){right:27%}
+.sk-face s{position:absolute;left:31%;right:31%;top:46%;height:20%;border:max(2px,calc(var(--cell)*0.05)) solid var(--pupil);border-top:0;border-radius:0 0 999px 999px;}
+.sk-crate.docked .sk-box{background-color:var(--crate-done);background-image:none;box-shadow:0 calc(var(--cell)*0.06) 0 rgba(0,0,0,0.2),0 0 0 2px var(--dock),0 0 calc(var(--cell)*0.35) calc(var(--cell)*-0.05) var(--dock);}
+.sk-crate.docked .sk-face{opacity:1;}
+.sk-crate.stuck .sk-box{border-color:var(--danger);animation:sk-shake .42s;}
+.sk-crate.pop .sk-box{animation:sk-pop .32s ease-out;}
+@keyframes sk-pop{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes sk-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7%)}40%{transform:translateX(6%)}60%{transform:translateX(-4%)}80%{transform:translateX(2%)}}
+.sk-body{position:absolute;inset:11%;border-radius:44% 44% 38% 38%;background:var(--keeper);
+  box-shadow:0 calc(var(--cell)*0.06) 0 rgba(0,0,0,0.22),inset 0 calc(var(--cell)*0.08) 0 rgba(255,255,255,0.22);}
+.sk-eyes{position:absolute;left:14%;right:14%;top:24%;height:34%;display:flex;justify-content:space-between;}
+.sk-eyes b{position:relative;width:42%;height:100%;border-radius:50%;background:var(--eye);}
+.sk-eyes b::after{content:"";position:absolute;width:52%;height:52%;border-radius:50%;background:var(--pupil);left:24%;top:24%;transition:left .12s,top .12s;}
+.sk-keeper[data-face="l"] .sk-eyes b::after{left:4%}.sk-keeper[data-face="r"] .sk-eyes b::after{left:44%}
+.sk-keeper[data-face="u"] .sk-eyes b::after{top:4%}.sk-keeper[data-face="d"] .sk-eyes b::after{top:44%}
+.sk-keeper.nudge .sk-body{animation:sk-nudge .2s;}
+.sk-keeper[data-face="l"]{--nx:-9%;--ny:0}.sk-keeper[data-face="r"]{--nx:9%;--ny:0}.sk-keeper[data-face="u"]{--nx:0;--ny:-9%}.sk-keeper[data-face="d"]{--nx:0;--ny:9%}
+@keyframes sk-nudge{50%{transform:translate(var(--nx,0),var(--ny,0))}}
+.sk-won .sk-crate .sk-box{animation:sk-pop .45s ease-out 2;}
+.sk-dot::before{content:"";position:absolute;inset:40%;border-radius:50%;background:var(--hint);opacity:0;animation:sk-dotin .3s forwards;animation-delay:inherit;}
+@keyframes sk-dotin{to{opacity:.85}}
+.sk-arrow::before{content:"";position:absolute;inset:14%;background:var(--hint);opacity:.9;clip-path:polygon(50% 0,100% 55%,70% 55%,70% 100%,30% 100%,30% 55%,0 55%);animation:sk-bob .8s ease-in-out infinite;}
+.sk-arrow[data-d="d"]::before{rotate:180deg}.sk-arrow[data-d="l"]::before{rotate:-90deg}.sk-arrow[data-d="r"]::before{rotate:90deg}
+@keyframes sk-bob{50%{opacity:.45}}
+.dpad{display:grid;grid-template-columns:repeat(3,clamp(50px,14vw,64px));grid-template-rows:repeat(2,clamp(42px,6vh,56px));gap:6px;flex:0 0 auto;}
+.dpad button{background:var(--surface);border:1px solid var(--border);border-radius:14px;color:var(--text);font-size:1.3rem;font-weight:800;cursor:pointer;touch-action:none;box-shadow:0 3px 0 var(--border);transition:transform .08s,box-shadow .12s;}
+.dpad button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--border);}
+.dpad button.hinted{box-shadow:0 0 0 3px var(--hint),0 0 14px -2px var(--hint);}
 .pad-u{grid-column:2;grid-row:1}.pad-l{grid-column:1;grid-row:2}.pad-d{grid-column:2;grid-row:2}.pad-r{grid-column:3;grid-row:2}
-@media (min-width:600px){.dpad{grid-template-columns:repeat(3,62px);grid-template-rows:repeat(2,62px);}}
-@media (prefers-reduced-motion:reduce){.ent,.trail{transition:none!important;}.shake{animation:none!important;}}
-
+.sk-badge{display:inline-block;min-width:1.5em;padding:0 .35em;margin-left:2px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-size:.78em;line-height:1.5em;}
+#sk-undo.sk-pulse{animation:sk-pulse .6s ease-in-out 3;}
+@keyframes sk-pulse{50%{box-shadow:0 0 0 3px var(--accent)}}
+.sk-tut-card{background:var(--surface);border:1.5px solid var(--accent);border-radius:18px;padding:16px 22px;max-width:300px;text-align:center;pointer-events:all;box-shadow:0 14px 40px rgba(0,0,0,0.22);cursor:pointer;}
+.sk-tut-title{color:var(--accent-ink);font-size:15px;font-weight:800;margin-bottom:6px;}
+.sk-tut-body{color:var(--text);font-size:13.5px;line-height:1.45;}
+.sk-tut-foot{color:var(--text-mute);font-size:11.5px;margin-top:10px;}
+/* chrome in the clay family (token-driven, covers Midnight too) */
+#screen-game,#screen-levelselect,#screen-shop,#screen-settings,#screen-moregames,#screen-themes,#screen-stats,#screen-missions,
+body.midnight #screen-game,body.midnight #screen-levelselect,body.midnight #screen-shop,body.midnight #screen-settings,body.midnight #screen-moregames{background:var(--bg)!important;}
+#screen-game .game-header,#screen-game .game-footer,body.midnight #screen-game .game-header,body.midnight #screen-game .game-footer{background:var(--chrome);border-color:var(--border);}
+#screen-game .hdr-level{color:var(--accent-ink);font-weight:800;}
+#screen-game .hdr-coins{color:var(--text);}
+#screen-game .foot-btn,body.midnight #screen-game .foot-btn{background:var(--btn-neutral-bg);color:var(--text);border:1px solid var(--border);border-radius:16px;font-weight:700;}
+#screen-game .foot-btn.warn{color:var(--danger);}
+body .ls-header,body .shop-header,body.midnight .ls-header,body.midnight .shop-header{background:var(--chrome);border-bottom:1px solid var(--border);}
+body .ls-back{color:var(--accent-ink);}
+body .ls-title,body.midnight .ls-title{color:var(--text);}
+body .ls-section-title,body.midnight .ls-section-title{color:var(--text-mute);}
+#screen-levelselect .ls-bubble.available,body.midnight #screen-levelselect .ls-bubble.available{background:var(--surface);color:var(--accent-ink);border:2px solid var(--border);}
+#screen-levelselect .ls-bubble.locked,body.midnight #screen-levelselect .ls-bubble.locked{background:var(--btn-neutral-bg);color:var(--text-mute);}
+#screen-levelselect .ls-bubble.current{background:var(--accent);color:var(--on-accent);box-shadow:0 0 12px var(--accent);}
+#screen-levelselect .ls-bubble.completed{background:var(--g-play);color:var(--on-accent);}
+#screen-levelselect .ls-bubble.stars-2{background:var(--crate);color:var(--text);}
+#screen-levelselect .ls-bubble.stars-1{background:var(--surface);color:var(--accent-ink);border:2px solid var(--accent);}
+body .settings-item,body .shop-item,body .mg-card,body.midnight .settings-item,body.midnight .shop-item,body.midnight .mg-card{background:var(--surface);border-color:var(--border);color:var(--text);}
+body .shop-item-desc,body .mg-card-desc{color:var(--text-mute);}
+body .toggle.on{background:var(--accent);}
+body .modal,body.midnight .modal{background:var(--surface);border-color:var(--border);color:var(--text);}
+body .modal p,body.midnight .modal p{color:var(--text-mute);}
+body .modal-btn.primary{background:var(--g-play);color:var(--on-accent);}
+body .modal-btn.secondary,body.midnight .modal-btn.secondary{background:var(--btn-neutral-bg);color:var(--text);}
+@media (min-width:600px){.dpad{grid-template-columns:repeat(3,66px);grid-template-rows:repeat(2,58px);}.chip{font-size:1rem;padding:6px 14px;}}
+@media (min-width:900px){.dpad{grid-template-columns:repeat(3,74px);grid-template-rows:repeat(2,64px);}}
+@media (prefers-reduced-motion:reduce){.sk-crate,.sk-keeper{transition:none!important;}.sk-dock::after,.sk-arrow::before,.sk-crate .sk-box,.sk-keeper .sk-body,#sk-undo{animation:none!important;}}
+#overlay-complete .stars-display{color:#d29922;letter-spacing:6px;}
+#themeBtn{background:var(--btn-neutral-bg)!important;border:1px solid var(--border)!important;color:var(--accent-ink)!important;}
+@media (min-width:600px){#screen-game .hdr-level{font-size:1.3rem;}#screen-game .hdr-coins{font-size:1.05rem;}}
 /*@@END BOARD_CSS*/
 /* ============ 2026-06-10 round-1: adaptive sizing via clamp() ============ */
 .game-footer {
@@ -498,23 +561,24 @@ body.midnight{
 }
 /* =================== END SHARED MENU SKIN v2 =================== */
 /*@@REGION IDENTITY_CSS*/
-/* PART6: faint board-grid motif fills the empty menu space (skin masks center, behind content, pointer-events:none) */
-:root{ --m-motif-size:240px 240px; --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg stroke='%230fb5c9' stroke-width='2' opacity='0.10'%3E%3Cpath d='M0 60H240M0 120H240M0 180H240M60 0V240M120 0V240M180 0V240'/%3E%3C/g%3E%3C/svg%3E"); }
-
-/* ---- Afterimage identity: blueprint echo (Part B) ---- */
+/* ---- Sokoban identity: terracotta warehouse — crates + docks motif ---- */
 :root{
-  --m-bg-top:#dfe8f6; --m-vignette: rgba(20,40,85,0.26); --m-grain-opacity:.04;
-  --m-cta-grad: linear-gradient(135deg,#0fb5c9,#2563b0);
-  --m-cta-glow: rgba(37,99,176,.42); --m-glow: rgba(15,181,201,.30);
-  --m-cta-glyph:"▶ "; --m-tile-icon:#2b4a86;
-  /* motif: graph paper + a cube with its dashed afterimage */
-  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cpath d='M0 0H360M0 60H360M0 120H360M0 180H360M0 240H360M0 300H360M0 0V360M60 0V360M120 0V360M180 0V360M240 0V360M300 0V360' stroke='%232b4a86' stroke-width='1' opacity='0.22' fill='none'/%3E%3C/svg%3E");
-  --m-motif-size: 360px 360px;
+  --m-bg-top:#f9ebe0; --m-vignette: rgba(120,52,24,0.20); --m-grain-opacity:.05;
+  --m-cta-grad: linear-gradient(135deg,#c0582f,#8f3a1b);
+  --m-cta-glow: rgba(143,58,27,.40); --m-glow: rgba(224,160,82,.32);
+  --m-cta-glyph:"▶ "; --m-tile-icon:#8f3d1d;
+  /* motif: crates with cross-bracing and dashed dock rings, ~14 % ink */
+  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cg fill='none' stroke='%238f3d1d' stroke-width='3' opacity='0.14' stroke-linejoin='round'%3E%3Crect x='20' y='24' width='70' height='70' rx='9'/%3E%3Cpath d='M28 32l54 54M82 32l-54 54'/%3E%3Ccircle cx='215' cy='70' r='30' stroke-dasharray='10 8'/%3E%3Crect x='170' y='180' width='70' height='70' rx='9'/%3E%3Cpath d='M178 188l54 54M232 188l-54 54'/%3E%3Ccircle cx='70' cy='225' r='30' stroke-dasharray='10 8'/%3E%3C/g%3E%3C/svg%3E");
+  --m-motif-size: 300px 300px;
 }
-body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
+body.midnight{ --m-bg-top:#2a1f1a; --m-vignette:rgba(0,0,0,.5);
   /* --m-* defaults resolve at html scope and cannot see body.midnight
      token overrides — restate the tile fill here explicitly. */
-  --m-tile-grad:#1b2942; --m-tile-icon:#8fb4e8; }
+  --m-tile-grad:#2b211c; --m-tile-icon:#f4a27e; }
+/* wordmark: clean 2-stop clay gradient (≥4.5:1 on the clay bg) */
+#screen-menu .menu-logo{background:linear-gradient(90deg,#b4532c,#7a2f14);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+body.midnight #screen-menu .menu-logo{background:linear-gradient(90deg,#f4a27e,#e9b46a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+#screen-menu .menu-sub{color:var(--text-mute);}
 /*@@END IDENTITY_CSS*/
 </style>
 <script>try{if(window.Android)window.NativeBridge=window.Android;}catch(e){}</script>
@@ -526,8 +590,8 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
   <div class="menu-lives" id="menu-lives">❤️ 5</div>
   <div class="menu-coins" id="menu-coins">🪙 0</div>
 <!--@@REGION MENU_TITLE-->
-  <div class="menu-logo">AFTERIMAGE</div>
-  <div class="menu-sub">Your echo moves two behind. Use it.</div>
+  <div class="menu-logo">SOKOBAN</div>
+  <div class="menu-sub">Push every crate home. No pulling allowed.</div>
 <!--@@END MENU_TITLE-->
   <button class="menu-primary" onclick="startGame()"><span>PLAY</span><span class="play-sub" id="aim-play-sub">Level 1</span></button>
   <button class="menu-pair" id="dailyChallengeBtn" onclick="startDailyChallenge()" style="width:240px;margin-top:14px">Daily puzzle</button>
@@ -559,14 +623,14 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
     <div class="hdr-coins" id="hdr-coins">🪙 0</div>
   </div>
 <!--@@REGION BOARD_HTML-->
-  <div class="board-zone">
-    <div class="par-row">
+  <div class="board-zone" id="sk-zone">
+    <div class="sk-hud">
       <div class="chip">Moves <b id="hud-moves">0</b></div>
+      <div class="chip">Pushes <b id="hud-pushes">0</b></div>
       <div class="chip">Par <b id="hud-par">–</b></div>
     </div>
-    <div id="board"></div>
-    <div class="queue"><span class="lbl">echo plays next →</span><div class="q empty" id="q0">·</div><div class="q empty" id="q1">·</div></div>
-    <div class="dpad">
+    <div class="sk-stage" id="sk-stage"><div id="board"></div></div>
+    <div class="dpad" id="sk-dpad">
       <button class="pad-u" data-d="U" aria-label="Up">↑</button>
       <button class="pad-l" data-d="L" aria-label="Left">←</button>
       <button class="pad-d" data-d="D" aria-label="Down">↓</button>
@@ -577,17 +641,17 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
 <!--@@REGION FOOTER-->
   <div class="game-footer">
     <button class="foot-btn" onclick="goMenu()">← Menu</button>
-    <button class="foot-btn" onclick="undoMove()">↶ Undo</button>
-    <button class="foot-btn" onclick="useHint()">💡 Hint</button>
+    <button class="foot-btn" id="sk-undo" onclick="undoMove()">↶ Undo</button>
+    <button class="foot-btn sk-hint-btn" onclick="useHint()">💡 Hint <span class="sk-badge" id="sk-hint-count">0</span></button>
     <button class="foot-btn warn" onclick="resetLevel()">↺ Reset</button>
   </div>
 <!--@@END FOOTER-->
 <!--@@REGION TUTORIAL_HTML-->
-  <div id="tutorialOverlay" style="display:none;position:absolute;bottom:90px;left:0;right:0;justify-content:center;pointer-events:none;z-index:50">
-    <div style="background:var(--surface,#fff);border:1.5px solid var(--you,#0fb5c9);border-radius:18px;padding:16px 22px;max-width:290px;text-align:center;pointer-events:all;box-shadow:0 14px 40px rgba(10,20,40,0.25)">
-      <div id="tut-title" style="color:var(--you,#0fb5c9);font-size:15px;font-weight:800;margin-bottom:6px">🟦 Two behind</div>
-      <div id="tut-body" style="color:var(--text,#13233f);font-size:13px;line-height:1.45">Swipe (or use the pad) to move your cyan cube one cell.</div>
-      <div id="tut-foot" style="color:var(--text-mute,#5b6c8a);font-size:11px;margin-top:10px">Tap to continue · 1/3</div>
+  <div id="tutorialOverlay" style="display:none;position:absolute;top:58px;left:0;right:0;justify-content:center;pointer-events:none;z-index:var(--z-tutorial,500)">
+    <div class="sk-tut-card">
+      <div id="tut-title" class="sk-tut-title">🙂 Meet the keeper</div>
+      <div id="tut-body" class="sk-tut-body">Swipe anywhere on the board (or use the pad) to walk.</div>
+      <div id="tut-foot" class="sk-tut-foot">Tap to continue · 1/3</div>
     </div>
   </div>
 <!--@@END TUTORIAL_HTML-->
@@ -646,6 +710,14 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
       <div class="toggle" id="toggle-music" onclick="toggleSetting('musicEnabled','toggle-music')"></div>
     </div>
     <div class="settings-item">
+      <span class="settings-label">📳 Haptics</span>
+      <div class="toggle" id="toggle-haptics" onclick="toggleHaptics()"></div>
+    </div>
+    <div class="settings-item">
+      <span class="settings-label">🎮 On-screen D-pad</span>
+      <div class="toggle" id="toggle-dpad" onclick="toggleDpad()"></div>
+    </div>
+    <div class="settings-item">
       <span class="settings-label">Reset Progress</span>
       <button class="modal-btn danger" style="padding:8px 20px;font-size:0.8rem;" onclick="confirmReset()">Reset All Data</button>
     </div>
@@ -666,7 +738,7 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
       <button class="shop-item-btn" onclick="openPrivacyPolicy()">View</button>
     </div>
     <div class="settings-item" style="justify-content:center;">
-      <span style="color:var(--text-mute, #37474f);font-size:0.75rem;">Afterimage <span data-app-version>v1.0.0</span> · © 2026 Pegasus Games</span>
+      <span style="color:var(--text-mute, #37474f);font-size:0.75rem;">Sokoban <span data-app-version>v2.0.0</span> · © 2026 Pegasus Games</span>
     </div>
   </div>
 </div>
@@ -728,10 +800,10 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
 <div class="overlay" id="overlay-hint">
   <div class="modal">
     <h2>Need a Hint? 💡</h2>
-    <p>Reveals your next optimal move.</p>
+    <p>Shows the route to your next push, straight from the solution.</p>
     <div class="modal-btns">
       <button class="modal-btn primary" onclick="watchAdForHint()">📺 Watch Ad (Free)</button>
-      <button class="modal-btn secondary" onclick="spendCoinsHint()">🪙 10 Coins</button>
+      <button class="modal-btn secondary" onclick="spendCoinsHint()">🪙 25 Coins</button>
       <button class="modal-btn secondary" onclick="hideOverlay('overlay-hint')">Cancel</button>
     </div>
   </div>
@@ -767,10 +839,16 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
 // this (same contract as the rest of the portfolio's PIPE_COLORS).
 //@@REGION ROLES
 const PIPE_COLORS = {
-  you:   'var(--you)',
-  echo:  'var(--echo)',
-  plate: 'var(--plate)',
-  exit:  'var(--exit)'
+  crate:        'var(--crate)',
+  dock:         'var(--dock)',
+  keeper:       'var(--keeper)',
+  wall:         'var(--wall)',
+  floor:        'var(--floor)',
+  plank:        'var(--plank)',
+  'wall-top':   'var(--wall-top)',
+  'crate-edge': 'var(--crate-edge)',
+  'crate-done': 'var(--crate-done)',
+  hint:         'var(--hint)'
 };
 //@@END ROLES
 
@@ -7890,7 +7968,7 @@ function buildLevelSelect(){
   // Chapters of 50 covering EVERY level (the old fixed list stopped at 60 of 500).
   const _N=(typeof LEVELS!=='undefined'?LEVELS:CAMPAIGN).length,_CH=50;
 //@@REGION CHAPTERS
-  const _NAMES=['Chapter 1','Chapter 2','Chapter 3','Chapter 4','Chapter 5','Chapter 6','Chapter 7','Chapter 8','Chapter 9','Chapter 10'];
+  const _NAMES=['Loading Dock','Packing Room','Back Alley','Cold Storage','Freight Yard','Clock Tower Depot','Harbor Sheds','Rail Sidings','Night Shift','Grand Warehouse'];
 //@@END CHAPTERS
   const sections=[];
   for(let s=0;s<_N;s+=_CH){const e=Math.min(_N,s+_CH);sections.push({label:(_NAMES[s/_CH]||('Chapter '+(s/_CH+1)))+' — '+(s+1)+'–'+e,range:[s,e]});}
@@ -8257,167 +8335,587 @@ window.onBackPressed=function(){
 //@@REGION ENGINE
 // GAME ENGINE
 // ============================================================
-// ━━ AFTERIMAGE CORE — ported verbatim from docs/prototypes/ditto.html ━━
-// step()/solve()/gen() are the tested prototype logic. Production layers:
-// banded difficulty, plate-detour filter, hint = first optimal move,
-// campaign seeds (CAMPAIGN), daily weekday ramp.
-function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-const GN=6,DIRS={U:[0,-1],D:[0,1],L:[-1,0],R:[1,0]},DK=['U','D','L','R'],ARROW={U:'↑',D:'↓',L:'←',R:'→'};
-function step(walls,bp,cp,q,dir){
-  const mv=(p,d)=>{if(d==null)return p;const[dx,dy]=DIRS[d];let nx=p[0]+dx,ny=p[1]+dy;if(nx<0||ny<0||nx>=GN||ny>=GN||walls.has(ny*GN+nx))return p;return[nx,ny];};
-  const nb=mv(bp,dir),nc=mv(cp,q[0]);
-  const collide=(nb[0]===nc[0]&&nb[1]===nc[1])||(nb[0]===cp[0]&&nb[1]===cp[1]&&nc[0]===bp[0]&&nc[1]===bp[1]);
-  return{nb,nc,nq:[q[1],dir],collide};
-}
-function solvePath(walls,bs,cs,exit,plate,q0){
-  // BFS over (you, echo, queue) recording the first move of the optimal line.
-  const enc=(b,c,q)=>b+'|'+c+'|'+(q[0]??'n')+'|'+(q[1]??'n');
-  const start=[bs,cs,q0||[null,null]];
-  let frontier=[[start[0],start[1],start[2],null]];
-  const seen=new Set([enc(start[0],start[1],start[2])]);let depth=0;
-  while(frontier.length){depth++;const next=[];
-    for(const[b,c,q,first]of frontier)for(const d of DK){
-      const{nb,nc,nq,collide}=step(walls,b,c,q,d);if(collide)continue;
-      const k=enc(nb,nc,nq);if(seen.has(k))continue;seen.add(k);
-      const f=first||d;
-      if(nb[0]===exit[0]&&nb[1]===exit[1]&&nc[0]===plate[0]&&nc[1]===plate[1])return{depth,first:f};
-      next.push([nb,nc,nq,f]);
-    }
-    frontier=next;if(depth>40)break;
-  }return null;
-}
-function solve(walls,bs,cs,exit,plate){const r=solvePath(walls,bs,cs,exit,plate,null);return r?r.depth:-1;}
-function shortestPath(walls,from,to){
-  const key=p=>p[1]*GN+p[0];const prev=new Map([[key(from),null]]);let frontier=[from];
-  while(frontier.length){const next=[];
-    for(const p of frontier){
-      if(p[0]===to[0]&&p[1]===to[1]){const path=[];let cur=p;while(cur){path.push(cur);cur=prev.get(key(cur));}return path;}
-      for(const d of DK){const[dx,dy]=DIRS[d];const nx=p[0]+dx,ny=p[1]+dy;
-        if(nx<0||ny<0||nx>=GN||ny>=GN||walls.has(ny*GN+nx))continue;
-        if(prev.has(ny*GN+nx))continue;prev.set(ny*GN+nx,p);next.push([nx,ny]);}
-    }frontier=next;}
-  return null;
-}
-function gen(seed,band){
-  const rnd=mulberry32(seed);
-  for(let t=0;t<5000;t++){
-    const walls=new Set();const nW=band.walls[0]+Math.floor(rnd()*(band.walls[1]-band.walls[0]+1));
-    while(walls.size<nW)walls.add(Math.floor(rnd()*GN*GN));
-    const cells=[];for(let i=0;i<GN*GN;i++)if(!walls.has(i))cells.push([i%GN,Math.floor(i/GN)]);
-    const pick=()=>cells[Math.floor(rnd()*cells.length)];
-    const bs=pick(),cs=pick(),exit=pick(),plate=pick();
-    const key=p=>p[0]+','+p[1];
-    if(new Set([bs,cs,exit,plate].map(key)).size<4)continue;
-    const par=solve(walls,bs,cs,exit,plate);
-    if(par<band.par[0]||par>band.par[1])continue;
-    const sp=shortestPath(walls,bs,exit);
-    if(sp&&sp.some(p=>p[0]===plate[0]&&p[1]===plate[1]))continue;
-    return{walls,bs,cs,exit,plate,par};
+// ━━ SOKOBAN CORE ━━ the keeper pushes crates onto docks (never pulls).
+// Content: LEVELS (ASCII) + SOLUTIONS (move-optimal LURD, run-length coded,
+// replayed offline by test/verify_levels.py). Par = solution length.
+// Hint = next step of the stored line from the CURRENT state; off the line
+// it re-joins it (same crates, walk to the next push) or runs the bounded
+// solver below from here — solver lines are legal by construction, so a
+// hint is never wrong. Daily = DAILY tier board × 8 symmetries; Endless =
+// the same reverse-pull generator as test/gen_campaign.js, run on device.
+/*SOKO-SOLVER-BEGIN*/
+// ── Sokoban core: level parsing + solver. This block is shared verbatim
+// between game.html (hint fallback) and Sokoban/test/solve_levels.js (the
+// offline move-optimal SOLUTIONS miner reads it OUT of game.html, so the
+// shipped solver and the one that produced the stored lines never drift).
+//
+// Level grid: cols×rows cells, index i = y*cols + x. A cell is FLOOR only if
+// the keeper can reach it ignoring crates; everything else (walls and the
+// void outside the room) counts as a wall for movement.
+function sokoParse(ascii) {
+  const lines = ascii.split('\n');
+  const rows = lines.length;
+  let cols = 0; for (const l of lines) cols = Math.max(cols, l.length);
+  const N = cols * rows;
+  const wallCh = new Uint8Array(N), goal = new Uint8Array(N), boxes = [];
+  let player = -1;
+  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+    const ch = lines[y][x] || ' ', i = y * cols + x;
+    if (ch === '#') wallCh[i] = 1;
+    else if (ch === '$') boxes.push(i);
+    else if (ch === '*') { boxes.push(i); goal[i] = 1; }
+    else if (ch === '.') goal[i] = 1;
+    else if (ch === '@') player = i;
+    else if (ch === '+') { player = i; goal[i] = 1; }
   }
-  return null;
+  // interior = flood from the keeper through non-wall cells
+  const floor = new Uint8Array(N);
+  if (player >= 0) {
+    const st = [player]; floor[player] = 1;
+    while (st.length) {
+      const c = st.pop(), x = c % cols, y = (c / cols) | 0;
+      const nb = [x > 0 ? c - 1 : -1, x < cols - 1 ? c + 1 : -1, y > 0 ? c - cols : -1, y < rows - 1 ? c + cols : -1];
+      for (const n of nb) if (n >= 0 && !wallCh[n] && !floor[n]) { floor[n] = 1; st.push(n); }
+    }
+  }
+  const wall = new Uint8Array(N);
+  for (let i = 0; i < N; i++) wall[i] = floor[i] ? 0 : 1;
+  const lv = { cols, rows, N, wall, wallCh, floor, goal, boxes, player };
+  sokoPrep(lv);
+  return lv;
 }
-function dayNum(){return Math.floor((Date.now()-Date.UTC(2026,0,1))/864e5);}
-function dailyBand(day){const wd=new Date(Date.UTC(2026,0,1)+day*864e5).getUTCDay();return wd===1||wd===2?BANDS.easy:(wd===0||wd===6?BANDS.hard:BANDS.med);}
-function genDaily(day){
-  const seed=(day*2654435761%2147483647)+1;
-  return gen(seed,dailyBand(day))||gen(seed,{par:[7,22],walls:[4,10]})||gen(seed,{par:[5,40],walls:[4,10]});
+// Directions: index 0..3 = u,d,l,r (LURD letters).
+const SOKO_DL = ['u', 'd', 'l', 'r'];
+function sokoDelta(lv, k) { return k === 0 ? -lv.cols : k === 1 ? lv.cols : k === 2 ? -1 : 1; }
+// Push distance (wall-only) from each cell to the nearest goal, by reverse
+// pulls. -1 = dead square: a crate there can never reach any goal.
+function sokoPrep(lv) {
+  const N = lv.N, goals = [];
+  for (let i = 0; i < N; i++) if (lv.goal[i] && !lv.wall[i]) goals.push(i);
+  const pdg = goals.map(g0 => {
+    const pd = new Int16Array(N).fill(-1), q = [g0]; pd[g0] = 0;
+    for (let h = 0; h < q.length; h++) {
+      const c = q[h];
+      for (let k = 0; k < 4; k++) {
+        const d = sokoDelta(lv, k), n = c + d, p = c + 2 * d;
+        if (n < 0 || p < 0 || n >= N || p >= N) continue;
+        if (lv.wall[n] || lv.wall[p] || pd[n] >= 0) continue;
+        pd[n] = pd[c] + 1; q.push(n);
+      }
+    }
+    return pd;
+  });
+  const pd = new Int16Array(N).fill(-1);
+  for (const t of pdg) for (let i = 0; i < N; i++) if (t[i] >= 0 && (pd[i] < 0 || t[i] < pd[i])) pd[i] = t[i];
+  lv.goals = goals; lv.pdg = pdg; lv.pd = pd;
+}
+// Lower bound on pushes: min-cost assignment of crates to distinct goals
+// (bitmask DP, ≤ 8 crates). Infinity = no assignment exists (deadlock).
+// One push moves one crate one step in the push graph, changing any of its
+// goal distances by ≤ 1, so this bound is consistent for A*.
+function sokoMatch(lv, bs) {
+  const n = bs.length, G = lv.pdg, full = 1 << G.length;
+  let dp = new Map([[0, 0]]);
+  for (let i = 0; i < n; i++) {
+    const nx = new Map(), b = bs[i];
+    for (const [mask, v] of dp) {
+      for (let j = 0; j < G.length; j++) {
+        if (mask & (1 << j)) continue;
+        const d = G[j][b]; if (d < 0) continue;
+        const m2 = mask | (1 << j), nv = v + d, o = nx.get(m2);
+        if (o === undefined || nv < o) nx.set(m2, nv);
+      }
+    }
+    dp = nx; if (!dp.size) return Infinity;
+  }
+  let best = Infinity; for (const v of dp.values()) if (v < best) best = v;
+  return best;
+}
+// 2×2 freeze: `cell` sits in a 2×2 block of walls/crates holding a crate that
+// is not on a goal → every crate in that block is stuck forever.
+function sokoFrozen(lv, isBox, cell) {
+  const c = lv.cols;
+  for (const o of [0, -1, -c, -c - 1]) {
+    const a = cell + o, q = [a, a + 1, a + c, a + c + 1];
+    let all = true, off = false;
+    for (const x of q) {
+      if (x < 0 || x >= lv.N) { all = false; break; }
+      if (lv.wall[x]) continue;
+      if (isBox[x]) { if (!lv.goal[x]) off = true; continue; }
+      all = false; break;
+    }
+    if (all && off) return true;
+  }
+  return false;
+}
+// Keeper BFS over free cells. Returns Int16Array of distances (-1 = no).
+function sokoReach(lv, isBox, from) {
+  const d = new Int16Array(lv.N).fill(-1), q = [from]; d[from] = 0;
+  for (let h = 0; h < q.length; h++) {
+    const c = q[h];
+    for (let k = 0; k < 4; k++) {
+      const n = c + sokoDelta(lv, k);
+      if (n < 0 || n >= lv.N || lv.wall[n] || isBox[n] || d[n] >= 0) continue;
+      d[n] = d[c] + 1; q.push(n);
+    }
+  }
+  return d;
+}
+// Shortest walk a→b avoiding crates, as lower-case LURD ('' if a===b, null).
+function sokoWalk(lv, isBox, a, b) {
+  if (a === b) return '';
+  const prev = new Int32Array(lv.N).fill(-1), pk = new Int8Array(lv.N), q = [a]; prev[a] = a;
+  for (let h = 0; h < q.length; h++) {
+    const c = q[h]; if (c === b) break;
+    for (let k = 0; k < 4; k++) {
+      const n = c + sokoDelta(lv, k);
+      if (n < 0 || n >= lv.N || lv.wall[n] || isBox[n] || prev[n] >= 0) continue;
+      prev[n] = c; pk[n] = k; q.push(n);
+    }
+  }
+  if (prev[b] < 0) return null;
+  let s = '', c = b;
+  while (c !== a) { s = SOKO_DL[pk[c]] + s; c = prev[c]; }
+  return s;
+}
+// A* in push space with MOVE cost (walk to the push cell + 1). With
+// weight 1 the heuristic (sum of push distances) is consistent, so the first
+// solved node popped is move-optimal; weight > 1 trades optimality for speed
+// (in-game hint fallback). Returns {lurd, expanded} or {lurd:null, ...}.
+function sokoSolve(lv, player, boxes, opt) {
+  opt = opt || {};
+  const budget = opt.budget || 200000, W = opt.weight || 1;
+  const N = lv.N, pd = lv.pd, goalCount = boxes.length;
+  for (const b of boxes) if (pd[b] < 0) return { lurd: null, dead: true, expanded: 0 };
+  const isBox = new Uint8Array(N);
+  const nodesB = [], nodesP = [], nodesPar = [], nodesSrc = [], nodesK = [], nodesG = [];
+  const seen = new Map();
+  const heap = [];
+  function hpush(f, id) {
+    heap.push([f, id]); let i = heap.length - 1;
+    while (i > 0) { const p = (i - 1) >> 1; if (heap[p][0] <= heap[i][0]) break; const t = heap[p]; heap[p] = heap[i]; heap[i] = t; i = p; }
+  }
+  function hpop() {
+    const top = heap[0], last = heap.pop();
+    if (heap.length) {
+      heap[0] = last; let i = 0;
+      for (;;) {
+        const l = 2 * i + 1, r = l + 1; let m = i;
+        if (l < heap.length && heap[l][0] < heap[m][0]) m = l;
+        if (r < heap.length && heap[r][0] < heap[m][0]) m = r;
+        if (m === i) break; const t = heap[m]; heap[m] = heap[i]; heap[i] = t; i = m;
+      }
+    }
+    return top;
+  }
+  const hOf = bs => sokoMatch(lv, bs);
+  const b0 = boxes.slice().sort((a, b) => a - b);
+  nodesB.push(b0); nodesP.push(player); nodesPar.push(-1); nodesSrc.push(-1); nodesK.push(-1); nodesG.push(0);
+  seen.set(b0.join(',') + '|' + player, 0);
+  const h0 = hOf(b0); if (h0 === Infinity) return { lurd: null, dead: true, expanded: 0 };
+  hpush(W * h0, 0);
+  let expanded = 0, goalId = -1;
+  while (heap.length) {
+    const [, id] = hpop();
+    const bs = nodesB[id], g = nodesG[id], pl = nodesP[id];
+    const key = bs.join(',') + '|' + pl;
+    if (seen.get(key) !== id) continue;           // stale entry
+    let solved = true; for (const b of bs) if (!lv.goal[b]) { solved = false; break; }
+    if (solved) { goalId = id; break; }
+    if (++expanded > budget) break;
+    for (const b of bs) isBox[b] = 1;
+    const reach = sokoReach(lv, isBox, pl);
+    for (let bi = 0; bi < bs.length; bi++) {
+      const b = bs[bi];
+      for (let k = 0; k < 4; k++) {
+        const d = sokoDelta(lv, k), src = b - d, dst = b + d;
+        if (src < 0 || src >= N || dst < 0 || dst >= N) continue;
+        if (reach[src] < 0 || lv.wall[dst] || isBox[dst] || pd[dst] < 0) continue;
+        isBox[b] = 0; isBox[dst] = 1;
+        const frozen = sokoFrozen(lv, isBox, dst);
+        isBox[dst] = 0; isBox[b] = 1;
+        if (frozen) continue;
+        const nb = bs.slice(); nb[bi] = dst; nb.sort((a, c) => a - c);
+        const hv = hOf(nb); if (hv === Infinity) continue;
+        const ng = g + reach[src] + 1, nk = nb.join(',') + '|' + b;
+        const old = seen.get(nk);
+        if (old !== undefined && nodesG[old] <= ng) continue;
+        const nid = nodesB.length;
+        nodesB.push(nb); nodesP.push(b); nodesPar.push(id); nodesSrc.push(src); nodesK.push(k); nodesG.push(ng);
+        seen.set(nk, nid);
+        hpush(ng + W * hv, nid);
+      }
+    }
+    for (const b of bs) isBox[b] = 0;
+  }
+  if (goalId < 0) return { lurd: null, expanded, exhausted: !heap.length };
+  const chain = [];
+  for (let id = goalId; nodesPar[id] >= 0; id = nodesPar[id]) chain.push(id);
+  chain.reverse();
+  let out = '';
+  for (const id of chain) {
+    const par = nodesPar[id];
+    for (const b of nodesB[par]) isBox[b] = 1;
+    out += sokoWalk(lv, isBox, nodesP[par], nodesSrc[id]) + SOKO_DL[nodesK[id]].toUpperCase();
+    for (const b of nodesB[par]) isBox[b] = 0;
+  }
+  return { lurd: out, expanded, moves: nodesG[goalId] };
+}
+// Run-length LURD codec ('3rU2l' <-> 'rrrUll').
+function sokoUnRLE(s) { return s.replace(/(\d+)([udlrUDLR])/g, (m, n, c) => c.repeat(+n)); }
+function sokoRLE(s) { return s.replace(/([udlrUDLR])\1+/g, m => m.length + m[0]); }
+/*SOKO-SOLVER-END*/
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+
+// ── board symmetries (daily variety): t&3 = quarter turns, t&4 = mirror ──
+function skTransform(ascii,lurd,t){
+  const rows=ascii.split('\n');let W=0;rows.forEach(r=>{if(r.length>W)W=r.length;});
+  const H=rows.length,rot=t&3,mir=!!(t&4);
+  const fw=(rot&1)?H:W,fh=(rot&1)?W:H;
+  const out=[];for(let y=0;y<fh;y++)out.push(new Array(fw).fill(' '));
+  const mapP=(x,y)=>{let X=mir?W-1-x:x,Y=y,w=W,h=H;for(let k=0;k<rot;k++){const nx=h-1-Y,ny=X;X=nx;Y=ny;const s=w;w=h;h=s;}return[X,Y];};
+  const mapD=(dx,dy)=>{if(mir)dx=-dx;for(let k=0;k<rot;k++){const n=-dy;dy=dx;dx=n;}return[dx,dy];};
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const ch=rows[y][x]||' ';const[X,Y]=mapP(x,y);out[Y][X]=ch;}
+  const V={u:[0,-1],d:[0,1],l:[-1,0],r:[1,0]};
+  const back=(dx,dy)=>dy<0?'u':dy>0?'d':dx<0?'l':'r';
+  let s='';for(const c of lurd){const v=V[c.toLowerCase()];const[a,b]=mapD(v[0],v[1]);const n=back(a,b);s+=c===c.toLowerCase()?n:n.toUpperCase();}
+  return{map:out.map(r=>r.join('').replace(/\s+$/,'')).join('\n'),lurd:s};
 }
 
-// ── state / rendering ──
-let levelIndex=0,L=null,gState=null,gHist=[],gMoves=0,cellPx=0,gapPx=0,gWon=false;
-let firstAttempt=true,levelStarted=false,interstitialCounter=0,isDailyChallenge=false,dailyDay=0;
-const boardEl=document.getElementById('board');
-let youEl,echoEl,plateEl,exitEl;
-function layoutBoard(){
-  const zone=boardEl.parentElement;
-  const maxW=Math.min(window.innerWidth-28,460,Math.floor(window.innerHeight*0.46));
-  cellPx=Math.floor(maxW/GN);gapPx=Math.round(cellPx*0.12);
-  boardEl.style.width=boardEl.style.height=(cellPx*GN)+'px';
+// ── on-device generator (Endless): port of test/gen_campaign.js ──
+const SK_PIECES=[[[0,0]],[[0,0],[1,0]],[[0,0],[0,1]],[[0,0],[1,0],[0,1]],[[0,0],[1,0],[1,1]],[[0,0],[0,1],[1,1]],[[1,0],[0,1],[1,1]],[[0,0],[1,0],[2,0]],[[0,0],[0,1],[0,2]]];
+function skRoomOk(wall,W,H,band,final){
+  const fl=[];for(let i=0;i<W*H;i++)if(!wall[i])fl.push(i);
+  if(fl.length<8)return false;
+  const seen=new Uint8Array(W*H),st=[fl[0]];seen[fl[0]]=1;let n=1;
+  while(st.length){const c=st.pop();for(const d of[1,-1,W,-W]){const m=c+d;if(!wall[m]&&!seen[m]){seen[m]=1;n++;st.push(m);}}}
+  if(n!==fl.length)return false;
+  let dead=0;for(const c of fl){let k=0;for(const d of[1,-1,W,-W])if(wall[c+d])k++;if(k>=3)dead++;if(k===4)return false;}
+  if(dead>2)return false;
+  if(final){let open=0;for(let y=1;y+2<H;y++)for(let x=1;x+2<W;x++){let all=true;for(let dy=0;dy<3&&all;dy++)for(let dx=0;dx<3;dx++)if(wall[(y+dy)*W+x+dx]){all=false;break;}if(all)open++;}if(open>band.open)return false;}
+  return true;
 }
-function bpx(c){return c*cellPx+gapPx/2;}
-function buildBoard(){
-  boardEl.innerHTML='';
-  L.walls.forEach(i=>{const x=i%GN,y=Math.floor(i/GN);const w=document.createElement('div');w.className='wallc';
-    w.style.width=w.style.height=(cellPx-gapPx)+'px';w.style.left=bpx(x)+'px';w.style.top=bpx(y)+'px';boardEl.appendChild(w);});
-  exitEl=document.createElement('div');exitEl.className='exitc';
-  exitEl.style.width=exitEl.style.height=(cellPx-gapPx+2)+'px';
-  exitEl.style.left=(bpx(L.exit[0])-1)+'px';exitEl.style.top=(bpx(L.exit[1])-1)+'px';boardEl.appendChild(exitEl);
-  plateEl=document.createElement('div');plateEl.className='platec';
-  plateEl.style.width=plateEl.style.height=(cellPx-gapPx-6)+'px';
-  plateEl.style.left=(bpx(L.plate[0])+3)+'px';plateEl.style.top=(bpx(L.plate[1])+3)+'px';boardEl.appendChild(plateEl);
-  echoEl=mkEnt('echoc');youEl=mkEnt('youc');
+function skMakeRoom(rnd,band){
+  const w=band.w[0]+Math.floor(rnd()*(band.w[1]-band.w[0]+1)),h=band.h[0]+Math.floor(rnd()*(band.h[1]-band.h[0]+1));
+  const W=w+2,H=h+2,wall=new Uint8Array(W*H);
+  for(let x=0;x<W;x++){wall[x]=1;wall[(H-1)*W+x]=1;}for(let y=0;y<H;y++){wall[y*W]=1;wall[y*W+W-1]=1;}
+  const target=Math.round(w*h*(band.wall[0]+rnd()*(band.wall[1]-band.wall[0])));
+  let placed=0,tries=0;
+  while(placed<target&&tries<400){tries++;
+    const p=SK_PIECES[Math.floor(rnd()*SK_PIECES.length)],ox=1+Math.floor(rnd()*w),oy=1+Math.floor(rnd()*h),cells=[];let ok=true;
+    for(const[dx,dy]of p){const x=ox+dx,y=oy+dy;if(x<1||y<1||x>w||y>h){ok=false;break;}const i=y*W+x;if(wall[i]){ok=false;break;}cells.push(i);}
+    if(!ok)continue;for(const i of cells)wall[i]=1;
+    if(!skRoomOk(wall,W,H,band,false)){for(const i of cells)wall[i]=0;continue;}placed+=cells.length;}
+  return skRoomOk(wall,W,H,band,true)?{W,H,wall}:null;
 }
-function mkEnt(cls){const d=document.createElement('div');d.className='ent '+cls;
-  d.style.width=d.style.height=(cellPx-gapPx)+'px';boardEl.appendChild(d);return d;}
-function setPos(el,c){const tx=bpx(c[0])+'px',ty=bpx(c[1])+'px';
-  el.style.setProperty('--tx',tx);el.style.setProperty('--ty',ty);el.style.transform='translate('+tx+','+ty+')';}
-function dropTrail(c){
-  const t=document.createElement('div');t.className='trail';
-  t.style.width=t.style.height=(cellPx-gapPx)+'px';
-  t.style.left=bpx(c[0])+'px';t.style.top=bpx(c[1])+'px';
-  boardEl.appendChild(t);
-  setTimeout(()=>{t.style.opacity='0';},60);setTimeout(()=>{t.remove();},620);
+function skPickGoals(rnd,room,nb){
+  const{W,H,wall}=room;const fl=[];
+  for(let c=0;c<W*H;c++){if(wall[c])continue;for(const d of[1,-1,W,-W])if(!wall[c+d]&&!wall[c+2*d]){fl.push(c);break;}}
+  if(fl.length<nb+4)return null;const goals=[];
+  while(goals.length<nb){let c;
+    if(goals.length&&rnd()<0.55){const near=fl.filter(x=>goals.indexOf(x)<0&&goals.some(g=>Math.abs(g%W-x%W)+Math.abs(((g/W)|0)-((x/W)|0))<=2));c=near.length?near[Math.floor(rnd()*near.length)]:fl[Math.floor(rnd()*fl.length)];}
+    else c=fl[Math.floor(rnd()*fl.length)];
+    if(goals.indexOf(c)<0)goals.push(c);}
+  return goals;
 }
-function renderGame(){
-  setPos(youEl,gState.b);setPos(echoEl,gState.c);
-  const held=gState.c[0]===L.plate[0]&&gState.c[1]===L.plate[1];
-  plateEl.classList.toggle('held',held);
-  exitEl.classList.toggle('armed',held);
-  document.getElementById('hud-moves').textContent=gMoves;
-  document.getElementById('hud-par').textContent=L.par;
-  const q0=document.getElementById('q0'),q1=document.getElementById('q1');
-  q0.textContent=gState.q[0]?ARROW[gState.q[0]]:'·';q0.className='q'+(gState.q[0]?'':' empty');
-  q1.textContent=gState.q[1]?ARROW[gState.q[1]]:'·';q1.className='q'+(gState.q[1]?'':' empty');
-  clearHintGlow();
+function skReverse(room,goals,cap){
+  const{W,H,wall}=room,N=W*H,DIRS=[1,-1,W,-W],mark=new Int32Array(N),isBox=new Uint8Array(N);let stamp=0;
+  function flood(p){stamp++;let mn=p;const st=[p];mark[p]=stamp;while(st.length){const c=st.pop();if(c<mn)mn=c;for(const d of DIRS){const m=c+d;if(!wall[m]&&!isBox[m]&&mark[m]!==stamp){mark[m]=stamp;st.push(m);}}}return mn;}
+  const keyOf=(bs,p)=>bs.join(',')+'|'+p,info=new Map();let frontier=[];
+  const gs=goals.slice().sort((a,b)=>a-b);for(const b of gs)isBox[b]=1;
+  const regDone=new Set();
+  for(let c=0;c<N;c++){if(wall[c]||isBox[c])continue;const mn=flood(c);if(regDone.has(mn))continue;regDone.add(mn);info.set(keyOf(gs,mn),[0,null,-1]);frontier.push([gs,mn]);}
+  for(const b of gs)isBox[b]=0;
+  let depth=0;
+  while(frontier.length&&info.size<cap){const next=[];
+    for(const[bs,p]of frontier){const pk=keyOf(bs,p);for(const b of bs)isBox[b]=1;
+      flood(p);const rs=stamp,reach=mark.slice();
+      for(let bi=0;bi<bs.length;bi++){const b=bs[bi];for(const d of DIRS){const pc=b+d,back=b+2*d;
+        if(reach[pc]!==rs||wall[back]||isBox[back])continue;
+        isBox[b]=0;isBox[pc]=1;const nmn=flood(back);isBox[pc]=0;isBox[b]=1;
+        const nbs=bs.slice();nbs[bi]=pc;nbs.sort((a,c)=>a-c);const k=keyOf(nbs,nmn);
+        if(info.has(k))continue;info.set(k,[depth+1,pk,pc]);next.push([nbs,nmn]);}}
+      for(const b of bs)isBox[b]=0;if(info.size>=cap)break;}
+    if(!next.length)break;depth++;frontier=next;}
+  return{depth,info};
 }
-function loadLevel(idx){
-  levelIndex=idx;isDailyChallenge=false;isEndless=false;
-  const row=CAMPAIGN[idx];
-  L=gen(row.seed,BANDS[row.band]);
-  if(!L){_showMsg('Level failed to generate');return;}
-  gState={b:L.bs.slice(),c:L.cs.slice(),q:[null,null]};gHist=[];gMoves=0;gWon=false;
-  firstAttempt=true;levelStarted=true;
-  document.getElementById('hdr-level').textContent='Level '+(idx+1);
-  layoutBoard();buildBoard();renderGame();updateAllUI();
-  save.lastLevelProgress={level:idx+1};persist(); // display-numbered for the shim's Continue label
-  maybeShowTutorial();
+function skSwitches(info,key){
+  const bo=k=>k.split('|')[0].split(',').map(Number);let n=0,k=key,g=0;
+  while(g++<1000){const cur=info.get(k),par=cur[1];if(par==null)break;const pi=info.get(par);if(pi[1]==null)break;
+    const cb=bo(k),pb=bo(par),landed=pb.filter(x=>cb.indexOf(x)<0)[0];if(pi[2]!==landed)n++;k=par;}
+  return n;
 }
-window.addEventListener('resize',()=>{if(L){layoutBoard();buildBoard();renderGame();}});
-function moveDir(d){
-  if(!L||gWon||document.querySelector('.overlay.show'))return;
-  const r=step(L.walls,gState.b,gState.c,gState.q,d);
-  if(r.collide){
-    youEl.classList.add('shake');echoEl.classList.add('shake');
-    setTimeout(()=>{youEl.classList.remove('shake');echoEl.classList.remove('shake');},320);
-    playError();_showMsg("You and the echo can't overlap.");return;
+function skRoomWalk(room,boxSet,a,b){
+  if(a===b)return'';const{W,H,wall}=room,prev=new Int32Array(W*H).fill(-1),pk=[],q=[a];prev[a]=a;const DD=[[-W,'u'],[W,'d'],[-1,'l'],[1,'r']];
+  for(let h=0;h<q.length;h++){const c=q[h];if(c===b)break;for(const[d,ch]of DD){const n=c+d;if(wall[n]||boxSet.has(n)||prev[n]>=0)continue;prev[n]=c;pk[n]=ch;q.push(n);}}
+  if(prev[b]<0)return null;let s='',c=b;while(c!==a){s=pk[c]+s;c=prev[c];}return s;
+}
+function skToAscii(room,boxes,goals,player){
+  const{W,H,wall}=room;let x0=W,y0=H,x1=0,y1=0;
+  for(let i=0;i<W*H;i++)if(!wall[i]){const x=i%W,y=(i/W)|0;x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);}
+  x0--;y0--;x1++;y1++;const bset=new Set(boxes),gset=new Set(goals),rows=[];
+  for(let y=y0;y<=y1;y++){let r='';for(let x=x0;x<=x1;x++){const i=y*W+x;
+    if(wall[i]){let touch=false;for(let dy=-1;dy<=1&&!touch;dy++)for(let dx=-1;dx<=1;dx++){const xx=x+dx,yy=y+dy;if(xx<0||yy<0||xx>=W||yy>=H)continue;if(!wall[yy*W+xx]){touch=true;break;}}r+=touch?'#':' ';}
+    else if(bset.has(i))r+=gset.has(i)?'*':'$';else if(i===player)r+=gset.has(i)?'+':'@';else r+=gset.has(i)?'.':' ';}
+    rows.push(r.replace(/\s+$/,''));}
+  return rows.join('\n');
+}
+// One Endless board: deepest reverse-pull state of a fresh room; its pull
+// chain, replayed forward, is a guaranteed solution (push-optimal pushes,
+// shortest walks between them) → par + hint line without a search.
+function skGenerate(rnd,band,cap){
+  for(let attempt=0;attempt<40;attempt++){
+    const room=skMakeRoom(rnd,band);if(!room)continue;
+    const nb=band.boxes[0]+Math.floor(rnd()*(band.boxes[1]-band.boxes[0]+1));
+    const goals=skPickGoals(rnd,room,nb);if(!goals)continue;
+    const R=skReverse(room,goals,cap);if(R.depth<band.push[0])continue;
+    const layer=Math.min(R.depth,band.push[1]),cands=[];
+    for(const[k,v]of R.info)if(v[0]===layer)cands.push(k);if(!cands.length)continue;
+    let best=null,bestS=-1;const sample=cands.length>30?Array.from({length:30},()=>cands[Math.floor(rnd()*cands.length)]):cands;
+    for(const k of sample){const s=skSwitches(R.info,k);if(s>bestS){bestS=s;best=k;}}
+    if(bestS<Math.min(2,nb-1))continue;
+    const[bp,pp]=best.split('|');const boxes=bp.split(',').map(Number);
+    if(nb>1&&boxes.filter(b=>goals.indexOf(b)>=0).length>=nb-1)continue;
+    const{W,wall}=room,isB=new Set(boxes),reg=[],seen=new Set([+pp]),st=[+pp];
+    while(st.length){const c=st.pop();reg.push(c);for(const d of[1,-1,W,-W]){const m=c+d;if(!wall[m]&&!isB.has(m)&&!seen.has(m)){seen.add(m);st.push(m);}}}
+    const player=reg[Math.floor(rnd()*reg.length)];
+    // forward line from the pull chain
+    let lurd='',p=player,k=best,cur=boxes.slice(),ok=true,g=0;const bo=x=>x.split('|')[0].split(',').map(Number);
+    while(g++<400){const v=R.info.get(k);if(!v||v[1]==null)break;const pb=bo(v[1]);
+      const from=cur.find(x=>pb.indexOf(x)<0),to=pb.find(x=>cur.indexOf(x)<0),d=to-from;
+      const walk=skRoomWalk(room,new Set(cur),p,from-d);if(walk==null){ok=false;break;}
+      lurd+=walk+(d===-W?'U':d===W?'D':d===-1?'L':'R');p=from;cur=pb;k=v[1];}
+    if(!ok)continue;
+    return{map:skToAscii(room,boxes,goals,player),lurd};
   }
-  gHist.push({b:gState.b.slice(),c:gState.c.slice(),q:gState.q.slice()});
-  if(r.nc[0]!==gState.c[0]||r.nc[1]!==gState.c[1])dropTrail(gState.c);
-  gState.b=r.nb;gState.c=r.nc;gState.q=r.nq;gMoves++;
-  playMove();renderGame();
-  if(r.nb[0]===L.exit[0]&&r.nb[1]===L.exit[1]&&r.nc[0]===L.plate[0]&&r.nc[1]===L.plate[1])winLevel();
+  return null;
+}
+
+// ── state ──
+const SK_TUT_KEY='soko_tutorialDone';
+const SK_DIRS={U:0,D:1,L:2,R:3},SK_CH=['u','d','l','r'],SK_ARROW={U:'↑',D:'↓',L:'←',R:'→'};
+let levelIndex=0,L=null,gWon=false,levelStarted=false,isDailyChallenge=false,isEndless=false,interstitialCounter=0,dailyDay=0;
+let lv=null,skOcc=null,skBoxId=null,skBoxPos=[],skPlayer=0,skMoves=0,skPushes=0,skFacing=1,skSolved=false;
+let skHist=[],skTrackLine='',skTrackPush=null,skHintsUsed=0,skStuckWarned=false,skEndlessNo=0,skRestored=false;
+let skCell=40,skFrames=[],skAnimT=null,skBoxEls=[],skKeeperEl=null,skHintTimer=null;
+const boardEl=document.getElementById('board');
+const skStage=document.getElementById('sk-stage');
+
+function skParse(map){
+  lv=sokoParse(map);
+  skOcc=new Uint8Array(lv.N);skBoxId=new Int16Array(lv.N).fill(-1);skBoxPos=lv.boxes.slice();
+  skBoxPos.forEach((c,i)=>{skOcc[c]=1;skBoxId[c]=i;});
+  skPlayer=lv.player;skMoves=0;skPushes=0;skFacing=1;skSolved=false;skHist=[];skHintsUsed=0;skStuckWarned=false;
+}
+function skResetState(){
+  for(let i=0;i<lv.N;i++){skOcc[i]=0;skBoxId[i]=-1;}
+  skBoxPos=lv.boxes.slice();skBoxPos.forEach((c,i)=>{skOcc[c]=1;skBoxId[c]=i;});
+  skPlayer=lv.player;skMoves=0;skPushes=0;skFacing=1;skSolved=false;skHist=[];
+}
+function skIsSolved(){for(const b of skBoxPos)if(!lv.goal[b])return false;return true;}
+function skBoxesKey(){return skBoxPos.slice().sort((a,b)=>a-b).join(',');}
+// Index the reference line from the current state: crate layout before each
+// push → {stand cell, push dir, index}. Hints re-join the line from any
+// keeper position with the same crates.
+function skSetTrack(line){
+  skTrackLine=line;skTrackPush=new Map();
+  const occ=skOcc.slice(),pos=skBoxPos.slice();let p=skPlayer;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i],k='udlr'.indexOf(ch.toLowerCase()),d=sokoDelta(lv,k),n=p+d;
+    if(ch!==ch.toLowerCase()){
+      const key=pos.slice().sort((a,b)=>a-b).join(',');
+      if(!skTrackPush.has(key))skTrackPush.set(key,{stand:p,idx:i});
+      const bi=pos.indexOf(n);if(bi<0)break;occ[n]=0;occ[n+d]=1;pos[bi]=n+d;
+    }
+    p=n;
+  }
+}
+
+// ── layout + render (DOM tiles; colours are theme role vars) ──
+function skLayout(){
+  if(!lv)return;
+  const sw=Math.max(120,skStage.clientWidth-8),sh=Math.max(120,skStage.clientHeight-8);
+  skCell=Math.max(16,Math.min(72,Math.floor(Math.min(sw/lv.cols,sh/lv.rows))));
+  boardEl.style.width=(skCell*lv.cols)+'px';boardEl.style.height=(skCell*lv.rows)+'px';
+  boardEl.style.setProperty('--cell',skCell+'px');
+}
+function skXY(c){return[(c%lv.cols)*skCell,((c/lv.cols)|0)*skCell];}
+function skBuild(){
+  boardEl.innerHTML='';skBoxEls=[];
+  const frag=document.createDocumentFragment(),C=lv.cols;
+  for(let i=0;i<lv.N;i++){
+    const[x,y]=skXY(i);let cls=null;
+    if(lv.floor[i])cls='sk-floor'+(((i%C)+((i/C)|0))%2?' alt':'');
+    else if(lv.wallCh[i]){
+      // only walls that touch the room (8-neighbourhood) are drawn
+      let touch=false;const cx=i%C,cy=(i/C)|0;
+      for(let dy=-1;dy<=1&&!touch;dy++)for(let dx=-1;dx<=1;dx++){const xx=cx+dx,yy=cy+dy;if(xx<0||yy<0||xx>=C||yy>=lv.rows)continue;if(lv.floor[yy*C+xx]){touch=true;break;}}
+      if(touch){cls='sk-wall';const up=i-C;if(up<0||!lv.wallCh[up])cls+=' top';}
+    }
+    if(!cls)continue;
+    const d=document.createElement('div');d.className=cls;d.style.transform='translate('+x+'px,'+y+'px)';frag.appendChild(d);
+    if(lv.floor[i]&&lv.goal[i]){const g=document.createElement('div');g.className='sk-dock';g.style.transform='translate('+x+'px,'+y+'px)';frag.appendChild(g);}
+  }
+  skBoxPos.forEach((c,i)=>{const b=document.createElement('div');b.className='sk-crate';
+    b.innerHTML='<i class="sk-box"><i class="sk-face"><b></b><b></b><s></s></i></i>';frag.appendChild(b);skBoxEls[i]=b;});
+  skKeeperEl=document.createElement('div');skKeeperEl.className='sk-keeper';skKeeperEl.innerHTML='<i class="sk-body"><i class="sk-eyes"><b></b><b></b></i></i>';
+  frag.appendChild(skKeeperEl);
+  const hl=document.createElement('div');hl.id='sk-hint';frag.appendChild(hl);
+  boardEl.appendChild(frag);
+  skSnap();
+}
+function skPlace(el,c){const[x,y]=skXY(c);el.style.transform='translate('+x+'px,'+y+'px)';}
+function skSnap(){
+  clearTimeout(skAnimT);skAnimT=null;skFrames=[];
+  boardEl.classList.add('sk-instant');
+  skBoxPos.forEach((c,i)=>{skPlace(skBoxEls[i],c);});skPlace(skKeeperEl,skPlayer);
+  skPaintState();void boardEl.offsetWidth;boardEl.classList.remove('sk-instant');
+}
+function skPaintState(){
+  skBoxPos.forEach((c,i)=>{const el=skBoxEls[i];if(!el)return;el.classList.toggle('docked',!!lv.goal[c]);el.classList.toggle('stuck',skIsStuck(c));});
+  if(skKeeperEl)skKeeperEl.dataset.face=SK_CH[skFacing];
+  skHud();
+}
+function skHud(){
+  const m=document.getElementById('hud-moves'),pu=document.getElementById('hud-pushes'),pa=document.getElementById('hud-par');
+  if(m)m.textContent=skMoves;if(pu)pu.textContent=skPushes;if(pa)pa.textContent=L?L.par:'–';
+}
+// Visual queue: logic applies instantly, the board catches up step by step.
+function skQueue(frame){skFrames.push(frame);if(!skAnimT)skTick();}
+function skTick(){
+  const f=skFrames.shift();
+  if(!f){skAnimT=null;skPaintState();if(skSolved)skAfterWin();return;}
+  const fast=skFrames.length>3;
+  boardEl.style.setProperty('--sk-step',(fast?55:f.push?120:95)+'ms');
+  skPlace(skKeeperEl,f.p);skKeeperEl.dataset.face=SK_CH[f.dir];
+  if(f.box!=null){const el=skBoxEls[f.box];skPlace(el,f.bc);el.classList.toggle('docked',!!lv.goal[f.bc]);el.classList.toggle('stuck',false);
+    if(lv.goal[f.bc]){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');}}
+  skAnimT=setTimeout(skTick,fast?55:f.push?120:95);
+}
+
+// ── rules ──
+function skIsStuck(c){return !lv.goal[c]&&(lv.pd[c]<0||sokoFrozen(lv,skOcc,c));}
+// One step; returns 0 blocked, 1 walk, 2 push. Records into `act`.
+function skStep(k,act,quiet){
+  const d=sokoDelta(lv,k),n=skPlayer+d;
+  skFacing=k;
+  if(n<0||n>=lv.N||lv.wall[n])return 0;
+  if(skOcc[n]){
+    const m=n+d;if(m<0||m>=lv.N||lv.wall[m]||skOcc[m])return 0;
+    const id=skBoxId[n];skOcc[n]=0;skBoxId[n]=-1;skOcc[m]=1;skBoxId[m]=id;skBoxPos[id]=m;
+    skPlayer=n;skMoves++;skPushes++;act.push(SK_CH[k].toUpperCase());
+    if(!quiet)skQueue({p:n,dir:k,box:id,bc:m,push:true});
+    return 2;
+  }
+  skPlayer=n;skMoves++;act.push(SK_CH[k]);
+  if(!quiet)skQueue({p:n,dir:k,box:null});
+  return 1;
+}
+function skCommit(act,quiet){
+  if(!act.length)return;
+  skHist.push(act.join(''));
+  skClearHint();skHud();
+  if(!quiet){
+    const pushed=act.some(c=>c!==c.toLowerCase());
+    if(pushed){
+      let dockedNow=false,stuckNow=false;
+      for(const c of skBoxPos){if(skIsStuck(c))stuckNow=true;}
+      const lastPush=act.join('').replace(/[udlr]/g,'').slice(-1);
+      if(lastPush){const k='udlr'.indexOf(lastPush.toLowerCase());const c=skPlayer+sokoDelta(lv,k);if(lv.goal[c])dockedNow=true;}
+      if(dockedNow){skSfx('dock');skBuzz(18);}else skSfx('push');
+      if(stuckNow&&!skStuckWarned){skStuckWarned=true;skWarnStuck();}
+    }else skSfx('step');
+  }
+  if(skIsSolved()){skSolved=true;if(quiet)return;if(!skAnimT)skAfterWin();}
+  skSaveRun();
+}
+function moveDir(dir,quiet){
+  if(!L||skSolved||gWon||!lv)return false;
+  if(!quiet&&document.querySelector('.overlay.show'))return false;
+  const k=SK_DIRS[dir];if(k==null)return false;
+  const act=[];const r=skStep(k,act,quiet);
+  if(!r){if(!quiet){skKeeperEl.dataset.face=SK_CH[k];skBump();}return false;}
+  skCommit(act,quiet);return true;
+}
+function skWalkTo(cell){
+  if(!L||skSolved||gWon)return;
+  const path=sokoWalk(lv,skOcc,skPlayer,cell);
+  if(path==null){skBump();return;}
+  if(!path.length)return;
+  const act=[];for(const ch of path)skStep('udlr'.indexOf(ch),act,false);
+  skCommit(act,false);
+}
+function skBump(){
+  skSfx('bump');
+  if(!skKeeperEl)return;skKeeperEl.classList.remove('nudge');void skKeeperEl.offsetWidth;skKeeperEl.classList.add('nudge');
+}
+function skWarnStuck(){
+  skSfx('stuck');skBuzz([20,40,20]);
+  _showMsg('That crate is wedged — Undo is free and unlimited.');
+  const u=document.getElementById('sk-undo');if(u){u.classList.remove('sk-pulse');void u.offsetWidth;u.classList.add('sk-pulse');}
 }
 function undoMove(){
-  if(!gHist.length)return;
-  const p=gHist.pop();gState.b=p.b;gState.c=p.c;gState.q=p.q;gMoves=Math.max(0,gMoves-1);renderGame();
+  if(!lv||!skHist.length||gWon)return;
+  const act=skHist.pop();skSolved=false;
+  for(let i=act.length-1;i>=0;i--){
+    const ch=act[i],k='udlr'.indexOf(ch.toLowerCase()),d=sokoDelta(lv,k);
+    if(ch!==ch.toLowerCase()){const b=skPlayer+d,id=skBoxId[b];skOcc[b]=0;skBoxId[b]=-1;skOcc[skPlayer]=1;skBoxId[skPlayer]=id;skBoxPos[id]=skPlayer;skPushes--;}
+    skPlayer-=d;skMoves--;skFacing=k;
+  }
+  skClearHint();skSnap();skSfx('undo');skSaveRun();
 }
 function resetLevel(){
-  if(!L)return;
-  gState={b:L.bs.slice(),c:L.cs.slice(),q:[null,null]};gHist=[];gMoves=0;gWon=false;renderGame();
+  if(!lv||gWon)return;
+  if(!skHist.length)return;
+  skResetState();skClearHint();skSnap();skSfx('undo');skSaveRun();
 }
+function skSaveRun(){
+  if(!L||L.kind!=='campaign')return;
+  if(skSolved||!skHist.length){save.sokoRun=null;save.lastLevelProgress={level:levelIndex+1};}
+  else{save.sokoRun={idx:levelIndex,acts:skHist.slice()};save.lastLevelProgress={level:levelIndex+1,moves:skMoves};}
+  persist();
+}
+function skStars(moves,par){if(moves<=par+Math.floor(par/10))return 3;if(moves<=Math.ceil(par*1.5)+2)return 2;return 1;}
+
+// ── level entry points ──
+function skStart(obj){
+  L=obj;skParse(obj.map);skSetTrack(obj.solution);
+  gWon=false;levelStarted=true;
+  document.getElementById('hdr-level').textContent=obj.title;
+  const hl=document.getElementById('hdr-lives');if(hl)hl.style.visibility=obj.kind==='endless'?'visible':'hidden';
+  skLayout();skBuild();updateAllUI();
+}
+function loadLevel(idx){
+  idx=Math.max(0,Math.min(LEVELS.length-1,idx|0));
+  levelIndex=idx;isDailyChallenge=false;isEndless=false;
+  const sol=sokoUnRLE(SOLUTIONS[idx]);
+  skStart({kind:'campaign',map:LEVELS[idx],solution:sol,par:sol.length,title:'Level '+(idx+1),boxes:(LEVELS[idx].match(/[$*]/g)||[]).length});
+  skRestored=false;
+  const run=save.sokoRun;
+  if(run&&run.idx===idx&&Array.isArray(run.acts)&&run.acts.length){
+    let ok=true;
+    for(const a of run.acts){const act=[];for(const ch of a){if(!skStep('udlr'.indexOf(ch.toLowerCase()),act,true)){ok=false;break;}}if(!ok)break;skHist.push(act.join(''));}
+    if(!ok||skIsSolved()){skResetState();save.sokoRun=null;}else{skRestored=true;skSnap();}
+  }
+  save.lastLevelProgress=skRestored?{level:idx+1,moves:skMoves}:{level:idx+1};persist();
+  if(skRestored)setTimeout(()=>_showMsg('Picked up where you left off — '+skMoves+' moves in.'),250);
+  maybeShowTutorial();
+}
+let _skRO=null;
+try{_skRO=new ResizeObserver(()=>{if(lv&&document.getElementById('screen-game').classList.contains('active')){skLayout();skSnap();}});_skRO.observe(skStage);}catch(e){}
+window.addEventListener('resize',()=>{if(lv){skLayout();skSnap();}});
+
+function skAfterWin(){if(gWon)return;setTimeout(()=>{if(skSolved&&!gWon)winLevel();},180);}
 function winLevel(){
   if(gWon)return;
   gWon=true;
   playComplete();
-  // brief sync flourish: both cubes pulse together
-  youEl.style.transition='transform .13s, box-shadow .3s';
-  youEl.style.boxShadow='0 0 22px 2px var(--you)';echoEl.style.boxShadow='0 0 22px 2px var(--echo)';
-  const delta=gMoves-L.par;
-  const stars=delta<=0?3:(delta<=3?2:1);
+  boardEl.classList.add('sk-won');setTimeout(()=>boardEl.classList.remove('sk-won'),1400);
+  const par=L.par,stars=skStars(skMoves,par);
+  let _wasNew=false;
   if(isDailyChallenge){
     const today=new Date().toISOString().split('T')[0];
     if(save.dailyChallengeDate!==today){
-      // A missed day restarts the streak (it used to only ever grow).
       var yesterday=new Date(Date.now()-86400000).toISOString().split('T')[0];
       save.dailyChallengeStreak=(save.dailyChallengeDate===yesterday)?(save.dailyChallengeStreak||0)+1:1;
       save.dailyChallengeDate=today;
@@ -8427,34 +8925,42 @@ function winLevel(){
     }
   }else if(!isEndless){
     _wasNew=!save.completedLevels.includes(levelIndex);
-    if(!save.completedLevels.includes(levelIndex))save.completedLevels.push(levelIndex);
+    if(_wasNew)save.completedLevels.push(levelIndex);
     const prev=save.levelStars[levelIndex]||0;
     if(stars>prev)save.levelStars[levelIndex]=stars;
+    save.sokoBest=save.sokoBest||{};
+    if(!save.sokoBest[levelIndex]||skMoves<save.sokoBest[levelIndex])save.sokoBest[levelIndex]=skMoves;
     if(save.currentLevel<=levelIndex)save.currentLevel=Math.min(levelIndex+1,CAMPAIGN.length-1);
+    save.sokoRun=null;
   }
+  save.cratesDocked=(save.cratesDocked||0)+skBoxPos.length;
   save.coins+=stars*5;
   save.lastLevelProgress=null;
   persist();
-  var _wasNew=_wasNew||false;
   try{if(window.gGame)window.gGame.clear(isDailyChallenge?{daily:true,stars:stars,isNew:true,coins:stars*5}:{level:levelIndex+1,stars:stars,isNew:!!_wasNew,perfect:stars===3,endless:!!isEndless,coins:stars*5});}catch(e){}
   interstitialCounter++;
   if(interstitialCounter%3===0&&interstitialCounter>3)safeShowInterstitial();
-  const starsStr='★'.repeat(stars)+'☆'.repeat(3-stars);
-  document.getElementById('complete-stars').textContent=starsStr;
-  document.getElementById('complete-msg').textContent=
-    (delta<=0?'Perfect sync — matched par! ':'Synced in '+gMoves+' moves (par '+L.par+'). ')+'+'+(stars*5)+' coins';
+  document.getElementById('complete-stars').textContent='★'.repeat(stars)+'☆'.repeat(3-stars);
+  const lines=stars===3?['Spotless! Not a wasted step.','Every crate tucked in — the foreman approves.','A tidy warehouse, and swiftly done.']
+    :stars===2?['Warehouse tidy. A few detours, but home.','All docked — a shorter route is out there.']
+    :['All crates home. The par route is much shorter — fancy a replay?'];
+  document.getElementById('complete-msg').textContent=lines[(levelIndex+skMoves)%lines.length]+' '+skMoves+' moves (par '+par+'). +'+(stars*5)+' coins';
   const ov=document.getElementById('overlay-complete');
   ov.dataset.share=shareString(stars);
-  setTimeout(()=>showOverlay('overlay-complete'),300);
+  const nb=ov.querySelector('.modal-btn.primary');
+  if(nb)nb.textContent=isDailyChallenge?'Back to Menu':isEndless?'Next Warehouse →':(levelIndex+1>=CAMPAIGN.length?'Back to Menu':'Next Level →');
+  setTimeout(()=>showOverlay('overlay-complete'),420);
   updateAllUI();
 }
 function shareString(stars){
-  if(isDailyChallenge)return 'Afterimage #'+dailyDay+' — '+gMoves+' moves'+(gMoves<=L.par?' ⭐':'');
-  return 'Afterimage level '+(levelIndex+1)+' — '+gMoves+' moves'+(gMoves<=L.par?' ⭐ par':'');
+  const st='⭐'.repeat(stars);
+  if(isDailyChallenge)return 'Sokoban Daily '+new Date().toISOString().split('T')[0]+' ✅ solved in '+skMoves+' moves (par '+L.par+') '+st;
+  if(isEndless)return 'Sokoban Endless #'+skEndlessNo+' — '+skMoves+' moves '+st;
+  return 'Sokoban level '+(levelIndex+1)+' — '+skMoves+' moves (par '+L.par+') '+st;
 }
 function shareResult(){
   const ov=document.getElementById('overlay-complete');
-  const txt=(ov&&ov.dataset.share)||shareString(1);
+  const txt=((ov&&ov.dataset.share)||shareString(1))+'\nhttps://play.google.com/store/apps/details?id=com.pegasusgames.sokoban';
   if(window.Android&&window.Android.shareText){try{window.Android.shareText(txt);return;}catch(e){}}
   try{navigator.clipboard.writeText(txt);_showMsg('Copied!');}catch(e){}
 }
@@ -8466,92 +8972,214 @@ function nextLevel(){
   if(next>=CAMPAIGN.length){goMenu();return;}
   loadLevel(next);showScreen('game');
 }
-function replayLevel(){hideOverlay('overlay-complete');if(isDailyChallenge)launchDailyLevel();else loadLevel(levelIndex);}
-function skipLevel(){
-  if(isDailyChallenge)return;
-  const next=levelIndex+1;
-  if(next<CAMPAIGN.length){loadLevel(next);showScreen('game');}
+function replayLevel(){
+  hideOverlay('overlay-complete');
+  if(isDailyChallenge){launchDailyLevel();return;}
+  if(isEndless&&L){const o=L;skStart(o);isEndless=true;return;}
+  loadLevel(levelIndex);
 }
-// ── hint: first move of the optimal line from the CURRENT state ──
-let _hintTimer=null;
-function clearHintGlow(){document.querySelectorAll('.dpad button.hinted').forEach(b=>b.classList.remove('hinted'));}
-function giveHint(){
-  if(!L)return;
+function skipLevel(){
+  if(isDailyChallenge||isEndless)return;
+  const next=levelIndex+1;
+  if(next<CAMPAIGN.length){
+    if(save.currentLevel<next)save.currentLevel=next;persist();
+    loadLevel(next);showScreen('game');
+  }
+}
+
+// ── hints: the next push of the reference line, from wherever you are ──
+function skClearHint(){
+  clearTimeout(skHintTimer);const h=document.getElementById('sk-hint');if(h)h.innerHTML='';
+  document.querySelectorAll('.dpad button.hinted').forEach(b=>b.classList.remove('hinted'));
+}
+function skNextSegment(){
+  // 1) same crates as a point on the line → walk to its push cell
+  if(!skTrackPush)return null;
+  const hit=skTrackPush.get(skBoxesKey());
+  if(hit){const walk=sokoWalk(lv,skOcc,skPlayer,hit.stand);
+    if(walk!=null){const line=walk+skTrackLine.slice(hit.idx);skSetTrack(line);return line;}}
+  // 2) off the line: dead position, or solve from here (bounded)
+  for(const c of skBoxPos)if(skIsStuck(c))return{stuck:true};
+  const r=sokoSolve(lv,skPlayer,skBoxPos.slice(),{budget:20000,weight:1.6});
+  if(r.lurd!=null&&r.lurd.length){skSetTrack(r.lurd);return r.lurd;}
+  if(r.dead||r.exhausted)return{stuck:true};
+  return{busy:true};
+}
+// Shows the walk to the next push + the push arrow. Returns true if a hint
+// was shown (only then is a hint token / coins spent).
+function giveHint(mode){
+  if(!L||!lv||skSolved||gWon)return false;
+  const seg=skNextSegment();
+  if(!seg||typeof seg!=='string'){
+    const msg=seg&&seg.stuck?'No way forward from here — a crate is stuck. Undo a few moves first.':'Too tangled to read from here — try Undo or Reset.';
+    if(mode!=='paid'&&mode!=='check'){save.hintCount=(save.hintCount||0)+1;persist();updateAllUI();_showMsg(msg+' Your hint was saved.');}
+    else _showMsg(msg);
+    return false;
+  }
+  if(mode==='check')return true;
+  skClearHint();
+  const h=document.getElementById('sk-hint');let p=skPlayer,html='';
+  for(let i=0;i<seg.length;i++){
+    const ch=seg[i],k='udlr'.indexOf(ch.toLowerCase()),d=sokoDelta(lv,k);
+    if(ch!==ch.toLowerCase()){const[x,y]=skXY(p+d);html+='<div class="sk-arrow" data-d="'+SK_CH[k]+'" style="transform:translate('+x+'px,'+y+'px)"></div>';break;}
+    p+=d;const[x,y]=skXY(p);html+='<div class="sk-dot" style="transform:translate('+x+'px,'+y+'px);animation-delay:'+(i*45)+'ms"></div>';
+  }
+  h.innerHTML=html;
+  const b=document.querySelector('.dpad button[data-d="'+seg[0].toUpperCase()+'"]');if(b)b.classList.add('hinted');
+  skHintsUsed++;
   try{if(window.gGame)window.gGame.emit('hint');}catch(e){}
-  const r=solvePath(L.walls,gState.b,gState.c,L.exit,L.plate,gState.q);
-  if(!r){_showMsg('No route from here — undo or reset.');return;}
-  clearHintGlow();
-  const btn=document.querySelector('.dpad button[data-d="'+r.first+'"]');
-  if(btn){btn.classList.add('hinted');clearTimeout(_hintTimer);_hintTimer=setTimeout(clearHintGlow,2600);}
-  _showMsg('Optimal: '+ARROW[r.first]+' ('+r.depth+' to sync)');
+  skHintTimer=setTimeout(skClearHint,6000);
+  return true;
+}
+function hasUnlimitedHints(){
+  try{if(typeof isPremium==='function')return !!isPremium();}catch(e){}
+  return !!((save.seasonPassUntil&&Date.now()<save.seasonPassUntil)||(save.weeklyPassUntil&&Date.now()<save.weeklyPassUntil));
 }
 function useHint(){
-  if(save.hintCount>0&&!hasUnlimitedHints()){save.hintCount--;persist();updateAllUI();giveHint();return;}
-  if(hasUnlimitedHints()){giveHint();return;}
+  if(!L||skSolved)return;
+  if(hasUnlimitedHints()){giveHint('paid');return;}
+  if((save.hintCount||0)>0){if(giveHint('paid')){save.hintCount--;persist();updateAllUI();}return;}
+  if(!giveHint('check'))return;
   showOverlay('overlay-hint');
 }
-function hasUnlimitedHints(){return (save.seasonPassUntil&&Date.now()<save.seasonPassUntil)||(save.weeklyPassUntil&&Date.now()<save.weeklyPassUntil);}
 function watchAdForHint(){hideOverlay('overlay-hint');requestRewardedAd('hint');}
 function spendCoinsHint(){
   if(save.coins<25){_showMsg('Not enough coins!');return;}
-  save.coins-=25;persist();updateAllUI();hideOverlay('overlay-hint');giveHint();
+  hideOverlay('overlay-hint');
+  if(giveHint('paid')){save.coins-=25;persist();updateAllUI();}
 }
 
-// ── ENDLESS: unlimited random boards, hard band ──
-let isEndless=false;
+// ── Endless: fresh on-device warehouses, one ❤ each ──
+const SK_ENDLESS_BAND={w:[7,8],h:[6,8],boxes:[3,4],push:[14,26],open:1,wall:[0.18,0.28]};
 function launchEndless(){
-  let L2=null,tries=0;
-  while(!L2&&tries<50){L2=gen(Math.floor(Math.random()*1e9)+1,BANDS.hard);tries++;}
-  if(!L2){_showMsg('Generation failed — try again');return;}
-  L=L2;isEndless=true;isDailyChallenge=false;levelStarted=true;
-  gState={b:L.bs.slice(),c:L.cs.slice(),q:[null,null]};gHist=[];gMoves=0;gWon=false;
-  document.getElementById('hdr-level').textContent='Endless';
-  layoutBoard();buildBoard();renderGame();updateAllUI();
-  showScreen('game');
+  if(typeof spendLife==='function'&&!spendLife())return;
+  _showMsg('Building a fresh warehouse…');
+  setTimeout(()=>{
+    let g=null;const seed=(Date.now()^Math.floor(Math.random()*1e9))>>>0;const rnd=mulberry32(seed);
+    for(let t=0;t<4&&!g;t++)g=skGenerate(rnd,SK_ENDLESS_BAND,60000);
+    if(!g){addLives(1);updateAllUI();_showMsg('The forklift jammed — try again.');return;}
+    // par: try for the move-optimal line; keep the chain line if out of budget
+    try{const lv2=sokoParse(g.map),r=sokoSolve(lv2,lv2.player,lv2.boxes.slice(),{budget:25000});if(r.lurd&&r.lurd.length<g.lurd.length)g.lurd=r.lurd;}catch(e){}
+    skEndlessNo=(save.endlessPlayed=(save.endlessPlayed||0)+1);persist();
+    isEndless=true;isDailyChallenge=false;showScreen('game');
+    skStart({kind:'endless',map:g.map,solution:g.lurd,par:g.lurd.length,title:'Endless #'+skEndlessNo});
+  },30);
 }
-// ── daily ──
+// ── Daily: same board for everyone (UTC day), Mon-Tue easy → Sat-Sun hard ──
+function skDailyPick(){
+  const now=new Date(),d=Math.floor((Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate())-Date.UTC(2026,0,5))/864e5);
+  const wd=((d%7)+7)%7,week=Math.floor(d/7);
+  let tier,slot,per;if(wd<2){tier=0;slot=wd;per=2;}else if(wd<5){tier=1;slot=wd-2;per=3;}else{tier=2;slot=wd-5;per=2;}
+  const n=DAILY[tier].length,span=n*8,k=(((week*per+slot)%span)+span)%span;
+  return{day:d,tier,idx:k%n,t:Math.floor(k/n)%8};
+}
 function startDailyChallenge(){
   const today=new Date().toISOString().split('T')[0];
-  if(save.dailyChallengeDate===today){_showMsg('You already synced today’s daily! Streak: '+save.dailyChallengeStreak);return;}
+  if(save.dailyChallengeDate===today){_showMsg('Today’s warehouse is already tidy! Streak: '+save.dailyChallengeStreak+' — back tomorrow.');return;}
   launchDailyLevel();
 }
 function launchDailyLevel(){
-  dailyDay=dayNum();
-  L=genDaily(dailyDay);
-  if(!L){_showMsg('Daily failed to generate');return;}
-  isDailyChallenge=true;isEndless=false;levelStarted=true;
-  gState={b:L.bs.slice(),c:L.cs.slice(),q:[null,null]};gHist=[];gMoves=0;gWon=false;
-  document.getElementById('hdr-level').textContent='Daily #'+dailyDay;
-  layoutBoard();buildBoard();renderGame();updateAllUI();
-  showScreen('game');
+  const pk=skDailyPick();dailyDay=pk.day;
+  const tr=skTransform(DAILY[pk.tier][pk.idx],sokoUnRLE(DAILY_SOL[pk.tier][pk.idx]),pk.t);
+  isDailyChallenge=true;isEndless=false;showScreen('game');
+  const lab=['Easy','Medium','Hard'][pk.tier];
+  skStart({kind:'daily',map:tr.map,solution:tr.lurd,par:tr.lurd.length,title:'Daily · '+lab});
 }
-// ── input ──
-document.querySelectorAll('.dpad button').forEach(b=>b.addEventListener('click',()=>moveDir(b.dataset.d)));
+
+// ── input: swipe anywhere on the board zone, tap to walk/push, d-pad ──
+document.querySelectorAll('.dpad button').forEach(b=>{
+  let rep=null,del=null;
+  const stop=()=>{clearTimeout(del);clearInterval(rep);del=rep=null;};
+  b.addEventListener('pointerdown',e=>{e.preventDefault();stop();moveDir(b.dataset.d);del=setTimeout(()=>{rep=setInterval(()=>{if(!moveDir(b.dataset.d))stop();},115);},320);});
+  ['pointerup','pointerleave','pointercancel'].forEach(t=>b.addEventListener(t,stop));
+  b.addEventListener('click',e=>{if(e.detail===0)moveDir(b.dataset.d);});// keyboard activation
+});
 addEventListener('keydown',e=>{
   if(!document.getElementById('screen-game').classList.contains('active'))return;
   const m={ArrowUp:'U',ArrowDown:'D',ArrowLeft:'L',ArrowRight:'R',w:'U',s:'D',a:'L',d:'R',W:'U',S:'D',A:'L',D:'R'};
   if(m[e.key]){e.preventDefault();moveDir(m[e.key]);}
-  if(e.key==='z'||e.key==='Z')undoMove();
+  else if(e.key==='z'||e.key==='Z'||e.key==='Backspace'){e.preventDefault();undoMove();}
+  else if(e.key==='r'||e.key==='R')resetLevel();
 });
-let _sx=null,_sy=null;
-boardEl.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
-boardEl.addEventListener('touchend',e=>{
-  if(_sx==null)return;const t=e.changedTouches[0];
-  const dx=t.clientX-_sx,dy=t.clientY-_sy;
-  if(Math.abs(dx)<18&&Math.abs(dy)<18){_sx=null;return;}
-  if(Math.abs(dx)>Math.abs(dy))moveDir(dx>0?'R':'L');else moveDir(dy>0?'D':'U');
-  _sx=null;
-});
-function playMove(){if(!save.soundEnabled)return;try{const a=getAudio();const o=a.createOscillator(),g=a.createGain();o.frequency.value=420;g.gain.setValueAtTime(0.05,a.currentTime);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+0.08);o.connect(g).connect(a.destination);o.start();o.stop(a.currentTime+0.09);}catch(e){}}
+(function(){
+  // Drag = one step per ~0.6 cell (keep sliding to keep walking); a short
+  // still tap walks to that tile, or pushes a crate the keeper stands next to.
+  const zone=document.getElementById('sk-zone');let sx=null,sy=null,st=0,slid=false;
+  zone.addEventListener('pointerdown',e=>{
+    if(e.target.closest('.dpad,.sk-hud'))return;
+    sx=e.clientX;sy=e.clientY;st=Date.now();slid=false;
+    try{zone.setPointerCapture(e.pointerId);}catch(_){}
+  });
+  zone.addEventListener('pointermove',e=>{
+    if(sx==null)return;const dx=e.clientX-sx,dy=e.clientY-sy,th=Math.max(22,skCell*0.6);
+    if(Math.abs(dx)<th&&Math.abs(dy)<th){if(Math.abs(dx)>10||Math.abs(dy)>10)slid=true;return;}
+    slid=true;moveDir(Math.abs(dx)>Math.abs(dy)?(dx>0?'R':'L'):(dy>0?'D':'U'));
+    sx=e.clientX;sy=e.clientY;
+  });
+  const end=e=>{
+    if(sx==null)return;const tap=!slid&&e.type==='pointerup'&&Date.now()-st<500;sx=null;
+    if(!tap||!lv)return;
+    const r=boardEl.getBoundingClientRect(),cx=Math.floor((e.clientX-r.left)/skCell),cy=Math.floor((e.clientY-r.top)/skCell);
+    if(cx<0||cy<0||cx>=lv.cols||cy>=lv.rows)return;
+    const c=cy*lv.cols+cx;if(c===skPlayer||lv.wall[c])return;
+    const px=skPlayer%lv.cols,py=(skPlayer/lv.cols)|0;
+    if(skOcc[c]){if(Math.abs(px-cx)+Math.abs(py-cy)===1)moveDir(cx>px?'R':cx<px?'L':cy>py?'D':'U');return;}
+    skWalkTo(c);
+  };
+  zone.addEventListener('pointerup',end);zone.addEventListener('pointercancel',end);
+})();
+
+// ── feel: WebAudio SFX (synthesised, no files) + haptics toggle ──
+let _skNoise=null;
+function skSfx(kind){
+  if(!save.soundEnabled)return;
+  try{
+    const a=getAudio(),t=a.currentTime,o=a.createOscillator(),g=a.createGain();
+    if(kind==='push'||kind==='dock'){
+      if(!_skNoise){_skNoise=a.createBuffer(1,a.sampleRate*0.2,a.sampleRate);const ch=_skNoise.getChannelData(0);for(let i=0;i<ch.length;i++)ch[i]=(Math.random()*2-1)*(1-i/ch.length);}
+      const n=a.createBufferSource(),f=a.createBiquadFilter(),ng=a.createGain();n.buffer=_skNoise;f.type='lowpass';f.frequency.value=900;
+      ng.gain.setValueAtTime(0.10,t);ng.gain.exponentialRampToValueAtTime(0.001,t+0.12);n.connect(f).connect(ng).connect(a.destination);n.start(t);n.stop(t+0.13);
+    }
+    if(kind==='dock'){
+      [659,988].forEach((fr,i)=>{const oo=a.createOscillator(),gg=a.createGain();oo.type='triangle';oo.frequency.value=fr;
+        gg.gain.setValueAtTime(0,t+0.05+i*0.07);gg.gain.linearRampToValueAtTime(0.11,t+0.07+i*0.07);gg.gain.exponentialRampToValueAtTime(0.001,t+0.32+i*0.07);
+        oo.connect(gg).connect(a.destination);oo.start(t+0.05+i*0.07);oo.stop(t+0.35+i*0.07);});
+      return;
+    }
+    const P={step:[300,0.018,0.05,'sine'],push:[150,0.08,0.11,'triangle'],bump:[110,0.06,0.08,'sine'],undo:[520,0.03,0.07,'sine'],stuck:[180,0.07,0.28,'sawtooth']}[kind];
+    if(!P)return;
+    o.type=P[3];o.frequency.setValueAtTime(P[0],t);
+    if(kind==='undo')o.frequency.exponentialRampToValueAtTime(330,t+P[2]);
+    if(kind==='stuck')o.frequency.exponentialRampToValueAtTime(110,t+P[2]);
+    g.gain.setValueAtTime(P[1],t);g.gain.exponentialRampToValueAtTime(0.001,t+P[2]);
+    o.connect(g).connect(a.destination);o.start(t);o.stop(t+P[2]+0.02);
+  }catch(e){}
+}
+function skBuzz(p){if(save.hapticsEnabled===false)return;try{if(navigator.vibrate)navigator.vibrate(p);}catch(e){}}
+function toggleHaptics(){toggleSetting('hapticsEnabled','toggle-haptics');if(save.hapticsEnabled)skBuzz(20);}
+function toggleDpad(){toggleSetting('dpadEnabled','toggle-dpad');skApplyDpad();}
+function skApplyDpad(){const d=document.getElementById('sk-dpad');if(d)d.style.display=save.dpadEnabled===false?'none':'';if(lv){skLayout();skSnap();}}
+if(save.hapticsEnabled===undefined)save.hapticsEnabled=true;
+if(save.dpadEnabled===undefined)save.dpadEnabled=true;
+(function(){const base=updateAllUI;updateAllUI=function(){base.apply(this,arguments);
+  const h=document.getElementById('toggle-haptics'),d=document.getElementById('toggle-dpad');
+  if(h)h.className='toggle'+(save.hapticsEnabled!==false?' on':'');if(d)d.className='toggle'+(save.dpadEnabled!==false?' on':'');
+  const hc=document.getElementById('sk-hint-count');if(hc)hc.textContent=hasUnlimitedHints()?'∞':(save.hintCount||0);};})();
+skApplyDpad();
+// Plays a LURD line through the real move path (runtime tests + screenshots).
+function skPlay(line,n){line=sokoUnRLE(line);const lim=n==null?line.length:Math.min(n,line.length);for(let i=0;i<lim;i++)moveDir(line[i].toUpperCase());}
+window.skPlay=skPlay;
+
 // ── tutorial: 3 sequential steps, once ──
 const TUT_STEPS=[
-  {t:'🟦 You',b:'Swipe, use arrows, or the pad — your cyan cube moves one cell per turn.'},
-  {t:'🟥 Your echo',b:'The red echo replays YOUR moves, two turns late. Watch the "echo plays next" pips.'},
-  {t:'🎯 The goal',b:'Park the echo on the gold plate and stand on the green exit — on the same turn.'}
+  {t:'🙂 Meet the keeper',b:'Swipe anywhere on the board (or use the pad) to walk. Tap a floor tile to stroll straight there.'},
+  {t:'📦 Push, never pull',b:'Walk into a crate to push it. Crates can’t be pulled back — keep them out of corners.'},
+  {t:'🎯 Dock every crate',b:'Park each crate on a glowing dock. Undo is free and unlimited, and 💡 shows the next push.'}
 ];
 function maybeShowTutorial(){
-  if(localStorage.getItem('aim_tutorialDone')||levelIndex!==0||isDailyChallenge)return;
-  let stepI=0;const ov=document.getElementById('tutorialOverlay');const card=(ov&&ov.querySelector('div'))||ov;/*PART3: bind taps to the pointer-events:all inner popup*/
+  if(localStorage.getItem(SK_TUT_KEY)||localStorage.getItem('tutorialDone')||levelIndex!==0||isDailyChallenge||isEndless)return;
+  const ov=document.getElementById('tutorialOverlay');if(!ov||ov.style.display==='flex')return;
+  let stepI=0;const card=ov.querySelector('div')||ov;
   function show(){
     document.getElementById('tut-title').textContent=TUT_STEPS[stepI].t;
     document.getElementById('tut-body').textContent=TUT_STEPS[stepI].b;
@@ -8560,13 +9188,35 @@ function maybeShowTutorial(){
   }
   function advance(){
     stepI++;
-    if(stepI>=TUT_STEPS.length){ov.style.display='none';localStorage.setItem('aim_tutorialDone','1');card.removeEventListener('click',advance);return;}
+    if(stepI>=TUT_STEPS.length){ov.style.display='none';localStorage.setItem(SK_TUT_KEY,'1');card.removeEventListener('click',advance);return;}
     show();
   }
   card.addEventListener('click',advance);
   show();
 }
-window.replayTutorial=function(){localStorage.removeItem('aim_tutorialDone');showScreen('game');loadLevel(0);};
+window.replayTutorial=function(){localStorage.removeItem(SK_TUT_KEY);localStorage.removeItem('tutorialDone');save.sokoRun=null;showScreen('game');loadLevel(0);};
+
+// ── menu identity: keeper pushing a crate onto a dock ──
+window.MENU_EMBLEM='<svg viewBox="0 0 168 84" width="190" height="95" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+
+  '<rect x="2" y="66" width="164" height="14" rx="5" style="fill:var(--wall,#9c4f33)"/>'+
+  '<rect x="2" y="66" width="164" height="4" rx="2" style="fill:var(--wall-top,#bd6a48)"/>'+
+  '<circle cx="138" cy="44" r="17" style="fill:none;stroke:var(--dock,#2f8f83)" stroke-width="4" stroke-dasharray="6 5"/>'+
+  '<circle cx="138" cy="44" r="6" style="fill:var(--dock,#2f8f83)" opacity=".55"/>'+
+  '<g><rect x="62" y="22" width="44" height="44" rx="7" style="fill:var(--crate,#e2a457);stroke:var(--crate-edge,#9b6327)" stroke-width="4"/>'+
+  '<path d="M68 28 L100 60 M100 28 L68 60" style="stroke:var(--crate-edge,#9b6327)" stroke-width="4" stroke-linecap="round" opacity=".8"/></g>'+
+  '<path d="M112 44 h10 m-5 -5 l5 5 l-5 5" style="stroke:var(--text-mute,#7a5444);fill:none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+
+  '<g><rect x="16" y="28" width="38" height="38" rx="15" style="fill:var(--keeper,#3b6fb6)"/>'+
+  '<circle cx="34" cy="42" r="6" style="fill:var(--eye,#fff)"/><circle cx="46" cy="42" r="6" style="fill:var(--eye,#fff)"/>'+
+  '<circle cx="37" cy="42" r="3" style="fill:var(--pupil,#1d2433)"/><circle cx="49" cy="42" r="3" style="fill:var(--pupil,#1d2433)"/></g></svg>';
+window.MENU_MOTIF='<g fill="none" stroke="currentColor" stroke-width="7" stroke-opacity="0.13" stroke-linejoin="round" stroke-linecap="round">'+
+  '<rect x="-24" y="-30" width="96" height="96" rx="12"/><path d="M-12 -18 L60 54 M60 -18 L-12 54"/>'+
+  '<circle cx="214" cy="40" r="40" stroke-dasharray="16 12"/>'+
+  '<rect x="330" y="-12" width="90" height="90" rx="12"/><path d="M342 0 L408 66 M408 0 L342 66"/>'+
+  '<rect x="120" y="150" width="58" height="58" rx="10"/>'+
+  '<circle cx="-6" cy="430" r="44" stroke-dasharray="16 12"/>'+
+  '<rect x="368" y="380" width="86" height="86" rx="12"/><path d="M380 392 L442 454 M442 392 L380 454"/>'+
+  '<rect x="24" y="700" width="92" height="92" rx="12"/><path d="M36 712 L104 780 M104 712 L36 780"/>'+
+  '<circle cx="336" cy="760" r="46" stroke-dasharray="16 12"/></g>';
 //@@END ENGINE
 
 
@@ -9359,11 +10009,12 @@ window.renderPipeStats=function(){
   var perfect=Object.values(save.levelStars||{}).filter(function(s){return s>=3;}).length;
 //@@REGION STATS
   var stats=[
-    {icon:'🎯',label:'Levels Synced',sub:'echo + exit together',value:completed},
-    {icon:'⭐',label:'Perfect Levels',sub:'no resets',value:perfect},
+    {icon:'📦',label:'Levels Cleared',sub:'every crate docked',value:completed},
+    {icon:'⭐',label:'Three-Star Levels',sub:'within 10% of par',value:perfect},
+    {icon:'🚚',label:'Crates Docked',sub:'all modes, all time',value:save.cratesDocked||0},
     {icon:'🔥',label:'Daily Streak',sub:'days in a row',value:Math.max(save.dailyChallengeStreak||0,1)},
     {icon:'🪙',label:'Coins',sub:'current balance',value:save.coins||0},
-    {icon:'📋',label:'Current Level',sub:'keep flowing!',value:(save.currentLevel||0)+1},
+    {icon:'📋',label:'Current Level',sub:'next warehouse',value:(save.currentLevel||0)+1},
   ];
 //@@END STATS
   list.innerHTML=stats.map(function(s){return '<div class="stat-card"><div class="stat-icon">'+s.icon+'</div><div class="stat-info"><h3>'+s.label+'</h3><p>'+s.sub+'</p></div><div class="stat-value">'+s.value+'</div></div>';}).join('');
@@ -9378,18 +10029,20 @@ window.renderPipeStats=function(){
   // No theme is sold via paid IAP — Midnight is a coin sink. (2026-05-25 user policy.)
 //@@REGION THEMES
   var THEMES=[
-    {id:'default',name:'Blueprint',emoji:'📘',unlockLevel:0,palette:{you:'#0fb5c9',echo:'#e85d5d',plate:'#d29922',exit:'#2ea043'}},
-    {id:'mint',name:'Mint',emoji:'🌿',unlockLevel:10,palette:{you:'#2ea871',echo:'#d96941',plate:'#c9a227',exit:'#3a86ff'}},
-    {id:'sunset',name:'Sunset',emoji:'🌇',unlockLevel:20,palette:{you:'#f2784b',echo:'#7a5cd6',plate:'#e0b228',exit:'#2ea043'}},
-    {id:'midnight',name:'Midnight',emoji:'🌙',coinCost:800,palette:{you:'#37e0e0',echo:'#ff6b6b',plate:'#f2c14e',exit:'#9be37d'}},
-    {id:'violet',name:'Violet',emoji:'🔮',unlockLevel:35,palette:{you:'#8b5cf6',echo:'#ef6292',plate:'#d29922',exit:'#22b8a0'}},
-    {id:'ember',name:'Ember',emoji:'🔥',unlockLevel:45,palette:{you:'#ff8c1a',echo:'#c0392b',plate:'#ffd166',exit:'#7fc97f'}},
-    {id:'mono',name:'Ink',emoji:'🖋️',unlockLevel:60,palette:{you:'#3a4a63',echo:'#8a93a6',plate:'#b08d2f',exit:'#4f7d52'}},
+    {id:'default',name:'Clay Yard',emoji:'🧱',unlockLevel:0,palette:{crate:'#e0a052',dock:'#2a8a7d',keeper:'#3b6fb6',wall:'#9c4f33',floor:'#f8ecdf',plank:'#ead6c3','wall-top':'#c26d4a','crate-edge':'#8e5a24','crate-done':'#58a68c',hint:'#2a8a7d'}},
+    {id:'pine',name:'Pine Loft',emoji:'🌲',unlockLevel:15,palette:{crate:'#d9a05b',dock:'#c2553a',keeper:'#c2553a',wall:'#4d6a49',floor:'#eef0e2',plank:'#dadfc8','wall-top':'#6f8e69','crate-edge':'#7d5428','crate-done':'#e3b341',hint:'#c2553a'}},
+    {id:'harbor',name:'Harbor Shed',emoji:'⚓',unlockLevel:40,palette:{crate:'#d6a157',dock:'#e0703f',keeper:'#e0703f',wall:'#3f5d7a',floor:'#e6eef3',plank:'#d0dde6','wall-top':'#5a7d9e','crate-edge':'#8a5b27','crate-done':'#4aa37a',hint:'#e0703f'}},
+    {id:'midnight',name:'Midnight',emoji:'🌙',coinCost:800,palette:{crate:'#c98a4b',dock:'#ffcf5a',keeper:'#7fb2ff',wall:'#5a4436',floor:'#2b221d',plank:'#352a23','wall-top':'#7a5e4b','crate-edge':'#6e4520','crate-done':'#4fae92',hint:'#ffcf5a'}},
+    {id:'candy',name:'Candy Depot',emoji:'🍬',unlockLevel:80,palette:{crate:'#f2b45a',dock:'#7a5cd6',keeper:'#7a5cd6',wall:'#a14d7d',floor:'#f9e8ef',plank:'#efd2df','wall-top':'#c16a9c','crate-edge':'#a86b22','crate-done':'#4fb3a5',hint:'#7a5cd6'}},
+    {id:'desert',name:'Desert Post',emoji:'🏜️',unlockLevel:150,palette:{crate:'#c9773c',dock:'#1f7a8c',keeper:'#1f7a8c',wall:'#b07a3e',floor:'#f6e9c8',plank:'#e9d6a8','wall-top':'#cf9a5c','crate-edge':'#7a3f17','crate-done':'#5d9e4a',hint:'#1f7a8c'}},
+    {id:'ink',name:'Ink & Paper',emoji:'🖋️',unlockLevel:250,palette:{crate:'#d8d2c4',dock:'#2f2f2f',keeper:'#2f2f2f',wall:'#3a3a3a',floor:'#f7f5f0',plank:'#e6e2d8','wall-top':'#5a5a5a','crate-edge':'#4a4a4a','crate-done':'#a8c3a0',hint:'#2f2f2f'}},
   ];
 //@@END THEMES
   window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel,coinCost:t.coinCost};});
 
   function isUnlocked(t){
+    // Season/Weekly Pass promise "all themes unlocked" (iaps.json) — honour it.
+    try{if(typeof isPremium==='function'&&isPremium())return true;}catch(e){}
     if(t.coinCost!=null){
       return Array.isArray(save.unlockedThemes) && save.unlockedThemes.indexOf(t.id)>=0;
     }
@@ -9458,15 +10111,15 @@ window.renderPipeStats=function(){
 
 /* Missions */
 (function(){
-  var MISSION_KEY='aim_missions_v1';
+  var MISSION_KEY='soko_missions_v1';
   var MISSION_POOL=[
-    {id:'complete3',desc:'Sync 3 levels',goal:3,reward:30,icon:'🎯',track:'levels'},
-    {id:'complete5',desc:'Sync 5 levels',goal:5,reward:50,icon:'🏆',track:'levels'},
+    {id:'complete3',desc:'Clear 3 levels',goal:3,reward:30,icon:'🎯',track:'levels'},
+    {id:'complete5',desc:'Clear 5 levels',goal:5,reward:50,icon:'🏆',track:'levels'},
     {id:'hint1',desc:'Use a hint',goal:1,reward:15,icon:'💡',track:'hint'},
     {id:'daily',desc:'Finish daily challenge',goal:1,reward:25,icon:'📅',track:'daily'},
-    {id:'perfect',desc:'Match par on a level',goal:1,reward:20,icon:'⭐',track:'perfect'},
+    {id:'perfect',desc:'Earn 3 stars on a level',goal:1,reward:20,icon:'⭐',track:'perfect'},
     {id:'complete1',desc:'Clear any level',goal:1,reward:10,icon:'✅',track:'levels'},
-    {id:'complete2',desc:'Sync 2 levels',goal:2,reward:20,icon:'🌟',track:'levels'},
+    {id:'complete2',desc:'Clear 2 levels',goal:2,reward:20,icon:'🌟',track:'levels'},
     {id:'fill',desc:'Earn 2+ stars on 3 levels',goal:3,reward:25,icon:'✨',track:'fill'},
   ];
   function getToday(){return new Date().toLocaleDateString('en-CA');}
@@ -9815,7 +10468,7 @@ function injectDragonTheme(){
   window._THEMES_META.push({
     id:'dragon', name:'Dragon 🐉', unlock:0, coinCost:300,
 //@@REGION EVENT_THEME
-    colors:['#ff4444','#ff8800','#ffdd00','#2ea043','#cc2200'], palette:{you:'#ff8800',echo:'#cc2200',plate:'#ffdd00',exit:'#2ea043'}
+    colors:['#e0702c','#f2b445','#6b3fa0','#2a8a7d','#3a2117'], palette:{crate:'#e0702c',dock:'#6b3fa0',keeper:'#6b3fa0',wall:'#3a2117',floor:'#fbe9d6',plank:'#f0d3b4','wall-top':'#5a3424','crate-edge':'#8a3d12','crate-done':'#f2b445',hint:'#6b3fa0'}
 //@@END EVENT_THEME
   });
 

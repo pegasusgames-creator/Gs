@@ -1,0 +1,34 @@
+Dokuz rakam, seksen bir hücre, tek bir doğru cevap — ve nedenini anlatan bir ipucu.
+
+Sudoku, sakin ve odaklı oynamak için klasik sayı bulmacasıdır. Her satır, sütun ve 3×3 kutuda 1'den 9'a kadar rakamlar birer kez olacak şekilde ızgarayı doldur. İnternetsiz çalışır.
+
+TEKNİĞE GÖRE DERECELENMİŞ 500 BULMACA
+Zorluk, bulmacanın istediği mantıktan gelir:
+• Kolay (1–125): sadece tekiller, bol başlangıç rakamı
+• Orta (126–250): işaret eden çiftler, kutu/çizgi eleme, açık ve gizli çiftler
+• Zor (251–375): üçlüler, dörtlüler ve X-Wing
+• Uzman (376–500): XY-Wing, XYZ-Wing ve Swordfish
+Her bulmaca yalnızca mantıkla çözülebilir.
+
+ÖĞRETEN İPUÇLARI
+Bir ipucu doğru bir hücreyi doldurur ve onu bulan tekniğin adını söyler; sadece cevabı değil, hamleyi de öğrenirsin.
+
+RAHAT ARAÇLAR
+• Not modu; bir rakam yerleşince çevredeki notlardan silinir
+• Seçili satır, sütun, kutu ve aynı rakamlar vurgulanır
+• Çakışan rakamlar anında yanar
+• Geri al, sil ve her tuşta kalan rakam sayısı
+• Üç hata bulmacayı bitirir; ikinci şans tahtanı korur
+• Her zorluk için en iyi süre tutan zamanlayıcı
+• Tahtan otomatik kaydedilir: Devam tam kaldığın yerden sürer
+
+HER GÜN YENİ BİR BULMACA
+Günlük bulmaca pazartesi Kolay'dan pazar Uzman'a yükselir. Serini büyütmek ve bonus jeton kazanmak için çöz. Kampanyayı bitirdin mi? Sonsuz mod her zorlukta yeni tahtalar getirir.
+
+YEDİ TAHTA TEMASI
+Ink, Pencil, Matcha, Coral, Ocean, Espresso ve Midnight tüm ızgaranın rengini değiştirir.
+
+RAHATLATICI VE TATMİN EDİCİ
+Yumuşak sesler, hafif titreşim (Ayarlar'dan kapatılabilir) ve bir satır, sütun ya da kutu tamamlandığında küçük bir kutlama.
+
+Ücretsiz; isteğe bağlı reklamlar ve uygulama içi satın alımlar içerir.

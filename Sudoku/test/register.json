@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_sudoku_unique.py",
+    "sudoku uniqueness + technique band"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      239,
+      236,
+      251
+    ],
+    "bg_top_right": [
+      230,
+      226,
+      248
+    ],
+    "bg_bottom": [
+      210,
+      203,
+      242
+    ],
+    "text_primary": [
+      29,
+      26,
+      69
+    ],
+    "text_accent": [
+      77,
+      67,
+      199
+    ],
+    "text_subtle": [
+      85,
+      80,
+      126
+    ],
+    "footer_tint": [
+      58,
+      50,
+      160
+    ],
+    "mood": "ink-lilac notebook",
+    "layout_archetype": "G",
+    "mascot_pattern": "M0",
+    "voice": "V8",
+    "texture": "T3"
+  }
+}

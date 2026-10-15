@@ -5,9 +5,10 @@
   "contains_ads": true,
   "contains_iap": true,
   "target_audience_min_age": 13,
-  "support_url": "https://pegasusgames.example/support",
-  "marketing_url": "",
-  "copyright": "© 2026 Pegasus Games",
+  "support_url": "https://pegasusgames-creator.github.io/",
+  "marketing_url": "https://pegasusgames-creator.github.io/",
+  "copyright": "\u00a9 2026 Pegasus Games",
   "package_name": "com.pegasusgames.sudoku",
-  "upload_key_sha1": "CE:09:AE:41:7C:DC:2C:ED:44:22:C2:38:D1:4E:FD:F9:AC:11:06:8B"
+  "upload_key_sha1": "CE:09:AE:41:7C:DC:2C:ED:44:22:C2:38:D1:4E:FD:F9:AC:11:06:8B",
+  "first_upload_at": null
 }

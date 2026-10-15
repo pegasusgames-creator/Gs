@@ -1,0 +1,88 @@
+{
+  "_comment": "Sudoku screenshot capture. 500-puzzle CAMPAIGN (valid loadLevel indices 0-499, display level = idx+1; E 0-124, M 125-249, H 250-374, X 375-499). Every slot is a gameplay board at a distinct level and theme: window._sdShot(idx,theme,fill,notes,selGiven) loads the level, fills some correct digits, pencils real candidates into a few cells and applies Sudoku's real theme palette (window._SD_THEMES) + midnight chrome. Phone ships 7, tablets 2 each.",
+  "_readiness_expr": "typeof save !== 'undefined' && typeof loadLevel === 'function' && typeof showScreen === 'function' && typeof PIPE_COLORS !== 'undefined' && !!window._SD_THEMES",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){try{localStorage.setItem('sd_tutorialDone','1');var s={currentLevel:300,completedLevels:Array.from({length:300},function(_,i){return i;}),levelStars:(function(){var x={};for(var i=0;i<300;i++)x[i]=(i%4===0?2:3);return x;})(),coins:1840,lives:5,maxLives:5,lastLifeTime:Date.now(),dailyChallengeStreak:6,hintCount:3,unlockedThemes:['midnight'],sdCamp:{}};Object.assign(save,s);if(typeof persist==='function')persist();if(typeof updateAllUI==='function')updateAllUI();window._sdShot=function(idx,th,fill,noteCells,selGiven){var T=window._SD_THEMES||[];var t=T.find(function(x){return x.id===th;})||T[0];Object.assign(PIPE_COLORS,t.palette);Object.keys(t.palette).forEach(function(k){document.body.style.setProperty('--'+k,t.palette[k]);});if(th==='midnight'){document.body.classList.add('midnight');document.documentElement.dataset.theme='midnight';}else{document.body.classList.remove('midnight');document.documentElement.dataset.theme='';}save.activeTheme=th;if(save.sdCamp)delete save.sdCamp[idx];showScreen('game');loadLevel(idx);var emp=[];for(var i=0;i<81;i++)if(!L.puz[i])emp.push(i);var step=Math.max(1,Math.floor(emp.length/Math.max(1,fill)));for(var k=0,n=0;k<emp.length&&n<fill;k+=step,n++)gVals[emp[k]]=L.sol[emp[k]];var known=gVals.map(function(v,i){return v===L.sol[i]?v:0;}),S=sdLogic(known),left=[];for(var j=0;j<81;j++)if(!gVals[j])left.push(j);for(var q=0;q<noteCells&&q<left.length;q++){var c=left[(q*7)%left.length];gNotes[c]=S.c[c];}gSel=-1;if(selGiven){for(var g=0;g<81;g++)if(L.puz[g]){gSel=g;break;}}else{for(var e=0;e<81;e++)if(!gVals[e]&&!gNotes[e]){gSel=e;break;}}gTime=137+idx*3;gFocus=0;sdRender();var h=document.getElementById('sd-hud');if(h)h.classList.remove('coach');};}catch(e){}return 'seeded';})()",
+      400
+    ]
+  ],
+  "01_easy_ink": [
+    [
+      "js",
+      "window._sdShot(3,'default',10,0,false);'ok';",
+      2200
+    ]
+  ],
+  "02_notes_pencil": [
+    [
+      "js",
+      "window._sdShot(58,'pencil',8,4,false);'ok';",
+      2200
+    ]
+  ],
+  "03_medium_matcha": [
+    [
+      "js",
+      "window._sdShot(140,'matcha',12,3,false);'ok';",
+      2200
+    ]
+  ],
+  "04_medium_midnight": [
+    [
+      "js",
+      "window._sdShot(212,'midnight',14,2,false);'ok';",
+      2200
+    ]
+  ],
+  "05_hard_coral": [
+    [
+      "js",
+      "window._sdShot(288,'coral',10,5,false);'ok';",
+      2200
+    ]
+  ],
+  "06_hard_ocean": [
+    [
+      "js",
+      "window._sdShot(365,'ocean',12,2,true);'ok';",
+      2200
+    ]
+  ],
+  "07_expert_espresso": [
+    [
+      "js",
+      "window._sdShot(455,'espresso',9,4,false);'ok';",
+      2200
+    ]
+  ],
+  "tablet_7_01_easy_pencil": [
+    [
+      "js",
+      "window._sdShot(101,'pencil',9,2,false);'ok';",
+      2200
+    ]
+  ],
+  "tablet_7_02_hard_ocean": [
+    [
+      "js",
+      "window._sdShot(330,'ocean',11,3,false);'ok';",
+      2200
+    ]
+  ],
+  "tablet_10_01_medium_matcha": [
+    [
+      "js",
+      "window._sdShot(190,'matcha',12,3,true);'ok';",
+      2200
+    ]
+  ],
+  "tablet_10_02_expert_midnight": [
+    [
+      "js",
+      "window._sdShot(480,'midnight',10,4,false);'ok';",
+      2200
+    ]
+  ]
+}
