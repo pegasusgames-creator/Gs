@@ -23,7 +23,7 @@ const maps = JSON.parse(fs.readFileSync(mapsPath, 'utf8'));
 let cache = {};
 try { cache = JSON.parse(fs.readFileSync(cachePath, 'utf8')); } catch (e) {}
 const BUDGET = +budgetArg || 400000;
-const LADDER = [[1, BUDGET], [1.15, 1500000], [1.4, 1500000], [2, 1500000], [3, 1500000]];
+const LADDER = [[1, BUDGET], [1, 1500000], [1.15, 1500000], [1.4, 1500000], [2, 1500000], [3, 1500000]];
 
 let solved = 0, t0 = Date.now();
 maps.forEach((m, i) => {
