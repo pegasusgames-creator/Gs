@@ -60,6 +60,38 @@ function snapshot() {
       const ok = !threw && moved.length > 0 && errs.length === 0;
       if (!ok) failures++;
       console.log(`  ${ok ? '✓' : '✗'} ${app} ${sku}: ${ok ? moved.map(f => f + ' ' + before[f] + '→' + after[f]).join(', ') : (threw || errs[0] || 'nothing changed (' + fields.join('/') + ')')}`);
+      // Passes promise "all themes unlocked": on the family shell, tap every
+      // theme card on the Themes screen and assert each one becomes active
+      // without spending coins (2026-10-16: the shell's isUnlocked() ignored
+      // the pass, so subscribers still saw locked themes).
+      if (/pass/.test(sku) && /all themes|themes unlocked/i.test(JSON.stringify(iaps))) {
+        const r = await p.evaluate(async () => {
+          const grid = document.getElementById('themesGrid');
+          if (!grid || typeof window.renderThemes !== 'function') return null;
+          const s = window.gGame.state(); const coins0 = s.coins; const bad = [];
+          window.renderThemes();
+          const n = grid.querySelectorAll('.theme-card').length;
+          if (n < 2) return null;
+          // Every card the player can see must be usable (metadata-only
+          // entries with no card are not a promise the player can see).
+          for (let i = 0; i < n; i++) {
+            window.renderThemes();
+            const card = grid.querySelectorAll('.theme-card')[i];
+            const label = (card.querySelector('h3') || card).textContent.trim().slice(0, 24);
+            const before = window.gGame.state().activeTheme;
+            card.click(); await new Promise(r => setTimeout(r, 30));
+            window.renderThemes();
+            const now = grid.querySelectorAll('.theme-card')[i];
+            if (!now || !now.classList.contains('active')) bad.push(label);
+          }
+          return { bad, spent: coins0 - window.gGame.state().coins };
+        });
+        if (r) {
+          const tok = r.bad.length === 0 && r.spent <= 0;
+          if (!tok) failures++;
+          console.log(`  ${tok ? '✓' : '✗'} ${app} ${sku}: ${tok ? 'every theme usable' : 'themes not unlocked by the pass: ' + r.bad.join(', ') + (r.spent > 0 ? ' (charged ' + r.spent + ' coins)' : '')}`);
+        }
+      }
       await ctx.close();
     }
   }

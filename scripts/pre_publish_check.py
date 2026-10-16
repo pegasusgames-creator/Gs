@@ -2071,6 +2071,7 @@ def main():
         ('check_reward_types_native.py', 'rewarded types requested by JS are whitelisted in Java'),
         ('check_lang_picker.py', 'every translated listing locale is selectable in the language picker'),
         ('check_trademarks.py', 'no third-party game/franchise trademarks in listing text'),
+        ('check_sudoku_unique.py', 'sudoku uniqueness + technique band'),
         ('check_level_select_coverage.py', 'Level Select reaches every level'),
     ]:
         try:

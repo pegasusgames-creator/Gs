@@ -217,18 +217,18 @@ THEMES = {
     },
 
     "Sudoku": {
-        "bg_top_left":  (240, 245, 250),  # near-white cool
-        "bg_top_right": (220, 230, 245),  # soft blue-white
-        "bg_bottom":    (190, 205, 225),
-        "text_primary":  (30, 40, 60),    # dark navy
-        "text_accent":   (50, 110, 200),  # logical blue
-        "text_subtle":   (90, 100, 120),
-        "footer_tint":   (40, 100, 180),
-        "mood": "graph-paper-cool",
-        "layout_archetype": "H",
-        "mascot_pattern":   "M4",
-        "voice":            "V5",
-        "texture":          "T2",
+        "bg_top_left": (239, 236, 251),
+        "bg_top_right": (230, 226, 248),
+        "bg_bottom": (210, 203, 242),
+        "text_primary": (29, 26, 69),
+        "text_accent": (77, 67, 199),
+        "text_subtle": (85, 80, 126),
+        "footer_tint": (58, 50, 160),
+        "mood": 'ink-lilac notebook',
+        "layout_archetype": 'G',
+        "mascot_pattern": 'M0',
+        "voice": 'V8',
+        "texture": 'T3',
     },
 
     "MahjongSolitaire": {

@@ -3569,6 +3569,10 @@ function injectRankCard(){
 // ── COIN SINK: DRAGON THEME ──────────────────────────────────────
 function injectDragonTheme(){
   if(!window._THEMES_META) return;
+  // Only where a selectTheme() API + Dragon card container exist; on the
+  // family shell neither does, so Dragon would be a phantom theme nobody
+  // can see or pick (and a pass promising "all themes" could not deliver it).
+  if(typeof window.selectTheme!=='function'||!document.getElementById('themes-grid-container')) return;
   if(window._THEMES_META.find(function(t){return t.id==='dragon';})) return;
   window._THEMES_META.push({
     id:'dragon', name:'Dragon 🐉', unlock:0, coinCost:300,
@@ -3819,8 +3823,8 @@ function injectThemeStrip(){
   strip.id = 'xThemeStrip';
   strip.style.cssText =
     'margin-top:0.55rem;padding:0.45rem 0.9rem;border-radius:14px;' +
-    'background:linear-gradient(135deg,#1a1330,#0d1117);' +
-    'border:1px solid #8957e5;color:#c7b5ff;font-size:0.74rem;' +
+    'background:var(--surface);' +
+    'border:1px solid var(--border);color:var(--text);font-size:0.74rem;' +
     'font-weight:600;text-align:center;width:220px;max-width:90vw;';
   if(next){
     var ul = next.unlockLevel || next.unlock || 0;

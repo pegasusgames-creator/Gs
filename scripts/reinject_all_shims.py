@@ -23,7 +23,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 
 DEFAULT_APPS = ["WaterSortPuzzle", "Nonogram", "Puzzle2048", "UnblockPuzzle",
-                "PipeConnect", "Afterimage", "Hunch", "Overlay"]
+                "PipeConnect", "Afterimage", "Hunch", "Overlay", "Sudoku"]
 
 # Canonical injection order. CORE (the shared gGame adapter) must precede
 # every other shim; a missing CORE is inserted right before Part A — run

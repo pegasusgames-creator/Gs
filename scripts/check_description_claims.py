@@ -26,7 +26,7 @@ UNIQUE_HINTS = [
 ]
 # A build that has earned the unique claim sets this marker in CLAUDE.md
 # or in the app's metadata/app_info.json.
-SOLVER_VERIFIED_APPS = {"Nonogram"}  # passes scripts/check_nonogram_unique.py
+SOLVER_VERIFIED_APPS = {"Nonogram", "Sudoku"}  # check_nonogram_unique.py / check_sudoku_unique.py
 
 
 def _is_app(app: str) -> bool:

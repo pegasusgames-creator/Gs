@@ -30,7 +30,7 @@ Sudoku 3.0 is a complete rebuild:
 • Notes that clear themselves, conflict highlights, undo and erase
 • Three-mistake limit with a second chance that keeps your board
 • Daily puzzle with streaks, plus Endless mode at any difficulty
-• Seven board themes and personal best times
+• Seven board themes and fastest-time records
 </en-US>
 
 <ar>
@@ -239,7 +239,7 @@ TOOLS THAT FEEL RIGHT
 • Clashing digits light up instantly
 • Undo, erase, and a count of what's left on every number key
 • Three mistakes end a puzzle; a second chance keeps your board
-• A timer with personal best times for each difficulty
+• A timer that remembers your fastest solve on each difficulty
 • Your board saves as you go, so Continue picks up exactly where you stopped
 
 A NEW PUZZLE EVERY DAY

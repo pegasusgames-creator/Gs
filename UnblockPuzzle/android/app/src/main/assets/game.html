@@ -4117,7 +4117,8 @@ function renderMissionsExtras(){
     var done=Object.keys(state.completedLevels||{}).length;
     grid.innerHTML='';
     THEMES.forEach(function(t){
-      var unlocked=done>=t.unlockLevel;
+      // Season/Weekly Pass promises "all themes unlocked" — honour it.
+      var unlocked=done>=t.unlockLevel||!!(typeof window.isPremium==='function'&&window.isPremium());
       var isActive=state.activeTheme===t.id;
       var card=document.createElement('div');
       card.className='theme-card'+(isActive?' active':'')+(!unlocked?' locked':'');

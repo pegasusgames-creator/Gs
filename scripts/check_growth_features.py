@@ -34,6 +34,7 @@ PRE_RELEASE = {
     "com.pegasusgames.hunch",
     "com.pegasusgames.afterimage",
     "com.pegasusgames.overlay",
+    "com.pegasusgames.sudoku",
 }
 
 # Java NativeBridge methods every shipping game.html must call into.

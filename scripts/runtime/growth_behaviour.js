@@ -84,7 +84,12 @@ async function open(browser, app, { pre = '', mockRet = {} } = {}) {
     const after = await p.evaluate(() => ({ total: gGame.totalClears(), pts: window.gEvents ? gEvents.points() : -1 }));
     check(app, 'win reaches the clear bus', after.total >= 1, `totalClears=${after.total}`);
     check(app, 'notification permission requested after first win', calls.includes('requestNotificationPermission'), 'no requestNotificationPermission');
-    check(app, 'Play Games score submitted', calls.includes('submitScore'), 'no submitScore');
+    // A new app ships TODO_FROM_PLAY_CONSOLE until the owner creates its
+    // leaderboard (wire_leaderboards.py); shim G rightly skips submitting
+    // to a placeholder, so only a real ID must reach submitScore.
+    const lbId = await p.evaluate(() => String(window._GROWTH_LEADERBOARD_ID || ''));
+    if (/TODO|PLACEHOLDER|ENTER_|^$/.test(lbId)) console.log(`  · ${app}: Play Games submit pending a real leaderboard ID (${lbId || 'none'})`);
+    else check(app, 'Play Games score submitted', calls.includes('submitScore'), 'no submitScore');
     check(app, 'no interstitial during the first 3 clears', !calls.includes('showInterstitial'), 'showInterstitial called');
     check(app, 'event tokens earned', after.pts > before.pts, `points ${before.pts} → ${after.pts}`);
     check(app, 'no page errors', errs.length === 0, errs.join(' | '));
