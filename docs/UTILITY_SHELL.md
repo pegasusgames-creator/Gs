@@ -21,13 +21,10 @@ Markers: CSS `/*@@REGION X*/…/*@@END X*/`, JS `//@@REGION X … //@@END X`.
 ```
 python3 scripts/scaffold_flagship.py <App> --name "<Store Name>" --version-name 2.0.0 \
     --from HabitTracker --replace-iaps [--pkg com.pegasusgames.<x>] [--reminder "…"]
-cp HabitTracker/android/app/src/main/res/xml/{backup_rules,data_extraction_rules}.xml <App>/android/app/src/main/res/xml/
-cp HabitTracker/android/app/src/main/res/drawable/ic_stat_check.xml <App>/android/app/src/main/res/drawable/
 ```
-The two `cp` lines are needed until `scaffold_flagship.py` WRAPPER_FILES lists
-those three resources (the manifest and NotificationReceiver reference them).
-The scaffold renames the package, `'<pkg>_save'` key, `<title>`, and
-`data-app-version`; the Java reads the app name from the manifest label.
+The scaffold copies the wrapper incl. the backup rules + notification icon,
+writes `<App>`'s name into `strings.xml` (`app_name`), and renames the
+package, `'<pkg>_save'` key, `<title>` and `data-app-version`.
 Then set your `APP` config and replace the tool regions.
 
 ## Regions you own
@@ -130,7 +127,7 @@ without a reload (a reload's pagehide-persist would overwrite a localStorage see
 
 ## Per-app checklist
 
-1. Scaffold (above) + the 3 resource copies; own keystore (`migrate_to_per_app_keystores.py --app <App>`).
+1. Scaffold (above); own keystore (`migrate_to_per_app_keystores.py --app <App>`).
 2. `APP_CONFIG`, `PALETTE` (distinct family), `FONT` (optional swap), `TOOL_*` regions; `grep -n "Habit\|habit" game.html` outside your regions must be empty.
 3. Strings in all 13 languages; no `__i18nMissing` at runtime (Arabic RTL + Japanese checked).
 4. `metadata/` 13 locales (title English), JSON files, `iaps.json` descriptions, `app_identity.md` (4 archetypes; utilities default to Layout I), headlines ×3.
