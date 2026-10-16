@@ -13,10 +13,12 @@ reads them from there, so the fairness gate always checks what ships.
 What lives here:
   * mulberry32()      — the game's PRNG (Math.imul / >>> semantics)
   * ramp(T, k)        — difficulty at gate index k (gap, spacing, max
-                        vertical change, speed, bobbing-gate chance)
+                        vertical change, speed, bobbing-gate chance) —
+                        mirror of fwRamp()
   * gen_course()      — gate k = {x, c (gap centre), gap, amp, phase,
-                        feather}; identical draws/rounding to the JS
-  * daily_seed()      — the Daily flight seed for a day index
+                        feather}; identical draws/rounding to fwGenNext()
+  * daily_seed()      — the Daily flight seed for a day index (fwDailySeed)
+  * daily_target()    — the Daily target score for a day (fwDailyTarget)
   * fly()             — the game's fixed-timestep physics (60 Hz) driven
                         by a deterministic autopilot with a HUMAN tap-rate
                         limit and an inflated hitbox. A completed flight is
@@ -129,7 +131,7 @@ def gen_course(T, seed, n):
 
 
 def daily_seed(day_index):
-    """Day 0 = 2026-01-01 (local calendar date). Mirror of dailySeed()."""
+    """Day 0 = 2026-01-01 (local calendar date). Mirror of fwDailySeed()."""
     return (imul(day_index + 1, 2654435761) ^ 0x5F1D2A77) & U32
 
 
@@ -137,6 +139,14 @@ def day_index(y, m, d):
     """Whole days from the epoch in FW_TUNING.daily.epoch to (y, m, d)."""
     import datetime
     return (datetime.date(y, m, d) - datetime.date(2026, 1, 1)).days
+
+
+def daily_target(T, day):
+    """Target score of the Daily flight on `day` — FW_TUNING.daily.targets is
+    indexed like JS Date.getDay() (0 = Sunday). Mirror of fwDailyTarget()."""
+    import datetime
+    wd = (datetime.date(2026, 1, 1) + datetime.timedelta(days=day)).weekday()  # Mon=0
+    return T["daily"]["targets"][(wd + 1) % 7]
 
 
 # ── physics ─────────────────────────────────────────────────────────────
@@ -344,7 +354,8 @@ def _res(ok, score, tick, taps, tap_ticks, T, why, repairs=0):
             j += 1
         best = max(best, i - j + 1)
     return {"ok": ok, "gates": score, "ticks": tick, "taps": taps,
-            "max_rate": best, "repairs": repairs, "why": why}
+            "max_rate": best, "repairs": repairs, "why": why,
+            "tap_ticks": list(tap_ticks)}
 
 
 def main(argv):

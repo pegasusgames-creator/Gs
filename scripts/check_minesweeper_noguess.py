@@ -1,38 +1,43 @@
 #!/usr/bin/env python3
 """check_minesweeper_noguess.py — gate: every shipped Minesweeper board is
-solvable WITHOUT GUESSING from its safe first click.
+solvable WITHOUT GUESSING from its stored safe first click.
 
-minesweeper_noguess: Minesweeper ships fixed, pre-verified boards (campaign
-levels, and the daily / endless modes re-use those same boards under a
-mirror/rotation that cannot change their logic). This gate reads the board
-data out of Minesweeper/android/app/src/main/assets/game.html EXACTLY as the
-game decodes it (`const LEVELS = ["RxC:start:bits", ...]`, base64url mine
-bitmap, 6 bits per char, MSB first, row-major) and, for every board:
+minesweeper_noguess: Minesweeper ships fixed, pre-verified boards. The 500
+campaign levels live in game.html as `const CAMPAIGN = ["RxC:start:bits", ...]`
+(base64url mine bitmap, 6 bits per char, MSB first, row-major). The daily
+board and Endless mode replay these same boards under a mirror / 180-degree
+rotation (transformBoard() in the engine), so this gate checks every board
+under all four transforms — every board a player can ever be dealt.
 
+For each board it BLOCKS unless:
   * the encoding is well formed (size, bitmap length, zero padding bits);
-  * the start cell is safe AND has no adjacent mine — the first tap always
+  * the stored start cell is safe AND touches no mine — the first tap always
     opens an area (a "0" flood), never a lone number;
-  * a sound logical solver clears every safe cell from that opening with no
-    guess at any step. Rules (each is a valid deduction, so a full clear
-    proves the board is no-guess):
-        1. single number  — need == 0 -> neighbours safe; need == unknowns -> mines
-        2. number pairs   — for overlapping constraints A, B:
-                            b - a == |B\\A| -> B\\A mines, A\\B safe (and mirror)
-        3. mine counter   — remaining mines vs. a disjoint cover of
-                            constraints: the uncovered rest is all-safe /
-                            all-mine when the count leaves no choice
-    The fixpoint of monotone sound rules is order independent, so the result
-    is the same under any mirror / 180-degree rotation (daily + endless);
-    the gate re-checks every transform for a sample of boards anyway;
-  * no two campaign boards are identical (incl. under the 4 transforms);
-  * the campaign has >= 500 boards, opens at 6x6 / 5 mines and ends on
-    30x16 boards (the documented ramp).
+  * a pure logical solver clears every safe cell from that opening, with no
+    guess at any step. The rules (each a sound deduction):
+        R1 single number  need == 0 -> hidden neighbours safe;
+                          need == hidden -> all mines
+        R2 subset / pair  overlapping constraints A, B (a, b mines):
+                          b - a == |B\\A|  ->  B\\A all mines, A\\B all safe
+                          (covers the subset case A <= B and its mirror)
+        R3 mine counter   remaining mines vs. the hidden cells: all-safe /
+                          all-mine when the count leaves no choice, also after
+                          setting aside ONE constraint or TWO disjoint ones
+    All rules are monotone (more revealed truth never disables a deduction)
+    and index-free, so the fixpoint is unique: the result does not depend on
+    move order, on the transform, or on which safe cells the player opened
+    first. The in-game hint runs the same rules (msDeduce in game.html), so a
+    hint always exists on a shipped board and is never a guess;
+  * no two campaign boards are the same board (incl. under the transforms);
+  * the campaign has >= 500 boards, opens at 6x6 / 5 mines, never shrinks,
+    ends on 30x16 boards, and levels 1-3 need only single-number logic.
 
-The level generator (Minesweeper/test/gen_levels.py) imports this module's
-solver, so the gate and the generator can never disagree.
+Minesweeper/test/gen_levels.py imports this module's solver, so the
+generator and the gate can never disagree.
 
-Usage:  python3 scripts/check_minesweeper_noguess.py [--quiet]
-Exit 1 on any bad board.
+Usage:  python3 scripts/check_minesweeper_noguess.py [Minesweeper] [--quiet]
+(other app names are ignored: the gate only applies to Minesweeper). Exit 1
+on any bad board.
 """
 from __future__ import annotations
 
@@ -41,7 +46,8 @@ import sys
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
-GAME = BASE / "Minesweeper" / "android" / "app" / "src" / "main" / "assets" / "game.html"
+APP = "Minesweeper"
+GAME = BASE / APP / "android" / "app" / "src" / "main" / "assets" / "game.html"
 B64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
 B64_INDEX = {ch: i for i, ch in enumerate(B64)}
 MIN_LEVELS = 500
@@ -67,7 +73,7 @@ def encode_level(rows: int, cols: int, start: int, mines) -> str:
 
 
 def decode_level(code: str):
-    """Mirror of the game's decodeLevel(): returns (rows, cols, start, mines:set).
+    """Mirror of the game's msDecode(): returns (rows, cols, start, mines:set).
     Raises ValueError on any malformed field."""
     m = re.fullmatch(r"(\d+)x(\d+):(\d+):([A-Za-z0-9_-]+)", code)
     if not m:
@@ -93,7 +99,7 @@ def decode_level(code: str):
 
 
 def transform(rows: int, cols: int, start: int, mines, t: int):
-    """Mirror of the game's transformBoard(): t 0=identity, 1=mirror columns,
+    """Mirror of the game's msTransform(): t 0=identity, 1=mirror columns,
     2=mirror rows, 3=rotate 180. Shape is unchanged."""
     def f(i):
         r, c = divmod(i, cols)
@@ -128,6 +134,38 @@ def neighbours(rows: int, cols: int):
     return _NB_CACHE[key]
 
 
+def three_bv(rows: int, cols: int, mines) -> int:
+    """Bechtel's Board Benchmark Value: the minimum number of clicks that
+    clears the board without flags (each 0-region is one click, plus every
+    number not on the rim of a 0-region). The game derives its star par
+    time from the same count (msBBBV in game.html)."""
+    nb = neighbours(rows, cols)
+    n = rows * cols
+    num = [0] * n
+    for m in mines:
+        for j in nb[m]:
+            num[j] += 1
+    seen = bytearray(n)
+    bv = 0
+    for i in range(n):
+        if i in mines or seen[i] or num[i]:
+            continue
+        bv += 1
+        stack = [i]
+        seen[i] = 1
+        while stack:
+            k = stack.pop()
+            for j in nb[k]:
+                if not seen[j] and j not in mines:
+                    seen[j] = 1
+                    if num[j] == 0:
+                        stack.append(j)
+    for i in range(n):
+        if i not in mines and not seen[i]:
+            bv += 1
+    return bv
+
+
 class SolveResult:
     __slots__ = ("solved", "state", "opening", "rounds", "pair_rounds", "count_rounds", "revealed")
 
@@ -141,8 +179,99 @@ class SolveResult:
         self.revealed = 0
 
 
-def solve(rows: int, cols: int, mines, start: int) -> SolveResult:
-    """Logical solve from the start opening. state: 0 unknown, 1 open, 2 known mine."""
+def deduce(n, nb, num, state, total_mines, known_mines, max_rule=3):
+    """One round of deduction on `state` (0 hidden, 1 open, 2 known mine).
+    Returns (safe:set, mines:set, rule:int) using the lowest rule that finds
+    anything (rule 0 = nothing found -> the next move would be a guess)."""
+    safe, flag = set(), set()
+    cons = {}
+    for i in range(n):
+        if state[i] != 1 or num[i] == 0:
+            continue
+        unk = []
+        need = num[i]
+        for j in nb[i]:
+            s = state[j]
+            if s == 0:
+                unk.append(j)
+            elif s == 2:
+                need -= 1
+        if not unk:
+            continue
+        if need == 0:
+            safe.update(unk)
+        elif need == len(unk):
+            flag.update(unk)
+        else:
+            cons[frozenset(unk)] = need
+    if safe or flag:
+        return safe, flag, 1
+    if max_rule < 2:
+        return safe, flag, 0
+    # R2: overlapping pairs (subset reasoning)
+    items = list(cons.items())
+    by_cell: dict = {}
+    for idx, (cells, _) in enumerate(items):
+        for c in cells:
+            by_cell.setdefault(c, []).append(idx)
+    for ai, (A, a) in enumerate(items):
+        seen = set()
+        for c in A:
+            for bi in by_cell[c]:
+                if bi <= ai or bi in seen:
+                    continue
+                seen.add(bi)
+                B, b = items[bi]
+                only_a = A - B
+                only_b = B - A
+                if b - a == len(only_b) and (only_a or only_b):
+                    flag.update(only_b)
+                    safe.update(only_a)
+                if a - b == len(only_a) and (only_a or only_b):
+                    flag.update(only_a)
+                    safe.update(only_b)
+    if safe or flag:
+        return safe, flag, 2
+    if max_rule < 3:
+        return safe, flag, 0
+    # R3: mine counter
+    unknown = [i for i in range(n) if state[i] == 0]
+    un = len(unknown)
+    remaining = total_mines - known_mines
+    if remaining == 0:
+        return set(unknown), flag, 3
+    if remaining == un:
+        return safe, set(unknown), 3
+
+    def settle(excl, left):
+        rest = [i for i in unknown if i not in excl]
+        if left == 0:
+            safe.update(rest)
+        else:
+            flag.update(rest)
+
+    for A, a in items:
+        rest_n = un - len(A)
+        left = remaining - a
+        if rest_n > 0 and (left == 0 or left == rest_n):
+            settle(A, left)
+    if not safe and not flag:
+        k = len(items)
+        for i in range(k):
+            A, a = items[i]
+            for j in range(i + 1, k):
+                B, b = items[j]
+                rest_n = un - len(A) - len(B)
+                left = remaining - a - b
+                if rest_n > 0 and (left == 0 or left == rest_n) and A.isdisjoint(B):
+                    settle(A | B, left)
+    if safe or flag:
+        return safe, flag, 3
+    return safe, flag, 0
+
+
+def solve(rows: int, cols: int, mines, start: int, max_rule: int = 3) -> SolveResult:
+    """Logical solve from the start opening. state: 0 hidden, 1 open, 2 known mine."""
     nb = neighbours(rows, cols)
     n = rows * cols
     mine = bytearray(n)
@@ -158,7 +287,7 @@ def solve(rows: int, cols: int, mines, start: int) -> SolveResult:
         return res
 
     opened = [0]
-    known = [0]
+    known = 0
 
     def open_cell(i):
         stack = [i]
@@ -178,83 +307,19 @@ def solve(rows: int, cols: int, mines, start: int) -> SolveResult:
 
     while opened[0] < safe_total:
         res.rounds += 1
-        safe, flag = set(), set()
-        cons = {}
-        for i in range(n):
-            if state[i] != 1 or num[i] == 0:
-                continue
-            unk = []
-            need = num[i]
-            for j in nb[i]:
-                s = state[j]
-                if s == 0:
-                    unk.append(j)
-                elif s == 2:
-                    need -= 1
-            if not unk:
-                continue
-            if need == 0:
-                safe.update(unk)
-            elif need == len(unk):
-                flag.update(unk)
-            else:
-                cons[frozenset(unk)] = need
-        if not safe and not flag:
-            # rule 2: overlapping pairs
-            items = list(cons.items())
-            by_cell: dict = {}
-            for idx, (cells, _) in enumerate(items):
-                for c in cells:
-                    by_cell.setdefault(c, []).append(idx)
-            for ai, (A, a) in enumerate(items):
-                seen = set()
-                for c in A:
-                    for bi in by_cell[c]:
-                        if bi <= ai or bi in seen:
-                            continue
-                        seen.add(bi)
-                        B, b = items[bi]
-                        only_a = A - B
-                        only_b = B - A
-                        if b - a == len(only_b) and (only_a or only_b):
-                            flag.update(only_b)
-                            safe.update(only_a)
-                        elif a - b == len(only_a) and (only_a or only_b):
-                            flag.update(only_a)
-                            safe.update(only_b)
-            if safe or flag:
-                res.pair_rounds += 1
-        if not safe and not flag:
-            # rule 3: mine counter vs. a greedy disjoint cover
-            unknown = [i for i in range(n) if state[i] == 0]
-            remaining = total_mines - known[0]
-            covered, cover_mines = set(), 0
-            for cells, need in sorted(cons.items(), key=lambda kv: (len(kv[0]), min(kv[0]))):
-                if covered.isdisjoint(cells):
-                    covered |= cells
-                    cover_mines += need
-            rest = [i for i in unknown if i not in covered]
-            if rest:
-                left = remaining - cover_mines
-                if left == 0:
-                    safe.update(rest)
-                elif left == len(rest):
-                    flag.update(rest)
-            if not safe and not flag:
-                if remaining == 0:
-                    safe.update(unknown)
-                elif remaining == len(unknown):
-                    flag.update(unknown)
-            if safe or flag:
-                res.count_rounds += 1
-        if not safe and not flag:
+        safe, flag, rule = deduce(n, nb, num, state, total_mines, known, max_rule)
+        if rule == 0:
             break  # stuck: the next move would be a guess
+        if rule == 2:
+            res.pair_rounds += 1
+        elif rule == 3:
+            res.count_rounds += 1
         for i in flag:
             if mine[i] != 1:
                 raise AssertionError("solver deduced a mine on a safe cell (unsound rule)")
             if state[i] == 0:
                 state[i] = 2
-                known[0] += 1
+                known += 1
         for i in safe:
             if mine[i]:
                 raise AssertionError("solver deduced a safe cell on a mine (unsound rule)")
@@ -268,9 +333,9 @@ def solve(rows: int, cols: int, mines, start: int) -> SolveResult:
 
 
 def load_levels(html: str):
-    m = re.search(r"const\s+LEVELS\s*=\s*\[(.*?)\];", html, re.S)
+    m = re.search(r"const\s+CAMPAIGN\s*=\s*\[(.*?)\];", html, re.S)
     if not m:
-        raise SystemExit("minesweeper_noguess: no `const LEVELS = [...]` in game.html")
+        raise ValueError("no `const CAMPAIGN = [...]` in game.html")
     return re.findall(r'"([^"]*)"', m.group(1))
 
 
@@ -279,7 +344,11 @@ def check(quiet: bool = False) -> int:
         print(f"✗ minesweeper_noguess: {GAME} missing")
         return 1
     html = GAME.read_text(encoding="utf-8")
-    codes = load_levels(html)
+    try:
+        codes = load_levels(html)
+    except ValueError as e:
+        print(f"✗ minesweeper_noguess: {e}")
+        return 1
     bad = []
     seen = {}
     shapes = []
@@ -301,25 +370,22 @@ def check(quiet: bool = False) -> int:
         if any(j in mines for j in nb[start]):
             bad.append(f"level {li}: start cell {start} touches a mine — the first tap would not open an area")
             continue
-        r = solve(rows, cols, mines, start)
-        if not r.solved:
-            bad.append(f"level {li} ({rows}x{cols}, {len(mines)} mines): needs a guess after "
-                       f"{r.revealed}/{n - len(mines)} safe cells")
-            continue
+        for t in range(4):
+            tr = transform(rows, cols, start, mines, t)
+            r = solve(rows, cols, tr[3], tr[2])
+            if not r.solved:
+                bad.append(f"level {li} ({rows}x{cols}, {len(mines)} mines, transform {t}): needs a guess "
+                           f"after {r.revealed}/{n - len(mines)} safe cells")
+                break
+        else:
+            if li <= 3 and not solve(rows, cols, mines, start, max_rule=1).solved:
+                bad.append(f"level {li}: needs more than single-number logic (first-session boards must be trivial)")
         for t in range(4):
             key = (rows, cols, frozenset(transform(rows, cols, start, mines, t)[3]))
             if key in seen and seen[key] != li:
                 bad.append(f"level {li}: same board as level {seen[key]} (transform {t})")
                 break
             seen.setdefault(key, li)
-        # Daily + endless play these boards mirrored / rotated: re-verify a
-        # sample of every transform (logic is symmetric; this proves the
-        # decoder's transform keeps the start opening intact).
-        if li % 25 == 1:
-            for t in (1, 2, 3):
-                tr = transform(rows, cols, start, mines, t)
-                if not solve(*tr[:2], tr[3], tr[2]).solved:
-                    bad.append(f"level {li}: transform {t} is not solvable without guessing")
     if len(codes) < MIN_LEVELS:
         bad.append(f"campaign has {len(codes)} boards, need >= {MIN_LEVELS}")
     if shapes:
@@ -331,13 +397,20 @@ def check(quiet: bool = False) -> int:
             if shapes[i][0] * shapes[i][1] < shapes[i - 1][0] * shapes[i - 1][1]:
                 bad.append(f"level {i + 1}: board shrinks ({shapes[i - 1][:2]} -> {shapes[i][:2]}) — the ramp must not go backwards")
                 break
-    for line in bad:
+    for line in bad[:40]:
         print(f"✗ minesweeper_noguess: {line}")
-    if not bad and not quiet:
-        print(f"minesweeper_noguess: OK — {len(codes)} boards, every one solvable without guessing "
-              f"from its opening tap (6x6/5 -> {shapes[-1][0]}x{shapes[-1][1]}/{shapes[-1][2]})")
+    if len(bad) > 40:
+        print(f"✗ minesweeper_noguess: … {len(bad) - 40} more")
+    if bad:
+        print("  re-run: python3 Minesweeper/test/gen_levels.py --write")
+    elif not quiet:
+        print(f"minesweeper_noguess: OK — {len(codes)} boards x 4 transforms, every one solvable without "
+              f"guessing from its opening tap (6x6/5 -> {shapes[-1][0]}x{shapes[-1][1]}/{shapes[-1][2]})")
     return 1 if bad else 0
 
 
 if __name__ == "__main__":
+    args = [a for a in sys.argv[1:] if not a.startswith("-")]
+    if args and APP not in args:
+        sys.exit(0)  # gate applies to Minesweeper only
     sys.exit(check("--quiet" in sys.argv))
