@@ -35,6 +35,7 @@ PRE_RELEASE = {
     "com.pegasusgames.afterimage",
     "com.pegasusgames.overlay",
     "com.pegasusgames.sudoku",
+    "com.pegasusgames.sokoban",
 }
 
 # Java NativeBridge methods every shipping game.html must call into.

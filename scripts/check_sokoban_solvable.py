@@ -10,6 +10,13 @@ ASCII maps out of a Sokoban game.html and, for each level, BLOCKS if:
 Levels too large to decide within the node budget WARN (trusted by the
 pull-construction witness, same policy as check_pipeconnect_solvable).
 
+Witness fast path (2026-10-16): when the game ships `const SOLUTIONS=[...]`
+(run-length LURD per level — lower case walks, upper case pushes), each
+stored line is REPLAYED; a legal replay that docks every crate proves the
+level solvable in microseconds, so the A* search only runs for levels with
+no stored line. A stored line that does not solve its level BLOCKS (the game
+uses it for hints and par).
+
 Apps with no Sokoban-style LEVELS array are silently skipped.
 
     python3 scripts/check_sokoban_solvable.py <App> | --all
@@ -86,6 +93,36 @@ def solve(walls, targets, boxes, player, budget=BUDGET):
     return -1
 
 
+LURD = {"u": (0, -1), "d": (0, 1), "l": (-1, 0), "r": (1, 0)}
+
+
+def parse_solutions(html):
+    m = re.search(r"const SOLUTIONS\s*=\s*\[(.*?)\];", html, re.S)
+    return re.findall(r"'([0-9udlrUDLR]*)'", m.group(1)) if m else None
+
+
+def replay(walls, targets, boxes, player, sol):
+    """True iff the RLE LURD line is legal and ends with every box docked."""
+    seq = re.sub(r"(\d+)([udlrUDLR])", lambda x: x.group(2) * int(x.group(1)), sol)
+    boxes = set(boxes); p = player
+    for ch in seq:
+        if ch.lower() not in LURD:
+            return False  # malformed line (e.g. a dangling run count)
+        dx, dy = LURD[ch.lower()]
+        n = (p[0] + dx, p[1] + dy)
+        if n in walls:
+            return False
+        if ch.isupper():
+            b = (n[0] + dx, n[1] + dy)
+            if n not in boxes or b in walls or b in boxes:
+                return False
+            boxes.discard(n); boxes.add(b)
+        elif n in boxes:
+            return False
+        p = n
+    return boxes == targets
+
+
 def parse_levels(html):
     m = re.search(r"const LEVELS\s*=\s*\[(.*?)\];", html, re.S)
     if not m:
@@ -103,9 +140,11 @@ def check_app(app):
     path = os.path.join(REPO, app, "android/app/src/main/assets/game.html")
     if not os.path.isfile(path):
         return [], []
-    maps = parse_levels(open(path, encoding="utf-8").read())
+    html = open(path, encoding="utf-8").read()
+    maps = parse_levels(html)
     if not maps:
         return [], []
+    sols = parse_solutions(html) or []
     blockers, warnings = [], []
     for i, mp in enumerate(maps):
         ln = i + 1
@@ -120,6 +159,12 @@ def check_app(app):
             continue
         if not boxes:
             blockers.append(f"{app}: level {ln} has no boxes")
+            continue
+        if i < len(sols) and sols[i]:
+            if replay(walls, targets, boxes, player, sols[i]):
+                continue
+            blockers.append(f"{app}: level {ln} stored solution does not solve it "
+                            f"(hint/par would be wrong)")
             continue
         d = solve(walls, targets, boxes, player)
         if d == -1:
