@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_flappywings_fair.py",
+    "course fairness (every gap flown, ramp monotonic, daily deterministic)"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      255,
+      185,
+      149
+    ],
+    "bg_top_right": [
+      255,
+      154,
+      122
+    ],
+    "bg_bottom": [
+      255,
+      226,
+      191
+    ],
+    "text_primary": [
+      58,
+      26,
+      44
+    ],
+    "text_accent": [
+      168,
+      42,
+      85
+    ],
+    "text_subtle": [
+      116,
+      66,
+      79
+    ],
+    "footer_tint": [
+      122,
+      35,
+      80
+    ],
+    "mood": "paper-sunset",
+    "layout_archetype": "A",
+    "mascot_pattern": "M1",
+    "voice": "V3",
+    "texture": "T3"
+  }
+}

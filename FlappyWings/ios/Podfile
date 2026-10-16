@@ -1,7 +1,7 @@
 platform :ios, '14.0'
 use_frameworks!
 
-target 'FlappyBird' do   # <- replace 'GameApp' with your Xcode target name
+target 'FlappyWings' do   # <- replace 'GameApp' with your Xcode target name
 
   # AppLovin MAX SDK
   pod 'AppLovinSDK'

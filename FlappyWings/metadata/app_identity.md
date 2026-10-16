@@ -1,42 +1,42 @@
-# FlappyBird Identity
+# Flappy Wings Identity
 
-- **Category**: arcade
-- **Layout archetype**: A (hero Play button stack)
-- **Mascot pattern**: M2 (static mascot with 2-3 expressions)
-- **Voice**: V6 (enthusiastic arcade)
-- **Texture**: T6 (neon / arcade)
-- **Mood string**: arcade-vivid
+Shipping name **Flappy Wings** (store title "Flappy Wings: Paper Bird").
+Package `com.pegasusgames.flappybird` (unchanged — the folder was renamed
+from FlappyBird for trademark safety; the words of that third-party mark
+appear nowhere in code, copy or metadata). Analog: the one-tap endless
+flyer category — matched on feel (instant one-touch flight, score = gates,
+medals, quick retry), differentiated by original art and trade dress, a
+gentle verified ramp, a shared Daily course and honest second chances.
 
-The app should feel like: punchy, fast, celebratory; juice on every action.
+- Category: arcade (one-tap endless flyer, score game)
+- Layout: A (hero Play + Daily tier; the family shell menu)
+- Mascot: M1 (anthropomorphised game element — the folded red paper bird is the player and the emblem)
+- Voice: V3 (playful narrator) — "Fold, flap and float through the sunset gates."
+- Texture: T3 (paper — origami folds on the bird, paper-bird motif in the menu)
+- Mood string: paper-sunset
 
-## Anti-pattern audit (APP_ARCHETYPES.md §5)
+Warm apricot sunset sky: Daylight chrome `#ffdcbf`, surfaces `#fff6ee`,
+deep plum text `#3a1a2c`, coral→rose accent `#ff7a59`→`#d9407a` — a family
+no sibling uses (WaterSort ocean blue, Nonogram cream/coral, 2048 sand/gold,
+Unblock mint, PipeConnect sky, Afterimage blueprint, Sokoban terracotta peach,
+Sudoku lilac). Midnight (800 coins) is a deep plum-indigo night sky.
 
-This file was auto-generated during the 2026-04-30 portfolio archetype
-assignment pass. The four archetypes above were chosen so the app does
-NOT default to the template signature (A/M0/V1/T1).
+Trade dress: the player is a red origami bird (no round yellow bird);
+obstacles are scalloped white cloud columns capped by terracotta floating
+islands with lanterns (no green tubes); the floor is a sea of clouds. Seven
+sky skins recolour sky, sun, clouds, islands, feathers and the bird:
+Apricot Dawn, Lilac Dusk, Mint Breeze, Rose Gold, Midnight, Storm Front,
+Aurora (coins; Season/Weekly Pass unlocks all).
 
-When the app's `game.html` is next touched (or built fresh), audit the
-in-app design against the §5 anti-patterns:
+Content: no fixed level list. Every flight is a seeded course
+(`fwGenNext` in game.html): endless = random seed, Daily = date seed with a
+Mon→Sun target ramp (15 → 32). `scripts/check_flappywings_fair.py` flies
+110 random courses through the full ramp + 180 gates at max difficulty and
+every Daily course for 2026–2027 with a human-rate autopilot (every gap
+passable), checks the ramp is monotonic and daily seeds deterministic, and
+verifies JS == Python generator parity.
 
-- [ ] Center-aligned everything → use offset weight
-- [ ] Same SVG icon set as other apps → vary icon family per app
-- [ ] All-caps headlines on every screen → mixed case for body
-- [ ] Generic templated currency icon → make it match the app theme
-- [ ] Identical button shapes / sizes / spacings → vary
-- [ ] Symmetric vertical column layout → break with side panels / FAB
-- [ ] Generic "Level Complete!" celebration → app-specific phrasing
-- [ ] Same loading / transition patterns → vary
-- [ ] Identical settings screen → reorder, rename, add app-specific options
-
-If 3+ of the above are hit, redesign before the next ship.
-
-## Phase 8 self-check
-
-Before declaring this app release-ready, all four of:
-
-1. Side-by-side test (vs other shipped apps, do they look like different products?)
-2. Voice-specificity test (does the menu copy reflect this app's voice archetype?)
-3. Identity-element test (a single recognizable visual element)
-4. Anonymous-screenshot test (could a user identify this app without title/name?)
-
-must pass. See APP_ARCHETYPES.md §8.
+Economy: feathers = 1 coin each, medal bonus 5/15/30/60, Daily +10×streak.
+Booster = Shield (`hintCount`, 25 coins) armed before take-off, absorbs one
+hit. Hearts (lives) = mid-flight continues (max 3 per flight); one free
+ad revive per flight (rewarded `extra_life`); new flights are always free.

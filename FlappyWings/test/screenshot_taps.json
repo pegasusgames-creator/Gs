@@ -1,88 +1,88 @@
 {
-  "_comment": "FlappyBird screenshot capture. Uses JS to switch panels and seed score.",
-  "_readiness_expr": "typeof showMenu === 'function' && typeof startGame === 'function' && typeof showShop === 'function'",
+  "_comment": "Flappy Wings screenshot capture — gameplay boards only. Score game (no level list): each slot calls window.fwShot(seed, gates, skin), which starts a REAL flight on a fixed course seed, flies it with the test pilot to that gate count and freezes the bird mid-air between gates (no overlay, no coachmark). 11 distinct seeds / gate counts; every sky skin appears (default Apricot Dawn, lilac, mint, rose, midnight, storm, aurora).",
+  "_readiness_expr": "typeof save !== 'undefined' && typeof window.fwShot === 'function' && typeof showScreen === 'function' && Array.isArray(window._FW_THEMES)",
   "_setup_taps": [
     [
       "js",
-      "(function(){try{_coins=247;localStorage.setItem('fb_coins',_coins);_bests={classic:42};localStorage.setItem('fb_bests',JSON.stringify(_bests));_scoreHistory=[{score:42,date:'05/12'},{score:38,date:'05/11'},{score:31,date:'05/10'},{score:25,date:'05/09'},{score:19,date:'05/08'}];localStorage.setItem('fb_history',JSON.stringify(_scoreHistory));_unlockedChars=['yellow','blue'];localStorage.setItem('fb_unlocked',JSON.stringify(_unlockedChars));}catch(e){}return 'seeded';})()",
-      400
+      "(function(){try{save.coins=1840;save.lives=5;save.hintCount=3;save.bestScore=64;save.gamesPlayed=118;save.fwGates=2210;save.fwFeathers=640;save.fwClears=96;save.fwMedals={bronze:41,silver:22,gold:9,platinum:0};save.unlockedThemes=['lilac','mint','rose','midnight','storm','aurora'];save.dailyChallengeStreak=6;persist();localStorage.setItem('fw_tutorialDone','1');localStorage.setItem('tutorialDone','1');updateAllUI();}catch(e){}return 'seeded';})()",
+      600
     ]
   ],
-  "01_deep_gameplay": [
+  "01_tap_to_flap": [
     [
       "js",
-      "(function(){startGame();var P=[[0.55,0.18],[0.95,0.45]];var f=function(){G.started=false;G.pipeSpeed=0;G.spawnTimer=9999;G.score=23;G.bird.x=W*0.28;G.bird.y=H*0.4;G.bird.vy=0;G.bird.angle=-0.2;G.pipes=P.map(function(p){return {x:W*p[0],gapY:H*p[1],scored:false,coinAnim:0};});if(typeof updateHUD==='function')updateHUD();var gr=document.getElementById('get-ready');if(gr)gr.style.display='none';};f();if(window._ffreeze)clearInterval(window._ffreeze);window._ffreeze=setInterval(f,40);})();'ok';",
-      2600
+      "window.fwShot(101,18,'default');'ok';",
+      1600
     ]
   ],
-  "02_early_gameplay": [
+  "02_cloud_gates": [
     [
       "js",
-      "(function(){startGame();var P=[[0.7,0.32]];var f=function(){G.started=false;G.pipeSpeed=0;G.spawnTimer=9999;G.score=5;G.bird.x=W*0.28;G.bird.y=H*0.5;G.bird.vy=0;G.bird.angle=0.1;G.pipes=P.map(function(p){return {x:W*p[0],gapY:H*p[1],scored:false,coinAnim:0};});if(typeof updateHUD==='function')updateHUD();var gr=document.getElementById('get-ready');if(gr)gr.style.display='none';};f();if(window._ffreeze)clearInterval(window._ffreeze);window._ffreeze=setInterval(f,40);})();'ok';",
-      2600
+      "window.fwShot(202,7,'lilac');'ok';",
+      1600
     ]
   ],
-  "03_level_complete": [
+  "03_medals": [
     [
       "js",
-      "(function(){startGame();var P=[[0.55,0.25],[0.95,0.55]];var f=function(){G.started=false;G.pipeSpeed=0;G.spawnTimer=9999;G.score=31;G.bird.x=W*0.28;G.bird.y=H*0.45;G.bird.vy=0;G.bird.angle=-0.1;G.pipes=P.map(function(p){return {x:W*p[0],gapY:H*p[1],scored:false,coinAnim:0};});if(typeof updateHUD==='function')updateHUD();var gr=document.getElementById('get-ready');if(gr)gr.style.display='none';};f();if(window._ffreeze)clearInterval(window._ffreeze);window._ffreeze=setInterval(f,40);})();'ok';",
-      2600
+      "window.fwShot(303,33,'mint');'ok';",
+      1600
     ]
   ],
-  "04_missions_panel": [
+  "04_moonlit": [
     [
       "js",
-      "(function(){startGame();var P=[[0.65,0.4]];var f=function(){G.started=false;G.pipeSpeed=0;G.spawnTimer=9999;G.score=8;G.bird.x=W*0.28;G.bird.y=H*0.6;G.bird.vy=0;G.bird.angle=0.25;G.pipes=P.map(function(p){return {x:W*p[0],gapY:H*p[1],scored:false,coinAnim:0};});if(typeof updateHUD==='function')updateHUD();var gr=document.getElementById('get-ready');if(gr)gr.style.display='none';};f();if(window._ffreeze)clearInterval(window._ffreeze);window._ffreeze=setInterval(f,40);})();'ok';",
-      2600
+      "window.fwShot(404,46,'midnight');'ok';",
+      1600
     ]
   ],
-  "05_stats": [
+  "05_gentle_start": [
     [
       "js",
-      "(function(){startGame();var P=[[0.55,0.15],[0.95,0.5]];var f=function(){G.started=false;G.pipeSpeed=0;G.spawnTimer=9999;G.score=47;G.bird.x=W*0.28;G.bird.y=H*0.3;G.bird.vy=0;G.bird.angle=-0.3;G.pipes=P.map(function(p){return {x:W*p[0],gapY:H*p[1],scored:false,coinAnim:0};});if(typeof updateHUD==='function')updateHUD();var gr=document.getElementById('get-ready');if(gr)gr.style.display='none';};f();if(window._ffreeze)clearInterval(window._ffreeze);window._ffreeze=setInterval(f,40);})();'ok';",
-      2600
+      "window.fwShot(505,12,'rose');'ok';",
+      1600
     ]
   ],
-  "06_levels_grid": [
+  "06_how_far": [
     [
       "js",
-      "(function(){startGame();var P=[[0.6,0.4],[0.95,0.2]];var f=function(){G.started=false;G.pipeSpeed=0;G.spawnTimer=9999;G.score=12;G.bird.x=W*0.28;G.bird.y=H*0.58;G.bird.vy=0;G.bird.angle=0.35;G.pipes=P.map(function(p){return {x:W*p[0],gapY:H*p[1],scored:false,coinAnim:0};});if(typeof updateHUD==='function')updateHUD();var gr=document.getElementById('get-ready');if(gr)gr.style.display='none';};f();if(window._ffreeze)clearInterval(window._ffreeze);window._ffreeze=setInterval(f,40);})();'ok';",
-      2600
+      "window.fwShot(606,58,'storm');'ok';",
+      1600
     ]
   ],
-  "07_menu": [
+  "07_one_more": [
     [
       "js",
-      "(function(){startGame();var P=[[0.8,0.45]];var f=function(){G.started=false;G.pipeSpeed=0;G.spawnTimer=9999;G.score=2;G.bird.x=W*0.28;G.bird.y=H*0.5;G.bird.vy=0;G.bird.angle=0.0;G.pipes=P.map(function(p){return {x:W*p[0],gapY:H*p[1],scored:false,coinAnim:0};});if(typeof updateHUD==='function')updateHUD();var gr=document.getElementById('get-ready');if(gr)gr.style.display='none';};f();if(window._ffreeze)clearInterval(window._ffreeze);window._ffreeze=setInterval(f,40);})();'ok';",
-      2600
+      "window.fwShot(707,26,'aurora');'ok';",
+      1600
     ]
   ],
-  "tablet_7_01_deep_gameplay": [
+  "tablet_7_01_sunset": [
     [
       "js",
-      "(function(){startGame();var P=[[0.55,0.16],[0.95,0.52]];var f=function(){G.started=false;G.pipeSpeed=0;G.spawnTimer=9999;G.score=18;G.bird.x=W*0.28;G.bird.y=H*0.35;G.bird.vy=0;G.bird.angle=-0.3;G.pipes=P.map(function(p){return {x:W*p[0],gapY:H*p[1],scored:false,coinAnim:0};});if(typeof updateHUD==='function')updateHUD();var gr=document.getElementById('get-ready');if(gr)gr.style.display='none';};f();if(window._ffreeze)clearInterval(window._ffreeze);window._ffreeze=setInterval(f,40);})();'ok';",
-      2600
+      "window.fwShot(808,41,'default');'ok';",
+      1600
     ]
   ],
-  "tablet_7_02_early_gameplay": [
+  "tablet_7_02_night": [
     [
       "js",
-      "(function(){startGame();var P=[[0.6,0.3],[0.95,0.6]];var f=function(){G.started=false;G.pipeSpeed=0;G.spawnTimer=9999;G.score=14;G.bird.x=W*0.28;G.bird.y=H*0.55;G.bird.vy=0;G.bird.angle=0.15;G.pipes=P.map(function(p){return {x:W*p[0],gapY:H*p[1],scored:false,coinAnim:0};});if(typeof updateHUD==='function')updateHUD();var gr=document.getElementById('get-ready');if(gr)gr.style.display='none';};f();if(window._ffreeze)clearInterval(window._ffreeze);window._ffreeze=setInterval(f,40);})();'ok';",
-      2600
+      "window.fwShot(909,9,'midnight');'ok';",
+      1600
     ]
   ],
-  "tablet_10_01_deep_gameplay": [
+  "tablet_10_01_gold": [
     [
       "js",
-      "(function(){startGame();var P=[[0.55,0.22],[0.95,0.48]];var f=function(){G.started=false;G.pipeSpeed=0;G.spawnTimer=9999;G.score=35;G.bird.x=W*0.28;G.bird.y=H*0.5;G.bird.vy=0;G.bird.angle=0.0;G.pipes=P.map(function(p){return {x:W*p[0],gapY:H*p[1],scored:false,coinAnim:0};});if(typeof updateHUD==='function')updateHUD();var gr=document.getElementById('get-ready');if(gr)gr.style.display='none';};f();if(window._ffreeze)clearInterval(window._ffreeze);window._ffreeze=setInterval(f,40);})();'ok';",
-      2600
+      "window.fwShot(1001,52,'aurora');'ok';",
+      1600
     ]
   ],
-  "tablet_10_02_early_gameplay": [
+  "tablet_10_02_big_sky": [
     [
       "js",
-      "(function(){startGame();var P=[[0.58,0.24],[0.96,0.46]];var f=function(){G.started=false;G.pipeSpeed=0;G.spawnTimer=9999;G.score=29;G.bird.x=W*0.28;G.bird.y=H*0.42;G.bird.vy=0;G.bird.angle=-0.15;G.pipes=P.map(function(p){return {x:W*p[0],gapY:H*p[1],scored:false,coinAnim:0};});if(typeof updateHUD==='function')updateHUD();var gr=document.getElementById('get-ready');if(gr)gr.style.display='none';};f();if(window._ffreeze)clearInterval(window._ffreeze);window._ffreeze=setInterval(f,40);})();'ok';",
-      2600
+      "window.fwShot(1102,21,'lilac');'ok';",
+      1600
     ]
   ]
 }

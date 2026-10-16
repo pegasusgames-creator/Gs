@@ -2082,6 +2082,7 @@ def main():
         ('check_reward_types_native.py', 'rewarded types requested by JS are whitelisted in Java'),
         ('check_lang_picker.py', 'every translated listing locale is selectable in the language picker'),
         ('check_trademarks.py', 'no third-party game/franchise trademarks in listing text'),
+        ('check_flappywings_fair.py', 'course fairness (every gap flown, ramp monotonic, daily deterministic)'),
         ('check_utility_shell.py', 'utility shell essentials (restore, privacy, IAP grants, ad cadence, 13-language picker, version, no game shims)'),
         ('check_families_compliance.py', 'Google Play Families compliance (kids track)'),
         ('check_sudoku_unique.py', 'sudoku uniqueness + technique band'),

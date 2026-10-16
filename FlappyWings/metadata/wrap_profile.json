@@ -1,46 +1,46 @@
 {
- "_comment": "FlappyBird wrapper decorations (scripts/wrap_screenshots.py). Style: ABUNDANT \u2014 on-theme motifs in the app's sampled palette, placed in corners/edges, center playfield + headline + subtitle kept clear; positions jitter per slot. Existing gradient kept.",
+ "_comment": "Flappy Wings wrapper decorations (scripts/wrap_screenshots.py). Warm sunset-sky family: soft cloud puffs, paper-bird shards, teal feather drips and lantern sparkles in the app's own palette, kept to corners/edges so the playfield + headline stay clear.",
  "blobs": [
   [
    0.15,
    0.2,
    0.34,
-   "#4ade80",
+   "#ffb995",
    74
   ],
   [
    0.86,
    0.24,
    0.32,
-   "#ffd600",
-   66
+   "#ff7a59",
+   62
   ],
   [
    0.1,
    0.66,
    0.34,
-   "#ff6f00",
-   58
+   "#d9407a",
+   48
   ],
   [
    0.9,
    0.7,
    0.32,
-   "#9fd8ff",
-   74
+   "#ffc46b",
+   70
   ],
   [
    0.42,
    0.92,
    0.34,
-   "#3d8b37",
+   "#f2cdbb",
    66
   ],
   [
    0.72,
    0.1,
    0.26,
-   "#4ade80",
+   "#ffe7c8",
    58
   ]
  ],
@@ -50,132 +50,120 @@
    "x": 0.12,
    "y": 0.29,
    "size": 0.46,
-   "color": "#ffffff",
-   "rot": 8,
+   "color": "#fff6ee",
+   "rot": 4,
    "alpha": 95,
-   "blur": 26
+   "blur": 24
   },
   {
-   "shape": "pipe_straight",
+   "shape": "shard",
    "x": 0.88,
-   "y": 0.79,
-   "size": 0.44,
-   "color": "#4ade80",
-   "rot": 1,
-   "alpha": 95,
-   "blur": 26
+   "y": 0.8,
+   "size": 0.2,
+   "color": "#e8505b",
+   "rot": -24,
+   "alpha": 92,
+   "blur": 0
   },
   {
    "shape": "dot",
    "x": 0.08,
    "y": 0.27,
-   "size": 0.13,
-   "color": "#ffd600",
-   "rot": -12,
-   "alpha": 242,
-   "blur": 0,
-   "shadow": true
-  },
-  {
-   "shape": "cloud",
-   "x": 0.93,
-   "y": 0.27,
    "size": 0.12,
-   "color": "#ffffff",
-   "rot": -11,
-   "alpha": 242,
-   "blur": 0,
-   "shadow": true
-  },
-  {
-   "shape": "pipe_elbow",
-   "x": 0.05,
-   "y": 0.5,
-   "size": 0.13,
-   "color": "#3d8b37",
-   "rot": -10,
-   "alpha": 242,
-   "blur": 0,
-   "shadow": true
-  },
-  {
-   "shape": "star",
-   "x": 0.95,
-   "y": 0.55,
-   "size": 0.12,
-   "color": "#ffd600",
-   "rot": -9,
-   "alpha": 242,
-   "blur": 0,
-   "shadow": true
-  },
-  {
-   "shape": "dot",
-   "x": 0.09,
-   "y": 0.9,
-   "size": 0.22,
-   "color": "#ff6f00",
-   "rot": -8,
-   "alpha": 242,
-   "blur": 0,
-   "shadow": true
+   "color": "#ffc46b",
+   "rot": 0,
+   "alpha": 90,
+   "blur": 0
   },
   {
    "shape": "cloud",
-   "x": 0.91,
-   "y": 0.91,
-   "size": 0.18,
-   "color": "#eef7ff",
-   "rot": -7,
-   "alpha": 242,
-   "blur": 0,
-   "shadow": true
-  },
-  {
-   "shape": "cloud",
-   "x": 0.5,
-   "y": 0.94,
-   "size": 0.15,
-   "color": "#ffffff",
+   "x": 0.86,
+   "y": 0.36,
+   "size": 0.38,
+   "color": "#fff6ee",
    "rot": -6,
-   "alpha": 242,
-   "blur": 0,
-   "shadow": true
+   "alpha": 90,
+   "blur": 22
   },
   {
-   "shape": "pipe_straight",
-   "x": 0.72,
-   "y": 0.12,
-   "size": 0.11,
-   "color": "#4ade80",
-   "rot": -5,
-   "alpha": 242,
-   "blur": 0,
-   "shadow": true
+   "shape": "drip",
+   "x": 0.1,
+   "y": 0.82,
+   "size": 0.12,
+   "color": "#1f8a80",
+   "rot": -35,
+   "alpha": 90,
+   "blur": 0
+  },
+  {
+   "shape": "sparkle",
+   "x": 0.9,
+   "y": 0.15,
+   "size": 0.1,
+   "color": "#ffb21e",
+   "rot": 0,
+   "alpha": 95,
+   "blur": 0
   },
   {
    "shape": "dot",
-   "x": 0.16,
-   "y": 0.89,
-   "size": 0.15,
-   "color": "#ffd600",
-   "rot": 8,
-   "alpha": 245,
-   "blur": 0,
-   "shadow": true,
-   "front": true
+   "x": 0.93,
+   "y": 0.55,
+   "size": 0.08,
+   "color": "#d9407a",
+   "rot": 0,
+   "alpha": 80,
+   "blur": 0
   },
   {
    "shape": "cloud",
-   "x": 0.85,
-   "y": 0.88,
-   "size": 0.15,
-   "color": "#ffffff",
-   "rot": 8,
-   "alpha": 245,
-   "blur": 0,
-   "shadow": true,
-   "front": true
+   "x": 0.18,
+   "y": 0.92,
+   "size": 0.42,
+   "color": "#fff6ee",
+   "rot": 3,
+   "alpha": 92,
+   "blur": 20
+  },
+  {
+   "shape": "cloud",
+   "x": 0.82,
+   "y": 0.95,
+   "size": 0.36,
+   "color": "#f2cdbb",
+   "rot": -4,
+   "alpha": 85,
+   "blur": 22
+  },
+  {
+   "shape": "shard",
+   "x": 0.08,
+   "y": 0.52,
+   "size": 0.14,
+   "color": "#f47c84",
+   "rot": 18,
+   "alpha": 85,
+   "blur": 0
+  },
+  {
+   "shape": "sparkle",
+   "x": 0.14,
+   "y": 0.1,
+   "size": 0.08,
+   "color": "#ffc46b",
+   "rot": 0,
+   "alpha": 90,
+   "blur": 0
+  },
+  {
+   "shape": "drip",
+   "x": 0.92,
+   "y": 0.44,
+   "size": 0.09,
+   "color": "#1f8a80",
+   "rot": 30,
+   "alpha": 85,
+   "blur": 0
   }
  ]
 }
