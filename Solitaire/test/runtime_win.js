@@ -1,0 +1,1 @@
+(()=>{ localStorage.setItem('ks_tutorialDone','1'); showScreen('game'); loadLevel(0); const line=ksDecode(ksParse(CAMPAIGN[0]).sol); for(const m of line){ if(gWon) break; if(!ksPlay(m)) return 'illegal move'; } return gWon; })()

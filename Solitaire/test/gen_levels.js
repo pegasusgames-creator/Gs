@@ -28,12 +28,12 @@ const K=loadCore();
 
 // ── human-like greedy playout (no knowledge of face-down cards) ──
 function playout(seed,rng){
-  const S=K.ksDeal(seed,1);let moves=0,faceUpAt=-1,idle=0;
+  const S=K.ksDeal(seed,1);let moves=0,faceUpAt=-1,idle=0;const log=[];
   const pick=a=>a[Math.floor(rng()*a.length)];
   const fnd=x=>S.f[K.ksSuit(x)]===K.ksRank(x);
   const allUp=()=>S.h.every(v=>v===0);
   for(let step=0;step<1500;step++){
-    if(K.ksWon(S))return {won:true,moves,faceUpAt:faceUpAt<0?moves:faceUpAt};
+    if(K.ksWon(S))return {won:true,moves,faceUpAt:faceUpAt<0?moves:faceUpAt,log};
     if(faceUpAt<0&&allUp())faceUpAt=moves;
     const cand=[];
     // 1 foundation plays that reveal or are low
@@ -54,20 +54,20 @@ function playout(seed,rng){
     // 4 any foundation play
     if(!cand.length){for(let c=0;c<7;c++){const m={k:'m',s:c,d:8};if(K.ksLegal(S,m))cand.push(m);}
       const m={k:'m',s:7,d:8};if(K.ksLegal(S,m))cand.push(m);}
-    if(cand.length){const m=pick(cand);K.ksApply(S,m);moves++;idle=0;continue;}
+    if(cand.length){const m=pick(cand);K.ksApply(S,m);log.push(m);moves++;idle=0;continue;}
     // 5 stock
-    if(S.p<S.T.length){K.ksApply(S,{k:'d'});moves++;continue;}
-    if(S.p>0){if(++idle>1)break;K.ksApply(S,{k:'r'});moves++;continue;}
+    if(S.p<S.T.length){K.ksApply(S,{k:'d'});log.push({k:'d'});moves++;continue;}
+    if(S.p>0){if(++idle>1)break;K.ksApply(S,{k:'r'});log.push({k:'r'});moves++;continue;}
     break;
   }
   return {won:K.ksWon(S),moves,faceUpAt};
 }
 function grade(seed){
   const rng=K.ksRng(seed^0x5bd1e995);const r=()=>rng()/4294967296;
-  let wins=0,fu=1e9,mv=[];
-  for(let i=0;i<24;i++){const o=playout(seed,r);if(o.won){wins++;fu=Math.min(fu,o.faceUpAt);mv.push(o.moves);}}
+  let wins=0,fu=1e9,mv=[],line=null;
+  for(let i=0;i<24;i++){const o=playout(seed,r);if(o.won){wins++;if(o.faceUpAt<fu){fu=o.faceUpAt;line=o.log;}mv.push(o.moves);}}
   mv.sort((a,b)=>a-b);
-  return {wr:wins/24,fu:wins?fu:-1,hm:wins?mv[mv.length>>1]:-1};
+  return {wr:wins/24,fu:wins?fu:-1,hm:wins?mv[mv.length>>1]:-1,line:line?K.ksEncode(line):null};
 }
 function verify(seed,enc){
   const S=K.ksDeal(seed,1);
@@ -91,7 +91,7 @@ function mine(want,out){
       const best=(r2.moves&&r2.moves.length<r.moves.length)?r2.moves:r.moves;
       r.moves=best;const enc=K.ksEncode(r.moves);
       if(!verify(seed,enc))throw new Error('replay failed for '+seed);
-      rec=Object.assign(rec,{sol:enc,par:r.moves.length},grade(seed));ok++;}
+      const gr=grade(seed);delete gr.line;rec=Object.assign(rec,{sol:enc,par:r.moves.length},gr);ok++;}
     fs.appendFileSync(out,JSON.stringify(rec)+'\n');
   }
   console.log('mined',ok,'winnable of',tried,'tried in',((Date.now()-t0)/1000).toFixed(0)+'s');
@@ -114,12 +114,14 @@ function hunt(n,out,keep){
     const r2=K.ksSolve(K.ksDeal(c.seed,1),120000,0,1.0);
     const best=(r2.moves&&r2.moves.length<r.moves.length)?r2.moves:r.moves;
     const enc=K.ksEncode(best);if(!verify(c.seed,enc))throw new Error('replay failed '+c.seed);
-    outRecs.push(Object.assign({i:-1,seed:c.seed,sol:enc,par:best.length,nodes:r.nodes,easy:1},grade(c.seed)));
+    {const gr=grade(c.seed);delete gr.line;outRecs.push(Object.assign({i:-1,seed:c.seed,sol:enc,par:best.length,nodes:r.nodes,easy:1},gr));}
   }
   fs.writeFileSync(out,outRecs.map(r=>JSON.stringify(r)).join('\n')+'\n');
   console.log('hunt: scanned',n,'greedy-won',pool.length,'kept',outRecs.length,'fu',outRecs.map(r=>r.fu).join(','));
 }
-module.exports={K,playout,grade,verify};
+// moves until every tableau card is face-up (the game auto-finishes from there)
+function faceUpAt(seed,enc){const S=K.ksDeal(seed,1),L=K.ksDecode(enc);let k=0;for(;k<L.length;k++){if(S.h.every(v=>v===0))break;K.ksApply(S,L[k]);}return k;}
+module.exports={K,playout,grade,verify,faceUpAt};
 if(require.main===module){
   const [cmd,a1,a2]=process.argv.slice(2);
   if(cmd==='mine')mine(+a1||900,a2||path.join(HERE,'mined.jsonl'));

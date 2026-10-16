@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <!-- Required permissions -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.android.vending.BILLING" />
 
+    <!-- Sister Pegasus Games packages for cross-promo "installed?"
+         verification — must match CROSS_PROMO_PACKAGES in MainActivity.java.
+         LIVE Play Store apps only. -->
+    <queries>
+        <package android:name="com.pegasusgames.watersortpuzzle" />
+        <package android:name="com.pegasusgames.nonogram" />
+        <package android:name="com.pegasusgames.puzzle2048" />
+        <package android:name="com.pegasusgames.unblockpuzzle" />
+    </queries>
+    <!-- allowBackup: the user's own data (WebView localStorage + reminder
+         schedule) rides Android Auto Backup to THEIR Google account, scoped by
+         the rules files — a tracker that forgets years of history on a new
+         phone is the #1 complaint in the category. -->
     <application
-        android:allowBackup="false"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_rules"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="Age Calculator"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PegasusGames"
+        android:theme="@style/Theme.PegasusUtility"
         android:hardwareAccelerated="true"
-        android:pageSizeCompat="enabled">
+        android:pageSizeCompat="enabled"
+        tools:targetApi="31">
 
         <!-- Resolve AdMob vs Firebase Analytics conflict over AD_SERVICES_CONFIG -->
         <property
@@ -24,22 +40,24 @@
             tools:replace="android:resource" />
 
         <!-- AdMob App ID — Google TEST ID until scripts/set_app_ids.py sets the real one -->
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
+        <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713"/>
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
+        <!-- adjustResize: on API 24-29 the window shrinks for the keyboard; on
+             API 30+ MainActivity pads the root by the IME inset instead. -->
+        <activity android:name=".MainActivity" android:exported="true"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:windowSoftInputMode="adjustNothing">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
         </activity>
 
+        <receiver
+            android:name=".NotificationReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
     </application>
-
 </manifest>

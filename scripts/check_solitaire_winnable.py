@@ -315,7 +315,7 @@ def main():
         print("✗ %s: %d winnability problem(s)" % (APP, len(errors)))
         return 1
     print("OK %s: %d numbered deals + %d daily deals re-dealt from seed and replayed to four "
-          "complete foundations (par %d–%d)%s" % (
+          "complete foundations (winning lines %d–%d moves)%s" % (
               APP, len(camp), len(daily), min(pars), max(pars),
               "; JS core deal == Python port" if cc == "" else ""))
     return 0

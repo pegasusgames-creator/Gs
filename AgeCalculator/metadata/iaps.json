@@ -4,7 +4,13 @@
       "id": "remove_ads",
       "title": "Remove Ads",
       "price_usd": 2.99,
-      "description": "Permanently removes all banner and interstitial ads. Rewarded ads remain available so you can still earn free coins and lives."
+      "description": "Removes every banner and interstitial ad for good. One-time purchase. All tracking features stay exactly the same."
+    },
+    {
+      "id": "pro_lifetime",
+      "title": "Habit Tracker Pro",
+      "price_usd": 5.99,
+      "description": "Unlimited habits, advanced stats with a full-year heatmap, every accent color, CSV export and no ads. One-time purchase, no subscription."
     }
   ],
   "subscriptions": []
