@@ -20,7 +20,7 @@ campaign byte for byte.
 
 Usage:
     python3 Minesweeper/test/gen_levels.py            # generate + report
-    python3 Minesweeper/test/gen_levels.py --write    # also patch LEVELS in game.html
+    python3 Minesweeper/test/gen_levels.py --write    # also replace the LEVELS region in game.html
 """
 from __future__ import annotations
 
@@ -127,6 +127,7 @@ def build_levels(verbose=True):
             frac = k / max(1, count - 1)
             score, start, mines, res = cands[round(frac * (len(cands) - 1))]
             tier.append({"code": ms.encode_level(rows, cols, start, mines), "mines": mines_n,
+                         "bv": ms.three_bv(rows, cols, set(mines)),
                          "score": round(score, 2), "opening": res.opening,
                          "pair": res.pair_rounds, "count": res.count_rounds})
         # keep the mine-count ramp, then order equal-mine boards by reasoning load
@@ -140,13 +141,18 @@ def build_levels(verbose=True):
 
 
 def write_game(levels):
+    """Replace the LEVELS shell region with the campaign (keeps the markers)."""
     html = GAME.read_text(encoding="utf-8")
     body = ",\n".join('  "%s"' % d["code"] for d in levels)
-    new = "const LEVELS = [\n" + body + "\n];"
-    html2, n = re.subn(r"const LEVELS = \[.*?\n\];", lambda _m: new, html, count=1, flags=re.S)
-    if n != 1:
-        raise SystemExit("game.html: `const LEVELS = [` ... `];` block not found")
-    GAME.write_text(html2, encoding="utf-8")
+    region = ("// LEVELS — %d no-guess boards (Minesweeper/test/gen_levels.py).\n"
+              "// \"RxC:start:bits\": rows x cols, the safe opening cell, base64url\n"
+              "// mine bitmap (6 bits/char, MSB first, row-major). Gate:\n"
+              "// scripts/check_minesweeper_noguess.py (all 4 transforms).\n"
+              "const CAMPAIGN = [\n%s\n];\n"
+              "const LEVELS = CAMPAIGN; // length contract for level-select/addendum\n") % (len(levels), body)
+    a = html.index("//@@REGION LEVELS\n") + len("//@@REGION LEVELS\n")
+    b = html.index("//@@END LEVELS")
+    GAME.write_text(html[:a] + region + html[b:], encoding="utf-8")
 
 
 def main():

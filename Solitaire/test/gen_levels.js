@@ -83,19 +83,47 @@ function mine(want,out){
   while(ok<want&&Date.now()-t0<9.5*60*1000){
     const seed=(src()&0x7fffffff)||1;const i=tried++;
     if(seen.has(seed))continue;seen.add(seed);
-    const r=K.ksSolve(K.ksDeal(seed,1),250000);
+    const r=K.ksSolve(K.ksDeal(seed,1),250000,0,0.35);
     let rec={i,seed,sol:null,nodes:r.nodes};
-    if(r.moves){const enc=K.ksEncode(r.moves);
+    if(r.moves){
+      // a second ordering often finds a shorter line — keep the shorter (par)
+      const r2=K.ksSolve(K.ksDeal(seed,1),120000,0,1.0);
+      const best=(r2.moves&&r2.moves.length<r.moves.length)?r2.moves:r.moves;
+      r.moves=best;const enc=K.ksEncode(r.moves);
       if(!verify(seed,enc))throw new Error('replay failed for '+seed);
       rec=Object.assign(rec,{sol:enc,par:r.moves.length},grade(seed));ok++;}
     fs.appendFileSync(out,JSON.stringify(rec)+'\n');
   }
   console.log('mined',ok,'winnable of',tried,'tried in',((Date.now()-t0)/1000).toFixed(0)+'s');
 }
+// Quick openers: scan many seeds with one cheap greedy playout, keep the deals a
+// newcomer clears fastest (fewest moves until every tableau card is face-up —
+// the game auto-completes from there), then solve + verify + grade them.
+function hunt(n,out,keep){
+  const src=K.ksRng(777001);const pool=[];const t0=Date.now();
+  for(let i=0;i<n&&Date.now()-t0<8*60*1000;i++){
+    const seed=(src()&0x7fffffff)||1;const rng=K.ksRng(seed^0x2545f491);
+    const o=playout(seed,()=>rng()/4294967296);
+    if(o.won)pool.push({seed,fu:o.faceUpAt});
+  }
+  pool.sort((a,b)=>a.fu-b.fu);
+  const outRecs=[];
+  for(const c of pool){
+    if(outRecs.length>=keep)break;
+    const r=K.ksSolve(K.ksDeal(c.seed,1),250000,0,0.35);if(!r.moves)continue;
+    const r2=K.ksSolve(K.ksDeal(c.seed,1),120000,0,1.0);
+    const best=(r2.moves&&r2.moves.length<r.moves.length)?r2.moves:r.moves;
+    const enc=K.ksEncode(best);if(!verify(c.seed,enc))throw new Error('replay failed '+c.seed);
+    outRecs.push(Object.assign({i:-1,seed:c.seed,sol:enc,par:best.length,nodes:r.nodes,easy:1},grade(c.seed)));
+  }
+  fs.writeFileSync(out,outRecs.map(r=>JSON.stringify(r)).join('\n')+'\n');
+  console.log('hunt: scanned',n,'greedy-won',pool.length,'kept',outRecs.length,'fu',outRecs.map(r=>r.fu).join(','));
+}
 module.exports={K,playout,grade,verify};
 if(require.main===module){
   const [cmd,a1,a2]=process.argv.slice(2);
   if(cmd==='mine')mine(+a1||900,a2||path.join(HERE,'mined.jsonl'));
+  else if(cmd==='hunt')hunt(+a1||100000,a2||path.join(HERE,'easy.jsonl'),24);
   else if(cmd==='build')require('./build_levels.js').build(a1||path.join(HERE,'mined.jsonl'));
   else console.log('usage: gen_levels.js mine [want] [out] | build [in]');
 }

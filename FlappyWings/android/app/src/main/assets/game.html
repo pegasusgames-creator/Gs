@@ -1659,6 +1659,7 @@ function fwNewFlight(opts){
       state:'ready',readyT:0,tapQ:0,flapT:99,shield:false,ghost:0,feathers:0,got:{},continues:0,adRevived:false,
       crashT:0,crashWhy:'',shieldsUsed:0,medalShown:null,targetShown:false,resume:false,cardTimer:null};
   fwParts.length=0;
+  const bn=document.getElementById('fw-banner');if(bn){bn.classList.remove('pop');bn.textContent='';}
   L=fw;gWon=false;levelStarted=true;
   if(!fwPal.bird)fwReadPalette();
   fwHideCrash();fwSetReady(true);fwUpdateHud();
@@ -1814,7 +1815,7 @@ function fwReviveAd(){
 })();
 
 // ── end of flight ──
-function fwFinish(){
+function fwFinish(silent){
   if(!fw||fw.state==='over')return;
   fw.state='over';gWon=true;levelStarted=false;fwPendingRevive=false;
   fwHideCrash();fwSetReady(false);
@@ -1856,13 +1857,18 @@ function fwFinish(){
   const nm=fwNextMedal(score);
   document.getElementById('complete-msg').textContent=
     (fw.daily?('Target '+fw.target+(cleared?' ✅':' — '+(fw.target-score)+' to go')+' · '):'')+
-    'Best '+(save.bestScore|0)+(nm?' · '+(nm.min-score)+' more for '+nm.name:'');
+    'Best '+(save.bestScore|0)+(nm?' · next: '+nm.name+' at '+nm.min:' · every medal earned');
   const st=document.getElementById('fw-over-stats');
   if(st)st.innerHTML='<span>Feathers <b>+'+feathers+'</b></span>'+(medal?'<span>Medal <b>+'+medal.coins+'</b></span>':'')+
     (dailyBonus?'<span>Daily <b>+'+dailyBonus+'</b></span>':'')+'<span class="coins-total">🪙 <b>+'+coins+'</b></span>';
   const ov=document.getElementById('overlay-complete');
   ov.dataset.share=shareString(stars);
+  // a stale "Double it" offer from an earlier medal flight must not ride
+  // along on this card (the REWARDS shim only refreshes it on a clear)
+  if(!cleared)document.querySelectorAll('#overlay-complete [data-growth-double]').forEach(b=>b.remove());
+  if(silent){updateAllUI();return;}
   setTimeout(()=>{
+    if(!document.getElementById('screen-game').classList.contains('active'))return;
     showOverlay('overlay-complete');
     if(cleared){ov.style.display='flex';setTimeout(()=>{ov.style.display='';},0);}
   },420);
@@ -1885,7 +1891,7 @@ function shareResult(){
 // Leaving mid-flight banks the flight (score + feathers) without a card.
 goMenu=(function(orig){return function(){
   if(fw&&(fw.state==='fly'||fw.state==='crash'||(fw.state==='ready'&&(fw.score>0||fw.resume)))){
-    const keep=fw;fwFinish();if(keep)hideOverlay('overlay-complete');
+    fwFinish(true);
   }
   hideOverlay('overlay-complete');fwHideCrash();
   orig();
@@ -1948,6 +1954,8 @@ function fwBanner(txt){
   const el=document.getElementById('fw-banner');if(!el)return;
   el.textContent=txt;el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');
 }
+// An animation restarts when its screen is re-shown — drop the class once played.
+(function(){const el=document.getElementById('fw-banner');if(el)el.addEventListener('animationend',()=>{el.classList.remove('pop');el.textContent='';});})();
 let fwCountT=null;
 function fwShowCrash(canAd,canHeart){
   const el=document.getElementById('fw-crash');if(!el)return;
@@ -2237,6 +2245,62 @@ window.MENU_MOTIF='<g fill="none" stroke="currentColor" stroke-width="6" stroke-
   '<path d="M-10 420 q18 -24 40 -8 q20 -18 40 4 q22 -4 24 18 H-10z"/>'+
   '<path d="M360 520 q-14 -30 0 -60 q14 30 0 60z"/><path d="M60 640 q-14 -30 0 -60 q14 30 0 60z"/>'+
   '<path d="M250 760 L330 786 L272 802 L290 780z"/><path d="M-20 820 q22 -26 48 -8 q24 -20 48 6 q28 -6 30 22 H-20z"/></g>';
+
+// ── score-copy adapter ──
+// The shared EVENTS + first-clear shims word GROWTH_CFG.kind:'score' for
+// 2048 ("Tile 128+", "big tiles", "Next stop: 2048!"). Their strings are read
+// from the shim source at runtime (every locale they ship) and swapped in
+// cards/sheets they append to <body> for this game's real rules: event
+// tokens come from medal flights (bronze 1 · silver 2 · gold 5 · platinum 8).
+(function fwScoreCopy(){
+  const MINE={
+    en:{tile:'Medal flight',intro:'Collect {k} by earning medals on your flights. 8 rewards to unlock — coins, shields and the {n} trophy!',first:'Next up: medals at 10, 25, 50 and 100 gates!'},
+    de:{tile:'Medaillenflug',intro:'Sammle {k} mit Medaillen auf deinen Flügen. 8 Belohnungen – Münzen, Schilde und die {n}-Trophäe!',first:'Als Nächstes: Medaillen bei 10, 25, 50 und 100 Toren!'},
+    fr:{tile:'Vol médaillé',intro:'Récolte des {k} en gagnant des médailles en vol. 8 récompenses : pièces, boucliers et le trophée {n} !',first:'Prochaine étape : médailles à 10, 25, 50 et 100 portes !'},
+    es:{tile:'Vuelo con medalla',intro:'Consigue {k} ganando medallas en tus vuelos. 8 premios: monedas, escudos y el trofeo {n}.',first:'Lo siguiente: medallas a las 10, 25, 50 y 100 puertas.'},
+    pt:{tile:'Voo com medalha',intro:'Junte {k} ganhando medalhas nos seus voos. 8 prêmios: moedas, escudos e o troféu {n}!',first:'A seguir: medalhas com 10, 25, 50 e 100 portais!'},
+    it:{tile:'Volo da medaglia',intro:'Raccogli {k} vincendo medaglie in volo. 8 premi: monete, scudi e il trofeo {n}!',first:'Prossimo passo: medaglie a 10, 25, 50 e 100 porte!'},
+    tr:{tile:'Madalyalı uçuş',intro:'Uçuşlarında madalya kazanarak {k} topla. 8 ödül: altın, kalkan ve {n} kupası!',first:'Sıradaki: 10, 25, 50 ve 100 kapıda madalyalar!'},
+    id:{tile:'Terbang bermedali',intro:'Kumpulkan {k} dengan meraih medali saat terbang. 8 hadiah: koin, perisai, dan trofi {n}!',first:'Berikutnya: medali di 10, 25, 50, dan 100 gerbang!'},
+    uk:{tile:'Політ із медаллю',intro:'Збирай {k}, здобуваючи медалі в польотах. 8 нагород: монети, щити і трофей «{n}»!',first:'Далі: медалі за 10, 25, 50 і 100 воріт!'},
+    ja:{tile:'メダル飛行',intro:'フライトでメダルを取って{k}を集めよう。コイン、シールド、{n}トロフィーなど8つの報酬！',first:'次は10・25・50・100ゲートでメダル！'},
+    zh:{tile:'奖牌飞行',intro:'在飞行中赢得奖牌来收集{k}。8份奖励：金币、护盾和{n}奖杯！',first:'下一步：10、25、50、100 道门可得奖牌！'},
+    ar:{tile:'رحلة بميدالية',intro:'اجمع {k} بالفوز بالميداليات في رحلاتك. 8 مكافآت: عملات ودروع وكأس {n}!',first:'التالي: ميداليات عند 10 و25 و50 و100 بوابة!'},
+    hi:{tile:'मेडल उड़ान',intro:'उड़ानों में मेडल जीतकर {k} जमा करें। 8 इनाम: सिक्के, शील्ड और {n} ट्रॉफी!',first:'आगे: 10, 25, 50 और 100 गेट पर मेडल!'}
+  };
+  const swaps=[];   // [RegExp, fn(match...) -> string]
+  const esc=t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const unq=t=>t.replace(/\\(['"\\])/g,'$1');
+  function build(){
+    const ev=(document.querySelector('script[data-growth-shim="EVENTS"]')||{}).textContent||'';
+    const e=(document.querySelector('script[data-growth-shim="E"]')||{}).textContent||'';
+    ev.split('\n').forEach(line=>{
+      const lm=line.match(/^\s*(\w+):\{ends:/);if(!lm||!MINE[lm[1]])return;const my=MINE[lm[1]];
+      const et=line.match(/eTile:'((?:[^'\\]|\\.)*)'/),ib=line.match(/introB2048:'((?:[^'\\]|\\.)*)'/);
+      if(et)swaps.push([new RegExp(esc(unq(et[1])),'g'),()=>my.tile]);
+      if(ib){
+        const tpl=unq(ib[1]),order=[];
+        const re=esc(tpl).replace(/\\\{(k|n)\\\}/g,(m,x)=>{order.push(x);return '(.+?)';});
+        swaps.push([new RegExp(re),function(){const a=arguments,v={};order.forEach((x,i)=>v[x]=a[i+1]);return my.intro.replace('{k}',v.k||'').replace('{n}',v.n||'');}]);
+      }
+    });
+    const fr=/(\w+):\{head:(["'])(?:[^\\]|\\.)*?\2,\s*more:(["'])(?:[^\\]|\\.)*?\3,\s*score:(["'])((?:[^\\]|\\.)*?)\4\}/g;let m;
+    while((m=fr.exec(e))){const my=MINE[m[1]];if(my)swaps.push([new RegExp(esc(unq(m[5])),'g'),()=>my.first]);}
+  }
+  function fix(node){
+    if(!swaps.length)return;
+    const w=document.createTreeWalker(node,NodeFilter.SHOW_TEXT);let t;
+    while((t=w.nextNode())){let v=t.nodeValue,o=v;for(const [re,fn] of swaps){re.lastIndex=0;if(re.test(v)){re.lastIndex=0;v=v.replace(re,fn);}}if(v!==o)t.nodeValue=v;}
+  }
+  function start(){
+    build();
+    new MutationObserver(ms=>{for(const m of ms)for(const n of m.addedNodes){if(n.nodeType===1)fix(n);}}).observe(document.body,{childList:true});
+    // sheets that re-render their own innerHTML after insertion
+    new MutationObserver(ms=>{for(const m of ms){const r=m.target.closest&&m.target.closest('#xEventsSheet,[data-growth-card]');if(r)fix(r);}}).observe(document.body,{childList:true,subtree:true});
+  }
+  // the shim <script>s are parsed after this region: wait for the whole document
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
+})();
 
 // A lapsed Season/Weekly Pass must not leave a pass-only skin applied:
 // runs before the shell's theme applier (t+400 ms). Every non-default skin

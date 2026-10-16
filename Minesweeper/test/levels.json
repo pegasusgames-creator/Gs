@@ -2,6 +2,7 @@
   {
     "code": "6x6:14:JCAAAi",
     "mines": 5,
+    "bv": 5,
     "score": 0.2,
     "opening": 27,
     "pair": 0,
@@ -10,6 +11,7 @@
   {
     "code": "6x6:19:MMACAA",
     "mines": 5,
+    "bv": 3,
     "score": 0.3,
     "opening": 24,
     "pair": 0,
@@ -18,6 +20,7 @@
   {
     "code": "6x6:7:AAAQuA",
     "mines": 5,
+    "bv": 10,
     "score": 0.4,
     "opening": 22,
     "pair": 0,
@@ -26,6 +29,7 @@
   {
     "code": "6x6:15:ABBRgA",
     "mines": 5,
+    "bv": 4,
     "score": 0.4,
     "opening": 28,
     "pair": 0,
@@ -34,6 +38,7 @@
   {
     "code": "6x6:14:EACCMA",
     "mines": 5,
+    "bv": 7,
     "score": 0.7,
     "opening": 19,
     "pair": 0,
@@ -42,6 +47,7 @@
   {
     "code": "6x6:21:BEBABJ",
     "mines": 6,
+    "bv": 8,
     "score": 0.6,
     "opening": 23,
     "pair": 0,
@@ -50,6 +56,7 @@
   {
     "code": "6x6:20:CIACA4",
     "mines": 6,
+    "bv": 11,
     "score": 0.7,
     "opening": 16,
     "pair": 0,
@@ -58,6 +65,7 @@
   {
     "code": "6x6:27:BEhAgg",
     "mines": 6,
+    "bv": 7,
     "score": 0.7,
     "opening": 19,
     "pair": 0,
@@ -66,6 +74,7 @@
   {
     "code": "6x6:16:EoQABI",
     "mines": 6,
+    "bv": 10,
     "score": 0.8,
     "opening": 16,
     "pair": 0,
@@ -74,6 +83,7 @@
   {
     "code": "6x6:15:AQQhQQ",
     "mines": 6,
+    "bv": 8,
     "score": 0.9,
     "opening": 23,
     "pair": 0,
@@ -82,6 +92,7 @@
   {
     "code": "7x7:24:QMAICCACA",
     "mines": 7,
+    "bv": 8,
     "score": 0.4,
     "opening": 33,
     "pair": 0,
@@ -90,6 +101,7 @@
   {
     "code": "7x7:31:EAAgCADgg",
     "mines": 7,
+    "bv": 4,
     "score": 0.4,
     "opening": 28,
     "pair": 0,
@@ -98,6 +110,7 @@
   {
     "code": "7x7:24:EIgAIGgAA",
     "mines": 7,
+    "bv": 15,
     "score": 0.6,
     "opening": 28,
     "pair": 0,
@@ -106,6 +119,7 @@
   {
     "code": "7x7:24:kCQACAECA",
     "mines": 7,
+    "bv": 8,
     "score": 0.6,
     "opening": 35,
     "pair": 0,
@@ -114,6 +128,7 @@
   {
     "code": "7x7:23:YAAwEABEA",
     "mines": 7,
+    "bv": 8,
     "score": 0.8,
     "opening": 29,
     "pair": 0,
@@ -122,6 +137,7 @@
   {
     "code": "7x7:24:AAEIBCoEA",
     "mines": 7,
+    "bv": 12,
     "score": 0.9,
     "opening": 26,
     "pair": 0,
@@ -130,6 +146,7 @@
   {
     "code": "7x7:24:MKAQEAAIA",
     "mines": 7,
+    "bv": 7,
     "score": 0.9,
     "opening": 31,
     "pair": 0,
@@ -138,6 +155,7 @@
   {
     "code": "7x7:23:C0AAAAgNA",
     "mines": 8,
+    "bv": 12,
     "score": 0.7,
     "opening": 30,
     "pair": 0,
@@ -146,6 +164,7 @@
   {
     "code": "7x7:18:BIABEALIA",
     "mines": 8,
+    "bv": 16,
     "score": 1.2,
     "opening": 17,
     "pair": 0,
@@ -154,7 +173,8 @@
   {
     "code": "7x7:32:JQQLACAAA",
     "mines": 8,
-    "score": 2.9,
+    "bv": 13,
+    "score": 2.7,
     "opening": 29,
     "pair": 0,
     "count": 1
@@ -162,22 +182,25 @@
   {
     "code": "7x7:23:AAQAUMCFA",
     "mines": 8,
+    "bv": 9,
     "score": 3.6,
     "opening": 33,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "7x7:24:gIAECEQUA",
+    "code": "7x7:18:BQIBBIAQg",
     "mines": 8,
+    "bv": 12,
     "score": 3.8,
-    "opening": 26,
+    "opening": 24,
     "pair": 1,
     "count": 0
   },
   {
     "code": "7x7:30:SEAEUAAMA",
     "mines": 8,
+    "bv": 14,
     "score": 4.1,
     "opening": 12,
     "pair": 1,
@@ -186,22 +209,25 @@
   {
     "code": "7x7:29:BGiIEAEAA",
     "mines": 8,
+    "bv": 10,
     "score": 4.1,
     "opening": 22,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "7x7:16:kBwACAGAA",
+    "code": "7x7:25:ASgACDBQA",
     "mines": 8,
-    "score": 5.8,
-    "opening": 32,
+    "bv": 18,
+    "score": 5.5,
+    "opening": 24,
     "pair": 1,
     "count": 1
   },
   {
     "code": "8x8:50:BCAAQAqICAA",
     "mines": 8,
+    "bv": 14,
     "score": 0.5,
     "opening": 14,
     "pair": 0,
@@ -210,6 +236,7 @@
   {
     "code": "8x8:29:BAAwAAEEAUE",
     "mines": 8,
+    "bv": 5,
     "score": 0.5,
     "opening": 17,
     "pair": 0,
@@ -218,6 +245,7 @@
   {
     "code": "8x8:19:0AQAABBAEBA",
     "mines": 8,
+    "bv": 9,
     "score": 0.6,
     "opening": 18,
     "pair": 0,
@@ -226,6 +254,7 @@
   {
     "code": "8x8:43:oAEICEBAAgA",
     "mines": 8,
+    "bv": 11,
     "score": 0.8,
     "opening": 20,
     "pair": 0,
@@ -234,6 +263,7 @@
   {
     "code": "8x8:38:BAUAQBiAAAQ",
     "mines": 8,
+    "bv": 10,
     "score": 0.9,
     "opening": 17,
     "pair": 0,
@@ -242,6 +272,7 @@
   {
     "code": "8x8:28:AIgCAkFQAAA",
     "mines": 8,
+    "bv": 12,
     "score": 1.0,
     "opening": 20,
     "pair": 0,
@@ -250,54 +281,52 @@
   {
     "code": "8x8:42:gAAQBYACBEA",
     "mines": 8,
+    "bv": 14,
     "score": 1.2,
     "opening": 19,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "8x8:18:EgACCYChAAA",
+    "code": "8x8:29:EACBEAAEQ4A",
     "mines": 9,
-    "score": 1.0,
-    "opening": 18,
+    "bv": 13,
+    "score": 0.9,
+    "opening": 17,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "8x8:52:CAAAJAQBgoI",
+    "code": "8x8:18:EgACCYChAAA",
     "mines": 9,
+    "bv": 16,
     "score": 1.0,
-    "opening": 19,
+    "opening": 18,
     "pair": 0,
     "count": 0
   },
   {
     "code": "8x8:36:EAAC4AEgCQA",
     "mines": 9,
+    "bv": 14,
     "score": 1.3,
     "opening": 18,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "8x8:44:AARAKIEBQgA",
+    "code": "8x8:45:QCRACgAAYCA",
     "mines": 9,
-    "score": 3.7,
-    "opening": 16,
-    "pair": 1,
-    "count": 0
-  },
-  {
-    "code": "8x8:22:AAgQCAwAgCY",
-    "mines": 9,
-    "score": 3.8,
-    "opening": 18,
-    "pair": 1,
+    "bv": 22,
+    "score": 1.4,
+    "opening": 20,
+    "pair": 0,
     "count": 0
   },
   {
     "code": "8x8:45:AEiICgBAEEA",
     "mines": 9,
+    "bv": 24,
     "score": 3.8,
     "opening": 16,
     "pair": 1,
@@ -306,14 +335,34 @@
   {
     "code": "8x8:27:IAQAhEBOAAA",
     "mines": 9,
+    "bv": 14,
     "score": 3.8,
     "opening": 15,
     "pair": 1,
     "count": 0
   },
   {
+    "code": "8x8:27:IAQBRACYAIA",
+    "mines": 9,
+    "bv": 15,
+    "score": 3.9,
+    "opening": 12,
+    "pair": 1,
+    "count": 0
+  },
+  {
+    "code": "8x8:27:CQEARAAIApA",
+    "mines": 9,
+    "bv": 20,
+    "score": 4.0,
+    "opening": 20,
+    "pair": 1,
+    "count": 0
+  },
+  {
     "code": "8x8:27:CAhCAAKIIAE",
     "mines": 9,
+    "bv": 17,
     "score": 4.0,
     "opening": 17,
     "pair": 1,
@@ -322,6 +371,7 @@
   {
     "code": "8x8:36:AApCAiAgJAA",
     "mines": 9,
+    "bv": 21,
     "score": 4.1,
     "opening": 12,
     "pair": 1,
@@ -330,38 +380,34 @@
   {
     "code": "8x8:45:BAEIEIAQABY",
     "mines": 9,
+    "bv": 13,
     "score": 4.1,
     "opening": 19,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "8x8:44:AIAAKKICAUA",
-    "mines": 9,
-    "score": 4.2,
-    "opening": 17,
-    "pair": 1,
-    "count": 0
-  },
-  {
     "code": "8x8:29:QBCBoAGEAAE",
     "mines": 10,
+    "bv": 16,
     "score": 4.0,
     "opening": 20,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "8x8:37:CgAIUGCBBAA",
+    "code": "8x8:27:BRAAAESFEAg",
     "mines": 10,
-    "score": 7.1,
-    "opening": 17,
-    "pair": 2,
+    "bv": 13,
+    "score": 4.1,
+    "opening": 12,
+    "pair": 1,
     "count": 0
   },
   {
     "code": "8x8:34:AIRKAAAOIIA",
     "mines": 10,
+    "bv": 22,
     "score": 7.4,
     "opening": 14,
     "pair": 2,
@@ -370,6 +416,7 @@
   {
     "code": "8x8:29:SAEAQRAIApA",
     "mines": 10,
+    "bv": 29,
     "score": 7.7,
     "opening": 18,
     "pair": 2,
@@ -378,6 +425,7 @@
   {
     "code": "8x8:20:JCIgAiAAEgQ",
     "mines": 10,
+    "bv": 22,
     "score": 13.7,
     "opening": 15,
     "pair": 4,
@@ -386,6 +434,7 @@
   {
     "code": "8x8:18:CAGACoAgYEA",
     "mines": 10,
+    "bv": 20,
     "score": 16.4,
     "opening": 17,
     "pair": 5,
@@ -394,6 +443,7 @@
   {
     "code": "8x8:34:EAIoiIAAiAE",
     "mines": 10,
+    "bv": 19,
     "score": 22.7,
     "opening": 15,
     "pair": 7,
@@ -402,6 +452,7 @@
   {
     "code": "9x9:21:ACEAIAMRgBAABA",
     "mines": 10,
+    "bv": 13,
     "score": 0.6,
     "opening": 24,
     "pair": 0,
@@ -410,6 +461,7 @@
   {
     "code": "9x9:32:KgIAAAEIkAQABA",
     "mines": 10,
+    "bv": 13,
     "score": 0.9,
     "opening": 19,
     "pair": 0,
@@ -418,6 +470,7 @@
   {
     "code": "9x9:50:ARgEEGAAiAAACA",
     "mines": 10,
+    "bv": 22,
     "score": 0.9,
     "opening": 20,
     "pair": 0,
@@ -426,6 +479,7 @@
   {
     "code": "9x9:24:AgACAQRAA6ACAA",
     "mines": 10,
+    "bv": 18,
     "score": 1.1,
     "opening": 23,
     "pair": 0,
@@ -434,6 +488,7 @@
   {
     "code": "9x9:50:QQAAgWAACEIAQA",
     "mines": 10,
+    "bv": 14,
     "score": 1.1,
     "opening": 24,
     "pair": 0,
@@ -442,6 +497,7 @@
   {
     "code": "9x9:57:BAQIKAiAEQQAAI",
     "mines": 11,
+    "bv": 20,
     "score": 0.8,
     "opening": 25,
     "pair": 0,
@@ -450,6 +506,7 @@
   {
     "code": "9x9:50:MggBAiEAAARAQA",
     "mines": 11,
+    "bv": 19,
     "score": 0.8,
     "opening": 26,
     "pair": 0,
@@ -458,6 +515,7 @@
   {
     "code": "9x9:49:iQQIAEACAARYAA",
     "mines": 11,
+    "bv": 19,
     "score": 0.9,
     "opening": 22,
     "pair": 0,
@@ -466,6 +524,7 @@
   {
     "code": "9x9:33:CAAYAAEKIAEIAY",
     "mines": 11,
+    "bv": 17,
     "score": 1.0,
     "opening": 26,
     "pair": 0,
@@ -474,6 +533,7 @@
   {
     "code": "9x9:42:EEEJAgAAQQMAAg",
     "mines": 11,
+    "bv": 23,
     "score": 1.2,
     "opening": 25,
     "pair": 0,
@@ -482,6 +542,7 @@
   {
     "code": "9x9:10:AIAEggESQAAQIg",
     "mines": 11,
+    "bv": 24,
     "score": 1.3,
     "opening": 25,
     "pair": 0,
@@ -490,6 +551,7 @@
   {
     "code": "9x9:30:AAyAUIAEAiBEAA",
     "mines": 11,
+    "bv": 20,
     "score": 1.9,
     "opening": 19,
     "pair": 0,
@@ -498,6 +560,7 @@
   {
     "code": "9x9:59:AkBIABChAgBCAA",
     "mines": 11,
+    "bv": 19,
     "score": 3.7,
     "opening": 16,
     "pair": 1,
@@ -506,6 +569,7 @@
   {
     "code": "9x9:42:FEACAgAAABQBaA",
     "mines": 11,
+    "bv": 17,
     "score": 3.9,
     "opening": 26,
     "pair": 1,
@@ -514,6 +578,7 @@
   {
     "code": "9x9:32:AkQAAAYBpAEAgA",
     "mines": 11,
+    "bv": 15,
     "score": 10.3,
     "opening": 24,
     "pair": 3,
@@ -522,6 +587,7 @@
   {
     "code": "9x9:57:AAhQSECAAA0AhA",
     "mines": 12,
+    "bv": 20,
     "score": 1.4,
     "opening": 25,
     "pair": 0,
@@ -530,6 +596,7 @@
   {
     "code": "9x9:60:QACgIAJAQEMBIA",
     "mines": 12,
+    "bv": 20,
     "score": 4.0,
     "opening": 17,
     "pair": 1,
@@ -538,6 +605,7 @@
   {
     "code": "9x9:29:AGIAAIACkAAuEA",
     "mines": 12,
+    "bv": 23,
     "score": 4.1,
     "opening": 21,
     "pair": 1,
@@ -546,6 +614,7 @@
   {
     "code": "9x9:31:AFgAEEAQoEAgAo",
     "mines": 12,
+    "bv": 21,
     "score": 4.1,
     "opening": 15,
     "pair": 1,
@@ -554,6 +623,7 @@
   {
     "code": "9x9:49:ARCEAAoiCAAASg",
     "mines": 12,
+    "bv": 21,
     "score": 4.1,
     "opening": 21,
     "pair": 1,
@@ -562,54 +632,70 @@
   {
     "code": "9x9:47:AEDDBQCAAggAEQ",
     "mines": 12,
+    "bv": 11,
     "score": 4.2,
     "opening": 18,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "9x9:68:UEgGAoAUIABAAA",
+    "code": "9x9:21:AUIAIAgqUhAAAA",
     "mines": 12,
-    "score": 4.9,
-    "opening": 21,
+    "bv": 21,
+    "score": 4.7,
+    "opening": 23,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "9x9:69:AAIKAQACGCIAOA",
+    "code": "9x9:52:IAJBQABEADACFA",
     "mines": 12,
+    "bv": 22,
+    "score": 6.2,
+    "opening": 12,
+    "pair": 1,
+    "count": 1
+  },
+  {
+    "code": "9x9:68:wEgGAoAUIABAAA",
+    "mines": 12,
+    "bv": 14,
     "score": 7.0,
-    "opening": 11,
-    "pair": 2,
-    "count": 0
+    "opening": 21,
+    "pair": 1,
+    "count": 1
   },
   {
     "code": "9x9:20:gAIBkAMQAAkQIA",
     "mines": 12,
+    "bv": 16,
     "score": 7.1,
     "opening": 16,
     "pair": 2,
     "count": 0
   },
   {
-    "code": "9x9:58:AAkCIYCQAYCABA",
-    "mines": 12,
-    "score": 9.9,
-    "opening": 21,
-    "pair": 2,
-    "count": 1
-  },
-  {
     "code": "9x9:33:YEEEIAEFCQAwAA",
     "mines": 13,
+    "bv": 21,
     "score": 7.2,
     "opening": 18,
     "pair": 2,
     "count": 0
   },
   {
+    "code": "9x9:30:BFEQQIQAAGBCIA",
+    "mines": 13,
+    "bv": 26,
+    "score": 10.6,
+    "opening": 12,
+    "pair": 3,
+    "count": 0
+  },
+  {
     "code": "9x9:41:EESQAAAKAdAoAA",
     "mines": 13,
+    "bv": 31,
     "score": 10.8,
     "opening": 24,
     "pair": 3,
@@ -618,6 +704,7 @@
   {
     "code": "9x9:31:gggYBEYAAGQAAQ",
     "mines": 13,
+    "bv": 27,
     "score": 10.8,
     "opening": 12,
     "pair": 3,
@@ -626,30 +713,16 @@
   {
     "code": "9x9:33:JIBSKgAEQAQQAA",
     "mines": 13,
+    "bv": 24,
     "score": 13.9,
     "opening": 18,
     "pair": 4,
     "count": 0
   },
   {
-    "code": "9x9:40:AABJlAAgAAyEFA",
-    "mines": 13,
-    "score": 14.3,
-    "opening": 25,
-    "pair": 4,
-    "count": 0
-  },
-  {
-    "code": "11x9:40:jAhQAFAAACAAQCECQ",
-    "mines": 14,
-    "score": 0.8,
-    "opening": 30,
-    "pair": 0,
-    "count": 0
-  },
-  {
     "code": "11x9:67:DAcAOAAAQASAAICCA",
     "mines": 14,
+    "bv": 16,
     "score": 0.9,
     "opening": 28,
     "pair": 0,
@@ -658,46 +731,79 @@
   {
     "code": "11x9:48:IACCIQAIKggAEUgAA",
     "mines": 14,
+    "bv": 26,
     "score": 0.9,
     "opening": 32,
     "pair": 0,
     "count": 0
   },
   {
+    "code": "11x9:49:EAAIAQApDgAAECIAw",
+    "mines": 14,
+    "bv": 23,
+    "score": 0.9,
+    "opening": 27,
+    "pair": 0,
+    "count": 0
+  },
+  {
     "code": "11x9:39:kAAAAOACEDAAABBQw",
     "mines": 14,
+    "bv": 14,
     "score": 1.0,
     "opening": 23,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "11x9:30:GAIAAIQiAEBhEAACg",
+    "code": "11x9:22:KAAAMAIA0gAAEkKAA",
     "mines": 14,
-    "score": 1.3,
-    "opening": 24,
+    "bv": 36,
+    "score": 3.5,
+    "opening": 31,
+    "pair": 0,
+    "count": 1
+  },
+  {
+    "code": "11x9:74:gQAgAEIQBDAACEMhA",
+    "mines": 15,
+    "bv": 14,
+    "score": 0.8,
+    "opening": 28,
     "pair": 0,
     "count": 0
   },
   {
     "code": "11x9:48:AAwACIAACQABWAiGg",
     "mines": 15,
+    "bv": 26,
     "score": 1.2,
     "opening": 31,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "11x9:68:IECBAAAioEAAABmEQ",
+    "code": "11x9:20:AAIAAQACMBGYiCIBA",
     "mines": 15,
-    "score": 1.5,
-    "opening": 24,
+    "bv": 17,
+    "score": 1.3,
+    "opening": 23,
+    "pair": 0,
+    "count": 0
+  },
+  {
+    "code": "11x9:23:ABAASATEQgQQCAQBI",
+    "mines": 15,
+    "bv": 21,
+    "score": 1.7,
+    "opening": 20,
     "pair": 0,
     "count": 0
   },
   {
     "code": "11x9:38:ABEQAACAYQAAmAOIg",
     "mines": 15,
+    "bv": 29,
     "score": 3.9,
     "opening": 12,
     "pair": 1,
@@ -706,22 +812,25 @@
   {
     "code": "11x9:48:QAAADUhACBAMABDAQ",
     "mines": 15,
+    "bv": 19,
     "score": 3.9,
     "opening": 28,
     "pair": 0,
     "count": 1
   },
   {
-    "code": "11x9:29:ASiBgEASkAAACAAGg",
+    "code": "11x9:25:hgICAAAILCCAgQADA",
     "mines": 15,
-    "score": 4.1,
-    "opening": 15,
+    "bv": 13,
+    "score": 4.0,
+    "opening": 16,
     "pair": 1,
     "count": 0
   },
   {
     "code": "11x9:30:BAUAoABAQYCcACAgA",
     "mines": 15,
+    "bv": 21,
     "score": 4.2,
     "opening": 27,
     "pair": 1,
@@ -730,38 +839,25 @@
   {
     "code": "11x9:41:CBRCAAwICAAkgIQBA",
     "mines": 15,
+    "bv": 26,
     "score": 4.3,
     "opening": 31,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "11x9:47:gAAEBQAACBgQlAkBQ",
-    "mines": 15,
-    "score": 4.6,
-    "opening": 25,
-    "pair": 1,
-    "count": 0
-  },
-  {
     "code": "11x9:30:AwCAECQgQRAANAAwA",
     "mines": 15,
+    "bv": 23,
     "score": 6.9,
     "opening": 30,
     "pair": 1,
     "count": 1
   },
   {
-    "code": "11x9:30:ASUAAIABEJoCICAIA",
-    "mines": 15,
-    "score": 7.1,
-    "opening": 23,
-    "pair": 1,
-    "count": 1
-  },
-  {
     "code": "11x9:39:gAlAAIRgAgJSIEACA",
     "mines": 16,
+    "bv": 40,
     "score": 4.0,
     "opening": 15,
     "pair": 1,
@@ -770,14 +866,25 @@
   {
     "code": "11x9:57:gIAQIuBYCASAAgQAA",
     "mines": 16,
+    "bv": 14,
     "score": 4.1,
     "opening": 31,
     "pair": 1,
     "count": 0
   },
   {
+    "code": "11x9:50:wJIABAABAEY0IEAAI",
+    "mines": 16,
+    "bv": 18,
+    "score": 4.2,
+    "opening": 30,
+    "pair": 1,
+    "count": 0
+  },
+  {
     "code": "11x9:66:AYIAqAqAIAAAAwYIQ",
     "mines": 16,
+    "bv": 24,
     "score": 4.3,
     "opening": 29,
     "pair": 1,
@@ -786,6 +893,7 @@
   {
     "code": "11x9:22:UCAAcABCZgMAAQAQA",
     "mines": 16,
+    "bv": 24,
     "score": 4.4,
     "opening": 28,
     "pair": 1,
@@ -794,6 +902,7 @@
   {
     "code": "11x9:31:CAgAKAoBICVEAIFAA",
     "mines": 16,
+    "bv": 27,
     "score": 4.7,
     "opening": 29,
     "pair": 1,
@@ -802,38 +911,34 @@
   {
     "code": "11x9:39:AFIBgKAwAEMQCCCAA",
     "mines": 16,
+    "bv": 34,
     "score": 4.8,
     "opening": 23,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "11x9:23:ABAABACIkAIFEcQQg",
-    "mines": 16,
-    "score": 4.9,
-    "opening": 27,
-    "pair": 1,
-    "count": 0
-  },
-  {
     "code": "11x9:48:AAAKjJAAKBCEBBAEI",
     "mines": 16,
+    "bv": 24,
     "score": 5.0,
     "opening": 21,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "11x9:32:SGAEBCEBgkgACAgQA",
+    "code": "11x9:50:ABIBAREEAAIEE8QAg",
     "mines": 16,
+    "bv": 25,
     "score": 6.9,
-    "opening": 23,
+    "opening": 31,
     "pair": 1,
     "count": 1
   },
   {
     "code": "11x9:65:AKEWEgCAABAAAEM4A",
     "mines": 16,
+    "bv": 19,
     "score": 10.2,
     "opening": 28,
     "pair": 3,
@@ -842,6 +947,7 @@
   {
     "code": "11x9:67:wEGICKQAAQWAAAYIA",
     "mines": 17,
+    "bv": 31,
     "score": 6.3,
     "opening": 28,
     "pair": 1,
@@ -850,7 +956,8 @@
   {
     "code": "11x9:49:QAAJcwAEAQIQIgiBA",
     "mines": 17,
-    "score": 7.0,
+    "bv": 34,
+    "score": 6.8,
     "opening": 27,
     "pair": 1,
     "count": 1
@@ -858,6 +965,7 @@
   {
     "code": "11x9:41:wEQzCBAIgIkAACACA",
     "mines": 17,
+    "bv": 26,
     "score": 7.1,
     "opening": 12,
     "pair": 2,
@@ -866,6 +974,7 @@
   {
     "code": "11x9:68:AYQBgpAgAUAAEAS0A",
     "mines": 17,
+    "bv": 33,
     "score": 11.0,
     "opening": 22,
     "pair": 3,
@@ -874,7 +983,8 @@
   {
     "code": "11x9:49:gAWAggAiEIJAggIQg",
     "mines": 17,
-    "score": 16.1,
+    "bv": 32,
+    "score": 15.9,
     "opening": 15,
     "pair": 4,
     "count": 1
@@ -882,6 +992,7 @@
   {
     "code": "12x10:53:kAICACGAAChhBAABQYAA",
     "mines": 17,
+    "bv": 25,
     "score": 0.9,
     "opening": 24,
     "pair": 0,
@@ -890,6 +1001,7 @@
   {
     "code": "12x10:76:EBRwCAGAAQCIIAiAAABI",
     "mines": 17,
+    "bv": 24,
     "score": 1.0,
     "opening": 15,
     "pair": 0,
@@ -898,6 +1010,7 @@
   {
     "code": "12x10:56:CQIAITEQACEAIAAKEAAM",
     "mines": 17,
+    "bv": 27,
     "score": 1.2,
     "opening": 32,
     "pair": 0,
@@ -906,22 +1019,25 @@
   {
     "code": "12x10:73:wCAAYBIEGCBgAISABAAA",
     "mines": 17,
+    "bv": 33,
     "score": 1.2,
     "opening": 37,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "12x10:64:AGBgAAAEKAAICEEGEDEA",
+    "code": "12x10:42:oAC6EAAAAgIgREAACAIg",
     "mines": 17,
-    "score": 1.5,
-    "opening": 15,
-    "pair": 0,
+    "bv": 18,
+    "score": 3.8,
+    "opening": 16,
+    "pair": 1,
     "count": 0
   },
   {
     "code": "12x10:65:QAggBQAOAAoCBACBSAAw",
     "mines": 18,
+    "bv": 32,
     "score": 0.9,
     "opening": 31,
     "pair": 0,
@@ -930,6 +1046,7 @@
   {
     "code": "12x10:84:AQQMAIRQAIEGAEAAkCIC",
     "mines": 18,
+    "bv": 39,
     "score": 1.1,
     "opening": 34,
     "pair": 0,
@@ -938,6 +1055,7 @@
   {
     "code": "12x10:84:iiQEAAgAQECACGAgAAko",
     "mines": 18,
+    "bv": 35,
     "score": 1.2,
     "opening": 18,
     "pair": 0,
@@ -946,6 +1064,7 @@
   {
     "code": "12x10:32:AIgAQCwAIQCAAQEJIYiA",
     "mines": 18,
+    "bv": 32,
     "score": 1.3,
     "opening": 37,
     "pair": 0,
@@ -954,15 +1073,8 @@
   {
     "code": "12x10:65:AiAAAhFggAAAwAhQZMAA",
     "mines": 18,
+    "bv": 29,
     "score": 1.3,
-    "opening": 29,
-    "pair": 0,
-    "count": 0
-  },
-  {
-    "code": "12x10:66:AiaAAFABAjAAIQAIEAEY",
-    "mines": 18,
-    "score": 1.4,
     "opening": 29,
     "pair": 0,
     "count": 0
@@ -970,15 +1082,26 @@
   {
     "code": "12x10:27:0AAQAJAhEQAIAwACQIGA",
     "mines": 18,
+    "bv": 26,
     "score": 1.4,
     "opening": 18,
     "pair": 0,
     "count": 0
   },
   {
+    "code": "12x10:23:BAAAAApACUBGCEKEAgQI",
+    "mines": 18,
+    "bv": 47,
+    "score": 2.4,
+    "opening": 27,
+    "pair": 0,
+    "count": 0
+  },
+  {
     "code": "12x10:46:QBBwAkMIJAAQAIBACCIA",
     "mines": 18,
-    "score": 3.4,
+    "bv": 25,
+    "score": 3.2,
     "opening": 26,
     "pair": 0,
     "count": 1
@@ -986,6 +1109,7 @@
   {
     "code": "12x10:55:BAAAVEBQAAQJQAwBAQGE",
     "mines": 18,
+    "bv": 26,
     "score": 4.5,
     "opening": 26,
     "pair": 1,
@@ -994,6 +1118,7 @@
   {
     "code": "12x10:43:EhABQRAAMGAgABCSEAAC",
     "mines": 18,
+    "bv": 37,
     "score": 4.8,
     "opening": 19,
     "pair": 1,
@@ -1002,14 +1127,25 @@
   {
     "code": "12x10:44:ggAABIggKIEAJJggEAAD",
     "mines": 19,
+    "bv": 26,
     "score": 4.1,
     "opening": 24,
     "pair": 1,
     "count": 0
   },
   {
+    "code": "12x10:41:EgSgABADAgACBRAUIQgI",
+    "mines": 19,
+    "bv": 39,
+    "score": 4.3,
+    "opening": 32,
+    "pair": 1,
+    "count": 0
+  },
+  {
     "code": "12x10:56:GiAIhMoIABIAAAggoAIA",
     "mines": 19,
+    "bv": 32,
     "score": 4.4,
     "opening": 29,
     "pair": 1,
@@ -1018,6 +1154,7 @@
   {
     "code": "12x10:55:SCkAAkhAIEgQAEQACQAw",
     "mines": 19,
+    "bv": 33,
     "score": 4.4,
     "opening": 29,
     "pair": 1,
@@ -1026,14 +1163,25 @@
   {
     "code": "12x10:48:QxARIAgICgAAAdEQCEAA",
     "mines": 19,
+    "bv": 27,
     "score": 4.5,
     "opening": 33,
     "pair": 1,
     "count": 0
   },
   {
+    "code": "12x10:86:hACKgAEAEogSAlAoABAA",
+    "mines": 19,
+    "bv": 37,
+    "score": 4.6,
+    "opening": 30,
+    "pair": 1,
+    "count": 0
+  },
+  {
     "code": "12x10:97:ABAACBBmAKDDFBAFEAAA",
     "mines": 19,
+    "bv": 42,
     "score": 4.6,
     "opening": 32,
     "pair": 1,
@@ -1042,6 +1190,7 @@
   {
     "code": "12x10:61:AELAAqAgwhEgIAgABAEQ",
     "mines": 19,
+    "bv": 23,
     "score": 4.8,
     "opening": 20,
     "pair": 1,
@@ -1050,62 +1199,52 @@
   {
     "code": "12x10:75:AhFQgoAKAIAIgSAAwiAA",
     "mines": 19,
+    "bv": 31,
     "score": 5.1,
     "opening": 27,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "12x10:56:UpSAAAIQIAIAiRBUAAAg",
-    "mines": 19,
-    "score": 6.5,
-    "opening": 31,
-    "pair": 1,
-    "count": 1
-  },
-  {
     "code": "12x10:64:ACwCQooAAAAgABFQUAgY",
     "mines": 19,
-    "score": 7.2,
+    "bv": 27,
+    "score": 7.0,
     "opening": 30,
     "pair": 1,
     "count": 1
   },
   {
-    "code": "12x10:43:IAggQAACAEgIOABtAIAY",
-    "mines": 19,
-    "score": 8.3,
-    "opening": 38,
-    "pair": 2,
-    "count": 0
-  },
-  {
-    "code": "12x10:62:DDBWAQYAIkCCAQCkAAAA",
+    "code": "12x10:93:hBBJAQAQABGAQQIAFCCi",
     "mines": 20,
-    "score": 4.1,
-    "opening": 15,
+    "bv": 33,
+    "score": 4.6,
+    "opening": 12,
     "pair": 1,
     "count": 0
   },
   {
     "code": "12x10:52:gCaMQIEBAAAgQgATAkAB",
     "mines": 20,
+    "bv": 39,
     "score": 4.6,
     "opening": 32,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "12x10:83:AQwECAACBQKRAEGhAFAg",
+    "code": "12x10:82:BAUBICABEAKAGIgAgGDI",
     "mines": 20,
-    "score": 4.9,
-    "opening": 19,
+    "bv": 36,
+    "score": 5.0,
+    "opening": 12,
     "pair": 1,
     "count": 0
   },
   {
     "code": "12x10:54:EQAIAEwAqAgAEEUAikgB",
     "mines": 20,
+    "bv": 45,
     "score": 5.0,
     "opening": 27,
     "pair": 1,
@@ -1114,31 +1253,35 @@
   {
     "code": "12x10:64:AFIAAkQIEKAIhAAEQCcB",
     "mines": 20,
+    "bv": 44,
     "score": 5.3,
     "opening": 18,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "12x10:76:JCAREABAAECCIACABlIx",
+    "code": "12x10:86:ABiCBIIGgAYggkCAJACA",
     "mines": 20,
-    "score": 7.4,
-    "opening": 12,
-    "pair": 2,
-    "count": 0
-  },
-  {
-    "code": "12x10:94:EECAEAgAJGLABACIAAyi",
-    "mines": 20,
-    "score": 7.5,
-    "opening": 22,
+    "bv": 40,
+    "score": 6.3,
+    "opening": 38,
     "pair": 1,
     "count": 1
   },
   {
+    "code": "12x10:95:QiAAgYAAwAiEkAEgGhAB",
+    "mines": 20,
+    "bv": 36,
+    "score": 7.4,
+    "opening": 16,
+    "pair": 2,
+    "count": 0
+  },
+  {
     "code": "12x10:57:DgQBAJAACQCDwEEACwgA",
     "mines": 20,
-    "score": 7.6,
+    "bv": 34,
+    "score": 7.4,
     "opening": 35,
     "pair": 1,
     "count": 1
@@ -1146,6 +1289,7 @@
   {
     "code": "12x10:86:AAJEQoISIAAAAiAMIABn",
     "mines": 20,
+    "bv": 38,
     "score": 11.5,
     "opening": 34,
     "pair": 3,
@@ -1154,22 +1298,25 @@
   {
     "code": "12x10:64:ACQAhIigkKAAgQNAgYAA",
     "mines": 20,
+    "bv": 38,
     "score": 13.9,
     "opening": 21,
     "pair": 4,
     "count": 0
   },
   {
-    "code": "12x10:65:AAgQBNBMwAIDwAgAAQgk",
+    "code": "12x10:55:QBAAXFAAmAIIeAgAgAAk",
     "mines": 21,
-    "score": 7.5,
-    "opening": 31,
+    "bv": 27,
+    "score": 7.6,
+    "opening": 15,
     "pair": 2,
     "count": 0
   },
   {
     "code": "12x10:64:gBKBgAAkICwAgigxAEgA",
     "mines": 21,
+    "bv": 48,
     "score": 11.4,
     "opening": 18,
     "pair": 3,
@@ -1178,22 +1325,25 @@
   {
     "code": "12x10:46:BKQCYAAoACCAHEAoAYUA",
     "mines": 21,
+    "bv": 42,
     "score": 13.9,
     "opening": 12,
     "pair": 4,
     "count": 0
   },
   {
-    "code": "12x10:75:QGAAGADSYWECAFEAQACA",
+    "code": "12x10:76:QCAAGADTYSECAFgAYACA",
     "mines": 21,
-    "score": 14.3,
-    "opening": 35,
-    "pair": 4,
+    "bv": 35,
+    "score": 17.8,
+    "opening": 15,
+    "pair": 5,
     "count": 0
   },
   {
     "code": "12x10:74:AQECAMIOHkIAAAEACwAJ",
     "mines": 21,
+    "bv": 37,
     "score": 20.1,
     "opening": 30,
     "pair": 6,
@@ -1202,14 +1352,25 @@
   {
     "code": "14x11:82:JIgABoABgAEEBAIgAROAAAAkIA",
     "mines": 22,
+    "bv": 44,
     "score": 0.9,
     "opening": 34,
     "pair": 0,
     "count": 0
   },
   {
+    "code": "14x11:59:AhgQQBIAAECICgICAACwgAiAYA",
+    "mines": 22,
+    "bv": 33,
+    "score": 1.1,
+    "opening": 49,
+    "pair": 0,
+    "count": 0
+  },
+  {
     "code": "14x11:37:UBQAAVGAICIANBABAAAADAYAAg",
     "mines": 22,
+    "bv": 25,
     "score": 1.1,
     "opening": 27,
     "pair": 0,
@@ -1218,22 +1379,16 @@
   {
     "code": "14x11:112:AAABMGAA5IAAAAIyQAQIAgDEAI",
     "mines": 22,
+    "bv": 39,
     "score": 1.1,
     "opening": 29,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "14x11:129:AwEEAIAAAFMBCAxAQkIgAQDAAA",
-    "mines": 22,
-    "score": 3.0,
-    "opening": 22,
-    "pair": 0,
-    "count": 0
-  },
-  {
     "code": "14x11:105:iACQJEQQYAAEAAAQABMAKhQAgA",
     "mines": 22,
+    "bv": 28,
     "score": 3.1,
     "opening": 47,
     "pair": 0,
@@ -1242,6 +1397,7 @@
   {
     "code": "14x11:91:DYADpBABAFgABAABAAAQSAQEBI",
     "mines": 23,
+    "bv": 31,
     "score": 1.0,
     "opening": 31,
     "pair": 0,
@@ -1250,6 +1406,7 @@
   {
     "code": "14x11:84:CAAAABGFBFCABACMACBACAgOSA",
     "mines": 23,
+    "bv": 30,
     "score": 1.1,
     "opening": 34,
     "pair": 0,
@@ -1258,6 +1415,7 @@
   {
     "code": "14x11:61:oEACAIhYAiAAABCAogEIAAQCcA",
     "mines": 23,
+    "bv": 37,
     "score": 1.1,
     "opening": 46,
     "pair": 0,
@@ -1266,6 +1424,7 @@
   {
     "code": "14x11:38:ABQAgEABCp4AgiaAAAAAgEEBAE",
     "mines": 23,
+    "bv": 39,
     "score": 1.3,
     "opening": 36,
     "pair": 0,
@@ -1274,30 +1433,34 @@
   {
     "code": "14x11:46:AgCcAAAAEQACAgYI6AASAAA7AA",
     "mines": 23,
+    "bv": 37,
     "score": 1.4,
     "opening": 40,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "14x11:105:AhgEAiDAAwggiCQAARAAUAEQBA",
-    "mines": 23,
-    "score": 1.4,
-    "opening": 17,
-    "pair": 0,
-    "count": 0
-  },
-  {
     "code": "14x11:50:IAQEARAnBQCBQAACgwAgICAAgg",
     "mines": 23,
+    "bv": 27,
     "score": 1.5,
     "opening": 36,
     "pair": 0,
     "count": 0
   },
   {
+    "code": "14x11:94:QRCCABgECAAlAQQAAAGNEAEQCA",
+    "mines": 23,
+    "bv": 43,
+    "score": 2.2,
+    "opening": 21,
+    "pair": 0,
+    "count": 0
+  },
+  {
     "code": "14x11:96:ACAEIRABVIEAAoBACgAEAAEmAM",
     "mines": 23,
+    "bv": 40,
     "score": 4.3,
     "opening": 46,
     "pair": 1,
@@ -1306,6 +1469,7 @@
   {
     "code": "14x11:52:BoIhQAARQAgABQBEEAQEAAD4gA",
     "mines": 24,
+    "bv": 36,
     "score": 1.4,
     "opening": 37,
     "pair": 0,
@@ -1314,6 +1478,7 @@
   {
     "code": "14x11:51:BA4EAgQAQCAIAiJEIgWEAAggCA",
     "mines": 24,
+    "bv": 39,
     "score": 1.6,
     "opening": 31,
     "pair": 0,
@@ -1322,6 +1487,7 @@
   {
     "code": "14x11:82:wSQSABRASBCgAIAAAADKAAAERg",
     "mines": 24,
+    "bv": 37,
     "score": 1.7,
     "opening": 36,
     "pair": 0,
@@ -1330,7 +1496,8 @@
   {
     "code": "14x11:26:QagAADEASAAIoIIIAgAQEhQQBA",
     "mines": 24,
-    "score": 3.6,
+    "bv": 41,
+    "score": 3.4,
     "opening": 18,
     "pair": 0,
     "count": 1
@@ -1338,6 +1505,7 @@
   {
     "code": "14x11:24:BIAUAEQCACCggAhADAAZgBAkIE",
     "mines": 24,
+    "bv": 44,
     "score": 3.8,
     "opening": 18,
     "pair": 0,
@@ -1346,6 +1514,7 @@
   {
     "code": "14x11:61:AAFAQAFAAIAoIhYEAEAGGAEEEo",
     "mines": 24,
+    "bv": 37,
     "score": 4.5,
     "opening": 24,
     "pair": 1,
@@ -1354,6 +1523,7 @@
   {
     "code": "14x11:92:AAgSAHkAQACARhAgkECIAoAIAg",
     "mines": 24,
+    "bv": 32,
     "score": 4.7,
     "opening": 30,
     "pair": 1,
@@ -1362,54 +1532,52 @@
   {
     "code": "14x11:62:IEgAiAsAAwCACARFQKBAAgKAAI",
     "mines": 24,
-    "score": 7.0,
+    "bv": 33,
+    "score": 6.8,
     "opening": 37,
     "pair": 1,
     "count": 1
   },
   {
+    "code": "14x11:82:BDAABEQEoEgAFoEADASKAgCQAA",
+    "mines": 25,
+    "bv": 42,
+    "score": 1.9,
+    "opening": 31,
+    "pair": 0,
+    "count": 0
+  },
+  {
     "code": "14x11:58:EGAAIggQKgAQQOAEAAIZAIAYKA",
     "mines": 25,
+    "bv": 34,
     "score": 2.1,
     "opening": 12,
     "pair": 0,
     "count": 0
   },
   {
+    "code": "14x11:68:IAXIAoQAAAkAQAwQAcAAoGABBQ",
+    "mines": 25,
+    "bv": 32,
+    "score": 3.4,
+    "opening": 41,
+    "pair": 0,
+    "count": 1
+  },
+  {
     "code": "14x11:79:FEAcwA4CAhRAAAgAVCAACQABAQ",
     "mines": 25,
+    "bv": 34,
     "score": 3.6,
     "opening": 45,
     "pair": 0,
     "count": 1
   },
   {
-    "code": "14x11:68:IAXIAoQAAAkAQAwQAcAAoGABBQ",
-    "mines": 25,
-    "score": 3.6,
-    "opening": 41,
-    "pair": 0,
-    "count": 1
-  },
-  {
-    "code": "14x11:127:KIIAAGIwBFAiQAAAgIEAhAMDIA",
-    "mines": 25,
-    "score": 4.7,
-    "opening": 26,
-    "pair": 1,
-    "count": 0
-  },
-  {
-    "code": "14x11:57:AAJFAJIABAoAEgEQSFABCgoCQA",
-    "mines": 25,
-    "score": 4.7,
-    "opening": 20,
-    "pair": 1,
-    "count": 0
-  },
-  {
     "code": "14x11:69:EgAwCggAgQoAAAIBwYAgSQgAoE",
     "mines": 25,
+    "bv": 41,
     "score": 4.8,
     "opening": 36,
     "pair": 1,
@@ -1418,14 +1586,25 @@
   {
     "code": "14x11:47:gAoCICAQUwAAIhBQIARoAAMkAA",
     "mines": 25,
+    "bv": 55,
     "score": 5.0,
     "opening": 21,
     "pair": 1,
     "count": 0
   },
   {
+    "code": "14x11:70:AMIAosMQAAEACBEAIhAMAAQQmA",
+    "mines": 25,
+    "bv": 35,
+    "score": 5.0,
+    "opening": 49,
+    "pair": 1,
+    "count": 0
+  },
+  {
     "code": "14x11:101:QWMAQAAAysABQAIEAAAQAIYQEo",
     "mines": 25,
+    "bv": 49,
     "score": 7.6,
     "opening": 30,
     "pair": 2,
@@ -1434,6 +1613,7 @@
   {
     "code": "14x11:80:gSKAQRABARAgAACEBAIEGIBBlg",
     "mines": 26,
+    "bv": 39,
     "score": 4.8,
     "opening": 15,
     "pair": 1,
@@ -1442,6 +1622,7 @@
   {
     "code": "14x11:82:KIAARgCSQ7CgCICBAISAAAIABA",
     "mines": 26,
+    "bv": 38,
     "score": 4.9,
     "opening": 20,
     "pair": 1,
@@ -1450,6 +1631,7 @@
   {
     "code": "14x11:61:ACAgIGGCCECACIBSAMBwgEAgBg",
     "mines": 26,
+    "bv": 26,
     "score": 5.1,
     "opening": 39,
     "pair": 1,
@@ -1458,6 +1640,7 @@
   {
     "code": "14x11:95:CKAKAAgRKiCU4ACAAACEIgAEQE",
     "mines": 26,
+    "bv": 36,
     "score": 5.2,
     "opening": 42,
     "pair": 1,
@@ -1466,6 +1649,7 @@
   {
     "code": "14x11:94:EBRUKQAJggIAAYQQAAIEEgLAAE",
     "mines": 26,
+    "bv": 65,
     "score": 5.5,
     "opening": 22,
     "pair": 1,
@@ -1474,30 +1658,34 @@
   {
     "code": "14x11:103:FQgcAAgBQVBAQoBCAAQEEUgQAA",
     "mines": 26,
+    "bv": 41,
     "score": 5.7,
     "opening": 27,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "14x11:112:AkgAMSGAQBAQAADBEQAKhEDCAE",
+    "code": "14x11:25:MABgAAHACADAdEASABkAgBgCAk",
     "mines": 26,
-    "score": 8.3,
-    "opening": 19,
-    "pair": 2,
-    "count": 0
+    "bv": 36,
+    "score": 6.5,
+    "opening": 44,
+    "pair": 1,
+    "count": 1
   },
   {
-    "code": "14x11:69:AASKBQgAJAAAwAggD4gcEBAAwA",
+    "code": "14x11:37:BEgBA0AAEqFAAFBBAIEICAGSAQ",
     "mines": 26,
-    "score": 16.3,
+    "bv": 58,
+    "score": 15.0,
     "opening": 32,
     "pair": 4,
-    "count": 1
+    "count": 0
   },
   {
     "code": "14x11:80:iQAGCIgIADIAAAyEABAAOBAipI",
     "mines": 27,
+    "bv": 54,
     "score": 4.7,
     "opening": 25,
     "pair": 1,
@@ -1506,46 +1694,52 @@
   {
     "code": "14x11:68:AEhAQBBMEAFABCQGBACFCiwGAA",
     "mines": 27,
+    "bv": 53,
     "score": 5.0,
     "opening": 32,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "14x11:106:AAABESARQAMAILWQAoCAACQNDA",
-    "mines": 27,
-    "score": 5.0,
-    "opening": 34,
-    "pair": 1,
-    "count": 0
-  },
-  {
     "code": "14x11:58:BGA6gBCEBAIQEQAEUKAQAESCBA",
     "mines": 27,
+    "bv": 59,
     "score": 5.2,
     "opening": 31,
     "pair": 1,
     "count": 0
   },
   {
+    "code": "14x11:74:CKQgBRCAMQQkAAAAUgBJBAEkAk",
+    "mines": 27,
+    "bv": 57,
+    "score": 5.9,
+    "opening": 34,
+    "pair": 1,
+    "count": 0
+  },
+  {
     "code": "14x11:113:ABAUABgiQiJDGQGEABIYABQAgA",
     "mines": 27,
+    "bv": 35,
     "score": 8.4,
     "opening": 42,
     "pair": 2,
     "count": 0
   },
   {
-    "code": "14x11:29:AAIGABQyQyxCoAAgggABCgoAQA",
+    "code": "14x11:81:AhEiAAACBAggTQRASChaUgAAAg",
     "mines": 27,
-    "score": 11.2,
-    "opening": 25,
-    "pair": 3,
-    "count": 0
+    "bv": 47,
+    "score": 10.7,
+    "opening": 16,
+    "pair": 2,
+    "count": 1
   },
   {
     "code": "14x11:93:AEAAAQAEC7GhCAghhAQSCAwACQ",
     "mines": 27,
+    "bv": 51,
     "score": 14.5,
     "opening": 12,
     "pair": 4,
@@ -1554,14 +1748,25 @@
   {
     "code": "14x11:92:EECKBMIAFDAilgAgAAGQCAIQIA",
     "mines": 27,
+    "bv": 53,
     "score": 15.2,
     "opening": 40,
     "pair": 4,
     "count": 0
   },
   {
+    "code": "14x11:63:kEAAAYEgAQQCCFEw4VAgKAEAMA",
+    "mines": 28,
+    "bv": 33,
+    "score": 7.8,
+    "opening": 12,
+    "pair": 2,
+    "count": 0
+  },
+  {
     "code": "14x11:82:EBQBCBCgAKcQAAIAQgDSQARgFg",
     "mines": 28,
+    "bv": 50,
     "score": 9.1,
     "opening": 26,
     "pair": 2,
@@ -1570,22 +1775,16 @@
   {
     "code": "14x11:104:YgACmAEAZJiIBwhwACAAAEiAAg",
     "mines": 28,
+    "bv": 44,
     "score": 14.5,
     "opening": 41,
     "pair": 4,
     "count": 0
   },
   {
-    "code": "14x11:105:GAAoAQAiBSFEEqgARhAAAgERAk",
-    "mines": 28,
-    "score": 14.9,
-    "opening": 12,
-    "pair": 4,
-    "count": 0
-  },
-  {
     "code": "14x11:73:AaAAASUMQoAAAYAQIIkUwASADI",
     "mines": 28,
+    "bv": 49,
     "score": 23.0,
     "opening": 37,
     "pair": 7,
@@ -1594,6 +1793,7 @@
   {
     "code": "14x11:80:GMgMiAIgAAQQAAEDCEnQKIUAAA",
     "mines": 28,
+    "bv": 51,
     "score": 23.2,
     "opening": 35,
     "pair": 6,
@@ -1602,6 +1802,7 @@
   {
     "code": "16x12:149:hCAAMAAjABCAMQAAADQAEIAJgAkYAkAB",
     "mines": 28,
+    "bv": 51,
     "score": 0.9,
     "opening": 42,
     "pair": 0,
@@ -1610,6 +1811,7 @@
   {
     "code": "16x12:140:AAgACUAjADgwAAAUAABCAAhAiBAAohMg",
     "mines": 28,
+    "bv": 38,
     "score": 1.0,
     "opening": 36,
     "pair": 0,
@@ -1618,6 +1820,7 @@
   {
     "code": "16x12:67:RgiAQAABACJAAABRiAgKAkAQBQABkEBA",
     "mines": 28,
+    "bv": 47,
     "score": 1.4,
     "opening": 55,
     "pair": 0,
@@ -1626,6 +1829,7 @@
   {
     "code": "16x12:40:gkACAAABoAAAEISiaAgCBAALAIQoBgAA",
     "mines": 28,
+    "bv": 40,
     "score": 4.4,
     "opening": 62,
     "pair": 1,
@@ -1634,6 +1838,7 @@
   {
     "code": "16x12:50:AB2QgAAACABNAgECBAAQAoQBQADUQAAF",
     "mines": 29,
+    "bv": 57,
     "score": 1.4,
     "opening": 47,
     "pair": 0,
@@ -1642,6 +1847,7 @@
   {
     "code": "16x12:42:QAEYgAACACEEEICAAgYgCCAAQZQQIUgC",
     "mines": 29,
+    "bv": 52,
     "score": 1.5,
     "opening": 59,
     "pair": 0,
@@ -1650,6 +1856,7 @@
   {
     "code": "16x12:32:gCACKAAAZAgAkUIACAJEABKhAIAAAGEi",
     "mines": 29,
+    "bv": 55,
     "score": 1.5,
     "opening": 52,
     "pair": 0,
@@ -1658,6 +1865,7 @@
   {
     "code": "16x12:64:EIAIAAcCgKAwICAAQkAQEAIAAIAAhWFC",
     "mines": 29,
+    "bv": 50,
     "score": 1.7,
     "opening": 21,
     "pair": 0,
@@ -1666,6 +1874,7 @@
   {
     "code": "16x12:78:IiMCCgAAQIKAABCAYEAgIAAARMECQAhB",
     "mines": 29,
+    "bv": 55,
     "score": 2.1,
     "opening": 28,
     "pair": 0,
@@ -1674,6 +1883,7 @@
   {
     "code": "16x12:54:EEAkCAABEBAAoQQEiAAAhgDABOCABEAD",
     "mines": 29,
+    "bv": 34,
     "score": 3.9,
     "opening": 39,
     "pair": 1,
@@ -1682,6 +1892,7 @@
   {
     "code": "16x12:126:BKIAAGAQBAIhKBBGCAAAIBwIRAggIAgA",
     "mines": 29,
+    "bv": 39,
     "score": 4.3,
     "opening": 33,
     "pair": 1,
@@ -1690,6 +1901,7 @@
   {
     "code": "16x12:137:SICDCAAAAEhUGAEAIAAAQCQQQIKAhyEA",
     "mines": 30,
+    "bv": 46,
     "score": 1.3,
     "opening": 60,
     "pair": 0,
@@ -1698,6 +1910,7 @@
   {
     "code": "16x12:77:AACAeBKARAwJAQIAAACUIUCAkIAIQEBA",
     "mines": 30,
+    "bv": 43,
     "score": 1.8,
     "opening": 21,
     "pair": 0,
@@ -1706,6 +1919,7 @@
   {
     "code": "16x12:103:AgyEAgKAwEBAAgAABAkEEQFQAIBcDAAg",
     "mines": 30,
+    "bv": 56,
     "score": 1.8,
     "opening": 58,
     "pair": 0,
@@ -1714,7 +1928,8 @@
   {
     "code": "16x12:99:wAICEEEAA4AACQAAhlQcBgACIAAQIACh",
     "mines": 30,
-    "score": 3.7,
+    "bv": 37,
+    "score": 3.5,
     "opening": 38,
     "pair": 0,
     "count": 1
@@ -1722,6 +1937,7 @@
   {
     "code": "16x12:102:AEAgABkAeAICMAIMAKAIGAAgEQkAgBAK",
     "mines": 30,
+    "bv": 32,
     "score": 4.1,
     "opening": 52,
     "pair": 1,
@@ -1730,6 +1946,7 @@
   {
     "code": "16x12:67:KoDDHAAAwEDCQAAAAAJEADA0oAAAABEA",
     "mines": 30,
+    "bv": 35,
     "score": 4.3,
     "opening": 57,
     "pair": 1,
@@ -1738,6 +1955,7 @@
   {
     "code": "16x12:50:ABCgBADgAAABAmBAQIsCYAwAACgADgMQ",
     "mines": 30,
+    "bv": 37,
     "score": 4.7,
     "opening": 42,
     "pair": 1,
@@ -1746,6 +1964,7 @@
   {
     "code": "16x12:126:AoQACABYAAEtAACAABiBAIQGIAQQQsgk",
     "mines": 31,
+    "bv": 51,
     "score": 1.2,
     "opening": 52,
     "pair": 0,
@@ -1754,14 +1973,25 @@
   {
     "code": "16x12:80:BCAEAIAVAABAGCIAWNBIYEkAAUAABwAI",
     "mines": 31,
+    "bv": 52,
     "score": 2.8,
     "opening": 21,
     "pair": 0,
     "count": 0
   },
   {
+    "code": "16x12:52:AAAECkAIwIAAgIQAAQgwIDQAQhHQAHkA",
+    "mines": 31,
+    "bv": 40,
+    "score": 4.3,
+    "opening": 48,
+    "pair": 1,
+    "count": 0
+  },
+  {
     "code": "16x12:162:AnABgAgEC0IREAAREgJgAICgACAIgIAg",
     "mines": 31,
+    "bv": 36,
     "score": 4.8,
     "opening": 51,
     "pair": 1,
@@ -1770,6 +2000,7 @@
   {
     "code": "16x12:67:GowBAEIAgBgEEAmAAgACAkAACIDSQCAi",
     "mines": 31,
+    "bv": 59,
     "score": 4.9,
     "opening": 55,
     "pair": 1,
@@ -1778,23 +2009,17 @@
   {
     "code": "16x12:88:BMEAAYMogogAAgAgAEMDAAkICRAoGAAA",
     "mines": 31,
+    "bv": 47,
     "score": 5.4,
     "opening": 32,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "16x12:127:mCAAYgCABAAIFAQICBCAgFIEkglKABAA",
-    "mines": 31,
-    "score": 5.4,
-    "opening": 19,
-    "pair": 1,
-    "count": 0
-  },
-  {
     "code": "16x12:103:AAgYASAFhAEhSJgAgA1AgQBBCCBAAAEQ",
     "mines": 31,
-    "score": 7.2,
+    "bv": 54,
+    "score": 7.0,
     "opening": 30,
     "pair": 1,
     "count": 1
@@ -1802,6 +2027,7 @@
   {
     "code": "16x12:44:ASGARAoAAAI0AAINggAiCoAEgABAKAA1",
     "mines": 32,
+    "bv": 52,
     "score": 3.4,
     "opening": 28,
     "pair": 0,
@@ -1810,22 +2036,16 @@
   {
     "code": "16x12:79:AMgChCYGAEAAoEAAlRAASEAAgyCgAQQB",
     "mines": 32,
+    "bv": 57,
     "score": 5.0,
     "opening": 36,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "16x12:123:AGYADIEABUgWFBMiAgAQQBAEYACIBAAA",
-    "mines": 32,
-    "score": 5.3,
-    "opening": 32,
-    "pair": 1,
-    "count": 0
-  },
-  {
     "code": "16x12:126:KAAE1AABQgIgCRAggVoCACIIYAAAIAGQ",
     "mines": 32,
+    "bv": 45,
     "score": 5.5,
     "opening": 56,
     "pair": 1,
@@ -1834,30 +2054,43 @@
   {
     "code": "16x12:147:AEAMAEAAUQAAphAElALRAFAAhIBSAAED",
     "mines": 32,
+    "bv": 66,
     "score": 5.6,
     "opening": 25,
     "pair": 1,
     "count": 0
   },
   {
+    "code": "16x12:137:QIEMBAAALAMQKCFAA4sBAAEBAAEEAgUQ",
+    "mines": 32,
+    "bv": 54,
+    "score": 5.7,
+    "opening": 33,
+    "pair": 1,
+    "count": 0
+  },
+  {
     "code": "16x12:137:QAGKAABpQAgAJAjDiSOAAAACAAkBBQEA",
     "mines": 32,
+    "bv": 57,
     "score": 5.8,
     "opening": 53,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "16x12:116:QAEcBABQDAEBYEDDAgFAHAQFAAEAggAB",
+    "code": "16x12:88:AogEARQQCDBAAQoUAAIABkDhAAgQQARk",
     "mines": 32,
-    "score": 8.0,
-    "opening": 50,
+    "bv": 52,
+    "score": 9.4,
+    "opening": 16,
     "pair": 2,
-    "count": 0
+    "count": 1
   },
   {
     "code": "16x12:149:AAAYQBQ40IIMCABAJKEEAEAAUKACgQAJ",
     "mines": 33,
+    "bv": 57,
     "score": 5.2,
     "opening": 38,
     "pair": 1,
@@ -1866,54 +2099,61 @@
   {
     "code": "16x12:140:BCIIUAAAIABGCIQogQIBggAAIAEQQObC",
     "mines": 33,
+    "bv": 55,
     "score": 5.4,
     "opening": 26,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "16x12:90:QIEACACBABA8kCEIEIBEGEBhEAFRgAAQ",
+    "code": "16x12:28:EsQAoEAAAFAodAAAcISGAIGCAIgAQAAK",
     "mines": 33,
-    "score": 5.6,
-    "opening": 12,
+    "bv": 53,
+    "score": 7.6,
+    "opening": 36,
     "pair": 1,
-    "count": 0
+    "count": 1
   },
   {
-    "code": "16x12:134:EMQFEAAQoFDoAADhCQQBAGAQAIgAQAAq",
+    "code": "16x12:91:QAiBEABA6RQUIAACkAEAIlQgAQ0ABIBA",
     "mines": 33,
-    "score": 8.6,
-    "opening": 44,
+    "bv": 71,
+    "score": 9.4,
+    "opening": 30,
     "pair": 2,
     "count": 0
   },
   {
-    "code": "16x12:89:CKAaGCBAATABEQQAAABggEACohACDUEB",
+    "code": "16x12:112:EgAAgUUREIABCBQAAogAoAAoASiADMqA",
     "mines": 33,
-    "score": 10.0,
-    "opening": 15,
+    "bv": 59,
+    "score": 10.5,
+    "opening": 21,
     "pair": 2,
     "count": 1
   },
   {
     "code": "16x12:86:QJQAAACCAACAAACIgIA-LhKCIAgghChC",
     "mines": 33,
+    "bv": 37,
     "score": 10.9,
     "opening": 30,
     "pair": 3,
     "count": 0
   },
   {
-    "code": "16x12:77:QCAECAACYCIUAI4AIRQgJEABJYBAAhwA",
+    "code": "16x12:29:DBERAAQIAIAAAACSoEkBMARACwigwaAA",
     "mines": 33,
-    "score": 11.2,
-    "opening": 52,
+    "bv": 48,
+    "score": 10.9,
+    "opening": 43,
     "pair": 2,
     "count": 1
   },
   {
     "code": "16x12:113:ACAgQBAhAFTICAAAACgNAGFB0AJBAGiB",
     "mines": 34,
+    "bv": 45,
     "score": 5.7,
     "opening": 43,
     "pair": 1,
@@ -1922,23 +2162,26 @@
   {
     "code": "16x12:39:gCABAAAoBgwAWdEQBIiBAABEAikBQRAg",
     "mines": 34,
+    "bv": 63,
     "score": 6.0,
     "opening": 43,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "16x12:138:AkAhUAQBMAQAkAAmQAECACQCQKBSEBET",
+    "code": "16x12:88:IABIKOAAAACQAiAJwEAwCpBUABCCIAjQ",
     "mines": 34,
-    "score": 7.2,
-    "opening": 37,
-    "pair": 1,
-    "count": 1
+    "bv": 59,
+    "score": 8.4,
+    "opening": 38,
+    "pair": 2,
+    "count": 0
   },
   {
     "code": "16x12:101:CCaCjACAgIKiIAMQAAMEIRABLAEAAgCC",
     "mines": 34,
-    "score": 16.5,
+    "bv": 45,
+    "score": 16.4,
     "opening": 18,
     "pair": 4,
     "count": 1
@@ -1946,7 +2189,8 @@
   {
     "code": "16x12:80:AAAgEJAKIQgAmB-AAAESBEgCFQgEJhAA",
     "mines": 34,
-    "score": 17.3,
+    "bv": 74,
+    "score": 17.1,
     "opening": 27,
     "pair": 4,
     "count": 1
@@ -1954,6 +2198,7 @@
   {
     "code": "16x12:138:ClEISACAiCBgBACASoEDQEECAAKAIGAo",
     "mines": 34,
+    "bv": 52,
     "score": 18.0,
     "opening": 31,
     "pair": 5,
@@ -1962,22 +2207,16 @@
   {
     "code": "16x12:86:QAECAAAGIgBWCQASAIcSRAAiSAAQggEW",
     "mines": 34,
+    "bv": 80,
     "score": 19.5,
     "opening": 27,
     "pair": 5,
     "count": 0
   },
   {
-    "code": "16x12:66:ACkQECKggNAAoAIBAAIi0eLAAgAABEAD",
-    "mines": 35,
-    "score": 10.3,
-    "opening": 43,
-    "pair": 2,
-    "count": 0
-  },
-  {
     "code": "16x12:86:iQCGhBBgAAIQAgDAAgFIABEiCANAKBHC",
     "mines": 35,
+    "bv": 43,
     "score": 11.2,
     "opening": 36,
     "pair": 3,
@@ -1986,38 +2225,52 @@
   {
     "code": "16x12:49:JQADACCUBQEAIKSJHQgABBAFBMAAgEAJ",
     "mines": 35,
+    "bv": 63,
     "score": 12.6,
     "opening": 23,
     "pair": 3,
     "count": 0
   },
   {
-    "code": "16x12:76:BQhSSgSMhEAAgYAAwSBAEQAAQSEEIiCA",
+    "code": "16x12:76:EAAIgpAAHCAAACQQIAeQAEAASaUAGq4A",
     "mines": 35,
-    "score": 16.7,
-    "opening": 30,
+    "bv": 77,
+    "score": 14.4,
+    "opening": 19,
     "pair": 4,
-    "count": 1
+    "count": 0
+  },
+  {
+    "code": "16x12:103:AIIoIKBAzAAQxgAEAABFMEIQAGAACKhJ",
+    "mines": 35,
+    "bv": 52,
+    "score": 14.6,
+    "opening": 12,
+    "pair": 4,
+    "count": 0
   },
   {
     "code": "18x14:134:RAAgKEggAgAABAAMEAACFKgAIUgGYAEAAABGAAoIiK",
     "mines": 38,
+    "bv": 46,
     "score": 1.1,
     "opening": 73,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "18x14:66:AAgSZEAAAACAAAAQngEAwMAiAwAgABlAQEYgSJAAAI",
+    "code": "18x14:121:AA0AAQIQEAEBQBBigAGAAUACIAIoEAQBCgSAgAgkAO",
     "mines": 38,
-    "score": 1.6,
-    "opening": 29,
+    "bv": 56,
+    "score": 1.3,
+    "opening": 45,
     "pair": 0,
     "count": 0
   },
   {
     "code": "18x14:202:ACkIAYACAIAAGIsQBQRIAAUCCERAYCEggABCAAAEMA",
     "mines": 38,
+    "bv": 57,
     "score": 1.8,
     "opening": 41,
     "pair": 0,
@@ -2026,7 +2279,8 @@
   {
     "code": "18x14:148:AAAnIgEJAESOAAAMAwAJBiAlIAAESAQAACAAEhQAgA",
     "mines": 38,
-    "score": 3.4,
+    "bv": 80,
+    "score": 3.2,
     "opening": 57,
     "pair": 0,
     "count": 1
@@ -2034,6 +2288,7 @@
   {
     "code": "18x14:148:AASBAGgARDQAAAQIAgBCFQAAAEYEAAAwAjjAQEFSIE",
     "mines": 39,
+    "bv": 65,
     "score": 1.4,
     "opening": 45,
     "pair": 0,
@@ -2042,6 +2297,7 @@
   {
     "code": "18x14:88:AAABQAABwqAxgEAQAAAABRYhQASQAoBAgEYFABGAgg",
     "mines": 39,
+    "bv": 53,
     "score": 1.5,
     "opening": 32,
     "pair": 0,
@@ -2050,6 +2306,7 @@
   {
     "code": "18x14:117:CAAESAkRACAOghgyAAEACADAtAQAgACAAMSASAEAoA",
     "mines": 39,
+    "bv": 64,
     "score": 1.5,
     "opening": 48,
     "pair": 0,
@@ -2058,6 +2315,7 @@
   {
     "code": "18x14:92:GAAEEAAOAEAAAABhAQgGGggIGAUEgAAGgGIAAoCKBB",
     "mines": 39,
+    "bv": 57,
     "score": 1.6,
     "opening": 63,
     "pair": 0,
@@ -2066,22 +2324,25 @@
   {
     "code": "18x14:145:QEQAJCBBAAKAQQIAIKtAAAIoCAAAQEAIBgALMAAVAk",
     "mines": 39,
+    "bv": 66,
     "score": 2.0,
     "opening": 47,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "18x14:118:IEAhgAAEAoQQAhAUIAgAAABgRAFBAAAgQhILwAUokA",
+    "code": "18x14:59:AAECggQgAABCAAQIBAAhHSAAgwDAKFABBgCACcABA0",
     "mines": 39,
-    "score": 4.5,
-    "opening": 75,
-    "pair": 1,
-    "count": 0
+    "bv": 64,
+    "score": 4.4,
+    "opening": 55,
+    "pair": 0,
+    "count": 1
   },
   {
     "code": "18x14:158:IEWMIIACABAAABMjEEBIEgAAAIgMAQYgAAwAIAAhkM",
     "mines": 40,
+    "bv": 52,
     "score": 1.2,
     "opening": 36,
     "pair": 0,
@@ -2090,6 +2351,7 @@
   {
     "code": "18x14:174:UAwEARsIAAAACABRCIwaQQIAAAAIEMUAgRMQIAAIQA",
     "mines": 40,
+    "bv": 52,
     "score": 1.6,
     "opening": 52,
     "pair": 0,
@@ -2098,6 +2360,7 @@
   {
     "code": "18x14:63:IgAQAAgCAJABECAAAGjQcwYIYUAKAAEAACIBAASERB",
     "mines": 40,
+    "bv": 47,
     "score": 1.7,
     "opening": 52,
     "pair": 0,
@@ -2106,22 +2369,25 @@
   {
     "code": "18x14:133:BkYIQAEAEABAkUCAFAAAEIAGRJAAbABEACAFEBgANA",
     "mines": 40,
+    "bv": 66,
     "score": 2.0,
     "opening": 79,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "18x14:149:AAAEAIAiARAQYEAMBlhEAYQAAABAIoIAAAsBoABTCD",
+    "code": "18x14:161:EAIIwAQgwAEFEAgcAQEBYBWQAgAABABYGAQCAADgAE",
     "mines": 40,
-    "score": 4.4,
-    "opening": 50,
-    "pair": 1,
+    "bv": 51,
+    "score": 2.5,
+    "opening": 42,
+    "pair": 0,
     "count": 0
   },
   {
     "code": "18x14:146:IoIhABCwAEAFIAiAICiBBAAABoQgAACEkAABAAwXAo",
     "mines": 40,
+    "bv": 74,
     "score": 4.4,
     "opening": 67,
     "pair": 1,
@@ -2130,6 +2396,7 @@
   {
     "code": "18x14:205:YBEAAAgAQAEBAIEEEAAAACAgHCqegAAgAhDGgKbAAA",
     "mines": 40,
+    "bv": 68,
     "score": 5.5,
     "opening": 16,
     "pair": 1,
@@ -2138,6 +2405,7 @@
   {
     "code": "18x14:143:AItgAAAYBCEYIIAiAATFEAU4AQACQDDAAABQwAAgBA",
     "mines": 41,
+    "bv": 57,
     "score": 4.6,
     "opening": 74,
     "pair": 1,
@@ -2146,6 +2414,7 @@
   {
     "code": "18x14:204:IAAhAQAwAAQUIAIgGAYGCoAEARAhKUAAQAElAABkEo",
     "mines": 41,
+    "bv": 89,
     "score": 4.7,
     "opening": 18,
     "pair": 1,
@@ -2154,6 +2423,7 @@
   {
     "code": "18x14:103:EBFAEIABAUIJEzQCEAQwADAQAhMACAACAAAkMEEEAo",
     "mines": 41,
+    "bv": 58,
     "score": 4.7,
     "opening": 37,
     "pair": 1,
@@ -2162,6 +2432,7 @@
   {
     "code": "18x14:147:AAABBABgEEAADwXTwYFgEkANACAAAAAgAEAREQQQDA",
     "mines": 41,
+    "bv": 35,
     "score": 5.1,
     "opening": 79,
     "pair": 1,
@@ -2170,22 +2441,25 @@
   {
     "code": "18x14:72:IQIEIAAEAAZIAAAAwAAFCIIkEgIIoEAOEMECAiKAAx",
     "mines": 41,
+    "bv": 89,
     "score": 5.3,
     "opening": 61,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "18x14:61:wQCxBQCQOBCAAEeIAAAQEEgQAARAUIAEAAoAEgBAAx",
+    "code": "18x14:146:CBEICgIAAAAAkQAYCJQDAABFACQBCBEEEDFBECUEAk",
     "mines": 41,
-    "score": 12.1,
-    "opening": 25,
-    "pair": 3,
-    "count": 0
+    "bv": 74,
+    "score": 5.4,
+    "opening": 36,
+    "pair": 0,
+    "count": 1
   },
   {
     "code": "18x14:100:UjAESAgBFBEAYggQAEQAAAjBIDAAGgAEAyCIVAAQgA",
     "mines": 42,
+    "bv": 61,
     "score": 4.7,
     "opening": 29,
     "pair": 1,
@@ -2194,6 +2468,7 @@
   {
     "code": "18x14:188:ABAABAJIEAQCiqMAxQhEACSEAgBhAAFBAIAAhAGgLA",
     "mines": 42,
+    "bv": 85,
     "score": 5.4,
     "opening": 26,
     "pair": 1,
@@ -2202,6 +2477,7 @@
   {
     "code": "18x14:150:miEHAAIUDAgAACCACHQIgiAYACUhAQQAAAEEAAkCAF",
     "mines": 42,
+    "bv": 50,
     "score": 5.7,
     "opening": 71,
     "pair": 1,
@@ -2210,30 +2486,34 @@
   {
     "code": "18x14:161:BFAQBEAooBJAADAggSAmIAAHAQATAECQBBgABCBCYA",
     "mines": 42,
+    "bv": 60,
     "score": 6.2,
     "opening": 28,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "18x14:117:gEMIpIRg4CNAAxAFBAQQCAACIACABGAAAAUiApAgAA",
-    "mines": 42,
-    "score": 8.2,
-    "opening": 64,
-    "pair": 2,
-    "count": 0
-  },
-  {
     "code": "18x14:116:BEEQAgYAAgQhogAICAABAQgCQkABUghCiQBBAACgqY",
     "mines": 42,
-    "score": 9.1,
+    "bv": 100,
+    "score": 8.9,
     "opening": 20,
     "pair": 1,
     "count": 1
   },
   {
+    "code": "18x14:218:CAAAsUoIAA5AEoQAIgkYJAAABAxBCDAMIgAUCkAAAA",
+    "mines": 42,
+    "bv": 84,
+    "score": 9.6,
+    "opening": 36,
+    "pair": 2,
+    "count": 0
+  },
+  {
     "code": "18x14:105:AAARZACABJAAQKAABgCAAJKkACoAAAAARJgigjgEpG",
     "mines": 42,
+    "bv": 77,
     "score": 11.1,
     "opening": 61,
     "pair": 2,
@@ -2242,6 +2522,7 @@
   {
     "code": "18x14:117:BAZmEILBCCEAAAQCAAAAIAAATQwIEAAAbAoAIAg0GH",
     "mines": 43,
+    "bv": 62,
     "score": 4.2,
     "opening": 61,
     "pair": 1,
@@ -2250,6 +2531,7 @@
   {
     "code": "18x14:151:ELAAIACGEDYggFBIIAYAEgoAAAAAQGRQgBwACIAENC",
     "mines": 43,
+    "bv": 76,
     "score": 5.0,
     "opening": 17,
     "pair": 1,
@@ -2258,6 +2540,7 @@
   {
     "code": "18x14:118:QQEBEEAghBJqYBAAgAgAAKICACBADAACAtAgyEAgcC",
     "mines": 43,
+    "bv": 79,
     "score": 5.1,
     "opening": 45,
     "pair": 1,
@@ -2266,22 +2549,16 @@
   {
     "code": "18x14:109:igBABoAADAA1UAEAQIEAgIQAAkgCEIAkIAEQDCQSC4",
     "mines": 43,
+    "bv": 72,
     "score": 5.3,
     "opening": 65,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "18x14:203:AEBBAQgQEFIAISAUoA1ECoIBzESAAIAAAAdgEACAAE",
-    "mines": 43,
-    "score": 5.5,
-    "opening": 56,
-    "pair": 1,
-    "count": 0
-  },
-  {
     "code": "18x14:47:AQAAAAAEAgBAMRCgBIBDgEggQQA4UwAEAAQgqCsJQh",
     "mines": 43,
+    "bv": 66,
     "score": 6.8,
     "opening": 75,
     "pair": 1,
@@ -2290,14 +2567,25 @@
   {
     "code": "18x14:132:FBBFpEQAgEQQABCIABFAAAAAgAAEARNVQBCrACRAEE",
     "mines": 43,
+    "bv": 74,
     "score": 7.8,
     "opening": 70,
     "pair": 1,
     "count": 1
   },
   {
+    "code": "18x14:34:AJACQAAMACQHoQCGABAgAAgAAWAaKAAIQQICxGYAgo",
+    "mines": 43,
+    "bv": 54,
+    "score": 8.4,
+    "opening": 68,
+    "pair": 2,
+    "count": 0
+  },
+  {
     "code": "18x14:51:FCAICCCUBEgABUSAAAEYCAAiMCRAAAxsABADASAFAq",
     "mines": 44,
+    "bv": 82,
     "score": 6.3,
     "opening": 19,
     "pair": 1,
@@ -2306,6 +2594,7 @@
   {
     "code": "18x14:116:AMAkAxEAmocASAIgAAFAAAhACAAAUAECCpIABIB8SB",
     "mines": 44,
+    "bv": 81,
     "score": 7.1,
     "opening": 41,
     "pair": 1,
@@ -2314,6 +2603,7 @@
   {
     "code": "18x14:50:EcT7AAAADCICAEQABAAAwgBagiQAIRAgiAAAFADIBC",
     "mines": 44,
+    "bv": 64,
     "score": 7.2,
     "opening": 62,
     "pair": 1,
@@ -2322,6 +2612,7 @@
   {
     "code": "18x14:78:BGUrDCAAIroCABICIQBAAAMAQwEEAABAUhwAAIkAEA",
     "mines": 44,
+    "bv": 75,
     "score": 11.3,
     "opening": 19,
     "pair": 3,
@@ -2330,6 +2621,7 @@
   {
     "code": "18x14:60:CACBIUgAAoAAAkAJAcAQcgAAQgBMBgAhIxhgAAshAF",
     "mines": 44,
+    "bv": 101,
     "score": 12.4,
     "opening": 38,
     "pair": 3,
@@ -2338,7 +2630,8 @@
   {
     "code": "18x14:78:EMBQBBoUEaAQABgAgKEICSQAAAOAAJgUAYEAAiEACK",
     "mines": 44,
-    "score": 14.3,
+    "bv": 79,
+    "score": 13.9,
     "opening": 71,
     "pair": 3,
     "count": 1
@@ -2346,22 +2639,34 @@
   {
     "code": "18x14:175:oNgAgIYUTMAgIkIQoAgAAAAQABUAUEggAQwAQAJECD",
     "mines": 45,
+    "bv": 80,
     "score": 6.0,
     "opening": 70,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "18x14:202:AVwMEgECJWCCEACUQBIZBQYQCkQAAgkAwgAAAICAAA",
+    "code": "18x14:164:MQIACagAACqwAIRSyBAMAAAAEABAQgPwAgBpAEAQEB",
     "mines": 45,
-    "score": 8.5,
-    "opening": 46,
+    "bv": 66,
+    "score": 7.8,
+    "opening": 67,
     "pair": 1,
     "count": 1
   },
   {
+    "code": "18x14:106:AAAgAwADABGASBFAYggADAlACCAUERDiIBSECEEGAD",
+    "mines": 45,
+    "bv": 61,
+    "score": 8.7,
+    "opening": 15,
+    "pair": 2,
+    "count": 0
+  },
+  {
     "code": "18x14:67:goACEFBEAA7AAQcygQwAgREUQASQAEAAWAgAAAARaA",
     "mines": 45,
+    "bv": 76,
     "score": 9.0,
     "opening": 25,
     "pair": 2,
@@ -2370,6 +2675,7 @@
   {
     "code": "18x14:156:EAggAaFKShOCAQgVAEYgAgUgBADAABMCIUAAAEBQgA",
     "mines": 45,
+    "bv": 83,
     "score": 9.8,
     "opening": 51,
     "pair": 2,
@@ -2378,6 +2684,7 @@
   {
     "code": "18x14:174:Q8KRAIgoRARAiQAhYEoBCQBgQAIiMEQAAkAAQAAADA",
     "mines": 45,
+    "bv": 81,
     "score": 11.7,
     "opening": 14,
     "pair": 3,
@@ -2386,46 +2693,52 @@
   {
     "code": "18x14:105:AkAEBIKaghkAjQIAAAAgBAXRYAMAYAJgQCCiIBACAA",
     "mines": 45,
+    "bv": 64,
     "score": 12.2,
     "opening": 47,
     "pair": 3,
     "count": 0
   },
   {
-    "code": "18x14:90:QASQAHgCkAgJAwADgDChQAABQAgYIIQDEAAAAQxCEL",
-    "mines": 45,
-    "score": 15.0,
-    "opening": 29,
-    "pair": 4,
+    "code": "18x14:135:AwAAFCIIFAwQkgBlAIEyBGAAAAAAiBAYAA4UIGYUAD",
+    "mines": 46,
+    "bv": 73,
+    "score": 9.1,
+    "opening": 60,
+    "pair": 2,
     "count": 0
   },
   {
     "code": "18x14:174:o8BAAAhMACBAiQzsAAACLRAgGEAAACJhgAAAEAgaAU",
     "mines": 46,
+    "bv": 54,
     "score": 11.4,
     "opening": 54,
     "pair": 3,
     "count": 0
   },
   {
-    "code": "18x14:134:AKAIZFQgCAAiKBwIIAQADEAAAAsEEEigIQEAEgKBtI",
-    "mines": 46,
-    "score": 11.4,
-    "opening": 62,
-    "pair": 2,
-    "count": 1
-  },
-  {
     "code": "18x14:164:IAkAMAWAggCAEAEEgmCEwAV5gAECEAIihAgAKGCYAA",
     "mines": 46,
+    "bv": 92,
     "score": 11.6,
     "opening": 18,
     "pair": 2,
     "count": 1
   },
   {
+    "code": "18x14:120:gaCQAEAiQAJAAiCAiAAEAYAkCIAAIkAiOEZAALaEGE",
+    "mines": 46,
+    "bv": 97,
+    "score": 13.0,
+    "opening": 38,
+    "pair": 3,
+    "count": 0
+  },
+  {
     "code": "18x14:163:wRgGAQAlAAxgAESaAxAgBQjCAWAAARIBgCoSAAQAAC",
     "mines": 46,
+    "bv": 74,
     "score": 13.4,
     "opening": 17,
     "pair": 3,
@@ -2434,22 +2747,16 @@
   {
     "code": "18x14:161:IAesFAAGBgAqSIQFAAgBgARCgIAAAGAEIIgIBEQkQU",
     "mines": 46,
-    "score": 14.5,
+    "bv": 90,
+    "score": 14.3,
     "opening": 63,
-    "pair": 3,
-    "count": 1
-  },
-  {
-    "code": "18x14:178:gACBAQAiwEAAAqCEjBBEQGgRAABAAAhwEEIRXhCIBg",
-    "mines": 46,
-    "score": 14.7,
-    "opening": 37,
     "pair": 3,
     "count": 1
   },
   {
     "code": "18x14:86:hAgJAMhEiBAABCgooAAEAQTUBCFAAECIAFHECgIiEQ",
     "mines": 47,
+    "bv": 105,
     "score": 10.1,
     "opening": 31,
     "pair": 2,
@@ -2458,6 +2765,7 @@
   {
     "code": "18x14:198:EREAcBACkAAiACEQBkAEAyzMVgBAAgQIAEBBFEAgDI",
     "mines": 47,
+    "bv": 52,
     "score": 11.5,
     "opening": 39,
     "pair": 2,
@@ -2466,22 +2774,25 @@
   {
     "code": "18x14:144:YoAAQbSgBGAkAAAAMAUWAAGAAEggACvIAESIAIiCEh",
     "mines": 47,
+    "bv": 106,
     "score": 12.7,
     "opening": 20,
     "pair": 3,
     "count": 0
   },
   {
-    "code": "18x14:147:AAhgEBJFAmZ0ACgAAYSJBLACQSAIAWABMEAgAAgQQg",
+    "code": "18x14:187:BEEAIwDQZSACIQHQKwAREBAAIAAiAUAABgGigIACJY",
     "mines": 47,
-    "score": 18.5,
-    "opening": 29,
-    "pair": 5,
-    "count": 0
+    "bv": 77,
+    "score": 13.7,
+    "opening": 39,
+    "pair": 3,
+    "count": 1
   },
   {
     "code": "22x14:234:AAIAEAmEpAAhEMhLEIAAAkCUAiACACAyARCQAAABwBIBCIAgIABA",
     "mines": 48,
+    "bv": 74,
     "score": 2.0,
     "opening": 66,
     "pair": 0,
@@ -2490,6 +2801,7 @@
   {
     "code": "22x14:91:ABAAQABQAIIgoACAAABJABIxQAmFgwAYEAAlEEAAKBjCgAkAwAgA",
     "mines": 48,
+    "bv": 67,
     "score": 2.1,
     "opening": 94,
     "pair": 0,
@@ -2498,6 +2810,7 @@
   {
     "code": "22x14:178:AAAgAhOQQCEAAAAAAkBwIgABQAACEAAEAgBwEigVAUkGELCEQAKA",
     "mines": 48,
+    "bv": 64,
     "score": 2.2,
     "opening": 39,
     "pair": 0,
@@ -2506,6 +2819,7 @@
   {
     "code": "22x14:206:I0IEGAwFBAIAAACAQBEBJGCQBAiCIAIAAADAQwAkAAgQYGAIAcIA",
     "mines": 49,
+    "bv": 66,
     "score": 1.4,
     "opening": 83,
     "pair": 0,
@@ -2514,6 +2828,7 @@
   {
     "code": "22x14:173:BgGgIBBBACBBJiAACAABgKJyBABAEQMAQAAAgkIBCEAogQ4AIAAQ",
     "mines": 49,
+    "bv": 85,
     "score": 2.1,
     "opening": 66,
     "pair": 0,
@@ -2522,6 +2837,7 @@
   {
     "code": "22x14:273:ggCQSAFEYoAMAAAMBwDCQiAQMYIBAAAYQgg4AQAADAgAAABQBIAA",
     "mines": 49,
+    "bv": 64,
     "score": 2.1,
     "opening": 87,
     "pair": 0,
@@ -2530,6 +2846,7 @@
   {
     "code": "22x14:135:ERKAAAgCAAABBEgAIhDgCAACYAgiAAGDQEA5EBYADAAADVAJAiAA",
     "mines": 49,
+    "bv": 73,
     "score": 2.3,
     "opening": 33,
     "pair": 0,
@@ -2538,6 +2855,7 @@
   {
     "code": "22x14:190:gAAQACAiMgABgFAgDAABAIAAAgASsAAAEQAAACxCCAlhEViQYIcA",
     "mines": 49,
+    "bv": 64,
     "score": 2.7,
     "opening": 85,
     "pair": 0,
@@ -2546,6 +2864,7 @@
   {
     "code": "22x14:135:AgIAJCAYwAAUkCCoAhAQAggQAEgAQAQgAgBCRkAFAOAAFEEEUIBA",
     "mines": 49,
+    "bv": 89,
     "score": 4.6,
     "opening": 76,
     "pair": 1,
@@ -2554,6 +2873,7 @@
   {
     "code": "22x14:161:VBgAhAgECCAgAAICCAsCBCIyQAYEQAAIAlCFAGAmQEAEACIIBAAQ",
     "mines": 50,
+    "bv": 71,
     "score": 1.8,
     "opening": 29,
     "pair": 0,
@@ -2562,14 +2882,25 @@
   {
     "code": "22x14:93:AAAZCQgGCUgiAEAAEUAgQEIRAAASUAUFEABFBAAQBAgNIEAACygA",
     "mines": 50,
+    "bv": 65,
     "score": 2.9,
     "opening": 28,
     "pair": 0,
     "count": 0
   },
   {
+    "code": "22x14:89:AiIAEIEQQQARAEgCAACgLAATBoAABGACgQoRkYAAIghFAECggAAQ",
+    "mines": 50,
+    "bv": 82,
+    "score": 3.3,
+    "opening": 80,
+    "pair": 0,
+    "count": 0
+  },
+  {
     "code": "22x14:132:BRAEAMggAACgIAACCCAAAgCECAQdAMEQmgAEICS0BEAFCgEEAIiA",
     "mines": 50,
+    "bv": 112,
     "score": 3.8,
     "opening": 45,
     "pair": 0,
@@ -2578,54 +2909,52 @@
   {
     "code": "22x14:148:mIAACQAEDAADQBwGARAgkQAAAEOBIAFlwoAAAEIAAACQAGEAQTEA",
     "mines": 50,
+    "bv": 79,
     "score": 5.4,
     "opening": 24,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "22x14:50:JAoQAABQAAIBIAgpIAFFAAEAigAAA2ANgAICIQUkhDmAggUAAAAA",
-    "mines": 50,
-    "score": 5.8,
-    "opening": 44,
-    "pair": 1,
-    "count": 0
-  },
-  {
     "code": "22x14:131:EUAAAABQBBIAEAAAgAAAwkAQAKSiYCBIoBkRMAAiKANUAARBkIAA",
     "mines": 50,
+    "bv": 101,
     "score": 6.8,
     "opening": 89,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "22x14:102:AggkIAUEBEAAEwQAYAEgCACSkCAwABVgwgBQAECAyiEEEAKEAACA",
+    "code": "22x14:63:AAAwiAihAAAwoIACAAYAXAAIBiAIBKFgiGAAGAAUSGAaCAQCQBAA",
     "mines": 51,
-    "score": 2.2,
-    "opening": 50,
+    "bv": 77,
+    "score": 2.1,
+    "opening": 76,
     "pair": 0,
     "count": 0
   },
   {
+    "code": "22x14:163:AMSBCxKAAAAEAABAAAgJKJoEACAAABk2GCwAgCCkBEQEAAEAyggA",
+    "mines": 51,
+    "bv": 77,
+    "score": 4.6,
+    "opening": 38,
+    "pair": 0,
+    "count": 1
+  },
+  {
     "code": "22x14:160:QAGGkEIAGBACyGoAIQEpAAAAADAkgICQAIAAQQAEAhgECAkEJISA",
     "mines": 51,
+    "bv": 77,
     "score": 4.8,
     "opening": 24,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "22x14:163:AMSBCxKAAAAEAABAAAgJKJoEACAAABk2GCwAgCCkBEQEAAEAyggA",
-    "mines": 51,
-    "score": 4.8,
-    "opening": 38,
-    "pair": 0,
-    "count": 1
-  },
-  {
     "code": "22x14:218:iMAMgIIABAgBCAgBCAmQAAAAAgAICCUFJICBAkQJQBIgASCiAMIg",
     "mines": 51,
+    "bv": 85,
     "score": 5.7,
     "opening": 45,
     "pair": 1,
@@ -2634,6 +2963,7 @@
   {
     "code": "22x14:216:AIoAAAARAhWAGIJAMFQEDMFgEEBAAQgIAAIwIkAgjQAEEAEAACMA",
     "mines": 51,
+    "bv": 79,
     "score": 5.8,
     "opening": 81,
     "pair": 1,
@@ -2642,6 +2972,7 @@
   {
     "code": "22x14:148:EBDAAEwAgiAkMBBogQhABBhQABEAAQhSAAA4LAKQIQEEAAAAATCA",
     "mines": 51,
+    "bv": 84,
     "score": 6.6,
     "opening": 31,
     "pair": 1,
@@ -2650,30 +2981,34 @@
   {
     "code": "22x14:176:gpQIAUYI5CAQFgAgAMBBEARERgABIAAIABAgQQCEEEIDAEAgEEAw",
     "mines": 52,
+    "bv": 59,
     "score": 4.4,
     "opening": 40,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "22x14:147:AABUAAAHAgIEQAAICEQggAFyggAIBYgIRAAITAEABAVAJUKIAWYA",
-    "mines": 52,
-    "score": 5.4,
-    "opening": 30,
-    "pair": 1,
-    "count": 0
-  },
-  {
     "code": "22x14:158:AEIJICBIAiCAgABQQRICAgREIABQAEIkECCAJFIAkABkQgCAYwoA",
     "mines": 52,
+    "bv": 99,
     "score": 6.2,
     "opening": 52,
     "pair": 1,
     "count": 0
   },
   {
+    "code": "22x14:212:AoOQUBAQAgwAhgAAsEQFGgYoBAAIIAAJAAqAAwDQgAQEAgAxBABA",
+    "mines": 52,
+    "bv": 87,
+    "score": 7.0,
+    "opening": 97,
+    "pair": 1,
+    "count": 0
+  },
+  {
     "code": "22x14:89:AQABIAYoQhAkAAAE4CAQqhJoEQ0FhAqRAAKABBAMABABIAAAAEAQ",
     "mines": 52,
+    "bv": 91,
     "score": 8.7,
     "opening": 62,
     "pair": 2,
@@ -2682,22 +3017,25 @@
   {
     "code": "22x14:202:xAqEoQAKBEIQLBIAACREogCAAAAIACEABQQEAQITAAAAiaSABgSA",
     "mines": 52,
+    "bv": 104,
     "score": 9.8,
     "opening": 63,
     "pair": 2,
     "count": 0
   },
   {
-    "code": "22x14:130:BCgIJAkMAABQCIAAEUKAIARkDIAkgAAACyBApJAAIChAEIFERIAA",
+    "code": "22x14:247:ACACoCgHAABAAAggQBQSgAARIIgI4EBCCiHAhIYEUAQAgQAAFCgg",
     "mines": 52,
-    "score": 12.4,
-    "opening": 60,
-    "pair": 3,
-    "count": 0
+    "bv": 86,
+    "score": 12.2,
+    "opening": 40,
+    "pair": 2,
+    "count": 1
   },
   {
     "code": "22x14:51:AQQAACAxgAMEwBjAIoAEAgkEBpQAYCIACgYEECGAACTEQAAGGABA",
     "mines": 53,
+    "bv": 61,
     "score": 5.2,
     "opening": 62,
     "pair": 1,
@@ -2706,7 +3044,8 @@
   {
     "code": "22x14:256:JIAEKALAAgCDYAIBckMCJAAAEEohACQQCB0BKAAACEAkAAQEGAIA",
     "mines": 53,
-    "score": 5.7,
+    "bv": 107,
+    "score": 5.5,
     "opening": 51,
     "pair": 0,
     "count": 1
@@ -2714,22 +3053,25 @@
   {
     "code": "22x14:74:AIgICAAgxEMEB4gGAkChN4SAABACAQAJACCBAAEAg8AgQAUCCgAA",
     "mines": 53,
-    "score": 7.8,
+    "bv": 69,
+    "score": 7.6,
     "opening": 39,
     "pair": 1,
     "count": 1
   },
   {
-    "code": "22x14:220:BggAAYAAhQBAABQFAJAIEhgAKyAIMAkEAAgQACGABIDSohhCQiAg",
+    "code": "22x14:159:Gr4AgAEAIgBIBAeAwSIAgCBADAAAAACIClAAYdAggQIAAAwQNgAA",
     "mines": 53,
-    "score": 8.8,
-    "opening": 26,
+    "bv": 69,
+    "score": 8.9,
+    "opening": 47,
     "pair": 2,
     "count": 0
   },
   {
     "code": "22x14:117:AAAESgAJCAJgIEoiEAgQAAAAhAAFkAAUQAQGEFiQysgEEAECgAuA",
     "mines": 53,
+    "bv": 80,
     "score": 9.2,
     "opening": 36,
     "pair": 2,
@@ -2738,6 +3080,7 @@
   {
     "code": "22x14:128:QAiKKIEggIEA0IFogFAAgBBAAIgIDCQgChAEqAAAQAAAgwhACwhA",
     "mines": 53,
+    "bv": 96,
     "score": 11.1,
     "opening": 31,
     "pair": 2,
@@ -2746,6 +3089,7 @@
   {
     "code": "22x14:128:CSCwgIIAIQAAQjJAACAACAAoDIAJygYQhoCABQAQCFJKAwAYDAAA",
     "mines": 54,
+    "bv": 79,
     "score": 6.1,
     "opening": 59,
     "pair": 1,
@@ -2754,7 +3098,8 @@
   {
     "code": "22x14:217:FIBCCAAJEGIAMSAAAASAAACAAGCRqYFBiEAQAoQCFoBgIIEAVAFA",
     "mines": 54,
-    "score": 8.0,
+    "bv": 79,
+    "score": 7.8,
     "opening": 21,
     "pair": 1,
     "count": 1
@@ -2762,30 +3107,34 @@
   {
     "code": "22x14:146:yCIKAgoEAAIEBEkAAiNARIAgBBAIgIBCABEGAgKEDAgACsoQAJEA",
     "mines": 54,
+    "bv": 109,
     "score": 9.5,
     "opening": 45,
     "pair": 1,
     "count": 1
   },
   {
-    "code": "22x14:105:ggCAgIiABFMADADEwBAAAAABBIQKgwbIAAAAA5BBE0BWAAQBBBYA",
-    "mines": 54,
-    "score": 9.6,
-    "opening": 54,
-    "pair": 2,
-    "count": 0
-  },
-  {
     "code": "22x14:162:hUIQgABGAAASIyBJAAgIAACgAJQAUCisEABAAAXAAWgCQgDCEASQ",
     "mines": 54,
+    "bv": 79,
     "score": 9.7,
     "opening": 34,
     "pair": 2,
     "count": 0
   },
   {
+    "code": "22x14:144:ggSAgJgIIBMACAD2AAgRAABAJAAIg4TIAAAAA5BFEgAWAAQBBBcA",
+    "mines": 54,
+    "bv": 81,
+    "score": 9.7,
+    "opening": 47,
+    "pair": 2,
+    "count": 0
+  },
+  {
     "code": "22x14:47:FAgAAAGgAABAD4EAjSFQhACFEApBKQECAgAABAAFwYEACKIRBEAg",
     "mines": 54,
+    "bv": 74,
     "score": 15.9,
     "opening": 62,
     "pair": 4,
@@ -2794,6 +3143,7 @@
   {
     "code": "22x14:101:BgJMwAAwRQBBqABBAIECIKCQoAAhAEoAALAAAAQBAxQAAlWEYQBA",
     "mines": 55,
+    "bv": 104,
     "score": 9.3,
     "opening": 64,
     "pair": 2,
@@ -2802,6 +3152,7 @@
   {
     "code": "22x14:74:AABYAEEBAoGBBAAzVAAwyRQAAAgAoIAIiiDKCAIAogwEAQAoAUCg",
     "mines": 55,
+    "bv": 97,
     "score": 10.6,
     "opening": 29,
     "pair": 2,
@@ -2810,7 +3161,8 @@
   {
     "code": "22x14:149:MGABAIgIFgAAEAAQgIUAgAwJIBsCIkKKAUggArABIwIADQCCAAJA",
     "mines": 55,
-    "score": 11.3,
+    "bv": 83,
+    "score": 11.1,
     "opening": 21,
     "pair": 2,
     "count": 1
@@ -2818,70 +3170,79 @@
   {
     "code": "22x14:203:AASQQCiCRQCAGoCQAAEgBKMAwAQwYQAACAIcAgCKgQIqgEQIQAQg",
     "mines": 55,
+    "bv": 104,
     "score": 12.5,
     "opening": 43,
     "pair": 3,
     "count": 0
   },
   {
-    "code": "22x14:231:kBJRAAIAUNgBEQCAQUQhgKFBAAQAAqeAQACQAKwIIAAkAECASAYA",
+    "code": "22x14:213:kIKYAVUgwCIARAMAskAAxCAERAQEEEAEEBIAgABMIACCSgBgABgA",
     "mines": 55,
-    "score": 16.0,
-    "opening": 41,
+    "bv": 104,
+    "score": 14.9,
+    "opening": 48,
     "pair": 3,
     "count": 1
   },
   {
-    "code": "22x14:232:SABgUAoASDAAAggAAEQAAGAAAENBBKVCB8ACCAASAPMACoABAbMA",
+    "code": "22x14:184:ADACRDEQKAARIHCWBArAQMQiAgAMABAQAIABsgoEQBACRECAAoAA",
     "mines": 55,
-    "score": 17.0,
-    "opening": 48,
+    "bv": 82,
+    "score": 17.1,
+    "opening": 77,
     "pair": 4,
     "count": 1
   },
   {
-    "code": "22x14:193:gAAvwAsAABAgkggEEgIMBgCYhECiAAAGGUAAwAggqAgKBARgAEBA",
+    "code": "22x14:173:SAABAAAQwEARHACBEQAiACCAAwAYAcBCQFIhACgOACiAkTggB1CA",
     "mines": 56,
-    "score": 6.8,
-    "opening": 36,
+    "bv": 84,
+    "score": 7.3,
+    "opening": 70,
     "pair": 1,
-    "count": 0
-  },
-  {
-    "code": "22x14:63:AEAEMMIUAQAhgAhQaBgAVpAIokCBEAAgAgACQqAFMEwgAAAhQFgA",
-    "mines": 56,
-    "score": 8.7,
-    "opening": 22,
-    "pair": 2,
-    "count": 0
+    "count": 1
   },
   {
     "code": "22x14:131:gDcUBgYiQIQComAABAIAIgAACAAKxQAAAQQFgAMEIIIGIElCBAGA",
     "mines": 56,
+    "bv": 123,
     "score": 8.7,
     "opening": 53,
     "pair": 2,
     "count": 0
   },
   {
-    "code": "22x14:134:pAQhAFgLAAAhMEQAKkIEARACAABUAJIAwQkCOAIjmgOAAAABIAgA",
+    "code": "22x14:147:AEFCRACpEAAZkFQKiEICAAAAAA4IEgAiAgJAAheiACAAQokABEiQ",
     "mines": 56,
-    "score": 9.0,
-    "opening": 82,
+    "bv": 110,
+    "score": 9.4,
+    "opening": 46,
     "pair": 2,
     "count": 0
   },
   {
-    "code": "22x14:146:AgCARYCASAIGEYIgANAgkECQAgQkgEzChBwAASigAAJAVAAaAACA",
+    "code": "22x14:146:AAwACAKABR4AAYIEASApIIAAABAJ3ACCRQkJUKQCEA0AoAGAANAA",
     "mines": 56,
-    "score": 10.6,
-    "opening": 30,
+    "bv": 88,
+    "score": 9.9,
+    "opening": 25,
+    "pair": 2,
+    "count": 0
+  },
+  {
+    "code": "22x14:147:QSAIgGShgAIAkBEEZigLAAAgBAAFBgGEgIAIKSCwAGKKUBABAAAA",
+    "mines": 56,
+    "bv": 97,
+    "score": 11.4,
+    "opening": 36,
     "pair": 2,
     "count": 0
   },
   {
     "code": "22x14:218:AACJJBAAAGg0kAxFAYUGAQAAAkUACUJFAIAYgAgAIGAYAAEMgNFA",
     "mines": 56,
+    "bv": 113,
     "score": 15.7,
     "opening": 37,
     "pair": 4,
@@ -2890,14 +3251,25 @@
   {
     "code": "22x14:175:QWBAIBEgQEQHDAAwBIMQwAXUABIAMCIBEAIgByAAgMEEFAAAgiBA",
     "mines": 57,
-    "score": 8.0,
+    "bv": 76,
+    "score": 7.8,
     "opening": 73,
     "pair": 1,
     "count": 1
   },
   {
+    "code": "22x14:228:HMSUMAJAkgIAIADQhAEJEAIIAiFSGgCAgAQABAHAgBgIwQAACOEA",
+    "mines": 57,
+    "bv": 90,
+    "score": 11.7,
+    "opening": 45,
+    "pair": 3,
+    "count": 0
+  },
+  {
     "code": "22x14:239:IAgAQVARBARCCAAJQMJAEAKBhhB0AIYqEAgxoABIEKAJAIA0ABAA",
     "mines": 57,
+    "bv": 100,
     "score": 13.1,
     "opening": 30,
     "pair": 3,
@@ -2906,6 +3278,7 @@
   {
     "code": "22x14:74:AkuCQAGBgACKDEAkFIAAAGCAAGMBiBgABACwEYABQZApIAgQigCA",
     "mines": 57,
+    "bv": 112,
     "score": 14.1,
     "opening": 26,
     "pair": 3,
@@ -2914,22 +3287,16 @@
   {
     "code": "22x14:213:AMUgABCAEBCMACJIQEoYERBABEAAIAKJgAAwYMJgQEQAiEBAYygg",
     "mines": 57,
+    "bv": 108,
     "score": 16.2,
     "opening": 44,
     "pair": 4,
     "count": 0
   },
   {
-    "code": "22x14:63:ABAAABrpAgAAQAAAAECBECwIEh8hCCQWVFSBAEKYIAGggABABBMA",
-    "mines": 57,
-    "score": 19.7,
-    "opening": 83,
-    "pair": 5,
-    "count": 0
-  },
-  {
     "code": "22x14:203:IwBAgAAUQACAGoKGEEALUwJAAKoKAQCgBAAQAIAAAhgFoSyhJBAA",
     "mines": 57,
+    "bv": 116,
     "score": 24.7,
     "opening": 74,
     "pair": 7,
@@ -2938,6 +3305,7 @@
   {
     "code": "22x14:231:EKCAwBAgQI0AEQgBABAAiRgkMAEAQlmUGYgAAAQIECoGCSAhGABA",
     "mines": 58,
+    "bv": 79,
     "score": 18.7,
     "opening": 30,
     "pair": 5,
@@ -2946,6 +3314,7 @@
   {
     "code": "22x14:170:DEgBChAAAAAgQGkgECgBAJCCAsFBCIgbCCkIkAgQEBoAYACoAgjA",
     "mines": 58,
+    "bv": 104,
     "score": 23.2,
     "opening": 21,
     "pair": 6,
@@ -2954,7 +3323,8 @@
   {
     "code": "22x14:200:EAFAAwBSIBKkAQKIACgBhCAolABgg6QFggAABQCARBSBFBAsABIA",
     "mines": 58,
-    "score": 34.7,
+    "bv": 108,
+    "score": 34.5,
     "opening": 55,
     "pair": 9,
     "count": 1
@@ -2962,6 +3332,7 @@
   {
     "code": "24x16:245:QAACFgAAACAgwBSwAgSDDAgDAAIKAAAAIAAgIACCAFEgAASAAQoQyAYg1EIYiRQC",
     "mines": 62,
+    "bv": 99,
     "score": 2.3,
     "opening": 87,
     "pair": 0,
@@ -2970,22 +3341,25 @@
   {
     "code": "24x16:137:CRRQYQAABhBAAEhEoCAAAAIQAQIAEAkNAAADKIGBAsARgECCABoCACGEgIEABQCQ",
     "mines": 62,
+    "bv": 112,
     "score": 2.7,
     "opening": 35,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "24x16:262:GhAAFoggDDGAgAAgSCCAAgABAAADBBCQAABECgCZgIwgJoAIACAQAERgMCAIADBg",
+    "code": "24x16:197:IIAgECCAIioJYiIkBgQQBBDAAIAAAgFAAFAAAAQU0AAAkQAjAAYYAAVAwABRBgBQ",
     "mines": 62,
-    "score": 4.9,
-    "opening": 60,
+    "bv": 88,
+    "score": 5.4,
+    "opening": 71,
     "pair": 1,
     "count": 0
   },
   {
     "code": "24x16:229:gQIAACAACCgiJAAQgEKACECAAAAiAAGIJAGgQIBGgDtAkAEAEBhgCAIIUIAJAmEh",
     "mines": 63,
+    "bv": 85,
     "score": 1.4,
     "opening": 40,
     "pair": 0,
@@ -2994,6 +3368,7 @@
   {
     "code": "24x16:183:oAwBDLAiCAAggAIISAMYABAACBAADEgBAAJBokCAAJtAE4EzAghAAIAAABADABIA",
     "mines": 63,
+    "bv": 73,
     "score": 2.0,
     "opening": 75,
     "pair": 0,
@@ -3002,6 +3377,7 @@
   {
     "code": "24x16:252:EjACCQQCILGQAEAIAwEAAAQRBwgBCIBYEIUBAAgCAAAoAACBEFFBAAQASAKIAKBW",
     "mines": 63,
+    "bv": 95,
     "score": 2.2,
     "opening": 97,
     "pair": 0,
@@ -3010,6 +3386,7 @@
   {
     "code": "24x16:87:QgQAAABAEVAECBQgQAAAAIASBAgJEQEBgMARAJGYDAhEkADAgjAQAgAriYAgAAMQ",
     "mines": 63,
+    "bv": 100,
     "score": 3.0,
     "opening": 64,
     "pair": 0,
@@ -3018,6 +3395,7 @@
   {
     "code": "24x16:230:FQBAAAAkA0AWAGAAiAAGIAIIAEAAAMiEIIEQKgBAAAAIj2hkoAEYAACTIAmACgCA",
     "mines": 63,
+    "bv": 100,
     "score": 5.1,
     "opening": 67,
     "pair": 1,
@@ -3026,6 +3404,7 @@
   {
     "code": "24x16:136:AUEpAKgQUIECRIQIkEQAAgAGtBCSBAhAQFgAAAAAKEAAAABIEigGQzBAAAQIAJAC",
     "mines": 64,
+    "bv": 123,
     "score": 2.3,
     "opening": 31,
     "pair": 0,
@@ -3034,22 +3413,25 @@
   {
     "code": "24x16:167:CECIQSIAQBgCAUEUAIBAgBAEBEKQYUAAAAAYpBAIBAIywABQAToQSAAgFIGAAQAM",
     "mines": 64,
+    "bv": 116,
     "score": 3.9,
     "opening": 27,
     "pair": 0,
     "count": 0
   },
   {
-    "code": "24x16:265:YAQYggACACAEICAAABCA4LAABAAiAoGQgCAhBEomEACICYAAAMCAhIhgACFDIAqg",
+    "code": "24x16:153:YAQaggACACAEICAAABCA4JAAABAAEQFAyEAQEIIlEwgCITAAAMCAhIhgQCFDAAqg",
     "mines": 64,
+    "bv": 107,
     "score": 5.8,
-    "opening": 57,
+    "opening": 67,
     "pair": 1,
     "count": 0
   },
   {
     "code": "24x16:178:wAoAICBABQFABQgBQ4CAIBWwOIAIgYLgAGkDAAAKwQAQAIAAAAAACASAoLIAAEJA",
     "mines": 64,
+    "bv": 97,
     "score": 5.8,
     "opening": 117,
     "pair": 1,
@@ -3058,38 +3440,43 @@
   {
     "code": "24x16:233:CQAABBAQtgEEgAQKAABKEAQQQsAKAAwAdACAECASAAAgSCABAEQBA0ACEqa8CAAg",
     "mines": 64,
+    "bv": 108,
     "score": 8.8,
     "opening": 104,
     "pair": 2,
     "count": 0
   },
   {
+    "code": "24x16:309:MQiCCIQEkgSACEAAABGwEAiIQAECAgAAAE0CAwFpBiBAABECARAAcUAACAFU4AAB",
+    "mines": 65,
+    "bv": 107,
+    "score": 5.3,
+    "opening": 29,
+    "pair": 1,
+    "count": 0
+  },
+  {
     "code": "24x16:307:ZhiEVAAQgkQAABETEBsAACBAAgEAAgwQAEC2EAABAABAgQENgACAXEAACAU4QJAA",
     "mines": 65,
+    "bv": 80,
     "score": 5.4,
     "opening": 59,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "24x16:89:hJEAACCBgADAAKsCAhiAAEABgRogBQEAEAQCIBCoIWAIBMIBAAACgqEhEgwBEAAE",
+    "code": "24x16:119:ISICRAAkAAQUAYISCAJAAAgAAIgEAABIyEEQCgECCEwAkKjKAEMAIgzAwSAABCgA",
     "mines": 65,
-    "score": 6.0,
-    "opening": 65,
-    "pair": 1,
-    "count": 0
-  },
-  {
-    "code": "24x16:231:CCAAAAgLLCkAZ0gAwIAAAEgOiCwAASSABBAAAiAoCAAISIIDICQAJgAAAAAQRIpk",
-    "mines": 65,
-    "score": 6.0,
-    "opening": 23,
+    "bv": 117,
+    "score": 6.8,
+    "opening": 54,
     "pair": 1,
     "count": 0
   },
   {
     "code": "24x16:101:MBgQyoABAAAQIkAAABMRACOJQEBUgAEagAgAhAyIABCBAAEAAOGWAACJAgAQCEIQ",
     "mines": 65,
+    "bv": 130,
     "score": 7.3,
     "opening": 46,
     "pair": 1,
@@ -3098,7 +3485,8 @@
   {
     "code": "24x16:202:AgAAAAAQIkASwQxBABBECIEEmAACQhgAjgQAAIAABiQAgiAiBQAkAEhgYiBoAhMY",
     "mines": 65,
-    "score": 8.7,
+    "bv": 109,
+    "score": 8.5,
     "opening": 50,
     "pair": 1,
     "count": 1
@@ -3106,6 +3494,7 @@
   {
     "code": "24x16:178:FKAhCEABgKAAgAgDQERAkAFCgAACAAEhgSEAFgDQAAwACCUNCAAAACUABQAaBLCZ",
     "mines": 66,
+    "bv": 101,
     "score": 5.1,
     "opening": 115,
     "pair": 1,
@@ -3114,22 +3503,25 @@
   {
     "code": "24x16:210:QEBgIDDGAQAAZAKCAAgAZAADgAAoAWAEASAAIIUQBYkRBAUQFiEAAICAAIiwCAwS",
     "mines": 66,
+    "bv": 106,
     "score": 6.0,
     "opening": 24,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "24x16:152:QBAACABUIEEJAIAAQizCTCAEKAAGEFgSACgYAEGGdAAgoggIOAAAIEDBgAAAAgCC",
+    "code": "24x16:139:ARAAAggEpCQAQAEgQDIAAYAAIAAIEQBgCJQAwqEQAAHAEA4AEAAaBRrIAEKEBQJ4",
     "mines": 66,
+    "bv": 105,
     "score": 7.4,
-    "opening": 28,
+    "opening": 78,
     "pair": 1,
-    "count": 0
+    "count": 1
   },
   {
     "code": "24x16:154:JQiIAAAaQAgwAoEgyAgEIQAIAAAFCFEAwKQhwAEMAAGaAYACABACiIAgMAAaAgJI",
     "mines": 66,
+    "bv": 114,
     "score": 8.7,
     "opening": 28,
     "pair": 2,
@@ -3138,6 +3530,7 @@
   {
     "code": "24x16:232:AgAAEQwCBELABA8CCIGCQgAAgSSFSMBICEiGAAAABA1REAAAhQgAoUAAAIgCBYEA",
     "mines": 66,
+    "bv": 107,
     "score": 8.9,
     "opening": 24,
     "pair": 2,
@@ -3146,6 +3539,7 @@
   {
     "code": "24x16:246:gJAIBgBTA0yAKAEIACAEUZQMCIAsgAAgxAAAUAAuAAFAAcYDAAAoARUEAEIAIAAw",
     "mines": 67,
+    "bv": 81,
     "score": 6.8,
     "opening": 92,
     "pair": 1,
@@ -3154,6 +3548,7 @@
   {
     "code": "24x16:218:AQMITAEFCqiACQSBJggCQJggCEAAASAIAAUACYADgggAlAYAYABAEGIBIADgIAoB",
     "mines": 67,
+    "bv": 110,
     "score": 7.6,
     "opening": 78,
     "pair": 1,
@@ -3162,30 +3557,34 @@
   {
     "code": "24x16:89:AJABQAgIAAMACAQAAAiASpAAAwCQAAQgAgAjQEFGAYFMgEigsgBQCUIRmYAAgBCa",
     "mines": 67,
+    "bv": 100,
     "score": 9.0,
     "opening": 45,
     "pair": 2,
     "count": 0
   },
   {
+    "code": "24x16:83:QEEBQIgAKQgCBAAAAIJAFIgABqwCAgQIqAASAAJBAjgCGgWQAgAUAAQUESgABCPQ",
+    "mines": 67,
+    "bv": 98,
+    "score": 9.1,
+    "opening": 33,
+    "pair": 2,
+    "count": 0
+  },
+  {
     "code": "24x16:133:BBgoIAEaEAAAAQACIAABAgAQEBgJAABAAQA8IQADABkAgwUEAjDMsgMDRCBUAShE",
     "mines": 67,
+    "bv": 101,
     "score": 9.3,
     "opening": 75,
     "pair": 2,
     "count": 0
   },
   {
-    "code": "24x16:166:AgkcQARhUBUAQAoICBQAlIkAIEAQJACQAAAAGAABCQgAUDCAwFhEAIQwBQgAiBDE",
-    "mines": 67,
-    "score": 12.4,
-    "opening": 67,
-    "pair": 3,
-    "count": 0
-  },
-  {
     "code": "24x16:118:AEAACKYogGgASAgACAIACPCAggIgAACiAQQAgINAFCKoIBVGIQEAWAABgEAIkUBK",
     "mines": 68,
+    "bv": 111,
     "score": 5.7,
     "opening": 50,
     "pair": 1,
@@ -3194,6 +3593,7 @@
   {
     "code": "24x16:310:KLAgAwJApoAEDFgtaAlAwAKBChBCAAEAMAIAAAOASKCAAIAAoAAoxABAAUgAAgAw",
     "mines": 68,
+    "bv": 112,
     "score": 6.2,
     "opening": 115,
     "pair": 1,
@@ -3202,6 +3602,7 @@
   {
     "code": "24x16:123:ADAggAEwEADAAQQIYAAAhoBAFoEgQgBIYigCBEBQAgQBMCwABgGykEAoQiCIRAEA",
     "mines": 68,
+    "bv": 144,
     "score": 8.2,
     "opening": 41,
     "pair": 1,
@@ -3210,54 +3611,61 @@
   {
     "code": "24x16:92:UCwQQDAAGUAAAAQgEKEFEAmQgACUAEiQJAsAFAMAQQAJIICQIsIQAEiADgICAwIA",
     "mines": 68,
+    "bv": 126,
     "score": 9.0,
     "opening": 55,
     "pair": 2,
     "count": 0
   },
   {
-    "code": "24x16:280:GQAkXYAUAADSAUgAoGAApAiAIAlACoIQQEBDCACjUAAAAAIABARRCDaIJAAGAQQA",
+    "code": "24x16:150:iABEwgICAAADIgDDAEAKEFBIcBAgSAAAAgCAKAJKAEAAADxACFAqhACIMFgQSElQ",
     "mines": 69,
-    "score": 3.6,
-    "opening": 76,
-    "pair": 0,
-    "count": 0
-  },
-  {
-    "code": "24x16:124:YBQEASUFYQgAwAAgBQIcgwGCQAIQwCCTBA4ZAAAMEQAQAwgQQAAgJQUARAhAAAFA",
-    "mines": 69,
-    "score": 6.7,
-    "opening": 30,
-    "pair": 1,
-    "count": 0
-  },
-  {
-    "code": "24x16:298:AAzIIiSAMA4BAACgBQwIHDgAAAGiAAAgAACJAAKBVCBQGkWCUQERAkAFAEIAkACA",
-    "mines": 69,
-    "score": 9.0,
-    "opening": 25,
+    "bv": 104,
+    "score": 8.5,
+    "opening": 64,
     "pair": 2,
     "count": 0
   },
   {
     "code": "24x16:169:AIQBDSAAIAhAQAQAIwAsUggQAAgIBCkCAgSCUJAEmBikhCBZIEACAKAgGIBgEQIQ",
     "mines": 69,
+    "bv": 116,
     "score": 9.8,
     "opening": 34,
     "pair": 2,
     "count": 0
   },
   {
-    "code": "24x16:88:SWAAsAAKEYAGACAAAACRFCAYgBgwBEGAEAGgAAQBkwAQkACoIAkAFgKDBGAkCABH",
+    "code": "24x16:311:AAJAAhFKACAMAAQkGEAEIAuCiQhABKQIGAAMDBABgIQIUIYIAAlYESABQIURACAB",
     "mines": 69,
-    "score": 12.5,
-    "opening": 89,
-    "pair": 3,
+    "bv": 94,
+    "score": 10.7,
+    "opening": 33,
+    "pair": 2,
     "count": 0
+  },
+  {
+    "code": "24x16:232:QIKAIUYAAQAEkYkIDAACxAgKAIiQAoICIAIAGAAgKBAAEQAvEABCA0wgACDEClBQ",
+    "mines": 69,
+    "bv": 116,
+    "score": 11.1,
+    "opening": 90,
+    "pair": 2,
+    "count": 1
+  },
+  {
+    "code": "24x16:212:QQDxAEkAEkBQUAIpCRAIACIEACESIAEBACQApADAZAghCARAoAAIACBYOAGAYAMG",
+    "mines": 69,
+    "bv": 127,
+    "score": 12.3,
+    "opening": 51,
+    "pair": 2,
+    "count": 1
   },
   {
     "code": "24x16:200:ALgCAAAZAQAAAICBgCgQDoIQAdCAAiAEAgwIKAgAGQCEIMg6FCZQigCgoACAEARo",
     "mines": 70,
+    "bv": 95,
     "score": 8.5,
     "opening": 21,
     "pair": 2,
@@ -3266,6 +3674,7 @@
   {
     "code": "24x16:119:CCSIgSkBgDAoAACBIEAAYChDBYAAEQAFAAAgaCAAAFaECJAIIUCAgKiAwCgTQRCI",
     "mines": 70,
+    "bv": 116,
     "score": 9.5,
     "opening": 27,
     "pair": 2,
@@ -3274,23 +3683,26 @@
   {
     "code": "24x16:87:QOECWABUkRiAApBCACAQAeAIAFGABhSQAMCEEFGggJTIACAQAARADAARABBEAAgE",
     "mines": 70,
+    "bv": 139,
     "score": 9.9,
     "opening": 47,
     "pair": 2,
     "count": 0
   },
   {
-    "code": "24x16:152:AAAAkRIAoaBCADAoYABEoSgIABTAEBAEkEBgGINoCooAACAADSiOACAIUAiQAAUA",
+    "code": "24x16:217:yiAgGAwSACAEQAIMFQAgABEoEAFgIYCIAgEIAygAUACkgYAJYhhQAgABAwRIAIQK",
     "mines": 70,
-    "score": 15.1,
-    "opening": 37,
+    "bv": 125,
+    "score": 12.5,
+    "opening": 48,
     "pair": 3,
     "count": 0
   },
   {
     "code": "24x16:92:AAAsAgQmACDAQAMhAYEtAEgBQMgABABIYAhEUkQAABgACgAABiwJBJiAAgGApiAT",
     "mines": 70,
-    "score": 15.4,
+    "bv": 105,
+    "score": 15.2,
     "opening": 30,
     "pair": 3,
     "count": 1
@@ -3298,6 +3710,7 @@
   {
     "code": "24x16:123:AYIQAOEBwjaKAqgAEEAEgCCAo0AQRQQAJIIQCI1AiKAAUAAQACGAACQEMAAJQEBg",
     "mines": 71,
+    "bv": 111,
     "score": 7.9,
     "opening": 48,
     "pair": 1,
@@ -3306,22 +3719,25 @@
   {
     "code": "24x16:236:QBDBQIUAAgAgRNQQDnYAEEIC4IQMFACEmYIAAEGAkAAAAgIUAgBBAIAgAEQIXEUA",
     "mines": 71,
+    "bv": 132,
     "score": 8.6,
     "opening": 50,
     "pair": 1,
     "count": 1
   },
   {
-    "code": "24x16:122:AFEQsAAUghFgQAAAIQFAAgoCAggoQADAZIAA2E6AkgBQ4DAgIEgEgAEICMBABISQ",
+    "code": "24x16:181:gBQyEUCAQtIRggIUNgIAIAAAABgAINACMCAICIbApRBRQEAEEaAAATAACAAIEIKQ",
     "mines": 71,
-    "score": 12.4,
-    "opening": 41,
-    "pair": 3,
-    "count": 0
+    "bv": 120,
+    "score": 12.9,
+    "opening": 69,
+    "pair": 2,
+    "count": 1
   },
   {
     "code": "24x16:125:AACBBBURMUUEDhUgESAAIAAAAMAkIiAEgpiAGQQQAREQBKJAAAEUKTGYQAEIAiAA",
     "mines": 71,
+    "bv": 140,
     "score": 14.0,
     "opening": 28,
     "pair": 3,
@@ -3330,6 +3746,7 @@
   {
     "code": "24x16:199:ARBhAgCAgI0QAAAAAZABEABhJAgiCyAyAAAAABBEQCAImRIDS5QRAAAoErAwLJAQ",
     "mines": 71,
+    "bv": 118,
     "score": 14.1,
     "opening": 43,
     "pair": 3,
@@ -3338,54 +3755,61 @@
   {
     "code": "24x16:234:gIAUDKDEEBUAWAABQIEVQiADICRkBwQKIAAEAIAAIAJgmoEAEgQwEIARYEQAAEwI",
     "mines": 72,
+    "bv": 117,
     "score": 10.1,
     "opening": 73,
     "pair": 2,
     "count": 0
   },
   {
-    "code": "24x16:136:AREABMAECaCgBBAIABAECggACAoRgAANQQpAkESwjI0AwXAogYhAAAAGGgIABAwQ",
-    "mines": 72,
-    "score": 10.1,
-    "opening": 48,
-    "pair": 2,
-    "count": 0
-  },
-  {
     "code": "24x16:52:IAKAAQMAohMBQAEMQGABAwCAYSShAMCGIAAGQhKgQIiBAAEKIBwYAAwOAiAAiABY",
     "mines": 72,
+    "bv": 101,
     "score": 10.3,
     "opening": 78,
     "pair": 2,
     "count": 0
   },
   {
+    "code": "24x16:135:AAEASEBAEAiAYpEBACAUAAgAkEAAAAwggWmADHAEQkbMAwMgAI0AlAiCiQEAEBEN",
+    "mines": 72,
+    "bv": 118,
+    "score": 13.2,
+    "opening": 24,
+    "pair": 3,
+    "count": 0
+  },
+  {
+    "code": "24x16:278:BEWQAYgJAKDEAhlYAIEMISCQA6EEIiAFEQAEQgIAIggAFJAMIDgwBABAgYAAAKIA",
+    "mines": 72,
+    "bv": 130,
+    "score": 15.7,
+    "opening": 57,
+    "pair": 3,
+    "count": 1
+  },
+  {
     "code": "24x16:235:AAEHAAEFBQAAQEICBAjICsAIBFUgzCYELGCIgAgAAQQQYUBAABAEUChFClOCQAAA",
     "mines": 72,
+    "bv": 107,
     "score": 18.7,
     "opening": 29,
     "pair": 4,
     "count": 0
   },
   {
-    "code": "24x16:182:ABVQAQACIRAAAMAgCADAAALAhIRgg6BBAAYwCJIACQQAggjIQQQBQAaiAaELA5AU",
-    "mines": 72,
-    "score": 18.8,
-    "opening": 43,
-    "pair": 5,
-    "count": 0
-  },
-  {
-    "code": "24x16:245:M1GCAEIoAECQACqEYAIBAJAQwBGDIARQiiAAEoCIIAFBAHAICQAVDCEEGDASABAA",
+    "code": "24x16:135:hgAGEhAT8JAAglBgABAAAjAEAAIJQRMAMGZDIAAgjAEUAAQKDBCQgxBAAgEAIA0Q",
     "mines": 73,
-    "score": 15.0,
-    "opening": 22,
+    "bv": 136,
+    "score": 13.3,
+    "opening": 60,
     "pair": 3,
-    "count": 1
+    "count": 0
   },
   {
     "code": "24x16:294:JIhAaQACSDAgQFAoBACLgEAUCaBEQIVBykAHoQGAgCAAQIgCACAAQEgAGFASAoCA",
     "mines": 73,
+    "bv": 149,
     "score": 15.5,
     "opening": 55,
     "pair": 3,
@@ -3394,6 +3818,7 @@
   {
     "code": "24x16:312:gQAAgAMAAIQkAEAggBBSFULAC0FoCACBAQQIIgIFAAHAUQMgAAGIHQApLAGEJQYC",
     "mines": 73,
+    "bv": 130,
     "score": 16.8,
     "opening": 26,
     "pair": 4,
@@ -3402,46 +3827,52 @@
   {
     "code": "24x16:201:ADAgAAnIGARAACAAgBBMAAKikKiGABIBIQBAAAhhCAJAQHFgAwRMDIGDBMAKyABQ",
     "mines": 73,
-    "score": 19.4,
+    "bv": 134,
+    "score": 19.3,
     "opening": 41,
     "pair": 4,
     "count": 1
   },
   {
-    "code": "24x16:56:AIAAAA4RrAhQBKABCAkDEIAgRA5kmEwZkACBSAgAEBCQsBQCYUghAggAEACBQAAg",
+    "code": "24x16:202:AIAAAA6NYhQIQAKQEgYhAECIHMkwmDMEAAQKCAgAEBCQsBQCYUghAggAEACBQAAg",
     "mines": 73,
-    "score": 23.1,
-    "opening": 38,
-    "pair": 5,
+    "bv": 134,
+    "score": 28.2,
+    "opening": 23,
+    "pair": 7,
     "count": 1
   },
   {
-    "code": "24x16:72:AgNEIggYwCLEANADBYAocwSEgQQSBcAgkoAAAQAIAAAEIAACCBECgKKCJIEoiIAQ",
+    "code": "24x16:103:CAAADgAgQEAARAhAgCEkMDgAQQAriUCooIBMEBYKAQQAGFBKAYBIiKDAAAhiwSAI",
     "mines": 74,
-    "score": 21.1,
+    "bv": 138,
+    "score": 13.2,
+    "opening": 64,
+    "pair": 2,
+    "count": 1
+  },
+  {
+    "code": "24x16:293:AIEIyAIAeCACAQoCCCggQAgBADAAAAOJTrIAhUBASIRFCAAAEQAgEQBhAcgQehEo",
+    "mines": 74,
+    "bv": 106,
+    "score": 19.2,
+    "opening": 24,
+    "pair": 4,
+    "count": 1
+  },
+  {
+    "code": "24x16:72:AgPEIogYQCJEANADBYAocwSEgQQSBcAgkoAAAQAIAAAEIAACCBECgKKCJIEoiIAQ",
+    "mines": 74,
+    "bv": 130,
+    "score": 23.3,
     "opening": 23,
     "pair": 5,
-    "count": 0
-  },
-  {
-    "code": "24x16:226:WAgyQAAyCAigxgggdAKAAAFgCQACioIEJAgAAQMQDgAEmAAAAEFGjKAKBKEBEUAQ",
-    "mines": 74,
-    "score": 23.0,
-    "opening": 32,
-    "pair": 5,
     "count": 1
-  },
-  {
-    "code": "24x16:267:iAAhAAUACCBYBAIkgCgSCyQoSAADIiBIABDCQBAAAUAsRiAAxigBgm8ACASGAEAD",
-    "mines": 74,
-    "score": 31.3,
-    "opening": 31,
-    "pair": 8,
-    "count": 0
   },
   {
     "code": "30x16:375:QDgCAQIAIQ4CQAIECIQggAChQBEGAkgBUEAwCQEEAFQEEAQIACqAcAAIAAAUBEgwACCgIkICIIEQAApQ",
     "mines": 80,
+    "bv": 99,
     "score": 1.9,
     "opening": 102,
     "pair": 0,
@@ -3450,6 +3881,7 @@
   {
     "code": "30x16:248:AIIAAABlJCRhIAwAKABBgQMAEWAABCRFCEA4AEgCBCUIAAQgBYCCQQBAAAAoCIAAALAKIAVDAEAgwASR",
     "mines": 80,
+    "bv": 116,
     "score": 6.0,
     "opening": 32,
     "pair": 1,
@@ -3458,6 +3890,7 @@
   {
     "code": "30x16:437:cMQCBEQAQIhIDAAAiQQAAAgCgAkAIAAFICCHLBCCgAAYAIwEEARAAUBABEoAkAIQBdJDCEAEAKCAAIEJ",
     "mines": 81,
+    "bv": 139,
     "score": 2.1,
     "opening": 56,
     "pair": 0,
@@ -3466,6 +3899,7 @@
   {
     "code": "30x16:179:BoCgQIACJhAABQQKBAAAUAFBAEAFgAAAABgAEEAhFgZIUwwgQAABAYhgBzMEiAAgAAAGAowAgKAhBJQE",
     "mines": 81,
+    "bv": 129,
     "score": 3.9,
     "opening": 87,
     "pair": 0,
@@ -3474,6 +3908,7 @@
   {
     "code": "30x16:166:kiABAqQKxAAcHAwAAiBAIAQAAAwAQBAAAEIgAGhKCASIgQACCAgCCCwCCECACASFBFQQAQMIQAAAWoFQ",
     "mines": 81,
+    "bv": 135,
     "score": 6.0,
     "opening": 80,
     "pair": 1,
@@ -3482,6 +3917,7 @@
   {
     "code": "30x16:296:QIAAAAMUiAAIAAhSEMEQQkgBAKBHACGAAACgCMIYEjBKGAAALBMaBABAAhDAABRgAgKCBJAAAhMAAgCg",
     "mines": 82,
+    "bv": 127,
     "score": 1.9,
     "opening": 84,
     "pair": 0,
@@ -3490,6 +3926,7 @@
   {
     "code": "30x16:89:IEQAqIgFwECAAAAIMBKKfIBAABIBgEAAAAokELEUAAAyAADIIYAAQIGAASQkSAAANYJAAWBRAAAABAYI",
     "mines": 82,
+    "bv": 132,
     "score": 3.7,
     "opening": 46,
     "pair": 0,
@@ -3498,46 +3935,52 @@
   {
     "code": "30x16:117:HKIKAiISABDAgCKiIABAhAAAgACICAkKSASCwAkAKAQEAgCAgAJihBgAVAAAoAABAAJTUEAjAAoQAQiI",
     "mines": 82,
+    "bv": 134,
     "score": 5.1,
     "opening": 76,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "30x16:85:AAIgAAhiKwAQAAABAMRBwAIAQgACQCGYAAEEoNCAhBFAjkAASwgAAgBCAgSiAgAogAKCEDLwCBAQCoAK",
-    "mines": 83,
-    "score": 5.5,
-    "opening": 39,
-    "pair": 0,
-    "count": 1
-  },
-  {
     "code": "30x16:262:CAiiAwJABBAgFBYgwCQAQAAAAAEwIMCICgIAAWkiYCAAACABAgCCpBQKFATECQAQIBIIaQAAEWYA0AAQ",
     "mines": 83,
+    "bv": 152,
     "score": 6.3,
     "opening": 58,
     "pair": 1,
     "count": 0
   },
   {
+    "code": "30x16:153:AAIgAAhgKwAQAABBiIOABAAQgAASACGYAAEEoNCAhBFAjkAASwgQAgBCAgSiAgAogAKCEDLwCBAQCoAK",
+    "mines": 83,
+    "bv": 134,
+    "score": 8.4,
+    "opening": 49,
+    "pair": 1,
+    "count": 1
+  },
+  {
     "code": "30x16:311:AhQBDAAPAAwApEmEgAAACBRVARgAQAAqAEBEVEISGGAAAPACjEAEAQAABigICAAAECATAwAAQAUigMCI",
     "mines": 83,
+    "bv": 117,
     "score": 8.8,
     "opening": 41,
     "pair": 1,
     "count": 1
   },
   {
-    "code": "30x16:296:UAIEIBAAIQFAIMAIIgAEAMACAAkyICAjAECJAAGABgBACkAEgCQSBBikZhUAIQQIAAkuEQOADBgICCCA",
+    "code": "30x16:230:KEAGoEAABASGAIgrAEAySABggiBAEAAVDhQAIGAAAAEgDAAAAgQkqQk4AE4IaVBAABBAIEABiAEAASwA",
     "mines": 84,
-    "score": 6.3,
-    "opening": 80,
+    "bv": 105,
+    "score": 5.6,
+    "opening": 66,
     "pair": 1,
     "count": 0
   },
   {
     "code": "30x16:214:ABEAIcgALEkABwAQBBCABADUABAAAAgEAAQAiABADIAAWAIiAAAABJgJBIAAEIwiCLE6MRAAsAB1lBiJ",
     "mines": 84,
+    "bv": 128,
     "score": 8.3,
     "opening": 128,
     "pair": 1,
@@ -3546,30 +3989,34 @@
   {
     "code": "30x16:121:MEEDMBlCIQASJEAAAgABAAYALMJgAAQggAyCUIIACBgQlRckDAEAWQQgQCJAAEEEgEBAEIpAEAEAEIAA",
     "mines": 85,
+    "bv": 137,
     "score": 6.4,
     "opening": 52,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "30x16:262:AQGUKAAgQCAIgSJBhJgBEQgGBgKBYKARAmABwCAAAISAEDggAARDAQIBhGQAABkBAAgAKAQgRhaIAABB",
+    "code": "30x16:187:zDHQOAAAAAAMCgAAhVgIEDAtAIBQAAIAuEAAAEARQAESUGAYEKAgyAAHAHkgAASQgCDmAAAAgxAABABA",
     "mines": 85,
-    "score": 7.3,
-    "opening": 40,
+    "bv": 107,
+    "score": 7.6,
+    "opening": 42,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "30x16:216:SCEAGQIAQBEBUEOMBASsAgQQCYAQQCAAAACgAIAIABAgDQcQcAIkAIBoAFVkWAiAuAEAQAAQCkBhEBAA",
+    "code": "30x16:199:SCEAGQIAQBEBUEOMBASsAgQQCYAQQCAAAAAUABAIBBAgDQcQcAIkAIBgAFVkWAiAuAEAQAAQCkBhEBAA",
     "mines": 85,
+    "bv": 128,
     "score": 7.9,
-    "opening": 100,
+    "opening": 86,
     "pair": 1,
     "count": 0
   },
   {
     "code": "30x16:280:EBURmAoIGAARAmCCACBQgmSQAgAEACAABQwACkAMGAgAEIAAECAiABAAQiBFiqwCBCQAAoDCU8QAEAgM",
     "mines": 86,
+    "bv": 134,
     "score": 6.4,
     "opening": 87,
     "pair": 1,
@@ -3578,62 +4025,70 @@
   {
     "code": "30x16:299:TIAATBABoYECAAAQCCAQATNgQBEkVMgIIiAQAKQVAYCAEgIAEIEIAQIgAmDQAwgAMgEAAABADDgAQIJo",
     "mines": 86,
+    "bv": 147,
     "score": 7.1,
     "opening": 73,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "30x16:216:BKAgSjIAASAEmCBgwIIICggAIIBgBBgBShgAAAgQQQIiiAIAHgoABDAAwFwBkyACUgAIARAJAAQmAABQ",
+    "code": "30x16:132:AAECIIIJQYEgCAABASgASENAAQLAIwCJDoECAFgByJEAEAhQIgAgZEABm2AAAEQBiDAAMAmEAgIAQAAS",
     "mines": 86,
-    "score": 10.1,
-    "opening": 41,
-    "pair": 2,
+    "bv": 134,
+    "score": 7.1,
+    "opening": 68,
+    "pair": 1,
     "count": 0
   },
   {
     "code": "30x16:280:AAIhAAEk2AQBABADghgYEoAoQAaAQ2gQEJ4AAQACCQAACAAABAAOQAARJKAGHTAgEIYjAIAgAQlYAyAI",
     "mines": 87,
+    "bv": 163,
     "score": 6.4,
     "opening": 61,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "30x16:280:ASIQ0BAgwIAhOSALsCAAABAjgYCAIACBAAAmEgAEAECkAIAGAAAxQQgGAktACAhAEFwUARQARkAIBMAS",
-    "mines": 87,
-    "score": 6.6,
-    "opening": 39,
-    "pair": 1,
-    "count": 0
-  },
-  {
     "code": "30x16:186:FYgGQAMYABQBBBASCABEAAWAIAgAAICFMQQEAA6AIQACGMACBCAw4AGGgEBAQgQiCEBE0QABABEKUmQB",
     "mines": 87,
+    "bv": 121,
     "score": 7.7,
     "opening": 88,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "30x16:311:KYQAACAjIISAGAgAQMAkOBBQDEEKQAAzhAwNhACAggoVgQAEQAIAAwAIARQEigLSAgIEAAhGAAEIIAgo",
-    "mines": 88,
-    "score": 7.3,
-    "opening": 109,
+    "code": "30x16:90:FGAQAAQpYACIABgEgAcAgAgkEoCCAIoAUAAAASoYBEJAMAIJAaCBCMQIkEQIMCBAIgAAowBEggCYZAJI",
+    "mines": 87,
+    "bv": 154,
+    "score": 8.5,
+    "opening": 53,
     "pair": 1,
     "count": 0
   },
   {
-    "code": "30x16:117:ABLAQA0UwEEpDAIUAAXgEQAohEpASYgAAEDAJAgIgABAIAAoSAgAEBAAIAAThIEMAggigAFCEQKARCoh",
+    "code": "30x16:331:EkEYgRAQAGAEaQCCEBAEBAIgCAhSsFAAAAoAQGIA0hAgCAAKBAAUgAAAAEGCIQDCCiAJsQgQCCaUUwIR",
     "mines": 88,
-    "score": 8.4,
-    "opening": 126,
+    "bv": 146,
+    "score": 6.4,
+    "opening": 59,
     "pair": 1,
-    "count": 1
+    "count": 0
+  },
+  {
+    "code": "30x16:181:iAIBCADALGAGACCYR0CEQYQogCCBACAAIAIogAIEBYCoAIMAAMAQAAFIAMJAgIMAQRIUhBBQCkiBDEgC",
+    "mines": 88,
+    "bv": 148,
+    "score": 10.0,
+    "opening": 36,
+    "pair": 2,
+    "count": 0
   },
   {
     "code": "30x16:242:iQAAgBGJMMAAFAACASQQAKAQCFQDCAIICRAAEAIAhAEGAOAQERAIFASOoSAQEEMAIUswEBAFLDAgCQBC",
     "mines": 88,
+    "bv": 144,
     "score": 13.0,
     "opening": 34,
     "pair": 3,
@@ -3642,6 +4097,7 @@
   {
     "code": "30x16:294:AAAmABogRZGIAQABAaIgSCjhIAYMImoEAigCAEAIEUACKACUACJAAQAACAkICQAAQigaEEDgyBETAQAE",
     "mines": 89,
+    "bv": 143,
     "score": 10.2,
     "opening": 74,
     "pair": 2,
@@ -3650,6 +4106,7 @@
   {
     "code": "30x16:236:GAkBAIIkEAgOIAAIYAuQUBEAwAACAwEAhhAAQCGAAACh4ACQAegEoAKDAAKFQAAJUoowAMABAJkBSCIE",
     "mines": 89,
+    "bv": 128,
     "score": 13.1,
     "opening": 41,
     "pair": 3,
@@ -3658,38 +4115,43 @@
   {
     "code": "30x16:59:EAmUwEIACAABxIiQGIgYBCRAkABAAQBQBCFUCBAAgygAQdgGCCIMAMBDIAOEgAAA4EAgYAoIKQCACAGA",
     "mines": 89,
+    "bv": 151,
     "score": 13.2,
     "opening": 33,
     "pair": 3,
     "count": 0
   },
   {
-    "code": "30x16:58:DAJAgASBBIQAgSIBQDQQIEwCA5FJQSAgMAAAhCALQIgBsQEAgFBWAXgAyQwAAAAAAgBEBKQAwICApKQA",
+    "code": "30x16:202:FRAAADZsCNQpRAAChQAoACIggHAaBASAAYBkAIAAkECgGAAEqAgBIgBAJQBBBFEA4lASABQKADUIAgAA",
     "mines": 90,
-    "score": 6.9,
-    "opening": 27,
+    "bv": 150,
+    "score": 9.4,
+    "opening": 81,
     "pair": 1,
+    "count": 1
+  },
+  {
+    "code": "30x16:265:gD4IIIAwEJACVFAkRIDEoAIISAAAACpAKSISAACIEABEAAAKFAARARBGgIACABQpIQcTiZIAAMVAABgA",
+    "mines": 90,
+    "bv": 169,
+    "score": 11.7,
+    "opening": 45,
+    "pair": 2,
     "count": 0
   },
   {
-    "code": "30x16:295:AAESCdAGEUMQVPEAFkDlIIgAADMAABAAIKIAABAA7pBgUARAAAAANEADAQBUIKEHgAMgQgFEBAASIAAA",
+    "code": "30x16:167:LlQQEQFmhhgUAAgDABCAAgoEwAgQOCgCAIWAUABEgICILAQAABAoiIigsAEADgIAAARBAKFAoWAAAgGB",
     "mines": 90,
-    "score": 7.7,
-    "opening": 44,
-    "pair": 1,
-    "count": 0
-  },
-  {
-    "code": "30x16:151:EAGBGAAAgBmKhD4ARACEQMAAKAQIAAABREAAEBjYECABAAAAAI8QAKGggCMUWQFXCABTIHHgAIAFAACI",
-    "mines": 90,
-    "score": 15.5,
-    "opening": 108,
-    "pair": 4,
-    "count": 0
+    "bv": 132,
+    "score": 11.7,
+    "opening": 90,
+    "pair": 2,
+    "count": 1
   },
   {
     "code": "30x16:150:IAsMJAoMEwAAgQACAMBIAYCAsCVAAMCEcCSEEYigFYEIAgAAQIaoQjBEIEAgADgBCCIEEAIMQDgAgAAG",
     "mines": 91,
+    "bv": 115,
     "score": 10.2,
     "opening": 58,
     "pair": 2,
@@ -3698,6 +4160,7 @@
   {
     "code": "30x16:171:AVAXV4GKA4ACDgIBDcACAAFACQOBAgMASgBIAIAELowAAAMAgABA0AAAAAQAiSAERiAoCMAIBABkECoq",
     "mines": 91,
+    "bv": 112,
     "score": 11.8,
     "opening": 108,
     "pair": 2,
@@ -3706,54 +4169,61 @@
   {
     "code": "30x16:228:AQANAAAAwBAIZIjgAIQIIiEBEWAzCwahAJBAhAAAAIQpAEBKxCgBAAAIMAwAREQJMlMAEAIBEAlEwAMC",
     "mines": 91,
+    "bv": 149,
     "score": 15.5,
     "opening": 27,
     "pair": 3,
     "count": 0
   },
   {
-    "code": "30x16:119:GCAIAkCBEAkBBgCBAGHgAABoAoAAAoQACFHGAgAElCACAsCgQIsYiIBBBGgyE4DKAAeCBCAsAASIgIAA",
+    "code": "30x16:139:CAZcAQgADIBQIxBAQEEAQCIEAoYYA5BgwABJCKBQgoUNSADQAAwIgAAAkUFghFQYEBBQAAgBAiAQAZAI",
     "mines": 92,
-    "score": 8.7,
-    "opening": 79,
+    "bv": 127,
+    "score": 7.0,
+    "opening": 61,
     "pair": 1,
+    "count": 0
+  },
+  {
+    "code": "30x16:201:Q6PAQbQAwAkNALQAsIMCAFShEAQEECAAYAUAHEBgoADAEAQEgBAwAgAIMEIIBJAECCCAgEIAAIIEhNoA",
+    "mines": 92,
+    "bv": 134,
+    "score": 12.2,
+    "opening": 105,
+    "pair": 2,
     "count": 1
   },
   {
-    "code": "30x16:121:CkCGgBCAEACAISkJRBBAAAIAEADpAgBgJwAAAAAQ0AgCgRaMgCeCEAT6kAQgILVkUEQAIAAACEIBAKhB",
-    "mines": 92,
-    "score": 9.8,
-    "opening": 66,
+    "code": "30x16:219:ACBDExjiAQAKAEAwEJtIFqrAQgWAAAAIQAYABkAAoAGFABCARACSEhCIgIUAoAwARABADQgAEEgHYIkC",
+    "mines": 93,
+    "bv": 163,
+    "score": 6.7,
+    "opening": 103,
     "pair": 1,
-    "count": 1
+    "count": 0
   },
   {
     "code": "30x16:247:BACAGAgE4p0AACAkICASIwqAAAEAAAKoAAUYARgs4AAEAIIEQIAEAVhAVBUMCMGTIREgQUgDIEEBCBCC",
     "mines": 93,
-    "score": 13.0,
+    "bv": 130,
+    "score": 12.8,
     "opening": 53,
     "pair": 2,
     "count": 1
   },
   {
-    "code": "30x16:277:AIWAIBRiAAJKiWCBGCgQiBAEKAJEASCAJEABAtAAAwAQYiABIAJAAjsBMAhQKgjAKxAIJoQAgAGGAAII",
+    "code": "30x16:231:AQAQwCMKgA0EEADBAFUKDAAABAIAGIhxAAAkBAwAAAjAA0jYCAQAAUATIABHCgwJRBZAkjgABgkARBiY",
     "mines": 93,
-    "score": 15.0,
-    "opening": 118,
+    "bv": 175,
+    "score": 15.9,
+    "opening": 108,
     "pair": 3,
-    "count": 0
-  },
-  {
-    "code": "30x16:172:YYEEFBFAAA8AIQCvICJAAAICgAAIYGCAVwACwASAAIAENSBYUBZiZQAhAAAAECgDAAIRJDIIAghgNIQA",
-    "mines": 93,
-    "score": 16.9,
-    "opening": 64,
-    "pair": 4,
-    "count": 0
+    "count": 1
   },
   {
     "code": "30x16:179:IAEgEgAAEMSKAAi5UAYQIGJAgWBAEEELALABQLSCBAIAKKAMAAJEQoBAgAYSIAAAYIwIkMBiBDEggCCJ",
     "mines": 94,
+    "bv": 178,
     "score": 10.7,
     "opening": 28,
     "pair": 2,
@@ -3762,6 +4232,7 @@
   {
     "code": "30x16:345:NQAAAYCAAgMAQAAwWiQAEwGAACAg1ABkmAAANRQASBRvHoCAIAA0AQIQAAKrEChMAggEARAFAjOAAAQO",
     "mines": 94,
+    "bv": 150,
     "score": 16.4,
     "opening": 36,
     "pair": 4,
@@ -3770,6 +4241,7 @@
   {
     "code": "30x16:330:wYciAAAEKDJMY0QIAxQAAAAAQJggAAASABQIAsRgpAYAUBkggEGKDAgAxAAIRAACKUCCQQNIEgIgBwER",
     "mines": 94,
+    "bv": 154,
     "score": 16.7,
     "opening": 40,
     "pair": 4,
@@ -3778,6 +4250,7 @@
   {
     "code": "30x16:356:wBMOECJACACTCAIIEYFQIIoAJAwBSKpAAAkgChwhioiGFAACVkCAoMEEIgAAAiARAEEAASRwBC0AAAgA",
     "mines": 95,
+    "bv": 166,
     "score": 12.6,
     "opening": 79,
     "pair": 2,
@@ -3786,7 +4259,8 @@
   {
     "code": "30x16:264:IAACBkgcANAAkDCEgUIQQ4DBCRgCCAAURAJAIJZAAADAAQwAgg4VDgBggACIMQAAAYAAGDUCG4KKAQiU",
     "mines": 95,
-    "score": 15.0,
+    "bv": 130,
+    "score": 14.8,
     "opening": 51,
     "pair": 3,
     "count": 1
@@ -3794,208 +4268,234 @@
   {
     "code": "30x16:394:QChEiECIFAIABkVLABBRQkwrDEAQIFAAQQAQwBgIgogCBUwAALBghGAEBACAAikLAAQAACAOGgBFhEQE",
     "mines": 95,
-    "score": 16.4,
+    "bv": 177,
+    "score": 16.3,
     "opening": 70,
     "pair": 3,
     "count": 1
   },
   {
-    "code": "30x16:248:CIBQU3JEQAIgQQiBJAAAEAAAkirBxAAAAgwIggAAgApoCQwMAQCiRAoEESgAACwQsCAJgVCgDrBAOAAM",
+    "code": "30x16:330:AAAhEQbQkcADQBEihAkQQAAQUADQQAgUSggAkAiBAAhAAKfBIABTBRyGIggAJgGVAyAKAACgApSAEIgg",
     "mines": 96,
-    "score": 16.3,
-    "opening": 43,
-    "pair": 3,
-    "count": 1
-  },
-  {
-    "code": "30x16:312:BgCEAAECABRKAECaQQEESpQCAQlABZOkIAAkAYoIgEQzQFAQiAIAARQEEIeDyAAIAhQRACEoKgiARAkA",
-    "mines": 96,
-    "score": 17.5,
-    "opening": 33,
-    "pair": 4,
-    "count": 0
-  },
-  {
-    "code": "30x16:229:BIDQCAGAaWoAgQBCGBKCCQiEhBVICFAIAABghAAOkQoAEBEGAgAABAgAAJBcgXBAMIAgYAJIUQAOMxAK",
-    "mines": 96,
-    "score": 18.8,
-    "opening": 85,
-    "pair": 4,
-    "count": 1
-  },
-  {
-    "code": "30x16:117:IAhmAAAAEbCwQg4SwCJgAAAFQASsEAABQCfF5ggAAASRQkBxARKAaJAAlCUCAwJAiMQAAAQgAICBBEIg",
-    "mines": 97,
-    "score": 12.7,
-    "opening": 54,
+    "bv": 164,
+    "score": 13.5,
+    "opening": 27,
     "pair": 2,
     "count": 1
   },
   {
-    "code": "30x16:279:BgAAAJhEE0TABBMmMACAWgCCQy4kEAGXAwAAAAABELAQARgAACARCAgCkKAAWYgAUAMNFGApMFmDAAgA",
-    "mines": 97,
-    "score": 15.0,
-    "opening": 68,
+    "code": "30x16:150:jgQAIzSIFCQAEIBgARBGgIAAgExAlAhoAAABQgKQBCQQAAAAwAGCQimAIYRGcQBgQChALCGQADIxIFgQ",
+    "mines": 96,
+    "bv": 145,
+    "score": 14.5,
+    "opening": 45,
     "pair": 3,
     "count": 0
   },
   {
+    "code": "30x16:117:EQoBABGAABSeAAA9EAAAIBFWCoIGIDiDKAgIKAgBtQsIhQEAECAEADAAACUAwEoAEkBCTAAwEIJ5gAAi",
+    "mines": 96,
+    "bv": 172,
+    "score": 14.5,
+    "opening": 27,
+    "pair": 3,
+    "count": 0
+  },
+  {
+    "code": "30x16:343:okMEECYABAEMBCEAAoAhBbHgiIyBQOIABBHIAAJB4AQghYCBogEgCMAIdAAACJIFQgAQAokAAEIIBSAS",
+    "mines": 97,
+    "bv": 148,
+    "score": 15.2,
+    "opening": 81,
+    "pair": 3,
+    "count": 1
+  },
+  {
     "code": "30x16:220:KUAgBUNEgCAC4hBAABGBSAAAAAICoQJCAABRAAkAA8wEMIECAMKmYgEqDQghCAgQgAxCgQEFTJABkEEw",
     "mines": 97,
+    "bv": 165,
     "score": 18.3,
     "opening": 41,
     "pair": 4,
     "count": 0
   },
   {
-    "code": "30x16:249:gogIDAwSBArSkAAgAIARIAMIAAAKBAYAAEKBIikAiBEADEABQUMAKW1LEAPAFAAIAAgBGaCBGIAjCxJS",
-    "mines": 98,
-    "score": 13.0,
-    "opening": 37,
-    "pair": 2,
-    "count": 1
-  },
-  {
-    "code": "30x16:153:gKAACwCFwAqBQBAIkAcCEYsQtgCACAEAECAAIIwxQAACgUDAQABICiQQkMWIiFAlASeRYAAAkHgiAgAB",
-    "mines": 98,
-    "score": 18.2,
-    "opening": 27,
-    "pair": 4,
-    "count": 0
-  },
-  {
-    "code": "30x16:373:CAAwgIEAILRBjMSR4AAEGCCUggAABFgIWcigiAGSFCIOkAggQAKIaCAIADAQEAAIwAwiAEQoAIQEFwJA",
-    "mines": 98,
-    "score": 25.1,
-    "opening": 60,
+    "code": "30x16:300:sZCDElUIAUAA4GyA2BAEJgMCAAOABkBQRjBBgIAIlAIAIJiAIIAMQAAgCAYCYIwAgUQAQIIQCQARkAGE",
+    "mines": 97,
+    "bv": 154,
+    "score": 22.9,
+    "opening": 31,
     "pair": 6,
     "count": 0
   },
   {
-    "code": "30x16:230:hywCUEAAUBCIBCAEKEQQAMEgAQAAEACEACiAMBAyaAI8A5GsGBQQkPoQBMlCiAEAAAiCMioQQIAAECgh",
-    "mines": 99,
-    "score": 21.4,
-    "opening": 65,
+    "code": "30x16:153:gKAACwCFwAqBQBAIkAcCEYsQtgCACAEAECAAIIwxQAACgUDAQABICiQQkMWIiFAlASeRYAAAkHgiAgAI",
+    "mines": 98,
+    "bv": 153,
+    "score": 20.6,
+    "opening": 27,
+    "pair": 4,
+    "count": 1
+  },
+  {
+    "code": "30x16:220:AMhViEHDG2EgIIUACAAEBhhRIIGJAIAgAECYAIABAASiVApwDIkggADpUAFlCIAkQGBDACAAKQAyAAAA",
+    "mines": 98,
+    "bv": 157,
+    "score": 22.0,
+    "opening": 60,
     "pair": 5,
     "count": 0
   },
   {
-    "code": "30x16:359:EAMiCEAgAADoABBAsFETCwiCI0AIAATUBBA4UGASVAImAAwTCSABBpANAClAAAQSAACPcggBAQCIgMAF",
+    "code": "30x16:345:A9RBCQSQQAUJQoEAiIkASBAhAgJEOBUyAogyhAcgAJECIAAIiAkCgAUCigBQAAAFG1AAgQANIQQAOAgI",
+    "mines": 98,
+    "bv": 178,
+    "score": 27.0,
+    "opening": 37,
+    "pair": 6,
+    "count": 1
+  },
+  {
+    "code": "30x16:247:GAEADQIEAQKQGqACIEwAAAFiECUAYCRACQYTFRhAgEBQRiAgEAHCAWgYAAAwAkAAUJIEYwMEEAEIYdXg",
     "mines": 99,
-    "score": 21.5,
-    "opening": 32,
+    "bv": 162,
+    "score": 18.9,
+    "opening": 71,
+    "pair": 4,
+    "count": 1
+  },
+  {
+    "code": "30x16:199:JKZJEAEAIYEAAkxIIAPoICAhEDCyzIgAFABgCwAAQAIFCVBBFChBQoAiCkgAEAAMASoFQCA6AgACUgBB",
+    "mines": 99,
+    "bv": 196,
+    "score": 20.4,
+    "opening": 48,
     "pair": 4,
     "count": 1
   },
   {
     "code": "30x16:268:mACCaBAkhRAARAoZRAAUUIMgCjSABSAAEoQMAhQAAiAFgGJAAKIgCAojCBFAEhDaCAAbBUAgVTACAAQE",
     "mines": 99,
+    "bv": 197,
     "score": 30.8,
     "opening": 42,
     "pair": 7,
     "count": 0
   },
   {
-    "code": "30x16:362:IDIGAAERLKUgUCogCCUCAxoFwIKhEVLAIiQAASFDAAAMASEAAgaAEBwgQAOgAAgCwQJgAAchIiAgAA4k",
+    "code": "30x16:136:BIAAACBAAgAEEYSlACAACEAIAgEAMgQAoQYbUEBTBGIBDAQErhvCAAcGwwgdmAQQEZBggAABAIAJNYjB",
     "mines": 100,
-    "score": 23.2,
-    "opening": 99,
-    "pair": 5,
-    "count": 1
+    "bv": 141,
+    "score": 24.1,
+    "opening": 70,
+    "pair": 6,
+    "count": 0
   },
   {
     "code": "30x16:188:AQANCPuRCCAAgLACADAKRhiIIwAAgBIAiCGYAKAAABGYChgVgBgCEIUQSAAAKEARBKyIBgoIAAIcVA1B",
     "mines": 100,
+    "bv": 148,
     "score": 26.7,
     "opening": 42,
     "pair": 6,
     "count": 1
   },
   {
+    "code": "30x16:296:IAEFJ4lKhgg4iWAARbAAAQgAA4AAQBHloBgIDQKCCAAABCAsEAQmEAAkABAgAABiQGSElEAPEIUoAUOE",
+    "mines": 101,
+    "bv": 160,
+    "score": 21.2,
+    "opening": 67,
+    "pair": 5,
+    "count": 0
+  },
+  {
     "code": "30x16:359:YAIQkCCOMAAASCaigRGIBgAAApWAkQpCQCGAEgINSQihGAKAFXIiCJgIIBBgAFAQCwgDIAGCSAAhAABU",
     "mines": 101,
+    "bv": 182,
     "score": 23.9,
     "opening": 34,
     "pair": 5,
     "count": 0
   },
   {
-    "code": "30x16:204:AEAQBAgEgAgAAAJFwaIREAGBDAUoAhUAoAMLQAQYCGiB4QIDseAAAElIAACEA4CKyABIkFCBEjkhTBEA",
+    "code": "30x16:265:hkClyjRBGkACQpHYURAIAgCBIUQyAFJJIApiiBABEACACKEQAAAEAgCCJCKEEBFgBASOATQIABARAABU",
     "mines": 101,
-    "score": 26.0,
-    "opening": 31,
-    "pair": 6,
-    "count": 0
-  },
-  {
-    "code": "30x16:413:gTOBggJQKAgIkYZAiDuQOAQFQM5AEAUAAShABiwBIBIIQBoBESASwAUhAIWBCEAGoACAIIEggCQCAIBA",
-    "mines": 101,
-    "score": 28.6,
-    "opening": 29,
-    "pair": 7,
-    "count": 0
+    "bv": 206,
+    "score": 42.8,
+    "opening": 62,
+    "pair": 11,
+    "count": 1
   },
   {
     "code": "30x16:262:QIgNAABwCQiAIAgEUChAEBhggiohSZQAAEOpCJgCEAOwIkAAhEhClgALAVBwAgAAAIICEQDIGAADxYPC",
     "mines": 102,
+    "bv": 181,
     "score": 20.8,
     "opening": 34,
     "pair": 5,
     "count": 0
   },
   {
-    "code": "30x16:233:BQAARBQNtkAoCBACABUAgwA0JCCCpCgAlAgUBgEADAgCgEDRBBAzRoAAABEMdRBEijwwB6wAQAKRAAIA",
+    "code": "30x16:213:UAkDDCYgwBEDKaDECIAtgBBBgBAgoBAuANEQBIABIIJhAgsAAAACgIBxEgwAIokgBFoAZCAgEISAsCMQ",
     "mines": 102,
-    "score": 29.7,
-    "opening": 29,
+    "bv": 168,
+    "score": 28.4,
+    "opening": 38,
+    "pair": 7,
+    "count": 0
+  },
+  {
+    "code": "30x16:203:KACgdFAMnGAIKBAEBEGEIAh0hCAEqCCAsoAIAREChIACCEJAAFEBRQYAUAEESAJEiF0KAAAINAFPGAIC",
+    "mines": 102,
+    "bv": 194,
+    "score": 31.7,
+    "opening": 43,
     "pair": 7,
     "count": 1
   },
   {
-    "code": "30x16:343:iAAgiYAxBauAAAEAEWQjIAVAgEMEBAiAAEoBggSIF7JCAkwJEEBQAIARQAGQAIQgKDLwAkaCABDCACAP",
-    "mines": 102,
-    "score": 31.0,
+    "code": "30x16:285:CAURAAAAIgWiSBAAAcYgAAAFAKshCixAACgA0AIRACj4MBUhItCAAADIQAALAIMYIC9gmIC4AKgEGMMQ",
+    "mines": 103,
+    "bv": 146,
+    "score": 17.1,
+    "opening": 26,
+    "pair": 3,
+    "count": 1
+  },
+  {
+    "code": "30x16:213:BwAgASAAgmgEBGCYhLQGAlKIAUBCAABAQEggFQAgVAJAIAgMESOAAgxVSUCAAI1MECApoEFjQAEFAmQZ",
+    "mines": 103,
+    "bv": 219,
+    "score": 19.6,
     "opening": 48,
-    "pair": 7,
+    "pair": 4,
     "count": 1
-  },
-  {
-    "code": "30x16:100:QDggEYAQEgUEGECKASAAcIgEApkABAEAACgpsUwAQdECBAihoEUBVBAAoIAFxAQQhGBTfABACOIIgIIg",
-    "mines": 103,
-    "score": 25.8,
-    "opening": 52,
-    "pair": 6,
-    "count": 0
-  },
-  {
-    "code": "30x16:347:EFAwCiBQDIgQKLF2IQoiFAhwpQEDAAgIRABQCBAwAliggwBKCCAFcAgAhAEBgAahAgAkJSEY0AFgIABA",
-    "mines": 103,
-    "score": 43.3,
-    "opening": 35,
-    "pair": 12,
-    "count": 0
   },
   {
     "code": "30x16:199:QgYEIEAAOkgEIgDQQEAIgQU4CQACggAUACoABnS7BAwaggSKDBGIIZUjIAgQgoCABAgREQALCkEUQAII",
     "mines": 103,
-    "score": 56.1,
+    "bv": 203,
+    "score": 55.9,
     "opening": 48,
     "pair": 15,
     "count": 1
   },
   {
-    "code": "30x16:343:RBigCICgEgBBUBNFhIQogEAFUBCACCgiF4UhoBjAwARgANwEQjBYBBABGBIAQSBiQQQiqAEAAggQSBAw",
+    "code": "30x16:211:KEgQAECAhASICTgOBCCACwgiBQABECQfgBAAQACQNDKAARHIEYAEEgAAgQBSZXAXJoAaQAJAhcCAcKFE",
     "mines": 104,
-    "score": 24.6,
-    "opening": 75,
+    "bv": 164,
+    "score": 20.6,
+    "opening": 26,
     "pair": 5,
-    "count": 1
+    "count": 0
   },
   {
-    "code": "30x16:262:A5c4ggQpSQApIQxgBERgGwgAGAAYGIJBFBIwQAAQIJKYAQANkACTAAsAIkAAQgagAKGACCkUgCIEoAgM",
+    "code": "30x16:119:AEcACBoENVgDIwQBkAKABBAcOKACSAASIRAUAAUhgAJELgUA1yUgACIAigBBAABgB1CERCIUAlBQBQUh",
     "mines": 104,
-    "score": 32.7,
-    "opening": 74,
+    "bv": 183,
+    "score": 31.0,
+    "opening": 40,
     "pair": 8,
     "count": 0
   }
