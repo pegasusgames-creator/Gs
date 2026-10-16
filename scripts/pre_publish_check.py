@@ -1848,6 +1848,15 @@ def main():
 
     print(bold(f"Checking {len(apps)} app(s)…\n"))
 
+    # Game-only gates (growth stack, menu architecture, reward parity,
+    # gameplay-only screenshots) skip kids / utility apps — those tracks
+    # have their own shells and gates (scripts/_tracks.py).
+    try:
+        from _tracks import is_game as _is_game
+    except Exception:
+        _is_game = lambda _a: True
+    game_apps = [a for a in apps if _is_game(a)]
+
     blocking = []
     warnings = []
 
@@ -1974,7 +1983,7 @@ def main():
                 b, w = _growth_check(a)
                 b_all.extend(b); w_all.extend(w)
             return b_all, w_all
-        section("code",  "growth baseline",         _growth, apps)
+        section("code",  "growth baseline",         _growth, game_apps)
     except Exception as _e:
         # Soft-fail — log and continue (the dedicated tool still works).
         print(f"  growth baseline: skipped ({_e})")
@@ -1989,7 +1998,7 @@ def main():
                 b, w = _menu_check(a)
                 b_all.extend(b); w_all.extend(w)
             return b_all, w_all
-        section("code",  "menu hierarchy",          _menu, apps)
+        section("code",  "menu hierarchy",          _menu, game_apps)
     except Exception as _e:
         print(f"  menu hierarchy: skipped ({_e})")
 
@@ -2017,9 +2026,11 @@ def main():
     # single Tier 2 Daily, canonical Levels·Shop·Games·Settings icon row,
     # Settings in row not top-bar gear.)
     try:
+        if not game_apps:
+            raise RuntimeError('no game-track apps in this run')
         _r = _subprocess.run(
             ['python3', os.path.join(BASE, 'scripts', 'check_menu_composition.py')]
-            + [a for a in apps if os.path.isdir(os.path.join(BASE, a))],
+            + [a for a in game_apps if os.path.isdir(os.path.join(BASE, a))],
             capture_output=True, text=True,
         )
         if _r.returncode != 0:
@@ -2071,13 +2082,20 @@ def main():
         ('check_reward_types_native.py', 'rewarded types requested by JS are whitelisted in Java'),
         ('check_lang_picker.py', 'every translated listing locale is selectable in the language picker'),
         ('check_trademarks.py', 'no third-party game/franchise trademarks in listing text'),
+        ('check_utility_shell.py', 'utility shell essentials (restore, privacy, IAP grants, ad cadence, 13-language picker, version, no game shims)'),
+        ('check_families_compliance.py', 'Google Play Families compliance (kids track)'),
         ('check_sudoku_unique.py', 'sudoku uniqueness + technique band'),
         ('check_level_select_coverage.py', 'Level Select reaches every level'),
     ]:
+        # Kids / utility screenshots show real-use states, not game boards, and
+        # their bottom bar is a nav (banner clearance checked by their own gates).
+        _targets = game_apps if _gate in ('check_screenshots_gameplay_only.py', 'check_footer_clearance.py') else apps
+        if not _targets:
+            continue
         try:
             _r = _subprocess.run(
                 ['python3', os.path.join(BASE, 'scripts', _gate)]
-                + [a for a in apps if os.path.isdir(os.path.join(BASE, a))],
+                + [a for a in _targets if os.path.isdir(os.path.join(BASE, a))],
                 capture_output=True, text=True,
             )
             if _r.returncode != 0:
@@ -2108,7 +2126,7 @@ def main():
         print(f"  nonogram uniqueness: skipped ({_e})")
     try:
         from check_reward_type_parity import check_app as _rwd
-        section("code", "reward type parity",       _wrap(_rwd), apps)
+        section("code", "reward type parity",       _wrap(_rwd), game_apps)
     except Exception as _e:
         print(f"  reward type parity: skipped ({_e})")
     try:
@@ -2133,7 +2151,7 @@ def main():
         print(f"  release notes match: skipped ({_e})")
     try:
         from check_menu_shims import check_app as _ms
-        section("code", "menu shim hygiene",        _wrap(_ms), apps)
+        section("code", "menu shim hygiene",        _wrap(_ms), game_apps)
     except Exception as _e:
         print(f"  menu shim hygiene: skipped ({_e})")
     try:
@@ -2143,7 +2161,7 @@ def main():
         print(f"  text contrast: skipped ({_e})")
     try:
         from check_menu_consistency import check_app as _mc
-        section("code", "menu consistency",         _wrap(_mc), apps)
+        section("code", "menu consistency",         _wrap(_mc), game_apps)
     except Exception as _e:
         print(f"  menu consistency: skipped ({_e})")
 

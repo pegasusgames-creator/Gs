@@ -64,6 +64,9 @@ WRAPPER_FILES = [
     "app/src/main/AndroidManifest.xml",
     "app/src/main/res/values/ids.xml", "app/src/main/res/values/strings.xml",
     "app/src/main/res/values/styles.xml", "app/src/main/res/xml/gma_ad_services_config.xml",
+    # utility shell (HabitTracker): backup rules + notification icon
+    "app/src/main/res/xml/backup_rules.xml", "app/src/main/res/xml/data_extraction_rules.xml",
+    "app/src/main/res/drawable/ic_stat_check.xml",
 ]
 
 
@@ -182,6 +185,9 @@ def main() -> int:
                          sp.read_text(encoding="utf-8"))
         elif rel == "app/src/main/res/values/strings.xml":
             out = re.sub(r"\s*<!-- TODO\(name\)[\s\S]*?-->", "", sp.read_text(encoding="utf-8"))
+            # app_name is TARGET's (the utility shell reads it for notifications)
+            out = re.sub(r'(<string name="app_name"[^>]*>)[^<]*(</string>)',
+                         lambda m: m.group(1) + a.name.replace("&", "&amp;") + m.group(2), out)
         elif sp.suffix in (".jar",) or rel in ("gradlew", "gradlew.bat"):
             out = sp.read_bytes()
         else:

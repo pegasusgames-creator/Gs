@@ -1,0 +1,17 @@
+{
+  "gate": ["scripts/check_utility_shell.py", "utility shell essentials (restore, privacy, IAP grants, ad cadence, 13-language picker, version, no game shims)"],
+  "app_theme": {
+    "bg_top_left": [245, 243, 250],
+    "bg_top_right": [236, 231, 253],
+    "bg_bottom": [91, 63, 209],
+    "text_primary": [28, 25, 48],
+    "text_accent": [91, 63, 209],
+    "text_subtle": [87, 82, 112],
+    "footer_tint": [116, 87, 236],
+    "mood": "ring-violet",
+    "layout_archetype": "G",
+    "mascot_pattern": "M4",
+    "voice": "V2",
+    "texture": "T1"
+  }
+}

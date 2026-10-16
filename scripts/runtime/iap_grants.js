@@ -25,6 +25,9 @@ const EXPECT = {
   starter_pack: ['coins'],
   season_pass_monthly: ['seasonPassUntil', 'seasonPassForever'],
   weekly_pass: ['weeklyPassUntil'],
+  // kids track (ABCLearning shell) / utility track (HabitTracker shell)
+  full_pack: ['fullPack', 'removeAds'],
+  pro_lifetime: ['proLifetime', 'pro', 'isPro', 'removeAds'],
 };
 function snapshot() {
   const s = window.gGame ? window.gGame.state() : {};

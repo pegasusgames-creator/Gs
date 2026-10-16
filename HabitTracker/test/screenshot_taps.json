@@ -1,0 +1,88 @@
+{
+  "_comment": "HabitTracker (utility shell) screenshot capture — real-use tool states, never Settings/paywall/onboarding. _setup_taps seeds 6 habits with ~140 days of history via window.shellLoadState (no reload: the pagehide persist would overwrite a localStorage seed), Pro + ad-free so no banner/lock overlays. Each slot sets a theme/accent with applyTheme() and navigates with UI.tab/UI.go (the utility shell's navigation; there is no showScreen). Phone 7 + tablet_7 2 + tablet_10 2 = 11 distinct states/themes; headlines in metadata/screenshot_headlines*.json describe exactly these screens.",
+  "_readiness_expr": "typeof UI !== 'undefined' && typeof window.shellLoadState === 'function' && typeof TOOL !== 'undefined'",
+  "_setup_taps": [
+    [
+      "js",
+      "(function (o) { o = o || {}; var r = 20261015; function rnd() { r = (r * 1103515245 + 12345) % 2147483648; return r / 2147483648; } function key(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); } var now = new Date(); now.setHours(12, 0, 0, 0); var H = [ ['h1', 'Drink water', 'drop', '#0288D1', 127, 8, 'glasses', 140, 0.9], ['h2', 'Read 10 pages', 'book', '#5B48D9', 127, 1, '', 120, 0.82], ['h3', 'Morning run', 'walk', '#2F8F46', 42, 1, '', 110, 0.75], ['h4', 'Meditate', 'flower', '#8E44D9', 127, 1, '', 90, 0.7], ['h5', 'Practice guitar', 'music', '#E2620F', 62, 1, '', 70, 0.6], ['h6', 'No sweets', 'apple', '#E5484D', 127, 1, '', 45, 0.55] ]; var habits = [], log = {}, notes = {}; H.forEach(function (x, i) { var start = new Date(now); start.setDate(start.getDate() - x[7]); habits.push({ id: x[0], name: x[1], icon: x[2], color: x[3], days: x[4], target: x[5], unit: x[6], created: key(start), archived: false, rem: { on: i < 2, h: i ? 21 : 8, m: i ? 30 : 0 }, slot: i + 1 }); var L = log[x[0]] = {}; for (var d = new Date(start); d < now; d.setDate(d.getDate() + 1)) { if (!(x[4] & (1 << d.getDay()))) continue; var age = (now - d) / 864e5, p = x[8] + (age < 20 ? 0.12 : 0); if (rnd() < p) L[key(d)] = x[5]; else if (x[5] > 1 && rnd() < 0.6) L[key(d)] = Math.ceil(x[5] * rnd()); } for (var k = 1; k <= 12 - i; k++) { var dd = new Date(now); dd.setDate(dd.getDate() - k); if (x[4] & (1 << dd.getDay())) L[key(dd)] = x[5]; } }); log.h1[key(now)] = 5; log.h2[key(now)] = 1; log.h4[key(now)] = 1; notes.h2 = {}; notes.h4 = {}; var n1 = new Date(now); n1.setDate(n1.getDate() - 1); notes.h2[key(n1)] = 'Finished chapter 7 — the twist!'; var n2 = new Date(now); n2.setDate(n2.getDate() - 3); notes.h4[key(n2)] = 'Ten minutes felt easy today.'; var n3 = new Date(now); n3.setDate(n3.getDate() - 6); notes.h2[key(n3)] = 'Read on the train.'; var s = { saveVersion: 1, created: Date.now() - 140 * 864e5, sessions: 9, lastSeen: Date.now() - 4 * 3600e3, onboarded: true, removeAds: !!o.removeAds, pro: !!o.pro || ['forest','ember','rose'].indexOf(o.accent) >= 0, proTrialUntil: 0, settings: { theme: o.theme || 'light', accent: o.accent || 'violet', lang: o.lang && o.lang !== 'en' ? o.lang : '', textSize: o.textSize || 1, haptics: true, reduceMotion: false, daily: { on: false, h: 20, m: 0 } }, ads: { last: 0, breaks: 0 }, tool: { habits: habits, log: log, notes: notes, weekStart: -1, lastVisit: key(now) } }; if (o.names) s.tool.habits.forEach(function (h, i) { if (o.names[i]) h.name = o.names[i]; }); return window.shellLoadState(s); })({pro:true,removeAds:true,theme:'light',accent:'violet'});",
+      1500
+    ]
+  ],
+  "01_today_progress": [
+    [
+      "js",
+      "UI.closeAll();S.settings.theme='light';S.settings.accent='violet';S.settings.lang='';persist();applyLang();applyTheme();UI.buildNav();TD.sel=todayKey();TD.later=false;UI.tab('today');'ok';",
+      1400
+    ]
+  ],
+  "02_today_all_done": [
+    [
+      "js",
+      "UI.closeAll();S.settings.theme='light';S.settings.accent='ocean';S.settings.lang='';persist();applyLang();applyTheme();UI.buildNav();TD.sel=todayKey();TD.later=false;S.tool.habits.forEach(function(h){if(HB.sched(h,today()))HB.set(h,todayKey(),h.target);});persist();UI.tab('today');'ok';",
+      1600
+    ]
+  ],
+  "03_habit_calendar": [
+    [
+      "js",
+      "['h3','h5','h6'].forEach(function(i){HB.set(HB.get(i),todayKey(),0);});HB.set(HB.get('h1'),todayKey(),5);persist();UI.closeAll();S.settings.theme='light';S.settings.accent='violet';S.settings.lang='';persist();applyLang();applyTheme();UI.buildNav();TD.sel=todayKey();TD.later=false;UI.tab('today');UI.go('habit',{id:'h2'});setTimeout(function(){document.getElementById('view').scrollTop=300;},250);'ok';",
+      1600
+    ]
+  ],
+  "04_stats_overview": [
+    [
+      "js",
+      "['h3','h5','h6'].forEach(function(i){HB.set(HB.get(i),todayKey(),0);});HB.set(HB.get('h1'),todayKey(),5);persist();UI.closeAll();S.settings.theme='light';S.settings.accent='forest';S.settings.lang='';persist();applyLang();applyTheme();UI.buildNav();TD.sel=todayKey();TD.later=false;UI.tab('stats');'ok';",
+      1400
+    ]
+  ],
+  "05_new_habit_editor": [
+    [
+      "js",
+      "['h3','h5','h6'].forEach(function(i){HB.set(HB.get(i),todayKey(),0);});HB.set(HB.get('h1'),todayKey(),5);persist();UI.closeAll();S.settings.theme='light';S.settings.accent='rose';S.settings.lang='';persist();applyLang();applyTheme();UI.buildNav();TD.sel=todayKey();TD.later=false;UI.tab('today');openEditor(null,{name:'Stretch for 5 minutes',icon:'dumbbell',color:'#E2620F',days:62,target:1,rem:{on:true,h:7,m:30}});'ok';",
+      1800
+    ]
+  ],
+  "06_dark_today": [
+    [
+      "js",
+      "['h3','h5','h6'].forEach(function(i){HB.set(HB.get(i),todayKey(),0);});HB.set(HB.get('h1'),todayKey(),5);persist();UI.closeAll();S.settings.theme='dark';S.settings.accent='violet';S.settings.lang='';persist();applyLang();applyTheme();UI.buildNav();TD.sel=todayKey();TD.later=false;UI.tab('today');TD.later=true;UI.refresh();'ok';",
+      1400
+    ]
+  ],
+  "07_count_and_note": [
+    [
+      "js",
+      "['h3','h5','h6'].forEach(function(i){HB.set(HB.get(i),todayKey(),0);});HB.set(HB.get('h1'),todayKey(),5);persist();UI.closeAll();S.settings.theme='light';S.settings.accent='ember';S.settings.lang='';persist();applyLang();applyTheme();UI.buildNav();TD.sel=todayKey();TD.later=false;UI.tab('today');openDay('h1',todayKey());setTimeout(function(){var n=document.getElementById('ds-note');if(n)n.value='Two glasses before lunch.';},400);'ok';",
+      1800
+    ]
+  ],
+  "tablet_7_01_today": [
+    [
+      "js",
+      "['h3','h5','h6'].forEach(function(i){HB.set(HB.get(i),todayKey(),0);});HB.set(HB.get('h1'),todayKey(),5);persist();UI.closeAll();S.settings.theme='light';S.settings.accent='ocean';S.settings.lang='';persist();applyLang();applyTheme();UI.buildNav();TD.sel=todayKey();TD.later=false;UI.tab('today');TD.later=true;UI.refresh();'ok';",
+      1400
+    ]
+  ],
+  "tablet_7_02_stats_patterns": [
+    [
+      "js",
+      "['h3','h5','h6'].forEach(function(i){HB.set(HB.get(i),todayKey(),0);});HB.set(HB.get('h1'),todayKey(),5);persist();UI.closeAll();S.settings.theme='dark';S.settings.accent='forest';S.settings.lang='';persist();applyLang();applyTheme();UI.buildNav();TD.sel=todayKey();TD.later=false;UI.tab('stats');setTimeout(function(){document.getElementById('view').scrollTop=520;},250);'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_01_year_heatmap": [
+    [
+      "js",
+      "['h3','h5','h6'].forEach(function(i){HB.set(HB.get(i),todayKey(),0);});HB.set(HB.get('h1'),todayKey(),5);persist();UI.closeAll();S.settings.theme='dark';S.settings.accent='rose';S.settings.lang='';persist();applyLang();applyTheme();UI.buildNav();TD.sel=todayKey();TD.later=false;UI.tab('today');UI.go('habit',{id:'h1'});setTimeout(function(){document.getElementById('view').scrollTop=900;},250);'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_02_habits_list": [
+    [
+      "js",
+      "['h3','h5','h6'].forEach(function(i){HB.set(HB.get(i),todayKey(),0);});HB.set(HB.get('h1'),todayKey(),5);persist();UI.closeAll();S.settings.theme='light';S.settings.accent='violet';S.settings.lang='';persist();applyLang();applyTheme();UI.buildNav();TD.sel=todayKey();TD.later=false;UI.tab('habits');'ok';",
+      1400
+    ]
+  ]
+}
