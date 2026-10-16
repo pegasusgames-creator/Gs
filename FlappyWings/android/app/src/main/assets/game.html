@@ -633,7 +633,7 @@ body.midnight #screen-menu .menu-logo{background:linear-gradient(90deg,#ffd6e3,#
   <div class="game-footer">
     <button class="foot-btn" onclick="goMenu()">← Menu</button>
     <button class="foot-btn" id="fw-shield-btn" onclick="useHint()">🛡 Shield <b id="fw-shield-n">0</b></button>
-    <button class="foot-btn" id="fw-pause-btn" onclick="togglePause()">⏸ Pause</button>
+    <button class="foot-btn" id="fw-pause-btn" onclick="togglePause()">❚❚ Pause</button>
   </div>
 <!--@@END FOOTER-->
 <!--@@REGION TUTORIAL_HTML-->
@@ -1747,13 +1747,13 @@ function fwStep(){
     if(dx*dx+dy*dy<=(r+16)*(r+16)){fw.got[j]=1;fw.feathers++;fwSfx('feather');fwHaptic(8);fwSparkle(f.x,f.y);fwUpdateHud();}
   }
   let hit=null;
-  if(fw.y+r>=W.floorY)hit='the cloud sea';
-  else for(let j=Math.max(0,fw.score-2);j<fw.score+2;j++){if(fwHitsGate(C.gates[j],fw.cam,fw.y,r)){hit='gate '+(j+1);break;}}
+  if(fw.y+r>=W.floorY)hit='Dipped into the cloud sea';
+  else for(let j=Math.max(0,fw.score-2);j<fw.score+2;j++){if(fwHitsGate(C.gates[j],fw.cam,fw.y,r)){hit='Clipped gate '+(j+1);break;}}
   if(!hit)return;
-  if(fw.ghost>0){if(hit==='the cloud sea'){fw.y=W.floorY-r-1;fw.vy=P.flapV;}return;}
+  if(fw.ghost>0){if(hit==='Dipped into the cloud sea'){fw.y=W.floorY-r-1;fw.vy=P.flapV;}return;}
   if(fw.shield){
     fw.shield=false;fw.ghost=48;fw.shieldsUsed++;fwSfx('shield');fwHaptic([12,30,12]);fwBurst(fw.cam,fw.y,'shield');
-    if(hit==='the cloud sea'){fw.y=W.floorY-r-1;fw.vy=P.flapV;}
+    if(hit==='Dipped into the cloud sea'){fw.y=W.floorY-r-1;fw.vy=P.flapV;}
     fwBanner('🛡 Shield saved you!');fwUpdateHud();return;
   }
   fwCrash(hit);
@@ -1953,11 +1953,12 @@ let fwCountT=null;
 function fwShowCrash(canAd,canHeart){
   const el=document.getElementById('fw-crash');if(!el)return;
   document.getElementById('fw-crash-score').textContent=fw.score;
-  document.getElementById('fw-crash-why').textContent='Bumped '+fw.crashWhy;
+  document.getElementById('fw-crash-why').textContent=fw.crashWhy;
   const ad=document.getElementById('fw-btn-revive'),ht=document.getElementById('fw-btn-heart');
   ad.style.display=canAd?'':'none';ht.style.display=canHeart?'':'none';
   const unl=typeof hasUnlimitedLives==='function'&&hasUnlimitedLives();
-  ht.innerHTML='❤ Continue <small>'+(unl?'free':'1 heart · '+(save.lives|0)+' left')+' · '+(FW_MAX_CONTINUES-fw.continues)+'/'+FW_MAX_CONTINUES+'</small>';
+  const left=FW_MAX_CONTINUES-fw.continues;
+  ht.innerHTML='❤ Continue <small>'+(unl?'free (continue pass)':'uses 1 of your '+(save.lives|0)+' hearts')+' · '+left+' continue'+(left===1?'':'s')+' left</small>';
   el.classList.add('show');
   fwStartCountdown();
 }
@@ -2033,21 +2034,20 @@ function fwRender(alpha){
   if(!fwSkyCache){const g=c.createLinearGradient(0,0,0,V.h);g.addColorStop(0,fwPal['sky-top']);g.addColorStop(0.72,fwPal['sky-bot']);g.addColorStop(1,fwPal['sky-bot']);fwSkyCache=g;}
   c.fillStyle=fwSkyCache;c.fillRect(0,0,V.w,V.h);
   // sun + glow
-  const sx=V.w*0.74-((cam*0.02)%40),sy=Y(170);
-  const glow=c.createRadialGradient(sx,sy,10*s,sx,sy,150*s);glow.addColorStop(0,fwPal.sun);glow.addColorStop(1,'rgba(255,255,255,0)');
-  c.globalAlpha=0.55;c.fillStyle=glow;c.fillRect(0,0,V.w,V.h);c.globalAlpha=1;
-  c.fillStyle=fwPal.sun;c.beginPath();c.arc(sx,sy,54*s,0,Math.PI*2);c.fill();
+  const sx=V.w*0.72,sy=Y(468);
+  const glow=c.createRadialGradient(sx,sy,10*s,sx,sy,170*s);glow.addColorStop(0,fwRgba(fwPal.sun,0.75));glow.addColorStop(1,fwRgba(fwPal.sun,0));
+  c.fillStyle=glow;c.fillRect(0,0,V.w,V.h);
+  c.fillStyle=fwPal.sun;c.beginPath();c.arc(sx,sy,42*s,0,Math.PI*2);c.fill();
   // soft horizon haze
   const hz=c.createLinearGradient(0,Y(330),0,Y(600));hz.addColorStop(0,fwRgba(fwPal.haze,0));hz.addColorStop(0.6,fwRgba(fwPal.haze,0.55));hz.addColorStop(1,fwRgba(fwPal.haze,0.2));
   c.fillStyle=hz;c.fillRect(0,Y(330),V.w,Y(600)-Y(330));
   // far floating islands (parallax 0.15)
   const p1=cam*0.15,t1=Math.floor((p1-200)/260);
   for(let i=t1;i<t1+Math.ceil(V.vw/260)+3;i++){
-    const h=fwHash(i*7+3),ix=(i*260-p1+V.bx)*s,iy=Y(150+h*240),iw=(70+h*60)*s;
-    c.globalAlpha=0.35;c.fillStyle=fwPal['cloud-shade'];
-    c.beginPath();c.ellipse(ix,iy,iw/2,8*s,0,0,Math.PI*2);c.fill();
-    c.beginPath();c.moveTo(ix-iw/2,iy);c.lineTo(ix,iy+iw*0.5);c.lineTo(ix+iw/2,iy);c.closePath();c.fill();
-    c.globalAlpha=0.5;c.fillStyle=fwPal.cloud;fwCloud(c,ix-iw*0.45,iy-4*s,iw*0.9,10*s);
+    const h=fwHash(i*7+3),ix=(i*260-p1+V.bx)*s,iy=Y(130+h*260),iw=(40+h*34)*s;
+    c.globalAlpha=0.28;c.fillStyle=fwPal.isle;
+    c.beginPath();c.moveTo(ix-iw/2,iy);c.lineTo(ix+iw/2,iy);c.lineTo(ix+iw*0.2,iy+iw*0.32);c.lineTo(ix-iw*0.05,iy+iw*0.42);c.lineTo(ix-iw*0.28,iy+iw*0.22);c.closePath();c.fill();
+    c.globalAlpha=0.45;c.fillStyle=fwPal.cloud;fwCloud(c,ix-iw*0.55,iy-2*s,iw*1.1,7*s);
   }
   // mid clouds (parallax 0.4)
   const p2=cam*0.4,t2=Math.floor((p2-300)/210);
@@ -2110,12 +2110,12 @@ function fwDrawGate(c,g,cam,X,Y,s,V){
     const t=Math.min(ya,yb),h=Math.abs(yb-ya);
     const gr=c.createLinearGradient(x0,0,x1,0);gr.addColorStop(0,fwPal.cloud);gr.addColorStop(1,fwPal['cloud-shade']);
     c.fillStyle=gr;c.fillRect(x0,t,x1-x0,h);
+    c.strokeStyle=fwRgba(fwPal.isle,0.28);c.lineWidth=1.5*s;c.strokeRect(x0,t,x1-x0,h);
+    c.lineWidth=1.2*s;c.strokeStyle=fwRgba(fwPal.isle,0.22);
     c.fillStyle=fwPal.cloud;
-    for(let yy=t+10*s,i=0;yy<t+h;yy+=24*s,i++){
-      c.beginPath();c.arc(x0+3*s,yy,9*s,0,Math.PI*2);c.fill();
-    }
+    for(let yy=t+10*s;yy<t+h;yy+=24*s){c.beginPath();c.arc(x0+3*s,yy,9*s,0,Math.PI*2);c.fill();c.stroke();}
     c.fillStyle=fwPal['cloud-shade'];
-    for(let yy=t+22*s;yy<t+h;yy+=24*s){c.beginPath();c.arc(x1-3*s,yy,9*s,0,Math.PI*2);c.fill();}
+    for(let yy=t+22*s;yy<t+h;yy+=24*s){c.beginPath();c.arc(x1-3*s,yy,9*s,0,Math.PI*2);c.fill();c.stroke();}
   };
   col(Math.min(-20*s,0)-V.oy-10,Y(top-ch)+2*s);
   col(Y(bot+ch)-2*s,V.h+10);
