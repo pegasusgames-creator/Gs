@@ -1,6 +1,6 @@
 {
-  "google_review_notes": "No login required. All features of Habit Tracker accessible from the main menu.",
-  "apple_review_notes": "No login required. To test IAPs, use the shop button in Habit Tracker.",
+  "google_review_notes": "No login required. Habit Tracker opens on the Today screen after a 3-card intro (Skip). Add a habit with + or a suggestion chip, tap the circle to check in, long-press it for an exact count/note. Habits, Stats and Settings (gear) hold everything else. Pro and Remove Ads are one-time in-app products (Settings > Purchases); Restore purchases is in the same section. Habit data stays on the device; it is a general self-tracking tool, not a medical or health-diagnosis app.",
+  "apple_review_notes": "No login required. To test in-app purchases open Settings (gear, top right) > Purchases: Go Pro (pro_lifetime) or Remove ads (remove_ads); Restore purchases is in the same section. No demo account needed.",
   "demo_account_required": false,
   "demo_username": "",
   "demo_password": "",

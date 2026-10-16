@@ -4,10 +4,19 @@
   "category_apple_subcategory": "",
   "contains_ads": true,
   "contains_iap": true,
-  "target_audience_min_age": 13,
-  "support_url": "https://pegasusgames.example/support",
-  "marketing_url": "",
+  "kids_program": true,
+  "target_age_band": "3-8",
+  "target_audience_min_age": 3,
+  "target_audience_max_age": 8,
+  "play_target_age_groups": [
+    "ages_5_and_under",
+    "ages_6_to_8"
+  ],
+  "apple_kids_category_band": "6-8",
+  "support_url": "https://pegasusgames-creator.github.io/",
+  "marketing_url": "https://pegasusgames-creator.github.io/",
   "copyright": "© 2026 Pegasus Games",
   "package_name": "com.pegasusgames.abclearning",
-  "upload_key_sha1": "2C:0F:6C:19:E9:9C:55:70:D2:1B:88:44:FC:A1:A9:B8:08:2F:CC:93"
+  "upload_key_sha1": "2C:0F:6C:19:E9:9C:55:70:D2:1B:88:44:FC:A1:A9:B8:08:2F:CC:93",
+  "first_upload_at": null
 }

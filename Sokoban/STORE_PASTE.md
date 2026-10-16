@@ -24,55 +24,55 @@ The 13 locales (Play Console tags): en-US, ar, de-DE, es-419, fr-FR, hi-IN, id, 
 _Test and release → Production → release details_
 
 <en-US>
-Initial release · 500 solver-verified push puzzles, from gentle to brain-bending · Daily challenge with streak rewards · Weekly tournament and leaderboards · 5 unlockable visual themes · Move and push counters · Undo and restart anytime · Plays fully offline.
+Sokoban 2.0 is a complete rebuild. A cozy new look with smooth, tactile pushes · 500 levels in 10 chapters, each with a par from its shortest solution · hints that draw the route to your next push · a warning when a crate gets stuck · a daily board everyone shares · endless fresh warehouses · 7 board themes · haptics and an optional d-pad · unlimited free undo.
 </en-US>
 
 <ar>
-الإصدار الأول · 500 لغز دفع تم التحقق منها بالحل، من السهل إلى المُحيّر · تحدٍّ يومي مع مكافآت السلسلة · بطولة أسبوعية ولوحات صدارة · 5 سمات بصرية قابلة للفتح · عدّادات الحركة والدفع · تراجع وإعادة بدء في أي وقت · يعمل بلا إنترنت تمامًا.
+Sokoban 2.0 إعادة بناء كاملة. مظهر دافئ جديد مع دفعات ناعمة ملموسة · 500 مستوى في 10 فصول لكلٍّ منها رقم مثالي من أقصر حل · تلميحات ترسم الطريق إلى دفعتك التالية · تنبيه عند علوق صندوق · لوحة يومية مشتركة · مستودعات لا نهائية · 7 سمات للوحة · اهتزاز وأزرار اتجاه اختيارية · تراجع مجاني غير محدود.
 </ar>
 
 <de-DE>
-Erstveröffentlichung · 500 lösungsgeprüfte Schiebe-Rätsel, von sanft bis knifflig · Tägliche Herausforderung mit Serien-Belohnungen · Wöchentliches Turnier und Bestenlisten · 5 freischaltbare Designs · Zug- und Schub-Zähler · Jederzeit rückgängig machen und neu starten · Komplett offline spielbar.
+Sokoban 2.0 ist komplett neu gebaut. Gemütlicher neuer Look mit weichen, fühlbaren Schüben · 500 Level in 10 Kapiteln, jedes mit Par aus der kürzesten Lösung · Tipps zeigen den Weg zum nächsten Schub · Warnung, wenn eine Kiste feststeckt · ein Tagesrätsel für alle · endlos neue Lagerhallen · 7 Brett-Themen · Haptik und optionales Steuerkreuz · unbegrenztes Rückgängig.
 </de-DE>
 
 <es-419>
-Lanzamiento inicial · 500 rompecabezas de empuje verificados, de suaves a desafiantes · Desafío diario con recompensas por racha · Torneo semanal y tablas de clasificación · 5 temas visuales desbloqueables · Contadores de movimientos y empujes · Deshacer y reiniciar cuando quieras · Totalmente sin conexión.
+Sokoban 2.0 es una reconstrucción total. Nuevo look acogedor con empujes suaves y táctiles · 500 niveles en 10 capítulos, cada uno con un par de su solución más corta · pistas que trazan la ruta a tu próximo empuje · aviso cuando una caja se atasca · un tablero diario compartido · almacenes infinitos · 7 temas de tablero · vibración y cruceta opcional · deshacer ilimitado gratis.
 </es-419>
 
 <fr-FR>
-Première version · 500 puzzles de poussée vérifiés, du doux au casse-tête · Défi quotidien avec récompenses de série · Tournoi hebdomadaire et classements · 5 thèmes visuels à débloquer · Compteurs de coups et de poussées · Annuler et recommencer à tout moment · Entièrement hors ligne.
+Sokoban 2.0 est une refonte complète. Nouveau look chaleureux aux poussées douces et tactiles · 500 niveaux en 10 chapitres, chacun avec un par tiré de sa solution la plus courte · indices qui tracent la route vers ta prochaine poussée · alerte quand une caisse se bloque · un plateau du jour partagé · entrepôts infinis · 7 thèmes de plateau · vibrations et croix directionnelle en option · annulation illimitée.
 </fr-FR>
 
 <hi-IN>
-पहला रिलीज़ · 500 हल-सत्यापित पुश पहेलियाँ, आसान से दिमाग़ घुमाने वाली तक · स्ट्रीक इनाम के साथ रोज़ाना चुनौती · साप्ताहिक टूर्नामेंट और लीडरबोर्ड · 5 अनलॉक होने वाली विज़ुअल थीम · चाल और पुश काउंटर · कभी भी पूर्ववत करें और फिर से शुरू करें · पूरी तरह ऑफ़लाइन।
+Sokoban 2.0 पूरी तरह नए सिरे से बना है। मुलायम, महसूस होने वाले धक्कों के साथ नया आरामदायक रूप · 10 अध्यायों में 500 लेवल, हर एक का पार सबसे छोटे हल से · संकेत जो अगले धक्के का रास्ता दिखाते हैं · बक्सा फँसने पर चेतावनी · सबके लिए रोज़ का बोर्ड · अनंत नए गोदाम · 7 बोर्ड थीम · कंपन और वैकल्पिक डी-पैड · असीमित मुफ़्त अनडू।
 </hi-IN>
 
 <id>
-Rilis perdana · 500 teka-teki dorong terverifikasi, dari ringan hingga memutar otak · Tantangan harian dengan hadiah streak · Turnamen mingguan dan papan peringkat · 5 tema visual yang bisa dibuka · Penghitung langkah dan dorongan · Urungkan dan mulai ulang kapan saja · Sepenuhnya offline.
+Sokoban 2.0 dibangun ulang sepenuhnya. Tampilan baru yang nyaman dengan dorongan halus dan terasa · 500 level dalam 10 bab, masing-masing dengan par dari solusi terpendek · petunjuk yang menggambar rute ke dorongan berikutnya · peringatan saat peti macet · papan harian bersama · gudang tanpa akhir · 7 tema papan · getaran dan d-pad opsional · urung tanpa batas gratis.
 </id>
 
 <it-IT>
-Versione iniziale · 500 rompicapi a spinta verificati, dai più dolci ai rompicapo · Sfida giornaliera con ricompense per la serie · Torneo settimanale e classifiche · 5 temi visivi sbloccabili · Contatori di mosse e spinte · Annulla e ricomincia quando vuoi · Completamente offline.
+Sokoban 2.0 è stato ricostruito da zero. Nuovo look accogliente con spinte morbide e tattili · 500 livelli in 10 capitoli, ognuno con un par dalla soluzione più breve · suggerimenti che tracciano il percorso verso la prossima spinta · avviso quando una cassa si blocca · una sfida del giorno condivisa · magazzini infiniti · 7 temi del tabellone · vibrazione e croce direzionale opzionale · annulla illimitato gratis.
 </it-IT>
 
 <ja-JP>
-初回リリース · 解答検証済みの押し込みパズル500問（やさしいものから頭をひねるものまで）· 連続記録報酬付きのデイリーチャレンジ · 週替わりトーナメントとリーダーボード · 解放できる5つのビジュアルテーマ · 移動数・押し込み数カウンター · いつでも取り消し＆やり直し · 完全オフライン対応。
+Sokoban 2.0は全面リニューアル。なめらかで手応えのある押し心地の新デザイン・10章500ステージ（各ステージに最短解のパー）・次の一押しまでの道を描くヒント・箱が動けなくなると警告・みんな共通のデイリー盤面・終わりのない新しい倉庫・7種類の盤面テーマ・振動と十字キー（任意）・無制限の無料取り消し。
 </ja-JP>
 
 <pt-BR>
-Lançamento inicial · 500 quebra-cabeças de empurrar verificados, do suave ao alucinante · Desafio diário com recompensas por sequência · Torneio semanal e placares · 5 temas visuais desbloqueáveis · Contadores de movimentos e empurrões · Desfazer e reiniciar a qualquer momento · Totalmente offline.
+Sokoban 2.0 foi totalmente reconstruído. Visual aconchegante com empurrões suaves e táteis · 500 fases em 10 capítulos, cada uma com um par da solução mais curta · dicas que desenham o caminho até o próximo empurrão · aviso quando uma caixa trava · um tabuleiro diário compartilhado · armazéns infinitos · 7 temas de tabuleiro · vibração e direcional opcional · desfazer ilimitado grátis.
 </pt-BR>
 
 <tr-TR>
-İlk sürüm · Çözümü doğrulanmış 500 itme bulmacası, yumuşaktan zorlayıcıya · Seri ödüllü günlük görev · Haftalık turnuva ve lider tabloları · Açılabilir 5 görsel tema · Hamle ve itme sayaçları · İstediğiniz zaman geri al ve yeniden başla · Tamamen çevrimdışı.
+Sokoban 2.0 baştan yazıldı. Yumuşak ve dokunsal itişlerle sıcak yeni görünüm · 10 bölümde 500 seviye, her biri en kısa çözümden gelen bir par ile · bir sonraki itişin yolunu çizen ipuçları · kasa sıkışınca uyarı · herkesin paylaştığı günlük bulmaca · sonsuz yeni depolar · 7 tahta teması · titreşim ve isteğe bağlı yön tuşları · sınırsız ücretsiz geri alma.
 </tr-TR>
 
 <uk>
-Перший випуск · 500 перевірених розв'язувачем головоломок-штовхалок, від простих до складних · Щоденний виклик із нагородами за серію · Щотижневий турнір і таблиці лідерів · 5 візуальних тем, які можна відкрити · Лічильники ходів і поштовхів · Скасування та перезапуск будь-коли · Повністю офлайн.
+Sokoban 2.0 — повністю нова версія. Затишний вигляд із плавними відчутними поштовхами · 500 рівнів у 10 розділах, у кожного пар із найкоротшого розв’язку · підказки малюють шлях до наступного поштовху · попередження, коли ящик застряг · спільне щоденне поле · нескінченні нові склади · 7 тем поля · вібрація та необов’язкова хрестовина · безлімітне безкоштовне скасування.
 </uk>
 
 <zh-CN>
-首次发布 · 500 个经求解器验证的推箱谜题，从轻松到烧脑 · 每日挑战和连续奖励 · 每周锦标赛和排行榜 · 5 个可解锁视觉主题 · 步数和推动计数 · 随时撤销和重来 · 完全离线。
+Sokoban 2.0 全面重制。温馨新外观，推动顺滑有手感 · 10章共500关，每关的标准步数来自最短解 · 提示画出通往下一推的路线 · 箱子卡死时会提醒 · 人人相同的每日关卡 · 无尽的新仓库 · 7种棋盘主题 · 震动反馈与可选方向键 · 无限免费撤销。
 </zh-CN>
 
 ---
@@ -82,55 +82,55 @@ Lançamento inicial · 500 quebra-cabeças de empurrar verificados, do suave ao 
 _Grow → Store presence → Main store listing → Short description_
 
 <en-US>
-Push boxes onto targets. Classic Japanese logic puzzle!
+Cozy crate-pushing logic: 500 levels, free undo, smart hints and a daily board.
 </en-US>
 
 <ar>
-ادفع الصناديق نحو الأهداف. لُغز منطق ياباني كلاسيكي!
+لغز دفع صناديق مريح: 500 مستوى، تراجع مجاني، تلميحات ولوحة يومية.
 </ar>
 
 <de-DE>
-Schiebe Kisten auf Ziele. Klassisches japanisches Logikrätsel!
+Gemütliches Kisten-Schieben: 500 Level, freies Rückgängig, Tipps, Tagesrätsel.
 </de-DE>
 
 <es-419>
-¡EMPUJA CAJAS A LOS OBJETIVOS! ¡UN CLÁSICO PUZZLE JAPONES DE LÓGICA!
+Empuja cajas con calma: 500 niveles, deshacer gratis, pistas y reto diario.
 </es-419>
 
 <fr-FR>
-Poussez des caisses sur des cibles. Énigme japonaise classique !
+Pousse-caisses douillet : 500 niveaux, annulation libre, indices, défi du jour.
 </fr-FR>
 
 <hi-IN>
-लक्ष्य पर बक्से धकेलें। क्लासिक जापानी लॉजिक पहेली!
+आरामदायक बक्सा-धकेल पहेली: 500 लेवल, मुफ़्त अनडू, संकेत और रोज़ की पहेली।
 </hi-IN>
 
 <id>
-Dorong kotak ke target. Puzzle logika klasik Jepang!
+Teka-teki dorong peti yang nyaman: 500 level, urung gratis, petunjuk & harian.
 </id>
 
 <it-IT>
-Spingi le casse sui bersagli. Un classico rompicapo giapponese!
+Spingi casse con calma: 500 livelli, annulla gratis, suggerimenti e sfida.
 </it-IT>
 
 <ja-JP>
-ターゲットに箱を押し出そう！日本のロジックパズル！
+心地よい倉庫番パズル：500ステージ、無料の取り消し、ヒント、毎日の一問。
 </ja-JP>
 
 <pt-BR>
-Empurre caixas nos alvos. Clássico quebra-cabeça de lógica japonês!
+Empurre caixas com calma: 500 fases, desfazer grátis, dicas e desafio diário.
 </pt-BR>
 
 <tr-TR>
-Hedeflere kutuları itin. Klasik Japon mantık bulmacası!
+Sıcacık kasa itme bulmacası: 500 seviye, ücretsiz geri al, ipuçları, günlük.
 </tr-TR>
 
 <uk>
-Штовхайте ящики на цілі! Класична японська логічна головоломка!
+Затишна логіка зі штовханням ящиків: 500 рівнів, скасування, підказки, щоденка.
 </uk>
 
 <zh-CN>
-将箱子推到目标上。经典日本逻辑难题！
+温馨推箱子解谜：500关、免费撤销、提示与每日一题。
 </zh-CN>
 
 ---
@@ -140,432 +140,381 @@ Hedeflere kutuları itin. Klasik Japon mantık bulmacası!
 _Grow → Store presence → Main store listing → Full description_
 
 <en-US>
-Welcome to Sokoban — the classic Japanese box-pushing puzzle, polished for modern phones. Push every box onto its marked square. Sound simple? The first ten levels are warm-ups. After that, every wall, every corner, every wrong push can lock you in. The whole satisfaction of Sokoban is finding the one path that doesn't.
+One rule: push, never pull. Slide wooden crates onto their docks in a cozy brick warehouse, and discover how much planning hides inside a single shove.
 
 📦 HOW IT PLAYS
-Tap the directional arrows or swipe to move. Walk into a box to push it. You can't pull boxes back — so every step matters. Plan ahead, undo when you need to, restart fresh if you paint yourself into a corner.
+Swipe anywhere on the board (or use the on-screen pad) to walk the keeper. Walk into a crate to push it. Crates can't be pulled back, so a crate wedged into a corner stays there. Undo is free and unlimited, so experiment as much as you like. Tap any floor tile to stroll straight to it.
 
-✨ THE FEEL
-• Tactile haptic feedback on every push
-• Crunchy retro pixel art with smooth animations
-• 500 hand-tuned levels from gentle warm-ups to brain-bending knots
-• Works fully offline — play on planes, in line, anywhere
-• ASMR-style sound design — soft pushes, satisfying box-on-target thumps
+🧩 500 LEVELS, EVERY ONE SOLVABLE
+Ten chapters take you from a four-move opener to five-crate warehouses that ask for real planning. Every level was built backwards from a solved room, so a solution always exists, and every level has been solved by computer: par is the fewest moves possible. Finish within 10% of par for three stars.
 
-🎯 WHAT'S IN IT
-• 500 classic Sokoban levels (more coming via free updates)
-• Daily Challenge with login streak rewards
-• 5 unlockable visual themes — Classic, Wood, Industrial, Temple, Space
-• Free Coins button (rewarded ad, 25 coins every 4 hours)
-• Stats screen tracking levels solved, daily streak, weekly standings
-• Weekly Tournament with synthetic leaderboard tiers
-• Hint system — gentle nudge when you're stuck
-• Full undo + restart on every level
+💡 HINTS THAT ACTUALLY HELP
+A hint draws the route to your next push, taken from the solution, even if you have wandered off course. If a crate is already stuck, the game tells you so instead of guessing, and your hint is not spent.
 
-🎁 EXTRAS (OPTIONAL)
-• Starter Pack — 100 coins + 5 hints + 5 lives + Ads Off for $0.99
-• Season Pass — ad-free + 100 coins/day + all themes + unlimited hints
-• Coin packs from 100 to 2,000 coins, hint packs, life refills
+✨ MADE TO FEEL GOOD
+• Smooth sliding crates, soft wooden thuds and a chime when a crate docks
+• Crates smile when they are home; a gentle shake warns you about a stuck one
+• Haptics you can switch off, an optional d-pad, big readable tiles on phones and tablets
+• Plays fully offline: a relaxing, satisfying brain workout with no timers
 
-For puzzle players who like a quiet, careful brain workout. Every level has exactly one path through. Find it.
+📅 MORE TO PLAY
+• Daily board: the same puzzle for everyone each day, easier early in the week and tougher at the weekend
+• Endless mode: freshly built warehouses whenever you want more (one ❤ per board; hearts refill over time)
+• 7 board themes to unlock: Clay Yard, Pine Loft, Harbor Shed, Candy Depot, Desert Post, Ink & Paper and Midnight
+• Daily missions, login streak rewards and weekly standings
 
-Made with care by Pegasus Games.
+🎁 OPTIONAL EXTRAS
+The campaign and the daily board are free to play. Coins buy hints and the Midnight theme. Optional purchases: coin packs, a 10-hint pack, Remove Ads, and Season or Weekly passes (ad-free, daily coins, all themes, unlimited hints; cancel anytime in Google Play).
+
+Ready to tidy up? Your first crate is waiting.
 </en-US>
 
 <ar>
-مرحبًا بكم في Sokoban — اللغز الكلاسيكي الياباني لدفع الصناديق، المصقول ليكون مناسبًا للهواتف الحديثة. ادفع كل صندوق إلى مربعه المحدد. يبدو بسيطًا؟ المستويات العشرة الأولى مجرد تدفئة. بعد ذلك، كل جدار، كل زاوية، وكل دفع خاطئ يمكن أن يحصرك. كل المتعة في Sokoban هي إيجاد المسار الوحيد الذي لا يفعل ذلك.
+قاعدة واحدة: ادفع ولا تسحب أبدًا. حرّك الصناديق الخشبية إلى أماكنها في مستودع طوب دافئ، واكتشف كم من التخطيط يختبئ في دفعة واحدة.
 
-📦 كيف تُلعب
-اضغط على الأسهم الاتجاهية أو اسحب للتحرك. امش إلى صندوق لدفعه. لا يمكنك سحب الصناديق إلى الوراء — لذا كل خطوة لها أهميتها. خطط مسبقًا، وتراجع عندما تحتاج، وابدأ من جديد إذا وضعت نفسك في زاوية.
+📦 طريقة اللعب
+اسحب إصبعك في أي مكان على اللوحة (أو استخدم أزرار الاتجاه) لتحريك أمين المستودع. امشِ نحو صندوق لتدفعه. لا يمكن سحب الصناديق، لذا يبقى الصندوق العالق في الزاوية هناك. التراجع مجاني وغير محدود، فجرّب كما تشاء. المس أي بلاطة أرضية للمشي إليها مباشرة.
 
-✨ الإحساس
-• ردود فعل لمسية حسية على كل دفع
-• فن بكسل قديم مقرمش مع رسوم متحركة سلسة
-• 500 مستوى مصقول يدويًا من التدريبات اللطيفة إلى العقد العقلية المحيرة
-• يعمل بالكامل دون اتصال بالإنترنت — العب في الطائرات، وفي الصف، في أي مكان
-• تصميم صوتي بأسلوب ASMR — دفقات ناعمة، وضربات مرضية للصندوق على الهدف
+🧩 500 مستوى، كلها قابلة للحل
+عشرة فصول تبدأ بمستوى من أربع حركات وتصل إلى مستودعات بخمسة صناديق تتطلب تخطيطًا حقيقيًا. بُني كل مستوى بالعكس انطلاقًا من غرفة محلولة، لذا يوجد حل دائمًا، وقد حُلّ كل مستوى بالحاسوب: الرقم المثالي هو أقل عدد ممكن من الحركات. أنهِ المستوى ضمن 10% فوق الرقم المثالي لتنال ثلاث نجوم.
 
-🎯 ما يحتويه
-• 500 مستوى كلاسيكي من Sokoban (المزيد قادم عبر تحديثات مجانية)
-• تحدي يومي مع مكافآت لمتابعة تسجيل الدخول
-• 5 موضوعات بصرية قابلة للفتح — كلاسيكي، خشبي، صناعي، معبد، فضاء
-• زر العملات المجانية (إعلان مكافأة، 25 عملة كل 4 ساعات)
-• شاشة إحصائيات تتبع المستويات التي تم حلها، والمجموعات اليومية، والترتيب الأسبوعي
-• بطولة أسبوعية مع مستويات متسابقين صناعية
-• نظام تلميحات — دفعة لطيفة عندما تكون عالقًا
-• التراجع الكامل + إعادة التشغيل على كل مستوى
+💡 تلميحات تساعد فعلًا
+يرسم التلميح الطريق إلى دفعتك التالية مأخوذًا من الحل، حتى لو ابتعدت عن المسار. وإذا كان صندوق عالقًا بالفعل، تخبرك اللعبة بذلك بدل التخمين، ولا يُحتسب التلميح.
 
-🎁 إضافات (اختياري)
-• حزمة بدء — 100 عملة + 5 تلميحات + 5 أرواح + إعلانات معلقة مقابل 0.99 دولار
-• تذكرة موسم — خالية من الإعلانات + 100 عملة/يوم + جميع الموضوعات + تلميحات غير محدودة
-• حزم عملات تتراوح من 100 إلى 2000 عملة، وحزم تلميحات، وتجديد الأرواح
+✨ ممتعة الإحساس
+• صناديق تنزلق بنعومة، طرقات خشب هادئة، ورنين عند وصول الصندوق
+• تبتسم الصناديق عند وصولها، وهزة لطيفة تنبهك إلى صندوق عالق
+• اهتزاز يمكن إيقافه، أزرار اتجاه اختيارية، ومربعات كبيرة على الهاتف والجهاز اللوحي
+• تعمل دون اتصال: تمرين ذهني مريح وممتع بلا مؤقت
 
-لللاعبين الذين يحبون تمرين العقل في بيئة هادئة ودقيقة. كل مستوى لديه مسار واحد فقط. ابحث عنه.
+📅 المزيد للعب
+• لوحة يومية: اللغز نفسه للجميع كل يوم، أسهل في بداية الأسبوع وأصعب في عطلته
+• وضع لا نهائي: مستودعات جديدة تُبنى لك (❤ واحد لكل لوحة، وتتجدد القلوب مع الوقت)
+• 7 سمات للوحة، ومهام يومية، ومكافآت سلسلة الدخول، وترتيب أسبوعي
 
-مصنوع بعناية بواسطة ألعاب بيغاسوس.
+🎁 إضافات اختيارية
+الحملة واللوحة اليومية مجانيتان. تشتري العملات التلميحات وسمة Midnight. مشتريات اختيارية: حزم عملات، حزمة 10 تلميحات، إزالة الإعلانات، وتذكرة Season أو Weekly (بلا إعلانات، عملات يومية، كل السمات، تلميحات غير محدودة؛ يمكن الإلغاء في أي وقت من Google Play).
+
+مستعد للترتيب؟ صندوقك الأول في انتظارك.
 </ar>
 
 <de-DE>
-Willkommen bei Sokoban — dem klassischen japanischen Schiebespiel, optimiert für moderne Handys. Schiebe jede Box auf ihr markiertes Feld. Klingt einfach? Die ersten zehn Levels sind Aufwärmübungen. Danach kann jede Wand, jede Ecke, jeder falsche Schub dich in eine Falle locken. Die ganze Zufriedenheit von Sokoban besteht darin, den einen Weg zu finden, der das verhindert.
+Eine Regel: schieben, niemals ziehen. Schiebe Holzkisten auf ihre Plätze in einem gemütlichen Backstein-Lagerhaus und entdecke, wie viel Planung in einem einzigen Schub steckt.
 
-📦 SO SPIELST DU
-Tippe auf die Richtungspfeile oder wische, um dich zu bewegen. Gehe in eine Box, um sie zu schieben. Du kannst keine Boxen zurückziehen — jeder Schritt zählt. Plane voraus, mache Rückgängig, wenn du es brauchst, starte frisch neu, wenn du dich in die Enge treibst.
+📦 SO WIRD GESPIELT
+Wische irgendwo auf dem Brett (oder nutze das Steuerkreuz), um den Lageristen zu bewegen. Lauf gegen eine Kiste, um sie zu schieben. Kisten lassen sich nicht zurückziehen – eine Kiste in der Ecke bleibt dort. Rückgängig ist kostenlos und unbegrenzt, also probiere ruhig alles aus. Tippe auf ein Bodenfeld, um direkt dorthin zu laufen.
 
-✨ DAS GEFÜHL
-• Taktile haptische Rückmeldung bei jedem Schub
-• Knackige Retro-Pixelgrafik mit flüssigen Animationen
-• 500 handgefertigte Levels von sanften Aufwärmübungen bis zu kniffligen Knoten
-• Vollständig offline spielbar — spiele im Flugzeug, in der Warteschlange, überall
-• ASMR-artiges Sounddesign — sanfte Schube, befriedigende Geräusche beim Boxenaufsetzen
+🧩 500 LEVEL, JEDES LÖSBAR
+Zehn Kapitel führen von einem Vier-Züge-Einstieg bis zu Lagerhallen mit fünf Kisten, die echte Planung verlangen. Jedes Level wurde rückwärts aus einem gelösten Raum gebaut, eine Lösung existiert also immer – und jedes wurde per Computer gelöst: Par ist die kleinstmögliche Zugzahl. Bleib innerhalb von 10 % über Par für drei Sterne.
 
-🎯 DAS IST DRIN
-• 500 klassische Sokoban-Levels (weitere kommen über kostenlose Updates)
-• Tägliche Herausforderung mit Belohnungen für Anmeldereihen
-• 5 freischaltbare visuelle Themen — Klassisch, Holz, Industrie, Tempel, Weltraum
-• Kostenlose Coins-Schaltfläche (belohnte Werbung, 25 Münzen alle 4 Stunden)
-• Statistiken, die gelöste Level, tägliche Reihen und wöchentliche Platzierungen verfolgen
-• Wöchentlicher Wettkampf mit einer synthetischen Rangliste
-• Tipp-System — sanfter Hinweis, wenn du feststeckst
-• Vollständige Rückgängig-Funktion + Neustart für jedes Level
+💡 TIPPS, DIE WIRKLICH HELFEN
+Ein Tipp zeichnet den Weg zu deinem nächsten Schub, direkt aus der Lösung – auch wenn du vom Kurs abgekommen bist. Steckt eine Kiste schon fest, sagt dir das Spiel das, und der Tipp wird nicht verbraucht.
 
-🎁 EXTRAS (OPTIONAL)
-• Starter-Paket — 100 Münzen + 5 Tipps + 5 Leben + Ads Off für 0,99 $
-• Saisonpass — werbefrei + 100 Münzen/Tag + alle Themen + unbegrenzte Tipps
-• Münzpacks von 100 bis 2.000 Münzen, Tipp-Packs, Lebensauffüllungen
+✨ FÜHLT SICH GUT AN
+• Weich gleitende Kisten, sanftes Holzklopfen und ein Klang, wenn eine Kiste ankommt
+• Kisten lächeln, wenn sie am Ziel sind; ein sanftes Wackeln warnt vor festsitzenden
+• Abschaltbare Haptik, optionales Steuerkreuz, große Felder auf Handy und Tablet
+• Komplett offline spielbar: entspannendes, befriedigendes Gehirntraining ohne Zeitdruck
 
-Für Puzzleliebhaber, die ein ruhiges, sorgfältiges Gehirntraining mögen. Jedes Level hat genau einen Durchgang. Finde ihn.
+📅 NOCH MEHR
+• Tagesrätsel: jeden Tag dasselbe Rätsel für alle, früh in der Woche leichter, am Wochenende kniffliger
+• Endlos-Modus: frisch gebaute Lagerhallen (ein ❤ pro Brett; Herzen laden sich wieder auf)
+• 7 Brett-Themen zum Freischalten, Tagesmissionen, Login-Serien-Belohnungen und Wochenranglisten
 
-Mit Liebe gemacht von Pegasus Games.
+🎁 OPTIONALE EXTRAS
+Kampagne und Tagesrätsel sind kostenlos spielbar. Mit Münzen kaufst du Tipps und das Midnight-Thema. Optionale Käufe: Münzpakete, ein 10er-Tipp-Paket, Werbung entfernen sowie Season- oder Weekly-Pass (werbefrei, tägliche Münzen, alle Themen, unbegrenzte Tipps; jederzeit in Google Play kündbar).
+
+Bereit zum Aufräumen? Deine erste Kiste wartet.
 </de-DE>
 
 <es-419>
-¡Bienvenido a Sokoban! — el clásico rompecabezas japonés de empujar cajas, adaptado para teléfonos modernos. Empuja cada caja a su cuadrado marcado. ¿Suena simple? Los primeros diez niveles son calentamientos. Después de eso, cada pared, cada esquina, cada empujón incorrecto puede encerrarte. La satisfacción total de Sokoban es encontrar el único camino que no lo hace.
+Una regla: empuja, nunca tires. Desliza cajas de madera hasta sus muelles en un acogedor almacén de ladrillo y descubre cuánta estrategia cabe en un solo empujón.
 
-📦 CÓMO JUGAR
-Toca las flechas direccionales o desliza para moverte. Camina hacia una caja para empujarla. No puedes tirar de las cajas hacia atrás — así que cada paso cuenta. Planea con anticipación, deshaz tu movimiento cuando lo necesites, reinicia fresco si te quedas atrapado en una esquina.
+📦 CÓMO SE JUEGA
+Desliza el dedo en cualquier parte del tablero (o usa la cruceta) para mover al encargado. Camina contra una caja para empujarla. Las cajas no se pueden jalar, así que una caja atrapada en una esquina se queda ahí. Deshacer es gratis e ilimitado: experimenta todo lo que quieras. Toca una baldosa para caminar directo hasta ella.
 
-✨ LA SENSACIÓN
-• Retroalimentación háptica táctil en cada empujón
-• Arte de píxeles retro crujiente con animaciones suaves
-• 500 niveles ajustados a mano, desde suaves calentamientos hasta nudos mentales
-• Funciona completamente sin conexión — juega en aviones, en la fila, ¡en cualquier lugar!
-• Diseño de sonido al estilo ASMR — empujones suaves, satisfactorios golpes de caja en el objetivo
+🧩 500 NIVELES, TODOS CON SOLUCIÓN
+Diez capítulos van de un primer nivel de cuatro movimientos a almacenes con cinco cajas que exigen planear de verdad. Cada nivel se construyó al revés a partir de una sala resuelta, así que siempre tiene solución, y cada uno fue resuelto por computadora: el par es la menor cantidad de movimientos posible. Termina a menos de un 10 % del par para ganar tres estrellas.
 
-🎯 LO QUE ENCUENTRAS
-• 500 niveles clásicos de Sokoban (más por venir en actualizaciones gratuitas)
-• Desafío Diario con recompensas por rachas de inicio de sesión
-• 5 temas visuales desbloqueables — Clásico, Madera, Industrial, Templo, Espacio
-• Botón de Monedas Gratis (anuncio recompensado, 25 monedas cada 4 horas)
-• Pantalla de estadísticas que rastrea niveles resueltos, racha diaria, clasificación semanal
-• Torneo Semanal con niveles de tabla de clasificación sintética
-• Sistema de pistas — un suave empujón cuando estás atascado
-• Deshacer total + reiniciar en cada nivel
+💡 PISTAS QUE SÍ AYUDAN
+Una pista dibuja la ruta hacia tu próximo empuje, tomada de la solución, aunque te hayas desviado. Si una caja ya está atascada, el juego te lo dice en lugar de adivinar y no gastas la pista.
 
-🎁 EXTRAS (OPCIONAL)
-• Paquete Inicial — 100 monedas + 5 pistas + 5 vidas + Anuncios Desactivados por $0.99
-• Pase de Temporada — sin anuncios + 100 monedas/día + todos los temas + pistas ilimitadas
-• Paquetes de monedas de 100 a 2,000 monedas, paquetes de pistas, recargas de vidas
+✨ HECHO PARA SENTIRSE BIEN
+• Cajas que se deslizan suave, golpes de madera y un sonido cuando una caja llega
+• Las cajas sonríen al llegar; una sacudida suave te avisa de una atascada
+• Vibración desactivable, cruceta opcional y casillas grandes en teléfono y tableta
+• Funciona sin conexión: un ejercicio mental relajante y satisfactorio, sin cronómetro
 
-Para los jugadores de rompecabezas que disfrutan de un entrenamiento cerebral tranquilo y cuidadoso. Cada nivel tiene exactamente un camino a seguir. Encuéntralo.
+📅 MÁS PARA JUGAR
+• Tablero diario: el mismo reto para todos cada día, más fácil al inicio de la semana y más duro el fin de semana
+• Modo infinito: almacenes recién creados (un ❤ por tablero; los corazones se recargan)
+• 7 temas de tablero, misiones diarias, premios por racha de días y clasificación semanal
 
-Hecho con cuidado por Pegasus Games.
+🎁 EXTRAS OPCIONALES
+La campaña y el tablero diario son gratis. Las monedas compran pistas y el tema Midnight. Compras opcionales: paquetes de monedas, paquete de 10 pistas, quitar anuncios y pases Season o Weekly (sin anuncios, monedas diarias, todos los temas, pistas ilimitadas; cancela cuando quieras en Google Play).
+
+¿Listo para ordenar? Tu primera caja te espera.
 </es-419>
 
 <fr-FR>
-Bienvenue dans Sokoban — le classique jeu de casse-tête japonais de poussée de boîtes, optimisé pour les téléphones modernes. Pousse chaque boîte sur sa case marquée. Cela semble simple ? Les dix premiers niveaux sont des échauffements. Après cela, chaque mur, chaque coin, chaque mauvaise poussée peut te coincer. La satisfaction ultime de Sokoban est de trouver le seul chemin qui ne le fait pas.
+Une seule règle : pousser, jamais tirer. Fais glisser des caisses en bois jusqu’à leurs quais dans un entrepôt de briques douillet, et découvre combien de réflexion se cache dans une simple poussée.
 
-📦 COMMENT ÇA SE JOUENT  
-Tape sur les flèches directionnelles ou glisse pour te déplacer. Marche dans une boîte pour la pousser. Tu ne peux pas tirer les boîtes — chaque pas compte. Planifie à l'avance, annule quand tu en as besoin, recommence si tu te retrouves dans un coin.
+📦 COMMENT ON JOUE
+Glisse le doigt n’importe où sur le plateau (ou utilise la croix) pour déplacer le magasinier. Avance contre une caisse pour la pousser. Impossible de tirer une caisse : coincée dans un angle, elle y reste. L’annulation est gratuite et illimitée, alors expérimente autant que tu veux. Touche une case du sol pour t’y rendre directement.
 
-✨ L’EXPÉRIENCE  
-• Retour haptique tactile à chaque poussée  
-• Pixel art rétro croustillant avec des animations fluides  
-• 500 niveaux soigneusement conçus, des échauffements doux aux défis tordus  
-• Fonctionne entièrement hors ligne — joue dans les avions, dans la queue, partout  
-• Design sonore de type ASMR — poussées douces, bruits satisfaisants de boîte sur cible  
+🧩 500 NIVEAUX, TOUS SOLUBLES
+Dix chapitres mènent d’une ouverture en quatre coups à des entrepôts à cinq caisses qui demandent une vraie stratégie. Chaque niveau a été construit à l’envers à partir d’une salle résolue, donc une solution existe toujours, et chacun a été résolu par ordinateur : le par est le plus petit nombre de coups possible. Termine à moins de 10 % du par pour trois étoiles.
 
-🎯 CE QUI EST DANS LE JEU  
-• 500 niveaux classiques de Sokoban (plus à venir via des mises à jour gratuites)  
-• Défi quotidien avec des récompenses de connexion  
-• 5 thèmes visuels déblocables — Classique, Bois, Industriel, Temple, Espace  
-• Bouton de pièces gratuites (publicité récompensée, 25 pièces toutes les 4 heures)  
-• Écran de statistiques suivi des niveaux résolus, série quotidienne, classement hebdomadaire  
-• Tournoi hebdomadaire avec niveaux de classement synthétiques  
-• Système d'indices — coup de pouce doux quand tu es bloqué  
-• Annulation complète + redémarrage à chaque niveau  
+💡 DES INDICES VRAIMENT UTILES
+Un indice dessine le chemin jusqu’à ta prochaine poussée, tiré de la solution, même si tu t’es écarté du bon chemin. Si une caisse est déjà bloquée, le jeu te le dit au lieu de deviner, et l’indice n’est pas dépensé.
 
-🎁 EXTRAS (OPTIONNEL)  
-• Pack de démarrage — 100 pièces + 5 indices + 5 vies + Publicités Désactivées pour 0,99 $  
-• Pass de saison — sans publicité + 100 pièces/jour + tous les thèmes + indices illimités  
-• Packs de pièces de 100 à 2000 pièces, packs d'indices, recharges de vies  
+✨ CONÇU POUR FAIRE DU BIEN
+• Caisses qui glissent en douceur, bruits de bois feutrés et un carillon à chaque caisse rangée
+• Les caisses sourient une fois à quai ; une petite secousse signale une caisse bloquée
+• Vibrations désactivables, croix en option, grandes cases sur téléphone et tablette
+• Jouable hors ligne : un entraînement cérébral relaxant et satisfaisant, sans chrono
 
-Pour les joueurs de casse-tête qui aiment un entraînement cérébral calme et précis. Chaque niveau a exactement un chemin. Trouve-le.  
+📅 ENCORE PLUS
+• Plateau du jour : le même défi pour tous chaque jour, plus simple en début de semaine, plus corsé le week-end
+• Mode infini : des entrepôts tout neufs (un ❤ par plateau ; les cœurs se rechargent)
+• 7 thèmes de plateau, missions quotidiennes, récompenses de série et classement hebdomadaire
 
-Fait avec soin par Pegasus Games.
+🎁 EXTRAS OPTIONNELS
+La campagne et le plateau du jour sont gratuits. Les pièces achètent des indices et le thème Midnight. Achats optionnels : packs de pièces, pack de 10 indices, suppression des pubs et passes Season ou Weekly (sans pub, pièces quotidiennes, tous les thèmes, indices illimités ; résiliable à tout moment dans Google Play).
+
+Prêt à ranger ? Ta première caisse t’attend.
 </fr-FR>
 
 <hi-IN>
-स्वागत है सोकोबन में — क्लासिक जापानी बक्सा धकेलने वाले पहेली, जिसे आधुनिक फोन के लिए तराशा गया है। हर बक्से को उसके चिन्हित वर्ग पर धकेलें। साधारण लगता है? पहले दस स्तर केवल गर्म-up हैं। इसके बाद, हर दीवार, हर कोना, हर गलत धक्का आपको बंद कर सकता है। सोकोबन की पूरी संतोषजनकता उस एक रास्ते को खोजने में है जो आपको बंद नहीं करता।
+एक ही नियम: धकेलो, कभी खींचो मत। एक आरामदायक ईंटों वाले गोदाम में लकड़ी के बक्सों को उनकी जगह तक पहुँचाओ और देखो कि एक धक्के में कितनी योजना छिपी होती है।
 
-📦 यह कैसे खेलें
-दिशात्मक तीरों पर टैप करें या स्वाइप करें। एक बॉक्स में चलें ताकि उसे धक्का दें। आप बक्सों को वापस नहीं खींच सकते — इसलिए हर कदम महत्वपूर्ण है। आगे की योजना बनाएं, जब ज़रूरत हो तो पूर्ववत करें, यदि आप किसी कोने में खुद को फंसा लेते हैं तो नए सिरे से शुरू करें।
+📦 कैसे खेलें
+गोदाम-रक्षक को चलाने के लिए बोर्ड पर कहीं भी स्वाइप करें (या डी-पैड इस्तेमाल करें)। बक्से की ओर चलें तो वह धकेला जाता है। बक्से खींचे नहीं जा सकते, इसलिए कोने में फँसा बक्सा वहीं रह जाता है। अनडू मुफ़्त और असीमित है, तो खुलकर आज़माएँ। किसी फ़र्श टाइल पर टैप करें और सीधे वहाँ पहुँचें।
 
-✨ एहसास
-• हर धक्के पर स्पर्शकारी हैप्टिक फ़ीडबैक
-• कुरकुरा रेट्रो पिक्सल कला के साथ चिकनी एनिमेशन
-• 500 हाथ-समायोजित स्तर जो हल्के गर्म-up से लेकर दिमाग़ को मोड़ने वाले गांठों तक
-• पूरी तरह से ऑफ़लाइन कार्य करता है — विमान, लाइन में, कहीं भी खेलें
-• ASMR-शैली की ध्वनि डिजाइन — नरम धक्के, संतोषजनक बॉक्स-ऑन-टारगेट धव्स
+🧩 500 लेवल, हर एक हल होने वाला
+दस अध्याय चार चालों वाले शुरुआती लेवल से पाँच बक्सों वाले गोदामों तक ले जाते हैं, जिनमें असली योजना चाहिए। हर लेवल एक हल हो चुके कमरे से उल्टा बनाया गया है, इसलिए हल हमेशा मौजूद है, और हर लेवल कंप्यूटर से हल किया गया है: पार सबसे कम संभव चालें हैं। तीन सितारों के लिए पार से 10% के भीतर पूरा करें।
 
-🎯 इसमें क्या है
-• 500 क्लासिक सोकोबन स्तर (निःशुल्क अपडेट के माध्यम से और भी आ रहे हैं)
-• दैनिक चुनौती लॉगिन श्रंखला पुरस्कारों के साथ
-• 5 अनलॉक करने योग्य दृश्य थीम — क्लासिक, लकड़ी, औद्योगिक, मंदिर, अंतरिक्ष
-• निःशुल्क सिक्के बटन (पुरस्कृत विज्ञापन, हर 4 घंटे में 25 सिक्के)
-• आँकड़े स्क्रीन जो हल हुए स्तर, दैनिक श्रंखला, साप्ताहिक रैंकिंग को ट्रैक करता है
-• साप्ताहिक टूर्नामेंट जिसमें कृत्रिम लीडरबोर्ड स्तर
-• संकेत प्रणाली — जब आप फंस जाएं तो हलका धक्का
-• हर स्तर पर पूर्ण पूर्ववत + पुनः आरंभ
+💡 संकेत जो सच में मदद करें
+संकेत हल से लेकर आपके अगले धक्के तक का रास्ता दिखाता है, चाहे आप रास्ते से भटक गए हों। अगर कोई बक्सा पहले ही फँस चुका है, तो खेल अंदाज़ा लगाने के बजाय साफ़ बताता है और आपका संकेत खर्च नहीं होता।
 
-🎁 अतिरिक्त (वैकल्पिक)
-• स्टार्टर पैक — 100 सिक्के + 5 संकेत + 5 ज़िंदगी + विज्ञापन बंद केवल $0.99 में
-• सीजन पास — विज्ञापन-मुक्त + 100 सिक्के/दिन + सभी थीम + असीमित संकेत
-• सिक्कों के पैक 100 से लेकर 2,000 सिक्कों तक, संकेत पैक, जीवन रिफिल्स
+✨ खेलने में सुकून
+• मुलायम सरकते बक्से, लकड़ी की हल्की आवाज़ें और बक्सा पहुँचने पर घंटी
+• जगह पर पहुँचकर बक्से मुस्कुराते हैं; हल्का झटका फँसे बक्से की चेतावनी देता है
+• बंद किया जा सकने वाला कंपन, वैकल्पिक डी-पैड, फ़ोन और टैबलेट पर बड़े खाने
+• पूरी तरह ऑफ़लाइन: बिना टाइमर के सुकून भरी, संतोषजनक दिमागी कसरत
 
-पज़ल खिलाड़ियों के लिए जो शांत, सावधानीपूर्वक मस्तिष्क की कसरत पसंद करते हैं। हर स्तर में एक ही रास्ता है। उसे खोजें।
+📅 और भी बहुत कुछ
+• रोज़ का बोर्ड: हर दिन सबके लिए एक ही पहेली, हफ़्ते की शुरुआत में आसान और सप्ताहांत पर कठिन
+• अनंत मोड: बिल्कुल नए गोदाम (हर बोर्ड पर एक ❤; दिल समय के साथ भरते हैं)
+• 7 बोर्ड थीम, रोज़ के मिशन, लॉगिन स्ट्रीक इनाम और साप्ताहिक रैंकिंग
 
-पेगासस गेम्स द्वारा ध्यानपूर्वक बनाया गया।
+🎁 वैकल्पिक अतिरिक्त
+मुख्य अभियान और रोज़ का बोर्ड मुफ़्त हैं। सिक्कों से संकेत और Midnight थीम मिलती है। वैकल्पिक खरीदारी: सिक्कों के पैक, 10 संकेतों का पैक, विज्ञापन हटाएँ और Season या Weekly पास (विज्ञापन-मुक्त, रोज़ाना सिक्के, सभी थीम, असीमित संकेत; Google Play में कभी भी रद्द करें)।
+
+सजाने के लिए तैयार? आपका पहला बक्सा इंतज़ार कर रहा है।
 </hi-IN>
 
 <id>
-SELAMAT DATANG DI SOKOBAN — PUZZLE KLASIK JEPANG UNTUK MENDORONG KOTAK, DIPOLISH UNTUK TELEPON MODERN. Dorong setiap kotak ke kotak yang ditandai. Terlihat sederhana? Sepuluh level pertama adalah pemanasan. Setelah itu, setiap dinding, setiap sudut, setiap dorongan yang salah bisa mengunci Anda. Kepuasan sejati dari Sokoban adalah menemukan satu jalur yang tidak.
+Satu aturan: dorong, jangan pernah tarik. Geser peti kayu ke dermaganya di gudang bata yang nyaman, dan temukan betapa banyak rencana tersembunyi dalam satu dorongan.
 
-📦 CARA PERMAINAN
-Ketuk tombol arah atau geser untuk bergerak. Masuk ke dalam kotak untuk mendorongnya. Anda tidak bisa menarik kotak kembali — jadi setiap langkah sangat penting. Rencanakan ke depan, batalkan ketika perlu, mulai lagi jika Anda terjebak.
+📦 CARA BERMAIN
+Usap di mana saja pada papan (atau pakai d-pad) untuk menggerakkan penjaga gudang. Jalan ke arah peti untuk mendorongnya. Peti tidak bisa ditarik, jadi peti yang terjepit di sudut akan tetap di sana. Urung gratis dan tanpa batas, jadi bereksperimenlah sesukamu. Ketuk ubin lantai untuk langsung berjalan ke sana.
 
-✨ PERASAANNYA
-• Umpan balik haptic taktil di setiap dorongan
-• Seni piksel retro yang renyah dengan animasi yang halus
-• 500 level yang disesuaikan dari pemanasan lembut hingga tantangan memutar otak
-• Bekerja sepenuhnya secara offline — bermain di pesawat, dalam antrean, di mana saja
-• Desain suara gaya ASMR — dorongan lembut, suara kotak yang memuaskan saat tepat sasaran
+🧩 500 LEVEL, SEMUA BISA DISELESAIKAN
+Sepuluh bab membawamu dari pembuka empat langkah hingga gudang berisi lima peti yang butuh perencanaan sungguhan. Setiap level dibangun mundur dari ruangan yang sudah selesai, jadi solusinya selalu ada, dan setiap level sudah diselesaikan komputer: par adalah jumlah langkah paling sedikit. Selesaikan maksimal 10% di atas par untuk tiga bintang.
 
-🎯 APA YANG ADA DI DALAMNYA
-• 500 level Sokoban klasik (lebih banyak akan datang melalui pembaruan gratis)
-• Tantangan Harian dengan hadiah streak login
-• 5 tema visual yang dapat dibuka — Klasik, Kayu, Industri, Kuil, Luar Angkasa
-• Tombol Koin Gratis (Iklan yang dihargai, 25 koin setiap 4 jam)
-• Layar statistik yang melacak level yang diselesaikan, streak harian, peringkat mingguan
-• Turnamen Mingguan dengan tier papan peringkat sintetis
-• Sistem petunjuk — dorongan lembut saat Anda terjebak
-• Batalkan penuh + mulai ulang di setiap level
+💡 PETUNJUK YANG BENAR-BENAR MEMBANTU
+Petunjuk menggambar rute ke dorongan berikutnya, diambil dari solusi, meskipun kamu sudah keluar jalur. Jika ada peti yang sudah macet, game memberitahumu alih-alih menebak, dan petunjukmu tidak terpakai.
 
-🎁 EKSTRA (OPSIONAL)
-• Paket Pemula — 100 koin + 5 petunjuk + 5 nyawa + Iklan Dimatikan hanya $0.99
-• Season Pass — tanpa iklan + 100 koin/hari + semua tema + petunjuk tanpa batas
-• Paket koin dari 100 hingga 2.000 koin, paket petunjuk, pengisian nyawa
+✨ TERASA MENYENANGKAN
+• Peti meluncur halus, bunyi kayu lembut, dan dentang saat peti sampai
+• Peti tersenyum saat sampai; guncangan lembut memperingatkan peti yang macet
+• Getaran bisa dimatikan, d-pad opsional, ubin besar di ponsel dan tablet
+• Bisa dimainkan offline: latihan otak yang santai dan memuaskan, tanpa timer
 
-Untuk para pemain puzzle yang menyukai latihan otak yang tenang dan hati-hati. Setiap level memiliki tepat satu jalur untuk dilalui. Temukan itu.
+📅 LEBIH BANYAK LAGI
+• Papan harian: teka-teki yang sama untuk semua orang tiap hari, lebih mudah di awal minggu dan lebih sulit di akhir pekan
+• Mode tanpa akhir: gudang yang baru dibuat (satu ❤ per papan; hati terisi ulang)
+• 7 tema papan, misi harian, hadiah login beruntun, dan peringkat mingguan
 
-Dibuat dengan perhatian oleh Pegasus Games.
+🎁 EKSTRA OPSIONAL
+Kampanye dan papan harian gratis dimainkan. Koin bisa membeli petunjuk dan tema Midnight. Pembelian opsional: paket koin, paket 10 petunjuk, Hapus Iklan, serta Season atau Weekly pass (tanpa iklan, koin harian, semua tema, petunjuk tanpa batas; batalkan kapan saja di Google Play).
+
+Siap merapikan? Peti pertamamu sudah menunggu.
 </id>
 
 <it-IT>
-BENVENUTO IN SOKOBAN — IL CLASSICO PUZZLE GIAPPONESE DELLA SPINTA DELLE SCATOLE, RIFINITO PER I TELEFONI MODERNI. SPINGI OGNI SCATOLA SUL SUO QUADRATO MARCATO. SEMPLICE, NO? I PRIMI DIECI LIVELLI SONO SOLO UN RISCALDAMENTO. DOPO, OGNI MURO, OGNI ANGOLAZZO, OGNI SPINTA SBAGLIATA PUÒ CHIUDERTI IN UN VICOLO. LA VERA SODDISFAZIONE DI SOKOBAN È TROVARE L'UNICO PERCORSO CHE NON LO FA.
+Una sola regola: spingi, non tirare mai. Fai scivolare casse di legno sulle loro piazzole in un accogliente magazzino di mattoni e scopri quanta strategia si nasconde in una sola spinta.
 
 📦 COME SI GIOCA
-Tocca le frecce direzionali o scorri per muoverti. Cammina in una scatola per spingerla. Non puoi tirare indietro le scatole — quindi ogni passo conta. Pianifica in anticipo, annulla quando necessario, riparti fresco se ti sei bloccato.
+Scorri in qualsiasi punto del tabellone (o usa la croce direzionale) per muovere il magazziniere. Cammina contro una cassa per spingerla. Le casse non si possono tirare: una cassa incastrata in un angolo resta lì. Annullare è gratis e illimitato, quindi sperimenta quanto vuoi. Tocca una casella del pavimento per arrivarci subito.
 
-✨ LA SENSAZIONE
-• Feedback tattile su ogni spinta
-• Grafica retro in pixel croccante con animazioni fluide
-• 500 livelli calibrati a mano, da dolci riscaldamenti a nodi cervellotici
-• Funziona completamente offline — gioca su aerei, in fila, ovunque
-• Design sonoro in stile ASMR — spinte morbide, colpi soddisfacenti della scatola sul bersaglio
+🧩 500 LIVELLI, TUTTI RISOLVIBILI
+Dieci capitoli vanno da un’apertura in quattro mosse a magazzini con cinque casse che richiedono vera pianificazione. Ogni livello è stato costruito al contrario partendo da una stanza risolta, quindi una soluzione esiste sempre, e ognuno è stato risolto al computer: il par è il numero minimo di mosse possibile. Resta entro il 10 % dal par per tre stelle.
 
-🎯 COSA C'È DENTRO
-• 500 livelli classici di Sokoban (altri in arrivo con aggiornamenti gratuiti)
-• Sfida Giornaliera con ricompense per la costanza nel login
-• 5 temi visivi sbloccabili — Classico, Legno, Industriale, Tempio, Spazio
-• Pulsante Monete Gratis (pubblicità premiata, 25 monete ogni 4 ore)
-• Schermata statistiche che tiene traccia dei livelli risolti, della serie giornaliera, del classifica settimanale
-• Torneo Settimanale con livelli della classifica sintetica
-• Sistema di suggerimenti — incoraggiamento gentile quando sei bloccato
-• Annulla totale + riavvia ad ogni livello
+💡 SUGGERIMENTI CHE AIUTANO DAVVERO
+Un suggerimento disegna il percorso verso la tua prossima spinta, preso dalla soluzione, anche se hai cambiato strada. Se una cassa è già bloccata il gioco te lo dice invece di tirare a indovinare, e il suggerimento non viene consumato.
 
-🎁 EXTRA (OPZIONALE)
-• Pacchetto Iniziale — 100 monete + 5 suggerimenti + 5 vite + Pubblicità Disattivata per $0.99
-• Pass Stagionale — senza pubblicità + 100 monete/giorno + tutti i temi + suggerimenti illimitati
-• Pacchetti di monete da 100 a 2.000 monete, pacchetti di suggerimenti, ricariche vite
+✨ PIACEVOLE DA GIOCARE
+• Casse che scivolano morbide, tonfi di legno e un rintocco quando una cassa arriva
+• Le casse sorridono quando sono a posto; una leggera scossa segnala quelle bloccate
+• Vibrazione disattivabile, croce opzionale, caselle grandi su telefono e tablet
+• Gioca offline: un allenamento per il cervello rilassante e appagante, senza timer
 
-Per i giocatori di puzzle che amano un allenamento mentale tranquillo e attento. Ogni livello ha esattamente un percorso. Trovalo.
+📅 ANCORA DI PIÙ
+• Sfida del giorno: lo stesso puzzle per tutti ogni giorno, più facile a inizio settimana e più dura nel weekend
+• Modalità infinita: magazzini sempre nuovi (un ❤ per tabellone; i cuori si ricaricano)
+• 7 temi del tabellone, missioni giornaliere, premi per la serie di accessi e classifica settimanale
 
-Realizzato con cura da Pegasus Games.
+🎁 EXTRA OPZIONALI
+La campagna e la sfida del giorno sono gratis. Con le monete compri suggerimenti e il tema Midnight. Acquisti opzionali: pacchetti di monete, pacchetto da 10 suggerimenti, Rimuovi pubblicità e pass Season o Weekly (senza pubblicità, monete giornaliere, tutti i temi, suggerimenti illimitati; annullabili quando vuoi su Google Play).
+
+Pronto a fare ordine? La tua prima cassa ti aspetta.
 </it-IT>
 
 <ja-JP>
-ソコバンへようこそ — 現代のスマートフォン向けに磨き上げられたクラシックな日本の箱押しパズル。すべての箱を指定のマスに押し込んでください。簡単そうですか？最初の10レベルはウォーミングアップです。その後は、壁や角、間違った押し込みがすべてあなたを閉じ込める可能性があります。ソコバンの真の満足感は、一つだけ存在する正しい道を見つけることです。
+ルールはひとつ。押すだけ、引けない。あたたかなレンガの倉庫で木箱を置き場まで押し、たった一押しにどれほどの作戦が隠れているかを味わってください。
 
-📦 プレイ方法
-方向矢印をタップしたり、スワイプして移動します。箱に近づくと押すことができます。箱を引き戻すことはできないため、すべてのステップが重要です。計画を立て、必要に応じてアンドゥし、壁に追い込まれたら新たにやり直しましょう。
+📦 遊び方
+盤面のどこでもスワイプ（または十字キー）で倉庫番を動かします。箱に向かって歩けば箱を押せます。箱は引けないので、隅に押し込んだ箱はそのまま動かせません。取り消しは無料で無制限。気軽に試してください。床のマスをタップすれば、そこまで自動で歩きます。
 
-✨ 感覚
-• すべての押下での触覚フィードバック
-• スムーズなアニメーション付きのクリンチーなレトロピクセルアート
-• やさしいウォーミングアップから頭をひねるノットまで、手作業で調整された500のレベル
-• 完全オフラインで動作 — 飛行機の中や列に並んでいる時など、どこでもプレイ可能
-• ソフトな押し込み音や満足感のあるターゲットに当たる音で構成されたASMRスタイルの音デザイン
+🧩 500ステージ、すべて解ける
+10の章で、4手で解ける最初のステージから、しっかり計画が必要な箱5つの倉庫まで続きます。すべてのステージは解けた状態から逆向きに作られているので必ず解があり、さらにコンピューターで解いてあります。パーは可能な最少手数です。パーの10％以内でクリアすると星3つ。
 
-🎯 内容物
-• 500のクラシックソコバンレベル（追加の無料アップデートでさらに登場）
-• ログイン連続報酬付きのデイリーチャレンジ
-• アンロック可能な5つのビジュアルテーマ — クラシック、ウッド、インダストリアル、寺院、宇宙
-• 無料コインボタン（広告賞、4時間ごとに25コイン）
-• 解決したレベル、デイリーストリーク、週間ランキングを追跡する統計画面
-• 合成リーダーボードティア付きの週刊トーナメント
-• 行き詰まった時のためのヒントシステム — やさしい助け舟
-• 各レベルでの完全アンドゥ + 再スタート
+💡 本当に役立つヒント
+ヒントは解答から次の一押しまでの道順を描きます。正解ルートから外れていても大丈夫。すでに箱が詰んでいる場合は推測せずにそう伝え、ヒントは消費されません。
 
-🎁 オプションの追加機能
-• スターターパック — 100コイン + 5ヒント + 5ライフ + 広告なしで$0.99
-• シーズンパス — 広告なし + 1日100コイン + すべてのテーマ + 無制限ヒント
-• 100コインから2,000コインまでのコインパック、ヒントパック、ライフ補充
+✨ 気持ちいい手触り
+• なめらかに滑る箱、やさしい木の音、置き場に入るとチャイム
+• 置き場に着いた箱はにっこり。動けない箱は小さく揺れて知らせます
+• 振動はオフにでき、十字キーは任意。スマホでもタブレットでも大きく見やすいマス
+• 完全オフライン対応：タイマーなしで、癒されて満足できる脳トレ
 
-静かで注意深い頭の体操を好むパズルプレイヤー向け。すべてのレベルには正確に一つの通り道があります。それを見つけてください。
+📅 もっと遊べる
+• デイリー盤面：毎日みんな同じ一問。週の初めはやさしく、週末は手ごわく
+• エンドレスモード：作りたての倉庫が次々と（盤面ごとに❤1つ、ハートは時間で回復）
+• 7種類の盤面テーマ、デイリーミッション、連続ログイン報酬、週間ランキング
 
-ペガサスゲームズが大切に作りました。
+🎁 お好みで
+キャンペーンとデイリー盤面は無料で遊べます。コインでヒントとMidnightテーマを入手できます。任意の購入：コインパック、ヒント10個パック、広告削除、SeasonまたはWeeklyパス（広告なし、毎日のコイン、全テーマ、ヒント無制限。Google Playでいつでも解約可能）。
+
+片付けの準備はいいですか？最初の箱が待っています。
 </ja-JP>
 
 <pt-BR>
-BEM-VINDO AO SOKOBAN — O CLÁSSICO JOGO DE QUEBRA-CABEÇA JAPONES DE EMPURRAR CAIXAS, REFINADO PARA CELULARES MODERNOS. EMPURRE CADA CAIXA PARA SUA QUADRA MARCADA. SOA SIMPLES? OS PRIMEIROS DEZ NÍVEIS SÃO AQUECIMENTOS. APÓS ISSO, CADA PAREDE, CADA CANTO, CADA EMPURRÃO ERRADO PODE TE TRANCAR. A SATISFAÇÃO TOTAL DE SOKOBAN É ENCONTRAR O ÚNICO CAMINHO QUE NÃO TE ENCOLHE.
+Uma regra: empurre, nunca puxe. Deslize caixas de madeira até as docas em um armazém de tijolos aconchegante e descubra quanto planejamento cabe em um único empurrão.
 
-📦 COMO É O JOGO
-Toque nas setas de direção ou deslize para mover. Ande em uma caixa para empurrá-la. Você não pode puxar caixas de volta — então cada passo é importante. Planeje à frente, desfaça quando precisar, reinicie se se enfiar em uma armadilha.
+📦 COMO JOGAR
+Deslize o dedo em qualquer lugar do tabuleiro (ou use o direcional) para mover o estoquista. Ande contra uma caixa para empurrá-la. Caixas não podem ser puxadas, então uma caixa presa num canto fica lá. Desfazer é grátis e ilimitado: experimente à vontade. Toque em um piso para caminhar direto até ele.
 
-✨ A SENSAÇÃO
-• Feedback tátil em cada empurrão
-• Arte pixel retro com animações suaves
-• 500 níveis ajustados, desde aquecimentos suaves até nó mágico para o cérebro
-• Funciona totalmente offline — jogue em aviões, em filas, em qualquer lugar
-• Design sonoro estilo ASMR — empurrões suaves, batidas satisfatórias da caixa no alvo
+🧩 500 FASES, TODAS COM SOLUÇÃO
+Dez capítulos vão de uma abertura de quatro movimentos até armazéns com cinco caixas que pedem planejamento de verdade. Cada fase foi construída de trás para frente a partir de uma sala resolvida, então sempre existe solução, e cada uma foi resolvida por computador: o par é o menor número de movimentos possível. Termine até 10 % acima do par para ganhar três estrelas.
 
-🎯 O QUE TEM NELE
-• 500 níveis clássicos de Sokoban (mais chegando através de atualizações gratuitas)
-• Desafio Diário com recompensas por sequência de login
-• 5 temas visuais desbloqueáveis — Clássico, Madeira, Industrial, Templo, Espaço
-• Botão de Moedas Grátis (anúncio recompensado, 25 moedas a cada 4 horas)
-• Tela de estatísticas que acompanha níveis resolvidos, sequência diária e tempos mais rápidos
-• Torneio Semanal com níveis de liderança sintéticos
-• Sistema de dicas — empurrão gentil quando você está preso
-• Desfazer completo + reiniciar em cada nível
+💡 DICAS QUE AJUDAM DE VERDADE
+Uma dica desenha o caminho até o seu próximo empurrão, tirado da solução, mesmo que você tenha saído do rumo. Se uma caixa já travou, o jogo avisa em vez de chutar, e a dica não é gasta.
 
-🎁 EXTRAS (OPCIONAL)
-• Pacote Inicial — 100 moedas + 5 dicas + 5 vidas + Anúncios Desligados por $0,99
-• Passe de Temporada — sem anúncios + 100 moedas/dia + todos os temas + dicas ilimitadas
-• Pacotes de Moedas de 100 a 2.000 moedas, pacotes de dicas, recargas de vidas
+✨ FEITO PARA SER GOSTOSO DE JOGAR
+• Caixas deslizando suaves, batidas de madeira e um toque quando uma caixa chega
+• As caixas sorriem quando estão no lugar; um leve tremor avisa de uma caixa travada
+• Vibração que pode ser desligada, direcional opcional e casas grandes no celular e tablet
+• Funciona offline: um exercício para o cérebro relaxante e satisfatório, sem cronômetro
 
-Para jogadores de quebra-cabeça que gostam de um exercício mental calmo e cuidadoso. Cada nível tem exatamente um caminho. Encontre-o.
+📅 MAIS PARA JOGAR
+• Tabuleiro diário: o mesmo desafio para todos a cada dia, mais fácil no começo da semana e mais difícil no fim de semana
+• Modo infinito: armazéns recém-criados (um ❤ por tabuleiro; os corações recarregam)
+• 7 temas de tabuleiro, missões diárias, prêmios de sequência e classificação semanal
 
-Feito com carinho pela Pegasus Games.
+🎁 EXTRAS OPCIONAIS
+A campanha e o tabuleiro diário são grátis. Moedas compram dicas e o tema Midnight. Compras opcionais: pacotes de moedas, pacote com 10 dicas, Remover anúncios e passes Season ou Weekly (sem anúncios, moedas diárias, todos os temas, dicas ilimitadas; cancele quando quiser no Google Play).
+
+Pronto para arrumar? Sua primeira caixa está esperando.
 </pt-BR>
 
 <tr-TR>
-Sokoban'a hoş geldiniz — klasik Japon kutu itme bulmacası, modern telefonlar için geliştirilmiş. Her kutuyu işaretli kareye itin. Basit mi görünüyor? İlk on seviye ısınma turlarıdır. Sonrasında her duvar, her köşe, her yanlış itme sizi kilitleyebilir. Sokoban'ın tamamlayıcı keyfi, o tek yolu bulmaktır.
+Tek kural: it, asla çekme. Tahta kasaları sıcacık bir tuğla depoda yerlerine kaydır ve tek bir itişte ne kadar plan saklı olduğunu keşfet.
 
-📦 OYUN NASIL OYNANIR
-Yön oklarına dokunun veya kaydırarak hareket edin. Bir kutuya yürüyerek itersiniz. Kutuları geri çekemezsiniz — bu yüzden her adım önemlidir. İleriye plan yapın, ihtiyaç duyduğunuzda geri alın, kuşak içine sıkıştıysanız taze bir başlangıç yapın.
+📦 NASIL OYNANIR
+Depocuyu yürütmek için tahtanın herhangi bir yerinde parmağını kaydır (ya da yön tuşlarını kullan). Bir kasayı itmek için ona doğru yürü. Kasalar geri çekilemez, köşeye sıkışan kasa orada kalır. Geri alma ücretsiz ve sınırsız; dilediğin kadar dene. Bir zemin karesine dokunarak doğrudan oraya yürü.
 
-✨ HİS
-• Her itişte dokunsal geri bildirim
-• Duyusal animasyonlarla birlikte kıtır kıtır retro piksel sanatı
-• Nazik ısınmalardan zihin bükücü düğümlere kadar 500 elle ayarlanmış seviye
-• Tamamen çevrimdışı çalışır — uçakta, sırada, her yerde oynayın
-• ASMR tarzı ses tasarımı — yumuşak itilimler, tatmin edici kutu-hedef vuruşları
+🧩 500 SEVİYE, HEPSİ ÇÖZÜLEBİLİR
+On bölüm, dört hamlelik bir girişten gerçek plan isteyen beş kasalı depolara uzanır. Her seviye çözülmüş bir odadan geriye doğru kuruldu, yani her zaman bir çözüm var ve her biri bilgisayarla çözüldü: par, mümkün olan en az hamle sayısıdır. Üç yıldız için par’ın en fazla %10 üzerinde bitir.
 
-🎯 İÇİNDE KİMLER VAR
-• 500 klasik Sokoban seviyesi (ücretsiz güncellemelerle daha fazlası gelecek)
-• Günlük Mücadele ile giriş streak ödülleri
-• 5 kilidi açılabilir görsel tema — Klasik, Ahşap, Endüstriyel, Tapınak, Uzay
-• Ücretsiz Paralar butonu (ödüllü reklam, her 4 saatte 25 para)
-• Çözülen seviyeleri, günlük streak'i, haftalık sıralamayı takip eden istatistik ekranı
-• Sentetik liderlik katmanlarına sahip Haftalık Turnuva
-• İpucu sistemi — sıkıştığınızda nazik bir itme
-• Her seviyede tam geri alma + yeniden başlatma
+💡 GERÇEKTEN İŞE YARAYAN İPUÇLARI
+İpucu, yoldan sapmış olsan bile, çözümden alınan bir sonraki itişinin yolunu çizer. Bir kasa zaten sıkıştıysa oyun tahmin yürütmek yerine bunu söyler ve ipucun harcanmaz.
 
-🎁 EKSTRA (İSTEĞE BAĞLI)
-• Başlangıç Paketi — 100 para + 5 ipucu + 5 hayat + Reklamsız sadece $0.99
-• Sezon Pass'i — reklam olmadan + günde 100 para + tüm temalar + sınırsız ipucu
-• 100'den 2,000 paraya kadar para paketleri, ipucu paketleri, hayat yenilemeleri
+✨ HİSSİ GÜZEL
+• Yumuşakça kayan kasalar, tahta sesleri ve kasa yerine oturunca bir çan
+• Yerine varan kasalar gülümser; hafif bir sarsıntı sıkışan kasayı haber verir
+• Kapatılabilir titreşim, isteğe bağlı yön tuşları, telefon ve tablette büyük kareler
+• Tamamen çevrimdışı: zamanlayıcısız, rahatlatıcı ve tatmin edici bir beyin egzersizi
 
-Sakin, dikkatli bir zihin egzersizi isteyen bulmaca oyuncuları için. Her seviyede tam olarak bir yol vardır. Bulun. 
+📅 DAHA FAZLASI
+• Günlük bulmaca: her gün herkes için aynı bulmaca; hafta başı daha kolay, hafta sonu daha zor
+• Sonsuz mod: yepyeni depolar (tahta başına bir ❤; kalpler zamanla dolar)
+• 7 tahta teması, günlük görevler, giriş serisi ödülleri ve haftalık sıralama
 
-Pegasus Games tarafından titizlikle hazırlandı.
+🎁 İSTEĞE BAĞLI EKSTRALAR
+Ana oyun ve günlük bulmaca ücretsizdir. Altınlarla ipucu ve Midnight teması alınır. İsteğe bağlı satın alımlar: altın paketleri, 10 ipucu paketi, Reklamları Kaldır ve Season ya da Weekly pas (reklamsız, günlük altın, tüm temalar, sınırsız ipucu; Google Play’den istediğin zaman iptal et).
+
+Toplamaya hazır mısın? İlk kasan seni bekliyor.
 </tr-TR>
 
 <uk>
-Ласкаво просимо до Sokoban — класичного японського пазла з штовханням коробок, адаптованого для сучасних телефонів. Штовхніть кожну коробку на її відведене місце. Звучить просто? Перші десять рівнів — це лише розминка. Після цього кожна стіна, кожен кут, кожен неправильний рух можуть заблокувати вас. Уся задоволеність Sokoban полягає в пошуку єдиного шляху, який веде до перемоги.
+Одне правило: штовхай, ніколи не тягни. Пересувай дерев’яні ящики на їхні місця у затишному цегляному складі й відкрий, скільки планування ховається в одному поштовху.
 
-📦 КАК ЦЕ ГРАТИ
-Торкніться стрілок або проведіть пальцем, щоб рухатися. Вступайте в контакт з коробкою, щоб штовхнути її. Ви не можете тягнути коробки назад — тому кожен крок важливий. Плануйте заздалегідь, поверніть дії, коли потрібно, починайте заново, якщо закутали себе в кут.
+📦 ЯК ГРАТИ
+Проведи пальцем будь-де на полі (або скористайся хрестовиною), щоб рухати комірника. Іди в ящик, щоб штовхнути його. Ящики не можна тягнути, тож ящик, загнаний у кут, там і залишиться. Скасування безкоштовне й безлімітне — експериментуй скільки завгодно. Торкнися клітинки підлоги, щоб одразу дійти туди.
 
-✨ ВІДЧУТТЯ
-• Тактильний відгук на кожне штовхання
-• Хрустка ретро-піксельна графіка з плавною анімацією
-• 500 ретельно налаштованих рівнів — від м'яких розминок до складних завдань
-• Повністю працює офлайн — грайте в літаку, в черзі, будь-де
-• Звуковий дизайн в стилі ASMR — м'які штовхання, задовільні удари коробки по цілі
+🧩 500 РІВНІВ, УСІ МАЮТЬ РОЗВ’ЯЗОК
+Десять розділів ведуть від стартового рівня на чотири ходи до складів із п’ятьма ящиками, що вимагають справжнього планування. Кожен рівень збудовано у зворотному напрямку з уже розв’язаної кімнати, тож розв’язок існує завжди, і кожен рівень розв’язав комп’ютер: пар — це найменша можлива кількість ходів. Заверши не більш ніж на 10 % понад пар, щоб отримати три зірки.
 
-🎯 ЩО ВСЕРЕДИНІ
-• 500 класичних рівнів Sokoban (більше надійдуть з безкоштовними оновленнями)
-• Щоденний виклик з винагородами за активність
-• 5 розблоковуваних візуальних тем — Класика, Дерево, Промисловість, Храм, Космос
-• Кнопка безкоштовних монет (реклама-винагорода, 25 монет кожні 4 години)
-• Екран статистики, що відстежує розв'язані рівні, щоденну активність, щотижневий рейтинг змагань
-• Щотижневий турнір з синтетичними лідербордами
-• Система підказок — м'який натиск, коли ви застрягли
-• Повне повернення дій + перезапуск на кожному рівні
+💡 ПІДКАЗКИ, ЯКІ СПРАВДІ ДОПОМАГАЮТЬ
+Підказка малює шлях до твого наступного поштовху, взятий із розв’язку, навіть якщо ти збився з курсу. Якщо ящик уже застряг, гра чесно про це скаже, і підказка не витратиться.
 
-🎁 ДОПОВНЕННЯ (ДОБІРНО)
-• Стартовий пакет — 100 монет + 5 підказок + 5 життів + без реклами за 0.99 доларів
-• Сезонний пропуск — без реклами + 100 монет/день + всі теми + необмежені підказки
-• Пакети монет від 100 до 2000 монет, пакети підказок, відновлення життів
+✨ ПРИЄМНО ГРАТИ
+• Ящики плавно ковзають, м’яко стукає дерево, а на місці лунає дзвіночок
+• Ящики усміхаються, коли вони на місці; легке трусіння попереджає про застряглий
+• Вібрацію можна вимкнути, хрестовина за бажанням, великі клітинки на телефоні й планшеті
+• Працює офлайн: розслабливе й приємне тренування для мозку без таймерів
 
-Для любителів пазлів, які цінують тихий, обачний розумовий виклик. На кожному рівні є точно один шлях. Знайдіть його.
+📅 ЩЕ БІЛЬШЕ
+• Щоденне поле: щодня та сама головоломка для всіх, легша на початку тижня й складніша у вихідні
+• Нескінченний режим: щойно збудовані склади (одне ❤ за поле; серця відновлюються)
+• 7 тем поля, щоденні місії, нагороди за серію входів і тижневий рейтинг
 
-Розроблено з любов'ю компанією Pegasus Games.
+🎁 ДОДАТКОВО ЗА БАЖАННЯМ
+Кампанія та щоденне поле безкоштовні. За монети купуються підказки й тема Midnight. Необов’язкові покупки: набори монет, набір із 10 підказок, вимкнення реклами та перепустки Season або Weekly (без реклами, щоденні монети, усі теми, безлімітні підказки; скасування будь-коли в Google Play).
+
+Готовий навести лад? Твій перший ящик уже чекає.
 </uk>
 
 <zh-CN>
-欢迎来到推箱子 — 经典的日本推箱子益智游戏，专为现代手机打磨而成。将每个箱子推到它的标记方格上。听起来简单？前十关是热身。之后，每一堵墙、每一个角落、每次错误的推动都可能让你陷入困境。推箱子的全部乐趣在于找到那条不会锁住你的路径。
+只有一条规则：只能推，不能拉。在温馨的红砖仓库里把木箱推到停放点，体会一次推动里藏着多少谋划。
 
-📦 游戏玩法 
-点击方向箭头或滑动移动。走进一个箱子来推它。你不能拉回箱子 — 所以每一步都至关重要。提前规划，需要时撤销，如果自己陷入死胡同就重新开始。
+📦 玩法
+在棋盘任意位置滑动（或使用方向键）移动仓库管理员。走向箱子就能推动它。箱子无法拉回，推进角落的箱子就再也出不来。撤销免费且无限，尽情尝试吧。轻点任意地板格子，就能直接走过去。
 
-✨ 游戏体验 
-• 每次推动都有触觉反馈 
-• 复古像素艺术与流畅动画的完美结合 
-• 500 个精心调校的关卡，从轻松热身到令人费解的挑战 
-• 完全离线运行 — 可在飞机上、排队时、任何地方游玩 
-• ASMR 风格的声音设计 — 柔和的推动声和令人满意的箱子落位声 
+🧩 500关，关关有解
+十个章节，从四步就能完成的入门关，到需要真正规划的五箱仓库。每一关都是从已完成的房间倒推生成的，所以一定有解；每一关也都经过电脑求解：标准步数就是可能的最少步数。在标准步数的10%以内完成即可获得三颗星。
 
-🎯 游戏内容 
-• 500 个经典推箱子关卡（更多将在免费更新中推出） 
-• 每日挑战和登录连胜奖励 
-• 5 个可解锁的视觉主题 — 经典、木头、工业、寺庙、太空 
-• 免费金币按钮（观看广告可获得奖励，每4小时25金币） 
-• 统计屏幕跟踪已解决关卡、每日连胜、每周排行榜名次 
-• 每周锦标赛，带有合成排行榜分层 
-• 提示系统 — 当你卡住时轻轻提示 
-• 每个关卡都有完整的撤销 + 重新开始功能 
+💡 真正有用的提示
+提示会根据答案画出通往下一推的路线，即使你已经偏离正确路径也没关系。如果箱子已经卡死，游戏会直接告诉你而不是乱猜，提示也不会被消耗。
 
-🎁 额外内容（可选） 
-• 入门包 — 100金币 + 5个提示 + 5条命 + 关闭广告，价格为0.99美元 
-• 赛季通行证 — 无广告 + 每天100金币 + 所有主题 + 无限提示 
-• 从100到2000金币的金币包、提示包、生命补充包 
+✨ 手感舒适
+• 箱子顺滑滑动，木头轻响，箱子到位时叮的一声
+• 到位的箱子会微笑；卡死的箱子会轻轻晃动提醒你
+• 震动可关闭，方向键可选，手机和平板上格子都又大又清晰
+• 完全离线：没有计时器，放松又满足的烧脑练习
 
-为喜欢安静、认真思考的益智游戏玩家而设计。每个关卡都有且只有一条通路。找到它。
+📅 更多玩法
+• 每日关卡：每天所有人同一道题，周初较简单，周末更有挑战
+• 无尽模式：随时生成的新仓库（每个棋盘消耗1个❤，红心会随时间恢复）
+• 7种棋盘主题、每日任务、连续登录奖励和每周排名
 
-由天马游戏精心制作。
+🎁 可选内容
+主线关卡和每日关卡都可以免费游玩。金币可以购买提示和Midnight主题。可选购买：金币包、10个提示包、去除广告，以及Season或Weekly通行证（无广告、每日金币、全部主题、无限提示；可随时在Google Play取消）。
+
+准备好整理仓库了吗？你的第一个箱子正在等你。
 </zh-CN>
 
 ---
@@ -575,55 +524,55 @@ Pegasus Games tarafından titizlikle hazırlandı.
 _Apple App Store Connect → App Information → Subtitle_
 
 <en-US>
-Push boxes onto targets
+Push every crate home
 </en-US>
 
 <ar>
-ادفع الصناديق نحو الأهداف
+ادفع كل صندوق إلى مكانه
 </ar>
 
 <de-DE>
-Schiebe Kisten auf Ziele!
+Jede Kiste an ihren Platz
 </de-DE>
 
 <es-419>
-¡EMPUJA CAJAS A LOS OBJETIVOS!
+Lleva cada caja a su lugar
 </es-419>
 
 <fr-FR>
-Poussez les caisses
+Chaque caisse à sa place
 </fr-FR>
 
 <hi-IN>
-लक्ष्यों पर बक्से रखें
+हर बक्सा अपनी जगह पहुँचाओ
 </hi-IN>
 
 <id>
-Dorong kotak ke sasaran
+Dorong tiap peti ke tempatnya
 </id>
 
 <it-IT>
-SPINGI I CASSETTI VERSO GOAL
+Ogni cassa al suo posto
 </it-IT>
 
 <ja-JP>
-ターゲットにボックスを押そう！
+すべての箱を定位置へ
 </ja-JP>
 
 <pt-BR>
-EMPURRE CAIXAS PARA OS ALVO!
+Leve cada caixa ao seu lugar
 </pt-BR>
 
 <tr-TR>
-KUTULARI HEDEFLERE HİZALA
+Her kasayı yerine it
 </tr-TR>
 
 <uk>
-Штовхайте ящики на цілі
+Кожен ящик на своє місце
 </uk>
 
 <zh-CN>
-推动箱子到目标上
+把每个箱子推回原位
 </zh-CN>
 
 ---
@@ -633,55 +582,55 @@ KUTULARI HEDEFLERE HİZALA
 _Apple App Store Connect → Version → Keywords_
 
 <en-US>
-sokoban,box puzzle,push boxes,logic,japanese puzzle,classic,brain teaser
+sokoban,crate,box pushing,logic puzzle,warehouse,brain teaser,offline,daily puzzle,relaxing
 </en-US>
 
 <ar>
-سوكوبان، أحجية صناديق، دفع صناديق، منطق، أحجية يابانية، كلاسيكية، تحدي عقل
+سوكوبان,دفع الصناديق,ألغاز منطق,مستودع,تمرين العقل,بدون إنترنت,لغز يومي,مريح
 </ar>
 
 <de-DE>
-sokoban, kastenrätsel, kisten schieben, logik, klassisch, geistige herausforderung
+sokoban,kisten schieben,logikrätsel,lagerhaus,denkspiel,offline,tagesrätsel,entspannend
 </de-DE>
 
 <es-419>
-sokoban,juego de cajas,puzzles de empujar,rompecabezas,japonés,clásico,desafío mental
+sokoban,empujar cajas,rompecabezas,lógica,almacén,mente,sin conexión,puzzle diario,relajante
 </es-419>
 
 <fr-FR>
-sokoban,jeu de boîte,pousser des boîtes,logique,puzzle japonais,classique,casse-tête
+sokoban,pousser caisses,casse-tête,logique,entrepôt,cerveau,hors ligne,défi du jour,relaxant
 </fr-FR>
 
 <hi-IN>
-सोकोबान,बॉक्स पहेली,बॉक्स धक्का,तर्क,जापानी पहेली,क्लासिक,ब्रेन टीज़र
+सोकोबान,sokoban,बक्सा धकेलना,तर्क पहेली,गोदाम,दिमागी खेल,ऑफ़लाइन,रोज़ की पहेली
 </hi-IN>
 
 <id>
-sokoban,puzzle kotak,mendorong kotak,logika,puzzle jepang,klasik,tantangan otak
+sokoban,dorong peti,teka-teki logika,gudang,asah otak,offline,teka-teki harian,santai
 </id>
 
 <it-IT>
-sokoban, puzzle di scatole, spingere scatole, logica, puzzle giapponese, classico, rompicapo
+sokoban,spingi casse,rompicapo,logica,magazzino,cervello,offline,sfida giornaliera,rilassante
 </it-IT>
 
 <ja-JP>
-そばかん,箱パズル,ボックスプッシュ,論理パズル,日本のパズル,クラシック,頭の体操
+倉庫番,sokoban,箱押し,ロジックパズル,倉庫,脳トレ,オフライン,デイリーパズル,癒し
 </ja-JP>
 
 <pt-BR>
-sokoban,jogo de caixa,empurrar caixas,lógica,puzzle japonês,clássico,quebra-cabeça
+sokoban,empurrar caixas,quebra-cabeça,lógica,armazém,cérebro,offline,desafio diário,relaxante
 </pt-BR>
 
 <tr-TR>
-sokoban,kutu bulmacası,kutuları it,pazıl,zihin egzersizi,klasik
+sokoban,kasa itme,mantık bulmacası,depo,zeka oyunu,çevrimdışı,günlük bulmaca,rahatlatıcı
 </tr-TR>
 
 <uk>
-сокобан,головоломка,тягни коробки,логіка,японська головоломка,класика,мозкова стимуляція
+sokoban,сокобан,ящики,логічна головоломка,склад,мозок,офлайн,щоденна головоломка,релакс
 </uk>
 
 <zh-CN>
-推箱子, 盒子谜题, 推动箱子, 逻辑, 日式谜题, 经典, 思维挑战
+推箱子,sokoban,箱子,逻辑谜题,仓库,益智,离线,每日谜题,解压
 </zh-CN>
 
 ---
@@ -691,55 +640,55 @@ sokoban,kutu bulmacası,kutuları it,pazıl,zihin egzersizi,klasik
 _Apple App Store Connect → Version → Promotional Text_
 
 <en-US>
-The classic Japanese box-pushing puzzle!
+Rebuilt from scratch: 500 solvable warehouses, a daily board for everyone, hints that show your next push, and unlimited free undo.
 </en-US>
 
 <ar>
-ألغاز دفع الصناديق اليابانية الكلاسيكية!
+أُعيد بناؤه بالكامل: 500 مستودع قابل للحل، لوحة يومية للجميع، تلميحات تُظهر دفعتك التالية، وتراجع مجاني غير محدود.
 </ar>
 
 <de-DE>
-DAS KLASSISCHE JAPANISCHE PUZZLE MIT KASTENDRÜCKEN!
+Komplett neu gebaut: 500 lösbare Lagerhallen, ein Tagesrätsel für alle, Tipps mit dem Weg zum nächsten Schub und unbegrenztes Rückgängig.
 </de-DE>
 
 <es-419>
-¡EL CLÁSICO JUEGO DE PUZZLE JAPONES DE EMPUJAR CAJAS!
+Rehecho desde cero: 500 almacenes con solución, un tablero diario para todos, pistas que muestran tu próximo empuje y deshacer ilimitado gratis.
 </es-419>
 
 <fr-FR>
-LE CLASSIQUE PUZZLE JAPONAIS OÙ IL FAUT POUSSER DES CAISSES !
+Entièrement refait : 500 entrepôts solubles, un plateau du jour pour tous, des indices qui montrent ta prochaine poussée et l’annulation illimitée.
 </fr-FR>
 
 <hi-IN>
-जापानी बॉक्‍स-धकेलने वाली पहेली का मज़ा लें!
+पूरी तरह नए सिरे से: 500 हल होने वाले गोदाम, सबके लिए रोज़ का बोर्ड, अगले धक्के का रास्ता दिखाते संकेत और असीमित मुफ़्त अनडू।
 </hi-IN>
 
 <id>
-Teka-teki kotak klasik Jepang yang seru!
+Dibangun ulang dari nol: 500 gudang yang pasti bisa diselesaikan, papan harian untuk semua, petunjuk dorongan berikutnya, dan urung tanpa batas.
 </id>
 
 <it-IT>
-IL CLASSICO PUZZLE GIAPPONESE DELLO SPINGERE LE SCATOLE!
+Rifatto da zero: 500 magazzini risolvibili, una sfida del giorno per tutti, suggerimenti che mostrano la prossima spinta e annulla illimitato.
 </it-IT>
 
 <ja-JP>
-クラシックな日本の箱押しパズル！
+一から作り直しました：必ず解ける500の倉庫、みんな共通のデイリー盤面、次の一押しを示すヒント、無制限の取り消し。
 </ja-JP>
 
 <pt-BR>
-O clássico quebra-cabeça de empurrar caixas japonês!
+Refeito do zero: 500 armazéns com solução, um tabuleiro diário para todos, dicas que mostram o próximo empurrão e desfazer ilimitado grátis.
 </pt-BR>
 
 <tr-TR>
-KLASİK JAPON KUTU İTME BULMACASI!
+Sıfırdan yeniden yapıldı: 500 çözülebilir depo, herkes için günlük bulmaca, sonraki itişini gösteren ipuçları ve sınırsız ücretsiz geri alma.
 </tr-TR>
 
 <uk>
-Класична японська головоломка з штовханням коробок!
+Перероблено з нуля: 500 складів, які точно мають розв’язок, щоденне поле для всіх, підказки до наступного поштовху й безлімітне скасування.
 </uk>
 
 <zh-CN>
-经典的日本推箱子游戏！
+全新打造：500个必定有解的仓库、人人相同的每日关卡、指出下一推的提示，以及无限免费撤销。
 </zh-CN>
 
 ---

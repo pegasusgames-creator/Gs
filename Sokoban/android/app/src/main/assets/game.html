@@ -350,6 +350,7 @@ body .modal-btn.secondary,body.midnight .modal-btn.secondary{background:var(--bt
 #overlay-complete .stars-display{color:#d29922;letter-spacing:6px;}
 #themeBtn{background:var(--btn-neutral-bg)!important;border:1px solid var(--border)!important;color:var(--accent-ink)!important;}
 @media (min-width:600px){#screen-game .hdr-level{font-size:1.3rem;}#screen-game .hdr-coins{font-size:1.05rem;}}
+.sk-ring::before{content:"";position:absolute;inset:2%;border-radius:calc(var(--cell)*0.18);border:max(3px,calc(var(--cell)*0.08)) solid var(--hint);animation:sk-bob .8s ease-in-out infinite;}
 /*@@END BOARD_CSS*/
 /* ============ 2026-06-10 round-1: adaptive sizing via clamp() ============ */
 .game-footer {
@@ -579,6 +580,8 @@ body.midnight{ --m-bg-top:#2a1f1a; --m-vignette:rgba(0,0,0,.5);
 #screen-menu .menu-logo{background:linear-gradient(90deg,#b4532c,#7a2f14);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 body.midnight #screen-menu .menu-logo{background:linear-gradient(90deg,#f4a27e,#e9b46a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 #screen-menu .menu-sub{color:var(--text-mute);}
+#screen-menu .menu-primary{color:var(--on-accent)!important;letter-spacing:.6px!important;}
+#screen-menu .menu-primary .play-sub{color:var(--on-accent);}
 /*@@END IDENTITY_CSS*/
 </style>
 <script>try{if(window.Android)window.NativeBridge=window.Android;}catch(e){}</script>
@@ -863,17 +866,17 @@ const VALID_REWARD_TYPES = new Set(['hint','skip','life','extra_life','free_coin
 // Canonical shop order (CLAUDE.md "Shop ordering"): Spend Your Coins →
 // Coin packs → Subscriptions (Season Pass injected after coins_mega) → IAPs.
 const SHOP_PRODUCTS = [
-  {id:'lives_5_coins',    icon:'🪙', name:'5 Lives (Coins)',       desc:'Spend 30 coins for 5 lives',            price:'30 🪙', coinCost:30},
-  {id:'coins_small',      icon:'🪙', name:'100 Coins',            desc:'Small coin pack',                        price:'$0.99'},
+  {id:'lives_5_coins',    icon:'🪙', name:'5 Lives (Coins)',       desc:'Spend 30 coins: 5 hearts for Endless boards',            price:'30 🪙', coinCost:30},
+  {id:'coins_small',      icon:'🪙', name:'100 Coins',            desc:'Coins for hints and the Midnight theme',                        price:'$0.99'},
   {id:'coins_medium',     icon:'💵', name:'400 Coins',            desc:'Medium coin pack',                       price:'$2.99'},
   {id:'coins_large',      icon:'💰', name:'800 Coins',            desc:'Great value coin pack',                  price:'$4.99'},
   {id:'coins_mega',       icon:'🏆', name:'2000 Coins',           desc:'Mega coin pack — best value',            price:'$9.99'},
-  {id:'starter_pack',     icon:'🎁', name:'Starter Pack',         desc:'100🪙 + 5 hints + 5 lives + Ads Off',   price:'$0.99'},
+  {id:'starter_pack',     icon:'🎁', name:'Starter Pack',         desc:'100🪙 + 5 hints + 5 hearts + Ads Off',   price:'$0.99'},
   {id:'remove_ads',       icon:'🚫', name:'Remove Ads',           desc:'Enjoy ad-free gameplay forever',         price:'$2.99'},
-  {id:'hint_pack',        icon:'💡', name:'10 Hints',             desc:'Pack of 10 hint tokens',                 price:'$1.99'},
-  {id:'five_lives',       icon:'❤️', name:'5 Extra Lives',        desc:'Refill your lives instantly',            price:'$0.99'},
-  {id:'unlimited_lives_1h',icon:'⚡',name:'Unlimited Lives 1hr',  desc:'Play without limits for 1 hour',         price:'$1.99'},
-  {id:'unlimited_lives_forever',icon:'♾️',name:'Unlimited Lives Forever',desc:'Never run out of lives again',   price:'$4.99'}
+  {id:'hint_pack',        icon:'💡', name:'10 Hints',             desc:'Each one shows the route to your next push',                 price:'$1.99'},
+  {id:'five_lives',       icon:'❤️', name:'5 Extra Lives',        desc:'Refill hearts for Endless warehouses',            price:'$0.99'},
+  {id:'unlimited_lives_1h',icon:'⚡',name:'Unlimited Lives 1hr',  desc:'Endless boards without hearts for 1 hour',         price:'$1.99'},
+  {id:'unlimited_lives_forever',icon:'♾️',name:'Unlimited Lives Forever',desc:'Endless boards never cost a heart',   price:'$4.99'}
 ];
 //@@END SHOP
 
@@ -9021,7 +9024,8 @@ function giveHint(mode){
   const h=document.getElementById('sk-hint');let p=skPlayer,html='';
   for(let i=0;i<seg.length;i++){
     const ch=seg[i],k='udlr'.indexOf(ch.toLowerCase()),d=sokoDelta(lv,k);
-    if(ch!==ch.toLowerCase()){const[x,y]=skXY(p+d);html+='<div class="sk-arrow" data-d="'+SK_CH[k]+'" style="transform:translate('+x+'px,'+y+'px)"></div>';break;}
+    if(ch!==ch.toLowerCase()){const[bx,by]=skXY(p+d),[ax,ay]=skXY(p+2*d);
+      html+='<div class="sk-ring" style="transform:translate('+bx+'px,'+by+'px)"></div><div class="sk-arrow" data-d="'+SK_CH[k]+'" style="transform:translate('+ax+'px,'+ay+'px)"></div>';break;}
     p+=d;const[x,y]=skXY(p);html+='<div class="sk-dot" style="transform:translate('+x+'px,'+y+'px);animation-delay:'+(i*45)+'ms"></div>';
   }
   h.innerHTML=html;
@@ -9156,11 +9160,12 @@ function skSfx(kind){
   }catch(e){}
 }
 function skBuzz(p){if(save.hapticsEnabled===false)return;try{if(navigator.vibrate)navigator.vibrate(p);}catch(e){}}
-function toggleHaptics(){toggleSetting('hapticsEnabled','toggle-haptics');if(save.hapticsEnabled)skBuzz(20);}
-function toggleDpad(){toggleSetting('dpadEnabled','toggle-dpad');skApplyDpad();}
+// "on unless explicitly false" (older saves may hold null/undefined)
+function toggleHaptics(){save.hapticsEnabled=(save.hapticsEnabled===false);persist();updateAllUI();if(save.hapticsEnabled)skBuzz(20);}
+function toggleDpad(){save.dpadEnabled=(save.dpadEnabled===false);persist();updateAllUI();skApplyDpad();}
 function skApplyDpad(){const d=document.getElementById('sk-dpad');if(d)d.style.display=save.dpadEnabled===false?'none':'';if(lv){skLayout();skSnap();}}
-if(save.hapticsEnabled===undefined)save.hapticsEnabled=true;
-if(save.dpadEnabled===undefined)save.dpadEnabled=true;
+if(save.hapticsEnabled!==false)save.hapticsEnabled=true;
+if(save.dpadEnabled!==false)save.dpadEnabled=true;
 (function(){const base=updateAllUI;updateAllUI=function(){base.apply(this,arguments);
   const h=document.getElementById('toggle-haptics'),d=document.getElementById('toggle-dpad');
   if(h)h.className='toggle'+(save.hapticsEnabled!==false?' on':'');if(d)d.className='toggle'+(save.dpadEnabled!==false?' on':'');
@@ -10037,6 +10042,7 @@ window.renderPipeStats=function(){
     {id:'desert',name:'Desert Post',emoji:'🏜️',unlockLevel:150,palette:{crate:'#c9773c',dock:'#1f7a8c',keeper:'#1f7a8c',wall:'#b07a3e',floor:'#f6e9c8',plank:'#e9d6a8','wall-top':'#cf9a5c','crate-edge':'#7a3f17','crate-done':'#5d9e4a',hint:'#1f7a8c'}},
     {id:'ink',name:'Ink & Paper',emoji:'🖋️',unlockLevel:250,palette:{crate:'#d8d2c4',dock:'#2f2f2f',keeper:'#2f2f2f',wall:'#3a3a3a',floor:'#f7f5f0',plank:'#e6e2d8','wall-top':'#5a5a5a','crate-edge':'#4a4a4a','crate-done':'#a8c3a0',hint:'#2f2f2f'}},
   ];
+  window._SK_THEMES=THEMES; // read by test/screenshot_taps.json (apply a palette without the Themes screen)
 //@@END THEMES
   window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel,coinCost:t.coinCost};});
 
@@ -10464,6 +10470,10 @@ function injectRankCard(){
 // ── COIN SINK: DRAGON THEME ──────────────────────────────────────
 function injectDragonTheme(){
   if(!window._THEMES_META) return;
+  // Only where a selectTheme() API + Dragon card container exist; on the
+  // family shell neither does, so Dragon would be a phantom theme nobody
+  // can see or pick (and a pass promising "all themes" could not deliver it).
+  if(typeof window.selectTheme!=='function'||!document.getElementById('themes-grid-container')) return;
   if(window._THEMES_META.find(function(t){return t.id==='dragon';})) return;
   window._THEMES_META.push({
     id:'dragon', name:'Dragon 🐉', unlock:0, coinCost:300,
@@ -10714,8 +10724,8 @@ function injectThemeStrip(){
   strip.id = 'xThemeStrip';
   strip.style.cssText =
     'margin-top:0.55rem;padding:0.45rem 0.9rem;border-radius:14px;' +
-    'background:linear-gradient(135deg,#1a1330,#0d1117);' +
-    'border:1px solid #8957e5;color:#c7b5ff;font-size:0.74rem;' +
+    'background:var(--surface);' +
+    'border:1px solid var(--border);color:var(--text);font-size:0.74rem;' +
     'font-weight:600;text-align:center;width:220px;max-width:90vw;';
   if(next){
     var ul = next.unlockLevel || next.unlock || 0;

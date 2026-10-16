@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
         "https://play.google.com/store/"
     };
 
-    private static final int WEBVIEW_BG_COLOR = 0xFFfff6df;
+    private static final int WEBVIEW_BG_COLOR = 0xFFfff2c4;
     private static final String PREFS = "kids_shell";
     private static final String PREF_ADS_REMOVED = "ads_removed";
 

@@ -1,88 +1,88 @@
 {
-  "_comment": "Sokoban screenshot capture. Uses JS-based loadLevel/showMenu/etc.",
-  "_readiness_expr": "typeof loadLevel === 'function' && typeof showMenu === 'function' && typeof sokoState !== 'undefined'",
+  "_comment": "Sokoban screenshot capture — gameplay-only. 500-level LEVELS (valid loadLevel indices 0-499, display level = idx+1). _setup_taps seeds a mid-campaign save (tutorial done, all 7 themes owned) and defines window._applySK(themeId) — writes the theme's real palette (THEMES region, exported as window._SK_THEMES) into PIPE_COLORS + the board role CSS vars + midnight chrome, no Themes screen — and window._boardSK(idx,frac), which loads a level and plays that fraction of its stored solution instantly so every slot is a distinct mid-solve board. 11 slots = 11 distinct levels; themes cycle so each palette (and Midnight twice) appears on a live board.",
+  "_readiness_expr": "typeof save !== 'undefined' && typeof loadLevel === 'function' && typeof SOLUTIONS !== 'undefined' && typeof skSnap === 'function'",
   "_setup_taps": [
     [
       "js",
-      "(function(){try{var s={coins:247,lives:5,maxLives:5,hintPack:3,hintCount:3,removeAds:false,seasonPassUntil:0,weeklyPassUntil:0,lastSeasonGrantDate:'',lastWeeklyGrantDate:'',unlimitedLivesExpiry:0,unlimitedLivesPermanent:false,lastLifeTime:Date.now(),dailyChallengeDate:'',dailyChallengeStreak:7,lastLevelProgress:{level:24},activeTheme:'classic',streakLogin:0};Object.assign(sokoState,s);if(typeof persistSokoState==='function')persistSokoState();for(var i=0;i<28;i++)completed.add(i);localStorage.setItem('sokoban_done',JSON.stringify([...completed]));localStorage.setItem('soko_menu_seen','1');}catch(e){}return 'seeded';})()",
-      400
+      "(function(){try{localStorage.setItem('soko_tutorialDone','1');localStorage.setItem('tutorialDone','1');save.currentLevel=480;save.completedLevels=Array.from({length:480},function(_,i){return i;});save.levelStars=(function(){var x={};for(var i=0;i<480;i++)x[i]=(i%4===0?2:3);return x;})();save.coins=2480;save.hintCount=3;save.dailyChallengeStreak=7;save.unlockedThemes=['default','pine','harbor','midnight','candy','desert','ink'];save.sokoRun=null;save.lastLevelProgress=null;persist();}catch(e){}window._applySK=function(id){var t=(window._SK_THEMES||[]).filter(function(x){return x.id===id;})[0];if(!t)return;save.activeTheme=id;Object.keys(t.palette).forEach(function(k){PIPE_COLORS[k]=t.palette[k];document.body.style.setProperty('--'+k,t.palette[k]);});if(id==='midnight'){document.body.classList.add('midnight');document.documentElement.dataset.theme='midnight';}else{document.body.classList.remove('midnight');document.documentElement.dataset.theme='';}};window._boardSK=function(i,f){showScreen('game');loadLevel(i);var l=sokoUnRLE(SOLUTIONS[i]);var n=Math.floor(l.length*f);for(var k=0;k<n;k++)moveDir(l[k].toUpperCase(),true);skSnap();skHud();};return 'ok';})()",
+      600
     ]
   ],
-  "01_deep_gameplay": [
+  "01_deep_warehouse": [
     [
       "js",
-      "hideMenu();loadLevel(35);'ok';",
+      "window._applySK('default');window._boardSK(411,0.45);'ok';",
       1800
     ]
   ],
-  "02_early_gameplay": [
+  "02_first_rooms": [
     [
       "js",
-      "hideMenu();loadLevel(5);'ok';",
+      "window._applySK('pine');window._boardSK(86,0.4);'ok';",
       1800
     ]
   ],
-  "03_level_complete": [
+  "03_tight_corners": [
     [
       "js",
-      "hideMenu();loadLevel(18);'ok';",
-      2600
+      "window._applySK('harbor');window._boardSK(235,0.5);'ok';",
+      1800
     ]
   ],
-  "04_missions_panel": [
+  "04_night_shift": [
     [
       "js",
-      "hideMenu();loadLevel(27);'ok';",
-      2600
+      "window._applySK('midnight');window._boardSK(317,0.35);'ok';",
+      1800
     ]
   ],
-  "05_stats": [
+  "05_candy_depot": [
     [
       "js",
-      "hideMenu();loadLevel(11);'ok';",
-      2600
+      "window._applySK('candy');window._boardSK(153,0.55);'ok';",
+      1800
     ]
   ],
-  "06_levels_grid": [
+  "06_desert_post": [
     [
       "js",
-      "hideMenu();loadLevel(31);'ok';",
-      2600
+      "window._applySK('desert');window._boardSK(470,0.3);'ok';",
+      1800
     ]
   ],
-  "07_menu": [
+  "07_ink_and_paper": [
     [
       "js",
-      "hideMenu();loadLevel(3);'ok';",
-      2600
+      "window._applySK('ink');window._boardSK(28,0.5);'ok';",
+      1800
     ]
   ],
   "tablet_7_01_deep_gameplay": [
     [
       "js",
-      "hideMenu();loadLevel(22);'ok';",
+      "window._applySK('harbor');window._boardSK(365,0.4);'ok';",
       1800
     ]
   ],
   "tablet_7_02_early_gameplay": [
     [
       "js",
-      "hideMenu();loadLevel(8);'ok';",
+      "window._applySK('default');window._boardSK(197,0.5);'ok';",
       1800
     ]
   ],
   "tablet_10_01_deep_gameplay": [
     [
       "js",
-      "hideMenu();loadLevel(40);'ok';",
+      "window._applySK('midnight');window._boardSK(454,0.45);'ok';",
       1800
     ]
   ],
   "tablet_10_02_early_gameplay": [
     [
       "js",
-      "hideMenu();loadLevel(14);'ok';",
-      2600
+      "window._applySK('pine');window._boardSK(120,0.35);'ok';",
+      1800
     ]
   ]
 }

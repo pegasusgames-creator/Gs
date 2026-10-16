@@ -22,6 +22,7 @@
 :root{
   --bg:#fff2c4; --app-bg:#fff2c4; --bg-glow:#ffd977; --bg-dots:rgba(201,121,10,.11);
   --surface:#fffaf0; --surface-2:#fff0c9; --border:rgba(59,35,22,.14);
+  --menu-tile-bg:#fffaf0; --menu-tile-border:rgba(59,35,22,.14); --menu-tile-fg:#3b2316;
   --text:#3b2316; --text-mute:#6b4a30; --ink:#3b2316; --art-bg:#fffaf0;
   --accent:#c8305f; --accent-d:#8f1d40; --accent-soft:#f9d3df; --on-accent:#ffffff;
   --g-play:linear-gradient(180deg,#d94a73,#b8264f);
@@ -35,6 +36,7 @@
 html[data-theme="meadow"]{
   --bg:#e2f3d2; --app-bg:#e2f3d2; --bg-glow:#bfe6a0; --bg-dots:rgba(42,130,80,.10);
   --surface:#f8fdf2; --surface-2:#ebf7df; --border:rgba(30,51,24,.14);
+  --menu-tile-bg:#f8fdf2; --menu-tile-border:rgba(30,51,24,.14); --menu-tile-fg:#1e3318;
   --text:#1e3318; --text-mute:#456039; --ink:#2b2a1c; --art-bg:#f8fdf2;
   --accent:#b8325c; --accent-d:#84203f; --accent-soft:#f6d2dc;
   --g-play:linear-gradient(180deg,#c9446c,#a52650);
@@ -44,6 +46,7 @@ html[data-theme="meadow"]{
 html[data-theme="bedtime"]{
   --bg:#1c2045; --app-bg:#1c2045; --bg-glow:#33397a; --bg-dots:rgba(255,236,170,.10);
   --surface:#2a2f5e; --surface-2:#343a72; --border:rgba(255,255,255,.14);
+  --menu-tile-bg:#2a2f5e; --menu-tile-border:rgba(255,255,255,.14); --menu-tile-fg:#fbf1dc;
   --text:#fbf1dc; --text-mute:#cfc6ea; --ink:#2a1d14; --art-bg:#efe2c3;
   --accent:#ff8fb1; --accent-d:#c75b7e; --accent-soft:#4a3a72; --on-accent:#1c2045;
   --g-play:linear-gradient(180deg,#ffa3c0,#f0789e);
@@ -94,8 +97,8 @@ svg{display:block}
 .title-pill{font-weight:700;font-size:clamp(20px,5.4vw,30px);padding:6px 18px;border-radius:999px;background:var(--surface);box-shadow:0 3px 0 var(--btn-shadow);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 
 /* Chunky round buttons (>= 64 px) with a pressed state. */
-.rbtn{--c:var(--surface);--d:var(--btn-shadow);flex:0 0 auto;width:var(--tap);height:var(--tap);min-width:64px;min-height:64px;border-radius:50%;
-  background:var(--c);color:var(--text);box-shadow:0 5px 0 var(--d),0 9px 18px var(--shadow);display:grid;place-items:center;
+.rbtn{--c:var(--menu-tile-bg);--d:var(--btn-shadow);flex:0 0 auto;width:var(--tap);height:var(--tap);min-width:64px;min-height:64px;border-radius:50%;
+  background:var(--c);color:var(--menu-tile-fg);box-shadow:0 5px 0 var(--d),0 9px 18px var(--shadow);display:grid;place-items:center;
   transition:transform .08s ease,box-shadow .08s ease;position:relative}
 .rbtn>svg{width:54%;height:54%}
 .rbtn.accent{--c:var(--accent);--d:var(--accent-d);color:var(--on-accent)}
@@ -157,7 +160,7 @@ html[dir="rtl"] .helper .bubble::after{left:auto;right:-12px;border-right-color:
 .slot.got .stk{width:92%;height:92%;transform:rotate(var(--r,0deg));filter:drop-shadow(0 3px 0 var(--btn-shadow))}
 .stk{background:var(--art-bg);border-radius:50%;box-shadow:0 0 0 5px #ffffff inset}
 .stk svg{width:100%;height:100%}
-.book-count{text-align:center;font-weight:700;margin-top:10px;color:var(--text-mute)}
+.book-count{text-align:center;font-weight:700;margin-top:10px;color:var(--text-mute);direction:ltr}
 .wiggle{animation:wig .5s ease}
 @keyframes wig{20%{transform:rotate(-8deg) scale(1.06)}50%{transform:rotate(7deg) scale(1.06)}80%{transform:rotate(-3deg)}}
 
@@ -183,10 +186,7 @@ html[dir="rtl"] .helper .bubble::after{left:auto;right:-12px;border-right-color:
 .swatches{display:flex;gap:12px;flex-wrap:wrap}
 .swatch{width:84px;min-height:84px;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:6px;font-size:14px;font-weight:700;box-shadow:0 0 0 3px var(--border)}
 .swatch[aria-pressed="true"]{box-shadow:0 0 0 5px var(--accent)}
-.sw-sunny{background:linear-gradient(160deg,#fff2c4 55%,#c8305f 56%);color:#3b2316}
-.sw-meadow{background:linear-gradient(160deg,#e2f3d2 55%,#2a8250 56%);color:#1e3318}
-.sw-bedtime{background:linear-gradient(160deg,#1c2045 55%,#ff8fb1 56%);color:#fbf1dc}
-.sw-sunny span,.sw-meadow span,.sw-bedtime span{background:var(--surface);color:var(--text);border-radius:10px;padding:2px 8px}
+.swatch span{background:var(--surface);color:var(--text);border-radius:10px;padding:2px 8px}
 .prod{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--border)}
 .prod:first-of-type{border-top:0}
 .prod .pi{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-d);flex:0 0 auto}
@@ -197,6 +197,7 @@ html[data-theme="bedtime"] .prod .pi{color:var(--accent)}
 .prod .sub{color:var(--text-mute);font-size:15px}
 .buy{min-width:104px;min-height:56px;border-radius:999px;background:var(--g-play);color:var(--on-accent);font-weight:700;padding:8px 16px;box-shadow:0 4px 0 var(--accent-d)}
 .buy:active{transform:translateY(3px);box-shadow:0 1px 0 var(--accent-d)}
+@media (max-width:480px){.prod{flex-wrap:wrap}.prod .grow{flex:1 1 calc(100% - 70px)}.prod .buy{margin-inline-start:68px}}
 .buy[disabled]{background:var(--good);color:var(--on-tile);box-shadow:none;cursor:default}
 .linkbtn{min-height:56px;padding:8px 18px;border-radius:999px;background:var(--btn-neutral-bg);color:var(--text);font-weight:700;display:inline-flex;align-items:center;gap:8px}
 .linkbtn svg{width:24px;height:24px}
@@ -263,6 +264,7 @@ html[dir="rtl"] .sheet .x{right:auto;left:-10px}
 }
 html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
 
+/* Content bottom action bars use class "game-footer" (see the adaptive block below). */
 /*@@REGION CONTENT_CSS*/
 /* ABC Learning — letters grid, letter card, tracing, mini games. Tokens only
    (letter inks --l1..--l5 are per theme); art fills are decorative. */
@@ -275,7 +277,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
 /* Letters grid */
 .lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(72px,20vw,128px),1fr));gap:clamp(10px,2.6vw,16px);
   overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 4px 18px;flex:1;min-height:0;align-content:start}
-.ltile{position:relative;min-height:72px;aspect-ratio:1/1.08;border-radius:24px;background:var(--surface);color:var(--lc);
+.ltile{position:relative;min-height:72px;aspect-ratio:1/1.08;border-radius:24px;background:var(--menu-tile-bg);color:var(--lc);
   box-shadow:0 5px 0 var(--btn-shadow),0 8px 16px var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;
   transition:transform .08s,box-shadow .08s;padding:4px}
 .ltile:active{transform:translateY(4px);box-shadow:0 1px 0 var(--btn-shadow)}
@@ -289,7 +291,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
 .pips i.on{background:var(--good);box-shadow:none}
 
 /* Letter card */
-.card-col{gap:14px;padding-bottom:4px}
+.card-col{gap:10px;padding-bottom:0}
 .lcard{flex:1;min-height:0;background:var(--surface);border-radius:38px;box-shadow:0 8px 0 var(--btn-shadow),0 14px 30px var(--shadow);
   display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 14px 14px;gap:2px;position:relative;overflow:hidden}
 .lcard::before{content:"";position:absolute;inset:auto -10% -38% -10%;height:60%;border-radius:50%;background:var(--surface-2);z-index:0}
@@ -382,6 +384,12 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
 .wordmark .wm-abc span{display:inline-block;transform:rotate(var(--r));text-shadow:0 3px 0 var(--btn-shadow)}
 .wordmark .wm-l{font-size:clamp(18px,4.8vw,26px);color:var(--text)}
 /*@@END CONTENT_CSS*/
+
+/* ===== 2026-10-15 round-1: adaptive sizing via clamp() =====
+   Bottom action bars (.game-footer) keep a symmetric cushion plus the
+   safe-area inset and a +6px buffer. The native child-directed banner is laid
+   out below the WebView, so it can never cover these buttons. */
+.game-footer{padding-top:clamp(4px,1.2vh,10px) !important;padding-bottom:calc(clamp(4px,1.2vh,10px) + env(safe-area-inset-bottom, 0px) + 6px) !important}
 </style>
 </head>
 <body>
@@ -403,7 +411,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
       <span class="say-text" id="homeSay"></span>
       <button class="next-chip" id="nextChip" data-act="home-next" aria-label="Next"></button>
     </div>
-    <button class="mascot mascot-big" data-act="mascot" id="homeMascot" aria-label="Pip"></button>
+    <button class="mascot mascot-big" data-act="mascot" id="homeMascot" data-i18n-aria="mascotName" aria-label="Pip"></button>
   </div>
   <nav class="home-tiles" id="homeTiles">
 <!--@@REGION HOME_TILES-->
@@ -450,7 +458,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
       <button class="pic" data-act="card-word" id="cardPic" aria-label="Word"></button>
       <button class="word latin" data-act="card-word" id="cardWord"></button>
     </div>
-    <div class="card-bar">
+    <div class="card-bar game-footer">
       <button class="rbtn" data-act="card-prev" aria-label="Previous"><svg class="ico" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
       <button class="rbtn sky" data-act="card-name" data-i18n-aria="sayName" aria-label="Letter name"><svg class="ico" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
       <button class="rbtn accent" data-act="card-sound" data-i18n-aria="saySound" aria-label="Letter sound"><svg class="ico" viewBox="0 0 24 24"><path d="M4.5 12c2.5-4 12.5-4 15 0-2.5 4.5-12.5 4.5-15 0z"/><path d="M7.5 12h9"/></svg></button>
@@ -506,7 +514,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
   </header>
   <div class="col">
     <div class="tabs" id="bookTabs"></div>
-    <div class="book"><div class="book-grid" id="bookGrid"></div></div>
+    <div class="book"><div class="book-grid ltr" id="bookGrid"></div></div>
     <div class="book-count" id="bookCount"></div>
   </div>
 </section>
@@ -535,11 +543,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
     </div>
     <div class="card"><h3 data-i18n="language">Language</h3><p data-i18n="langNote">Letters, sounds and words stay English A-Z.</p><div class="lang-grid" id="langGrid"></div></div>
     <div class="card"><h3 data-i18n="theme">Colours</h3>
-      <div class="swatches" id="themeSw">
-        <button class="swatch sw-sunny" data-act="theme" data-v="sunny"><span data-i18n="thSunny">Sunny</span></button>
-        <button class="swatch sw-meadow" data-act="theme" data-v="meadow"><span data-i18n="thMeadow">Meadow</span></button>
-        <button class="swatch sw-bedtime" data-act="theme" data-v="bedtime"><span data-i18n="thBedtime">Bedtime</span></button>
-      </div>
+      <div class="swatches" id="themeSw"></div>
     </div>
     <div class="card">
       <h3 data-i18n="privacyTitle">Privacy</h3>
@@ -601,7 +605,13 @@ const APP = {
     { id: 'full_pack', price: '$4.99', icon: 'star', nameKey: 'p_full', descKey: 'p_full_d', grants: { fullPack: true, removeAds: true } },
     { id: 'remove_ads', price: '$2.99', icon: 'noads', nameKey: 'p_ads', descKey: 'p_ads_d', grants: { removeAds: true }, includedBy: 'fullPack' }
   ],
-  themes: ['sunny', 'meadow', 'bedtime']
+  // First theme = default (must be light). id = html[data-theme] block in PALETTE;
+  // label = i18n key; sw = [paper, accent] colours for the parent-area swatch.
+  themes: [
+    { id: 'sunny', label: 'thSunny', sw: ['#fff2c4', '#c8305f'] },
+    { id: 'meadow', label: 'thMeadow', sw: ['#e2f3d2', '#2a8250'] },
+    { id: 'bedtime', label: 'thBedtime', sw: ['#1c2045', '#ff8fb1'] }
+  ]
 };
 //@@END APP_META
 
@@ -640,7 +650,7 @@ function gatedNative(method, arg) {
 const SAVE_VERSION = 1;
 function freshSave() {
   return { saveVersion: SAVE_VERSION, removeAds: false, fullPack: false,
-    settings: { sfx: true, voice: true, slow: false, lang: '', theme: 'sunny' },
+    settings: { sfx: true, voice: true, slow: false, lang: '', theme: APP.themes[0].id },
     stickers: {}, goldStars: 0, progress: {}, created: Date.now() };
 }
 function migrateSave(s) {
@@ -651,7 +661,7 @@ function migrateSave(s) {
   if (!out.stickers || typeof out.stickers !== 'object') out.stickers = {};
   if (!out.progress || typeof out.progress !== 'object') out.progress = {};
   out.removeAds = out.removeAds === true; out.fullPack = out.fullPack === true;
-  if (APP.themes.indexOf(out.settings.theme) < 0) out.settings.theme = APP.themes[0];
+  if (!APP.themes.some(x => x.id === out.settings.theme)) out.settings.theme = APP.themes[0].id;
   out.saveVersion = SAVE_VERSION;
   return out;
 }
@@ -791,10 +801,10 @@ const Voice = {
       const last = merged[merged.length - 1];
       if (last && last.l === p.l) last.t += txt; else merged.push({ t: txt, l: p.l });
     });
-    if (!merged.length) return Promise.resolve();
+    if (!merged.length) return Promise.resolve(true);
     mascotTalk(true);
     return merged.reduce((pr, p) => pr.then(() => this.one(p.t.trim(), TTS_TAGS[p.l] || 'en-US', seq)), Promise.resolve())
-      .then(() => { if (seq === this.seq) mascotTalk(false); });
+      .then(() => { if (seq !== this.seq) return false; mascotTalk(false); return true; });   // true = finished, false = interrupted
   }
 };
 window.onSpeakDone = function (id) { const f = Voice.pending[id]; if (f) f(); };
@@ -999,7 +1009,7 @@ function renderParent() {
   $$('#scr-parent .toggle').forEach(b => { const on = !!save.settings[b.getAttribute('data-key')]; b.setAttribute('aria-pressed', on); b.textContent = t(on ? 'on' : 'off'); });
   $$('#speedSeg button').forEach(b => b.setAttribute('aria-pressed', (b.getAttribute('data-v') === 'slow') === !!save.settings.slow));
   $('#langGrid').innerHTML = Object.keys(window.LANG_NAMES).map(c => '<button data-act="lang" data-v="' + c + '" aria-pressed="' + (c === curLang) + '" lang="' + c + '">' + esc(window.LANG_NAMES[c]) + '</button>').join('');
-  $$('#themeSw .swatch').forEach(b => b.setAttribute('aria-pressed', b.getAttribute('data-v') === save.settings.theme));
+  $('#themeSw').innerHTML = APP.themes.map(x => '<button class="swatch" data-act="theme" data-v="' + x.id + '" aria-pressed="' + (x.id === save.settings.theme) + '" style="background:linear-gradient(160deg,' + x.sw[0] + ' 55%,' + x.sw[1] + ' 56%)"><span>' + esc(t(x.label)) + '</span></button>').join('');
   $('#aboutName').textContent = APP.name;
   const r = $('#btnReset'); r.classList.remove('armed'); r.querySelector('span').textContent = t('reset');
 }
@@ -1009,7 +1019,7 @@ defineScreen('parent', {
   leave() { Gate.until = 0; }
 });
 function applyTheme() { document.documentElement.setAttribute('data-theme', save.settings.theme); }
-function setTheme(v) { if (APP.themes.indexOf(v) < 0) return; save.settings.theme = v; persist(); applyTheme(); if (cur === 'parent') renderParent(); }
+function setTheme(v) { if (!APP.themes.some(x => x.id === v)) return; save.settings.theme = v; persist(); applyTheme(); if (cur === 'parent') renderParent(); }
 function askGrownUp() {
   const a = $('#askArt'); if (a && !a.querySelector('svg')) a.innerHTML = window.MASCOT_SVG || '';
   Modal.open('m-ask'); Sfx.play('tap'); sayT('askVoice');
@@ -1311,7 +1321,7 @@ window.LANG_NAMES = {
 // word: those parts are always spoken by an English voice (the alphabet,
 // sounds and words are English in every language — the listing says so).
 const CONTENT_I18N = {
-  en: { tLetters:'Letters', tTrace:'Trace', tGames:'Games', listen:'Listen', sayName:'Letter name', saySound:'Letter sound', bigL:'Big letter', smallL:'Little letter', again:'Again',
+  en: { mascotName:'Pip the owl', tLetters:'Letters', tTrace:'Trace', tGames:'Games', listen:'Listen', sayName:'Letter name', saySound:'Letter sound', bigL:'Big letter', smallL:'Little letter', again:'Again',
     hello:"Hi, I'm Pip! Let's play with letters!", homeNext:"Let's trace {x}!", homeAll:'You traced every letter! Pick any one you like.', lettersVoice:'Tap a letter!',
     traceVoice:'Trace {x}! Start at the green dot.', trDone:'Great tracing! {x} is for {w}!', gamesVoice:'Pick a game!',
     gFind:'Find the letter {x}!', gFindNo:"That's {y}. Can you find {x}?", gYes:'Yes! That is {x}!', gMatch:'Big {x}. Where is little {x}?',
@@ -1319,7 +1329,7 @@ const CONTENT_I18N = {
     roundDone:'Five stars! You did it!', tabLetters:'Letter pictures', tabStars:'Star stickers', progressLine:'{a} of 26 letters traced · {b} stickers collected',
     gameFind:'Find the letter', gameMatch:'Big and little', gameSound:'First sound',
     p_full:'All letters & games', p_full_d:'Unlocks letters K-Z (cards and tracing), the Big and little and First sound games, and removes ads. One-time purchase.' },
-  ar: { tLetters:'الحروف', tTrace:'التتبّع', tGames:'الألعاب', listen:'استمع', sayName:'اسم الحرف', saySound:'صوت الحرف', bigL:'حرف كبير', smallL:'حرف صغير', again:'مرة أخرى',
+  ar: { mascotName:'البومة بيب', tLetters:'الحروف', tTrace:'التتبّع', tGames:'الألعاب', listen:'استمع', sayName:'اسم الحرف', saySound:'صوت الحرف', bigL:'حرف كبير', smallL:'حرف صغير', again:'مرة أخرى',
     hello:'مرحبًا، أنا بيب! هيا نلعب بالحروف!', homeNext:'هيا نتتبّع {x}!', homeAll:'تتبّعت كل الحروف! اختر أي حرف تحبه.', lettersVoice:'المس حرفًا!',
     traceVoice:'تتبّع {x}! ابدأ من النقطة الخضراء.', trDone:'تتبّع رائع! {x} مثل {w}!', gamesVoice:'اختر لعبة!',
     gFind:'ابحث عن الحرف {x}!', gFindNo:'هذا {y}. هل تجد {x}؟', gYes:'نعم! هذا {x}!', gMatch:'{x} الكبير. أين {x} الصغير؟',
@@ -1327,7 +1337,7 @@ const CONTENT_I18N = {
     roundDone:'خمس نجوم! أحسنت!', tabLetters:'صور الحروف', tabStars:'ملصقات النجوم', progressLine:'{a} من 26 حرفًا تم تتبّعها · {b} ملصقات',
     gameFind:'ابحث عن الحرف', gameMatch:'كبير وصغير', gameSound:'الصوت الأول',
     p_full:'كل الحروف والألعاب', p_full_d:'يفتح الحروف من K إلى Z (البطاقات والتتبّع) ولعبتَي «كبير وصغير» و«الصوت الأول»، ويزيل الإعلانات. شراء لمرة واحدة.' },
-  de: { tLetters:'Buchstaben', tTrace:'Nachspuren', tGames:'Spiele', listen:'Anhören', sayName:'Buchstabenname', saySound:'Buchstabenlaut', bigL:'Großbuchstabe', smallL:'Kleinbuchstabe', again:'Nochmal',
+  de: { mascotName:'Eule Pip', tLetters:'Buchstaben', tTrace:'Nachspuren', tGames:'Spiele', listen:'Anhören', sayName:'Buchstabenname', saySound:'Buchstabenlaut', bigL:'Großbuchstabe', smallL:'Kleinbuchstabe', again:'Nochmal',
     hello:'Hallo, ich bin Pip! Lass uns mit Buchstaben spielen!', homeNext:'Lass uns {x} nachspuren!', homeAll:'Du hast alle Buchstaben gespurt! Such dir einen aus.', lettersVoice:'Tippe auf einen Buchstaben!',
     traceVoice:'Spure {x} nach! Fang beim grünen Punkt an.', trDone:'Toll gespurt! {x} wie {w}!', gamesVoice:'Such dir ein Spiel aus!',
     gFind:'Finde den Buchstaben {x}!', gFindNo:'Das ist {y}. Findest du {x}?', gYes:'Ja! Das ist {x}!', gMatch:'Großes {x}. Wo ist das kleine {x}?',
@@ -1335,7 +1345,7 @@ const CONTENT_I18N = {
     roundDone:'Fünf Sterne! Geschafft!', tabLetters:'Buchstabenbilder', tabStars:'Sternsticker', progressLine:'{a} von 26 Buchstaben gespurt · {b} Sticker gesammelt',
     gameFind:'Finde den Buchstaben', gameMatch:'Groß und klein', gameSound:'Erster Laut',
     p_full:'Alle Buchstaben & Spiele', p_full_d:'Schaltet die Buchstaben K-Z (Karten und Nachspuren), die Spiele Groß und klein und Erster Laut frei und entfernt Werbung. Einmalkauf.' },
-  es: { tLetters:'Letras', tTrace:'Trazar', tGames:'Juegos', listen:'Escuchar', sayName:'Nombre de la letra', saySound:'Sonido de la letra', bigL:'Mayúscula', smallL:'Minúscula', again:'Otra vez',
+  es: { mascotName:'el búho Pip', tLetters:'Letras', tTrace:'Trazar', tGames:'Juegos', listen:'Escuchar', sayName:'Nombre de la letra', saySound:'Sonido de la letra', bigL:'Mayúscula', smallL:'Minúscula', again:'Otra vez',
     hello:'¡Hola, soy Pip! ¡Juguemos con las letras!', homeNext:'¡Vamos a trazar la {x}!', homeAll:'¡Trazaste todas las letras! Elige la que quieras.', lettersVoice:'¡Toca una letra!',
     traceVoice:'¡Traza la {x}! Empieza en el punto verde.', trDone:'¡Muy bien trazado! {x} de {w}!', gamesVoice:'¡Elige un juego!',
     gFind:'¡Busca la letra {x}!', gFindNo:'Esa es la {y}. ¿Encuentras la {x}?', gYes:'¡Sí! ¡Es la {x}!', gMatch:'{x} grande. ¿Dónde está la {x} pequeña?',
@@ -1343,7 +1353,7 @@ const CONTENT_I18N = {
     roundDone:'¡Cinco estrellas! ¡Lo lograste!', tabLetters:'Dibujos de letras', tabStars:'Pegatinas de estrellas', progressLine:'{a} de 26 letras trazadas · {b} pegatinas',
     gameFind:'Busca la letra', gameMatch:'Grande y pequeña', gameSound:'Primer sonido',
     p_full:'Todas las letras y juegos', p_full_d:'Desbloquea las letras K-Z (tarjetas y trazado), los juegos Grande y pequeña y Primer sonido, y quita los anuncios. Pago único.' },
-  fr: { tLetters:'Lettres', tTrace:'Tracer', tGames:'Jeux', listen:'Écouter', sayName:'Nom de la lettre', saySound:'Son de la lettre', bigL:'Majuscule', smallL:'Minuscule', again:'Encore',
+  fr: { mascotName:'Pip la chouette', tLetters:'Lettres', tTrace:'Tracer', tGames:'Jeux', listen:'Écouter', sayName:'Nom de la lettre', saySound:'Son de la lettre', bigL:'Majuscule', smallL:'Minuscule', again:'Encore',
     hello:'Coucou, je suis Pip ! Jouons avec les lettres !', homeNext:'Traçons le {x} !', homeAll:'Tu as tracé toutes les lettres ! Choisis celle que tu veux.', lettersVoice:'Touche une lettre !',
     traceVoice:'Trace le {x} ! Commence au point vert.', trDone:'Bravo ! {x} comme {w} !', gamesVoice:'Choisis un jeu !',
     gFind:'Trouve la lettre {x} !', gFindNo:'Ça, c’est {y}. Trouves-tu {x} ?', gYes:'Oui ! C’est {x} !', gMatch:'{x} majuscule. Où est {x} minuscule ?',
@@ -1351,7 +1361,7 @@ const CONTENT_I18N = {
     roundDone:'Cinq étoiles ! Bravo !', tabLetters:'Images des lettres', tabStars:'Autocollants étoiles', progressLine:'{a} lettres tracées sur 26 · {b} autocollants',
     gameFind:'Trouve la lettre', gameMatch:'Majuscule et minuscule', gameSound:'Premier son',
     p_full:'Toutes les lettres et jeux', p_full_d:'Débloque les lettres K-Z (cartes et tracé), les jeux Majuscule et minuscule et Premier son, et retire les pubs. Achat unique.' },
-  hi: { tLetters:'अक्षर', tTrace:'लिखो', tGames:'खेल', listen:'सुनो', sayName:'अक्षर का नाम', saySound:'अक्षर की ध्वनि', bigL:'बड़ा अक्षर', smallL:'छोटा अक्षर', again:'फिर से',
+  hi: { mascotName:'उल्लू पिप', tLetters:'अक्षर', tTrace:'लिखो', tGames:'खेल', listen:'सुनो', sayName:'अक्षर का नाम', saySound:'अक्षर की ध्वनि', bigL:'बड़ा अक्षर', smallL:'छोटा अक्षर', again:'फिर से',
     hello:'नमस्ते, मैं पिप हूँ! चलो अक्षरों से खेलें!', homeNext:'चलो {x} लिखें!', homeAll:'तुमने सारे अक्षर लिख लिए! कोई भी अक्षर चुनो।', lettersVoice:'किसी अक्षर को छुओ!',
     traceVoice:'{x} पर उँगली चलाओ! हरे बिंदु से शुरू करो।', trDone:'बहुत बढ़िया! {x} से {w}!', gamesVoice:'कोई खेल चुनो!',
     gFind:'अक्षर {x} ढूँढो!', gFindNo:'यह {y} है। क्या तुम {x} ढूँढ सकते हो?', gYes:'हाँ! यह {x} है!', gMatch:'बड़ा {x}। छोटा {x} कहाँ है?',
@@ -1359,7 +1369,7 @@ const CONTENT_I18N = {
     roundDone:'पाँच सितारे! शाबाश!', tabLetters:'अक्षर चित्र', tabStars:'सितारा स्टिकर', progressLine:'26 में से {a} अक्षर लिखे · {b} स्टिकर',
     gameFind:'अक्षर ढूँढो', gameMatch:'बड़ा और छोटा', gameSound:'पहली ध्वनि',
     p_full:'सभी अक्षर और खेल', p_full_d:'K-Z अक्षर (कार्ड और लिखना), "बड़ा और छोटा" और "पहली ध्वनि" खेल खोलता है और विज्ञापन हटाता है। एक बार की खरीद।' },
-  id: { tLetters:'Huruf', tTrace:'Menebalkan', tGames:'Permainan', listen:'Dengar', sayName:'Nama huruf', saySound:'Bunyi huruf', bigL:'Huruf besar', smallL:'Huruf kecil', again:'Lagi',
+  id: { mascotName:'burung hantu Pip', tLetters:'Huruf', tTrace:'Menebalkan', tGames:'Permainan', listen:'Dengar', sayName:'Nama huruf', saySound:'Bunyi huruf', bigL:'Huruf besar', smallL:'Huruf kecil', again:'Lagi',
     hello:'Halo, aku Pip! Ayo bermain dengan huruf!', homeNext:'Ayo tebalkan {x}!', homeAll:'Kamu sudah menebalkan semua huruf! Pilih huruf yang kamu suka.', lettersVoice:'Ketuk sebuah huruf!',
     traceVoice:'Tebalkan {x}! Mulai dari titik hijau.', trDone:'Hebat! {x} untuk {w}!', gamesVoice:'Pilih permainan!',
     gFind:'Cari huruf {x}!', gFindNo:'Itu {y}. Bisakah kamu menemukan {x}?', gYes:'Ya! Itu {x}!', gMatch:'{x} besar. Di mana {x} kecil?',
@@ -1367,7 +1377,7 @@ const CONTENT_I18N = {
     roundDone:'Lima bintang! Kamu berhasil!', tabLetters:'Gambar huruf', tabStars:'Stiker bintang', progressLine:'{a} dari 26 huruf ditebalkan · {b} stiker',
     gameFind:'Cari hurufnya', gameMatch:'Besar dan kecil', gameSound:'Bunyi pertama',
     p_full:'Semua huruf & permainan', p_full_d:'Membuka huruf K-Z (kartu dan menebalkan), permainan Besar dan kecil serta Bunyi pertama, dan menghapus iklan. Pembelian sekali.' },
-  it: { tLetters:'Lettere', tTrace:'Ricalca', tGames:'Giochi', listen:'Ascolta', sayName:'Nome della lettera', saySound:'Suono della lettera', bigL:'Maiuscola', smallL:'Minuscola', again:'Ancora',
+  it: { mascotName:'il gufo Pip', tLetters:'Lettere', tTrace:'Ricalca', tGames:'Giochi', listen:'Ascolta', sayName:'Nome della lettera', saySound:'Suono della lettera', bigL:'Maiuscola', smallL:'Minuscola', again:'Ancora',
     hello:'Ciao, sono Pip! Giochiamo con le lettere!', homeNext:'Ricalchiamo la {x}!', homeAll:'Hai ricalcato tutte le lettere! Scegline una.', lettersVoice:'Tocca una lettera!',
     traceVoice:'Ricalca la {x}! Parti dal punto verde.', trDone:'Bravissimo! {x} come {w}!', gamesVoice:'Scegli un gioco!',
     gFind:'Trova la lettera {x}!', gFindNo:'Questa è la {y}. Trovi la {x}?', gYes:'Sì! È la {x}!', gMatch:'{x} grande. Dov’è la {x} piccola?',
@@ -1375,7 +1385,7 @@ const CONTENT_I18N = {
     roundDone:'Cinque stelle! Ce l’hai fatta!', tabLetters:'Figure delle lettere', tabStars:'Adesivi stella', progressLine:'{a} lettere su 26 ricalcate · {b} adesivi',
     gameFind:'Trova la lettera', gameMatch:'Grande e piccola', gameSound:'Primo suono',
     p_full:'Tutte le lettere e i giochi', p_full_d:'Sblocca le lettere K-Z (schede e ricalco), i giochi Grande e piccola e Primo suono, e rimuove gli annunci. Acquisto unico.' },
-  ja: { tLetters:'もじ', tTrace:'なぞる', tGames:'ゲーム', listen:'きく', sayName:'もじのなまえ', saySound:'もじのおと', bigL:'おおもじ', smallL:'こもじ', again:'もういちど',
+  ja: { mascotName:'フクロウのピップ', tLetters:'もじ', tTrace:'なぞる', tGames:'ゲーム', listen:'きく', sayName:'もじのなまえ', saySound:'もじのおと', bigL:'おおもじ', smallL:'こもじ', again:'もういちど',
     hello:'こんにちは、ピップだよ！もじであそぼう！', homeNext:'{x} をなぞろう！', homeAll:'ぜんぶのもじをなぞったね！すきなもじをえらんでね。', lettersVoice:'もじをタッチしてね！',
     traceVoice:'{x} をなぞろう！みどりのてんからはじめてね。', trDone:'じょうずになぞれたね！{x} は {w} の {x}！', gamesVoice:'ゲームをえらんでね！',
     gFind:'{x} をさがしてね！', gFindNo:'それは {y} だよ。{x} はどれかな？', gYes:'せいかい！{x} だね！', gMatch:'おおもじの {x}。こもじの {x} はどれ？',
@@ -1383,7 +1393,7 @@ const CONTENT_I18N = {
     roundDone:'ほしがいつつ！やったね！', tabLetters:'もじのえ', tabStars:'ほしのシール', progressLine:'26もじのうち {a} もじなぞりずみ · シール {b} まい',
     gameFind:'もじをさがそう', gameMatch:'おおもじとこもじ', gameSound:'さいしょのおと',
     p_full:'すべてのもじとゲーム', p_full_d:'K〜Z の文字（カードとなぞり）、「おおもじとこもじ」「さいしょのおと」ゲームが使えるようになり、広告も消えます。買い切りです。' },
-  pt: { tLetters:'Letras', tTrace:'Traçar', tGames:'Jogos', listen:'Ouvir', sayName:'Nome da letra', saySound:'Som da letra', bigL:'Letra maiúscula', smallL:'Letra minúscula', again:'De novo',
+  pt: { mascotName:'a coruja Pip', tLetters:'Letras', tTrace:'Traçar', tGames:'Jogos', listen:'Ouvir', sayName:'Nome da letra', saySound:'Som da letra', bigL:'Letra maiúscula', smallL:'Letra minúscula', again:'De novo',
     hello:'Oi, eu sou o Pip! Vamos brincar com as letras!', homeNext:'Vamos traçar o {x}!', homeAll:'Você traçou todas as letras! Escolha a que quiser.', lettersVoice:'Toque em uma letra!',
     traceVoice:'Trace o {x}! Comece no ponto verde.', trDone:'Muito bem! {x} de {w}!', gamesVoice:'Escolha um jogo!',
     gFind:'Encontre a letra {x}!', gFindNo:'Essa é o {y}. Você acha o {x}?', gYes:'Isso! É o {x}!', gMatch:'{x} maiúsculo. Cadê o {x} minúsculo?',
@@ -1391,7 +1401,7 @@ const CONTENT_I18N = {
     roundDone:'Cinco estrelas! Você conseguiu!', tabLetters:'Figuras das letras', tabStars:'Figurinhas de estrela', progressLine:'{a} de 26 letras traçadas · {b} figurinhas',
     gameFind:'Encontre a letra', gameMatch:'Maiúscula e minúscula', gameSound:'Primeiro som',
     p_full:'Todas as letras e jogos', p_full_d:'Libera as letras K-Z (cartões e traçado), os jogos Maiúscula e minúscula e Primeiro som, e remove os anúncios. Compra única.' },
-  tr: { tLetters:'Harfler', tTrace:'Çiz', tGames:'Oyunlar', listen:'Dinle', sayName:'Harfin adı', saySound:'Harfin sesi', bigL:'Büyük harf', smallL:'Küçük harf', again:'Tekrar',
+  tr: { mascotName:'baykuş Pip', tLetters:'Harfler', tTrace:'Çiz', tGames:'Oyunlar', listen:'Dinle', sayName:'Harfin adı', saySound:'Harfin sesi', bigL:'Büyük harf', smallL:'Küçük harf', again:'Tekrar',
     hello:'Merhaba, ben Pip! Hadi harflerle oynayalım!', homeNext:'Hadi {x} çizelim!', homeAll:'Bütün harfleri çizdin! İstediğin harfi seç.', lettersVoice:'Bir harfe dokun!',
     traceVoice:'{x} harfini çiz! Yeşil noktadan başla.', trDone:'Harika çizdin! {x}, {w} gibi!', gamesVoice:'Bir oyun seç!',
     gFind:'{x} harfini bul!', gFindNo:'Bu {y}. {x} harfini bulabilir misin?', gYes:'Evet! Bu {x}!', gMatch:'Büyük {x}. Küçük {x} nerede?',
@@ -1399,7 +1409,7 @@ const CONTENT_I18N = {
     roundDone:'Beş yıldız! Başardın!', tabLetters:'Harf resimleri', tabStars:'Yıldız çıkartmaları', progressLine:'26 harften {a} tanesi çizildi · {b} çıkartma',
     gameFind:'Harfi bul', gameMatch:'Büyük ve küçük', gameSound:'İlk ses',
     p_full:'Tüm harfler ve oyunlar', p_full_d:'K-Z harflerini (kartlar ve çizim), Büyük ve küçük ile İlk ses oyunlarını açar ve reklamları kaldırır. Tek seferlik satın alma.' },
-  uk: { tLetters:'Літери', tTrace:'Обводити', tGames:'Ігри', listen:'Слухати', sayName:'Назва літери', saySound:'Звук літери', bigL:'Велика літера', smallL:'Мала літера', again:'Ще раз',
+  uk: { mascotName:'сова Піп', tLetters:'Літери', tTrace:'Обводити', tGames:'Ігри', listen:'Слухати', sayName:'Назва літери', saySound:'Звук літери', bigL:'Велика літера', smallL:'Мала літера', again:'Ще раз',
     hello:'Привіт, я Піп! Граймося з літерами!', homeNext:'Обведімо {x}!', homeAll:'Ти обвів усі літери! Обери будь-яку.', lettersVoice:'Торкнися літери!',
     traceVoice:'Обведи {x}! Почни із зеленої крапки.', trDone:'Чудово! {x}, як у слові {w}!', gamesVoice:'Обери гру!',
     gFind:'Знайди літеру {x}!', gFindNo:'Це {y}. Знайдеш {x}?', gYes:'Так! Це {x}!', gMatch:'Велика {x}. Де мала {x}?',
@@ -1407,7 +1417,7 @@ const CONTENT_I18N = {
     roundDone:'П’ять зірок! Молодець!', tabLetters:'Малюнки літер', tabStars:'Зіркові наліпки', progressLine:'Обведено {a} з 26 літер · {b} наліпок',
     gameFind:'Знайди літеру', gameMatch:'Велика й мала', gameSound:'Перший звук',
     p_full:'Усі літери та ігри', p_full_d:'Відкриває літери K-Z (картки й обведення), ігри «Велика й мала» та «Перший звук» і прибирає рекламу. Разова покупка.' },
-  zh: { tLetters:'字母', tTrace:'描写', tGames:'游戏', listen:'听一听', sayName:'字母名称', saySound:'字母发音', bigL:'大写字母', smallL:'小写字母', again:'再来一次',
+  zh: { mascotName:'猫头鹰皮普', tLetters:'字母', tTrace:'描写', tGames:'游戏', listen:'听一听', sayName:'字母名称', saySound:'字母发音', bigL:'大写字母', smallL:'小写字母', again:'再来一次',
     hello:'你好，我是皮普！一起玩字母吧！', homeNext:'一起描写 {x} 吧！', homeAll:'你描完了所有字母！随便选一个吧。', lettersVoice:'点一个字母吧！',
     traceVoice:'描一描 {x}！从绿点开始。', trDone:'描得真棒！{x} 是 {w} 的 {x}！', gamesVoice:'选一个游戏吧！',
     gFind:'找出字母 {x}！', gFindNo:'这是 {y}。你能找到 {x} 吗？', gYes:'对了！这是 {x}！', gMatch:'大写的 {x}。小写的 {x} 在哪里？',
@@ -1618,7 +1628,7 @@ window.MASCOT_SVG = '<svg class="pip" viewBox="0 0 120 124" aria-hidden="true">'
                      : '<svg class="ico" viewBox="0 0 24 24" style="width:34px;height:34px"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" fill="currentColor"/></svg>';
       chip.setAttribute('aria-label', L ? t('homeNext', { x: L }) : t('homeAll'));
       const first = !P().greeted;
-      const fn = () => (first ? K.sayT('hello').then(() => L && K.sayT('homeNext', { x: name(L) })) : (L ? K.sayT('homeNext', { x: name(L) }) : K.sayT('homeAll')));
+      const fn = () => (first ? K.sayT('hello').then(done => done && L && K.current() === 'home' && K.sayT('homeNext', { x: name(L) })) : (L ? K.sayT('homeNext', { x: name(L) }) : K.sayT('homeAll')));
       if (first) { P().greeted = true; K.persist(); }
       lastSay = fn; setTimeout(() => { if (K.current() === 'home') fn(); }, 350);
       if (!first) $('#homeSay').textContent = L ? t('homeNext', { x: L }) : t('homeAll');

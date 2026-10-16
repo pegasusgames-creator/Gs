@@ -123,7 +123,7 @@ public class MainActivity extends Activity {
     ));
 
     // Launch colour (before game.html paints): the Daylight background.
-    private static final int WEBVIEW_BG_COLOR = 0xFFF3F0FA;
+    private static final int WEBVIEW_BG_COLOR = 0xFFF5F3FA;
 
     // ── Notification scheduling (NOTIFICATIONS_IMPL.md §1) ────────────────────
     private static final int REQ_DAILY_REMINDER       = 1001;
@@ -758,7 +758,7 @@ public class MainActivity extends Activity {
             if (text == null) return;
             runOnUiThread(() -> {
                 ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                if (cm != null) cm.setPrimaryClip(ClipData.newPlainText("Habit Tracker", text));
+                if (cm != null) cm.setPrimaryClip(ClipData.newPlainText(appLabel(), text));
             });
         }
 
@@ -1079,7 +1079,9 @@ public class MainActivity extends Activity {
         }
     }
 
-    private String getDailyReminderTitle() { return "Habit Tracker"; }
+    // App label from the manifest — scaffolded tools inherit the right name.
+    private String appLabel() { return String.valueOf(getApplicationInfo().loadLabel(getPackageManager())); }
+    private String getDailyReminderTitle() { return appLabel(); }
     private String getDailyReminderBody()  { return "Time to check in on today's habits."; }
 
     @Override

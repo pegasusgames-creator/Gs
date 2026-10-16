@@ -1,0 +1,88 @@
+{
+  "_comment": "ABCLearning (kids shell) screenshot capture: 11 distinct real-use activity states (tracing, letter cards, the three letter games), each a different letter or round seed and a cycled theme (sunny / meadow / bedtime). No home menu, sticker book, parent area, gate or reveal popup in any slot. _setup_taps unlocks full_pack (so K-Z + all games are reachable and no banner), mutes the voice for capture, and seeds some traced letters. Screens are opened with KIDS.go(screen, params); trace prog {s: finished strokes, f: fraction of the next} shows a stroke mid-trace; play seed fixes the round.",
+  "_readiness_expr": "typeof KIDS !== 'undefined' && KIDS.ready === true",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){var s=KIDS.save;s.fullPack=true;s.removeAds=true;s.settings.voice=false;s.progress={greeted:true,rounds:2,traced:{A:1,a:1,B:1,b:1,C:1,c:1,D:1,E:1,e:1,F:1,G:1,H:1,h:1,I:1,J:1}};s.stickers={L_A:1,L_B:1,L_C:1,L_D:1,L_E:1,L_F:1,L_G:1,L_H:1,L_I:1,L_J:1,S_star:1,S_heart:1,S_rocket:1};KIDS.persist();KIDS.go('home');return 'seeded';})()",
+      500
+    ]
+  ],
+  "01_gameplay_open": [
+    [
+      "js",
+      "KIDS.setTheme('sunny');KIDS.go('trace',{l:'B',prog:{s:2,f:0.55}});'ok';",
+      1600
+    ]
+  ],
+  "02_gameplay_early": [
+    [
+      "js",
+      "KIDS.setTheme('sunny');KIDS.go('card',{l:'A'});'ok';",
+      1600
+    ]
+  ],
+  "03_gameplay_build": [
+    [
+      "js",
+      "KIDS.setTheme('meadow');KIDS.save.progress.rounds=2;KIDS.go('play',{g:'find',seed:3});'ok';",
+      1600
+    ]
+  ],
+  "04_gameplay_mid": [
+    [
+      "js",
+      "KIDS.setTheme('meadow');KIDS.go('trace',{l:'g',c:'lower',prog:{s:1,f:0.6}});'ok';",
+      1600
+    ]
+  ],
+  "05_gameplay_busy": [
+    [
+      "js",
+      "KIDS.setTheme('sunny');KIDS.go('play',{g:'match',seed:11});'ok';",
+      1600
+    ]
+  ],
+  "06_gameplay_deep": [
+    [
+      "js",
+      "KIDS.setTheme('bedtime');KIDS.go('play',{g:'sound',seed:5});'ok';",
+      1600
+    ]
+  ],
+  "07_gameplay_late": [
+    [
+      "js",
+      "KIDS.setTheme('bedtime');KIDS.go('card',{l:'M'});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_01_gameplay_open": [
+    [
+      "js",
+      "KIDS.setTheme('sunny');KIDS.go('trace',{l:'S',prog:{s:0,f:0.7}});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_02_gameplay_early": [
+    [
+      "js",
+      "KIDS.setTheme('meadow');KIDS.go('card',{l:'Z'});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_01_gameplay_open": [
+    [
+      "js",
+      "KIDS.setTheme('bedtime');KIDS.save.progress.rounds=3;KIDS.go('play',{g:'find',seed:9});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_02_gameplay_early": [
+    [
+      "js",
+      "KIDS.setTheme('meadow');KIDS.go('trace',{l:'k',c:'lower',prog:{s:2,f:0.4}});'ok';",
+      1600
+    ]
+  ]
+}

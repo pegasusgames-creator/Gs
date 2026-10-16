@@ -53,7 +53,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, channelId)
             .setSmallIcon(R.drawable.ic_stat_check)
-            .setColor(0xFF6A4FD6)
+            .setColor(ctx.getColor(R.color.ic_launcher_background))
             .setContentTitle(title)
             .setContentText(body)
             .setStyle(new NotificationCompat.BigTextStyle().bigText(body))

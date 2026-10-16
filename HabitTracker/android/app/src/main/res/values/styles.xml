@@ -4,9 +4,9 @@
          background so there is no dark flash before game.html paints;
          MainActivity then follows the in-app theme (setSystemBarColors). -->
     <style name="Theme.PegasusUtility" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">#F3F0FA</item>
-        <item name="android:statusBarColor">#F3F0FA</item>
-        <item name="android:navigationBarColor">#F3F0FA</item>
+        <item name="android:windowBackground">#F5F3FA</item>
+        <item name="android:statusBarColor">#F5F3FA</item>
+        <item name="android:navigationBarColor">#F5F3FA</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowFullscreen">false</item>
     </style>

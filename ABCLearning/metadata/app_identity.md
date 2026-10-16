@@ -1,42 +1,39 @@
-# ABCLearning Identity
+# ABC Learning Identity
 
-- **Category**: kids
-- **Layout archetype**: E (animated character speaks)
-- **Mascot pattern**: M3 (animated companion with idle + reactions)
-- **Voice**: V7 (educational warm)
-- **Texture**: T7 (storybook / illustrated)
-- **Mood string**: kids-bright
+- **Track**: kids (Google Play Families, ages 3-8) — the template every kids
+  app is scaffolded from (`docs/KIDS_SHELL.md`)
+- **Layout archetype**: E (animated character speaks — Pip offers the next
+  letter in a speech bubble; activities are big picture tiles below)
+- **Mascot pattern**: M3 (Pip the owl: idle bob + blink, talks while the
+  voice speaks, hops/flaps on success, tilts to think on a wrong tap; also
+  sits in the corner of tracing and game screens)
+- **Voice**: V7 (educational warm) — "Great tracing! B is for ball!",
+  "That's D. Can you find B?"
+- **Texture**: T7 (storybook / illustrated — original outlined SVG art for
+  all 26 words and 12 star stickers, dotted paper background)
+- **Mood string**: sunny-storybook
 
-The app should feel like: warm and inviting; reads as a children's app at a glance.
+Sunny butter-yellow paper (`#fff2c4`) with berry-pink accent (`#c8305f`)
+and four bold tile colours (tomato, sky, leaf, grape); Meadow (light green)
+and Bedtime (soft navy, the only dark theme — never the default) are the
+alternates. Letters are drawn in Andika (single-storey a and g, the shapes
+children are taught). Identity element: Pip the owl in a speech bubble
+handing the child the next letter.
 
 ## Anti-pattern audit (APP_ARCHETYPES.md §5)
 
-This file was auto-generated during the 2026-04-30 portfolio archetype
-assignment pass. The four archetypes above were chosen so the app does
-NOT default to the template signature (A/M0/V1/T1).
-
-When the app's `game.html` is next touched (or built fresh), audit the
-in-app design against the §5 anti-patterns:
-
-- [ ] Center-aligned everything → use offset weight
-- [ ] Same SVG icon set as other apps → vary icon family per app
-- [ ] All-caps headlines on every screen → mixed case for body
-- [ ] Generic templated currency icon → make it match the app theme
-- [ ] Identical button shapes / sizes / spacings → vary
-- [ ] Symmetric vertical column layout → break with side panels / FAB
-- [ ] Generic "Level Complete!" celebration → app-specific phrasing
-- [ ] Same loading / transition patterns → vary
-- [ ] Identical settings screen → reorder, rename, add app-specific options
-
-If 3+ of the above are hit, redesign before the next ship.
+- [x] Not centre-stacked buttons: character-led home, 2×2 picture tiles
+- [x] Own icon family (blocks, dotted-A pencil, balloons, star sticker)
+- [x] Mixed case everywhere; letters shown as Aa pairs
+- [x] No currency at all (stickers, not coins)
+- [x] Varied button shapes: round chunky buttons, tiles, balloons, cards
+- [x] App-specific celebration: confetti + Pip hop + "X is for word" + sticker reveal
+- [x] Settings is a grown-ups area behind a hold-to-answer gate
 
 ## Phase 8 self-check
 
-Before declaring this app release-ready, all four of:
-
-1. Side-by-side test (vs other shipped apps, do they look like different products?)
-2. Voice-specificity test (does the menu copy reflect this app's voice archetype?)
-3. Identity-element test (a single recognizable visual element)
-4. Anonymous-screenshot test (could a user identify this app without title/name?)
-
-must pass. See APP_ARCHETYPES.md §8.
+1. Side-by-side: no sibling has a mascot-speaks home or a tracing board.
+2. Voice: every line is spoken, short and warm; nothing says "wrong".
+3. Identity element: Pip + the speech-bubble "next letter" chip.
+4. Anonymous screenshot: the dotted handwriting lines with a glowing start
+   dot read as ABC Learning without the title.
