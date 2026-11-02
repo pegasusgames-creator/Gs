@@ -23,11 +23,12 @@ def check_shim() -> list[str]:
     if not SHIM_SRC.exists():
         return ['_growth_shim_menu.html missing']
     s = SHIM_SRC.read_text(encoding='utf-8')
-    m = re.search(r"function\s+hasResumableProgress[\s\S]*?return false;\s*\}", s)
+    # The whole function, up to the next sibling function in the shim.
+    m = re.search(r"function\s+hasResumableProgress\(\)\{[\s\S]*?(?=\n  function )", s)
     if not m:
         return ['hasResumableProgress() function not found']
     body = m.group(0)
-    if "'2048'" not in body:
+    if "'2048'" not in body and 'is2048App()' not in body:
         return ['hasResumableProgress missing 2048-specific branch']
     if 'gridHasTile' not in body and 'sc > 0' not in body:
         return ['hasResumableProgress 2048 branch lacks grid-or-score guard — risks "Continue · 0"']

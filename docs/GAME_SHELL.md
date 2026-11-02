@@ -87,6 +87,14 @@ run's target (so first-session rewards and missions fire). They still get a
 Level Select of "stages" only if the brief says so — otherwise Play +
 Daily + Endless is the loop, and `CAMPAIGN` may hold stage targets.
 
+Score games also set, so the shared shims treat them as THEIR game (not
+2048): `GROWTH_CFG.scoreBrackets = [[score, topPct], …]` best-first (weekly
+standings scale, e.g. `[[100,5],[50,12],[25,25],[10,50]]`); pass `stars`
+(1–3) in `gGame.clear({...})` so event tokens accrue (2048 alone reports
+`tile`); define `window.gResumable = () => bool` (+ optional
+`window.gResumeLabel = () => '1,240'`) if a run can be resumed — otherwise
+the menu says Play, never "Continue · Level 1".
+
 `GROWTH_CFG` (in `<script data-growth-config>` near the end): set
 `kind`, `totalLevels`, `booster:{field:'hintCount',name,emoji,coins:25}`
 to match your game. `levelBase:0`. Leave `pkg/saveKey/app/name` as scaffolded.

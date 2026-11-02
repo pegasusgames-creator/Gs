@@ -1,0 +1,1 @@
+(()=>{ localStorage.setItem('bp_tutorialDone','1'); showScreen('game'); bpBegin(bpFreshClassic()); let g=0; while(bp.score<bp.goal&&g++<300){ const m=bpBotMove(bp); if(!m){ bpDoRevive('ad'); continue; } bpPlace(m.slot,m.r,m.c); } bpEndRun(); return bp.over&&bp.score>=bp.goal; })()

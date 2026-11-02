@@ -3503,7 +3503,17 @@ function maybeShowStarter(){
   if(G.flag('xstarter_seen')) return;
   if(G.completed()<5) return;
   G.setFlag('xstarter_seen','1');
-  setTimeout(function(){ var m=document.getElementById('starterPackModal'); if(m) m.style.display='flex'; },800);
+  // Popup choreography: never over the win overlay or mid-level. Wait until
+  // the player is back on the menu with nothing open, then queue it.
+  var _spShow=function(){ var m=document.getElementById('starterPackModal'); if(m) m.style.display='flex'; };
+  var _spWait=setInterval(function(){
+    var menu=document.getElementById('menuScreen')||document.getElementById('screen-menu');
+    if(!menu||!menu.classList.contains('active')) return;
+    var open=[].some.call(document.querySelectorAll('.overlay.show,.overlay.active,[id*="verlay"].active,[id*="verlay"].show,.modal.show,.modal.active'),function(o){ return getComputedStyle(o).display!=='none'; });
+    if(open) return;
+    clearInterval(_spWait);
+    if(window.gPopupQueue&&window.gPopupQueue.enqueueWithSelector) window.gPopupQueue.enqueueWithSelector('#starterPackModal',_spShow); else _spShow();
+  },700);
 }
 
 window.buyStarterPack=function(){
@@ -3736,7 +3746,7 @@ function hookWinOverlay(){
     if(!el||el._xWinHooked) return;
     el._xWinHooked=true;
     var obs=new MutationObserver(function(){
-      var active=el.classList.contains('active')||el.style.display==='flex'||el.style.display==='block';
+      var active=el.classList.contains('active')||el.classList.contains('show')||el.style.display==='flex'||el.style.display==='block';
       if(active&&!el._xWinFired){
         el._xWinFired=true;
         onLevelWin();
@@ -5132,26 +5142,29 @@ window.addEventListener('load',function(){
     var cfg = (window.gGame && window.gGame.cfg) || {};
     var L = FIRST_CLEAR[String((window.gGame && window.gGame.lang()) || 'en').toLowerCase().split('-')[0]] || FIRST_CLEAR.en;
     var left = cfg.totalLevels ? (cfg.totalLevels - 1) : 499;
-    var sub = (cfg.kind === 'score') ? L.score : L.more.split('{n}').join(String(left));
+    // 'Next stop: 2048!' is Puzzle2048's line; every other score game
+    // (FlappyWings, BlockPuzzle, …) gets the game-neutral 'best' line.
+    var sub = (cfg.kind === 'score') ? ((cfg.app === 'Puzzle2048' || !L.best) ? L.score : L.best)
+            : L.more.split('{n}').join(String(left));
     msg.innerHTML = '🎉 ' + L.head + "<br><span style='font-weight:600;font-size:0.9rem;color:var(--text-mute, #5a7390);'>" + sub + '</span>';
     document.body.appendChild(msg);
     setTimeout(function(){ msg.style.opacity = '0'; }, 2300);
     setTimeout(function(){ msg.remove(); }, 2750);
   }
   var FIRST_CLEAR = {
-    en:{head:"You've got this!", more:'{n} more puzzles to go.', score:'Next stop: 2048!'},
-    de:{head:'Du schaffst das!', more:'Noch {n} Rätsel warten.', score:'Nächster Halt: 2048!'},
-    fr:{head:'Tu gères !', more:'Encore {n} puzzles à résoudre.', score:'Prochain arrêt : 2048 !'},
-    es:{head:'¡Lo tienes!', more:'Quedan {n} puzles más.', score:'Próxima parada: ¡2048!'},
-    pt:{head:'Você consegue!', more:'Mais {n} quebra-cabeças pela frente.', score:'Próxima parada: 2048!'},
-    it:{head:'Ce la fai!', more:'Ancora {n} puzzle da risolvere.', score:'Prossima tappa: 2048!'},
-    tr:{head:'Harikasın!', more:'Önünde {n} bulmaca daha var.', score:'Sıradaki durak: 2048!'},
-    id:{head:'Kamu bisa!', more:'Masih ada {n} teka-teki lagi.', score:'Perhentian berikutnya: 2048!'},
-    uk:{head:'У тебе виходить!', more:'Попереду ще {n} головоломок.', score:'Наступна зупинка: 2048!'},
-    ja:{head:'その調子！', more:'残り{n}パズル。', score:'次の目標：2048！'},
-    zh:{head:'你真棒！', more:'还有 {n} 个谜题等你挑战。', score:'下一站：2048！'},
-    ar:{head:'أحسنت!', more:'تبقّى {n} لغزًا.', score:'المحطة التالية: 2048!'},
-    hi:{head:'शाबाश!', more:'अभी {n} और पहेलियाँ बाकी हैं।', score:'अगला पड़ाव: 2048!'}
+    en:{head:"You've got this!", more:'{n} more puzzles to go.', score:'Next stop: 2048!', best:'Beat your best on the next run!'},
+    de:{head:'Du schaffst das!', more:'Noch {n} Rätsel warten.', score:'Nächster Halt: 2048!', best:'Knack beim nächsten Lauf deinen Rekord!'},
+    fr:{head:'Tu gères !', more:'Encore {n} puzzles à résoudre.', score:'Prochain arrêt : 2048 !', best:'Bats ton record à la prochaine partie !'},
+    es:{head:'¡Lo tienes!', more:'Quedan {n} puzles más.', score:'Próxima parada: ¡2048!', best:'¡Supera tu récord en la próxima partida!'},
+    pt:{head:'Você consegue!', more:'Mais {n} quebra-cabeças pela frente.', score:'Próxima parada: 2048!', best:'Supere seu recorde na próxima partida!'},
+    it:{head:'Ce la fai!', more:'Ancora {n} puzzle da risolvere.', score:'Prossima tappa: 2048!', best:'Batti il tuo record alla prossima partita!'},
+    tr:{head:'Harikasın!', more:'Önünde {n} bulmaca daha var.', score:'Sıradaki durak: 2048!', best:'Bir sonraki turda rekorunu kır!'},
+    id:{head:'Kamu bisa!', more:'Masih ada {n} teka-teki lagi.', score:'Perhentian berikutnya: 2048!', best:'Pecahkan rekormu di ronde berikutnya!'},
+    uk:{head:'У тебе виходить!', more:'Попереду ще {n} головоломок.', score:'Наступна зупинка: 2048!', best:'Побий свій рекорд наступного разу!'},
+    ja:{head:'その調子！', more:'残り{n}パズル。', score:'次の目標：2048！', best:'次のプレイで自己ベストを更新しよう！'},
+    zh:{head:'你真棒！', more:'还有 {n} 个谜题等你挑战。', score:'下一站：2048！', best:'下一局刷新你的最佳成绩！'},
+    ar:{head:'أحسنت!', more:'تبقّى {n} لغزًا.', score:'المحطة التالية: 2048!', best:'حطّم رقمك القياسي في الجولة التالية!'},
+    hi:{head:'शाबाश!', more:'अभी {n} और पहेलियाँ बाकी हैं।', score:'अगला पड़ाव: 2048!', best:'अगले राउंड में अपना रिकॉर्ड तोड़ें!'}
   };
 
   function maybeDay2Nudge(){
@@ -5799,15 +5812,26 @@ window.addEventListener('load',function(){
     var s = readSave();
     return s.dailyChallengeStreak || s.loginStreak || s.streak || 0;
   }
+  // 2048 is identified by its config (title fallback for older builds);
+  // every other kind:'score' game (FlappyWings, BlockPuzzle, …) is a
+  // generic score game: Continue only when the game says a run is
+  // resumable (window.gResumable / window.gResumeLabel), standings by best
+  // score with the game's own GROWTH_CFG.scoreBrackets.
+  function cfgOf(){ return window.GROWTH_CFG || (window.gGame && window.gGame.cfg) || {}; }
+  function is2048App(){ var c = cfgOf(); return c.app === 'Puzzle2048' || (!c.app && (document.title||'').toLowerCase().indexOf('2048') >= 0); }
+  function isScoreGame(){ return cfgOf().kind === 'score' && !is2048App(); }
   function hasResumableProgress(){
     var s = readSave();
     var t = (document.title||'').toLowerCase();
+    if (isScoreGame()) {
+      try { return typeof window.gResumable === 'function' ? !!window.gResumable() : false; } catch(e){ return false; }
+    }
     // 2048-style: only "Continue" when score > 0 (player has made at
     // least one merge). A fresh game with starter tiles placed but no
     // merges yet has score=0 — must say Play, not "Continue · 0".
     // Round-14 fix: gridHasTile alone returned true right after
     // newGame initialized 2 starter tiles, surfacing "Continue · 0".
-    if (t.indexOf('2048') >= 0) {
+    if (is2048App()) {
       var sc = s.score || s.currentScore || 0;
       var ended = s.gameOver === true || s.achieved2048 === true;
       if (ended) return false;
@@ -5840,9 +5864,14 @@ window.addEventListener('load',function(){
   function progressLabel(){
     var s = readSave();
     var t = (document.title||'').toLowerCase();
-    if (t.indexOf('2048') >= 0) {
+    if (is2048App()) {
       var sc = s.score || s.currentScore || 0;
       return 'Continue · ' + sc;
+    }
+    if (isScoreGame()) {
+      var lbl = '';
+      try { lbl = typeof window.gResumeLabel === 'function' ? String(window.gResumeLabel()) : ''; } catch(e){}
+      return 'Continue' + (lbl ? ' · ' + lbl : '');
     }
     // gGame.displayLevel() knows whether currentLevel is an index (WaterSort,
     // PipeConnect family) or a level number (Nonogram, Unblock) — the old
@@ -6377,8 +6406,8 @@ window.addEventListener('load',function(){
   function readPlayerMetric(){
     var s = readSave();
     var t = (document.title||'').toLowerCase();
-    var is2048 = t.indexOf('2048') >= 0;
-    if (is2048) {
+    var is2048 = is2048App();
+    if (is2048 || isScoreGame()) {
       var sc = s.bestScore || s.highScore || s.score || s.currentScore || 0;
       return { value: parseInt(sc,10) || 0, label: 'Score', is2048: true };
     }
@@ -6390,6 +6419,13 @@ window.addEventListener('load',function(){
   function percentileFor(metric, is2048){
     // Light approximation; mirrors the WEEKLY_BRACKETS shape in each app
     // without depending on the specific constant (varies per game).
+    // A score game's own scale: GROWTH_CFG.scoreBrackets = [[score, topPct], …]
+    // best-first (e.g. FlappyWings [[100,5],[50,12],[25,25],[10,50]]).
+    var br = cfgOf().scoreBrackets;
+    if (is2048 && !is2048App() && Array.isArray(br) && br.length) {
+      for (var i = 0; i < br.length; i++) if (metric >= br[i][0]) return br[i][1];
+      return 75;
+    }
     if (is2048) {
       if (metric >= 8192) return 5;
       if (metric >= 4096) return 12;
@@ -7601,19 +7637,19 @@ if(typeof window.showSettings!=='function')window.showSettings=function(){showSc
     hi:['आतिशबाज़ी उत्सव','वसंत बहार','भाग्यशाली तिपतिया खोज','अंडा खोज','तितली बाग़','धूप भरे दिन','सीपियों की गर्मी','तरबूज़ धमाल','मेपल फ़सल','कद्दू खोज','गर्म बलूत','हिमकण मौसम']
   };
   var T = {
-    en:{ends:'Ends in {t}',claim:'Claim',claimAll:'Claim rewards',claimed:'Claimed',how:'How to earn',eNew:'New level',ePerfect:'3 stars',eDaily:'Daily puzzle',eTile:'Tile 128+',boosts:'Boosts',weekend:'Weekend Rush',weekendD:'×2 {k} and +5 🪙 every clear',weekendN:'Saturday & Sunday',golden:'Golden Hour',goldenD:'+5 🪙 every clear · {h}',pass:'Season Pass',passD:'×2 {k} while active',getPass:'Get',on:'ON',trophies:'Trophy case',noTrophies:'Finish an event to win its trophy.',introT:'{n} is here!',introB:'Collect {k} by clearing levels. 8 rewards to unlock — coins, boosters, unlimited lives and the {n} trophy!',introB2048:'Collect {k} with big tiles (128+). 8 rewards to unlock — coins, undos and the {n} trophy!',go:'Let\'s go!',reward:'Reward unlocked!',close:'Close',last:'Last chance — {t} left!',grand:'Grand prize',lives:'∞ lives 30 min',trophy:'Trophy',left:'{t} left'},
-    de:{ends:'Endet in {t}',claim:'Abholen',claimAll:'Belohnungen abholen',claimed:'Abgeholt',how:'So sammelst du',eNew:'Neues Level',ePerfect:'3 Sterne',eDaily:'Tagesrätsel',eTile:'Kachel 128+',boosts:'Boosts',weekend:'Wochenend-Rausch',weekendD:'×2 {k} und +5 🪙 pro Level',weekendN:'Samstag & Sonntag',golden:'Goldene Stunde',goldenD:'+5 🪙 pro Level · {h}',pass:'Saisonpass',passD:'×2 {k}, solange aktiv',getPass:'Holen',on:'AN',trophies:'Trophäenvitrine',noTrophies:'Schließe ein Event ab, um seine Trophäe zu gewinnen.',introT:'{n} ist da!',introB:'Sammle {k}, indem du Level löst. 8 Belohnungen – Münzen, Booster, unendliche Leben und die {n}-Trophäe!',introB2048:'Sammle {k} mit großen Kacheln (128+). 8 Belohnungen – Münzen, Rückgängig und die {n}-Trophäe!',go:'Los geht\'s!',reward:'Belohnung freigeschaltet!',close:'Schließen',last:'Letzte Chance – noch {t}!',grand:'Hauptpreis',lives:'∞ Leben 30 Min.',trophy:'Trophäe',left:'noch {t}'},
-    fr:{ends:'Fin dans {t}',claim:'Récupérer',claimAll:'Récupérer',claimed:'Récupéré',how:'Comment gagner',eNew:'Nouveau niveau',ePerfect:'3 étoiles',eDaily:'Puzzle du jour',eTile:'Tuile 128+',boosts:'Bonus',weekend:'Rush du week-end',weekendD:'×2 {k} et +5 🪙 par niveau',weekendN:'Samedi et dimanche',golden:'Heure dorée',goldenD:'+5 🪙 par niveau · {h}',pass:'Pass saison',passD:'×2 {k} tant qu\'il est actif',getPass:'Obtenir',on:'ACTIF',trophies:'Vitrine des trophées',noTrophies:'Termine un événement pour gagner son trophée.',introT:'{n} commence !',introB:'Récolte des {k} en terminant des niveaux. 8 récompenses : pièces, bonus, vies illimitées et le trophée {n} !',introB2048:'Récolte des {k} avec de grosses tuiles (128+). 8 récompenses : pièces, annulations et le trophée {n} !',go:'C\'est parti !',reward:'Récompense débloquée !',close:'Fermer',last:'Dernière chance — encore {t} !',grand:'Grand prix',lives:'∞ vies 30 min',trophy:'Trophée',left:'encore {t}'},
-    es:{ends:'Termina en {t}',claim:'Reclamar',claimAll:'Reclamar premios',claimed:'Reclamado',how:'Cómo ganar',eNew:'Nivel nuevo',ePerfect:'3 estrellas',eDaily:'Puzzle diario',eTile:'Ficha 128+',boosts:'Potenciadores',weekend:'Fiebre de fin de semana',weekendD:'×2 {k} y +5 🪙 por nivel',weekendN:'Sábado y domingo',golden:'Hora dorada',goldenD:'+5 🪙 por nivel · {h}',pass:'Pase de temporada',passD:'×2 {k} mientras esté activo',getPass:'Obtener',on:'ACTIVO',trophies:'Vitrina de trofeos',noTrophies:'Completa un evento para ganar su trofeo.',introT:'¡Llega {n}!',introB:'Consigue {k} superando niveles. 8 premios: monedas, potenciadores, vidas ilimitadas y el trofeo {n}.',introB2048:'Consigue {k} con fichas grandes (128+). 8 premios: monedas, deshacer y el trofeo {n}.',go:'¡Vamos!',reward:'¡Premio desbloqueado!',close:'Cerrar',last:'¡Última oportunidad: quedan {t}!',grand:'Gran premio',lives:'∞ vidas 30 min',trophy:'Trofeo',left:'quedan {t}'},
-    pt:{ends:'Termina em {t}',claim:'Resgatar',claimAll:'Resgatar prêmios',claimed:'Resgatado',how:'Como ganhar',eNew:'Nível novo',ePerfect:'3 estrelas',eDaily:'Desafio diário',eTile:'Peça 128+',boosts:'Bônus',weekend:'Corrida de Fim de Semana',weekendD:'×2 {k} e +5 🪙 por nível',weekendN:'Sábado e domingo',golden:'Hora de Ouro',goldenD:'+5 🪙 por nível · {h}',pass:'Passe de Temporada',passD:'×2 {k} enquanto ativo',getPass:'Obter',on:'ATIVO',trophies:'Estante de troféus',noTrophies:'Conclua um evento para ganhar o troféu.',introT:'{n} chegou!',introB:'Junte {k} passando de nível. 8 prêmios: moedas, bônus, vidas infinitas e o troféu {n}!',introB2048:'Junte {k} com peças grandes (128+). 8 prêmios: moedas, desfazer e o troféu {n}!',go:'Vamos lá!',reward:'Prêmio desbloqueado!',close:'Fechar',last:'Última chance — faltam {t}!',grand:'Grande prêmio',lives:'∞ vidas 30 min',trophy:'Troféu',left:'faltam {t}'},
-    it:{ends:'Termina tra {t}',claim:'Riscatta',claimAll:'Riscatta premi',claimed:'Riscattato',how:'Come guadagnare',eNew:'Nuovo livello',ePerfect:'3 stelle',eDaily:'Puzzle del giorno',eTile:'Tessera 128+',boosts:'Bonus',weekend:'Corsa del weekend',weekendD:'×2 {k} e +5 🪙 a livello',weekendN:'Sabato e domenica',golden:'Ora d\'oro',goldenD:'+5 🪙 a livello · {h}',pass:'Pass stagionale',passD:'×2 {k} finché attivo',getPass:'Ottieni',on:'ATTIVO',trophies:'Bacheca dei trofei',noTrophies:'Completa un evento per vincere il suo trofeo.',introT:'È arrivato {n}!',introB:'Raccogli {k} completando livelli. 8 premi: monete, bonus, vite infinite e il trofeo {n}!',introB2048:'Raccogli {k} con tessere grandi (128+). 8 premi: monete, annullamenti e il trofeo {n}!',go:'Si parte!',reward:'Premio sbloccato!',close:'Chiudi',last:'Ultima occasione: mancano {t}!',grand:'Primo premio',lives:'∞ vite 30 min',trophy:'Trofeo',left:'mancano {t}'},
-    tr:{ends:'{t} sonra bitiyor',claim:'Al',claimAll:'Ödülleri al',claimed:'Alındı',how:'Nasıl kazanılır',eNew:'Yeni bölüm',ePerfect:'3 yıldız',eDaily:'Günlük bulmaca',eTile:'128+ karo',boosts:'Güçlendirmeler',weekend:'Hafta Sonu Telaşı',weekendD:'×2 {k} ve bölüm başına +5 🪙',weekendN:'Cumartesi ve pazar',golden:'Altın Saat',goldenD:'Bölüm başına +5 🪙 · {h}',pass:'Sezon Kartı',passD:'Aktifken ×2 {k}',getPass:'Al',on:'AÇIK',trophies:'Kupa dolabı',noTrophies:'Kupasını kazanmak için bir etkinliği tamamla.',introT:'{n} başladı!',introB:'Bölüm geçerek {k} topla. 8 ödül: altın, güçlendirme, sınırsız can ve {n} kupası!',introB2048:'Büyük karolarla (128+) {k} topla. 8 ödül: altın, geri alma ve {n} kupası!',go:'Hadi başlayalım!',reward:'Ödül açıldı!',close:'Kapat',last:'Son şans — {t} kaldı!',grand:'Büyük ödül',lives:'∞ can 30 dk',trophy:'Kupa',left:'{t} kaldı'},
-    id:{ends:'Berakhir dalam {t}',claim:'Klaim',claimAll:'Klaim hadiah',claimed:'Diklaim',how:'Cara mendapatkan',eNew:'Level baru',ePerfect:'3 bintang',eDaily:'Teka-teki harian',eTile:'Ubin 128+',boosts:'Bonus',weekend:'Serbu Akhir Pekan',weekendD:'×2 {k} dan +5 🪙 tiap level',weekendN:'Sabtu & Minggu',golden:'Jam Emas',goldenD:'+5 🪙 tiap level · {h}',pass:'Season Pass',passD:'×2 {k} selama aktif',getPass:'Dapatkan',on:'AKTIF',trophies:'Lemari trofi',noTrophies:'Selesaikan event untuk memenangkan trofinya.',introT:'{n} telah tiba!',introB:'Kumpulkan {k} dengan menyelesaikan level. 8 hadiah: koin, booster, nyawa tak terbatas, dan trofi {n}!',introB2048:'Kumpulkan {k} dengan ubin besar (128+). 8 hadiah: koin, undo, dan trofi {n}!',go:'Ayo!',reward:'Hadiah terbuka!',close:'Tutup',last:'Kesempatan terakhir — sisa {t}!',grand:'Hadiah utama',lives:'∞ nyawa 30 mnt',trophy:'Trofi',left:'sisa {t}'},
-    uk:{ends:'Завершиться через {t}',claim:'Забрати',claimAll:'Забрати нагороди',claimed:'Отримано',how:'Як заробити',eNew:'Новий рівень',ePerfect:'3 зірки',eDaily:'Щоденна головоломка',eTile:'Плитка 128+',boosts:'Бонуси',weekend:'Вихідний ривок',weekendD:'×2 {k} і +5 🪙 за рівень',weekendN:'Субота й неділя',golden:'Золота година',goldenD:'+5 🪙 за рівень · {h}',pass:'Сезонний пропуск',passD:'×2 {k}, поки активний',getPass:'Отримати',on:'УВІМК.',trophies:'Вітрина трофеїв',noTrophies:'Заверши подію, щоб виграти її трофей.',introT:'{n} вже тут!',introB:'Збирай {k}, проходячи рівні. 8 нагород: монети, бустери, безлімітні життя і трофей «{n}»!',introB2048:'Збирай {k} великими плитками (128+). 8 нагород: монети, скасування і трофей «{n}»!',go:'Поїхали!',reward:'Нагороду відкрито!',close:'Закрити',last:'Останній шанс — лишилось {t}!',grand:'Головний приз',lives:'∞ життя 30 хв',trophy:'Трофей',left:'лишилось {t}'},
-    ja:{ends:'終了まで {t}',claim:'受け取る',claimAll:'報酬を受け取る',claimed:'受け取り済み',how:'集め方',eNew:'新しいレベル',ePerfect:'星3つ',eDaily:'デイリーパズル',eTile:'128以上のタイル',boosts:'ブースト',weekend:'週末ラッシュ',weekendD:'{k}×2、クリアごとに+5 🪙',weekendN:'土曜・日曜',golden:'ゴールデンアワー',goldenD:'クリアごとに+5 🪙 · {h}',pass:'シーズンパス',passD:'有効中は{k}×2',getPass:'入手',on:'有効',trophies:'トロフィー棚',noTrophies:'イベントを完了するとトロフィーを獲得できます。',introT:'{n} 開催中！',introB:'レベルをクリアして{k}を集めよう。コイン、ブースター、無限ライフ、{n}トロフィーなど8つの報酬！',introB2048:'大きなタイル（128以上）で{k}を集めよう。コイン、元に戻す、{n}トロフィーなど8つの報酬！',go:'はじめる！',reward:'報酬ゲット！',close:'閉じる',last:'ラストチャンス — 残り{t}！',grand:'グランプリ',lives:'∞ライフ 30分',trophy:'トロフィー',left:'残り{t}'},
-    zh:{ends:'{t}后结束',claim:'领取',claimAll:'领取奖励',claimed:'已领取',how:'获取方式',eNew:'新关卡',ePerfect:'3星',eDaily:'每日谜题',eTile:'128+方块',boosts:'加成',weekend:'周末狂欢',weekendD:'{k}×2，每关+5 🪙',weekendN:'周六和周日',golden:'黄金时段',goldenD:'每关+5 🪙 · {h}',pass:'季票',passD:'有效期间{k}×2',getPass:'获取',on:'已开启',trophies:'奖杯柜',noTrophies:'完成活动即可赢得奖杯。',introT:'{n}开始啦！',introB:'通关收集{k}。8份奖励：金币、道具、无限生命和{n}奖杯！',introB2048:'用大方块（128+）收集{k}。8份奖励：金币、撤销和{n}奖杯！',go:'出发！',reward:'奖励已解锁！',close:'关闭',last:'最后机会——还剩{t}！',grand:'大奖',lives:'∞生命 30分钟',trophy:'奖杯',left:'还剩{t}'},
-    ar:{ends:'ينتهي خلال {t}',claim:'استلام',claimAll:'استلم المكافآت',claimed:'تم الاستلام',how:'كيف تجمع',eNew:'مستوى جديد',ePerfect:'3 نجوم',eDaily:'لغز اليوم',eTile:'مربع 128+',boosts:'المعززات',weekend:'اندفاعة نهاية الأسبوع',weekendD:'×2 {k} و‎+5 🪙 لكل مستوى',weekendN:'السبت والأحد',golden:'الساعة الذهبية',goldenD:'‎+5 🪙 لكل مستوى · {h}',pass:'تذكرة الموسم',passD:'×2 {k} أثناء التفعيل',getPass:'احصل',on:'مفعّل',trophies:'خزانة الكؤوس',noTrophies:'أكمل حدثًا لتفوز بكأسه.',introT:'وصل {n}!',introB:'اجمع {k} بإنهاء المستويات. 8 مكافآت: عملات ومعززات وأرواح غير محدودة وكأس {n}!',introB2048:'اجمع {k} بالمربعات الكبيرة (128+). 8 مكافآت: عملات وتراجع وكأس {n}!',go:'هيا بنا!',reward:'تم فتح مكافأة!',close:'إغلاق',last:'الفرصة الأخيرة — تبقّى {t}!',grand:'الجائزة الكبرى',lives:'∞ أرواح 30 د',trophy:'كأس',left:'تبقّى {t}'},
-    hi:{ends:'{t} में समाप्त',claim:'लें',claimAll:'इनाम लें',claimed:'ले लिया',how:'कैसे कमाएँ',eNew:'नया लेवल',ePerfect:'3 सितारे',eDaily:'दैनिक पहेली',eTile:'टाइल 128+',boosts:'बूस्ट',weekend:'वीकेंड रश',weekendD:'×2 {k} और हर लेवल पर +5 🪙',weekendN:'शनिवार और रविवार',golden:'गोल्डन आवर',goldenD:'हर लेवल पर +5 🪙 · {h}',pass:'सीज़न पास',passD:'सक्रिय रहने तक ×2 {k}',getPass:'पाएँ',on:'चालू',trophies:'ट्रॉफी कैबिनेट',noTrophies:'ट्रॉफी जीतने के लिए कोई इवेंट पूरा करें।',introT:'{n} आ गया!',introB:'लेवल पूरे करके {k} जमा करें। 8 इनाम: सिक्के, बूस्टर, असीमित जीवन और {n} ट्रॉफी!',introB2048:'बड़ी टाइलों (128+) से {k} जमा करें। 8 इनाम: सिक्के, अनडू और {n} ट्रॉफी!',go:'चलो शुरू करें!',reward:'इनाम खुला!',close:'बंद करें',last:'आख़िरी मौका — {t} बचे!',grand:'महा इनाम',lives:'∞ जीवन 30 मिनट',trophy:'ट्रॉफी',left:'{t} बचे'}
+    en:{ends:'Ends in {t}',claim:'Claim',claimAll:'Claim rewards',claimed:'Claimed',how:'How to earn',eNew:'New level',ePerfect:'3 stars',eDaily:'Daily puzzle',eTile:'Tile 128+',eRun:'Star run',boosts:'Boosts',weekend:'Weekend Rush',weekendD:'×2 {k} and +5 🪙 every clear',weekendN:'Saturday & Sunday',golden:'Golden Hour',goldenD:'+5 🪙 every clear · {h}',pass:'Season Pass',passD:'×2 {k} while active',getPass:'Get',on:'ON',trophies:'Trophy case',noTrophies:'Finish an event to win its trophy.',introT:'{n} is here!',introB:'Collect {k} by clearing levels. 8 rewards to unlock — coins, boosters, unlimited lives and the {n} trophy!',introB2048:'Collect {k} with big tiles (128+). 8 rewards to unlock — coins, undos and the {n} trophy!',go:'Let\'s go!',reward:'Reward unlocked!',close:'Close',last:'Last chance — {t} left!',grand:'Grand prize',lives:'∞ lives 30 min',trophy:'Trophy',left:'{t} left'},
+    de:{ends:'Endet in {t}',claim:'Abholen',claimAll:'Belohnungen abholen',claimed:'Abgeholt',how:'So sammelst du',eNew:'Neues Level',ePerfect:'3 Sterne',eDaily:'Tagesrätsel',eTile:'Kachel 128+',eRun:'Sterne-Runde',boosts:'Boosts',weekend:'Wochenend-Rausch',weekendD:'×2 {k} und +5 🪙 pro Level',weekendN:'Samstag & Sonntag',golden:'Goldene Stunde',goldenD:'+5 🪙 pro Level · {h}',pass:'Saisonpass',passD:'×2 {k}, solange aktiv',getPass:'Holen',on:'AN',trophies:'Trophäenvitrine',noTrophies:'Schließe ein Event ab, um seine Trophäe zu gewinnen.',introT:'{n} ist da!',introB:'Sammle {k}, indem du Level löst. 8 Belohnungen – Münzen, Booster, unendliche Leben und die {n}-Trophäe!',introB2048:'Sammle {k} mit großen Kacheln (128+). 8 Belohnungen – Münzen, Rückgängig und die {n}-Trophäe!',go:'Los geht\'s!',reward:'Belohnung freigeschaltet!',close:'Schließen',last:'Letzte Chance – noch {t}!',grand:'Hauptpreis',lives:'∞ Leben 30 Min.',trophy:'Trophäe',left:'noch {t}'},
+    fr:{ends:'Fin dans {t}',claim:'Récupérer',claimAll:'Récupérer',claimed:'Récupéré',how:'Comment gagner',eNew:'Nouveau niveau',ePerfect:'3 étoiles',eDaily:'Puzzle du jour',eTile:'Tuile 128+',eRun:'Partie étoilée',boosts:'Bonus',weekend:'Rush du week-end',weekendD:'×2 {k} et +5 🪙 par niveau',weekendN:'Samedi et dimanche',golden:'Heure dorée',goldenD:'+5 🪙 par niveau · {h}',pass:'Pass saison',passD:'×2 {k} tant qu\'il est actif',getPass:'Obtenir',on:'ACTIF',trophies:'Vitrine des trophées',noTrophies:'Termine un événement pour gagner son trophée.',introT:'{n} commence !',introB:'Récolte des {k} en terminant des niveaux. 8 récompenses : pièces, bonus, vies illimitées et le trophée {n} !',introB2048:'Récolte des {k} avec de grosses tuiles (128+). 8 récompenses : pièces, annulations et le trophée {n} !',go:'C\'est parti !',reward:'Récompense débloquée !',close:'Fermer',last:'Dernière chance — encore {t} !',grand:'Grand prix',lives:'∞ vies 30 min',trophy:'Trophée',left:'encore {t}'},
+    es:{ends:'Termina en {t}',claim:'Reclamar',claimAll:'Reclamar premios',claimed:'Reclamado',how:'Cómo ganar',eNew:'Nivel nuevo',ePerfect:'3 estrellas',eDaily:'Puzzle diario',eTile:'Ficha 128+',eRun:'Partida con estrellas',boosts:'Potenciadores',weekend:'Fiebre de fin de semana',weekendD:'×2 {k} y +5 🪙 por nivel',weekendN:'Sábado y domingo',golden:'Hora dorada',goldenD:'+5 🪙 por nivel · {h}',pass:'Pase de temporada',passD:'×2 {k} mientras esté activo',getPass:'Obtener',on:'ACTIVO',trophies:'Vitrina de trofeos',noTrophies:'Completa un evento para ganar su trofeo.',introT:'¡Llega {n}!',introB:'Consigue {k} superando niveles. 8 premios: monedas, potenciadores, vidas ilimitadas y el trofeo {n}.',introB2048:'Consigue {k} con fichas grandes (128+). 8 premios: monedas, deshacer y el trofeo {n}.',go:'¡Vamos!',reward:'¡Premio desbloqueado!',close:'Cerrar',last:'¡Última oportunidad: quedan {t}!',grand:'Gran premio',lives:'∞ vidas 30 min',trophy:'Trofeo',left:'quedan {t}'},
+    pt:{ends:'Termina em {t}',claim:'Resgatar',claimAll:'Resgatar prêmios',claimed:'Resgatado',how:'Como ganhar',eNew:'Nível novo',ePerfect:'3 estrelas',eDaily:'Desafio diário',eTile:'Peça 128+',eRun:'Partida com estrelas',boosts:'Bônus',weekend:'Corrida de Fim de Semana',weekendD:'×2 {k} e +5 🪙 por nível',weekendN:'Sábado e domingo',golden:'Hora de Ouro',goldenD:'+5 🪙 por nível · {h}',pass:'Passe de Temporada',passD:'×2 {k} enquanto ativo',getPass:'Obter',on:'ATIVO',trophies:'Estante de troféus',noTrophies:'Conclua um evento para ganhar o troféu.',introT:'{n} chegou!',introB:'Junte {k} passando de nível. 8 prêmios: moedas, bônus, vidas infinitas e o troféu {n}!',introB2048:'Junte {k} com peças grandes (128+). 8 prêmios: moedas, desfazer e o troféu {n}!',go:'Vamos lá!',reward:'Prêmio desbloqueado!',close:'Fechar',last:'Última chance — faltam {t}!',grand:'Grande prêmio',lives:'∞ vidas 30 min',trophy:'Troféu',left:'faltam {t}'},
+    it:{ends:'Termina tra {t}',claim:'Riscatta',claimAll:'Riscatta premi',claimed:'Riscattato',how:'Come guadagnare',eNew:'Nuovo livello',ePerfect:'3 stelle',eDaily:'Puzzle del giorno',eTile:'Tessera 128+',eRun:'Partita con stelle',boosts:'Bonus',weekend:'Corsa del weekend',weekendD:'×2 {k} e +5 🪙 a livello',weekendN:'Sabato e domenica',golden:'Ora d\'oro',goldenD:'+5 🪙 a livello · {h}',pass:'Pass stagionale',passD:'×2 {k} finché attivo',getPass:'Ottieni',on:'ATTIVO',trophies:'Bacheca dei trofei',noTrophies:'Completa un evento per vincere il suo trofeo.',introT:'È arrivato {n}!',introB:'Raccogli {k} completando livelli. 8 premi: monete, bonus, vite infinite e il trofeo {n}!',introB2048:'Raccogli {k} con tessere grandi (128+). 8 premi: monete, annullamenti e il trofeo {n}!',go:'Si parte!',reward:'Premio sbloccato!',close:'Chiudi',last:'Ultima occasione: mancano {t}!',grand:'Primo premio',lives:'∞ vite 30 min',trophy:'Trofeo',left:'mancano {t}'},
+    tr:{ends:'{t} sonra bitiyor',claim:'Al',claimAll:'Ödülleri al',claimed:'Alındı',how:'Nasıl kazanılır',eNew:'Yeni bölüm',ePerfect:'3 yıldız',eDaily:'Günlük bulmaca',eTile:'128+ karo',eRun:'Yıldızlı tur',boosts:'Güçlendirmeler',weekend:'Hafta Sonu Telaşı',weekendD:'×2 {k} ve bölüm başına +5 🪙',weekendN:'Cumartesi ve pazar',golden:'Altın Saat',goldenD:'Bölüm başına +5 🪙 · {h}',pass:'Sezon Kartı',passD:'Aktifken ×2 {k}',getPass:'Al',on:'AÇIK',trophies:'Kupa dolabı',noTrophies:'Kupasını kazanmak için bir etkinliği tamamla.',introT:'{n} başladı!',introB:'Bölüm geçerek {k} topla. 8 ödül: altın, güçlendirme, sınırsız can ve {n} kupası!',introB2048:'Büyük karolarla (128+) {k} topla. 8 ödül: altın, geri alma ve {n} kupası!',go:'Hadi başlayalım!',reward:'Ödül açıldı!',close:'Kapat',last:'Son şans — {t} kaldı!',grand:'Büyük ödül',lives:'∞ can 30 dk',trophy:'Kupa',left:'{t} kaldı'},
+    id:{ends:'Berakhir dalam {t}',claim:'Klaim',claimAll:'Klaim hadiah',claimed:'Diklaim',how:'Cara mendapatkan',eNew:'Level baru',ePerfect:'3 bintang',eDaily:'Teka-teki harian',eTile:'Ubin 128+',eRun:'Ronde berbintang',boosts:'Bonus',weekend:'Serbu Akhir Pekan',weekendD:'×2 {k} dan +5 🪙 tiap level',weekendN:'Sabtu & Minggu',golden:'Jam Emas',goldenD:'+5 🪙 tiap level · {h}',pass:'Season Pass',passD:'×2 {k} selama aktif',getPass:'Dapatkan',on:'AKTIF',trophies:'Lemari trofi',noTrophies:'Selesaikan event untuk memenangkan trofinya.',introT:'{n} telah tiba!',introB:'Kumpulkan {k} dengan menyelesaikan level. 8 hadiah: koin, booster, nyawa tak terbatas, dan trofi {n}!',introB2048:'Kumpulkan {k} dengan ubin besar (128+). 8 hadiah: koin, undo, dan trofi {n}!',go:'Ayo!',reward:'Hadiah terbuka!',close:'Tutup',last:'Kesempatan terakhir — sisa {t}!',grand:'Hadiah utama',lives:'∞ nyawa 30 mnt',trophy:'Trofi',left:'sisa {t}'},
+    uk:{ends:'Завершиться через {t}',claim:'Забрати',claimAll:'Забрати нагороди',claimed:'Отримано',how:'Як заробити',eNew:'Новий рівень',ePerfect:'3 зірки',eDaily:'Щоденна головоломка',eTile:'Плитка 128+',eRun:'Раунд із зірками',boosts:'Бонуси',weekend:'Вихідний ривок',weekendD:'×2 {k} і +5 🪙 за рівень',weekendN:'Субота й неділя',golden:'Золота година',goldenD:'+5 🪙 за рівень · {h}',pass:'Сезонний пропуск',passD:'×2 {k}, поки активний',getPass:'Отримати',on:'УВІМК.',trophies:'Вітрина трофеїв',noTrophies:'Заверши подію, щоб виграти її трофей.',introT:'{n} вже тут!',introB:'Збирай {k}, проходячи рівні. 8 нагород: монети, бустери, безлімітні життя і трофей «{n}»!',introB2048:'Збирай {k} великими плитками (128+). 8 нагород: монети, скасування і трофей «{n}»!',go:'Поїхали!',reward:'Нагороду відкрито!',close:'Закрити',last:'Останній шанс — лишилось {t}!',grand:'Головний приз',lives:'∞ життя 30 хв',trophy:'Трофей',left:'лишилось {t}'},
+    ja:{ends:'終了まで {t}',claim:'受け取る',claimAll:'報酬を受け取る',claimed:'受け取り済み',how:'集め方',eNew:'新しいレベル',ePerfect:'星3つ',eDaily:'デイリーパズル',eTile:'128以上のタイル',eRun:'スター獲得プレイ',boosts:'ブースト',weekend:'週末ラッシュ',weekendD:'{k}×2、クリアごとに+5 🪙',weekendN:'土曜・日曜',golden:'ゴールデンアワー',goldenD:'クリアごとに+5 🪙 · {h}',pass:'シーズンパス',passD:'有効中は{k}×2',getPass:'入手',on:'有効',trophies:'トロフィー棚',noTrophies:'イベントを完了するとトロフィーを獲得できます。',introT:'{n} 開催中！',introB:'レベルをクリアして{k}を集めよう。コイン、ブースター、無限ライフ、{n}トロフィーなど8つの報酬！',introB2048:'大きなタイル（128以上）で{k}を集めよう。コイン、元に戻す、{n}トロフィーなど8つの報酬！',go:'はじめる！',reward:'報酬ゲット！',close:'閉じる',last:'ラストチャンス — 残り{t}！',grand:'グランプリ',lives:'∞ライフ 30分',trophy:'トロフィー',left:'残り{t}'},
+    zh:{ends:'{t}后结束',claim:'领取',claimAll:'领取奖励',claimed:'已领取',how:'获取方式',eNew:'新关卡',ePerfect:'3星',eDaily:'每日谜题',eTile:'128+方块',eRun:'星级回合',boosts:'加成',weekend:'周末狂欢',weekendD:'{k}×2，每关+5 🪙',weekendN:'周六和周日',golden:'黄金时段',goldenD:'每关+5 🪙 · {h}',pass:'季票',passD:'有效期间{k}×2',getPass:'获取',on:'已开启',trophies:'奖杯柜',noTrophies:'完成活动即可赢得奖杯。',introT:'{n}开始啦！',introB:'通关收集{k}。8份奖励：金币、道具、无限生命和{n}奖杯！',introB2048:'用大方块（128+）收集{k}。8份奖励：金币、撤销和{n}奖杯！',go:'出发！',reward:'奖励已解锁！',close:'关闭',last:'最后机会——还剩{t}！',grand:'大奖',lives:'∞生命 30分钟',trophy:'奖杯',left:'还剩{t}'},
+    ar:{ends:'ينتهي خلال {t}',claim:'استلام',claimAll:'استلم المكافآت',claimed:'تم الاستلام',how:'كيف تجمع',eNew:'مستوى جديد',ePerfect:'3 نجوم',eDaily:'لغز اليوم',eTile:'مربع 128+',eRun:'جولة بالنجوم',boosts:'المعززات',weekend:'اندفاعة نهاية الأسبوع',weekendD:'×2 {k} و‎+5 🪙 لكل مستوى',weekendN:'السبت والأحد',golden:'الساعة الذهبية',goldenD:'‎+5 🪙 لكل مستوى · {h}',pass:'تذكرة الموسم',passD:'×2 {k} أثناء التفعيل',getPass:'احصل',on:'مفعّل',trophies:'خزانة الكؤوس',noTrophies:'أكمل حدثًا لتفوز بكأسه.',introT:'وصل {n}!',introB:'اجمع {k} بإنهاء المستويات. 8 مكافآت: عملات ومعززات وأرواح غير محدودة وكأس {n}!',introB2048:'اجمع {k} بالمربعات الكبيرة (128+). 8 مكافآت: عملات وتراجع وكأس {n}!',go:'هيا بنا!',reward:'تم فتح مكافأة!',close:'إغلاق',last:'الفرصة الأخيرة — تبقّى {t}!',grand:'الجائزة الكبرى',lives:'∞ أرواح 30 د',trophy:'كأس',left:'تبقّى {t}'},
+    hi:{ends:'{t} में समाप्त',claim:'लें',claimAll:'इनाम लें',claimed:'ले लिया',how:'कैसे कमाएँ',eNew:'नया लेवल',ePerfect:'3 सितारे',eDaily:'दैनिक पहेली',eTile:'टाइल 128+',eRun:'स्टार राउंड',boosts:'बूस्ट',weekend:'वीकेंड रश',weekendD:'×2 {k} और हर लेवल पर +5 🪙',weekendN:'शनिवार और रविवार',golden:'गोल्डन आवर',goldenD:'हर लेवल पर +5 🪙 · {h}',pass:'सीज़न पास',passD:'सक्रिय रहने तक ×2 {k}',getPass:'पाएँ',on:'चालू',trophies:'ट्रॉफी कैबिनेट',noTrophies:'ट्रॉफी जीतने के लिए कोई इवेंट पूरा करें।',introT:'{n} आ गया!',introB:'लेवल पूरे करके {k} जमा करें। 8 इनाम: सिक्के, बूस्टर, असीमित जीवन और {n} ट्रॉफी!',introB2048:'बड़ी टाइलों (128+) से {k} जमा करें। 8 इनाम: सिक्के, अनडू और {n} ट्रॉफी!',go:'चलो शुरू करें!',reward:'इनाम खुला!',close:'बंद करें',last:'आख़िरी मौका — {t} बचे!',grand:'महा इनाम',lives:'∞ जीवन 30 मिनट',trophy:'ट्रॉफी',left:'{t} बचे'}
   };
   function lang(){ var l = (window.gGame && window.gGame.lang()) || 'en'; l = String(l).toLowerCase().split('-')[0]; return T[l] ? l : 'en'; }
   function tr(k, vars){
@@ -7696,8 +7732,14 @@ if(typeof window.showSettings!=='function')window.showSettings=function(){showSc
   function tokensFor(d){
     var kind = window.gGame && window.gGame.cfg && window.gGame.cfg.kind;
     if (kind === 'score'){
-      var tile = d.tile | 0; if (tile < 128) return 0;
-      return tile >= 4096 ? 8 : tile >= 2048 ? 5 : tile >= 1024 ? 3 : tile >= 512 ? 2 : 1;
+      // 2048 reports tile milestones; other score games (FlappyWings,
+      // BlockPuzzle, …) report a run's stars (1-3) or the daily.
+      if (d.tile){
+        var tile = d.tile | 0; if (tile < 128) return 0;
+        return tile >= 4096 ? 8 : tile >= 2048 ? 5 : tile >= 1024 ? 3 : tile >= 512 ? 2 : 1;
+      }
+      if (d.daily) return 3;
+      return Math.max(0, Math.min(3, d.stars | 0));
     }
     if (d.endless) return 0;
     if (d.daily) return 3;
@@ -7707,7 +7749,7 @@ if(typeof window.showSettings!=='function')window.showSettings=function(){showSc
   }
   function qualifiesForBonus(d){
     var kind = window.gGame && window.gGame.cfg && window.gGame.cfg.kind;
-    if (kind === 'score') return (d.tile | 0) >= 256;
+    if (kind === 'score') return d.tile ? (d.tile | 0) >= 256 : (!!d.daily || (d.stars | 0) >= 2);
     return !d.endless && (d.daily || d.isNew || d.inferred);
   }
   function onClear(d){
@@ -7853,7 +7895,8 @@ if(typeof window.showSettings!=='function')window.showSettings=function(){showSc
     var trophyHtml = tro.length
       ? '<div style="display:flex;flex-wrap:wrap;gap:8px;">' + tro.slice(-12).map(function(t){ return '<div title="' + (NAMES[lang()] || NAMES.en)[t.month - 1] + ' ' + t.year + '" style="width:46px;height:46px;border-radius:12px;background:' + TILE + ';border:1px solid ' + LINE + ';display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.3rem;line-height:1;">' + t.token + '<span style="font-size:0.55rem;font-weight:800;margin-top:2px;">' + String(t.year).slice(2) + '</span></div>'; }).join('') + '</div>'
       : '<div style="font-size:0.85rem;color:' + MUTE + ';">' + tr('noTrophies') + '</div>';
-    var earn = is2048 ? '<span>' + tr('eTile') + ' +1…+8</span>'
+    var earn = is2048 ? ((window.gGame.cfg.app === 'Puzzle2048') ? '<span>' + tr('eTile') + ' +1…+8</span>'
+                         : '<span>' + tr('eRun') + ' +1…+3</span><span>' + tr('eDaily') + ' +3</span>')
       : '<span>' + tr('eNew') + ' +1</span><span>' + tr('ePerfect') + ' +1</span><span>' + tr('eDaily') + ' +3</span>';
     var sheet = document.createElement('div');
     sheet.id = 'xEventsSheet';

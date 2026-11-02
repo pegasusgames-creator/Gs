@@ -282,15 +282,26 @@
     var s = readSave();
     return s.dailyChallengeStreak || s.loginStreak || s.streak || 0;
   }
+  // 2048 is identified by its config (title fallback for older builds);
+  // every other kind:'score' game (FlappyWings, BlockPuzzle, …) is a
+  // generic score game: Continue only when the game says a run is
+  // resumable (window.gResumable / window.gResumeLabel), standings by best
+  // score with the game's own GROWTH_CFG.scoreBrackets.
+  function cfgOf(){ return window.GROWTH_CFG || (window.gGame && window.gGame.cfg) || {}; }
+  function is2048App(){ var c = cfgOf(); return c.app === 'Puzzle2048' || (!c.app && (document.title||'').toLowerCase().indexOf('2048') >= 0); }
+  function isScoreGame(){ return cfgOf().kind === 'score' && !is2048App(); }
   function hasResumableProgress(){
     var s = readSave();
     var t = (document.title||'').toLowerCase();
+    if (isScoreGame()) {
+      try { return typeof window.gResumable === 'function' ? !!window.gResumable() : false; } catch(e){ return false; }
+    }
     // 2048-style: only "Continue" when score > 0 (player has made at
     // least one merge). A fresh game with starter tiles placed but no
     // merges yet has score=0 — must say Play, not "Continue · 0".
     // Round-14 fix: gridHasTile alone returned true right after
     // newGame initialized 2 starter tiles, surfacing "Continue · 0".
-    if (t.indexOf('2048') >= 0) {
+    if (is2048App()) {
       var sc = s.score || s.currentScore || 0;
       var ended = s.gameOver === true || s.achieved2048 === true;
       if (ended) return false;
@@ -323,9 +334,14 @@
   function progressLabel(){
     var s = readSave();
     var t = (document.title||'').toLowerCase();
-    if (t.indexOf('2048') >= 0) {
+    if (is2048App()) {
       var sc = s.score || s.currentScore || 0;
       return 'Continue · ' + sc;
+    }
+    if (isScoreGame()) {
+      var lbl = '';
+      try { lbl = typeof window.gResumeLabel === 'function' ? String(window.gResumeLabel()) : ''; } catch(e){}
+      return 'Continue' + (lbl ? ' · ' + lbl : '');
     }
     // gGame.displayLevel() knows whether currentLevel is an index (WaterSort,
     // PipeConnect family) or a level number (Nonogram, Unblock) — the old
@@ -860,8 +876,8 @@
   function readPlayerMetric(){
     var s = readSave();
     var t = (document.title||'').toLowerCase();
-    var is2048 = t.indexOf('2048') >= 0;
-    if (is2048) {
+    var is2048 = is2048App();
+    if (is2048 || isScoreGame()) {
       var sc = s.bestScore || s.highScore || s.score || s.currentScore || 0;
       return { value: parseInt(sc,10) || 0, label: 'Score', is2048: true };
     }
@@ -873,6 +889,13 @@
   function percentileFor(metric, is2048){
     // Light approximation; mirrors the WEEKLY_BRACKETS shape in each app
     // without depending on the specific constant (varies per game).
+    // A score game's own scale: GROWTH_CFG.scoreBrackets = [[score, topPct], …]
+    // best-first (e.g. FlappyWings [[100,5],[50,12],[25,25],[10,50]]).
+    var br = cfgOf().scoreBrackets;
+    if (is2048 && !is2048App() && Array.isArray(br) && br.length) {
+      for (var i = 0; i < br.length; i++) if (metric >= br[i][0]) return br[i][1];
+      return 75;
+    }
     if (is2048) {
       if (metric >= 8192) return 5;
       if (metric >= 4096) return 12;

@@ -30,6 +30,22 @@ const apps = process.argv.slice(2).length ? process.argv.slice(2)
     page.on('pageerror', e => errs.push(String(e.message).slice(0, 160)));
     try { await page.goto('file://' + path.join(REPO, app, 'android/app/src/main/assets/game.html'), { timeout: 15000 }); } catch (e) { errs.push('load: ' + e.message.slice(0, 120)); }
     await page.waitForTimeout(2200);
+    // Open the Themes screen the way its menu tile does: a renderer that
+    // throws there aborts showScreen() and every hook chained after it
+    // (2026-11-02: WaterSort's renderThemes hit a palette-less meta entry).
+    try {
+      const thrown = await page.evaluate(() => {
+        const id = ['themeScreen', 'themesScreen', 'screen-themes'].find(x => document.getElementById(x));
+        if (!id) return null;
+        try {
+          if (window.Game && typeof Game.showScreen === 'function') Game.showScreen(id);
+          else if (typeof showScreen === 'function') showScreen(id.replace(/^screen-/, ''));
+          return null;
+        } catch (e) { return 'opening Themes: ' + e.message; }
+      });
+      if (thrown) errs.push(thrown.slice(0, 160));
+      await page.waitForTimeout(300);
+    } catch (e) {}
     const uniq = [...new Set(errs)];
     if (uniq.length) {
       const tag = blocked.has(app) ? 'BLOCKED' : 'FAIL';

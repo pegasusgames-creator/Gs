@@ -1,3 +1,7 @@
-• Safe first tap guaranteed
-• Custom difficulty mode
-• Best time leaderboard
+Minesweeper 2.0 is a complete rebuild:
+• 500 no-guess fields, each checked by a logic solver from the first tap to the last mine
+• Boards grow from 6×6 to 30×16, with pinch-zoom and pan
+• Hints open a provably safe tile or flag a provable mine, and show the numbers behind it
+• Long-press or Flag mode, plus chording on numbers
+• Daily field with streaks, Endless mode, seven themes
+• Hit a mine? Keep your field and carry on

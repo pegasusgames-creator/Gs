@@ -1,0 +1,7 @@
+Minesweeper 2.0 è ricostruito da zero:
+• 500 campi senza azzardo, ognuno verificato da un risolutore logico dal primo tocco all'ultima mina
+• Griglie da 6×6 a 30×16, con zoom e spostamento
+• I suggerimenti aprono una casella sicura dimostrabile o segnano una mina dimostrabile
+• Pressione lunga o modalità bandierina, e accordo sui numeri
+• Campo del giorno con serie, modalità Infinita e sette temi
+• Hai colpito una mina? Tieni il campo e continua

@@ -92,7 +92,42 @@ async function open(browser, app, { pre = '', mockRet = {} } = {}) {
     else check(app, 'Play Games score submitted', calls.includes('submitScore'), 'no submitScore');
     check(app, 'no interstitial during the first 3 clears', !calls.includes('showInterstitial'), 'showInterstitial called');
     check(app, 'event tokens earned', after.pts > before.pts, `points ${before.pts} → ${after.pts}`);
+    // The retention addendum's win hook (session streak bonus + weekly
+    // challenge) must see the real win overlay (2026-11-02: the family shell
+    // opens it with .show, which the hook ignored — it never fired).
+    const wk = await p.evaluate(() => document.documentElement.innerHTML.indexOf('function hookWinOverlay') >= 0
+      ? Object.keys(localStorage).some(k => /^xweekly_\d+$/.test(k) && +localStorage.getItem(k) >= 1) : null);
+    // Score games' test "win" is a merge / a flight, not the level-complete
+    // overlay the hook watches — only leveled games are checked here.
+    const scoreKind = await p.evaluate(() => (window.GROWTH_CFG || {}).kind === 'score');
+    if (wk !== null && !scoreKind) check(app, 'weekly challenge counts the win', wk, 'win overlay hook never fired (xweekly_<week> unset)');
     check(app, 'no page errors', errs.length === 0, errs.join(' | '));
+    await ctx.close();
+    // 1b. Popup choreography: the Starter Pack offer (after the 5th clear)
+    // must never open over the win overlay; it waits for the menu.
+    ({ ctx, p, errs } = await open(browser, app, {}));
+    const hasStarter = await p.evaluate(() => !!document.getElementById('starterPackModal'));
+    if (hasStarter) {
+      await p.evaluate(() => {
+        localStorage.removeItem('xstarter_seen');
+        const s = gGame.state();
+        // 8 prior clears, in whichever shape the game keeps them
+        if (Array.isArray(s.completedLevels)) { for (let i = 0; i < 8; i++) if (s.completedLevels.indexOf(i) < 0) s.completedLevels.push(i); }
+        else if (s.completedLevels && typeof s.completedLevels === 'object') { for (let i = 0; i < 8; i++) s.completedLevels[i] = s.completedLevels[i] || 1; }
+        if (Array.isArray(s.completed)) { for (let i = 0; i < 8; i++) if (s.completed.indexOf(i) < 0) s.completed.push(i); }
+        s.gamesPlayed = Math.max(s.gamesPlayed | 0, 8); gGame.persist();
+      });
+      try { await p.evaluate(winPath(app)); } catch (e) {}
+      await p.waitForTimeout(2600);
+      const vis = () => p.evaluate(() => {
+        const v = el => !!el && getComputedStyle(el).display !== 'none';
+        const win = ['levelCompleteOverlay','overlay-win','winOverlay','overlayWin','levelComplete','overlay-complete','gameOverOverlay','overlay-gameover']
+          .map(id => document.getElementById(id)).some(el => v(el) && (el.classList.contains('active') || el.classList.contains('show') || el.style.display === 'flex' || el.style.display === 'block'));
+        return { win, starter: v(document.getElementById('starterPackModal')) };
+      });
+      const during = await vis();
+      if (during.win) check(app, 'starter pack never stacks on the win overlay', !during.starter, 'starterPackModal opened over the win overlay');
+    }
     await ctx.close();
     // 2. Day-7 win-back pays exactly 100, a 2-day gap pays nothing
     const coinsAfter = async (pre) => { const o = await open(browser, app, { pre }); await dismiss(o.p); const c = await o.p.evaluate(() => gGame.coins()); await o.ctx.close(); return c; };
