@@ -1,12 +1,12 @@
 [
   {
-    "line1": "EXACT",
-    "line2": "AGE",
-    "subtitle": "Years, months and days at a glance."
+    "line1": "TWO",
+    "line2": "DATES",
+    "subtitle": "Years, months and days apart."
   },
   {
-    "line1": "DATE",
-    "line2": "DIFFERENCE",
-    "subtitle": "Everything between two dates."
+    "line1": "WEEKDAYS",
+    "line2": "COUNTED",
+    "subtitle": "Mon to Fri between any two days."
   }
 ]

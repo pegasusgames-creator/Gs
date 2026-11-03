@@ -1,0 +1,7 @@
+Minesweeper 2.0 baştan yeniden yapıldı:
+• Tahmin gerektirmeyen 500 alan, her biri ilk dokunuştan son mayına kadar bir mantık çözücüyle denetlendi
+• Tahtalar 6×6'dan 30×16'ya büyür; iki parmakla yakınlaştırma ve kaydırma
+• İpucu kanıtlanmış güvenli bir kareyi açar ya da kesin bir mayını işaretler ve bunu kanıtlayan sayıları gösterir
+• Uzun basma veya Bayrak modu, sayılarda toplu açma
+• Seri takipli günlük alan, Sonsuz mod, yedi tema
+• Mayına mı bastın? Alanını koru ve devam et

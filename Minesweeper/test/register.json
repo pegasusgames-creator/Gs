@@ -1,0 +1,20 @@
+{
+  "gate": [
+    "scripts/check_minesweeper_noguess.py",
+    "no-guess boards (every field solvable by logic from its safe first click, all 4 transforms)"
+  ],
+  "app_theme": {
+    "bg_top_left": [238, 240, 222],
+    "bg_top_right": [230, 233, 210],
+    "bg_bottom": [196, 210, 178],
+    "text_primary": [29, 38, 25],
+    "text_accent": [31, 111, 105],
+    "text_subtle": [76, 86, 65],
+    "footer_tint": [26, 93, 88],
+    "mood": "survey-map field",
+    "layout_archetype": "F",
+    "mascot_pattern": "M0",
+    "voice": "V2",
+    "texture": "T3"
+  }
+}

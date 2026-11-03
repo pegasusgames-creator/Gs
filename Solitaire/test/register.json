@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_solitaire_winnable.py",
+    "solitaire deals replay to four full foundations"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      227,
+      241,
+      238
+    ],
+    "bg_top_right": [
+      214,
+      236,
+      231
+    ],
+    "bg_bottom": [
+      188,
+      223,
+      215
+    ],
+    "text_primary": [
+      16,
+      48,
+      44
+    ],
+    "text_accent": [
+      14,
+      104,
+      95
+    ],
+    "text_subtle": [
+      52,
+      84,
+      79
+    ],
+    "footer_tint": [
+      11,
+      82,
+      75
+    ],
+    "mood": "sea-glass felt",
+    "layout_archetype": "D",
+    "mascot_pattern": "M0",
+    "voice": "V5",
+    "texture": "T4"
+  }
+}

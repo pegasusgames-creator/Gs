@@ -2082,6 +2082,7 @@ def main():
         ('check_reward_types_native.py', 'rewarded types requested by JS are whitelisted in Java'),
         ('check_lang_picker.py', 'every translated listing locale is selectable in the language picker'),
         ('check_trademarks.py', 'no third-party game/franchise trademarks in listing text'),
+        ('check_agecalculator_dates.py', 'date maths exact across leap years, month ends, century rules, invalid input, Chinese New Year table (JS vs independent Python reference)'),
         ('check_flappywings_fair.py', 'course fairness (every gap flown, ramp monotonic, daily deterministic)'),
         ('check_utility_shell.py', 'utility shell essentials (restore, privacy, IAP grants, ad cadence, 13-language picker, version, no game shims)'),
         ('check_families_compliance.py', 'Google Play Families compliance (kids track)'),

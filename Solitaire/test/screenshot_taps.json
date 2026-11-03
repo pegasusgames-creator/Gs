@@ -4,7 +4,7 @@
   "_setup_taps": [
     [
       "js",
-      "(function(){try{localStorage.setItem('ks_tutorialDone','1');localStorage.setItem('tutorialDone','1');var s={currentLevel:320,completedLevels:Array.from({length:320},function(_,i){return i;}),levelStars:(function(){var x={};for(var i=0;i<320;i++)x[i]=(i%5===0?2:3);return x;})(),coins:1960,lives:5,maxLives:5,lastLifeTime:Date.now(),dailyChallengeStreak:5,hintCount:3,unlockedThemes:['midnight'],ksCamp:{},ksRand:null,ksLefty:false,ks4c:false,soundEnabled:true,musicEnabled:false};Object.assign(save,s);if(typeof persist==='function')persist();if(typeof updateAllUI==='function')updateAllUI();\nwindow._ksShot=function(idx,th,k,o){o=o||{};var T=window._KS_THEMES||[];var t=T.find(function(x){return x.id===th;})||T[0];Object.assign(PIPE_COLORS,t.palette);Object.keys(t.palette).forEach(function(kk){document.body.style.setProperty('--'+kk,t.palette[kk]);});if(th==='midnight'){document.body.classList.add('midnight');document.documentElement.dataset.theme='midnight';}else{document.body.classList.remove('midnight');document.documentElement.dataset.theme='';}save.activeTheme=th;save.ksLefty=false;save.ks4c=!!o.c4;ksApplyPrefs();if(save.ksCamp)delete save.ksCamp[idx];save.ksRand=null;showScreen('game');\nif(o.rand){isEndless=true;isDailyChallenge=false;ksStart({mode:'rand',seed:o.rand,draw:3,fresh:true});document.getElementById('hdr-level').textContent='Random · Draw 3';}else{loadLevel(idx);}\nsetTimeout(function(){var line=o.rand?null:ksDecode(ksParse(CAMPAIGN[idx]).sol);var n=0;for(var i=0;i<k;i++){var m=line?line[i]:ksGreedy(S);if(!m||gWon)break;if(line&&S.h.every(function(v){return v===0;}))break;if(!ksPlay(m))break;n++;}ksStopAuto();gTime=Math.round(n*3.6+14);ksHud();if(o.hint)setTimeout(giveHint,250);},1400);};\n}catch(e){}return 'seeded';})()",
+      "(function(){try{localStorage.setItem('ks_tutorialDone','1');localStorage.setItem('tutorialDone','1');var s={currentLevel:320,completedLevels:Array.from({length:320},function(_,i){return i;}),levelStars:(function(){var x={};for(var i=0;i<320;i++)x[i]=(i%5===0?2:3);return x;})(),coins:1960,lives:5,maxLives:5,lastLifeTime:Date.now(),dailyChallengeStreak:5,hintCount:3,unlockedThemes:['midnight'],ksCamp:{},ksRand:null,ksLefty:false,ks4c:false,soundEnabled:true,musicEnabled:false};Object.assign(save,s);if(typeof persist==='function')persist();if(typeof updateAllUI==='function')updateAllUI();\nwindow._ksShot=function(idx,th,k,o){o=o||{};var T=window._KS_THEMES||[];var t=T.find(function(x){return x.id===th;})||T[0];Object.assign(PIPE_COLORS,t.palette);Object.keys(t.palette).forEach(function(kk){document.body.style.setProperty('--'+kk,t.palette[kk]);});if(th==='midnight'){document.body.classList.add('midnight');document.documentElement.dataset.theme='midnight';}else{document.body.classList.remove('midnight');document.documentElement.dataset.theme='';}save.activeTheme=th;save.ksLefty=false;save.ks4c=!!o.c4;ksApplyPrefs();if(save.ksCamp)delete save.ksCamp[idx];save.ksRand=null;showScreen('game');\nif(o.rand){isEndless=true;isDailyChallenge=false;ksStart({mode:'rand',seed:o.rand,draw:3,fresh:true});document.getElementById('hdr-level').textContent='Random · Draw 3';}else{loadLevel(idx);}\nsetTimeout(function(){var line=o.rand?null:ksDecode(ksParse(CAMPAIGN[idx]).sol);var n=0;for(var i=0;i<k;i++){var m=line?line[i]:ksGreedy(S);if(!m||gWon)break;if(line&&S.h.every(function(v){return v===0;}))break;if(!ksPlay(m))break;n++;}if(o.rand&&S.p<S.T.length){ksPlay({k:'d'});n++;}ksStopAuto();gTime=Math.round(n*3.6+14);ksHud();if(o.hint)setTimeout(giveHint,250);},1400);};\n}catch(e){}return 'seeded';})()",
       500
     ]
   ],
@@ -18,7 +18,7 @@
   "02_hint_baize": [
     [
       "js",
-      "window._ksShot(46,'baize',22,{hint:true});'ok';",
+      "window._ksShot(46,'baize',23,{hint:true});'ok';",
       3200
     ]
   ],
@@ -67,7 +67,7 @@
   "tablet_7_02_midnight_hint": [
     [
       "js",
-      "window._ksShot(401,'midnight',34,{hint:true});'ok';",
+      "window._ksShot(401,'midnight',37,{hint:true});'ok';",
       3200
     ]
   ],

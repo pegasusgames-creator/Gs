@@ -2726,7 +2726,7 @@ function ksFmt(s){s=Math.floor(s||0);const m=Math.floor(s/60),x=s%60;return m+':
 function ksHud(){
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   set('ks-moves',gMoves);set('ks-score',gScore);set('ks-time',ksFmt(gTime));
-  set('ks-par',L?(L.par?L.par:'–'):'–');
+  set('ks-par',L?(L.par?L.par:(L.mode==='rand'?'':'–')):'–');
   set('ks-par-lbl',L&&L.mode==='rand'&&!L.par?'Draw '+L.draw:'Par');
   const b=document.getElementById('ks-hint-badge');
   if(b)b.textContent=(typeof hasUnlimitedHints==='function'&&hasUnlimitedHints())?'∞':String(save.hintCount|0);
