@@ -27,7 +27,7 @@ _Test and release → Production → release details_
 Solitaire 2.0 is a complete rebuild:
 • 500 numbered draw-1 deals, each verified winnable by a solver
 • Hint shows the next move of a winning line from where you are
-• Tap a card to send it to its best spot, or drag to choose
+• Tap a card to send it where it fits, or drag to choose
 • Free undo, auto-finish once every card is face-up
 • A Daily Deal for everyone, easy early in the week, hard at the weekend
 • Random deals in draw 1 or draw 3
@@ -242,7 +242,7 @@ HINTS FROM A WINNING LINE
 Hint highlights the card to move and where it goes. It follows a winning line from your current position whenever the solver finds one, and says so plainly when it can't.
 
 PLAYS THE WAY YOU EXPECT
-• Tap a card and it jumps to its best spot, or drag it exactly where you want
+• Tap a card and it jumps to where it fits, or drag it exactly where you want
 • Move whole runs between columns
 • Free undo and a one-tap restart
 • Auto-finish sends every card home once the whole tableau is face-up

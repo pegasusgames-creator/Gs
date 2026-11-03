@@ -61,6 +61,8 @@ Everything in your contract doc's per-app checklist, plus
 `<App>/test/register.json` (`{"gate": [script, label] or null,
 "app_theme": {...}}` — shape in docs/BUILDER_GAME.md).
 
+**Gate contract:** `pre_publish_check.py` runs every registered gate with ALL the apps in the run as arguments, so your `scripts/check_<app>_*.py` must check only your app: with no args or with your app among the args, check it; with other app names only, print a skip line and exit 0 — never exit 1 for an app that isn't yours.
+
 ## Verify
 
 Your contract doc's verify list. Drive it headlessly with real input events

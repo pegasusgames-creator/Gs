@@ -34,7 +34,13 @@ import sys
 import tempfile
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP = sys.argv[1] if len(sys.argv) > 1 else "AgeCalculator"
+# pre_publish_check passes every app in the run; this gate only applies to
+# AgeCalculator (any other app name is skipped as OK).
+_ARGS = [a for a in sys.argv[1:] if not a.startswith("-")]
+if _ARGS and "AgeCalculator" not in _ARGS:
+    print("check_agecalculator_dates: skipped (not AgeCalculator)")
+    sys.exit(0)
+APP = "AgeCalculator"
 GAME = os.path.join(BASE, APP, "android/app/src/main/assets/game.html")
 
 # --------------------------------------------------------------------------

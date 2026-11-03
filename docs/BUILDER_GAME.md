@@ -71,6 +71,8 @@ Everything in docs/GAME_SHELL.md "Deliverables per game", plus
 
 (codes from docs/APP_ARCHETYPES.md — read only its tables; never A+M0+V1+T1).
 
+**Gate contract:** `pre_publish_check.py` runs every registered gate with ALL the apps in the run as arguments, so your `scripts/check_<app>_*.py` must check only your app: with no args or with your app among the args, check it; with other app names only, print a skip line and exit 0 — never exit 1 for an app that isn't yours.
+
 ## Verify
 
 Run the "Verify before you finish" list in docs/GAME_SHELL.md. Play it

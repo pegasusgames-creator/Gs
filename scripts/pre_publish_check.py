@@ -111,7 +111,6 @@ BLOCKED_APPS = {
     "WordSearch",
     # 2026-10-03 audit: BlockPuzzle's game.html is the Dice Roller placeholder
     # with ONE byte changed (99.9% identical) and was never listed.
-    "BlockPuzzle",
 }
 
 # Reference Dice Roller game.html hash, computed on first run and cached
@@ -2082,6 +2081,9 @@ def main():
         ('check_reward_types_native.py', 'rewarded types requested by JS are whitelisted in Java'),
         ('check_lang_picker.py', 'every translated listing locale is selectable in the language picker'),
         ('check_trademarks.py', 'no third-party game/franchise trademarks in listing text'),
+        ('check_solitaire_winnable.py', 'solitaire deals replay to four full foundations'),
+        ('check_minesweeper_noguess.py', 'no-guess boards (every field solvable by logic from its safe first click, all 4 transforms)'),
+        ('check_blockpuzzle_fair.py', 'fair dealer (no dead tray while a piece fits, daily deterministic)'),
         ('check_agecalculator_dates.py', 'date maths exact across leap years, month ends, century rules, invalid input, Chinese New Year table (JS vs independent Python reference)'),
         ('check_flappywings_fair.py', 'course fairness (every gap flown, ramp monotonic, daily deterministic)'),
         ('check_utility_shell.py', 'utility shell essentials (restore, privacy, IAP grants, ad cadence, 13-language picker, version, no game shims)'),

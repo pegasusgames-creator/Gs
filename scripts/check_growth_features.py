@@ -40,6 +40,9 @@ PRE_RELEASE = {
     "com.pegasusgames.habittracker",
     "com.pegasusgames.flappybird",
     "com.pegasusgames.agecalculator",
+    "com.pegasusgames.blockpuzzle",
+    "com.pegasusgames.minesweeper",
+    "com.pegasusgames.solitaire",
 }
 
 # Java NativeBridge methods every shipping game.html must call into.

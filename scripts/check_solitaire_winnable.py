@@ -25,8 +25,9 @@ dst 0-6 column | F foundation. A column→column move carries the single card of
 the source's face-up run that fits the destination (a King for an empty column)
 plus everything above it.
 
-Usage: python3 scripts/check_solitaire_winnable.py [AppDir]   (default Solitaire)
-Exit 0 = OK, 1 = blocked.
+Usage: python3 scripts/check_solitaire_winnable.py [App ...]
+  (no args or Solitaire among them -> checks Solitaire; only other apps -> skip, exit 0)
+Exit 0 = OK / skipped, 1 = blocked.
 """
 import json
 import os
@@ -36,7 +37,11 @@ import subprocess
 import sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP = sys.argv[1] if len(sys.argv) > 1 else "Solitaire"
+# pre_publish_check runs every gate with ALL the apps in the run as arguments:
+# check Solitaire when called bare or when it is among them; skip otherwise.
+_ARGS = [a for a in sys.argv[1:] if not a.startswith("-")]
+APP = "Solitaire"
+SKIP = bool(_ARGS) and APP not in _ARGS
 GAME = os.path.join(BASE, APP, "android", "app", "src", "main", "assets", "game.html")
 MIN_DEALS = 500
 DAILY_SIZE = 364
@@ -270,6 +275,9 @@ def node_crosscheck(html, seeds):
 
 
 def main():
+    if SKIP:
+        print("skip: solitaire_winnable applies to Solitaire only (got %s)" % ", ".join(_ARGS))
+        return 0
     if not os.path.isfile(GAME):
         print("✗ %s: game.html not found" % APP)
         return 1

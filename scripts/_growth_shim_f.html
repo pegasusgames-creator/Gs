@@ -162,6 +162,16 @@
     target.appendChild(btn);
   }
 
+  function dailyDoneToday(){
+    var st = (window.gGame && window.gGame.state && window.gGame.state()) || {};
+    if (!('dailyChallengeDate' in st)) return true;   // legacy apps: unchanged
+    var d = String(st.dailyChallengeDate || '');
+    if (!d) return false;
+    var now = new Date();
+    var p2 = function(n){ return (n < 10 ? '0' : '') + n; };
+    var local = now.getFullYear() + '-' + p2(now.getMonth() + 1) + '-' + p2(now.getDate());
+    return d === now.toISOString().slice(0, 10) || d === local || d === now.toDateString();
+  }
   function scan(){
     for (var i=0;i<SELECTORS.length;i++){
       var els = document.querySelectorAll(SELECTORS[i]);
@@ -169,6 +179,9 @@
         if (!isVisible(els[j])) continue;
         var id = (els[j].id || '').toLowerCase();
         if (id.indexOf('daily') >= 0) {
+          // Only once today's daily is actually done — on the family shell
+          // overlay-daily is the card shown BEFORE the run (2026-11-03).
+          if (!dailyDoneToday()) continue;
           injectInto(els[j], composeDaily, '🔁 Share daily result');
         } else if (id.indexOf('highscore') >= 0 || id.indexOf('high') >= 0) {
           injectInto(els[j], compose2048Score, '🔁 Share new high score');

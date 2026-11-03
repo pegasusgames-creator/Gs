@@ -56,6 +56,9 @@ CFG = {
     "Sudoku":          dict(pkg="com.pegasusgames.sudoku", name="Sudoku", saveKey="sudoku_save", levelBase=0, kind="levels", totalLevels=500, live=False, booster=dict(field="hintCount", name="Hint", emoji="💡", coins=25)),
     "Sokoban":         dict(pkg="com.pegasusgames.sokoban", name="Sokoban", saveKey="sokoban_save", levelBase=0, kind="levels", totalLevels=500, live=False, booster=dict(field="hintCount", name="Hint", emoji="💡", coins=25)),
     "FlappyWings":     dict(pkg="com.pegasusgames.flappybird", name="Flappy Wings", saveKey="flappybird_save", levelBase=0, kind="score", totalLevels=0, live=False, booster=dict(field="hintCount", name="Shield", emoji="🛡", coins=25)),
+    "BlockPuzzle":     dict(pkg="com.pegasusgames.blockpuzzle", name="Block Puzzle", saveKey="blockpuzzle_save", levelBase=0, kind="score", totalLevels=0, live=False, booster=dict(field="hintCount", name="Bomb", emoji="💣", coins=25), scoreBrackets=[[12000, 5], [6000, 12], [3000, 25], [1200, 50]]),
+    "Minesweeper":     dict(pkg="com.pegasusgames.minesweeper", name="Minesweeper", saveKey="minesweeper_save", levelBase=0, kind="levels", totalLevels=500, live=False, booster=dict(field="hintCount", name="Hint", emoji="💡", coins=25)),
+    "Solitaire":       dict(pkg="com.pegasusgames.solitaire", name="Solitaire", saveKey="solitaire_save", levelBase=0, kind="levels", totalLevels=500, live=False, booster=dict(field="hintCount", name="Hint", emoji="💡", coins=25)),
 }
 
 CFG_RE = re.compile(r'<script data-growth-config>[\s\S]*?</script>\n?')
