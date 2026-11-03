@@ -1,0 +1,1001 @@
+{
+  "_comment": "Build order for the remaining apps (game / utility / kids interleaved for genre spread). status: todo | building | done. Builders: docs/BUILDER_GAME.md (game) and docs/BUILDER_KIDS_UTILITY.md (kids, utility); briefs in docs/*_briefs.json; finished apps go through scripts/integrate_flagship.py.",
+  "apps": [
+    {
+      "app": "HabitTracker",
+      "track": "utility",
+      "status": "done",
+      "model": "default"
+    },
+    {
+      "app": "ABCLearning",
+      "track": "kids",
+      "status": "done",
+      "model": "default"
+    },
+    {
+      "app": "BlockPuzzle",
+      "track": "game",
+      "status": "building",
+      "model": "default"
+    },
+    {
+      "app": "AgeCalculator",
+      "track": "utility",
+      "status": "building",
+      "model": "sonnet"
+    },
+    {
+      "app": "Solitaire",
+      "track": "game",
+      "status": "building",
+      "model": "default"
+    },
+    {
+      "app": "AspectRatio",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "AnimalSounds",
+      "track": "kids",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "Sudoku",
+      "track": "game",
+      "status": "done",
+      "model": "default"
+    },
+    {
+      "app": "BMICalculator",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "FlappyWings",
+      "track": "game",
+      "status": "done",
+      "model": "default"
+    },
+    {
+      "app": "BillSplit",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "BasicMathKids",
+      "track": "kids",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "Sokoban",
+      "track": "game",
+      "status": "done",
+      "model": "default"
+    },
+    {
+      "app": "BloodPressureLog",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "Minesweeper",
+      "track": "game",
+      "status": "building",
+      "model": "default"
+    },
+    {
+      "app": "BloodSugarLog",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "CountingApp",
+      "track": "kids",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "MahjongSolitaire",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "BreathingExercise",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WordSearch",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "BudgetPlanner",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "DinosaurApp",
+      "track": "kids",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "BubbleShooter",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "CharadesApp",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "ScrewPuzzle",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "ChessClock",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "EmotionFlash",
+      "track": "kids",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "PinPull",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "ChoreChart",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "JigsawPuzzle",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "CocktailGuide",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "KidsColoring",
+      "track": "kids",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "SlidingTiles",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "CoffeeGuide",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "Sumplete",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "CoinFlip",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "KidsDrum",
+      "track": "kids",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "Binairo",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "CompoundInterest",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "LightsOut",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "CurrencyConverter",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "KidsPiano",
+      "track": "kids",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "ColorFill",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "DartsScorer",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "KnotPuzzle",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "DecisionMaker",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "MultiplicationGame",
+      "track": "kids",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "CodeBreaker",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "DiceRoller",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "NumberLink",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "DotArt",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "ShapesColors",
+      "track": "kids",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "YarnSort",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "DrumMachine",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "FruitSort",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "ExpenseTracker",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "MemoryCard",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "EyeRest",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "FindDifference",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "FastingTimer",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "HiddenObject",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "Fireworks",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "PixelArt",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "FishingLog",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WordGroups",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "FlashcardMaker",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "FruitMerge",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "FlashlightSOS",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "BrickBreaker",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "GPACalculator",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "BlockDrop",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "GolfScorecard",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "SnakeGame",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "GroceryList",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WhackaMole",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "GuitarChords",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "BalloonPop",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "IceBreaker",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "TapColor",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "Kaleidoscope",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "NumberTap",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "LoanCalculator",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "ReactionTime",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "MandalaColor",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "StroopTest",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "MedicationReminder",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "NumberMemory",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "Metronome",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "Hangman",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "MoodTracker",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "Cryptogram",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "MorseCode",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WordLadder",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "MusicTheory",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WordHive",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "NeverHaveIEver",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WordConnect",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "NumberBase",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WordGuess",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "PackingChecklist",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WordScramble",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "PackingList",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "FlagQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "PasswordGen",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "CapitalCities",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "PercentageCalc",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "GeographyQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "PeriodTracker",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "FoodQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "PhoneticApp",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "SymbolQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "Phrasebook",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "BibleQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "PianoKeyboard",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "EmojiQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "PlantWater",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "AnimalQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "PomodoroTimer",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "SportsQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "PostureReminder",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "FootballQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "PushUpCounter",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "GeneralQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "QRCodeGen",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "HistoryQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "QuitSmoking",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "ScienceQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "RandomName",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "MovieTrivia",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "RandomNumber",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "MythQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "RandomRecipe",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "MentalMathQuiz",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "RecipeConverter",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "TrueOrFalse",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "RomanNumeralConverter",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "TwentyQuestions",
+      "track": "game",
+      "status": "todo",
+      "model": "default"
+    },
+    {
+      "app": "SalaryCalculator",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "SatisfyingSlime",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "SavingsGoal",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "ScientificCalc",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "ScoreTracker",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "SleepTracker",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "SobrietyCounter",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "SolarSystem",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "SoundBoard",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "SpinBottle",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "StepCounter",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "StopwatchTimer",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "TallyCounter",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "TextCase",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "ThisOrThat",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "TiltGuess",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "TimesTable",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "TimezoneConverter",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "TipCalculator",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "TruthOrDare",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "TwoTruthsOneLie",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "UnitConverter",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "VATCalculator",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WaterReminder",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WhiteNoise",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WorkoutLog",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WorldClock",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "WouldYouRather",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    },
+    {
+      "app": "ZenGarden",
+      "track": "utility",
+      "status": "todo",
+      "model": "sonnet"
+    }
+  ]
+}
