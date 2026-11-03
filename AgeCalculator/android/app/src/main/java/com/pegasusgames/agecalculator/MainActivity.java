@@ -1082,7 +1082,7 @@ public class MainActivity extends Activity {
     // App label from the manifest — scaffolded tools inherit the right name.
     private String appLabel() { return String.valueOf(getApplicationInfo().loadLabel(getPackageManager())); }
     private String getDailyReminderTitle() { return appLabel(); }
-    private String getDailyReminderBody()  { return "Time to check in on today's habits."; }
+    private String getDailyReminderBody()  { return "Check which birthdays are coming up."; }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,

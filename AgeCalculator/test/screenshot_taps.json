@@ -1,0 +1,88 @@
+{
+  "_comment": "AgeCalculator (utility shell) screenshot capture — real-use calculator states, never Settings/paywall/onboarding. _setup_taps seeds five saved people and Pro + ad-free (no banner / lock overlays) through window.shellLoadState (no reload: the pagehide persist would overwrite a localStorage seed) and defines agSet(), which sets theme/accent/birth date and navigates with UI.tab/UI.go (the utility shell's navigation; there is no showScreen). Phone 7 + tablet_7 2 + tablet_10 2 = 11 distinct states and themes; headlines in metadata/screenshot_headlines*.json describe exactly these screens.",
+  "_readiness_expr": "typeof UI !== 'undefined' && typeof window.shellLoadState === 'function' && typeof TOOL !== 'undefined' && typeof AM !== 'undefined'",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){var s={saveVersion:1,created:Date.now()-30*864e5,sessions:9,lastSeen:Date.now()-3600e3,onboarded:true,removeAds:true,pro:true,proTrialUntil:0,settings:{theme:'light',accent:'caramel',lang:'',textSize:1,haptics:true,reduceMotion:false,daily:{on:false,h:20,m:0}},ads:{last:0,breaks:0},tool:{quick:{birth:'1990-05-15',asOf:'',custom:[]},diff:{from:'2019-02-28',to:''},people:[{id:'p1',name:'Mia',birth:'2016-02-29',custom:[{id:'c1',n:5000,u:'d'},{id:'c2',n:10,u:'y'}]},{id:'p2',name:'Grandpa Joe',birth:'1948-11-09',custom:[]},{id:'p3',name:'Sam',birth:'1995-11-20',custom:[]},{id:'p4',name:'Priya',birth:'1988-03-12',custom:[]},{id:'p5',name:'Leo',birth:'2003-07-04',custom:[]}],wk:{on:true,dow:0,h:18,m:0}}};\nwindow.agSet=function(o){UI.closeAll();S.settings.theme=o.theme||'light';S.settings.accent=o.accent||'caramel';S.settings.lang='';S.tool.quick.birth=o.birth||'1990-05-15';S.tool.quick.asOf='';S.tool.quick.custom=o.custom||[];S.tool.diff=o.diff||{from:'2019-02-28',to:''};TD.showPast=!!o.past;persist();applyLang();applyTheme();UI.buildNav();UI.tab(o.tab||'age');if(o.person)UI.go('person',{id:o.person});setTimeout(function(){var v=document.getElementById('view');if(!v||!o.scroll)return;var e=o.scroll==='nb'?document.querySelector('.nb'):o.scroll==='zs'?document.querySelector('.zs'):[].slice.call(document.querySelectorAll('.sec-h')).filter(function(x){return /milestone/i.test(x.textContent);})[0];if(e)v.scrollTop+=e.getBoundingClientRect().top-v.getBoundingClientRect().top-10;},500);return 'ok';};\nreturn window.shellLoadState(s);})();",
+      1500
+    ]
+  ],
+  "01_exact_age": [
+    [
+      "js",
+      "agSet({\"theme\": \"light\", \"accent\": \"caramel\", \"birth\": \"1990-05-15\", \"tab\": \"age\"});'ok';",
+      1600
+    ]
+  ],
+  "02_next_birthday": [
+    [
+      "js",
+      "agSet({\"theme\": \"light\", \"accent\": \"ocean\", \"birth\": \"1984-11-20\", \"tab\": \"age\", \"scroll\": \"nb\"});'ok';",
+      1600
+    ]
+  ],
+  "03_milestones_10000_days": [
+    [
+      "js",
+      "agSet({\"theme\": \"dark\", \"accent\": \"caramel\", \"birth\": \"1999-09-09\", \"tab\": \"age\", \"scroll\": \"ms\"});'ok';",
+      1600
+    ]
+  ],
+  "04_zodiac_leap_day": [
+    [
+      "js",
+      "agSet({\"theme\": \"light\", \"accent\": \"plum\", \"birth\": \"1996-02-29\", \"tab\": \"age\", \"scroll\": \"zs\"});'ok';",
+      1600
+    ]
+  ],
+  "05_date_difference": [
+    [
+      "js",
+      "agSet({\"theme\": \"light\", \"accent\": \"forest\", \"tab\": \"diff\", \"diff\": {\"from\": \"2019-02-28\", \"to\": \"\"}});'ok';",
+      1600
+    ]
+  ],
+  "06_people_list": [
+    [
+      "js",
+      "agSet({\"theme\": \"light\", \"accent\": \"rose\", \"tab\": \"people\"});'ok';",
+      1600
+    ]
+  ],
+  "07_person_billion_seconds": [
+    [
+      "js",
+      "agSet({\"theme\": \"dark\", \"accent\": \"ocean\", \"tab\": \"people\", \"person\": \"p1\", \"scroll\": \"ms\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_01_exact_age": [
+    [
+      "js",
+      "agSet({\"theme\": \"light\", \"accent\": \"ocean\", \"birth\": \"1975-12-24\", \"tab\": \"age\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_02_date_difference": [
+    [
+      "js",
+      "agSet({\"theme\": \"dark\", \"accent\": \"plum\", \"tab\": \"diff\", \"diff\": {\"from\": \"2020-02-29\", \"to\": \"2026-08-14\"}});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_01_next_birthday": [
+    [
+      "js",
+      "agSet({\"theme\": \"dark\", \"accent\": \"caramel\", \"birth\": \"1988-03-12\", \"tab\": \"age\", \"scroll\": \"nb\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_02_milestones": [
+    [
+      "js",
+      "agSet({\"theme\": \"light\", \"accent\": \"forest\", \"tab\": \"people\", \"person\": \"p2\", \"scroll\": \"ms\"});'ok';",
+      1600
+    ]
+  ]
+}

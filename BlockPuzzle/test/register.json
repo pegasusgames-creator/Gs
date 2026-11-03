@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_blockpuzzle_fair.py",
+    "fair dealer (no dead tray while a piece fits, daily deterministic)"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      253,
+      240,
+      244
+    ],
+    "bg_top_right": [
+      247,
+      218,
+      229
+    ],
+    "bg_bottom": [
+      239,
+      200,
+      214
+    ],
+    "text_primary": [
+      61,
+      22,
+      38
+    ],
+    "text_accent": [
+      180,
+      45,
+      98
+    ],
+    "text_subtle": [
+      123,
+      63,
+      87
+    ],
+    "footer_tint": [
+      143,
+      33,
+      80
+    ],
+    "mood": "rose-glaze arcade",
+    "layout_archetype": "A",
+    "mascot_pattern": "M0",
+    "voice": "V6",
+    "texture": "T4"
+  }
+}

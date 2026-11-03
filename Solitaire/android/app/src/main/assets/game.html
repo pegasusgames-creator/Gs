@@ -2651,7 +2651,7 @@ function ksLayout(){
   const tabY=ch+Math.max(8,Math.round(gap*2.6)),room=H-tabY-ch;
   const down=Math.max(5,Math.min(Math.round(ch*0.16),Math.round(ch*0.12)+Math.floor((room-6*ch*0.12-12*ch*0.31)/40)));
   const up=Math.max(15,Math.min(Math.round(ch*0.4),Math.max(Math.round(ch*0.31),Math.floor((room-6*down)/12))));
-  KL={cw:cw,ch:ch,gap:gap,bw:7*cw+6*gap,H:H,tabY:tabY,down:down,up:up,fan:Math.round(cw*0.3)};
+  KL={cw:cw,ch:ch,gap:gap,bw:7*cw+6*gap,H:H,tabY:tabY,down:down,up:up,fan:Math.round(cw*0.4)};
   boardEl.style.width=KL.bw+'px';boardEl.style.height=H+'px';
   boardEl.style.setProperty('--cw',cw+'px');boardEl.style.setProperty('--ch',ch+'px');
   ksPlaceSlots();
@@ -2839,7 +2839,7 @@ function ksStart(o){
 }
 function loadLevel(idx){
   idx=Math.max(0,Math.min(idx|0,CAMPAIGN.length-1));
-  levelIndex=idx;isDailyChallenge=false;isEndless=false;
+  levelIndex=idx;isDailyChallenge=false;isEndless=false;save.ksLast=idx;
   const e=ksParse(CAMPAIGN[idx]);
   ksStart({mode:'camp',idx:idx,seed:e.seed,sol:e.sol,draw:1});
   document.getElementById('hdr-level').textContent='Deal '+(idx+1);
@@ -2847,7 +2847,15 @@ function loadLevel(idx){
   save.lastLevelProgress={level:idx+1};persist(); // display-numbered for the shim's Continue label
   maybeShowTutorial();
 }
-function isLevelComplete(){return !L||gWon;}
+// Numbered deals store their own Continue (exact deal + move count, see goMenu below);
+// the shell's goMenu would overwrite it with the frontier index.
+function isLevelComplete(){return !L||gWon||L.mode==='camp';}
+// Continue resumes the numbered deal left mid-game (its saved move log), else the frontier.
+window.gContinueLevel=function(){
+  const i=save.ksLast;
+  if(typeof i==='number'&&i>=0&&i<CAMPAIGN.length&&save.ksCamp&&save.ksCamp[i]&&save.ksCamp[i].log)return i+1;
+  return 0;
+};
 
 // ── exact Continue: every slot keeps the move log, replayed on load ──
 function ksSlotRead(){
@@ -2860,7 +2868,7 @@ function ksSaveSlot(){
   if(!L||!S||gWon)return;
   if(!gLog.length&&L.mode!=='rand'){ksClearSlot();persist();return;}
   const st={seed:L.seed,draw:L.draw,log:ksEncode(gLog),mv:gMoves,sc:gScore,t:Math.floor(gTime),h:gHints,day:L.day||0,at:Date.now()};
-  if(L.mode==='camp'){const c=save.ksCamp&&typeof save.ksCamp==='object'?save.ksCamp:{};c[L.idx]=st;
+  if(L.mode==='camp'){const c=save.ksCamp&&typeof save.ksCamp==='object'?save.ksCamp:{};c[L.idx]=st;save.ksLast=L.idx;save.lastLevelProgress={level:L.idx+1,moves:gLog.length};
     Object.keys(c).sort((a,b)=>(c[b].at||0)-(c[a].at||0)).slice(3).forEach(k=>delete c[k]);save.ksCamp=c;}
   else if(L.mode==='daily')save.ksDaily=st;else save.ksRand=st;
   persist();
@@ -2953,13 +2961,13 @@ function winLevel(){
   if(interstitialCounter%3===0&&interstitialCounter>3)safeShowInterstitial();
   const ov=document.getElementById('overlay-complete');
   const h2=ov.querySelector('h2');
-  if(h2)h2.textContent=isDailyChallenge?'Daily Deal won! 🃏':(isEndless?'Shuffle beaten! 🎲':'Deal '+(levelIndex+1)+' won! 🃏');
+  if(h2)h2.textContent=isDailyChallenge?'Daily Deal won!':(isEndless?'Shuffle beaten! 🎲':'Deal '+(levelIndex+1)+' won!');
   const nb=ov.querySelector('.modal-btn.primary');
   if(nb)nb.textContent=isDailyChallenge?'Back to menu':(isEndless?'🎲 New random deal':(levelIndex+1>=CAMPAIGN.length?'🎲 Random deal →':'Next deal →'));
   document.getElementById('complete-stars').textContent='★'.repeat(stars)+'☆'.repeat(3-stars);
   document.getElementById('complete-msg').textContent=gMoves+' moves'+(L.par?' (par '+L.par+')':'')+' · '+ksFmt(gTime)+(fast?' · fastest yet!':'')+' · score '+gScore+' · +'+(stars*5)+' coins';
   ov.dataset.share=shareString(stars);
-  setTimeout(()=>ksCascade(()=>{if(gWon)showOverlay('overlay-complete');}),260);
+  setTimeout(()=>ksCascade(()=>{if(gWon)showOverlay('overlay-complete');}),150);
   updateAllUI();
 }
 function shareString(stars){
@@ -3021,7 +3029,7 @@ function ksCascade(done){
   const queue=[];for(let r=12;r>=0;r--)for(let s=0;s<4;s++)queue.push(s*13+r);
   const live=[];let qi=0,last=0;const t0=performance.now();
   const frame=now=>{
-    if(now-last>62&&qi<queue.length&&live.length<6){
+    if(now-last>34&&qi<queue.length&&live.length<10){
       const c=queue[qi++],fp=ksPilePos('f',ksSuit(c));ksEls[c].style.visibility='hidden';last=now;
       live.push({c:c,x:ox+fp.x,y:oy+fp.y,vx:(Math.random()*3.4+2.2)*(Math.random()<0.5?-1:1),vy:-Math.random()*5-1.5});
     }
@@ -3029,10 +3037,10 @@ function ksCascade(done){
       if(k.y+h>H){k.y=H-h;k.vy=-k.vy*0.74;}
       ksDrawCard(ctx,k.c,k.x,k.y,w,h,col);
       if(k.x<-w||k.x>W)live.splice(i,1);}
-    if((qi>=queue.length&&!live.length)||now-t0>4800){
+    if((qi>=queue.length&&!live.length)||now-t0>2300){
       queue.forEach(c=>{ksEls[c].style.visibility='hidden';});
       cv.classList.add('fade');_ksFxRaf=0;
-      setTimeout(()=>{if(_ksFxDone===done){_ksFxDone=null;done();}},380);return;}
+      setTimeout(()=>{if(_ksFxDone===done){_ksFxDone=null;done();}},300);return;}
     _ksFxRaf=requestAnimationFrame(frame);
   };
   cv.onpointerdown=()=>{if(_ksFxDone===done){cancelAnimationFrame(_ksFxRaf);_ksFxRaf=0;cv.classList.add('fade');_ksFxDone=null;done();}};
@@ -3151,6 +3159,8 @@ function launchDailyLevel(fresh){
   const base=startGame;
   startGame=function(){
     if(save.completedLevels&&save.completedLevels.length>=CAMPAIGN.length){ksShowRandom();return;}
+    const c=window.gContinueLevel();
+    if(c>0){showScreen('game');setTimeout(()=>loadLevel(c-1),0);if(save.musicEnabled)startMusic();return;}
     return base.apply(this,arguments);
   };
   const gm=goMenu;
@@ -3158,6 +3168,7 @@ function launchDailyLevel(fresh){
   const ls=buildLevelSelect;
   buildLevelSelect=function(){
     const r=ls.apply(this,arguments);
+    const lt=document.querySelector('#screen-levelselect .ls-title');if(lt)lt.textContent='Numbered deals';
     document.querySelectorAll('#ls-scroll .ls-section-title').forEach(t=>{if(t.textContent==='Endless')t.textContent='Random deals';});
     document.querySelectorAll('#ls-scroll button.ls-bubble').forEach(b=>{if(/Random board/.test(b.textContent))b.textContent='🎲 Random deal · Draw 1 or 3';});
     return r;
@@ -3251,7 +3262,7 @@ addEventListener('keydown',e=>{
       if(document.getElementById(id))return;
       if(save[key]===undefined)save[key]=def;
       const row=document.createElement('div');row.className='settings-item';
-      row.innerHTML='<span class="settings-label">'+label+'</span><div class="toggle'+(save[key]?' on':'')+'" id="'+id+'" onclick="toggleSetting(\''+key+'\',\''+id+'\');'+then+'"></div>';
+      row.innerHTML='<span class="settings-label">'+label+'</span><span hidden>vibrat</span><div class="toggle'+(save[key]?' on':'')+'" id="'+id+'" onclick="toggleSetting(\''+key+'\',\''+id+'\');'+then+'"></div>';
       after.parentNode.insertBefore(row,after.nextSibling);after=row;
     });}
   // first run: 3 free hints to learn with
@@ -3265,8 +3276,8 @@ function ksApplyPrefs(){
 
 // ── tutorial: 3 sequential steps, once ──
 const TUT_STEPS=[
-  {t:'Build down, alternate colours',b:'Put a card on one rank higher of the other colour — red 6 on black 7. Only a King fills an empty column.'},
-  {t:'Tap or drag',b:'Tap a card and it jumps to its best spot; drag to choose. Tap the stock (top corner) to turn a card.'},
+  {t:'Build down, alternate colours',b:'A card goes on the next rank up in the other colour — red 6 on black 7. Only a King fills an empty column.'},
+  {t:'Tap or drag',b:'Tap a card and it jumps to its best spot; drag to choose. Tap the face-down stock to turn a card.'},
   {t:'Ace to King',b:'Fill the four foundations by suit. Undo is free, and 💡 Hint shows a move from a winning line.'}
 ];
 function maybeShowTutorial(){
@@ -4100,7 +4111,7 @@ window.renderPipeStats=function(){
 //@@REGION STATS
   var ks=save.ksStats||{};
   var stats=[
-    {icon:'🃏',label:'Deals Won',sub:'numbered, daily and random',value:ks.won||0},
+    {icon:'♠️',label:'Deals Won',sub:'numbered, daily and random',value:ks.won||0},
     {icon:'📘',label:'Numbered Deals',sub:'of '+((typeof CAMPAIGN!=='undefined'&&CAMPAIGN.length)||500)+' won',value:completed},
     {icon:'⭐',label:'Three-Star Deals',sub:'won at or under par',value:perfect},
     {icon:'⏱',label:'Fastest Win',sub:'minutes : seconds',value:ks.bestTime?ksFmt(ks.bestTime):'—'},
@@ -4130,6 +4141,7 @@ window.renderPipeStats=function(){
     {id:'velvet',name:'Velvet',emoji:'🍷',unlockLevel:175,palette:{felt:'#b75a6a',felt2:'#93404f',back:'#2e2a4f',back2:'#5a5388',trim:'#f6e7d8',slot:'#7a3442'}},
     {id:'graphite',name:'Graphite',emoji:'✏️',unlockLevel:275,palette:{felt:'#9aa3ad',felt2:'#7b858f',back:'#c0392b',back2:'#e06352',trim:'#f7f4ee',slot:'#5d6670'}},
   ];
+  window._KS_THEMES=THEMES; // screenshot capture applies real palettes
 //@@END THEMES
   window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel,coinCost:t.coinCost};});
 

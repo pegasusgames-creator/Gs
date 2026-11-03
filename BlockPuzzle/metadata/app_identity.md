@@ -1,42 +1,46 @@
-# BlockPuzzle Identity
+# Block Puzzle Identity
 
-- **Category**: puzzle
-- **Layout archetype**: F (direct-to-game minimal)
-- **Mascot pattern**: M0 (no mascot — game elements carry the personality)
-- **Voice**: V4 (snarky / dry)
-- **Texture**: T4 (wood / material)
-- **Mood string**: puzzle-deep
+- Category: puzzle (score chase / block placement, 8×8)
+- Layout: A (family shell: hero Play CTA, daily pill, icon grid)
+- Mascot: M0 (no mascot; the glossy glazed tiles carry the personality)
+- Voice: V6 (enthusiastic arcade): "NICE!" → "GREAT!" → "AMAZING!" → "UNREAL!" → "LEGENDARY!", "BOOM!", "REVIVED!"
+- Texture: T4 (material: glossy ceramic glaze tiles on a glazed tray)
+- Mood string: rose-glaze arcade
 
-The app should feel like: thoughtful and tactile; each app's mechanic is the star.
+A ceramic studio where every drop is a glazed tile settling into a blush
+tray. Daylight "Rose Glaze" is a pale rose board with a raspberry accent;
+Midnight Glaze is the coin-bought dark look. Seven tile colours (cobalt,
+jade, vermilion, amber, violet, teal, lime) stay readable on every theme;
+themes re-glaze the tray and all seven tiles (Celadon, Delft Blue,
+Majolica, Raku, Stoneware, Midnight Glaze).
 
-## Anti-pattern audit (APP_ARCHETYPES.md §5)
+Core loop: three-piece tray, drag with a ghost lifted above the finger,
+full rows and columns clear together, combo multiplier ×1…×8 with a
+3-move grace, Spotless bonus for an empty board, per-run goal ladder
+(100 → 2000) that awards 1-3 stars. The dealer is adaptive (small pieces
+when crowded, big pieces as the score climbs) and fair: it never deals a
+tray with nothing placeable while any shape still fits — gated by
+`scripts/check_blockpuzzle_fair.py` (500 seeded greedy-bot runs + 366
+daily seeds replayed for determinism, plus 50 JS golden traces).
 
-This file was auto-generated during the 2026-04-30 portfolio archetype
-assignment pass. The four archetypes above were chosen so the app does
-NOT default to the template signature (A/M0/V1/T1).
+Fail state: "No room!" card — one free video revive per run (empties the
+densest 4×4, deals a fresh tray) and up to two heart revives. Boosters:
+💣 Bomb (main, `hintCount`; 3×3 blast, solver marks the strongest spot),
+↻ Rotate (tap pieces to turn them until the tray is used), ⟳ Refresh
+(new tray dealt to fit). Daily = date-seeded piece sequence shared by all
+players, weekday target 700 (Mon) → 1500 (Sun), streak.
 
-When the app's `game.html` is next touched (or built fresh), audit the
-in-app design against the §5 anti-patterns:
+Distinct from siblings: Puzzle2048 (number merge on a sand board),
+Sokoban (pushing crates in a clay warehouse), FlappyWings (one-tap
+flyer, peach sky). No sibling uses a rose/raspberry family. No
+third-party marks or look-alike trade dress (deliberately unlike the
+dark-blue leaders of the genre).
 
-- [ ] Center-aligned everything → use offset weight
-- [ ] Same SVG icon set as other apps → vary icon family per app
-- [ ] All-caps headlines on every screen → mixed case for body
-- [ ] Generic templated currency icon → make it match the app theme
-- [ ] Identical button shapes / sizes / spacings → vary
-- [ ] Symmetric vertical column layout → break with side panels / FAB
-- [ ] Generic "Level Complete!" celebration → app-specific phrasing
-- [ ] Same loading / transition patterns → vary
-- [ ] Identical settings screen → reorder, rename, add app-specific options
-
-If 3+ of the above are hit, redesign before the next ship.
-
-## Phase 8 self-check
-
-Before declaring this app release-ready, all four of:
-
-1. Side-by-side test (vs other shipped apps, do they look like different products?)
-2. Voice-specificity test (does the menu copy reflect this app's voice archetype?)
-3. Identity-element test (a single recognizable visual element)
-4. Anonymous-screenshot test (could a user identify this app without title/name?)
-
-must pass. See APP_ARCHETYPES.md §8.
+## Menu-must-pass checklist (skin v2 — see CLAUDE.md)
+- [x] Icon tiles filled & brand-tinted with depth (never outline-on-white)
+- [x] Motif felt (~14% berry ink: L, T, square, bar outlines) and masked out of the center
+- [x] Emblem reads the core mechanic in one glance (a domino dropping into the last gap of a row)
+- [x] Hero CTA dominates (raspberry gradient + depth + glyph + shine)
+- [x] Wordmark gradient clean (2 stops #7d1f47 → #a82a5c, ≥4.5:1)
+- [x] Family-consistent yet distinct vs every sibling
+- [x] Light + midnight correct; reduced-motion respected; no competing shim

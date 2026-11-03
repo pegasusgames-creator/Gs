@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Android Auto Backup (API 23-30): the user's own habits (WebView
+<!-- Android Auto Backup (API 23-30): the user's own saved people (WebView
      localStorage) + reminder schedule travel to their Google account backup
      and come back on a new phone / reinstall. Nothing else is backed up. -->
 <full-backup-content>

@@ -1,0 +1,95 @@
+{
+ "_comment": "Block Puzzle wrapper decorations (scripts/wrap_screenshots.py). Rose-glaze family: a few soft glossy tiles in the game's own tile colours plus warm glow sparkles, kept to the corners/edges so the board and headline stay clear.",
+ "blobs": [
+  [
+   0.14,
+   0.18,
+   0.34,
+   "#f7c6d6",
+   70
+  ],
+  [
+   0.88,
+   0.26,
+   0.3,
+   "#ffd98a",
+   58
+  ],
+  [
+   0.1,
+   0.7,
+   0.32,
+   "#c93a6f",
+   40
+  ],
+  [
+   0.9,
+   0.74,
+   0.32,
+   "#8fb8f0",
+   46
+  ]
+ ],
+ "pieces": [
+  {
+   "shape": "block",
+   "x": 0.1,
+   "y": 0.27,
+   "size": 0.16,
+   "color": "#2f62c0",
+   "rot": -12,
+   "alpha": 88,
+   "blur": 2
+  },
+  {
+   "shape": "block",
+   "x": 0.9,
+   "y": 0.34,
+   "size": 0.14,
+   "color": "#e09b12",
+   "rot": 10,
+   "alpha": 92,
+   "blur": 2
+  },
+  {
+   "shape": "block",
+   "x": 0.12,
+   "y": 0.84,
+   "size": 0.13,
+   "color": "#23936e",
+   "rot": 8,
+   "alpha": 84,
+   "blur": 3
+  },
+  {
+   "shape": "block",
+   "x": 0.88,
+   "y": 0.86,
+   "size": 0.15,
+   "color": "#d4553f",
+   "rot": -8,
+   "alpha": 86,
+   "blur": 3
+  },
+  {
+   "shape": "sparkle",
+   "x": 0.84,
+   "y": 0.17,
+   "size": 0.09,
+   "color": "#ffcf5a",
+   "rot": 0,
+   "alpha": 120,
+   "blur": 0
+  },
+  {
+   "shape": "sparkle",
+   "x": 0.16,
+   "y": 0.6,
+   "size": 0.07,
+   "color": "#ffcf5a",
+   "rot": 20,
+   "alpha": 110,
+   "blur": 0
+  }
+ ]
+}

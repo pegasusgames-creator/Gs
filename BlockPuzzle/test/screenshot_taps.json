@@ -1,0 +1,88 @@
+{
+ "_comment": "Block Puzzle screenshot capture: gameplay boards only. Score game (no level list): each slot calls window.bpShot(seed, moves, theme, drag), which plays a REAL classic run on a fixed dealer seed with the greedy bot for that many placements and renders it mid-play (no overlay, coachmark, toast or popup). drag=true leaves the next piece lifted over its drop spot so the ghost preview and the will-clear glow show. 11 distinct seed/move boards; every glaze theme appears (default Rose Glaze, Celadon, Delft Blue, Raku, Midnight Glaze, Majolica, Stoneware).",
+ "_readiness_expr": "typeof save !== 'undefined' && typeof window.bpShot === 'function' && typeof showScreen === 'function' && Array.isArray(window._BP_THEMES)",
+ "_setup_taps": [
+  [
+   "js",
+   "(function(){try{save.coins=1840;save.lives=5;save.hintCount=4;save.bestScore=6240;save.gamesPlayed=87;save.bpLines=1312;save.bpBestCombo=14;save.bpGoalsHit=9;save.unlockedThemes=['midnight','raku'];save.dailyChallengeStreak=6;save.bpGift=1;persist();localStorage.setItem('bp_tutorialDone','1');localStorage.setItem('tutorialDone','1');updateAllUI();}catch(e){}try{var ev=window.gEvents&&gEvents.current();if(ev)localStorage.setItem('gEv_'+ev.key,JSON.stringify({pts:0,claimed:[],intro:1,last:1}));}catch(e){}return 'seeded';})()",
+   600
+  ]
+ ],
+ "01_drag_drop": [
+  [
+   "js",
+   "window.bpShot(128,33,'default',true);'ok';",
+   1600
+  ]
+ ],
+ "02_combo_chain": [
+  [
+   "js",
+   "window.bpShot(205,33,'celadon',false);'ok';",
+   1600
+  ]
+ ],
+ "03_rows_columns": [
+  [
+   "js",
+   "window.bpShot(142,33,'delft',true);'ok';",
+   1600
+  ]
+ ],
+ "04_fair_dealer": [
+  [
+   "js",
+   "window.bpShot(184,18,'raku',false);'ok';",
+   1600
+  ]
+ ],
+ "05_after_dark": [
+  [
+   "js",
+   "window.bpShot(226,27,'midnight',true);'ok';",
+   1600
+  ]
+ ],
+ "06_big_pieces": [
+  [
+   "js",
+   "window.bpShot(191,33,'majolica',false);'ok';",
+   1600
+  ]
+ ],
+ "07_one_more_run": [
+  [
+   "js",
+   "window.bpShot(233,27,'stoneware',false);'ok';",
+   1600
+  ]
+ ],
+ "tablet_7_01_lifted_ghost": [
+  [
+   "js",
+   "window.bpShot(121,33,'default',true);'ok';",
+   1600
+  ]
+ ],
+ "tablet_7_02_night_run": [
+  [
+   "js",
+   "window.bpShot(163,18,'midnight',false);'ok';",
+   1600
+  ]
+ ],
+ "tablet_10_01_line_burst": [
+  [
+   "js",
+   "window.bpShot(156,27,'delft',true);'ok';",
+   1600
+  ]
+ ],
+ "tablet_10_02_calm_board": [
+  [
+   "js",
+   "window.bpShot(275,18,'stoneware',false);'ok';",
+   1600
+  ]
+ ]
+}

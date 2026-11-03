@@ -1,13 +1,14 @@
 {
-  "category_google": "LIFESTYLE",
-  "category_apple_primary": "LIFESTYLE",
-  "category_apple_subcategory": "",
+  "category_google": "GAME_CARD",
+  "category_apple_primary": "GAMES",
+  "category_apple_subcategory": "CARD",
   "contains_ads": true,
   "contains_iap": true,
   "target_audience_min_age": 13,
-  "support_url": "https://pegasusgames.example/support",
-  "marketing_url": "",
+  "support_url": "https://pegasusgames-creator.github.io/",
+  "marketing_url": "https://pegasusgames-creator.github.io/",
   "copyright": "© 2026 Pegasus Games",
   "package_name": "com.pegasusgames.solitaire",
-  "upload_key_sha1": "3A:E5:21:08:C8:15:CE:40:F2:57:40:F9:B7:28:3D:14:99:FE:15:67"
+  "upload_key_sha1": "3A:E5:21:08:C8:15:CE:40:F2:57:40:F9:B7:28:3D:14:99:FE:15:67",
+  "first_upload_at": null
 }

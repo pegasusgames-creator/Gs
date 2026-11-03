@@ -139,29 +139,33 @@ body.midnight .modal p{color:#7d93b6;}
 /* §3.1 menu hierarchy: V8 minimal + T6 neon — hero Play, secondary pair, glowing tertiary icons. */
 /*@@REGION PALETTE*/
 :root{
-  /* Daylight = glazed tiles on a pale-clay tray ("Kiln"): warm terracotta
-     family, no sibling uses clay/terracotta. Midnight = the kiln at night. */
-  --bg:#f6e4d8; --app-bg:#f6e4d8; --surface:#fffaf6;
-  --text:#3a1f15; --text-mute:#74493a;
-  --border:rgba(58,31,21,0.15);
-  --g-play:linear-gradient(135deg,#c4502a,#963519); --on-accent:#ffffff;
-  --btn-neutral-bg:#f0d9cb;
-  --menu-tile-bg:#fff3ea; --menu-tile-border:#ecc9b5; --menu-tile-fg:#8a3519;
-  --accent:#b8492a; --accent-dim:#8a3519;
+  /* Daylight = "Rose Glaze": glossy ceramic tiles on a blush-glazed tray,
+     raspberry accent. Own colour family (siblings: clay = Sokoban, peach =
+     FlappyWings, cream = Nonogram/2048, blues/greens/lavenders elsewhere).
+     Midnight = the same glaze after dark. */
+  --bg:#f9e5ec; --app-bg:#f9e5ec; --surface:#fffafc;
+  --text:#3d1626; --text-mute:#7b3f57;
+  --border:rgba(61,22,38,0.14);
+  --g-play:linear-gradient(135deg,#c93a6f,#901f4d); --on-accent:#ffffff;
+  --btn-neutral-bg:#f3d6e1;
+  --menu-tile-bg:#fff2f6; --menu-tile-border:#efc4d3; --menu-tile-fg:#8f2150;
+  --accent:#b42d62; --accent-dim:#8f2150;
   /* board roles (themes recolour these) */
-  --well:#e5c3ae; --slot:#f3dfd2; --well-edge:#d4a68d; --glow:#ffcf5a;
-  --c1:#2f62c0; --c2:#23936e; --c3:#d4553f; --c4:#e09b12; --c5:#8447b0; --c6:#178ea6; --c7:#c8457a;
+  --well:#efc8d6; --slot:#f8e0e9; --well-edge:#dca2b8; --glow:#ffcf5a;
+  --c1:#2f62c0; --c2:#23936e; --c3:#d4553f; --c4:#e09b12; --c5:#8447b0; --c6:#178ea6; --c7:#6f9a1f;
+  --shade:rgba(70,14,38,.32);
 }
 body.midnight{
-  --bg:#1c1416; --app-bg:#1c1416; --surface:#2a1f22;
-  --text:#f6e7dc; --text-mute:#c9ab9c;
-  --border:rgba(246,231,220,0.14);
+  --bg:#1d1219; --app-bg:#1d1219; --surface:#2c1d26;
+  --text:#f8e6ee; --text-mute:#d0a7b9;
+  --border:rgba(248,230,238,0.14);
   --on-accent:#ffffff;
-  --btn-neutral-bg:#3b2b2e;
-  --menu-tile-bg:#2a1f22; --menu-tile-border:#45333a; --menu-tile-fg:#f3ab88;
-  --accent:#ec7a4c; --accent-dim:#b8492a;
-  --well:#120c0e; --slot:#2c2124; --well-edge:#3d2c30; --glow:#ffc85a;
-  --c1:#5b8cf0; --c2:#3cc495; --c3:#f0715a; --c4:#f5b93a; --c5:#b07ae0; --c6:#34bfd6; --c7:#f06aa0;
+  --btn-neutral-bg:#3d2833;
+  --menu-tile-bg:#2c1d26; --menu-tile-border:#4a3040; --menu-tile-fg:#f59ac0;
+  --accent:#f0679a; --accent-dim:#b42d62;
+  --well:#130b10; --slot:#2e1f28; --well-edge:#43293a; --glow:#ffc85a;
+  --c1:#5b8cf0; --c2:#3cc495; --c3:#f0715a; --c4:#f5b93a; --c5:#b07ae0; --c6:#34bfd6; --c7:#9ccc3a;
+  --shade:rgba(0,0,0,.45);
 }
 /*@@END PALETTE*/
 .menu-primary{width:240px;padding:18px 0;border:none;border-radius:32px;font-family:'Poppins',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:2px;cursor:pointer;background:linear-gradient(135deg,#448aff,#69f0ae);color:#0f1923;box-shadow:0 0 24px rgba(105,240,174,0.35),0 0 60px rgba(68,138,255,0.25);transition:transform 0.1s;}
@@ -251,6 +255,8 @@ body.midnight{
 .stars-display{font-size:2rem;margin-bottom:16px;letter-spacing:4px;}
 
 /*@@REGION BOARD_CSS*/
+/* in-board stacking order (local to .board-zone; shell layers use --z-toast/--z-tutorial) */
+:root{--z-bp-will:1;--z-bp-shard:2;--z-bp-sweep:3;--z-bp-fx:4;--z-bp-pop:5;--z-bp-card:6;--z-bp-toast:7;}
 /* ── Block Puzzle: chrome re-tint (shell chrome → this app's tokens, both themes) ── */
 body{background:var(--bg);color:var(--text);}
 #screen-game,#screen-levelselect,#screen-shop,#screen-settings,#screen-moregames,
@@ -310,8 +316,8 @@ body.midnight .bp-foot .foot-btn.warn{color:var(--accent);}
 @keyframes bpShake{20%{transform:translate(-5px,2px)}40%{transform:translate(4px,-3px)}60%{transform:translate(-3px,1px)}80%{transform:translate(2px,-1px)}}
 .bp-board{display:grid;grid-template-columns:repeat(8,var(--cell,36px));grid-auto-rows:var(--cell,36px);gap:var(--gap,3px);padding:var(--pad,8px);
   background:var(--well);border:2px solid var(--well-edge,var(--border));border-radius:18px;
-  box-shadow:inset 0 3px 10px -4px rgba(0,0,0,.28),0 18px 36px -22px rgba(60,20,8,.55);}
-.bp-board.bombing{cursor:crosshair;box-shadow:inset 0 3px 10px -4px rgba(0,0,0,.28),0 0 0 3px var(--accent),0 18px 36px -22px rgba(60,20,8,.55);}
+  box-shadow:inset 0 3px 10px -4px rgba(0,0,0,.28),0 18px 36px -22px var(--shade);}
+.bp-board.bombing{cursor:crosshair;box-shadow:inset 0 3px 10px -4px rgba(0,0,0,.28),0 0 0 3px var(--accent),0 18px 36px -22px var(--shade);}
 .bp-cell{position:relative;border-radius:22%;background:var(--slot);box-shadow:inset 0 2px 3px rgba(0,0,0,.10);}
 /* glazed ceramic tile: base colour + soft top glaze + bottom lip */
 .t{--cc:var(--c1);background:linear-gradient(160deg,rgba(255,255,255,.46) 0%,rgba(255,255,255,.08) 42%,rgba(255,255,255,0) 60%),var(--cc)!important;
@@ -322,7 +328,7 @@ body.midnight .bp-foot .foot-btn.warn{color:var(--accent);}
 .bp-cell.pv::after{display:none;}
 .bp-cell.will.w1{--cw:var(--c1)}.bp-cell.will.w2{--cw:var(--c2)}.bp-cell.will.w3{--cw:var(--c3)}.bp-cell.will.w4{--cw:var(--c4)}.bp-cell.will.w5{--cw:var(--c5)}.bp-cell.will.w6{--cw:var(--c6)}.bp-cell.will.w7{--cw:var(--c7)}
 .bp-cell.will.t{--cc:var(--cw);filter:brightness(1.12) saturate(1.1);}
-.bp-cell.will{box-shadow:0 0 0 2px var(--glow,#ffd36b),0 0 12px -1px var(--glow,#ffd36b)!important;z-index:1;}
+.bp-cell.will{box-shadow:0 0 0 2px var(--glow,#ffd36b),0 0 12px -1px var(--glow,#ffd36b)!important;z-index:var(--z-bp-will);}
 .bp-cell.will.pv{opacity:.8;}
 .bp-cell.drop{animation:bpDrop .26s cubic-bezier(.3,1.6,.5,1);}
 @keyframes bpDrop{0%{transform:scale(1.14);filter:brightness(1.35)}100%{transform:none}}
@@ -348,35 +354,38 @@ body.midnight .bp-foot .foot-btn.warn{color:var(--accent);}
 .bp-piece i{position:absolute;display:block;}
 
 /* lifted ghost that follows the finger (offset above it) */
-.bp-ghost{position:fixed;left:0;top:0;pointer-events:none;opacity:0;z-index:var(--z-toast,300);transform-origin:0 0;transition:transform .12s ease-out,opacity .1s;will-change:transform;filter:drop-shadow(0 12px 12px rgba(40,12,4,.35));}
+.bp-ghost{position:fixed;left:0;top:0;pointer-events:none;opacity:0;z-index:var(--z-toast,300);transform-origin:0 0;transition:transform .12s ease-out,opacity .1s;will-change:transform;filter:drop-shadow(0 12px 12px var(--shade));}
 .bp-ghost.on{opacity:1;}
 .bp-ghost.back{transition:transform .16s ease-in,opacity .16s;}
 
 /* clear FX */
-.bp-shard{position:absolute;pointer-events:none;z-index:2;animation:bpShard .52s ease-in both;}
+.bp-shard{position:absolute;pointer-events:none;z-index:var(--z-bp-shard);animation:bpShard .52s ease-in both;}
 @keyframes bpShard{0%{transform:scale(1);filter:brightness(1)}25%{transform:scale(1.18);filter:brightness(2.1)}100%{transform:scale(.1) rotate(25deg);opacity:0}}
-.bp-sweep{position:absolute;pointer-events:none;z-index:3;border-radius:10px;background:linear-gradient(90deg,transparent,var(--glow,#ffd36b),transparent);animation:bpSweepH .5s ease-out both;}
+.bp-sweep{position:absolute;pointer-events:none;z-index:var(--z-bp-sweep);border-radius:10px;background:linear-gradient(90deg,transparent,var(--glow,#ffd36b),transparent);animation:bpSweepH .5s ease-out both;}
 .bp-sweep.v{background:linear-gradient(180deg,transparent,var(--glow,#ffd36b),transparent);animation-name:bpSweepV;}
 @keyframes bpSweepH{0%{transform:scaleX(.05);opacity:1}100%{transform:scaleX(1.25);opacity:0}}
 @keyframes bpSweepV{0%{transform:scaleY(.05);opacity:1}100%{transform:scaleY(1.25);opacity:0}}
-#bp-fx{position:absolute;left:0;top:0;pointer-events:none;z-index:4;}
-.bp-pop{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:5;}
+#bp-fx{position:absolute;left:0;top:0;pointer-events:none;z-index:var(--z-bp-fx);}
+.bp-pop{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:var(--z-bp-pop);}
 .bp-word{position:absolute;font-size:clamp(1.6rem,9vw,2.7rem);font-weight:900;letter-spacing:1px;color:var(--on-accent);text-align:center;line-height:1.05;
   -webkit-text-stroke:1.5px var(--accent-dim);text-shadow:0 3px 0 var(--accent-dim),0 8px 22px rgba(0,0,0,.35);animation:bpWord 1.25s cubic-bezier(.2,1.4,.4,1) both;}
 .bp-word small{display:block;font-size:.5em;letter-spacing:2px;margin-top:2px;}
 .bp-word.big{font-size:clamp(2rem,11vw,3.3rem);}
 .bp-word.goal,.bp-word.best{color:var(--glow,#ffd36b);-webkit-text-stroke:1.5px var(--accent-dim);}
 @keyframes bpWord{0%{transform:scale(.3);opacity:0}18%{transform:scale(1.12);opacity:1}30%{transform:scale(1)}78%{transform:translateY(-8px);opacity:1}100%{transform:translateY(-34px);opacity:0}}
-.bp-float{position:absolute;transform:translate(-50%,-50%);pointer-events:none;z-index:5;font-weight:800;font-size:clamp(.9rem,4vw,1.15rem);color:var(--text);text-shadow:0 1px 0 var(--surface);animation:bpFloat .85s ease-out both;}
+.bp-float{position:absolute;transform:translate(-50%,-50%);pointer-events:none;z-index:var(--z-bp-pop);font-weight:800;font-size:clamp(.9rem,4vw,1.15rem);color:var(--text);text-shadow:0 1px 0 var(--surface);animation:bpFloat .85s ease-out both;}
 @keyframes bpFloat{0%{opacity:0;transform:translate(-50%,-30%)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-190%)}}
 
 /* single in-board toast (engine messages never stack) */
 .bp-toast{position:absolute;left:50%;top:10px;transform:translate(-50%,8px);max-width:88%;padding:8px 14px;border-radius:14px;
-  background:var(--text);color:var(--bg);font-size:.82rem;font-weight:700;text-align:center;line-height:1.3;opacity:0;pointer-events:none;z-index:7;transition:opacity .2s,transform .2s;box-shadow:0 8px 20px -8px rgba(0,0,0,.4);}
+  background:var(--text);color:var(--bg);font-size:.82rem;font-weight:700;text-align:center;line-height:1.3;opacity:0;pointer-events:none;z-index:var(--z-bp-toast);transition:opacity .2s,transform .2s;box-shadow:0 8px 20px -8px rgba(0,0,0,.4);}
 .bp-toast.on{opacity:.94;transform:translate(-50%,0);}
+/* while the No-room card is up, messages sit just below the board (over the tray), never on the card */
+.bp-stuck.show ~ .bp-toast{top:100%;transform:translate(-50%,16px);}
+.bp-stuck.show ~ .bp-toast.on{transform:translate(-50%,8px);}
 .stars-display{color:#d29922;}
 /* no-room card */
-.bp-stuck{position:absolute;inset:0;display:none;align-items:center;justify-content:center;border-radius:18px;background:color-mix(in srgb,var(--bg) 62%,transparent);backdrop-filter:blur(2px);z-index:6;}
+.bp-stuck{position:absolute;inset:0;display:none;align-items:center;justify-content:center;border-radius:18px;background:color-mix(in srgb,var(--bg) 62%,transparent);backdrop-filter:blur(2px);z-index:var(--z-bp-card);}
 .bp-stuck.show{display:flex;animation:bpFade .25s ease-out;}
 @keyframes bpFade{from{opacity:0}to{opacity:1}}
 .bp-stuck-card{width:min(86%,290px);background:var(--surface);border:1.5px solid var(--accent);border-radius:20px;padding:14px 16px;text-align:center;box-shadow:0 18px 40px -12px rgba(0,0,0,.45);display:flex;flex-direction:column;gap:8px;}
@@ -615,23 +624,23 @@ body.midnight .bp-foot .foot-btn.warn{color:var(--accent);}
 }
 /* =================== END SHARED MENU SKIN v2 =================== */
 /*@@REGION IDENTITY_CSS*/
-/* ---- Block Puzzle identity: glazed tiles on a clay tray ---- */
+/* ---- Block Puzzle identity: glossy tiles on a rose-glazed tray ---- */
 :root{
-  --m-bg-top:#fbefe6; --m-vignette: rgba(122,45,23,0.22); --m-grain-opacity:.05;
-  --m-cta-grad: linear-gradient(135deg,#c4502a,#963519);
-  --m-cta-glow: rgba(158,58,31,.42); --m-glow: rgba(224,155,18,.30);
-  --m-cta-glyph:"▶ "; --m-tile-icon:#8a3519;
-  /* motif: outlines of the tray's pieces (L, T, square, bar), ~14% clay ink */
-  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cg fill='none' stroke='%237a2d17' stroke-width='3' stroke-linejoin='round' opacity='0.14'%3E%3Cpath d='M24 24h36v36h36v36H24z'/%3E%3Cpath d='M200 40h84v28h-28v28h-28V68h-28z'/%3E%3Crect x='40' y='196' width='56' height='56' rx='8'/%3E%3Cpath d='M180 230h112v28H180z'/%3E%3Cpath d='M250 150h28v28h-28zM222 150h28v28h-28z'/%3E%3C/g%3E%3C/svg%3E");
+  --m-bg-top:#fdf0f4; --m-vignette: rgba(120,24,62,0.20); --m-grain-opacity:.05;
+  --m-cta-grad: linear-gradient(135deg,#c93a6f,#901f4d);
+  --m-cta-glow: rgba(150,30,80,.40); --m-glow: rgba(224,155,18,.28);
+  --m-cta-glyph:"▶ "; --m-tile-icon:#8f2150;
+  /* motif: outlines of the tray's pieces (L, T, square, bar), ~14% berry ink */
+  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cg fill='none' stroke='%237d1f47' stroke-width='3' stroke-linejoin='round' opacity='0.14'%3E%3Cpath d='M24 24h36v36h36v36H24z'/%3E%3Cpath d='M200 40h84v28h-28v28h-28V68h-28z'/%3E%3Crect x='40' y='196' width='56' height='56' rx='8'/%3E%3Cpath d='M180 230h112v28H180z'/%3E%3Cpath d='M250 150h28v28h-28zM222 150h28v28h-28z'/%3E%3C/g%3E%3C/svg%3E");
   --m-motif-size: 320px 320px;
 }
-body.midnight{ --m-bg-top:#271b1e; --m-vignette:rgba(0,0,0,.5);
+body.midnight{ --m-bg-top:#2a1923; --m-vignette:rgba(0,0,0,.5);
   /* --m-* defaults resolve at html scope and cannot see body.midnight
      token overrides — restate the tile fill here explicitly. */
-  --m-tile-grad:#2a1f22; --m-tile-icon:#f3ab88; }
-/* wordmark: clean 2-stop terracotta glaze (≥4.5:1 on both backgrounds) */
-#screen-menu .menu-logo{background:linear-gradient(90deg,#7a2d17,#a8441f);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
-body.midnight #screen-menu .menu-logo{background:linear-gradient(90deg,#f6e7dc,#f3ab88);-webkit-background-clip:text;background-clip:text;}
+  --m-tile-grad:#2c1d26; --m-tile-icon:#f59ac0; }
+/* wordmark: clean 2-stop raspberry glaze (≥4.5:1 on both backgrounds) */
+#screen-menu .menu-logo{background:linear-gradient(90deg,#7d1f47,#a82a5c);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+body.midnight #screen-menu .menu-logo{background:linear-gradient(90deg,#f8e6ee,#f59ac0);-webkit-background-clip:text;background-clip:text;}
 #screen-menu .menu-sub{color:var(--text-mute);}
 #screen-menu .menu-primary{color:var(--on-accent);}
 /*@@END IDENTITY_CSS*/
@@ -855,7 +864,7 @@ body.midnight #screen-menu .menu-logo{background:linear-gradient(90deg,#f6e7dc,#
     <p id="complete-msg">Score 0</p>
     <div class="modal-btns">
       <button class="modal-btn primary" id="complete-next" onclick="nextLevel()">▶ Play again</button>
-      <button class="modal-btn secondary" onclick="shareResult()">↗ Share score</button>
+      <button class="modal-btn secondary" data-growth-share-btn="1" onclick="shareResult()">↗ Share score</button>
       <button class="modal-btn secondary" onclick="hideOverlay('overlay-complete');goMenu()">☰ Menu</button>
     </div>
   </div>
@@ -904,6 +913,8 @@ body.midnight #screen-menu .menu-logo{background:linear-gradient(90deg,#f6e7dc,#
       <button class="modal-btn primary" onclick="launchDailyLevel()">Play Now</button>
       <button class="modal-btn secondary" onclick="hideOverlay('overlay-daily')">Later</button>
     </div>
+    <!-- intro card (nothing to share before the run): tells the virality shim not to add a share button here -->
+    <span data-growth-share-btn="0" hidden></span>
   </div>
 </div>
 
@@ -1815,6 +1826,11 @@ function loadLevel(idx){
   save.lastLevelProgress={level:1};persist();
   maybeShowTutorial();
 }
+// Menu Continue (shared MENU shim): only a classic run with real moves on it
+// is resumable; loadLevel() restores that exact board, tray and score.
+function bpResumableRun(){const r=save&&save.bpRun;return !!(r&&!r.over&&Array.isArray(r.board)&&((r.moves|0)>0||(r.score|0)>0));}
+window.gResumable=function(){return bpResumableRun();};
+window.gResumeLabel=function(){return bpResumableRun()?bpFmt(save.bpRun.score):'';};
 function launchEndless(){showScreen('game');loadLevel(0);}   // Classic already is the endless mode
 function isLevelComplete(){return !bp||!!bp.over;}
 function skipLevel(){}   // no levels to skip in a score game ('skip' is never requested)
@@ -1832,7 +1848,7 @@ function bpLayout(){
   const zone=document.getElementById('bp-zone');if(!zone)return;
   const zw=zone.clientWidth||window.innerWidth,zh=zone.clientHeight||Math.max(320,window.innerHeight-170);
   const hud=document.querySelector('.bp-hud');const hudH=hud?hud.offsetHeight:58;
-  let bw=Math.min(zw-20,560,Math.floor((zh-hudH-26)/1.37));
+  let bw=Math.min(zw-20,620,Math.floor((zh-hudH-26)/1.37));
   bw=Math.max(208,bw);
   const pad=Math.max(5,Math.round(bw*0.024)),gap=Math.max(2,Math.round(bw*0.009));
   const cell=Math.floor((bw-2*pad-7*gap)/8);
@@ -1990,7 +2006,7 @@ function bpTapPiece(s){
   if(bp.rot){const p=bp.tray[s];bp.tray[s]=[p[0],(p[1]+1)%BP_OR[p[0]].length];bpSfx('rotate');bpBuzz(8);
     const el=document.querySelector('.bp-slot[data-s="'+s+'"]');if(el){el.classList.remove('spin');void el.offsetWidth;el.classList.add('spin');}
     bpRenderTray(false);bpPersist();
-    if(!bpStuck(bp))bpHideStuck();return;}
+    if(!bpStuckNow())bpHideStuck();return;}
   const el=document.querySelector('.bp-slot[data-s="'+s+'"]');if(el){el.classList.remove('wig');void el.offsetWidth;el.classList.add('wig');}
   if(!bpTapHintShown){bpTapHintShown=true;bpToast('Drag it onto the board ✋ (Rotate ↻ lets taps turn pieces)');}
 }
@@ -2037,7 +2053,7 @@ function bpPlace(s,r,c){
 }
 function bpCellRect(i){const o=bpBoardOrigin();const pitch=bpV.cell+bpV.gap;const z=document.getElementById('bp-zone').getBoundingClientRect();
   return{x:o.x-z.left+(i%BP_N)*pitch,y:o.y-z.top+((i/BP_N)|0)*pitch,s:bpV.cell};}
-function bpRoleColor(col){try{return getComputedStyle(document.body).getPropertyValue('--c'+col).trim()||'#c4552c';}catch(e){return '#c4552c';}}
+function bpRoleColor(col){try{return getComputedStyle(document.body).getPropertyValue('--c'+col).trim()||'#b42d62';}catch(e){return '#b42d62';}}
 const BP_WORDS=['','NICE!','GREAT!','AMAZING!','UNREAL!','LEGENDARY!','LEGENDARY!'];
 function bpClearFx(res){
   const zone=document.getElementById('bp-zone');const reduce=bpReduced();
@@ -2084,7 +2100,12 @@ function bpFxTick(t){
 }
 
 // ── no room: revive (rewarded video once, hearts up to 2) or end ──
-function bpQueueStuck(ms){clearTimeout(bpStuckT);bpStuckT=setTimeout(()=>{if(bp&&!bp.over&&!bp.bomb&&bpStuck(bp))bpShowStuck();},ms);}
+// Stuck = no tray piece fits as dealt; with Rotate armed, a piece that fits
+// in ANY orientation still counts as a move, so the No-room card waits.
+function bpStuckNow(){if(!bp||bp.over||bp.bomb||!bpStuck(bp))return false;
+  if(bp.rot){for(const p of bp.tray){if(!p)continue;for(let o=0;o<BP_OR[p[0]].length;o++)if(bpCanPlace(bp.board,[p[0],o]))return false;}}
+  return true;}
+function bpQueueStuck(ms){clearTimeout(bpStuckT);bpStuckT=setTimeout(()=>{if(bpStuckNow())bpShowStuck();},ms);}
 function bpShowStuck(){
   const el=document.getElementById('bp-stuck');if(!el||!bp)return;
   document.getElementById('bp-stuck-score').textContent=bpFmt(bp.score);
@@ -2158,8 +2179,8 @@ function bpFinish(){
   }else{if(hit)save.bpGoalsHit=(save.bpGoalsHit|0)+1;save.bpRun=null;}
   save.coins+=coins;save.lastLevelProgress=null;persist();
   try{if(window.gGame){gGame.emit('gameover',{score:score,daily:daily});if(isBest)gGame.emit('best',{score:score,best:score});}}catch(e){}
-  // tile = the shared EVENTS shim's score-game tier key (1★→128, 2★→512, 3★→1024 = 1/2/3 event tokens)
-  if(hit){const tile=[0,128,512,1024][stars];try{if(window.gGame)gGame.clear(daily?{daily:true,stars:stars,isNew:true,coins:coins,tile:tile}:{stars:stars,isNew:true,perfect:stars===3,coins:coins,tile:tile});}catch(e){}}
+  // A run that reaches its goal is a "clear": stars (1-3) drive event tokens, missions and first-session rewards.
+  if(hit){try{if(window.gGame)gGame.clear(daily?{daily:true,stars:stars,isNew:true,coins:coins}:{stars:stars,isNew:true,perfect:stars===3,coins:coins});}catch(e){}}
   interstitialCounter++;
   if(interstitialCounter%3===0&&interstitialCounter>3)safeShowInterstitial();
   document.getElementById('complete-title').textContent=isBest&&prevBest>0?'New best! 👑':(hit?(daily?'Target smashed! ★':'Goal reached! ★'):'Out of room');
@@ -2272,7 +2293,7 @@ function bpBoostB(){
 }
 function bpApplyBoost(k){
   if(!bp||bp.over)return;
-  if(k==='rotate'){bp.rot=true;bpRenderTray(false);bpSfx('rotate');bpToast('↻ Tap any piece to turn it');}
+  if(k==='rotate'){bp.rot=true;bpRenderTray(false);bpSfx('rotate');if(!bpStuckNow())bpHideStuck();bpToast('↻ Tap any piece to turn it');}
   else if(k==='refresh'){bpDeal(bp,'refresh');bpRenderTray(true);bpSfx('deal');bpBuzz(10);if(!bpStuck(bp))bpHideStuck();else bpQueueStuck(600);}
   try{if(window.missionProgress)missionProgress('boost',1);}catch(e){}
   bpRender();bpPersist();updateAllUI();
@@ -2287,7 +2308,7 @@ function bpBuzz(p){if(save.hapticsEnabled===false)return;try{if(navigator.vibrat
     base();
     try{
       const ps=document.getElementById('aim-play-sub');
-      if(ps){const r=save.bpRun;ps.textContent=(r&&!r.over&&r.score>0)?('Resume · '+bpFmt(r.score)+' pts'):((save.bestScore|0)>0?('Best · '+bpFmt(save.bestScore)):'Classic · endless');}
+      if(ps){const r=save.bpRun;ps.textContent=bpResumableRun()?((save.bestScore|0)>0?('Same board · Best '+bpFmt(save.bestScore)):'Your board is saved'):((save.bestScore|0)>0?('Best · '+bpFmt(save.bestScore)):'Classic · endless');}
       const unl=hasUnlimitedHints();
       const bn=document.getElementById('bp-bomb-n');if(bn)bn.textContent=unl?'∞':String(save.hintCount|0);
       const rc=document.getElementById('bp-rot-n');if(rc)rc.textContent=unl?'free':BP_COST.rotate+'🪙';
@@ -2355,6 +2376,43 @@ function bpSfx(kind,lines,mult){
 
 // ── tutorial: 3 tap-to-advance coachmarks + an animated drag hand that
 // demonstrates the bot's best move for the current tray ──
+// ── store-screenshot capture (test/screenshot_taps.json) ──
+// bpShot(seed, moves, themeId, drag): a REAL classic run on a fixed seed,
+// played `moves` placements by the greedy bot (revived like a player would
+// if it ever runs out of room), re-glazed in `themeId`, rendered mid-play.
+// drag=true leaves the bot's next piece lifted over its drop spot, so the
+// ghost preview + "will clear" glow show exactly as under a finger.
+// No overlay, coachmark, toast or popup is opened.
+window.bpShot=function(seed,moves,themeId,drag){
+  try{localStorage.setItem('bp_tutorialDone','1');localStorage.setItem('tutorialDone','1');}catch(e){}
+  const T=(window._BP_THEMES||[]).find(t=>t.id===themeId);
+  if(T){save.activeTheme=T.id;Object.assign(PIPE_COLORS,T.palette);
+    Object.keys(T.palette).forEach(k=>document.body.style.setProperty('--'+k,T.palette[k]));
+    document.body.classList.toggle('midnight',T.id==='midnight');document.documentElement.dataset.theme=T.id==='midnight'?'midnight':'';}
+  bpEnsureSave();
+  const st=bpNewState('classic',seed|0,0);st.goal=bpGoalFor();st.best0=save.bestScore|0;bpDeal(st,'tray');
+  for(let k=0;k<(moves|0);k++){
+    let m=bpBotMove(st);
+    if(!m){bpReviveClear(st);bpDeal(st,'revive');m=bpBotMove(st);if(!m)break;}
+    bpApply(st,m.slot,m.r,m.c);
+  }
+  if(st.score>=st.goal)st.goalHit=true;
+  document.querySelectorAll('.overlay.show').forEach(o=>o.classList.remove('show'));
+  document.querySelectorAll('[data-growth-card]').forEach(c=>c.remove());   // capture only: no event/promo card over the board
+  const tov=document.getElementById('tutorialOverlay');if(tov)tov.style.display='none';
+  showScreen('game');bpBegin(st);bpHideHand();bpHideStuck();clearTimeout(bpStuckT);
+  const tt=document.getElementById('bp-toast');if(tt)tt.classList.remove('on');
+  if(drag){const m=bpBotMove(bp);if(m){const p=bp.tray[m.slot];const cells=BP_OR[p[0]][p[1]];let h=0,w=0;
+    for(const q of cells){if(q[0]+1>h)h=q[0]+1;if(q[1]+1>w)w=q[1]+1;}
+    const pw=w*bpV.cell+(w-1)*bpV.gap,ph=h*bpV.cell+(h-1)*bpV.gap,o=bpBoardOrigin(),pitch=bpV.cell+bpV.gap,lift=bpV.cell*1.15+18;
+    const fx=o.x+m.c*pitch+pw/2,fy=o.y+m.r*pitch+ph+lift;
+    bpDrag={s:m.slot,p:p,id:-7,x0:fx,y0:fy,t0:Date.now(),moved:true,type:'touch',r:-1,c:-1,pw:pw,ph:ph,x:fx,y:fy};
+    const gh=document.getElementById('bp-ghost');gh.innerHTML=bpPieceHTML(p,bpV.cell,bpV.gap);gh.style.transition='none';gh.classList.add('on');
+    bpPositionGhost();bpRenderTray(false);}}
+  updateAllUI();
+  return {score:bp.score,filled:bpFilled(bp.board),combo:bp.combo};
+};
+
 const TUT_STEPS=[
   {t:'✋ Drag & drop',b:'Drag a piece from the tray onto the board. It floats above your finger so you can see where it lands.'},
   {t:'✨ Fill a line',b:'Complete any row or column to clear it. Clear again within three moves to grow your COMBO multiplier.'},
@@ -2398,13 +2456,13 @@ window.MENU_EMBLEM=(function(){
   const X=c=>12+c*19.6,Y=r=>40+r*18.6,T='<linearGradient id="bpg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient>';
   const tile=(x,y,v,f)=>'<rect x="'+x+'" y="'+y+'" width="17" height="16" rx="4" fill="var('+v+','+f+')"/><rect x="'+x+'" y="'+y+'" width="17" height="16" rx="4" fill="url(#bpg)"/><rect x="'+(x+3)+'" y="'+(y+2.5)+'" width="4.5" height="3" rx="1.5" fill="#fff" opacity=".6"/>';
   let s='<svg viewBox="0 0 120 120" width="120" height="120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>'+T+'</defs>';
-  s+='<rect x="5" y="33" width="110" height="83" rx="15" fill="var(--well,#e5c3ae)"/>';
-  for(let r=0;r<4;r++)for(let c=0;c<5;c++)s+='<rect x="'+X(c)+'" y="'+Y(r)+'" width="17" height="16" rx="4" fill="var(--slot,#f3dfd2)"/>';
+  s+='<rect x="5" y="33" width="110" height="83" rx="15" fill="var(--well,#efc8d6)"/>';
+  for(let r=0;r<4;r++)for(let c=0;c<5;c++)s+='<rect x="'+X(c)+'" y="'+Y(r)+'" width="17" height="16" rx="4" fill="var(--slot,#f8e0e9)"/>';
   s+=tile(X(0),Y(3),'--c1','#2f62c0')+tile(X(1),Y(3),'--c5','#8447b0')+tile(X(4),Y(3),'--c2','#23936e')+tile(X(0),Y(2),'--c6','#178ea6')+tile(X(4),Y(2),'--c3','#d4553f')+tile(X(4),Y(1),'--c3','#d4553f');
-  s+='<rect x="'+(X(2)-1.5)+'" y="'+(Y(3)-1.5)+'" width="39.6" height="19" rx="5" fill="none" stroke="var(--accent,#b8492a)" stroke-width="2.2" stroke-dasharray="4 3"/>';
+  s+='<rect x="'+(X(2)-1.5)+'" y="'+(Y(3)-1.5)+'" width="39.6" height="19" rx="5" fill="none" stroke="var(--accent,#b42d62)" stroke-width="2.2" stroke-dasharray="4 3"/>';
   s+='<ellipse cx="'+(X(2)+19)+'" cy="'+(Y(3)+8)+'" rx="18" ry="4" fill="#000" opacity=".10"/>';
   s+='<g transform="translate('+(X(2)+1)+' 10) rotate(-6 19 8)">'+tile(0,0,'--c4','#e09b12')+tile(19.6,0,'--c4','#e09b12')+'</g>';
-  s+='<path d="M'+(X(2)+19)+' 32v6M'+(X(2)+13)+' 34l2 4M'+(X(2)+25)+' 34l-2 4" stroke="var(--accent,#b8492a)" stroke-width="2" stroke-linecap="round" opacity=".7"/>';
+  s+='<path d="M'+(X(2)+19)+' 32v6M'+(X(2)+13)+' 34l2 4M'+(X(2)+25)+' 34l-2 4" stroke="var(--accent,#b42d62)" stroke-width="2" stroke-linecap="round" opacity=".7"/>';
   s+='<path d="M2 '+(Y(3)+8)+'h5M113 '+(Y(3)+8)+'h5" stroke="var(--c4,#e09b12)" stroke-width="2.6" stroke-linecap="round"/>';
   return s+'</svg>';
 })();
@@ -3230,16 +3288,18 @@ window.renderPipeStats=function(){
   // No theme is sold via paid IAP — Midnight is a coin sink. (2026-05-25 user policy.)
 //@@REGION THEMES
   // Score game: themes unlock at best-score milestones (unlockScore) or for
-  // coins; the Season/Weekly Pass unlocks all of them.
+  // coins; the Season/Weekly Pass unlocks all of them. Each one re-glazes the
+  // tray (well/slot) and all seven tile colours.
   var THEMES=[
-    {id:'default',name:'Terracotta',emoji:'🏺',unlockLevel:0,palette:{c1:'#2f62c0',c2:'#23936e',c3:'#d4553f',c4:'#e09b12',c5:'#8447b0',c6:'#178ea6',c7:'#c8457a',well:'#e5c3ae',slot:'#f3dfd2'}},
+    {id:'default',name:'Rose Glaze',emoji:'🌹',unlockLevel:0,palette:{c1:'#2f62c0',c2:'#23936e',c3:'#d4553f',c4:'#e09b12',c5:'#8447b0',c6:'#178ea6',c7:'#6f9a1f',well:'#efc8d6',slot:'#f8e0e9'}},
     {id:'celadon',name:'Celadon',emoji:'🍵',unlockScore:800,palette:{c1:'#3d6f8f',c2:'#4f8f6a',c3:'#c06a4a',c4:'#c9a23a',c5:'#7a6aa8',c6:'#3f9a94',c7:'#b8607a',well:'#c9d8c6',slot:'#e3ebdf'}},
     {id:'delft',name:'Delft Blue',emoji:'🫖',unlockScore:2000,palette:{c1:'#1f4fa8',c2:'#2f86b8',c3:'#5b57c4',c4:'#d9a441',c5:'#2a3f86',c6:'#3fa3d0',c7:'#7a6cc4',well:'#cad5ea',slot:'#e9eef8'}},
-    {id:'midnight',name:'Midnight Kiln',emoji:'🌙',coinCost:800,palette:{c1:'#5b8cf0',c2:'#3cc495',c3:'#f0715a',c4:'#f5b93a',c5:'#b07ae0',c6:'#34bfd6',c7:'#f06aa0',well:'#120c0e',slot:'#2c2124'}},
+    {id:'midnight',name:'Midnight Glaze',emoji:'🌙',coinCost:800,palette:{c1:'#5b8cf0',c2:'#3cc495',c3:'#f0715a',c4:'#f5b93a',c5:'#b07ae0',c6:'#34bfd6',c7:'#9ccc3a',well:'#130b10',slot:'#2e1f28'}},
     {id:'raku',name:'Raku',emoji:'🔥',coinCost:500,palette:{c1:'#3fb6b0',c2:'#8bbf6a',c3:'#e0743f',c4:'#e8b04a',c5:'#c08a6a',c6:'#46c3d9',c7:'#d9775f',well:'#4a3f3c',slot:'#5f524e'}},
     {id:'majolica',name:'Majolica',emoji:'🌻',unlockScore:3500,palette:{c1:'#1f5fbf',c2:'#2c8f4e',c3:'#d2452f',c4:'#f0a20a',c5:'#7b3fa0',c6:'#1c97b0',c7:'#e0602a',well:'#ecd394',slot:'#f8ebc4'}},
-    {id:'sakura',name:'Sakura',emoji:'🌸',unlockScore:5000,palette:{c1:'#6a7fd1',c2:'#5aa88a',c3:'#e0607a',c4:'#f2a65a',c5:'#a46ad0',c6:'#4fb0c0',c7:'#d84f8a',well:'#efcad4',slot:'#fae6ec'}},
+    {id:'stoneware',name:'Stoneware',emoji:'🪨',unlockScore:5000,palette:{c1:'#41608a',c2:'#5e8a4f',c3:'#b4553c',c4:'#c99a3e',c5:'#7d5b8c',c6:'#3f8c8c',c7:'#8c6d4f',well:'#d8d1c6',slot:'#eeeae3'}},
   ];
+  window._BP_THEMES=THEMES;   // read by bpShot() (store-screenshot capture) to re-glaze without the Themes screen
 //@@END THEMES
   window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel,unlockScore:t.unlockScore,coinCost:t.coinCost};});
 
@@ -4115,7 +4175,7 @@ window.addEventListener('load',function(){
 </script>
 
 
-<script data-growth-config>window.GROWTH_CFG={"app":"BlockPuzzle","pkg":"com.pegasusgames.blockpuzzle","name":"Block Puzzle","saveKey":"blockpuzzle_save","levelBase":0,"kind":"score","totalLevels":0,"live":false,"booster":{"field":"hintCount","name":"Bomb","emoji":"💣","coins":25}};</script>
+<script data-growth-config>window.GROWTH_CFG={"app":"BlockPuzzle","pkg":"com.pegasusgames.blockpuzzle","name":"Block Puzzle","saveKey":"blockpuzzle_save","levelBase":0,"kind":"score","totalLevels":0,"live":false,"booster":{"field":"hintCount","name":"Bomb","emoji":"💣","coins":25},"scoreBrackets":[[12000,5],[6000,12],[3000,25],[1200,50]]};</script>
 <!-- Growth shim — CORE (shared game adapter + clear-event bus). Idempotent: data-growth-shim="CORE".
      Injected FIRST (before Part A). Every other growth shim reads/writes the
      game through window.gGame instead of probing localStorage keys.
