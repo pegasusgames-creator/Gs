@@ -1,0 +1,88 @@
+{
+  "_comment": "Minesweeper screenshot capture. 500-field no-guess CAMPAIGN (valid loadLevel indices 0-499, display level = idx+1; 6x6 0-9 ... 16x12 200-249, 18x14 250-309, 22x14 310-369, 24x16 370-429, 30x16 430-499). Every slot is a gameplay board at a distinct level and theme: window._msShot(idx,theme,frac,{hint,fit}) loads the level, taps its safe start tile, then plays real logical deductions (msDeduce - the same solver the gate uses) until ~frac of the safe tiles are open with proven mines flagged, applies Minesweeper's real board palette (window._MS_THEMES) + midnight chrome, optionally fits a big field on screen or shows an on-board hint highlight. Promo cards (event intro) are removed during capture so no slot carries an overlay. Phone ships 7, tablets 2 each.",
+  "_readiness_expr": "typeof save !== 'undefined' && typeof loadLevel === 'function' && typeof showScreen === 'function' && typeof PIPE_COLORS !== 'undefined' && !!window._MS_THEMES && typeof msDeduce === 'function'",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){try{localStorage.setItem('ms_tutorialDone','1');var s={currentLevel:300,completedLevels:Array.from({length:300},function(_,i){return i;}),levelStars:(function(){var x={};for(var i=0;i<300;i++)x[i]=(i%4===0?2:3);return x;})(),coins:1840,lives:5,maxLives:5,lastLifeTime:Date.now(),dailyChallengeStreak:6,hintCount:3,unlockedThemes:['midnight'],msCamp:{}};Object.assign(save,s);if(typeof persist==='function')persist();if(typeof updateAllUI==='function')updateAllUI();try{new MutationObserver(function(){document.querySelectorAll('[data-growth-card],#xEventsSheet').forEach(function(e){e.remove();});}).observe(document.body,{childList:true});}catch(e){}window._msShot=function(idx,th,frac,opt){opt=opt||{};var T=window._MS_THEMES||[];var t=T.find(function(x){return x.id===th;})||T[0];Object.assign(PIPE_COLORS,t.palette);Object.keys(t.palette).forEach(function(k){document.body.style.setProperty('--'+k,t.palette[k]);});if(th==='midnight'){document.body.classList.add('midnight');document.documentElement.dataset.theme='midnight';}else{document.body.classList.remove('midnight');document.documentElement.dataset.theme='';}save.activeTheme=th;document.querySelectorAll('[data-growth-card],#xEventsSheet').forEach(function(e){e.remove();});if(save.msCamp)delete save.msCamp[idx];showScreen('game');loadLevel(idx);if(gFlagMode)msToggleFlagMode();msTapCell(L.start);var target=Math.floor(L.safeTotal*frac);for(var g=0;g<3000&&gOpenCount<target&&!gWon;g++){var st=new Uint8Array(L.n),k=0;for(var i=0;i<L.n;i++){if(gOpen[i])st[i]=1;else if(gFlag[i]&&L.mine[i]){st[i]=2;k++;}}var d=msDeduce(L.n,L.nb,L.num,st,L.mines,k,3);if(!d.rule)break;var mk=Array.from(d.mine.keys());for(var m=0;m<mk.length;m++)if(!gFlag[mk[m]])msFlagCell(mk[m]);var sk=Array.from(d.safe.keys());if(sk.length)msTapCell(sk[0]);}if(gWon)return;gTime=Math.max(7,Math.round(L.par*(0.25+frac*0.5)));gRevT.fill(0);gFlagT.fill(0);msRenderHud();setTimeout(function(){var co=document.getElementById('ms-coach');if(co)co.classList.remove('on');if(opt.fit&&typeof msZoomFit==='function'&&msZoomable())msZoomAt(csFit,vw/2,vh/2);if(opt.hint)giveHint();msDraw();},350);};}catch(e){}return 'seeded';})()",
+      400
+    ]
+  ],
+  "01_first_tap_survey": [
+    [
+      "js",
+      "window._msShot(3,'default',0.0);'ok';",
+      2300
+    ]
+  ],
+  "02_logic_canyon": [
+    [
+      "js",
+      "window._msShot(61,'canyon',0.45);'ok';",
+      2300
+    ]
+  ],
+  "03_hint_glacier": [
+    [
+      "js",
+      "window._msShot(139,'glacier',0.4,{hint:true});'ok';",
+      2300
+    ]
+  ],
+  "04_night_midnight": [
+    [
+      "js",
+      "window._msShot(229,'midnight',0.5,{fit:true});'ok';",
+      2300
+    ]
+  ],
+  "05_flags_orchid": [
+    [
+      "js",
+      "window._msShot(299,'orchid',0.55);'ok';",
+      2300
+    ]
+  ],
+  "06_big_field_harvest": [
+    [
+      "js",
+      "window._msShot(359,'harvest',0.5,{fit:true});'ok';",
+      2300
+    ]
+  ],
+  "07_expert_ember": [
+    [
+      "js",
+      "window._msShot(469,'ember',0.6,{fit:true});'ok';",
+      2300
+    ]
+  ],
+  "tablet_7_01_orchid": [
+    [
+      "js",
+      "window._msShot(94,'orchid',0.5);'ok';",
+      2300
+    ]
+  ],
+  "tablet_7_02_expert_survey": [
+    [
+      "js",
+      "window._msShot(414,'default',0.55,{fit:true});'ok';",
+      2300
+    ]
+  ],
+  "tablet_10_01_glacier": [
+    [
+      "js",
+      "window._msShot(184,'glacier',0.5,{hint:true});'ok';",
+      2300
+    ]
+  ],
+  "tablet_10_02_expert_midnight": [
+    [
+      "js",
+      "window._msShot(439,'midnight',0.6,{fit:true});'ok';",
+      2300
+    ]
+  ]
+}
