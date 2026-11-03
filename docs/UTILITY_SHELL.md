@@ -99,6 +99,8 @@ without a reload (a reload's pagehide-persist would overwrite a localStorage see
 
 ## Reminders, data, accessibility
 
+Dated reminders: `Reminders.enableAt(slot, dateOrMs, yearly, title, body)` (permission in context) / `Reminders.setAt(...)` — one-shot or yearly at a local date-time (birthdays, bills, events; bridge `scheduleDatedReminder`). Yearly counts from the original date (Feb 29 → Feb 28 in common years, back to 29 in leap years); a one-shot clears itself after it fires. Slots 0..63 are shared with the weekly reminders.
+
 * `Reminders.enable(slot, h, m, daysMask, title, body)` asks POST_NOTIFICATIONS
   **in context** (only after the user switches a reminder on) and schedules;
   `Reminders.set/cancel`. Slot 0 = the app-wide daily reminder (Settings row,

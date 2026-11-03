@@ -840,6 +840,16 @@ public class MainActivity extends Activity {
             NotificationHelper.armReminder(MainActivity.this, slot);
         }
 
+        // One-shot (yearly=false) or yearly reminder at whenMillis (epoch ms,
+        // local wall-clock time chosen in JS) — birthdays, bills, events.
+        @JavascriptInterface
+        public void scheduleDatedReminder(int slot, double whenMillis, boolean yearly,
+                                          String title, String body) {
+            if (slot < 0 || slot > NotificationHelper.MAX_SLOT || title == null || body == null) return;
+            NotificationHelper.saveDatedReminder(MainActivity.this, slot, (long) whenMillis, yearly, title, body);
+            NotificationHelper.armReminder(MainActivity.this, slot);
+        }
+
         @JavascriptInterface
         public void cancelReminder(int slot) {
             NotificationHelper.removeReminder(MainActivity.this, slot);

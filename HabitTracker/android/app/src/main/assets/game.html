@@ -881,6 +881,18 @@ const Reminders = {
     if (A && typeof A.scheduleReminder === 'function') callA('scheduleReminder', slot, h, m, daysMask & 127, title, body);
     else if (slot === 0) callA('scheduleDailyReminder', h, m);
   },
+  // One-shot (yearly=false) or yearly reminder at a local date-time —
+  // birthdays, bills, events. `when` = Date or epoch ms.
+  setAt(slot, when, yearly, title, body) {
+    const ms = (when instanceof Date) ? when.getTime() : +when;
+    if (!isFinite(ms)) return;
+    callA('scheduleDatedReminder', slot, ms, !!yearly, title, body);
+  },
+  async enableAt(slot, when, yearly, title, body) {
+    const ok = await this.ensurePermission();
+    if (!ok) { UI.toast(t('notif_off'), { action: t('open_settings'), onAction: () => callA('openNotificationSettings') }); return false; }
+    this.setAt(slot, when, yearly, title, body); return true;
+  },
   cancel(slot) { callA('cancelReminder', slot); },
   // Turn one on: permission first; false (and a settings hint) when refused.
   async enable(slot, h, m, daysMask, title, body) {

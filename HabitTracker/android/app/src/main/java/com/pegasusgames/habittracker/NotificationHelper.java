@@ -93,6 +93,23 @@ public class NotificationHelper {
         } catch (Exception ignored) {}
     }
 
+    /**
+     * One-shot (yearly=false) or yearly reminder at an exact wall-clock moment
+     * — birthdays, bill due dates, events. Stored in the same slot table as
+     * the weekly reminders, so cancelReminder(slot) and re-arming work alike.
+     */
+    static void saveDatedReminder(Context ctx, int slot, long whenMillis, boolean yearly,
+                                  String title, String body) {
+        try {
+            JSONObject o = new JSONObject();
+            o.put("at", whenMillis);
+            o.put("y", yearly);
+            o.put("t", title);
+            o.put("b", body);
+            prefs(ctx).edit().putString("r" + slot, o.toString()).apply();
+        } catch (Exception ignored) {}
+    }
+
     static void removeReminder(Context ctx, int slot) {
         prefs(ctx).edit().remove("r" + slot).apply();
         cancelReminderAlarm(ctx, slot);
@@ -116,8 +133,31 @@ public class NotificationHelper {
         if (raw == null) return;
         try {
             JSONObject o = new JSONObject(raw);
-            long at = nextTrigger(o.getInt("h"), o.getInt("m"), o.getInt("d"),
-                                  System.currentTimeMillis());
+            long now = System.currentTimeMillis();
+            long at;
+            if (o.has("at")) {
+                long orig = o.getLong("at");
+                if (o.optBoolean("y", false)) {
+                    // Count whole years from the ORIGINAL date each time, so a
+                    // Feb 29 reminder falls on Feb 28 in common years but returns
+                    // to Feb 29 in leap years instead of drifting.
+                    Calendar c = Calendar.getInstance();
+                    int k = 0;
+                    do {
+                        c.setTimeInMillis(orig);
+                        c.add(Calendar.YEAR, k++);
+                    } while (c.getTimeInMillis() <= now + 1000L && k < 400);
+                    at = c.getTimeInMillis();
+                } else if (orig <= now + 1000L) {
+                    // A one-shot that has fired (or lapsed while the phone was off).
+                    removeReminder(ctx, slot);
+                    return;
+                } else {
+                    at = orig;
+                }
+            } else {
+                at = nextTrigger(o.getInt("h"), o.getInt("m"), o.getInt("d"), now);
+            }
             Intent intent = new Intent(ctx, NotificationReceiver.class);
             intent.putExtra("type", "user_reminder");
             intent.putExtra("slot", slot);
