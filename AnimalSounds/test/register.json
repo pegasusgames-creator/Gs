@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_animalsounds_facts.py",
+    "Animal Sounds facts (habitat, diet, names, honest sounds)"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      239,
+      233,
+      255
+    ],
+    "bg_top_right": [
+      214,
+      200,
+      251
+    ],
+    "bg_bottom": [
+      186,
+      168,
+      230
+    ],
+    "text_primary": [
+      44,
+      31,
+      74
+    ],
+    "text_accent": [
+      14,
+      122,
+      133
+    ],
+    "text_subtle": [
+      85,
+      72,
+      120
+    ],
+    "footer_tint": [
+      118,
+      64,
+      184
+    ],
+    "mood": "kids-lilac",
+    "layout_archetype": "E",
+    "mascot_pattern": "M2",
+    "voice": "V7",
+    "texture": "T7"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "_comment": "AnimalSounds (kids shell) screenshot capture: 11 distinct real-use activity states (Who says this? rounds, Where does it live? rounds, animal cards, habitat pages, the sound board), each a different animal/round seed/habitat and a cycled theme (lilac / meadow / bedtime). No home menu, sticker book, parent area, gate or reveal popup in any slot. _setup_taps unlocks full_pack (every animal and both games reachable, no banner), mutes the voice for capture and seeds some heard animals. Screens are opened with KIDS.go(screen, params); play seed fixes the round.",
+  "_readiness_expr": "typeof KIDS !== 'undefined' && KIDS.ready === true",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){var s=KIDS.save;s.fullPack=true;s.removeAds=true;s.settings.voice=false;s.progress={greeted:true,rounds:2,heard:{cow:1,pig:1,sheep:1,horse:1,hen:1,duck:1,dog:1,cat:1,bee:1,wolf:1,fox:1,lion:1,elephant:1,whale:1}};s.stickers={A_cow:1,A_pig:1,A_sheep:1,A_cat:1,A_dog:1,A_lion:1,S_paw:1,S_feather:1,S_shell:1};KIDS.persist();KIDS.go('home');return 'seeded';})()",
+      500
+    ]
+  ],
+  "01_gameplay_open": [
+    [
+      "js",
+      "KIDS.setTheme('lilac');KIDS.go('play',{g:'who',seed:3});'ok';",
+      1600
+    ]
+  ],
+  "02_gameplay_early": [
+    [
+      "js",
+      "KIDS.setTheme('lilac');KIDS.go('animal',{a:'elephant'});'ok';",
+      1600
+    ]
+  ],
+  "03_gameplay_build": [
+    [
+      "js",
+      "KIDS.setTheme('meadow');KIDS.go('habitat',{h:'savanna'});'ok';",
+      1600
+    ]
+  ],
+  "04_gameplay_mid": [
+    [
+      "js",
+      "KIDS.setTheme('meadow');KIDS.go('play',{g:'where',seed:5});'ok';",
+      1600
+    ]
+  ],
+  "05_gameplay_busy": [
+    [
+      "js",
+      "KIDS.setTheme('bedtime');KIDS.go('board');document.querySelector('[data-a=\"fox\"]').classList.add('sel');'ok';",
+      1600
+    ]
+  ],
+  "06_gameplay_deep": [
+    [
+      "js",
+      "KIDS.setTheme('bedtime');KIDS.go('play',{g:'who',seed:9});'ok';",
+      1600
+    ]
+  ],
+  "07_gameplay_late": [
+    [
+      "js",
+      "KIDS.setTheme('lilac');KIDS.go('habitat',{h:'ocean'});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_01_gameplay_open": [
+    [
+      "js",
+      "KIDS.setTheme('lilac');KIDS.go('animal',{a:'lion'});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_02_gameplay_early": [
+    [
+      "js",
+      "KIDS.setTheme('meadow');KIDS.go('habitat',{h:'jungle'});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_01_gameplay_open": [
+    [
+      "js",
+      "KIDS.setTheme('bedtime');KIDS.go('board');document.querySelector('[data-a=\"penguin\"]').classList.add('sel');'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_02_gameplay_early": [
+    [
+      "js",
+      "KIDS.setTheme('lilac');KIDS.go('play',{g:'where',seed:9});'ok';",
+      1600
+    ]
+  ]
+}
