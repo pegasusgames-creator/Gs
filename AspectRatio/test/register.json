@@ -1,0 +1,20 @@
+{
+  "gate": [
+    "scripts/check_aspectratio_math.py",
+    "ratio/resize maths exact: GCD reduction, half-up rounding, width/height/ratio locks, clamping, px/in/cm/mm at any DPI, crops, batch, parsing, preset table (JS vs independent Python reference)"
+  ],
+  "app_theme": {
+    "bg_top_left": [247, 240, 238],
+    "bg_top_right": [240, 230, 227],
+    "bg_bottom": [27, 107, 115],
+    "text_primary": [42, 29, 27],
+    "text_accent": [27, 107, 115],
+    "text_subtle": [102, 82, 78],
+    "footer_tint": [35, 128, 138],
+    "mood": "tool-clean",
+    "layout_archetype": "I",
+    "mascot_pattern": "M0",
+    "voice": "V8",
+    "texture": "T2"
+  }
+}

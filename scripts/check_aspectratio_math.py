@@ -21,7 +21,7 @@ Rules the reference encodes (and the app states on screen):
 Without node the Python reference is only self-checked on known answers
 (WARN - the JS is not executed).
 
-Usage: python3 scripts/check_aspectratio_math.py [AspectRatio]
+Usage: python3 scripts/check_aspectratio_math.py [AspectRatio]   (other app names only: skipped, exit 0)
 Exit 1 on any mismatch.
 """
 import json
@@ -36,7 +36,8 @@ import tempfile
 from fractions import Fraction
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP = sys.argv[1] if len(sys.argv) > 1 else "AspectRatio"
+APP = "AspectRatio"
+ARGS = [a for a in sys.argv[1:] if not a.startswith("-")]
 GAME = os.path.join(BASE, APP, "android/app/src/main/assets/game.html")
 
 MAXPX, MAXMILLI, MAXDPI, MAXRATIO, MAXLIST = 100000, 100000000, 2400, 100000, 50
@@ -350,6 +351,9 @@ def run_js(block, cases):
 
 
 def main():
+    if ARGS and APP not in ARGS:
+        print("skip: check_aspectratio_math only checks AspectRatio")
+        return 0
     known_answers()
     if not os.path.exists(GAME):
         print("BLOCK: %s not found" % GAME)

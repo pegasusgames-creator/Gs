@@ -273,7 +273,7 @@ select.inp{appearance:none;-webkit-appearance:none}
 .apx{font-weight:650;color:var(--text-mute)}
 @media (max-width:359px){.frm{grid-template-columns:1fr;}.frm .swp{justify-self:center;margin:-6px 0 6px}}
 @media (max-height:720px){.pv{height:140px}.pv-card{padding:10px 10px 8px;margin-bottom:10px}.pv-meta{margin-top:8px}.lockbar{margin-bottom:10px}}
-@media (min-width:600px){.pv{height:240px}.frm{max-width:620px}}
+@media (min-width:600px){.pv{height:240px}}
 .group+.info,.group+.btn-line{margin-top:14px}
 .group .hrow+.row{border-top:1px solid var(--border)}
 /*@@END TOOL_CSS*/
@@ -1200,6 +1200,7 @@ const TD = { grp: 'social', ed: null };
 const CROPS = [[1, 1], [4, 5], [9, 16], [16, 9], [3, 2], [4, 3]];
 const DIGITS = { '٠': 0, '١': 1, '٢': 2, '٣': 3, '٤': 4, '٥': 5, '٦': 6, '٧': 7, '٨': 8, '٩': 9, '۰': 0, '۱': 1, '۲': 2, '۳': 3, '۴': 4, '۵': 5, '۶': 6, '۷': 7, '۸': 8, '۹': 9, '०': 0, '१': 1, '२': 2, '३': 3, '४': 4, '५': 5, '६': 6, '७': 7, '८': 8, '९': 9, '０': 0, '１': 1, '２': 2, '３': 3, '４': 4, '５': 5, '６': 6, '７': 7, '８': 8, '９': 9 };
 const norm = s => String(s == null ? '' : s).replace(/[٠-٩۰-۹०-९０-９]/g, c => DIGITS[c]).replace(/٫/g, '.');
+const iso = s => '\u2066' + s + '\u2069';
 const ltr = s => '<bdi dir="ltr">' + esc(s) + '</bdi>';
 const rz = () => S.tool.rz;
 const f3 = n => fmtNum(n, { maximumFractionDigits: 3 });
@@ -1236,9 +1237,9 @@ function pvFit() {
 }
 function noteHtml(z) {
   const i = AR.info(z.w, z.h);
-  if (z.w * z.rh === z.h * z.rw) return '<div class="info" role="status">' + esc(t('n_exact', { size: z.w + ' × ' + z.h, ratio: ratioTxt(z) })) + '</div>';
+  if (z.w * z.rh === z.h * z.rw) return '<div class="info" role="status">' + esc(t('n_exact', { size: iso(z.w + ' × ' + z.h), ratio: iso(ratioTxt(z)) })) + '</div>';
   const o = z.lock === 'h' ? AR.fromH(z.h, z.rw, z.rh) : AR.fromW(z.w, z.rw, z.rh);
-  return '<div class="info" role="status">' + esc(t('n_round', { dim: t(z.lock === 'h' ? 'f_width' : 'f_height').toLowerCase(), raw: f3(o.raw), v: fmtNum(o.v), size: z.w + ' × ' + z.h, actual: f4(i.dec), ratio: ratioTxt(z) })) + '</div>';
+  return '<div class="info" role="status">' + esc(t('n_round', { dim: t(z.lock === 'h' ? 'f_width' : 'f_height').toLowerCase(), raw: iso(f3(o.raw)), v: iso(fmtNum(o.v)), size: iso(z.w + ' × ' + z.h), actual: iso(f4(i.dec)), ratio: iso(ratioTxt(z)) })) + '</div>';
 }
 function resultsHtml(z) {
   const i = AR.info(z.w, z.h), cur = AR.reduce(z.w, z.h);
@@ -1356,7 +1357,7 @@ function paintConv() {
   }).join('') + '</div>';
   if (v.wp != null && v.hp != null) {
     const i = AR.info(v.wp, v.hp);
-    h += '<div class="info">' + esc(t('cv_ratio', { ratio: i.rw + ':' + i.rh, dec: f4(i.dec), mp: fmtNum(i.mp, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) })) + '</div>' +
+    h += '<div class="info">' + esc(t('cv_ratio', { ratio: iso(i.rw + ':' + i.rh), dec: iso(f4(i.dec)), mp: fmtNum(i.mp, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) })) + '</div>' +
       '<div class="btn-line"><button class="btn btn-secondary" data-act="copy" data-arg="convall">' + icon('copy', 20) + esc(t('copy_all')) + '</button><button class="btn btn-primary" data-act="cv-use">' + icon('ratio', 20) + esc(t('use_resize')) + '</button></div>';
   } else h += '<div class="btn-line"><button class="btn btn-secondary" data-act="copy" data-arg="convall">' + icon('copy', 20) + esc(t('copy_all')) + '</button></div>';
   el.innerHTML = h + '<p class="fine pad">' + esc(t('cv_note')) + '</p>';
@@ -1477,7 +1478,7 @@ function paintBatch() {
 function batchScreen(el) {
   const z = rz(), b = S.tool.batch;
   if (!isPro()) { el.innerHTML = UI.empty({ icon: 'layers', title: t('bt_title'), body: t('batch_pro'), cta: t('go_pro'), act: 'go-pro', arg: 'batch_pro' }); return; }
-  el.innerHTML = '<div class="info">' + esc(t('bt_using', { ratio: ratioTxt(z) })) + '</div><div class="card bt-in" style="padding:14px"><label class="field" style="margin:0"><span class="fl">' + esc(t('bt_list', { max: AR.MAXLIST })) + '</span><textarea class="inp ta" id="bt-text" rows="3" inputmode="text" data-input="bt-text" data-change="bt-c">' + esc(b.text) + '</textarea></label>' +
+  el.innerHTML = '<div class="info">' + esc(t('bt_using', { ratio: iso(ratioTxt(z)) })) + '</div><div class="card bt-in" style="padding:14px"><label class="field" style="margin:0"><span class="fl">' + esc(t('bt_list', { max: AR.MAXLIST })) + '</span><textarea class="inp ta" id="bt-text" rows="3" inputmode="text" data-input="bt-text" data-change="bt-c">' + esc(b.text) + '</textarea></label>' +
     seg([['w', t('bt_widths')], ['h', t('bt_heights')]], b.by, 'bt-by') + '</div><div id="bt-res"></div>';
   paintBatch();
 }

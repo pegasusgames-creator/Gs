@@ -1,0 +1,88 @@
+{
+  "_comment": "AspectRatio (utility shell) screenshot capture — real-use calculator states, never Settings/paywall/onboarding. _setup_taps seeds saved presets, history and Pro + ad-free (no banner / lock overlays) through window.shellLoadState (no reload: the pagehide persist would overwrite a localStorage seed) and defines arSet(), which sets theme/accent/size/unit and navigates with UI.tab/UI.go (the utility shell's navigation; there is no showScreen). Phone 7 + tablet_7 2 + tablet_10 2 = 11 distinct states and themes; headlines in metadata/screenshot_headlines*.json describe exactly these screens.",
+  "_readiness_expr": "typeof UI !== 'undefined' && typeof window.shellLoadState === 'function' && typeof TOOL !== 'undefined' && typeof AR !== 'undefined'",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){var s={saveVersion:1,created:Date.now()-30*864e5,sessions:9,lastSeen:Date.now()-3600e3,onboarded:true,removeAds:true,pro:true,proTrialUntil:0,settings:{theme:'light',accent:'teal',lang:'',textSize:1,haptics:true,reduceMotion:false,daily:{on:false,h:20,m:0}},ads:{last:0,breaks:0},tool:{rz:{w:1080,h:1350,rw:4,rh:5,lock:'ratio'},cv:{w:'8.5',h:'11',u:'in',dpi:300},hist:[{id:'h1',k:'r',w:1080,h:1350,rw:4,rh:5,lock:'ratio',t:Date.now()-600e3},{id:'h2',k:'c',w:'8.5',h:'11',u:'in',dpi:300,t:Date.now()-3600e3},{id:'h3',k:'r',w:1000,h:563,rw:16,rh:9,lock:'ratio',t:Date.now()-7200e3},{id:'h4',k:'r',w:2100,h:2970,rw:70,rh:99,lock:'ratio',t:Date.now()-86400e3},{id:'h5',k:'c',w:'21',h:'29.7',u:'cm',dpi:150,t:Date.now()-90000e3}],mine:[{id:'m1',name:'Poster',rw:2,rh:3},{id:'m2',name:'Business card',rw:7,rh:4},{id:'m3',name:'Banner',rw:4,rh:1},{id:'m4',name:'Cover',rw:205,rh:78}],batch:{text:'320, 640, 1080, 1280, 1920, 2560',by:'w'},grp:'social'}};\nwindow.arSet=function(o){UI.closeAll();S.settings.theme=o.theme||'light';S.settings.accent=o.accent||'teal';S.settings.lang='';if(o.rz)S.tool.rz=o.rz;if(o.cv)S.tool.cv=o.cv;TD.grp=o.grp||'social';S.tool.grp=TD.grp;persist();applyLang();applyTheme();UI.buildNav();UI.tab(o.tab||'resize');if(o.go)UI.go(o.go);setTimeout(function(){var v=document.getElementById('view');if(!v||!o.scroll)return;var e=o.scroll==='crop'?[].slice.call(document.querySelectorAll('.sec-h')).filter(function(x){return /crop/i.test(x.textContent);})[0]:document.querySelector('#rz-note');if(e)v.scrollTop+=e.getBoundingClientRect().top-v.getBoundingClientRect().top-10;},500);return 'ok';};\nreturn window.shellLoadState(s);})();",
+      1500
+    ]
+  ],
+  "01_keep_the_shape": [
+    [
+      "js",
+      "arSet({\"theme\": \"light\", \"accent\": \"teal\", \"tab\": \"resize\", \"rz\": {\"w\": 1080, \"h\": 1350, \"rw\": 4, \"rh\": 5, \"lock\": \"ratio\"}, \"grp\": \"social\"});'ok';",
+      1600
+    ]
+  ],
+  "02_rounded_half_up": [
+    [
+      "js",
+      "arSet({\"theme\": \"dark\", \"accent\": \"ocean\", \"tab\": \"resize\", \"rz\": {\"w\": 1000, \"h\": 563, \"rw\": 16, \"rh\": 9, \"lock\": \"ratio\"}, \"grp\": \"video\", \"scroll\": \"note\"});'ok';",
+      1600
+    ]
+  ],
+  "03_width_locked": [
+    [
+      "js",
+      "arSet({\"theme\": \"light\", \"accent\": \"violet\", \"tab\": \"resize\", \"rz\": {\"w\": 1920, \"h\": 1350, \"rw\": 64, \"rh\": 45, \"lock\": \"w\"}, \"grp\": \"social\"});'ok';",
+      1600
+    ]
+  ],
+  "04_print_sizes": [
+    [
+      "js",
+      "arSet({\"theme\": \"light\", \"accent\": \"ember\", \"tab\": \"resize\", \"rz\": {\"w\": 2100, \"h\": 2970, \"rw\": 70, \"rh\": 99, \"lock\": \"ratio\"}, \"grp\": \"print\"});'ok';",
+      1600
+    ]
+  ],
+  "05_pixels_to_inches": [
+    [
+      "js",
+      "arSet({\"theme\": \"light\", \"accent\": \"teal\", \"tab\": \"convert\", \"cv\": {\"w\": \"8.5\", \"h\": \"11\", \"u\": \"in\", \"dpi\": 300}});'ok';",
+      1600
+    ]
+  ],
+  "06_largest_crops": [
+    [
+      "js",
+      "arSet({\"theme\": \"dark\", \"accent\": \"rose\", \"tab\": \"resize\", \"rz\": {\"w\": 1920, \"h\": 1080, \"rw\": 16, \"rh\": 9, \"lock\": \"ratio\"}, \"grp\": \"video\", \"scroll\": \"crop\"});'ok';",
+      1600
+    ]
+  ],
+  "07_batch_list": [
+    [
+      "js",
+      "arSet({\"theme\": \"light\", \"accent\": \"forest\", \"tab\": \"resize\", \"go\": \"batch\", \"rz\": {\"w\": 1920, \"h\": 1080, \"rw\": 16, \"rh\": 9, \"lock\": \"ratio\"}});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_01_ultrawide": [
+    [
+      "js",
+      "arSet({\"theme\": \"light\", \"accent\": \"teal\", \"tab\": \"resize\", \"rz\": {\"w\": 2800, \"h\": 1200, \"rw\": 7, \"rh\": 3, \"lock\": \"ratio\"}, \"grp\": \"video\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_02_cm_to_pixels": [
+    [
+      "js",
+      "arSet({\"theme\": \"dark\", \"accent\": \"ocean\", \"tab\": \"convert\", \"cv\": {\"w\": \"21\", \"h\": \"29.7\", \"u\": \"cm\", \"dpi\": 150}});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_01_saved": [
+    [
+      "js",
+      "arSet({\"theme\": \"light\", \"accent\": \"rose\", \"tab\": \"saved\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_02_height_locked": [
+    [
+      "js",
+      "arSet({\"theme\": \"light\", \"accent\": \"forest\", \"tab\": \"resize\", \"rz\": {\"w\": 759, \"h\": 1350, \"rw\": 9, \"rh\": 16, \"lock\": \"h\"}, \"grp\": \"social\"});'ok';",
+      1600
+    ]
+  ]
+}
