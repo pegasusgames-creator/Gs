@@ -1,42 +1,24 @@
-# BasicMathKids Identity
+# Basic Math for Kids Identity
 
-- **Category**: kids
-- **Layout archetype**: C (hub world / cozy room)
-- **Mascot pattern**: M3 (animated companion with idle + reactions)
-- **Voice**: V7 (educational warm)
-- **Texture**: T7 (storybook / illustrated)
-- **Mood string**: kids-bright
+- **Track**: kids (Google Play Families, ages 4-8) on the kids shell (`docs/KIDS_SHELL.md`)
+- **Layout archetype**: E (animated character speaks: Bea suggests the next skill in a speech bubble; activities are big picture tiles below)
+- **Mascot pattern**: M3 (Bea the bunny: idle bob + blink, talks while the voice speaks, hops and flaps her ears on success, tilts to think on a gentle miss; also sits beside every activity)
+- **Voice**: V7 (educational warm) -- "3 plus 2 makes 5!", "Almost! Let's do it together."
+- **Texture**: T7 (storybook / illustrated: original outlined SVG art for six counting objects, 12 friend stickers and 20 number cards, dotted paper background)
+- **Mood string**: kids-mint
 
-The app should feel like: warm and inviting; reads as a children's app at a glance.
+Mint paper (`#d8f1e2`) with a brick-coral accent (`#c4411f`) and four bold tile colours (brick, blue, leaf, grape). Peach (light) and Night (soft teal, the only dark theme, never the default) are the alternates. Numerals use Andika. Identity element: manipulatives you move (blue and orange blocks, ten-frame counters, bead frame, number-line hops) with Bea counting aloud.
 
-## Anti-pattern audit (APP_ARCHETYPES.md §5)
+## Distinct from siblings
 
-This file was auto-generated during the 2026-04-30 portfolio archetype
-assignment pass. The four archetypes above were chosen so the app does
-NOT default to the template signature (A/M0/V1/T1).
+- MultiplicationGame is times tables; CountingApp is counting 1-100. This app never multiplies and stops at 20; its core is moving objects to add, take away and compare.
+- ABCLearning shares only the shell. Different palette family (mint vs butter yellow), mascot (bunny vs owl), tile icons, and activity boards.
 
-When the app's `game.html` is next touched (or built fresh), audit the
-in-app design against the §5 anti-patterns:
+## Anti-pattern audit (APP_ARCHETYPES.md section 5)
 
-- [ ] Center-aligned everything → use offset weight
-- [ ] Same SVG icon set as other apps → vary icon family per app
-- [ ] All-caps headlines on every screen → mixed case for body
-- [ ] Generic templated currency icon → make it match the app theme
-- [ ] Identical button shapes / sizes / spacings → vary
-- [ ] Symmetric vertical column layout → break with side panels / FAB
-- [ ] Generic "Level Complete!" celebration → app-specific phrasing
-- [ ] Same loading / transition patterns → vary
-- [ ] Identical settings screen → reorder, rename, add app-specific options
-
-If 3+ of the above are hit, redesign before the next ship.
-
-## Phase 8 self-check
-
-Before declaring this app release-ready, all four of:
-
-1. Side-by-side test (vs other shipped apps, do they look like different products?)
-2. Voice-specificity test (does the menu copy reflect this app's voice archetype?)
-3. Identity-element test (a single recognizable visual element)
-4. Anonymous-screenshot test (could a user identify this app without title/name?)
-
-must pass. See APP_ARCHETYPES.md §8.
+- [x] Not centre-stacked buttons: character-led home, 2x2 picture tiles
+- [x] Own icon family (blocks, ten-frame, beads, number line)
+- [x] No currency at all (stickers, not coins)
+- [x] No timers, lives or failure states; a wrong answer triggers a guided count-along
+- [x] App-specific celebration: confetti + Bea hop + spoken equation + sticker reveal
+- [x] Settings is a grown-ups area behind a hold-to-answer gate

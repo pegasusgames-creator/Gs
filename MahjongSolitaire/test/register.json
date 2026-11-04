@@ -1,0 +1,20 @@
+{
+  "gate": [
+    "scripts/check_mahjong_solvable.py",
+    "mahjong deals replay their stored clearing order to an empty board"
+  ],
+  "app_theme": {
+    "bg_top_left": [246, 232, 201],
+    "bg_top_right": [240, 223, 189],
+    "bg_bottom": [220, 181, 122],
+    "text_primary": [43, 33, 22],
+    "text_accent": [31, 122, 92],
+    "text_subtle": [95, 74, 46],
+    "footer_tint": [21, 90, 67],
+    "mood": "honey-teak tea table",
+    "layout_archetype": "A",
+    "mascot_pattern": "M4",
+    "voice": "V5",
+    "texture": "T4"
+  }
+}

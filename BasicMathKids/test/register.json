@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_basicmathkids_items.py",
+    "BasicMathKids early-math items (answers, ranges, distractors)"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      216,
+      241,
+      226
+    ],
+    "bg_top_right": [
+      180,
+      229,
+      200
+    ],
+    "bg_bottom": [
+      29,
+      118,
+      72
+    ],
+    "text_primary": [
+      18,
+      53,
+      36
+    ],
+    "text_accent": [
+      196,
+      65,
+      31
+    ],
+    "text_subtle": [
+      59,
+      99,
+      80
+    ],
+    "footer_tint": [
+      45,
+      107,
+      179
+    ],
+    "mood": "kids-mint",
+    "layout_archetype": "E",
+    "mascot_pattern": "M3",
+    "voice": "V7",
+    "texture": "T7"
+  }
+}

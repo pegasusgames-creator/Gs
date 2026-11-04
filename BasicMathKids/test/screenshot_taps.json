@@ -1,0 +1,88 @@
+{
+  "_comment": "BasicMathKids (kids shell) screenshot capture: 11 distinct gameplay boards (counting, blocks, ten-frame, bead frame, number line, comparing), each a different question seed and a cycled theme (mint / peach / night). No home menu, sticker book, parent area, gate or reveal popup in any slot. _setup_taps unlocks full_pack (no banner, levels up to 20), mutes the voice, seeds skill levels and stickers. Boards are opened with KIDS.go('play', params); small DOM taps put blocks / counters / hops mid-way.",
+  "_readiness_expr": "typeof KIDS !== 'undefined' && KIDS.ready === true",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){var s=KIDS.save;s.fullPack=true;s.removeAds=true;s.settings.voice=false;s.progress={greeted:true,rounds:4,skills:{}};s.stickers={N_3:1,N_5:1,N_8:1,S_sun:1,S_rainbow:1};KIDS.persist();KIDS.go('home');return 'seeded';})()",
+      500
+    ]
+  ],
+  "01_gameplay_open": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelector(sel);if(!b)return;var r=b.getBoundingClientRect(),o={bubbles:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2,pointerId:1};b.dispatchEvent(new PointerEvent('pointerdown',o));b.dispatchEvent(new PointerEvent('pointerup',o));}};KIDS.setTheme('mint');var s=KIDS.save.progress.skills;s.count={lvl:2,streak:0,trouble:0,rounds:1,items:5};s.add={lvl:2,streak:0,trouble:0,rounds:1,items:5}; KIDS.go('play',{skill:'count',seed:3});setTimeout(function(){KIDS.acts.cobj(document.querySelectorAll('#cnt .cobj')[0]);KIDS.acts.cobj(document.querySelectorAll('#cnt .cobj')[1]);},250);return 'ok';})();",
+      1700
+    ]
+  ],
+  "02_gameplay_early": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelector(sel);if(!b)return;var r=b.getBoundingClientRect(),o={bubbles:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2,pointerId:1};b.dispatchEvent(new PointerEvent('pointerdown',o));b.dispatchEvent(new PointerEvent('pointerup',o));}};KIDS.setTheme('mint');var s=KIDS.save.progress.skills;s.add={lvl:2,streak:0,trouble:0,rounds:1,items:5}; KIDS.go('play',{skill:'add',tool:'blocks',seed:5});setTimeout(function(){T('#mat .pile[data-zone=\"pa\"] .blk',2);T('#mat .pile[data-zone=\"pb\"] .blk',1);},250);return 'ok';})();",
+      1700
+    ]
+  ],
+  "03_gameplay_build": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelector(sel);if(!b)return;var r=b.getBoundingClientRect(),o={bubbles:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2,pointerId:1};b.dispatchEvent(new PointerEvent('pointerdown',o));b.dispatchEvent(new PointerEvent('pointerup',o));}};KIDS.setTheme('peach');var s=KIDS.save.progress.skills;s.sub={lvl:4,streak:0,trouble:0,rounds:1,items:5}; KIDS.go('play',{skill:'sub',tool:'frame',seed:7});setTimeout(function(){KIDS.acts.cell(document.querySelector('#manip .cell.on:not(.off)'));},250);return 'ok';})();",
+      1700
+    ]
+  ],
+  "04_gameplay_mid": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelector(sel);if(!b)return;var r=b.getBoundingClientRect(),o={bubbles:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2,pointerId:1};b.dispatchEvent(new PointerEvent('pointerdown',o));b.dispatchEvent(new PointerEvent('pointerup',o));}};KIDS.setTheme('peach');var s=KIDS.save.progress.skills;s.add={lvl:4,streak:0,trouble:0,rounds:1,items:5}; KIDS.go('play',{skill:'add',tool:'beads',seed:9});setTimeout(function(){},250);return 'ok';})();",
+      1700
+    ]
+  ],
+  "05_gameplay_busy": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelector(sel);if(!b)return;var r=b.getBoundingClientRect(),o={bubbles:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2,pointerId:1};b.dispatchEvent(new PointerEvent('pointerdown',o));b.dispatchEvent(new PointerEvent('pointerup',o));}};KIDS.setTheme('night');var s=KIDS.save.progress.skills;s.line={lvl:3,streak:0,trouble:0,rounds:1,items:5}; KIDS.go('play',{skill:'line',tool:'line',seed:11,op:'+'});setTimeout(function(){KIDS.acts.hop();},250);return 'ok';})();",
+      1700
+    ]
+  ],
+  "06_gameplay_deep": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelector(sel);if(!b)return;var r=b.getBoundingClientRect(),o={bubbles:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2,pointerId:1};b.dispatchEvent(new PointerEvent('pointerdown',o));b.dispatchEvent(new PointerEvent('pointerup',o));}};KIDS.setTheme('night');var s=KIDS.save.progress.skills;s.compare={lvl:1,streak:0,trouble:0,rounds:1,items:5}; KIDS.go('play',{skill:'compare',seed:2});setTimeout(function(){},250);return 'ok';})();",
+      1700
+    ]
+  ],
+  "07_gameplay_late": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelector(sel);if(!b)return;var r=b.getBoundingClientRect(),o={bubbles:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2,pointerId:1};b.dispatchEvent(new PointerEvent('pointerdown',o));b.dispatchEvent(new PointerEvent('pointerup',o));}};KIDS.setTheme('mint');var s=KIDS.save.progress.skills;s.count={lvl:4,streak:0,trouble:0,rounds:1,items:5}; KIDS.go('play',{skill:'count',seed:14});setTimeout(function(){KIDS.acts.cobj(document.querySelectorAll('#cnt .cobj')[0]);KIDS.acts.cobj(document.querySelectorAll('#cnt .cobj')[1]);KIDS.acts.cobj(document.querySelectorAll('#cnt .cobj')[2]);},250);return 'ok';})();",
+      1700
+    ]
+  ],
+  "tablet_7_01_gameplay_open": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelector(sel);if(!b)return;var r=b.getBoundingClientRect(),o={bubbles:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2,pointerId:1};b.dispatchEvent(new PointerEvent('pointerdown',o));b.dispatchEvent(new PointerEvent('pointerup',o));}};KIDS.setTheme('mint');var s=KIDS.save.progress.skills;s.add={lvl:2,streak:0,trouble:0,rounds:1,items:5}; KIDS.go('play',{skill:'add',tool:'blocks',seed:6});setTimeout(function(){T('#mat .pile[data-zone=\"pa\"] .blk',1);T('#mat .pile[data-zone=\"pb\"] .blk',1);},250);return 'ok';})();",
+      1700
+    ]
+  ],
+  "tablet_7_02_gameplay_early": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelector(sel);if(!b)return;var r=b.getBoundingClientRect(),o={bubbles:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2,pointerId:1};b.dispatchEvent(new PointerEvent('pointerdown',o));b.dispatchEvent(new PointerEvent('pointerup',o));}};KIDS.setTheme('night');var s=KIDS.save.progress.skills;s.line={lvl:4,streak:0,trouble:0,rounds:1,items:5}; KIDS.go('play',{skill:'line',tool:'line',seed:12,op:'-'});setTimeout(function(){KIDS.acts.hop();},250);return 'ok';})();",
+      1700
+    ]
+  ],
+  "tablet_10_01_gameplay_open": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelector(sel);if(!b)return;var r=b.getBoundingClientRect(),o={bubbles:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2,pointerId:1};b.dispatchEvent(new PointerEvent('pointerdown',o));b.dispatchEvent(new PointerEvent('pointerup',o));}};KIDS.setTheme('peach');var s=KIDS.save.progress.skills;s.add={lvl:4,streak:0,trouble:0,rounds:1,items:5}; KIDS.go('play',{skill:'add',tool:'frame',seed:2});setTimeout(function(){KIDS.acts.cell(document.querySelector('#manip .cell:not(.on)'));},250);return 'ok';})();",
+      1700
+    ]
+  ],
+  "tablet_10_02_gameplay_early": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelector(sel);if(!b)return;var r=b.getBoundingClientRect(),o={bubbles:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2,pointerId:1};b.dispatchEvent(new PointerEvent('pointerdown',o));b.dispatchEvent(new PointerEvent('pointerup',o));}};KIDS.setTheme('mint');var s=KIDS.save.progress.skills;s.compare={lvl:3,streak:0,trouble:0,rounds:1,items:5}; KIDS.go('play',{skill:'compare',seed:4});setTimeout(function(){},250);return 'ok';})();",
+      1700
+    ]
+  ]
+}

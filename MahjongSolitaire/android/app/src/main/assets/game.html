@@ -3872,6 +3872,7 @@ window.renderPipeStats=function(){
     {id:'maple',name:'Autumn Maple',emoji:'🍁',unlockLevel:250,palette:{'board-a':'#e6c29a','board-b':'#d09f6c','tile-side':'#a3471f','tile-side-dark':'#74300f','tile-bone':'#f1e2c6','sel':'#2f7a5c'}},
     {id:'ink',name:'Ink & Rice',emoji:'🖋️',unlockLevel:350,palette:{'board-a':'#e9e6dd','board-b':'#d3cfc2','tile-side':'#34363a','tile-side-dark':'#1d1f22','tile-bone':'#ebe6da','sel':'#c0392b'}},
   ];
+  window._MJ_THEMES=THEMES; // read by test/screenshot_taps.json
 //@@END THEMES
   window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel,coinCost:t.coinCost};});
 

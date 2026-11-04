@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.PegasusKids" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">#fff2c4</item>
-        <item name="android:statusBarColor">#fff2c4</item>
-        <item name="android:navigationBarColor">#fff2c4</item>
+        <item name="android:windowBackground">#d8f1e2</item>
+        <item name="android:statusBarColor">#d8f1e2</item>
+        <item name="android:navigationBarColor">#d8f1e2</item>
         <item name="android:windowFullscreen">false</item>
     </style>
 </resources>
