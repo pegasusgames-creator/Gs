@@ -285,7 +285,15 @@
         '<button data-ev-go type="button" style="display:block;width:100%;border:none;padding:13px;border-radius:14px;background:' + CTA + ';color:' + ON_CTA + ';font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;">' + tr('go') + '</button>', done);
       k.root.querySelector('[data-ev-go]').addEventListener('click', function(){ k.close(); openSheet(); });
     };
-    if (window.gPopupQueue) window.gPopupQueue.enqueue(show); else show(function(){});
+    var go = function(){ if (window.gPopupQueue) window.gPopupQueue.enqueue(show); else show(function(){}); };
+    // Never on top of the win / level-complete card it follows (popup
+    // choreography): wait until no overlay is open, then queue.
+    (function waitClear(n){
+      var open = [].some.call(document.querySelectorAll('.overlay.show,.overlay.active,[id*="verlay"].active,[id*="verlay"].show,[id*="omplete"].active,[id*="omplete"].show'),
+        function(o){ return getComputedStyle(o).display !== 'none'; });
+      if (open && n < 1200) { setTimeout(function(){ waitClear(n + 1); }, 500); return; }
+      go();
+    })(0);
   }
 
   // ── leftovers from last month: auto-pay reached-but-unclaimed rewards ──

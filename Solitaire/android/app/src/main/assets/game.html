@@ -6085,19 +6085,19 @@ window.addEventListener('load',function(){
     setTimeout(function(){ msg.remove(); }, 2750);
   }
   var FIRST_CLEAR = {
-    en:{head:"You've got this!", more:'{n} more puzzles to go.', score:'Next stop: 2048!', best:'Beat your best on the next run!'},
-    de:{head:'Du schaffst das!', more:'Noch {n} Rätsel warten.', score:'Nächster Halt: 2048!', best:'Knack beim nächsten Lauf deinen Rekord!'},
-    fr:{head:'Tu gères !', more:'Encore {n} puzzles à résoudre.', score:'Prochain arrêt : 2048 !', best:'Bats ton record à la prochaine partie !'},
-    es:{head:'¡Lo tienes!', more:'Quedan {n} puzles más.', score:'Próxima parada: ¡2048!', best:'¡Supera tu récord en la próxima partida!'},
-    pt:{head:'Você consegue!', more:'Mais {n} quebra-cabeças pela frente.', score:'Próxima parada: 2048!', best:'Supere seu recorde na próxima partida!'},
-    it:{head:'Ce la fai!', more:'Ancora {n} puzzle da risolvere.', score:'Prossima tappa: 2048!', best:'Batti il tuo record alla prossima partita!'},
-    tr:{head:'Harikasın!', more:'Önünde {n} bulmaca daha var.', score:'Sıradaki durak: 2048!', best:'Bir sonraki turda rekorunu kır!'},
-    id:{head:'Kamu bisa!', more:'Masih ada {n} teka-teki lagi.', score:'Perhentian berikutnya: 2048!', best:'Pecahkan rekormu di ronde berikutnya!'},
-    uk:{head:'У тебе виходить!', more:'Попереду ще {n} головоломок.', score:'Наступна зупинка: 2048!', best:'Побий свій рекорд наступного разу!'},
-    ja:{head:'その調子！', more:'残り{n}パズル。', score:'次の目標：2048！', best:'次のプレイで自己ベストを更新しよう！'},
-    zh:{head:'你真棒！', more:'还有 {n} 个谜题等你挑战。', score:'下一站：2048！', best:'下一局刷新你的最佳成绩！'},
-    ar:{head:'أحسنت!', more:'تبقّى {n} لغزًا.', score:'المحطة التالية: 2048!', best:'حطّم رقمك القياسي في الجولة التالية!'},
-    hi:{head:'शाबाश!', more:'अभी {n} और पहेलियाँ बाकी हैं।', score:'अगला पड़ाव: 2048!', best:'अगले राउंड में अपना रिकॉर्ड तोड़ें!'}
+    en:{head:"You've got this!", more:'{n} more to go.', score:'Next stop: 2048!', best:'Beat your best on the next run!'},
+    de:{head:'Du schaffst das!', more:'Noch {n} vor dir.', score:'Nächster Halt: 2048!', best:'Knack beim nächsten Lauf deinen Rekord!'},
+    fr:{head:'Tu gères !', more:'Encore {n} à venir.', score:'Prochain arrêt : 2048 !', best:'Bats ton record à la prochaine partie !'},
+    es:{head:'¡Lo tienes!', more:'Quedan {n} más.', score:'Próxima parada: ¡2048!', best:'¡Supera tu récord en la próxima partida!'},
+    pt:{head:'Você consegue!', more:'Faltam mais {n}.', score:'Próxima parada: 2048!', best:'Supere seu recorde na próxima partida!'},
+    it:{head:'Ce la fai!', more:'Ancora {n} da fare.', score:'Prossima tappa: 2048!', best:'Batti il tuo record alla prossima partita!'},
+    tr:{head:'Harikasın!', more:'Önünde {n} tane daha var.', score:'Sıradaki durak: 2048!', best:'Bir sonraki turda rekorunu kır!'},
+    id:{head:'Kamu bisa!', more:'Masih ada {n} lagi.', score:'Perhentian berikutnya: 2048!', best:'Pecahkan rekormu di ronde berikutnya!'},
+    uk:{head:'У тебе виходить!', more:'Попереду ще {n}.', score:'Наступна зупинка: 2048!', best:'Побий свій рекорд наступного разу!'},
+    ja:{head:'その調子！', more:'残り{n}。', score:'次の目標：2048！', best:'次のプレイで自己ベストを更新しよう！'},
+    zh:{head:'你真棒！', more:'还有 {n} 个等你挑战。', score:'下一站：2048！', best:'下一局刷新你的最佳成绩！'},
+    ar:{head:'أحسنت!', more:'تبقّى {n}.', score:'المحطة التالية: 2048!', best:'حطّم رقمك القياسي في الجولة التالية!'},
+    hi:{head:'शाबाश!', more:'अभी {n} और बाकी हैं।', score:'अगला पड़ाव: 2048!', best:'अगले राउंड में अपना रिकॉर्ड तोड़ें!'}
   };
 
   function maybeDay2Nudge(){
@@ -8797,7 +8797,15 @@ if(typeof window.watchAdForLife!=='function')window.watchAdForLife=function(){if
         '<button data-ev-go type="button" style="display:block;width:100%;border:none;padding:13px;border-radius:14px;background:' + CTA + ';color:' + ON_CTA + ';font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;">' + tr('go') + '</button>', done);
       k.root.querySelector('[data-ev-go]').addEventListener('click', function(){ k.close(); openSheet(); });
     };
-    if (window.gPopupQueue) window.gPopupQueue.enqueue(show); else show(function(){});
+    var go = function(){ if (window.gPopupQueue) window.gPopupQueue.enqueue(show); else show(function(){}); };
+    // Never on top of the win / level-complete card it follows (popup
+    // choreography): wait until no overlay is open, then queue.
+    (function waitClear(n){
+      var open = [].some.call(document.querySelectorAll('.overlay.show,.overlay.active,[id*="verlay"].active,[id*="verlay"].show,[id*="omplete"].active,[id*="omplete"].show'),
+        function(o){ return getComputedStyle(o).display !== 'none'; });
+      if (open && n < 1200) { setTimeout(function(){ waitClear(n + 1); }, 500); return; }
+      go();
+    })(0);
   }
 
   // ── leftovers from last month: auto-pay reached-but-unclaimed rewards ──

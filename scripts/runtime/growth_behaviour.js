@@ -80,6 +80,15 @@ async function open(browser, app, { pre = '', mockRet = {} } = {}) {
     await p.waitForTimeout(3300);
     const ok = await p.$('[data-growth-card] [data-card-ok]');
     if (ok) { try { await ok.click({ timeout: 3000 }); } catch (e) {} await p.waitForTimeout(300); }
+    await p.waitForTimeout(1200);   // the next queued popup appears now
+    // Popup choreography: the monthly-event intro (first clear) must queue
+    // behind the win card, never open on top of it (2026-11-03).
+    const stack = await p.evaluate(() => {
+      const v = el => !!el && getComputedStyle(el).display !== 'none';
+      const win = [...document.querySelectorAll('.overlay.show,.overlay.active,[id*="omplete"].active,[id*="omplete"].show')].some(v);
+      return win && [...document.querySelectorAll('[data-growth-events-card]')].some(v);
+    });
+    check(app, 'event intro never stacks on the win card', !stack, 'events card opened over the win overlay');
     const calls = await p.evaluate(() => window.__calls.map(c => c[0]));
     const after = await p.evaluate(() => ({ total: gGame.totalClears(), pts: window.gEvents ? gEvents.points() : -1 }));
     check(app, 'win reaches the clear bus', after.total >= 1, `totalClears=${after.total}`);
