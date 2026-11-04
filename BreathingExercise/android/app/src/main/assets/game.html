@@ -16,36 +16,36 @@
 <style>
 /*@@REGION PALETTE*/
 :root{
-  --bg:#F5F3FA;--app-bg:#F5F3FA;--surface:#FFFFFF;--surface-2:#EEEBF5;--surface-3:#E2DEEE;
-  --text:#1C1930;--text-mute:#575270;--text-faint:#6B6685;
-  --border:#E3DFEC;--border-strong:#C8C2D9;
-  --accent:#5B3FD1;--accent-2:#7457EC;--accent-soft:#ECE7FD;--on-accent:#FFFFFF;
+  --bg:#EEF5F2;--app-bg:#EEF5F2;--surface:#FFFFFF;--surface-2:#E3EEEA;--surface-3:#D3E3DD;
+  --text:#14302B;--text-mute:#40605A;--text-faint:#4F6A64;
+  --border:#D5E4DE;--border-strong:#AFC7BF;
+  --accent:#1B6E63;--accent-2:#258577;--accent-soft:#DCEFEA;--on-accent:#FFFFFF;
   --g-play:linear-gradient(135deg,var(--accent),var(--accent-2));
-  --btn-neutral-bg:#ECE9F3;
+  --btn-neutral-bg:#E3EEEA;
   --menu-tile-bg:var(--accent-soft);--menu-tile-border:transparent;--menu-tile-fg:var(--accent);
-  --danger:#C42E47;--success:#1E8653;--flame:#ff8c1a;
-  --scrim:rgba(18,12,40,.42);
-  --shadow-1:0 1px 2px rgba(28,20,70,.05),0 4px 14px rgba(28,20,70,.06);
-  --shadow-2:0 12px 36px rgba(28,20,70,.18);
+  --danger:#B8283F;--success:#1E7A4D;--flame:#E07B12;
+  --scrim:rgba(8,28,24,.42);
+  --shadow-1:0 1px 2px rgba(10,50,44,.05),0 4px 14px rgba(10,50,44,.06);
+  --shadow-2:0 12px 36px rgba(10,50,44,.18);
   --font:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans','Noto Sans Arabic','Noto Sans Devanagari','Noto Sans CJK JP',sans-serif;
 }
-html[data-accent="ocean"]{--accent:#1F5FC4;--accent-2:#2E6FD9;--accent-soft:#E2EDFC}
-html[data-accent="forest"]{--accent:#1D7347;--accent-2:#238552;--accent-soft:#DFF2E6}
-html[data-accent="ember"]{--accent:#BC3F0B;--accent-2:#C8490E;--accent-soft:#FDE9DD}
-html[data-accent="rose"]{--accent:#B42A63;--accent-2:#C93A76;--accent-soft:#FBE3ED}
+html[data-accent="sky"]{--accent:#1D5F9E;--accent-2:#2C72B5;--accent-soft:#E0ECF8}
+html[data-accent="dusk"]{--accent:#4A4FB0;--accent-2:#5D63C6;--accent-soft:#E6E7FA}
+html[data-accent="sand"]{--accent:#8F5314;--accent-2:#A2621D;--accent-soft:#F8EBDA}
+html[data-accent="lilac"]{--accent:#7A3E9E;--accent-2:#8E52B3;--accent-soft:#F2E6F8}
 html[data-theme="dark"]{
-  --bg:#121017;--app-bg:#121017;--surface:#1C1A24;--surface-2:#26232F;--surface-3:#312D3C;
-  --text:#EDEBF5;--text-mute:#B1ACC4;--text-faint:#9C97B0;
-  --border:#2C2837;--border-strong:#443F53;
-  --accent:#A796FF;--accent-2:#8B77F5;--accent-soft:#2B2546;--on-accent:#140F26;
-  --btn-neutral-bg:#2A2733;--danger:#FF7A8C;--success:#5FD49A;
+  --bg:#0D1A18;--app-bg:#0D1A18;--surface:#15251F;--surface-2:#1E3029;--surface-3:#294039;
+  --text:#E6F3EF;--text-mute:#A9C4BC;--text-faint:#93B0A8;
+  --border:#24372F;--border-strong:#3B5349;
+  --accent:#7FD6C6;--accent-2:#5CBFAE;--accent-soft:#17352F;--on-accent:#06201B;
+  --btn-neutral-bg:#223630;--danger:#FF8A9A;--success:#6BD9A0;
   --scrim:rgba(0,0,0,.6);
   --shadow-1:0 1px 2px rgba(0,0,0,.3);--shadow-2:0 14px 40px rgba(0,0,0,.5);
 }
-html[data-theme="dark"][data-accent="ocean"]{--accent:#7EB4FF;--accent-2:#5B9AF5;--accent-soft:#1B2A42}
-html[data-theme="dark"][data-accent="forest"]{--accent:#6FD39C;--accent-2:#4DBB80;--accent-soft:#16301F}
-html[data-theme="dark"][data-accent="ember"]{--accent:#FF9B6A;--accent-2:#F07E45;--accent-soft:#3A2216}
-html[data-theme="dark"][data-accent="rose"]{--accent:#FF8DBA;--accent-2:#F06A9F;--accent-soft:#3A1A28}
+html[data-theme="dark"][data-accent="sky"]{--accent:#8CBFFA;--accent-2:#68A5EC;--accent-soft:#182C42}
+html[data-theme="dark"][data-accent="dusk"]{--accent:#A9ADFF;--accent-2:#8D92F0;--accent-soft:#22254A}
+html[data-theme="dark"][data-accent="sand"]{--accent:#F0B877;--accent-2:#E19C4E;--accent-soft:#3A2A16}
+html[data-theme="dark"][data-accent="lilac"]{--accent:#D7A6F2;--accent-2:#C084E6;--accent-soft:#32203F}
 /*@@END PALETTE*/
 
 /* ── SHELL CSS (shared by every utility — do not edit per app) ── */
@@ -205,148 +205,76 @@ select.inp{appearance:none;-webkit-appearance:none}
 @media (min-width:900px){html{font-size:calc(18px * var(--fs))}:root{--appbar-h:4rem}.ab-title{font-size:1.5rem}}
 
 /*@@REGION TOOL_CSS*/
-/* Habit Tracker tool styles. --hc = the habit's own colour (user data). */
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:2px 0 14px}
-.wd{display:flex;flex-direction:column;align-items:center;gap:3px;min-height:4.4rem;padding:6px 0 7px;border-radius:16px;border:0;background:transparent;color:var(--text-mute)}
-.wd .wn{font-size:.72rem;font-weight:750;text-transform:uppercase;letter-spacing:.02em}
-.wd .wr{position:relative;width:2.3rem;height:2.3rem;display:grid;place-items:center;font-weight:800;font-size:.95rem;color:var(--text)}
-.wd .wr svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
-.wd .wr .tr{stroke:var(--border)}
-.wd .wr .pr{stroke:var(--accent);transition:stroke-dashoffset .4s}
-.wd[aria-pressed="true"]{background:var(--surface);box-shadow:var(--shadow-1)}
-.wd[aria-pressed="true"] .wn{color:var(--accent)}
-.wd.full .wr{background:var(--accent);color:var(--on-accent);border-radius:50%}
-.sum{display:flex;align-items:center;gap:16px;padding:16px;margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-1);position:relative;overflow:hidden}
-.sum .ring{position:relative;width:4.6rem;height:4.6rem;flex:none}
-.sum .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.sum .ring .tr{stroke:var(--surface-2)}
-.sum .ring .pr{stroke:var(--accent);transition:stroke-dashoffset .5s cubic-bezier(.2,.8,.2,1)}
-.sum .ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:1.05rem;font-weight:850}
-.sum h2{margin:0;font-size:1.12rem;font-weight:850;line-height:1.25}
-.sum p{margin:3px 0 0;color:var(--text-mute);font-size:.9rem}
-.sum.alldone{background:var(--g-play);color:var(--on-accent);border-color:transparent}
-.sum.alldone p{color:var(--on-accent);opacity:.92}
-.sum.alldone .ring .tr{stroke:rgba(255,255,255,.28)}
-.sum.alldone .ring .pr{stroke:var(--on-accent)}
-.backtoday{margin:-6px 0 12px}
-.hlist{display:flex;flex-direction:column;gap:10px}
-.hrow{--hc:#5B48D9;display:flex;align-items:center;gap:4px;padding:6px 6px 6px 0;padding-inline:0 6px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-1);transition:opacity .2s}
-.hrow.isdone{background:var(--surface)}
-.hmain{flex:1;min-width:0;display:flex;align-items:center;gap:12px;min-height:3.75rem;padding:6px 6px 6px 12px;padding-inline:12px 6px;border:0;background:transparent;text-align:start;border-radius:var(--r)}
-.hic{width:2.9rem;height:2.9rem;border-radius:15px;display:grid;place-items:center;background:var(--hc);color:#fff;flex:none;box-shadow:inset 0 -3px 0 rgba(0,0,0,.12)}
-.htx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
-.hnm{font-weight:780;font-size:1.02rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hrow.isdone .hnm{color:var(--text-mute)}
-.hmt{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.84rem;color:var(--text-mute);font-weight:650}
-.hmt .fl{display:inline-flex;align-items:center;gap:2px}
-.hmt .fl svg{color:var(--flame)}
-.chk{position:relative;width:3.6rem;height:3.6rem;min-width:56px;min-height:56px;border-radius:50%;border:0;background:transparent;padding:0;display:grid;place-items:center;flex:none;touch-action:manipulation;-webkit-touch-callout:none}
-.chk .rg{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);transform:rotate(-90deg)}
-.chk .rg .tr{stroke:var(--surface-3)}
-.chk .rg .pr{stroke:var(--hc);transition:stroke-dashoffset .35s cubic-bezier(.2,.8,.2,1)}
-.chk .fill{position:absolute;inset:6px;border-radius:50%;background:var(--hc);transform:scale(0);transition:transform .32s cubic-bezier(.3,1.6,.5,1)}
-.chk .tk{position:relative;width:1.7rem;height:1.7rem;color:#fff;stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .3s .08s}
-.chk .ct{position:absolute;font-weight:850;font-size:.92rem;color:var(--text)}
-.chk.on .fill{transform:scale(1)}
-.chk.on .tk{stroke-dashoffset:0}
-.chk.on .ct{display:none}
-.chk.bump{animation:bump .28s}
-.chk.pop{animation:pop .45s cubic-bezier(.3,1.5,.5,1)}
-@keyframes bump{50%{transform:scale(.88)}}
-@keyframes pop{0%{transform:scale(.8)}55%{transform:scale(1.14)}100%{transform:scale(1)}}
-.burst{position:absolute;inset:0;pointer-events:none}
-.burst i{position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px;border-radius:50%;background:var(--hc);animation:fly .6s ease-out forwards}
-@keyframes fly{to{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
-.confetti{position:fixed;inset:0;pointer-events:none;z-index:var(--z-toast);overflow:hidden}
-.confetti i{position:absolute;top:-12px;width:8px;height:14px;border-radius:2px;animation:fall 1.6s ease-in forwards}
-@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(var(--r));opacity:.6}}
-.collapse{display:flex;align-items:center;gap:8px;width:100%;min-height:3rem;margin:18px 0 8px;padding:0 4px;border:0;background:transparent;color:var(--text-mute);font-weight:800;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
-.collapse svg{transition:transform .2s}
-.collapse[aria-expanded="true"] svg{transform:rotate(90deg)}
-.later .hrow{opacity:.85}
-.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.sug{display:inline-flex;align-items:center;gap:8px;min-height:2.9rem;padding:0 14px 0 6px;padding-inline:6px 14px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-weight:700;box-shadow:var(--shadow-1)}
-.sug .hic{width:2.1rem;height:2.1rem;border-radius:50%}
-.planbar{display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:14px;border-radius:var(--r);background:var(--accent-soft);color:var(--text);font-weight:650;font-size:.9rem}
-.planbar span{flex:1;min-width:0}
-.planbar .btn{min-height:2.6rem;padding:0 14px;font-size:.9rem}
-.mrow{display:flex;align-items:center;gap:2px;background:var(--surface);transition:transform .15s,box-shadow .15s}
-.mrow+.mrow{border-top:1px solid var(--border)}
-.mrow .hmain{border-radius:0}
-.mrow.dragging{position:relative;z-index:var(--z-overlay-dim);box-shadow:var(--shadow-2);transition:none}
-.drag{width:2.75rem;height:3.5rem;min-width:44px;border:0;background:transparent;color:var(--text-faint);display:grid;place-items:center;touch-action:none;cursor:grab}
-.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.tile{padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-1);min-width:0}
-.tile .tv{font-size:1.6rem;font-weight:850;line-height:1.1;letter-spacing:-.01em}
-.tile .tl{font-size:.8rem;font-weight:700;color:var(--text-mute);margin-top:4px}
-.tile .tv small{font-size:.9rem;font-weight:700;color:var(--text-mute)}
-.bars{display:flex;align-items:flex-end;gap:4px;height:7.5rem;padding-top:6px}
-.bar{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%}
-.bar .bt{flex:1;width:100%;display:flex;align-items:flex-end;border-radius:7px;background:var(--surface-2);overflow:hidden}
-.bar .bf{width:100%;background:var(--accent);border-radius:7px 7px 0 0;min-height:2px;transition:height .4s}
-.bar .bl{font-size:.68rem;font-weight:700;color:var(--text-mute);white-space:nowrap}
-.bar.cur .bl{color:var(--accent)}
-.hero{display:flex;align-items:center;gap:14px;margin:4px 0 16px}
-.hero .hic{width:3.8rem;height:3.8rem;border-radius:20px}
-.hero h2{margin:0;font-size:1.08rem;font-weight:800;overflow-wrap:break-word}
-.hero p{margin:2px 0 0;color:var(--text-mute);font-size:.9rem}
+/* Breathing Exercise tool styles. Tokens only. */
+.bx-chip{display:flex;align-items:center;gap:12px;width:100%;min-height:3.5rem;padding:8px 14px;margin:0 0 4px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);box-shadow:var(--shadow-1);text-align:start}
+.bx-chip .bt{flex:1;min-width:0;display:flex;flex-direction:column}
+.bx-chip b{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bx-chip small{color:var(--text-mute);font-weight:650;font-size:.84rem}
+.bx-stage{position:relative;width:min(60vw,31vh,320px);aspect-ratio:1;margin:12px auto 8px;display:grid;place-items:center}
+.bx-rim{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.bx-rim .tr{fill:none;stroke:var(--surface-3);stroke-width:2.5}
+.bx-rim .pr{fill:none;stroke:var(--accent);stroke-width:3.5;stroke-linecap:round}
+.bx-orb{position:absolute;inset:7%;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--accent-2),var(--accent) 70%);box-shadow:0 0 0 12px var(--accent-soft),var(--shadow-2);transform:scale(.5);will-change:transform}
+.bx-txt{position:relative;text-align:center;color:var(--on-accent);display:flex;flex-direction:column;align-items:center;gap:2px;max-width:70%;pointer-events:none}
+.bx-phase{text-align:center;font-size:1.35rem;font-weight:800;line-height:1.2;min-height:1.7rem;margin:0 0 10px;color:var(--text)}
+.bx-txt .ct{font-size:2.4rem;font-weight:850;line-height:1;font-variant-numeric:tabular-nums}
+.bx-prog{height:6px;border-radius:3px;background:var(--surface-3);overflow:hidden;margin:0 auto 14px;max-width:360px}
+.bx-prog i{display:block;height:100%;width:0;background:var(--accent);border-radius:3px}
+.bx-lens{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 6px;margin:0 0 10px;scrollbar-width:none}.bx-lens::-webkit-scrollbar{display:none}
+.bx-len{flex:none;scroll-snap-align:center;min-width:3.4rem;min-height:2.75rem;padding:0 14px;border-radius:999px;border:1.5px solid var(--border-strong);background:var(--surface);color:var(--text);font-weight:750;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.bx-len[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.bx-len svg{opacity:.8}
+.bx-go{display:flex;flex-direction:column;align-items:center;gap:10px;margin:0 auto 16px;max-width:360px}
+.bx-go .btn{width:100%;min-height:3.25rem;font-size:1.08rem}
+.bx-meta{text-align:center;color:var(--text-mute);font-weight:650;font-size:.88rem;margin:-4px 0 14px}
+.bx-done{text-align:center;margin:0 auto 14px;max-width:360px;padding:14px;border-radius:var(--r);background:var(--accent-soft);color:var(--text);font-weight:700}
+.bx-opts{margin-top:6px}
+.bx-timeline{display:flex;gap:3px;height:.7rem;margin-top:8px}
+.bx-timeline i{display:block;border-radius:4px;background:var(--accent);min-width:4px}
+.bx-timeline i.h{background:var(--accent-2);opacity:.55}
+.bx-timeline i.o{opacity:.85}
+.pat{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);min-height:4.2rem}
+.pat+.pat{border-top:1px solid var(--border)}
+.pat .pm{flex:1;min-width:0;text-align:start;border:0;background:transparent;color:var(--text);padding:0;min-height:3rem}
+.pat .pm b{display:block;font-weight:800}
+.pat .pm small{display:block;color:var(--text-mute);font-weight:650;font-size:.84rem}
+.pat .on{color:var(--accent)}
 .cal-h{display:flex;align-items:center;gap:4px;margin:0 auto 6px;max-width:460px}
 .cal-h b{flex:1;text-align:center;font-weight:800}
 .cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;max-width:460px;margin:0 auto}
-[dir="rtl"] .collapse svg{transform:scaleX(-1)}
-[dir="rtl"] .collapse[aria-expanded="true"] svg{transform:rotate(90deg)}
 .cal .dn{text-align:center;font-size:.7rem;font-weight:800;color:var(--text-mute);padding:4px 0;text-transform:uppercase}
-.cd{position:relative;aspect-ratio:1;min-height:2.6rem;border:0;border-radius:12px;background:var(--surface-2);color:var(--text);font-weight:750;font-size:.88rem;display:grid;place-items:center;padding:0}
-.cd.off{background:transparent;color:var(--text-faint);font-weight:600}
-.cd.l1{background:var(--hc);color:#fff;opacity:.45}
-.cd.l2{background:var(--hc);color:#fff;opacity:.7}
-.cd.l3{background:var(--hc);color:#fff}
-.cd.today{box-shadow:inset 0 0 0 2.5px var(--text)}
+.cd{position:relative;aspect-ratio:1;min-height:2.4rem;border:0;border-radius:12px;background:var(--surface-2);color:var(--text);font-weight:750;font-size:.88rem;display:grid;place-items:center;padding:0}
+.cd.l1{background:var(--accent-soft);color:var(--text);box-shadow:inset 0 0 0 1.5px var(--accent)}
+.cd.l2{background:var(--accent-2);color:var(--on-accent)}
+.cd.l3{background:var(--accent);color:var(--on-accent)}
+.cd.today{outline:2.5px solid var(--text);outline-offset:-2.5px}
 .cd.fut{opacity:.35}
-.cd .nt{position:absolute;top:4px;inset-inline-end:5px;width:5px;height:5px;border-radius:50%;background:currentColor}
 .cd.pad{visibility:hidden}
-.year{overflow-x:auto;padding-bottom:6px}
-.yg{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,11px);grid-auto-columns:11px;gap:3px;width:max-content}
-.yg i{border-radius:3px;background:var(--surface-2)}
-.yg i.l1{background:var(--hc);opacity:.45}.yg i.l2{background:var(--hc);opacity:.7}.yg i.l3{background:var(--hc)}
-.notes{list-style:none;margin:0;padding:0}
-.notes li{padding:10px 2px;border-top:1px solid var(--border)}
-.notes li:first-child{border-top:0}
-.notes b{display:block;font-size:.78rem;color:var(--text-mute);font-weight:750}
-.notes span{overflow-wrap:anywhere;white-space:pre-wrap}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-1);min-width:0}
+.tile .tv{font-size:1.6rem;font-weight:850;line-height:1.1}
+.tile .tl{font-size:.8rem;font-weight:700;color:var(--text-mute);margin-top:4px}
+.bars{display:flex;align-items:flex-end;gap:4px;height:7.5rem;padding-top:6px}
+.bar{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%}
+.bar .bt{flex:1;width:100%;display:flex;align-items:flex-end;border-radius:7px;background:var(--surface-2);overflow:hidden}
+.bar .bf{width:100%;background:var(--accent);border-radius:7px 7px 0 0;min-height:2px}
+.bar .bl{font-size:.68rem;font-weight:700;color:var(--text-mute);white-space:nowrap}
+.bar.cur .bl{color:var(--accent)}
 .lockcard{position:relative;overflow:hidden}
 .lockcard .blur{filter:blur(5px);opacity:.55;pointer-events:none}
-.lockcard .lk{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;background:var(--surface-2);background:color-mix(in srgb,var(--surface) 55%,transparent)}
+.lockcard .lk{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;background:color-mix(in srgb,var(--surface) 60%,transparent)}
 .lockcard .lk p{margin:0;color:var(--text);font-weight:650;max-width:320px}
-.rank{display:flex;align-items:center;gap:12px;padding:8px 0}
-.rank .hic{width:2.3rem;height:2.3rem;border-radius:12px}
+.rank{display:flex;align-items:center;gap:10px;padding:8px 0}
 .rank .rn{flex:1;min-width:0;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mini{display:block;flex:none;width:100%;margin:6px 0 4px;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
-.mini i{display:block;height:100%;background:var(--hc,var(--accent));border-radius:3px}
-.pct{flex:none;min-width:2.8rem;text-align:end;font-weight:800;font-size:.9rem}
-.icons{display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,3rem);grid-auto-columns:3rem;gap:6px;overflow-x:auto;padding:2px 2px 8px}
-.ip{width:3rem;height:3rem;border-radius:14px;border:0;background:var(--surface-2);color:var(--text);display:grid;place-items:center;padding:0}
-.ip[aria-pressed="true"]{background:var(--hc);color:#fff;box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--hc)}
-.cols{display:flex;gap:4px;overflow-x:auto;padding:4px 2px 8px}
-.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
-.dy{min-height:3rem;border-radius:12px;border:1.5px solid var(--border);background:transparent;color:var(--text-mute);font-weight:800;font-size:.85rem;padding:0}
-.dy[aria-pressed="true"]{background:var(--hc);border-color:var(--hc);color:#fff}
-.presets{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.pre{min-height:2.5rem;padding:0 12px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-weight:700;font-size:.82rem}
-.pre[aria-pressed="true"]{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
-.goal{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.goal .inp{flex:1 1 120px;width:auto}
-.remrow{display:flex;align-items:center;gap:12px;min-height:3rem}
-.remrow .rl{flex:1;font-weight:700}
-.remrow .rs{display:block;font-size:.8rem;color:var(--text-mute);font-weight:600}
-.edit-prev{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:16px;border-radius:var(--r);background:var(--surface-2)}
-.edit-prev .hic{width:3.2rem;height:3.2rem}
-.edit-prev b{font-size:1.08rem;overflow-wrap:anywhere}
-.dsheet .big{display:flex;flex-direction:column;align-items:center;gap:10px;margin:4px 0 18px}
-.dsheet .chk{width:5rem;height:5rem}
-.dsheet .chk .tk{width:2.3rem;height:2.3rem}
-@media (min-width:600px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}.bars{height:9rem}.yg{grid-template-rows:repeat(7,13px);grid-auto-columns:13px}}
-@media (min-width:900px){.page[data-screen="today"] .hlist{display:grid;grid-template-columns:1fr 1fr}}
+.rank .pct{font-weight:800;color:var(--accent)}
+.hist{list-style:none;margin:0;padding:0}
+.hist li{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--border)}
+.hist li:first-child{border-top:0}
+.hist span{color:var(--text-mute);font-weight:650}
+.edrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px}
+.edrow .fl{font-weight:750;min-width:0}
+.edsum{text-align:center;color:var(--text-mute);font-weight:700;margin:4px 0 10px}
+@media (min-width:600px){.bx-stage{width:min(56vw,42vh,430px)}.bx-txt .ct{font-size:3.2rem}.bx-phase{font-size:1.6rem}}
 /*@@END TOOL_CSS*/
 </style>
 </head>
@@ -369,30 +297,30 @@ select.inp{appearance:none;-webkit-appearance:none}
 //@@REGION APP_CONFIG
 // Per-app identity + shell switches. Strings are i18n KEYS (TOOL_I18N / GAME_I18N).
 const APP = {
-  name: 'Habit Tracker',                       // == <title> == store title (never translated)
-  pkg: 'com.pegasusgames.breathingexercise',        // == applicationId (scaffold rewrites it)
-  saveKey: 'breathingexercise_save',                // localStorage key (scaffold rewrites it)
-  tabs: [                                      // bottom nav (1 tab = nav hidden); first = home
-    { id: 'today',  icon: 'today', label: 'tab_today' },
-    { id: 'habits', icon: 'list',  label: 'tab_habits' },
-    { id: 'stats',  icon: 'chart', label: 'tab_stats' },
+  name: 'Breathing Exercise',                  // == <title> == store title (never translated)
+  pkg: 'com.pegasusgames.breathingexercise',
+  saveKey: 'breathingexercise_save',
+  tabs: [
+    { id: 'breathe',  icon: 'wind',    label: 'tab_breathe' },
+    { id: 'patterns', icon: 'sliders', label: 'tab_patterns' },
+    { id: 'progress', icon: 'chart',   label: 'tab_progress' },
   ],
-  onboarding: [                                // 2-3 cards; art = ART key (TOOL_ICONS)
+  onboarding: [
     { art: 'ob1', title: 'ob1_t', body: 'ob1_b' },
     { art: 'ob2', title: 'ob2_t', body: 'ob2_b' },
     { art: 'ob3', title: 'ob3_t', body: 'ob3_b' },
   ],
   proFeatures: ['pro_f1', 'pro_f2', 'pro_f3', 'pro_f4', 'pro_f5'],
-  accents: [                                   // ids match PALETTE html[data-accent=…]; first = default
-    { id: 'violet', sw: '#5B3FD1', pro: false },
-    { id: 'ocean',  sw: '#1F5FC4', pro: false },
-    { id: 'forest', sw: '#1D7347', pro: true },
-    { id: 'ember',  sw: '#BC3F0B', pro: true },
-    { id: 'rose',   sw: '#B42A63', pro: true },
+  accents: [
+    { id: 'sea',   sw: '#1B6E63', pro: false },
+    { id: 'sky',   sw: '#1D5F9E', pro: false },
+    { id: 'dusk',  sw: '#4A4FB0', pro: true },
+    { id: 'sand',  sw: '#8F5314', pro: true },
+    { id: 'lilac', sw: '#7A3E9E', pro: true },
   ],
-  reminder: { body: 'rem_daily_body', h: 20, m: 0 },   // app-wide daily reminder (slot 0); null = none
-  interstitials: true,                         // natural-break interstitials (Ads.naturalBreak)
-  prices: { remove_ads: '$2.99', pro_lifetime: '$5.99' },   // fallback; Play pushes local prices
+  reminder: { body: 'rem_daily_body', h: 19, m: 0 },
+  interstitials: true,
+  prices: { remove_ads: '$2.99', pro_lifetime: '$5.99' },
 };
 //@@END APP_CONFIG
 window.GAME_I18N = {
@@ -412,19 +340,19 @@ window.GAME_I18N = {
 };
 //@@REGION TOOL_STRINGS
 const TOOL_I18N = {
-  en: {"tab_today":"Today","tab_habits":"Habits","tab_stats":"Stats","ob1_t":"Small steps, every day","ob1_b":"Big changes are built from tiny check-ins. Start with one habit you can do today.","ob2_t":"One tap to check in","ob2_b":"Tap the circle when you're done. Goals with a count fill up as you go. Long-press for notes.","ob3_t":"Watch your streaks grow","ob3_b":"Calendars and stats show how far you've come. Everything stays on this phone.","pro_f1":"Unlimited habits (free plan: 5)","pro_f2":"Advanced stats and a full-year heatmap","pro_f3":"Every accent color","pro_f4":"CSV export for spreadsheets","pro_f5":"No ads, ever","limit_t":"The free plan holds 5 habits. Pro makes it unlimited.","advanced_b":"Weekday patterns, a 12-month trend and a full-year heatmap.","csv_pro":"CSV export is part of Pro.","rem_daily_body":"Time to check in on today's habits.","rem_habit_body":"Time for: {name}","new_habit":"New habit","edit_habit":"Edit habit","f_name":"Name","f_name_ph":"e.g. Read 10 pages","f_icon":"Icon","f_color":"Color","f_repeat":"Repeat on","every_day":"Every day","weekdays":"Weekdays","weekends":"Weekends","f_target":"Daily goal","f_unit":"Unit","unit_ph":"times","goal_line":"{n} {unit} a day","goal_prog":"{c}/{t} {unit}","f_reminder":"Reminder","f_reminder_sub":"On the days this habit repeats","name_needed":"Give your habit a name.","days_needed":"Pick at least one day.","habit_added":"Added “{name}”. Tap the circle when it's done.","archive":"Archive","unarchive":"Restore","archived":"Archived","habit_archived":"Habit archived","habit_restored":"Habit restored","del_t":"Delete this habit?","del_b":"Its whole history goes with it. Archive it instead to keep the history.","habit_deleted":"Habit deleted","pick_day":"Pick a day","back_today":"Back to today","today_sum":"{done} of {total} done","left_n":"{n} to go","all_done":"All done for today!","all_done_sub":"Lovely work. See you tomorrow.","nothing_today":"Nothing scheduled","nothing_today_sub":"A free day. Enjoy it.","welcome_back":"Welcome back! One check-in starts a new streak.","not_today":"Not scheduled today","check_aria":"Check in: {name}","done_aria":"{name} done","unchecked":"Unchecked “{name}”","future_day":"That day hasn't happened yet.","done_state":"Done","not_done_state":"Not done","note":"Note","note_ph":"How did it go?","empty_t":"Start with one small habit","empty_b":"Pick a suggestion or make your own. Tiny daily steps add up.","suggest":"Suggestions","sg_water":"Drink water","sg_read":"Read 10 pages","sg_walk":"Go for a walk","sg_meditate":"Meditate","sg_stretch":"Stretch","sg_journal":"Journal","sg_sleep":"In bed by 11","sg_nosugar":"No sweets","sg_floss":"Floss","sg_call":"Call family","u_glasses":"glasses","habits_empty_t":"No habits yet","habits_empty_b":"Create a habit and it will show up here.","free_limit":"{n} of {max} habits on the free plan","active_h":"Active","reorder_hint":"Drag ⋮⋮ to reorder","move":"Reorder {name}","stats_empty_t":"Your stats live here","stats_empty":"Add a habit and check in for a few days to see your progress.","rate30":"30-day rate","checkins":"Check-ins","best_streak":"Best streak","cur_streak":"Current streak","perfect30":"Perfect days (30)","last14":"Last 14 days","by_weekday":"By weekday","months12":"Last 12 months","consistent":"Most consistent","advanced":"Advanced stats","per_habit":"Your habits","best":"Best","calendar":"Calendar","cal_hint":"Tap a day to fix a check-in or add a note.","trend12":"12-week trend","year_map":"Year at a glance","notes":"Notes","no_notes":"No notes yet. Long-press the circle or tap a calendar day to add one.","prev_month":"Previous month","next_month":"Next month","week_starts":"Week starts on","auto":"Automatic","since":"Since {date}"},
-  ar: {"tab_today":"اليوم","tab_habits":"العادات","tab_stats":"الإحصاءات","ob1_t":"خطوات صغيرة كل يوم","ob1_b":"التغييرات الكبيرة تُبنى من تسجيلات صغيرة. ابدأ بعادة واحدة يمكنك فعلها اليوم.","ob2_t":"لمسة واحدة للتسجيل","ob2_b":"المس الدائرة عند الانتهاء. الأهداف ذات العدد تمتلئ تدريجيًا. اضغط مطولًا لإضافة ملاحظة.","ob3_t":"شاهد سلاسلك تنمو","ob3_b":"التقويمات والإحصاءات تُظهر كم تقدّمت. كل شيء يبقى على هذا الهاتف.","pro_f1":"عادات بلا حدود (المجاني: 5)","pro_f2":"إحصاءات متقدمة وخريطة السنة","pro_f3":"كل ألوان التمييز","pro_f4":"تصدير CSV لجداول البيانات","pro_f5":"بلا إعلانات أبدًا","limit_t":"الخطة المجانية تتسع لـ 5 عادات. مع Pro بلا حدود.","advanced_b":"أنماط أيام الأسبوع واتجاه 12 شهرًا وخريطة السنة كاملة.","csv_pro":"تصدير CSV جزء من Pro.","rem_daily_body":"حان وقت تسجيل عادات اليوم.","rem_habit_body":"حان وقت: {name}","new_habit":"عادة جديدة","edit_habit":"تعديل العادة","f_name":"الاسم","f_name_ph":"مثلًا: قراءة 10 صفحات","f_icon":"الأيقونة","f_color":"اللون","f_repeat":"التكرار في","every_day":"كل يوم","weekdays":"أيام العمل","weekends":"عطلة نهاية الأسبوع","f_target":"الهدف اليومي","f_unit":"الوحدة","unit_ph":"مرات","goal_line":"{n} {unit} يوميًا","goal_prog":"{c}/{t} {unit}","f_reminder":"تذكير","f_reminder_sub":"في الأيام التي تتكرر فيها العادة","name_needed":"اختر اسمًا لعادتك.","days_needed":"اختر يومًا واحدًا على الأقل.","habit_added":"تمت إضافة «{name}». المس الدائرة عند إنجازها.","archive":"أرشفة","unarchive":"استعادة","archived":"المؤرشفة","habit_archived":"تمت أرشفة العادة","habit_restored":"تمت استعادة العادة","del_t":"حذف هذه العادة؟","del_b":"سيُحذف سجلّها كاملًا. أرشفها بدلًا من ذلك للاحتفاظ بالسجل.","habit_deleted":"تم حذف العادة","pick_day":"اختر يومًا","back_today":"العودة إلى اليوم","today_sum":"تم {done} من {total}","left_n":"متبقٍ {n}","all_done":"أنجزت كل شيء اليوم!","all_done_sub":"عمل رائع. نراك غدًا.","nothing_today":"لا شيء مجدول","nothing_today_sub":"يوم حر. استمتع به.","welcome_back":"مرحبًا بعودتك! تسجيل واحد يبدأ سلسلة جديدة.","not_today":"غير مجدولة اليوم","check_aria":"تسجيل: {name}","done_aria":"تم {name}","unchecked":"أُلغي تسجيل «{name}»","future_day":"هذا اليوم لم يأتِ بعد.","done_state":"تم","not_done_state":"لم يتم","note":"ملاحظة","note_ph":"كيف سارت الأمور؟","empty_t":"ابدأ بعادة صغيرة واحدة","empty_b":"اختر اقتراحًا أو أنشئ عادتك. الخطوات اليومية الصغيرة تتراكم.","suggest":"اقتراحات","sg_water":"شرب الماء","sg_read":"قراءة 10 صفحات","sg_walk":"المشي","sg_meditate":"التأمل","sg_stretch":"تمارين التمدد","sg_journal":"كتابة اليوميات","sg_sleep":"النوم قبل 11","sg_nosugar":"بلا حلويات","sg_floss":"خيط الأسنان","sg_call":"الاتصال بالعائلة","u_glasses":"أكواب","habits_empty_t":"لا توجد عادات بعد","habits_empty_b":"أنشئ عادة وستظهر هنا.","free_limit":"{n} من {max} عادات في الخطة المجانية","active_h":"النشطة","reorder_hint":"اسحب ⋮⋮ لإعادة الترتيب","move":"نقل {name}","stats_empty_t":"إحصاءاتك هنا","stats_empty":"أضف عادة وسجّلها بضعة أيام لترى تقدّمك.","rate30":"نسبة 30 يومًا","checkins":"التسجيلات","best_streak":"أفضل سلسلة","cur_streak":"السلسلة الحالية","perfect30":"أيام مثالية (30)","last14":"آخر 14 يومًا","by_weekday":"حسب يوم الأسبوع","months12":"آخر 12 شهرًا","consistent":"الأكثر انتظامًا","advanced":"إحصاءات متقدمة","per_habit":"عاداتك","best":"الأفضل","calendar":"التقويم","cal_hint":"المس يومًا لتصحيح تسجيل أو إضافة ملاحظة.","trend12":"اتجاه 12 أسبوعًا","year_map":"السنة في لمحة","notes":"الملاحظات","no_notes":"لا ملاحظات بعد. اضغط مطولًا على الدائرة أو المس يومًا في التقويم.","prev_month":"الشهر السابق","next_month":"الشهر التالي","week_starts":"يبدأ الأسبوع يوم","auto":"تلقائي","since":"منذ {date}"},
-  de: {"tab_today":"Heute","tab_habits":"Gewohnheiten","tab_stats":"Statistik","ob1_t":"Kleine Schritte, jeden Tag","ob1_b":"Große Veränderungen entstehen aus winzigen Check-ins. Starte mit einer Gewohnheit, die du heute schaffst.","ob2_t":"Ein Tipp zum Abhaken","ob2_b":"Tippe auf den Kreis, wenn du fertig bist. Ziele mit Anzahl füllen sich Schritt für Schritt. Lange drücken für Notizen.","ob3_t":"Sieh deine Serien wachsen","ob3_b":"Kalender und Statistiken zeigen, wie weit du gekommen bist. Alles bleibt auf diesem Handy.","pro_f1":"Unbegrenzt viele Gewohnheiten (gratis: 5)","pro_f2":"Erweiterte Statistik und Jahres-Heatmap","pro_f3":"Alle Akzentfarben","pro_f4":"CSV-Export für Tabellen","pro_f5":"Nie wieder Werbung","limit_t":"Der Gratis-Plan umfasst 5 Gewohnheiten. Mit Pro sind es unbegrenzt viele.","advanced_b":"Wochentagsmuster, 12-Monats-Trend und eine Jahres-Heatmap.","csv_pro":"Der CSV-Export gehört zu Pro.","rem_daily_body":"Zeit für den Check-in deiner heutigen Gewohnheiten.","rem_habit_body":"Zeit für: {name}","new_habit":"Neue Gewohnheit","edit_habit":"Gewohnheit bearbeiten","f_name":"Name","f_name_ph":"z. B. 10 Seiten lesen","f_icon":"Symbol","f_color":"Farbe","f_repeat":"Wiederholen an","every_day":"Jeden Tag","weekdays":"Werktags","weekends":"Am Wochenende","f_target":"Tagesziel","f_unit":"Einheit","unit_ph":"Mal","goal_line":"{n} {unit} pro Tag","goal_prog":"{c}/{t} {unit}","f_reminder":"Erinnerung","f_reminder_sub":"An den Tagen, an denen sie sich wiederholt","name_needed":"Gib deiner Gewohnheit einen Namen.","days_needed":"Wähle mindestens einen Tag.","habit_added":"„{name}“ hinzugefügt. Tippe auf den Kreis, wenn erledigt.","archive":"Archivieren","unarchive":"Wiederherstellen","archived":"Archiviert","habit_archived":"Gewohnheit archiviert","habit_restored":"Gewohnheit wiederhergestellt","del_t":"Diese Gewohnheit löschen?","del_b":"Der gesamte Verlauf wird mitgelöscht. Archiviere sie stattdessen, um ihn zu behalten.","habit_deleted":"Gewohnheit gelöscht","pick_day":"Tag wählen","back_today":"Zurück zu heute","today_sum":"{done} von {total} erledigt","left_n":"noch {n}","all_done":"Alles erledigt für heute!","all_done_sub":"Toll gemacht. Bis morgen.","nothing_today":"Nichts geplant","nothing_today_sub":"Ein freier Tag. Genieß ihn.","welcome_back":"Schön, dass du wieder da bist! Ein Check-in startet eine neue Serie.","not_today":"Heute nicht geplant","check_aria":"Abhaken: {name}","done_aria":"{name} erledigt","unchecked":"„{name}“ zurückgesetzt","future_day":"Dieser Tag ist noch nicht da.","done_state":"Erledigt","not_done_state":"Nicht erledigt","note":"Notiz","note_ph":"Wie lief es?","empty_t":"Starte mit einer kleinen Gewohnheit","empty_b":"Nimm einen Vorschlag oder erstelle deine eigene. Kleine tägliche Schritte summieren sich.","suggest":"Vorschläge","sg_water":"Wasser trinken","sg_read":"10 Seiten lesen","sg_walk":"Spazieren gehen","sg_meditate":"Meditieren","sg_stretch":"Dehnen","sg_journal":"Tagebuch","sg_sleep":"Um 23 Uhr im Bett","sg_nosugar":"Keine Süßigkeiten","sg_floss":"Zahnseide","sg_call":"Familie anrufen","u_glasses":"Gläser","habits_empty_t":"Noch keine Gewohnheiten","habits_empty_b":"Erstelle eine Gewohnheit, dann erscheint sie hier.","free_limit":"{n} von {max} Gewohnheiten im Gratis-Plan","active_h":"Aktiv","reorder_hint":"⋮⋮ ziehen zum Sortieren","move":"{name} verschieben","stats_empty_t":"Hier wohnt deine Statistik","stats_empty":"Füge eine Gewohnheit hinzu und hake sie ein paar Tage ab, um deinen Fortschritt zu sehen.","rate30":"Quote (30 Tage)","checkins":"Check-ins","best_streak":"Beste Serie","cur_streak":"Aktuelle Serie","perfect30":"Perfekte Tage (30)","last14":"Letzte 14 Tage","by_weekday":"Nach Wochentag","months12":"Letzte 12 Monate","consistent":"Am beständigsten","advanced":"Erweiterte Statistik","per_habit":"Deine Gewohnheiten","best":"Beste","calendar":"Kalender","cal_hint":"Tippe auf einen Tag, um einen Check-in zu korrigieren oder eine Notiz hinzuzufügen.","trend12":"12-Wochen-Trend","year_map":"Das Jahr im Überblick","notes":"Notizen","no_notes":"Noch keine Notizen. Halte den Kreis gedrückt oder tippe auf einen Kalendertag.","prev_month":"Vorheriger Monat","next_month":"Nächster Monat","week_starts":"Woche beginnt am","auto":"Automatisch","since":"Seit {date}"},
-  es: {"tab_today":"Hoy","tab_habits":"Hábitos","tab_stats":"Estadísticas","ob1_t":"Pasos pequeños, cada día","ob1_b":"Los grandes cambios se construyen con pequeños registros. Empieza con un hábito que puedas hacer hoy.","ob2_t":"Un toque para marcar","ob2_b":"Toca el círculo cuando termines. Las metas con cantidad se llenan poco a poco. Mantén pulsado para notas.","ob3_t":"Mira crecer tus rachas","ob3_b":"Calendarios y estadísticas muestran lo lejos que has llegado. Todo se queda en este teléfono.","pro_f1":"Hábitos ilimitados (gratis: 5)","pro_f2":"Estadísticas avanzadas y mapa del año","pro_f3":"Todos los colores de acento","pro_f4":"Exportación CSV para hojas de cálculo","pro_f5":"Sin anuncios, nunca","limit_t":"El plan gratis incluye 5 hábitos. Con Pro son ilimitados.","advanced_b":"Patrones por día de la semana, tendencia de 12 meses y un mapa de todo el año.","csv_pro":"La exportación CSV es parte de Pro.","rem_daily_body":"Es hora de revisar los hábitos de hoy.","rem_habit_body":"Es hora de: {name}","new_habit":"Nuevo hábito","edit_habit":"Editar hábito","f_name":"Nombre","f_name_ph":"p. ej., Leer 10 páginas","f_icon":"Ícono","f_color":"Color","f_repeat":"Repetir los","every_day":"Todos los días","weekdays":"Entre semana","weekends":"Fines de semana","f_target":"Meta diaria","f_unit":"Unidad","unit_ph":"veces","goal_line":"{n} {unit} al día","goal_prog":"{c}/{t} {unit}","f_reminder":"Recordatorio","f_reminder_sub":"Los días en que se repite el hábito","name_needed":"Ponle un nombre a tu hábito.","days_needed":"Elige al menos un día.","habit_added":"Se agregó “{name}”. Toca el círculo cuando lo hagas.","archive":"Archivar","unarchive":"Restaurar","archived":"Archivados","habit_archived":"Hábito archivado","habit_restored":"Hábito restaurado","del_t":"¿Eliminar este hábito?","del_b":"Se borrará todo su historial. Archívalo para conservarlo.","habit_deleted":"Hábito eliminado","pick_day":"Elige un día","back_today":"Volver a hoy","today_sum":"{done} de {total} hechos","left_n":"faltan {n}","all_done":"¡Todo listo por hoy!","all_done_sub":"Excelente trabajo. Nos vemos mañana.","nothing_today":"Nada programado","nothing_today_sub":"Un día libre. Disfrútalo.","welcome_back":"¡Qué bueno verte! Un registro inicia una nueva racha.","not_today":"No programado hoy","check_aria":"Marcar: {name}","done_aria":"{name} hecho","unchecked":"Se desmarcó “{name}”","future_day":"Ese día todavía no llega.","done_state":"Hecho","not_done_state":"Sin hacer","note":"Nota","note_ph":"¿Cómo te fue?","empty_t":"Empieza con un hábito pequeño","empty_b":"Elige una sugerencia o crea el tuyo. Los pequeños pasos diarios suman.","suggest":"Sugerencias","sg_water":"Tomar agua","sg_read":"Leer 10 páginas","sg_walk":"Salir a caminar","sg_meditate":"Meditar","sg_stretch":"Estirar","sg_journal":"Escribir un diario","sg_sleep":"En cama a las 11","sg_nosugar":"Sin dulces","sg_floss":"Usar hilo dental","sg_call":"Llamar a la familia","u_glasses":"vasos","habits_empty_t":"Aún no hay hábitos","habits_empty_b":"Crea un hábito y aparecerá aquí.","free_limit":"{n} de {max} hábitos en el plan gratis","active_h":"Activos","reorder_hint":"Arrastra ⋮⋮ para ordenar","move":"Mover {name}","stats_empty_t":"Aquí viven tus estadísticas","stats_empty":"Agrega un hábito y márcalo unos días para ver tu progreso.","rate30":"Tasa (30 días)","checkins":"Registros","best_streak":"Mejor racha","cur_streak":"Racha actual","perfect30":"Días perfectos (30)","last14":"Últimos 14 días","by_weekday":"Por día de la semana","months12":"Últimos 12 meses","consistent":"Los más constantes","advanced":"Estadísticas avanzadas","per_habit":"Tus hábitos","best":"Mejor","calendar":"Calendario","cal_hint":"Toca un día para corregir un registro o agregar una nota.","trend12":"Tendencia de 12 semanas","year_map":"El año de un vistazo","notes":"Notas","no_notes":"Aún no hay notas. Mantén pulsado el círculo o toca un día del calendario.","prev_month":"Mes anterior","next_month":"Mes siguiente","week_starts":"La semana empieza el","auto":"Automático","since":"Desde el {date}"},
-  fr: {"tab_today":"Aujourd'hui","tab_habits":"Habitudes","tab_stats":"Stats","ob1_t":"De petits pas, chaque jour","ob1_b":"Les grands changements naissent de petites validations. Commencez par une habitude faisable aujourd'hui.","ob2_t":"Un geste pour valider","ob2_b":"Touchez le cercle une fois fait. Les objectifs chiffrés se remplissent au fil de la journée. Appui long pour une note.","ob3_t":"Regardez vos séries grandir","ob3_b":"Calendriers et statistiques montrent le chemin parcouru. Tout reste sur ce téléphone.","pro_f1":"Habitudes illimitées (gratuit : 5)","pro_f2":"Statistiques avancées et carte de l'année","pro_f3":"Toutes les couleurs d'accent","pro_f4":"Export CSV pour tableurs","pro_f5":"Plus jamais de pubs","limit_t":"L'offre gratuite compte 5 habitudes. Pro les rend illimitées.","advanced_b":"Tendances par jour de la semaine, évolution sur 12 mois et carte de toute l'année.","csv_pro":"L'export CSV fait partie de Pro.","rem_daily_body":"C'est l'heure de valider vos habitudes du jour.","rem_habit_body":"C'est l'heure : {name}","new_habit":"Nouvelle habitude","edit_habit":"Modifier l'habitude","f_name":"Nom","f_name_ph":"ex. Lire 10 pages","f_icon":"Icône","f_color":"Couleur","f_repeat":"Répéter le","every_day":"Tous les jours","weekdays":"En semaine","weekends":"Le week-end","f_target":"Objectif du jour","f_unit":"Unité","unit_ph":"fois","goal_line":"{n} {unit} par jour","goal_prog":"{c}/{t} {unit}","f_reminder":"Rappel","f_reminder_sub":"Les jours où l'habitude se répète","name_needed":"Donnez un nom à votre habitude.","days_needed":"Choisissez au moins un jour.","habit_added":"« {name} » ajoutée. Touchez le cercle une fois fait.","archive":"Archiver","unarchive":"Restaurer","archived":"Archivées","habit_archived":"Habitude archivée","habit_restored":"Habitude restaurée","del_t":"Supprimer cette habitude ?","del_b":"Tout son historique sera supprimé. Archivez-la plutôt pour le garder.","habit_deleted":"Habitude supprimée","pick_day":"Choisir un jour","back_today":"Revenir à aujourd'hui","today_sum":"{done} sur {total} faites","left_n":"encore {n}","all_done":"Tout est fait pour aujourd'hui !","all_done_sub":"Beau travail. À demain.","nothing_today":"Rien de prévu","nothing_today_sub":"Un jour libre. Profitez-en.","welcome_back":"Content de vous revoir ! Une validation lance une nouvelle série.","not_today":"Pas prévu aujourd'hui","check_aria":"Valider : {name}","done_aria":"{name} fait","unchecked":"« {name} » décochée","future_day":"Ce jour n'est pas encore arrivé.","done_state":"Fait","not_done_state":"Pas fait","note":"Note","note_ph":"Comment ça s'est passé ?","empty_t":"Commencez par une petite habitude","empty_b":"Choisissez une suggestion ou créez la vôtre. Les petits pas quotidiens s'additionnent.","suggest":"Suggestions","sg_water":"Boire de l'eau","sg_read":"Lire 10 pages","sg_walk":"Aller marcher","sg_meditate":"Méditer","sg_stretch":"S'étirer","sg_journal":"Tenir un journal","sg_sleep":"Au lit à 23 h","sg_nosugar":"Pas de sucreries","sg_floss":"Fil dentaire","sg_call":"Appeler la famille","u_glasses":"verres","habits_empty_t":"Pas encore d'habitudes","habits_empty_b":"Créez une habitude et elle apparaîtra ici.","free_limit":"{n} sur {max} habitudes dans l'offre gratuite","active_h":"Actives","reorder_hint":"Glissez ⋮⋮ pour réordonner","move":"Déplacer {name}","stats_empty_t":"Vos statistiques s'afficheront ici","stats_empty":"Ajoutez une habitude et validez-la quelques jours pour voir vos progrès.","rate30":"Taux sur 30 jours","checkins":"Validations","best_streak":"Meilleure série","cur_streak":"Série en cours","perfect30":"Jours parfaits (30)","last14":"14 derniers jours","by_weekday":"Par jour de la semaine","months12":"12 derniers mois","consistent":"Les plus régulières","advanced":"Statistiques avancées","per_habit":"Vos habitudes","best":"Record","calendar":"Calendrier","cal_hint":"Touchez un jour pour corriger une validation ou ajouter une note.","trend12":"Tendance sur 12 semaines","year_map":"L'année en un coup d'œil","notes":"Notes","no_notes":"Pas encore de notes. Appui long sur le cercle ou touchez un jour du calendrier.","prev_month":"Mois précédent","next_month":"Mois suivant","week_starts":"La semaine commence le","auto":"Automatique","since":"Depuis le {date}"},
-  hi: {"tab_today":"आज","tab_habits":"आदतें","tab_stats":"आँकड़े","ob1_t":"हर दिन छोटे क़दम","ob1_b":"बड़े बदलाव छोटे-छोटे चेक-इन से बनते हैं। एक ऐसी आदत से शुरू करें जो आज कर सकें।","ob2_t":"एक टैप में चेक-इन","ob2_b":"काम पूरा हो तो गोले पर टैप करें। गिनती वाले लक्ष्य धीरे-धीरे भरते हैं। नोट के लिए देर तक दबाएँ।","ob3_t":"अपनी लगातार जीत बढ़ते देखें","ob3_b":"कैलेंडर और आँकड़े दिखाते हैं कि आप कितना आगे आए। सब कुछ इसी फ़ोन में रहता है।","pro_f1":"असीमित आदतें (मुफ़्त: 5)","pro_f2":"विस्तृत आँकड़े और पूरे साल का हीटमैप","pro_f3":"सभी मुख्य रंग","pro_f4":"स्प्रेडशीट के लिए CSV एक्सपोर्ट","pro_f5":"कभी कोई विज्ञापन नहीं","limit_t":"मुफ़्त प्लान में 5 आदतें हैं। Pro में असीमित।","advanced_b":"हफ़्ते के दिनों का पैटर्न, 12 महीने का रुझान और पूरे साल का हीटमैप।","csv_pro":"CSV एक्सपोर्ट Pro का हिस्सा है।","rem_daily_body":"आज की आदतों पर चेक-इन का समय।","rem_habit_body":"समय हो गया: {name}","new_habit":"नई आदत","edit_habit":"आदत बदलें","f_name":"नाम","f_name_ph":"जैसे: 10 पन्ने पढ़ें","f_icon":"आइकन","f_color":"रंग","f_repeat":"किन दिनों","every_day":"हर दिन","weekdays":"कामकाजी दिन","weekends":"सप्ताहांत","f_target":"रोज़ का लक्ष्य","f_unit":"इकाई","unit_ph":"बार","goal_line":"रोज़ {n} {unit}","goal_prog":"{c}/{t} {unit}","f_reminder":"रिमाइंडर","f_reminder_sub":"उन दिनों पर जब यह आदत दोहराई जाती है","name_needed":"अपनी आदत को एक नाम दें।","days_needed":"कम से कम एक दिन चुनें।","habit_added":"“{name}” जुड़ गई। पूरा होने पर गोले पर टैप करें।","archive":"आर्काइव करें","unarchive":"वापस लाएँ","archived":"आर्काइव","habit_archived":"आदत आर्काइव हुई","habit_restored":"आदत वापस आई","del_t":"यह आदत मिटाएँ?","del_b":"इसका पूरा इतिहास भी मिट जाएगा। इतिहास रखने के लिए आर्काइव करें।","habit_deleted":"आदत मिटा दी गई","pick_day":"दिन चुनें","back_today":"आज पर लौटें","today_sum":"{total} में से {done} पूरी","left_n":"{n} बाक़ी","all_done":"आज का सब पूरा!","all_done_sub":"बहुत बढ़िया। कल मिलते हैं।","nothing_today":"आज कुछ तय नहीं","nothing_today_sub":"छुट्टी का दिन। मज़े करें।","welcome_back":"फिर से स्वागत है! एक चेक-इन से नई लड़ी शुरू होती है।","not_today":"आज के लिए तय नहीं","check_aria":"चेक-इन: {name}","done_aria":"{name} पूरी","unchecked":"“{name}” का चेक हटाया","future_day":"वह दिन अभी आया नहीं है।","done_state":"पूरा","not_done_state":"अधूरा","note":"नोट","note_ph":"कैसा रहा?","empty_t":"एक छोटी आदत से शुरुआत करें","empty_b":"कोई सुझाव चुनें या अपनी आदत बनाएँ। रोज़ के छोटे क़दम जुड़ते जाते हैं।","suggest":"सुझाव","sg_water":"पानी पिएँ","sg_read":"10 पन्ने पढ़ें","sg_walk":"टहलने जाएँ","sg_meditate":"ध्यान","sg_stretch":"स्ट्रेचिंग","sg_journal":"डायरी लिखें","sg_sleep":"11 बजे तक सोना","sg_nosugar":"मिठाई नहीं","sg_floss":"फ़्लॉस करें","sg_call":"परिवार को फ़ोन","u_glasses":"गिलास","habits_empty_t":"अभी कोई आदत नहीं","habits_empty_b":"एक आदत बनाएँ, वह यहाँ दिखेगी।","free_limit":"मुफ़्त प्लान में {max} में से {n} आदतें","active_h":"चालू","reorder_hint":"क्रम बदलने के लिए ⋮⋮ खींचें","move":"{name} खिसकाएँ","stats_empty_t":"आपके आँकड़े यहाँ दिखेंगे","stats_empty":"कोई आदत जोड़ें और कुछ दिन चेक-इन करें, फिर प्रगति देखें।","rate30":"30 दिन की दर","checkins":"चेक-इन","best_streak":"सबसे लंबी लड़ी","cur_streak":"मौजूदा लड़ी","perfect30":"परफ़ेक्ट दिन (30)","last14":"पिछले 14 दिन","by_weekday":"हफ़्ते के दिन के हिसाब से","months12":"पिछले 12 महीने","consistent":"सबसे नियमित","advanced":"विस्तृत आँकड़े","per_habit":"आपकी आदतें","best":"सबसे अच्छा","calendar":"कैलेंडर","cal_hint":"चेक-इन ठीक करने या नोट जोड़ने के लिए किसी दिन पर टैप करें।","trend12":"12 हफ़्तों का रुझान","year_map":"एक नज़र में साल","notes":"नोट","no_notes":"अभी कोई नोट नहीं। गोले को देर तक दबाएँ या कैलेंडर में किसी दिन पर टैप करें।","prev_month":"पिछला महीना","next_month":"अगला महीना","week_starts":"हफ़्ता शुरू होता है","auto":"अपने-आप","since":"{date} से"},
-  id: {"tab_today":"Hari ini","tab_habits":"Kebiasaan","tab_stats":"Statistik","ob1_t":"Langkah kecil, setiap hari","ob1_b":"Perubahan besar dibangun dari centang kecil. Mulai dengan satu kebiasaan yang bisa kamu lakukan hari ini.","ob2_t":"Sekali ketuk untuk centang","ob2_b":"Ketuk lingkaran saat selesai. Target berjumlah terisi sedikit demi sedikit. Tekan lama untuk catatan.","ob3_t":"Lihat runtunanmu tumbuh","ob3_b":"Kalender dan statistik menunjukkan sejauh mana kamu melangkah. Semuanya tetap di ponsel ini.","pro_f1":"Kebiasaan tanpa batas (gratis: 5)","pro_f2":"Statistik lanjutan dan peta setahun","pro_f3":"Semua warna aksen","pro_f4":"Ekspor CSV untuk spreadsheet","pro_f5":"Tanpa iklan, selamanya","limit_t":"Paket gratis memuat 5 kebiasaan. Pro membuatnya tanpa batas.","advanced_b":"Pola per hari, tren 12 bulan, dan peta setahun penuh.","csv_pro":"Ekspor CSV adalah bagian dari Pro.","rem_daily_body":"Saatnya mencentang kebiasaan hari ini.","rem_habit_body":"Saatnya: {name}","new_habit":"Kebiasaan baru","edit_habit":"Ubah kebiasaan","f_name":"Nama","f_name_ph":"mis. Baca 10 halaman","f_icon":"Ikon","f_color":"Warna","f_repeat":"Ulangi pada","every_day":"Setiap hari","weekdays":"Hari kerja","weekends":"Akhir pekan","f_target":"Target harian","f_unit":"Satuan","unit_ph":"kali","goal_line":"{n} {unit} sehari","goal_prog":"{c}/{t} {unit}","f_reminder":"Pengingat","f_reminder_sub":"Pada hari kebiasaan ini berulang","name_needed":"Beri nama kebiasaanmu.","days_needed":"Pilih minimal satu hari.","habit_added":"“{name}” ditambahkan. Ketuk lingkaran saat selesai.","archive":"Arsipkan","unarchive":"Pulihkan","archived":"Diarsipkan","habit_archived":"Kebiasaan diarsipkan","habit_restored":"Kebiasaan dipulihkan","del_t":"Hapus kebiasaan ini?","del_b":"Seluruh riwayatnya ikut terhapus. Arsipkan saja untuk menyimpan riwayat.","habit_deleted":"Kebiasaan dihapus","pick_day":"Pilih hari","back_today":"Kembali ke hari ini","today_sum":"{done} dari {total} selesai","left_n":"{n} lagi","all_done":"Semua beres hari ini!","all_done_sub":"Kerja bagus. Sampai besok.","nothing_today":"Tidak ada jadwal","nothing_today_sub":"Hari bebas. Nikmati.","welcome_back":"Selamat datang kembali! Satu centang memulai runtunan baru.","not_today":"Tidak dijadwalkan hari ini","check_aria":"Centang: {name}","done_aria":"{name} selesai","unchecked":"Centang “{name}” dibatalkan","future_day":"Hari itu belum tiba.","done_state":"Selesai","not_done_state":"Belum","note":"Catatan","note_ph":"Bagaimana hasilnya?","empty_t":"Mulai dengan satu kebiasaan kecil","empty_b":"Pilih saran atau buat sendiri. Langkah kecil setiap hari akan terkumpul.","suggest":"Saran","sg_water":"Minum air","sg_read":"Baca 10 halaman","sg_walk":"Jalan kaki","sg_meditate":"Meditasi","sg_stretch":"Peregangan","sg_journal":"Menulis jurnal","sg_sleep":"Tidur jam 11","sg_nosugar":"Tanpa camilan manis","sg_floss":"Benang gigi","sg_call":"Telepon keluarga","u_glasses":"gelas","habits_empty_t":"Belum ada kebiasaan","habits_empty_b":"Buat kebiasaan dan akan muncul di sini.","free_limit":"{n} dari {max} kebiasaan di paket gratis","active_h":"Aktif","reorder_hint":"Seret ⋮⋮ untuk mengurutkan","move":"Pindahkan {name}","stats_empty_t":"Statistikmu ada di sini","stats_empty":"Tambahkan kebiasaan dan centang beberapa hari untuk melihat kemajuanmu.","rate30":"Tingkat 30 hari","checkins":"Centang","best_streak":"Runtunan terbaik","cur_streak":"Runtunan saat ini","perfect30":"Hari sempurna (30)","last14":"14 hari terakhir","by_weekday":"Per hari","months12":"12 bulan terakhir","consistent":"Paling konsisten","advanced":"Statistik lanjutan","per_habit":"Kebiasaanmu","best":"Terbaik","calendar":"Kalender","cal_hint":"Ketuk tanggal untuk memperbaiki centang atau menambah catatan.","trend12":"Tren 12 minggu","year_map":"Setahun sekilas","notes":"Catatan","no_notes":"Belum ada catatan. Tekan lama lingkaran atau ketuk tanggal di kalender.","prev_month":"Bulan sebelumnya","next_month":"Bulan berikutnya","week_starts":"Minggu dimulai hari","auto":"Otomatis","since":"Sejak {date}"},
-  it: {"tab_today":"Oggi","tab_habits":"Abitudini","tab_stats":"Statistiche","ob1_t":"Piccoli passi, ogni giorno","ob1_b":"I grandi cambiamenti nascono da piccoli check-in. Inizia con un'abitudine che puoi fare oggi.","ob2_t":"Un tocco per segnare","ob2_b":"Tocca il cerchio quando hai finito. Gli obiettivi numerici si riempiono man mano. Tieni premuto per le note.","ob3_t":"Guarda crescere le tue serie","ob3_b":"Calendari e statistiche mostrano quanta strada hai fatto. Tutto resta su questo telefono.","pro_f1":"Abitudini illimitate (gratis: 5)","pro_f2":"Statistiche avanzate e mappa dell'anno","pro_f3":"Tutti i colori di accento","pro_f4":"Esportazione CSV per fogli di calcolo","pro_f5":"Niente pubblicità, mai","limit_t":"Il piano gratuito comprende 5 abitudini. Con Pro sono illimitate.","advanced_b":"Andamento per giorno della settimana, trend di 12 mesi e mappa dell'intero anno.","csv_pro":"L'esportazione CSV fa parte di Pro.","rem_daily_body":"È ora di segnare le abitudini di oggi.","rem_habit_body":"È il momento di: {name}","new_habit":"Nuova abitudine","edit_habit":"Modifica abitudine","f_name":"Nome","f_name_ph":"es. Leggere 10 pagine","f_icon":"Icona","f_color":"Colore","f_repeat":"Ripeti il","every_day":"Ogni giorno","weekdays":"Giorni feriali","weekends":"Weekend","f_target":"Obiettivo giornaliero","f_unit":"Unità","unit_ph":"volte","goal_line":"{n} {unit} al giorno","goal_prog":"{c}/{t} {unit}","f_reminder":"Promemoria","f_reminder_sub":"Nei giorni in cui l'abitudine si ripete","name_needed":"Dai un nome alla tua abitudine.","days_needed":"Scegli almeno un giorno.","habit_added":"“{name}” aggiunta. Tocca il cerchio quando è fatto.","archive":"Archivia","unarchive":"Ripristina","archived":"Archiviate","habit_archived":"Abitudine archiviata","habit_restored":"Abitudine ripristinata","del_t":"Eliminare questa abitudine?","del_b":"Verrà eliminato tutto lo storico. Archiviala per conservarlo.","habit_deleted":"Abitudine eliminata","pick_day":"Scegli un giorno","back_today":"Torna a oggi","today_sum":"{done} di {total} fatte","left_n":"ne mancano {n}","all_done":"Tutto fatto per oggi!","all_done_sub":"Ottimo lavoro. A domani.","nothing_today":"Niente in programma","nothing_today_sub":"Un giorno libero. Goditelo.","welcome_back":"Bentornato! Un check-in avvia una nuova serie.","not_today":"Non in programma oggi","check_aria":"Segna: {name}","done_aria":"{name} fatto","unchecked":"“{name}” non segnata","future_day":"Quel giorno non è ancora arrivato.","done_state":"Fatto","not_done_state":"Non fatto","note":"Nota","note_ph":"Com'è andata?","empty_t":"Inizia con una piccola abitudine","empty_b":"Scegli un suggerimento o creane una tua. I piccoli passi quotidiani si sommano.","suggest":"Suggerimenti","sg_water":"Bere acqua","sg_read":"Leggere 10 pagine","sg_walk":"Fare una passeggiata","sg_meditate":"Meditare","sg_stretch":"Stretching","sg_journal":"Scrivere un diario","sg_sleep":"A letto entro le 23","sg_nosugar":"Niente dolci","sg_floss":"Filo interdentale","sg_call":"Chiamare la famiglia","u_glasses":"bicchieri","habits_empty_t":"Ancora nessuna abitudine","habits_empty_b":"Crea un'abitudine e la vedrai qui.","free_limit":"{n} di {max} abitudini nel piano gratuito","active_h":"Attive","reorder_hint":"Trascina ⋮⋮ per riordinare","move":"Sposta {name}","stats_empty_t":"Qui trovi le tue statistiche","stats_empty":"Aggiungi un'abitudine e segnala per qualche giorno per vedere i tuoi progressi.","rate30":"Tasso a 30 giorni","checkins":"Check-in","best_streak":"Serie migliore","cur_streak":"Serie attuale","perfect30":"Giorni perfetti (30)","last14":"Ultimi 14 giorni","by_weekday":"Per giorno della settimana","months12":"Ultimi 12 mesi","consistent":"Le più costanti","advanced":"Statistiche avanzate","per_habit":"Le tue abitudini","best":"Record","calendar":"Calendario","cal_hint":"Tocca un giorno per correggere un check-in o aggiungere una nota.","trend12":"Trend di 12 settimane","year_map":"L'anno in un colpo d'occhio","notes":"Note","no_notes":"Ancora nessuna nota. Tieni premuto il cerchio o tocca un giorno del calendario.","prev_month":"Mese precedente","next_month":"Mese successivo","week_starts":"La settimana inizia di","auto":"Automatico","since":"Dal {date}"},
-  ja: {"tab_today":"今日","tab_habits":"習慣","tab_stats":"統計","ob1_t":"毎日、小さな一歩","ob1_b":"大きな変化は小さなチェックの積み重ね。今日できる習慣をひとつ始めましょう。","ob2_t":"ワンタップでチェック","ob2_b":"終わったら丸をタップ。回数の目標は少しずつ満ちていきます。長押しでメモ。","ob3_t":"連続記録が伸びていく","ob3_b":"カレンダーと統計で歩みがひと目でわかります。データはすべてこのスマホに。","pro_f1":"習慣を無制限に（無料は5つまで）","pro_f2":"詳しい統計と1年分のヒートマップ","pro_f3":"すべてのアクセントカラー","pro_f4":"表計算用のCSV書き出し","pro_f5":"広告は一切なし","limit_t":"無料プランは5つまで。Pro なら無制限です。","advanced_b":"曜日ごとの傾向、12か月の推移、1年分のヒートマップ。","csv_pro":"CSV書き出しは Pro の機能です。","rem_daily_body":"今日の習慣をチェックする時間です。","rem_habit_body":"{name} の時間です","new_habit":"新しい習慣","edit_habit":"習慣を編集","f_name":"名前","f_name_ph":"例：10ページ読む","f_icon":"アイコン","f_color":"色","f_repeat":"くり返す曜日","every_day":"毎日","weekdays":"平日","weekends":"週末","f_target":"1日の目標","f_unit":"単位","unit_ph":"回","goal_line":"1日{n}{unit}","goal_prog":"{c}/{t}{unit}","f_reminder":"リマインダー","f_reminder_sub":"この習慣をくり返す曜日に","name_needed":"習慣に名前を付けてください。","days_needed":"曜日を1つ以上選んでください。","habit_added":"「{name}」を追加しました。終わったら丸をタップ。","archive":"アーカイブ","unarchive":"元に戻す","archived":"アーカイブ済み","habit_archived":"習慣をアーカイブしました","habit_restored":"習慣を元に戻しました","del_t":"この習慣を削除しますか？","del_b":"これまでの記録もすべて消えます。記録を残すならアーカイブしてください。","habit_deleted":"習慣を削除しました","pick_day":"日付を選ぶ","back_today":"今日に戻る","today_sum":"{total}件中{done}件完了","left_n":"残り{n}件","all_done":"今日はすべて完了！","all_done_sub":"おつかれさま。また明日。","nothing_today":"予定なし","nothing_today_sub":"自由な日。ゆっくりどうぞ。","welcome_back":"おかえりなさい！ひとつのチェックで新しい連続記録が始まります。","not_today":"今日は予定なし","check_aria":"チェック：{name}","done_aria":"{name} 完了","unchecked":"「{name}」のチェックを外しました","future_day":"その日はまだ来ていません。","done_state":"完了","not_done_state":"未完了","note":"メモ","note_ph":"どうでしたか？","empty_t":"小さな習慣をひとつから","empty_b":"おすすめから選ぶか、自分で作りましょう。毎日の小さな一歩が積み重なります。","suggest":"おすすめ","sg_water":"水を飲む","sg_read":"10ページ読む","sg_walk":"散歩する","sg_meditate":"瞑想","sg_stretch":"ストレッチ","sg_journal":"日記を書く","sg_sleep":"23時に布団へ","sg_nosugar":"甘いものを控える","sg_floss":"フロス","sg_call":"家族に電話","u_glasses":"杯","habits_empty_t":"まだ習慣がありません","habits_empty_b":"習慣を作るとここに表示されます。","free_limit":"無料プラン：{max}つ中{n}つ","active_h":"アクティブ","reorder_hint":"⋮⋮ をドラッグして並べ替え","move":"{name} を移動","stats_empty_t":"ここに統計が表示されます","stats_empty":"習慣を追加して数日チェックすると、進み具合が見えてきます。","rate30":"30日間の達成率","checkins":"チェック数","best_streak":"最長連続","cur_streak":"現在の連続","perfect30":"完璧な日（30日）","last14":"過去14日","by_weekday":"曜日別","months12":"過去12か月","consistent":"安定している習慣","advanced":"詳しい統計","per_habit":"あなたの習慣","best":"最長","calendar":"カレンダー","cal_hint":"日付をタップしてチェックの修正やメモの追加ができます。","trend12":"12週間の推移","year_map":"1年をひと目で","notes":"メモ","no_notes":"まだメモはありません。丸を長押しするか、カレンダーの日付をタップしてください。","prev_month":"前の月","next_month":"次の月","week_starts":"週の始まり","auto":"自動","since":"{date} から"},
-  pt: {"tab_today":"Hoje","tab_habits":"Hábitos","tab_stats":"Estatísticas","ob1_t":"Pequenos passos, todo dia","ob1_b":"Grandes mudanças nascem de pequenos check-ins. Comece com um hábito que dá para fazer hoje.","ob2_t":"Um toque para marcar","ob2_b":"Toque no círculo quando terminar. Metas com quantidade enchem aos poucos. Toque e segure para notas.","ob3_t":"Veja suas sequências crescerem","ob3_b":"Calendários e estatísticas mostram o quanto você avançou. Tudo fica neste celular.","pro_f1":"Hábitos ilimitados (grátis: 5)","pro_f2":"Estatísticas avançadas e mapa do ano","pro_f3":"Todas as cores de destaque","pro_f4":"Exportação CSV para planilhas","pro_f5":"Sem anúncios, nunca","limit_t":"O plano grátis tem 5 hábitos. Com o Pro, são ilimitados.","advanced_b":"Padrões por dia da semana, tendência de 12 meses e mapa do ano inteiro.","csv_pro":"A exportação CSV faz parte do Pro.","rem_daily_body":"Hora de marcar os hábitos de hoje.","rem_habit_body":"Hora de: {name}","new_habit":"Novo hábito","edit_habit":"Editar hábito","f_name":"Nome","f_name_ph":"ex.: Ler 10 páginas","f_icon":"Ícone","f_color":"Cor","f_repeat":"Repetir em","every_day":"Todo dia","weekdays":"Dias úteis","weekends":"Fins de semana","f_target":"Meta diária","f_unit":"Unidade","unit_ph":"vezes","goal_line":"{n} {unit} por dia","goal_prog":"{c}/{t} {unit}","f_reminder":"Lembrete","f_reminder_sub":"Nos dias em que o hábito se repete","name_needed":"Dê um nome ao seu hábito.","days_needed":"Escolha pelo menos um dia.","habit_added":"“{name}” adicionado. Toque no círculo quando fizer.","archive":"Arquivar","unarchive":"Restaurar","archived":"Arquivados","habit_archived":"Hábito arquivado","habit_restored":"Hábito restaurado","del_t":"Excluir este hábito?","del_b":"Todo o histórico vai junto. Arquive para manter o histórico.","habit_deleted":"Hábito excluído","pick_day":"Escolha um dia","back_today":"Voltar para hoje","today_sum":"{done} de {total} feitos","left_n":"faltam {n}","all_done":"Tudo feito por hoje!","all_done_sub":"Mandou bem. Até amanhã.","nothing_today":"Nada programado","nothing_today_sub":"Um dia livre. Aproveite.","welcome_back":"Que bom te ver! Um check-in começa uma nova sequência.","not_today":"Não programado hoje","check_aria":"Marcar: {name}","done_aria":"{name} feito","unchecked":"“{name}” desmarcado","future_day":"Esse dia ainda não chegou.","done_state":"Feito","not_done_state":"Não feito","note":"Nota","note_ph":"Como foi?","empty_t":"Comece com um hábito pequeno","empty_b":"Escolha uma sugestão ou crie o seu. Pequenos passos diários fazem diferença.","suggest":"Sugestões","sg_water":"Beber água","sg_read":"Ler 10 páginas","sg_walk":"Fazer uma caminhada","sg_meditate":"Meditar","sg_stretch":"Alongar","sg_journal":"Escrever um diário","sg_sleep":"Na cama às 23h","sg_nosugar":"Sem doces","sg_floss":"Usar fio dental","sg_call":"Ligar para a família","u_glasses":"copos","habits_empty_t":"Ainda não há hábitos","habits_empty_b":"Crie um hábito e ele vai aparecer aqui.","free_limit":"{n} de {max} hábitos no plano grátis","active_h":"Ativos","reorder_hint":"Arraste ⋮⋮ para ordenar","move":"Mover {name}","stats_empty_t":"Suas estatísticas ficam aqui","stats_empty":"Adicione um hábito e marque por alguns dias para ver seu progresso.","rate30":"Taxa de 30 dias","checkins":"Check-ins","best_streak":"Melhor sequência","cur_streak":"Sequência atual","perfect30":"Dias perfeitos (30)","last14":"Últimos 14 dias","by_weekday":"Por dia da semana","months12":"Últimos 12 meses","consistent":"Mais constantes","advanced":"Estatísticas avançadas","per_habit":"Seus hábitos","best":"Recorde","calendar":"Calendário","cal_hint":"Toque em um dia para corrigir um check-in ou adicionar uma nota.","trend12":"Tendência de 12 semanas","year_map":"O ano num relance","notes":"Notas","no_notes":"Ainda não há notas. Toque e segure o círculo ou toque em um dia do calendário.","prev_month":"Mês anterior","next_month":"Próximo mês","week_starts":"A semana começa no","auto":"Automático","since":"Desde {date}"},
-  tr: {"tab_today":"Bugün","tab_habits":"Alışkanlıklar","tab_stats":"İstatistik","ob1_t":"Her gün küçük adımlar","ob1_b":"Büyük değişimler küçük işaretlerle başlar. Bugün yapabileceğin tek bir alışkanlıkla başla.","ob2_t":"İşaretlemek için tek dokunuş","ob2_b":"Bitirdiğinde daireye dokun. Sayılı hedefler adım adım dolar. Not için basılı tut.","ob3_t":"Serilerinin büyümesini izle","ob3_b":"Takvimler ve istatistikler ne kadar ilerlediğini gösterir. Her şey bu telefonda kalır.","pro_f1":"Sınırsız alışkanlık (ücretsiz: 5)","pro_f2":"Gelişmiş istatistik ve yıllık ısı haritası","pro_f3":"Tüm vurgu renkleri","pro_f4":"Tablolar için CSV dışa aktarma","pro_f5":"Asla reklam yok","limit_t":"Ücretsiz plan 5 alışkanlık içerir. Pro ile sınırsız.","advanced_b":"Haftanın günlerine göre desenler, 12 aylık eğilim ve tüm yılın ısı haritası.","csv_pro":"CSV dışa aktarma Pro'ya dahildir.","rem_daily_body":"Bugünkü alışkanlıklarını işaretleme zamanı.","rem_habit_body":"Zamanı geldi: {name}","new_habit":"Yeni alışkanlık","edit_habit":"Alışkanlığı düzenle","f_name":"Ad","f_name_ph":"ör. 10 sayfa oku","f_icon":"Simge","f_color":"Renk","f_repeat":"Tekrar günleri","every_day":"Her gün","weekdays":"Hafta içi","weekends":"Hafta sonu","f_target":"Günlük hedef","f_unit":"Birim","unit_ph":"kez","goal_line":"Günde {n} {unit}","goal_prog":"{c}/{t} {unit}","f_reminder":"Hatırlatıcı","f_reminder_sub":"Bu alışkanlığın tekrarlandığı günlerde","name_needed":"Alışkanlığına bir ad ver.","days_needed":"En az bir gün seç.","habit_added":"“{name}” eklendi. Yapınca daireye dokun.","archive":"Arşivle","unarchive":"Geri yükle","archived":"Arşivlenenler","habit_archived":"Alışkanlık arşivlendi","habit_restored":"Alışkanlık geri yüklendi","del_t":"Bu alışkanlık silinsin mi?","del_b":"Tüm geçmişi de silinir. Geçmişi korumak için arşivle.","habit_deleted":"Alışkanlık silindi","pick_day":"Bir gün seç","back_today":"Bugüne dön","today_sum":"{total} işten {done} tamam","left_n":"{n} kaldı","all_done":"Bugünlük hepsi tamam!","all_done_sub":"Harika iş. Yarın görüşürüz.","nothing_today":"Plan yok","nothing_today_sub":"Serbest bir gün. Tadını çıkar.","welcome_back":"Tekrar hoş geldin! Tek bir işaret yeni bir seri başlatır.","not_today":"Bugün planlanmadı","check_aria":"İşaretle: {name}","done_aria":"{name} tamam","unchecked":"“{name}” işareti kaldırıldı","future_day":"O gün henüz gelmedi.","done_state":"Tamam","not_done_state":"Yapılmadı","note":"Not","note_ph":"Nasıl geçti?","empty_t":"Küçük bir alışkanlıkla başla","empty_b":"Bir öneri seç ya da kendininkini oluştur. Küçük günlük adımlar birikir.","suggest":"Öneriler","sg_water":"Su iç","sg_read":"10 sayfa oku","sg_walk":"Yürüyüş yap","sg_meditate":"Meditasyon","sg_stretch":"Esneme","sg_journal":"Günlük yaz","sg_sleep":"23:00'te yatakta","sg_nosugar":"Tatlı yok","sg_floss":"Diş ipi","sg_call":"Aileni ara","u_glasses":"bardak","habits_empty_t":"Henüz alışkanlık yok","habits_empty_b":"Bir alışkanlık oluştur, burada görünsün.","free_limit":"Ücretsiz planda {max} alışkanlıktan {n} tanesi","active_h":"Etkin","reorder_hint":"Sıralamak için ⋮⋮ sürükle","move":"{name} taşı","stats_empty_t":"İstatistiklerin burada","stats_empty":"İlerlemeni görmek için bir alışkanlık ekle ve birkaç gün işaretle.","rate30":"30 günlük oran","checkins":"İşaretler","best_streak":"En iyi seri","cur_streak":"Güncel seri","perfect30":"Kusursuz gün (30)","last14":"Son 14 gün","by_weekday":"Haftanın gününe göre","months12":"Son 12 ay","consistent":"En istikrarlılar","advanced":"Gelişmiş istatistik","per_habit":"Alışkanlıkların","best":"En iyi","calendar":"Takvim","cal_hint":"Bir işareti düzeltmek ya da not eklemek için güne dokun.","trend12":"12 haftalık eğilim","year_map":"Bir bakışta yıl","notes":"Notlar","no_notes":"Henüz not yok. Daireyi basılı tut ya da takvimde bir güne dokun.","prev_month":"Önceki ay","next_month":"Sonraki ay","week_starts":"Hafta başlangıcı","auto":"Otomatik","since":"{date} tarihinden beri"},
-  uk: {"tab_today":"Сьогодні","tab_habits":"Звички","tab_stats":"Статистика","ob1_t":"Маленькі кроки щодня","ob1_b":"Великі зміни складаються з маленьких відміток. Почніть з однієї звички, яку можете виконати сьогодні.","ob2_t":"Один дотик — і відмічено","ob2_b":"Торкніться кола, коли виконаєте. Цілі з кількістю заповнюються поступово. Довге натискання — нотатка.","ob3_t":"Дивіться, як ростуть серії","ob3_b":"Календарі й статистика показують, скільки ви пройшли. Усе залишається на цьому телефоні.","pro_f1":"Необмежено звичок (безкоштовно: 5)","pro_f2":"Розширена статистика й теплова карта року","pro_f3":"Усі кольори акценту","pro_f4":"Експорт CSV для таблиць","pro_f5":"Жодної реклами","limit_t":"Безкоштовний план містить 5 звичок. З Pro — без обмежень.","advanced_b":"Закономірності за днями тижня, тренд за 12 місяців і карта всього року.","csv_pro":"Експорт CSV входить до Pro.","rem_daily_body":"Час відмітити сьогоднішні звички.","rem_habit_body":"Час для: {name}","new_habit":"Нова звичка","edit_habit":"Редагувати звичку","f_name":"Назва","f_name_ph":"напр. Прочитати 10 сторінок","f_icon":"Значок","f_color":"Колір","f_repeat":"Повторювати","every_day":"Щодня","weekdays":"Будні","weekends":"Вихідні","f_target":"Денна мета","f_unit":"Одиниця","unit_ph":"раз","goal_line":"{n} {unit} на день","goal_prog":"{c}/{t} {unit}","f_reminder":"Нагадування","f_reminder_sub":"У дні, коли звичка повторюється","name_needed":"Дайте звичці назву.","days_needed":"Виберіть хоча б один день.","habit_added":"Додано «{name}». Торкніться кола, коли виконаєте.","archive":"Архівувати","unarchive":"Відновити","archived":"В архіві","habit_archived":"Звичку архівовано","habit_restored":"Звичку відновлено","del_t":"Видалити цю звичку?","del_b":"Разом з нею зникне вся історія. Щоб зберегти історію, архівуйте її.","habit_deleted":"Звичку видалено","pick_day":"Виберіть день","back_today":"До сьогодні","today_sum":"Виконано {done} з {total}","left_n":"Залишилося: {n}","all_done":"На сьогодні все!","all_done_sub":"Чудова робота. До завтра.","nothing_today":"Нічого не заплановано","nothing_today_sub":"Вільний день. Насолоджуйтеся.","welcome_back":"З поверненням! Одна відмітка починає нову серію.","not_today":"Не заплановано на сьогодні","check_aria":"Відмітити: {name}","done_aria":"{name}: виконано","unchecked":"Відмітку «{name}» знято","future_day":"Цей день ще не настав.","done_state":"Виконано","not_done_state":"Не виконано","note":"Нотатка","note_ph":"Як усе пройшло?","empty_t":"Почніть з однієї маленької звички","empty_b":"Виберіть підказку або створіть свою. Маленькі щоденні кроки складаються в результат.","suggest":"Підказки","sg_water":"Пити воду","sg_read":"Прочитати 10 сторінок","sg_walk":"Прогулянка","sg_meditate":"Медитація","sg_stretch":"Розтяжка","sg_journal":"Щоденник","sg_sleep":"У ліжку до 23:00","sg_nosugar":"Без солодкого","sg_floss":"Зубна нитка","sg_call":"Подзвонити рідним","u_glasses":"склянок","habits_empty_t":"Ще немає звичок","habits_empty_b":"Створіть звичку — і вона з'явиться тут.","free_limit":"{n} з {max} звичок у безкоштовному плані","active_h":"Активні","reorder_hint":"Тягніть ⋮⋮, щоб змінити порядок","move":"Перемістити «{name}»","stats_empty_t":"Тут буде ваша статистика","stats_empty":"Додайте звичку й відмічайте її кілька днів, щоб побачити прогрес.","rate30":"Виконання за 30 днів","checkins":"Відмітки","best_streak":"Найкраща серія","cur_streak":"Поточна серія","perfect30":"Ідеальні дні (30)","last14":"Останні 14 днів","by_weekday":"За днями тижня","months12":"Останні 12 місяців","consistent":"Найстабільніші","advanced":"Розширена статистика","per_habit":"Ваші звички","best":"Рекорд","calendar":"Календар","cal_hint":"Торкніться дня, щоб виправити відмітку чи додати нотатку.","trend12":"Тренд за 12 тижнів","year_map":"Рік з одного погляду","notes":"Нотатки","no_notes":"Нотаток ще немає. Утримуйте коло або торкніться дня в календарі.","prev_month":"Попередній місяць","next_month":"Наступний місяць","week_starts":"Тиждень починається з","auto":"Автоматично","since":"З {date}"},
-  zh: {"tab_today":"今天","tab_habits":"习惯","tab_stats":"统计","ob1_t":"每天一小步","ob1_b":"大改变来自一次次小打卡。从今天就能做到的一个习惯开始吧。","ob2_t":"轻点一下即可打卡","ob2_b":"完成后点一下圆圈。有次数的目标会逐步填满。长按可写备注。","ob3_t":"看着连续天数增长","ob3_b":"日历和统计让你看清走了多远。所有数据都留在这部手机上。","pro_f1":"习惯数量不限（免费版：5 个）","pro_f2":"高级统计和全年热力图","pro_f3":"全部强调色","pro_f4":"导出 CSV 用于表格","pro_f5":"永无广告","limit_t":"免费版最多 5 个习惯，Pro 不限数量。","advanced_b":"按星期的规律、12 个月趋势和全年热力图。","csv_pro":"CSV 导出是 Pro 功能。","rem_daily_body":"该为今天的习惯打卡了。","rem_habit_body":"该做：{name}","new_habit":"新习惯","edit_habit":"编辑习惯","f_name":"名称","f_name_ph":"例如：读 10 页书","f_icon":"图标","f_color":"颜色","f_repeat":"重复日期","every_day":"每天","weekdays":"工作日","weekends":"周末","f_target":"每日目标","f_unit":"单位","unit_ph":"次","goal_line":"每天 {n} {unit}","goal_prog":"{c}/{t} {unit}","f_reminder":"提醒","f_reminder_sub":"在这个习惯重复的日子","name_needed":"给你的习惯起个名字。","days_needed":"请至少选择一天。","habit_added":"已添加“{name}”。完成后点一下圆圈。","archive":"归档","unarchive":"恢复","archived":"已归档","habit_archived":"习惯已归档","habit_restored":"习惯已恢复","del_t":"删除这个习惯？","del_b":"它的全部记录也会被删除。想保留记录可以改为归档。","habit_deleted":"习惯已删除","pick_day":"选择日期","back_today":"回到今天","today_sum":"已完成 {done}/{total}","left_n":"还剩 {n} 个","all_done":"今天全部完成！","all_done_sub":"干得漂亮，明天见。","nothing_today":"今天没有安排","nothing_today_sub":"自由的一天，好好享受。","welcome_back":"欢迎回来！打一次卡，就开始新的连续记录。","not_today":"今天不需要做","check_aria":"打卡：{name}","done_aria":"{name} 已完成","unchecked":"已取消“{name}”打卡","future_day":"那一天还没到。","done_state":"已完成","not_done_state":"未完成","note":"备注","note_ph":"感觉怎么样？","empty_t":"从一个小习惯开始","empty_b":"选一个建议或自己创建。每天的小步积累起来就是大进步。","suggest":"建议","sg_water":"喝水","sg_read":"读 10 页书","sg_walk":"散步","sg_meditate":"冥想","sg_stretch":"拉伸","sg_journal":"写日记","sg_sleep":"11 点上床","sg_nosugar":"不吃甜食","sg_floss":"用牙线","sg_call":"给家人打电话","u_glasses":"杯","habits_empty_t":"还没有习惯","habits_empty_b":"创建一个习惯，它会显示在这里。","free_limit":"免费版：已用 {n}/{max} 个习惯","active_h":"进行中","reorder_hint":"拖动 ⋮⋮ 调整顺序","move":"移动 {name}","stats_empty_t":"你的统计在这里","stats_empty":"添加习惯并打卡几天，就能看到进展。","rate30":"30 天完成率","checkins":"打卡次数","best_streak":"最长连续","cur_streak":"当前连续","perfect30":"完美天数（30 天）","last14":"最近 14 天","by_weekday":"按星期","months12":"最近 12 个月","consistent":"最稳定","advanced":"高级统计","per_habit":"你的习惯","best":"最长","calendar":"日历","cal_hint":"点日期可修改打卡或添加备注。","trend12":"12 周趋势","year_map":"一年概览","notes":"备注","no_notes":"还没有备注。长按圆圈或点日历中的日期即可添加。","prev_month":"上个月","next_month":"下个月","week_starts":"每周开始于","auto":"自动","since":"始于 {date}"},
+  en: {"tab_breathe":"Breathe","tab_patterns":"Patterns","tab_progress":"Progress","sub_breathe":"Slow down for a minute","ob1_t":"A calm minute, anytime","ob1_b":"Follow the glowing circle: grow as you breathe in, shrink as you breathe out. It may help you relax.","ob2_t":"Pick a rhythm","ob2_b":"Box 4-4-4-4, 4-7-8, coherent 5.5 and the physiological sigh are ready. Soft tones, voice and haptics are optional.","ob3_t":"Build a gentle habit","ob3_b":"Track your streak and minutes. A gentle daily reminder is optional. Everything stays on this phone.","pro_f1":"Custom breathing patterns","pro_f2":"Longer sessions (10–30 min)","pro_f3":"Full stats history and calendar","pro_f4":"Extra accent colors","pro_f5":"No ads, ever","pro_custom_b":"Custom patterns are part of Pro.","pro_len_b":"Sessions longer than 5 minutes are part of Pro.","pro_hist_b":"Full history, past months and per-pattern totals are part of Pro.","rem_daily_body":"A calm minute is waiting for you.","acc_sea":"Sea","acc_sky":"Sky","acc_dusk":"Dusk","acc_sand":"Sand","acc_lilac":"Lilac","pat_box":"Box breathing 4-4-4-4","pat_p478":"4-7-8 breathing","pat_coh":"Coherent 5.5","pat_sigh":"Physiological sigh 2-1-6","pat_calm":"Calm 4-6","ph_in":"Breathe in","ph_in2":"A little more","ph_hold":"Hold","ph_out":"Breathe out","ph_rest":"Rest","paused":"Paused","ready":"Ready when you are","sess_done":"Session complete","stage_aria":"Breathing guide circle","change_pat":"Change pattern","cycle_s":"{n} s per breath","resume":"Resume","pause":"Pause","end_now":"End session","logged":"Logged {m}. Nicely done.","nothing_logged":"Ended before a full breath cycle, so nothing was logged.","length":"Session length","min_n":"{n} min","plan_line":"{c} full breaths · {m}","begin":"Begin","streak":"Day streak","today":"Today","s_tone":"Soft tones","s_tone_sub":"A gentle note at each phase change","s_voice":"Voice cues","s_voice_sub":"Speaks “Breathe in”, “Hold”, “Breathe out” (uses your phone voice)","wellness_note":"For relaxation only. It may help you relax; it is not medical advice or a treatment.","new_pat":"New pattern","edit_pat":"Edit pattern","edit":"Edit","selected":"Selected","presets":"Built-in patterns","custom":"Your patterns","custom_empty_t":"Design your own rhythm","custom_empty_b":"Set inhale, hold, exhale and rest lengths (Pro).","prog_empty_t":"Your first session starts here","prog_empty_b":"Finish a session and your streak, minutes and calendar appear here.","best_streak":"Best streak","total_time":"Total time","sessions":"Sessions","last14":"Last 14 days","calendar":"Calendar","prev_month":"Previous month","next_month":"Next month","months12":"Minutes per month","by_pat":"By pattern","history":"Recent sessions","history_h":"Full history","f_name":"Name","max_custom":"You have reached 12 custom patterns.","pat_deleted":"Pattern deleted","v_in":"Breathe in","v_in2":"A little more","v_hold":"Hold","v_out":"Breathe out","v_rest":"Rest"},
+  ar: {"tab_breathe":"تنفّس","tab_patterns":"الأنماط","tab_progress":"التقدّم","sub_breathe":"أبطئ لدقيقة","ob1_t":"دقيقة هادئة في أي وقت","ob1_b":"تابع الدائرة المضيئة: تكبر مع الشهيق وتصغر مع الزفير. قد تساعدك على الاسترخاء.","ob2_t":"اختر إيقاعًا","ob2_b":"التنفس المربّع 4-4-4-4 و4-7-8 والمتناسق 5.5 والتنهيدة الفيزيولوجية جاهزة. النغمات والصوت والاهتزاز اختيارية.","ob3_t":"كوّن عادة لطيفة","ob3_b":"تابع سلسلة أيامك ودقائقك. التذكير اليومي اللطيف اختياري. كل شيء يبقى على هذا الهاتف.","pro_f1":"أنماط تنفس مخصّصة","pro_f2":"جلسات أطول (10–30 دقيقة)","pro_f3":"سجل الإحصاءات والتقويم كاملًا","pro_f4":"ألوان مميزة إضافية","pro_f5":"بلا إعلانات أبدًا","pro_custom_b":"الأنماط المخصّصة جزء من Pro.","pro_len_b":"الجلسات الأطول من 5 دقائق جزء من Pro.","pro_hist_b":"السجل الكامل والأشهر السابقة وإجماليات كل نمط جزء من Pro.","rem_daily_body":"دقيقة هادئة بانتظارك.","acc_sea":"بحر","acc_sky":"سماء","acc_dusk":"غسق","acc_sand":"رمل","acc_lilac":"أرجواني","pat_box":"التنفس المربّع 4-4-4-4","pat_p478":"تنفس 4-7-8","pat_coh":"المتناسق 5.5","pat_sigh":"التنهيدة الفيزيولوجية 2-1-6","pat_calm":"هادئ 4-6","ph_in":"شهيق","ph_in2":"المزيد قليلًا","ph_hold":"احبس","ph_out":"زفير","ph_rest":"استرح","paused":"متوقف مؤقتًا","ready":"جاهز متى شئت","sess_done":"اكتملت الجلسة","stage_aria":"دائرة إرشاد التنفس","change_pat":"تغيير النمط","cycle_s":"{n} ث لكل نفس","resume":"استئناف","pause":"إيقاف مؤقت","end_now":"إنهاء الجلسة","logged":"تم تسجيل {m}. أحسنت.","nothing_logged":"انتهت قبل دورة تنفس كاملة، لذا لم يُسجَّل شيء.","length":"مدة الجلسة","min_n":"{n} د","plan_line":"{c} دورة كاملة · {m}","begin":"ابدأ","streak":"أيام متتالية","today":"اليوم","s_tone":"نغمات هادئة","s_tone_sub":"نغمة لطيفة عند كل مرحلة","s_voice":"إرشاد صوتي","s_voice_sub":"ينطق «شهيق» و«احبس» و«زفير» (بصوت هاتفك)","wellness_note":"للاسترخاء فقط. قد يساعدك على الاسترخاء، وليس نصيحة طبية ولا علاجًا.","new_pat":"نمط جديد","edit_pat":"تعديل النمط","edit":"تعديل","selected":"محدّد","presets":"أنماط مدمجة","custom":"أنماطك","custom_empty_t":"صمّم إيقاعك الخاص","custom_empty_b":"اضبط مدد الشهيق والحبس والزفير والراحة (Pro).","prog_empty_t":"تبدأ جلستك الأولى من هنا","prog_empty_b":"أكمل جلسة لتظهر هنا سلسلة أيامك ودقائقك وتقويمك.","best_streak":"أفضل سلسلة","total_time":"الوقت الإجمالي","sessions":"الجلسات","last14":"آخر 14 يومًا","calendar":"التقويم","prev_month":"الشهر السابق","next_month":"الشهر التالي","months12":"الدقائق شهريًا","by_pat":"حسب النمط","history":"الجلسات الأخيرة","history_h":"السجل الكامل","f_name":"الاسم","max_custom":"وصلت إلى 12 نمطًا مخصّصًا.","pat_deleted":"حُذف النمط","v_in":"شهيق","v_in2":"المزيد قليلًا","v_hold":"احبس","v_out":"زفير","v_rest":"استرح"},
+  de: {"tab_breathe":"Atmen","tab_patterns":"Muster","tab_progress":"Verlauf","sub_breathe":"Eine Minute langsamer werden","ob1_t":"Eine ruhige Minute, jederzeit","ob1_b":"Folge dem leuchtenden Kreis: Er wächst beim Einatmen und schrumpft beim Ausatmen. Das kann beim Entspannen helfen.","ob2_t":"Wähle einen Rhythmus","ob2_b":"Box 4-4-4-4, 4-7-8, kohärent 5,5 und der physiologische Seufzer sind bereit. Töne, Stimme und Haptik sind optional.","ob3_t":"Baue eine sanfte Gewohnheit auf","ob3_b":"Verfolge Serie und Minuten. Eine sanfte tägliche Erinnerung ist optional. Alles bleibt auf diesem Handy.","pro_f1":"Eigene Atemmuster","pro_f2":"Längere Sitzungen (10–30 Min.)","pro_f3":"Vollständiger Verlauf und Kalender","pro_f4":"Zusätzliche Akzentfarben","pro_f5":"Nie wieder Werbung","pro_custom_b":"Eigene Muster gehören zu Pro.","pro_len_b":"Sitzungen über 5 Minuten gehören zu Pro.","pro_hist_b":"Voller Verlauf, frühere Monate und Summen je Muster gehören zu Pro.","rem_daily_body":"Eine ruhige Minute wartet auf dich.","acc_sea":"Meer","acc_sky":"Himmel","acc_dusk":"Dämmerung","acc_sand":"Sand","acc_lilac":"Flieder","pat_box":"Box-Atmung 4-4-4-4","pat_p478":"4-7-8-Atmung","pat_coh":"Kohärent 5,5","pat_sigh":"Physiologischer Seufzer 2-1-6","pat_calm":"Ruhig 4-6","ph_in":"Einatmen","ph_in2":"Noch etwas mehr","ph_hold":"Halten","ph_out":"Ausatmen","ph_rest":"Pause","paused":"Pausiert","ready":"Bereit, wenn du es bist","sess_done":"Sitzung beendet","stage_aria":"Atemführungskreis","change_pat":"Muster ändern","cycle_s":"{n} s pro Atemzug","resume":"Weiter","pause":"Pause","end_now":"Sitzung beenden","logged":"{m} erfasst. Gut gemacht.","nothing_logged":"Vor einem vollen Atemzyklus beendet, daher nichts erfasst.","length":"Sitzungsdauer","min_n":"{n} Min.","plan_line":"{c} volle Atemzüge · {m}","begin":"Starten","streak":"Tage in Folge","today":"Heute","s_tone":"Sanfte Töne","s_tone_sub":"Ein sanfter Ton bei jedem Phasenwechsel","s_voice":"Sprachhinweise","s_voice_sub":"Spricht „Einatmen“, „Halten“, „Ausatmen“ (Stimme deines Handys)","wellness_note":"Nur zur Entspannung. Es kann beim Entspannen helfen; kein medizinischer Rat und keine Behandlung.","new_pat":"Neues Muster","edit_pat":"Muster bearbeiten","edit":"Bearbeiten","selected":"Ausgewählt","presets":"Eingebaute Muster","custom":"Deine Muster","custom_empty_t":"Entwirf deinen eigenen Rhythmus","custom_empty_b":"Lege Einatmen, Halten, Ausatmen und Pause fest (Pro).","prog_empty_t":"Hier beginnt deine erste Sitzung","prog_empty_b":"Beende eine Sitzung, dann erscheinen hier Serie, Minuten und Kalender.","best_streak":"Beste Serie","total_time":"Gesamtzeit","sessions":"Sitzungen","last14":"Letzte 14 Tage","calendar":"Kalender","prev_month":"Vorheriger Monat","next_month":"Nächster Monat","months12":"Minuten pro Monat","by_pat":"Nach Muster","history":"Letzte Sitzungen","history_h":"Voller Verlauf","f_name":"Name","max_custom":"Du hast 12 eigene Muster erreicht.","pat_deleted":"Muster gelöscht","v_in":"Einatmen","v_in2":"Noch etwas mehr","v_hold":"Halten","v_out":"Ausatmen","v_rest":"Pause"},
+  es: {"tab_breathe":"Respirar","tab_patterns":"Patrones","tab_progress":"Progreso","sub_breathe":"Baja el ritmo un minuto","ob1_t":"Un minuto de calma, cuando quieras","ob1_b":"Sigue el círculo luminoso: crece al inhalar y se encoge al exhalar. Puede ayudarte a relajarte.","ob2_t":"Elige un ritmo","ob2_b":"Caja 4-4-4-4, 4-7-8, coherente 5,5 y el suspiro fisiológico están listos. Tonos suaves, voz y vibración son opcionales.","ob3_t":"Crea un hábito suave","ob3_b":"Sigue tu racha y tus minutos. Un recordatorio diario suave es opcional. Todo se queda en este teléfono.","pro_f1":"Patrones de respiración propios","pro_f2":"Sesiones más largas (10–30 min)","pro_f3":"Historial completo y calendario","pro_f4":"Colores de acento extra","pro_f5":"Sin anuncios, nunca","pro_custom_b":"Los patrones propios forman parte de Pro.","pro_len_b":"Las sesiones de más de 5 minutos forman parte de Pro.","pro_hist_b":"El historial completo, los meses anteriores y los totales por patrón forman parte de Pro.","rem_daily_body":"Un minuto de calma te espera.","acc_sea":"Mar","acc_sky":"Cielo","acc_dusk":"Crepúsculo","acc_sand":"Arena","acc_lilac":"Lila","pat_box":"Respiración en caja 4-4-4-4","pat_p478":"Respiración 4-7-8","pat_coh":"Coherente 5,5","pat_sigh":"Suspiro fisiológico 2-1-6","pat_calm":"Calma 4-6","ph_in":"Inhala","ph_in2":"Un poco más","ph_hold":"Mantén","ph_out":"Exhala","ph_rest":"Descansa","paused":"En pausa","ready":"Listo cuando tú quieras","sess_done":"Sesión completada","stage_aria":"Círculo guía de respiración","change_pat":"Cambiar patrón","cycle_s":"{n} s por respiración","resume":"Reanudar","pause":"Pausar","end_now":"Terminar sesión","logged":"Registrado: {m}. Bien hecho.","nothing_logged":"Terminó antes de un ciclo completo, así que no se registró nada.","length":"Duración de la sesión","min_n":"{n} min","plan_line":"{c} respiraciones completas · {m}","begin":"Comenzar","streak":"Racha de días","today":"Hoy","s_tone":"Tonos suaves","s_tone_sub":"Una nota suave en cada cambio de fase","s_voice":"Indicaciones por voz","s_voice_sub":"Dice «Inhala», «Mantén», «Exhala» (con la voz del teléfono)","wellness_note":"Solo para relajarte. Puede ayudarte a relajarte; no es consejo médico ni tratamiento.","new_pat":"Nuevo patrón","edit_pat":"Editar patrón","edit":"Editar","selected":"Seleccionado","presets":"Patrones incluidos","custom":"Tus patrones","custom_empty_t":"Diseña tu propio ritmo","custom_empty_b":"Ajusta inhalar, mantener, exhalar y descanso (Pro).","prog_empty_t":"Tu primera sesión empieza aquí","prog_empty_b":"Termina una sesión y aquí aparecerán tu racha, minutos y calendario.","best_streak":"Mejor racha","total_time":"Tiempo total","sessions":"Sesiones","last14":"Últimos 14 días","calendar":"Calendario","prev_month":"Mes anterior","next_month":"Mes siguiente","months12":"Minutos por mes","by_pat":"Por patrón","history":"Sesiones recientes","history_h":"Historial completo","f_name":"Nombre","max_custom":"Has llegado a 12 patrones propios.","pat_deleted":"Patrón eliminado","v_in":"Inhala","v_in2":"Un poco más","v_hold":"Mantén","v_out":"Exhala","v_rest":"Descansa"},
+  fr: {"tab_breathe":"Respirer","tab_patterns":"Rythmes","tab_progress":"Progrès","sub_breathe":"Ralentissez une minute","ob1_t":"Une minute de calme, à tout moment","ob1_b":"Suivez le cercle lumineux : il grandit à l'inspiration et rétrécit à l'expiration. Cela peut aider à se détendre.","ob2_t":"Choisissez un rythme","ob2_b":"Carré 4-4-4-4, 4-7-8, cohérent 5,5 et le soupir physiologique sont prêts. Sons doux, voix et vibrations sont facultatifs.","ob3_t":"Installez une douce habitude","ob3_b":"Suivez votre série et vos minutes. Un rappel quotidien discret est facultatif. Tout reste sur ce téléphone.","pro_f1":"Rythmes de respiration personnalisés","pro_f2":"Séances plus longues (10–30 min)","pro_f3":"Historique complet et calendrier","pro_f4":"Couleurs d'accent en plus","pro_f5":"Jamais de publicité","pro_custom_b":"Les rythmes personnalisés font partie de Pro.","pro_len_b":"Les séances de plus de 5 minutes font partie de Pro.","pro_hist_b":"L'historique complet, les mois passés et les totaux par rythme font partie de Pro.","rem_daily_body":"Une minute de calme vous attend.","acc_sea":"Mer","acc_sky":"Ciel","acc_dusk":"Crépuscule","acc_sand":"Sable","acc_lilac":"Lilas","pat_box":"Respiration carrée 4-4-4-4","pat_p478":"Respiration 4-7-8","pat_coh":"Cohérente 5,5","pat_sigh":"Soupir physiologique 2-1-6","pat_calm":"Calme 4-6","ph_in":"Inspirez","ph_in2":"Encore un peu","ph_hold":"Retenez","ph_out":"Expirez","ph_rest":"Pause","paused":"En pause","ready":"Prêt quand vous l'êtes","sess_done":"Séance terminée","stage_aria":"Cercle guide de respiration","change_pat":"Changer de rythme","cycle_s":"{n} s par cycle","resume":"Reprendre","pause":"Pause","end_now":"Terminer la séance","logged":"{m} enregistrées. Bravo.","nothing_logged":"Arrêtée avant un cycle complet : rien n'a été enregistré.","length":"Durée de la séance","min_n":"{n} min","plan_line":"{c} cycles complets · {m}","begin":"Commencer","streak":"Jours de suite","today":"Aujourd'hui","s_tone":"Sons doux","s_tone_sub":"Une note douce à chaque changement de phase","s_voice":"Indications vocales","s_voice_sub":"Dit « Inspirez », « Retenez », « Expirez » (voix du téléphone)","wellness_note":"Pour la détente uniquement. Peut aider à se détendre ; ce n'est ni un avis médical ni un traitement.","new_pat":"Nouveau rythme","edit_pat":"Modifier le rythme","edit":"Modifier","selected":"Sélectionné","presets":"Rythmes inclus","custom":"Vos rythmes","custom_empty_t":"Créez votre propre rythme","custom_empty_b":"Réglez inspiration, rétention, expiration et pause (Pro).","prog_empty_t":"Votre première séance commence ici","prog_empty_b":"Terminez une séance : votre série, vos minutes et le calendrier apparaîtront ici.","best_streak":"Meilleure série","total_time":"Temps total","sessions":"Séances","last14":"14 derniers jours","calendar":"Calendrier","prev_month":"Mois précédent","next_month":"Mois suivant","months12":"Minutes par mois","by_pat":"Par rythme","history":"Séances récentes","history_h":"Historique complet","f_name":"Nom","max_custom":"Vous avez atteint 12 rythmes personnalisés.","pat_deleted":"Rythme supprimé","v_in":"Inspirez","v_in2":"Encore un peu","v_hold":"Retenez","v_out":"Expirez","v_rest":"Pause"},
+  hi: {"tab_breathe":"साँस","tab_patterns":"पैटर्न","tab_progress":"प्रगति","sub_breathe":"एक मिनट धीमे हो जाएँ","ob1_t":"कभी भी एक शांत मिनट","ob1_b":"चमकते घेरे का साथ दें: साँस लेते समय वह बड़ा होता है, छोड़ते समय छोटा। यह आपको आराम करने में मदद कर सकता है।","ob2_t":"एक लय चुनें","ob2_b":"बॉक्स 4-4-4-4, 4-7-8, कोहेरेंट 5.5 और फिज़ियोलॉजिकल साइ तैयार हैं। हल्की ध्वनि, आवाज़ और कंपन वैकल्पिक हैं।","ob3_t":"एक कोमल आदत बनाएँ","ob3_b":"अपनी स्ट्रीक और मिनट देखें। रोज़ का हल्का रिमाइंडर वैकल्पिक है। सब कुछ इसी फ़ोन पर रहता है।","pro_f1":"अपने साँस के पैटर्न","pro_f2":"लंबे सत्र (10–30 मिनट)","pro_f3":"पूरा आँकड़ा इतिहास और कैलेंडर","pro_f4":"अतिरिक्त एक्सेंट रंग","pro_f5":"कभी कोई विज्ञापन नहीं","pro_custom_b":"कस्टम पैटर्न Pro का हिस्सा हैं।","pro_len_b":"5 मिनट से लंबे सत्र Pro का हिस्सा हैं।","pro_hist_b":"पूरा इतिहास, पिछले महीने और हर पैटर्न का कुल Pro का हिस्सा हैं।","rem_daily_body":"एक शांत मिनट आपका इंतज़ार कर रहा है।","acc_sea":"समुद्र","acc_sky":"आसमान","acc_dusk":"गोधूलि","acc_sand":"रेत","acc_lilac":"बैंगनी","pat_box":"बॉक्स श्वास 4-4-4-4","pat_p478":"4-7-8 श्वास","pat_coh":"कोहेरेंट 5.5","pat_sigh":"फिज़ियोलॉजिकल साइ 2-1-6","pat_calm":"शांत 4-6","ph_in":"साँस लें","ph_in2":"थोड़ा और","ph_hold":"रोकें","ph_out":"साँस छोड़ें","ph_rest":"विराम","paused":"रुका हुआ","ready":"जब आप तैयार हों","sess_done":"सत्र पूरा","stage_aria":"साँस मार्गदर्शक घेरा","change_pat":"पैटर्न बदलें","cycle_s":"{n} सेकंड प्रति साँस","resume":"जारी रखें","pause":"रोकें","end_now":"सत्र समाप्त करें","logged":"{m} दर्ज हुए। बहुत बढ़िया।","nothing_logged":"एक पूरे चक्र से पहले रुका, इसलिए कुछ दर्ज नहीं हुआ।","length":"सत्र की अवधि","min_n":"{n} मिनट","plan_line":"{c} पूरी साँसें · {m}","begin":"शुरू करें","streak":"दिनों की स्ट्रीक","today":"आज","s_tone":"हल्की ध्वनियाँ","s_tone_sub":"हर चरण बदलने पर हल्का स्वर","s_voice":"आवाज़ संकेत","s_voice_sub":"“साँस लें”, “रोकें”, “साँस छोड़ें” बोलता है (फ़ोन की आवाज़)","wellness_note":"केवल आराम के लिए। यह आपको आराम करने में मदद कर सकता है; यह चिकित्सीय सलाह या उपचार नहीं है।","new_pat":"नया पैटर्न","edit_pat":"पैटर्न संपादित करें","edit":"संपादित करें","selected":"चयनित","presets":"इन-बिल्ट पैटर्न","custom":"आपके पैटर्न","custom_empty_t":"अपनी लय बनाएँ","custom_empty_b":"साँस लेना, रोकना, छोड़ना और विराम की अवधि तय करें (Pro)।","prog_empty_t":"आपका पहला सत्र यहीं से शुरू होता है","prog_empty_b":"एक सत्र पूरा करें, तो स्ट्रीक, मिनट और कैलेंडर यहाँ दिखेंगे।","best_streak":"सर्वश्रेष्ठ स्ट्रीक","total_time":"कुल समय","sessions":"सत्र","last14":"पिछले 14 दिन","calendar":"कैलेंडर","prev_month":"पिछला महीना","next_month":"अगला महीना","months12":"प्रति माह मिनट","by_pat":"पैटर्न के अनुसार","history":"हाल के सत्र","history_h":"पूरा इतिहास","f_name":"नाम","max_custom":"आप 12 कस्टम पैटर्न तक पहुँच गए हैं।","pat_deleted":"पैटर्न हटाया गया","v_in":"साँस लें","v_in2":"थोड़ा और","v_hold":"रोकें","v_out":"साँस छोड़ें","v_rest":"विराम"},
+  id: {"tab_breathe":"Napas","tab_patterns":"Pola","tab_progress":"Kemajuan","sub_breathe":"Pelan sejenak selama semenit","ob1_t":"Semenit tenang, kapan saja","ob1_b":"Ikuti lingkaran bercahaya: membesar saat menarik napas, mengecil saat mengembuskan. Ini mungkin membantu Anda rileks.","ob2_t":"Pilih ritme","ob2_b":"Kotak 4-4-4-4, 4-7-8, koheren 5,5 dan desah fisiologis sudah tersedia. Nada lembut, suara, dan getar bersifat opsional.","ob3_t":"Bangun kebiasaan lembut","ob3_b":"Pantau streak dan menit Anda. Pengingat harian lembut bersifat opsional. Semua data tetap di ponsel ini.","pro_f1":"Pola napas kustom","pro_f2":"Sesi lebih panjang (10–30 menit)","pro_f3":"Riwayat statistik lengkap dan kalender","pro_f4":"Warna aksen tambahan","pro_f5":"Tanpa iklan, selamanya","pro_custom_b":"Pola kustom adalah bagian dari Pro.","pro_len_b":"Sesi lebih dari 5 menit adalah bagian dari Pro.","pro_hist_b":"Riwayat lengkap, bulan lalu, dan total per pola adalah bagian dari Pro.","rem_daily_body":"Semenit tenang menunggu Anda.","acc_sea":"Laut","acc_sky":"Langit","acc_dusk":"Senja","acc_sand":"Pasir","acc_lilac":"Lilac","pat_box":"Napas kotak 4-4-4-4","pat_p478":"Napas 4-7-8","pat_coh":"Koheren 5,5","pat_sigh":"Desah fisiologis 2-1-6","pat_calm":"Tenang 4-6","ph_in":"Tarik napas","ph_in2":"Sedikit lagi","ph_hold":"Tahan","ph_out":"Embuskan","ph_rest":"Jeda","paused":"Dijeda","ready":"Siap kapan pun Anda siap","sess_done":"Sesi selesai","stage_aria":"Lingkaran panduan napas","change_pat":"Ganti pola","cycle_s":"{n} dtk per napas","resume":"Lanjutkan","pause":"Jeda","end_now":"Akhiri sesi","logged":"{m} dicatat. Bagus.","nothing_logged":"Berakhir sebelum satu siklus penuh, jadi tidak dicatat.","length":"Durasi sesi","min_n":"{n} mnt","plan_line":"{c} napas penuh · {m}","begin":"Mulai","streak":"Hari berturut-turut","today":"Hari ini","s_tone":"Nada lembut","s_tone_sub":"Nada lembut di setiap pergantian fase","s_voice":"Panduan suara","s_voice_sub":"Mengucap “Tarik napas”, “Tahan”, “Embuskan” (suara ponsel)","wellness_note":"Hanya untuk relaksasi. Mungkin membantu Anda rileks; bukan saran medis atau pengobatan.","new_pat":"Pola baru","edit_pat":"Ubah pola","edit":"Ubah","selected":"Dipilih","presets":"Pola bawaan","custom":"Pola Anda","custom_empty_t":"Rancang ritme sendiri","custom_empty_b":"Atur durasi tarik, tahan, embus, dan jeda (Pro).","prog_empty_t":"Sesi pertama Anda dimulai di sini","prog_empty_b":"Selesaikan satu sesi dan streak, menit, serta kalender akan muncul di sini.","best_streak":"Streak terbaik","total_time":"Total waktu","sessions":"Sesi","last14":"14 hari terakhir","calendar":"Kalender","prev_month":"Bulan sebelumnya","next_month":"Bulan berikutnya","months12":"Menit per bulan","by_pat":"Menurut pola","history":"Sesi terbaru","history_h":"Riwayat lengkap","f_name":"Nama","max_custom":"Anda mencapai 12 pola kustom.","pat_deleted":"Pola dihapus","v_in":"Tarik napas","v_in2":"Sedikit lagi","v_hold":"Tahan","v_out":"Embuskan","v_rest":"Jeda"},
+  it: {"tab_breathe":"Respira","tab_patterns":"Schemi","tab_progress":"Progressi","sub_breathe":"Rallenta per un minuto","ob1_t":"Un minuto di calma, quando vuoi","ob1_b":"Segui il cerchio luminoso: cresce quando inspiri e si restringe quando espiri. Può aiutarti a rilassarti.","ob2_t":"Scegli un ritmo","ob2_b":"Box 4-4-4-4, 4-7-8, coerente 5,5 e il sospiro fisiologico sono pronti. Toni dolci, voce e vibrazione sono opzionali.","ob3_t":"Crea un'abitudine gentile","ob3_b":"Segui serie e minuti. Un promemoria quotidiano gentile è facoltativo. Tutto resta su questo telefono.","pro_f1":"Schemi di respirazione personalizzati","pro_f2":"Sessioni più lunghe (10–30 min)","pro_f3":"Storico completo e calendario","pro_f4":"Colori d'accento extra","pro_f5":"Mai pubblicità","pro_custom_b":"Gli schemi personalizzati fanno parte di Pro.","pro_len_b":"Le sessioni oltre 5 minuti fanno parte di Pro.","pro_hist_b":"Storico completo, mesi passati e totali per schema fanno parte di Pro.","rem_daily_body":"Un minuto di calma ti aspetta.","acc_sea":"Mare","acc_sky":"Cielo","acc_dusk":"Crepuscolo","acc_sand":"Sabbia","acc_lilac":"Lilla","pat_box":"Respiro a quadrato 4-4-4-4","pat_p478":"Respiro 4-7-8","pat_coh":"Coerente 5,5","pat_sigh":"Sospiro fisiologico 2-1-6","pat_calm":"Calma 4-6","ph_in":"Inspira","ph_in2":"Ancora un po'","ph_hold":"Trattieni","ph_out":"Espira","ph_rest":"Pausa","paused":"In pausa","ready":"Pronto quando vuoi","sess_done":"Sessione completata","stage_aria":"Cerchio guida del respiro","change_pat":"Cambia schema","cycle_s":"{n} s per respiro","resume":"Riprendi","pause":"Pausa","end_now":"Termina sessione","logged":"{m} registrati. Ben fatto.","nothing_logged":"Terminata prima di un ciclo completo: nulla registrato.","length":"Durata sessione","min_n":"{n} min","plan_line":"{c} respiri completi · {m}","begin":"Inizia","streak":"Giorni di fila","today":"Oggi","s_tone":"Toni dolci","s_tone_sub":"Una nota gentile a ogni cambio di fase","s_voice":"Indicazioni vocali","s_voice_sub":"Dice «Inspira», «Trattieni», «Espira» (voce del telefono)","wellness_note":"Solo per rilassarsi. Può aiutarti a rilassarti; non è un consiglio medico né una terapia.","new_pat":"Nuovo schema","edit_pat":"Modifica schema","edit":"Modifica","selected":"Selezionato","presets":"Schemi inclusi","custom":"I tuoi schemi","custom_empty_t":"Crea il tuo ritmo","custom_empty_b":"Imposta inspirazione, pausa, espirazione e riposo (Pro).","prog_empty_t":"La tua prima sessione inizia qui","prog_empty_b":"Completa una sessione e qui compariranno serie, minuti e calendario.","best_streak":"Serie migliore","total_time":"Tempo totale","sessions":"Sessioni","last14":"Ultimi 14 giorni","calendar":"Calendario","prev_month":"Mese precedente","next_month":"Mese successivo","months12":"Minuti al mese","by_pat":"Per schema","history":"Sessioni recenti","history_h":"Storico completo","f_name":"Nome","max_custom":"Hai raggiunto 12 schemi personalizzati.","pat_deleted":"Schema eliminato","v_in":"Inspira","v_in2":"Ancora un po'","v_hold":"Trattieni","v_out":"Espira","v_rest":"Pausa"},
+  ja: {"tab_breathe":"呼吸","tab_patterns":"パターン","tab_progress":"記録","sub_breathe":"1分間、ゆっくりと","ob1_t":"いつでも、穏やかな1分","ob1_b":"光る円に合わせて、息を吸うと広がり、吐くと縮みます。リラックスの助けになるかもしれません。","ob2_t":"リズムを選ぼう","ob2_b":"ボックス4-4-4-4、4-7-8、コヒーレント5.5、生理的ため息を用意。やさしい音・音声・振動は任意です。","ob3_t":"やさしい習慣をつくろう","ob3_b":"連続日数と時間を記録。やさしい毎日のリマインダーは任意です。データはこの端末内だけに保存されます。","pro_f1":"カスタム呼吸パターン","pro_f2":"長めのセッション（10〜30分）","pro_f3":"完全な履歴とカレンダー","pro_f4":"追加のアクセントカラー","pro_f5":"広告なし、ずっと","pro_custom_b":"カスタムパターンはProの機能です。","pro_len_b":"5分を超えるセッションはProの機能です。","pro_hist_b":"完全な履歴・過去の月・パターン別合計はProの機能です。","rem_daily_body":"穏やかな1分をどうぞ。","acc_sea":"海","acc_sky":"空","acc_dusk":"夕暮れ","acc_sand":"砂","acc_lilac":"ライラック","pat_box":"ボックス呼吸 4-4-4-4","pat_p478":"4-7-8 呼吸","pat_coh":"コヒーレント 5.5","pat_sigh":"生理的ため息 2-1-6","pat_calm":"穏やか 4-6","ph_in":"吸って","ph_in2":"もう少し","ph_hold":"止めて","ph_out":"吐いて","ph_rest":"休んで","paused":"一時停止中","ready":"準備ができたら","sess_done":"セッション完了","stage_aria":"呼吸ガイドの円","change_pat":"パターンを変更","cycle_s":"1回 {n} 秒","resume":"再開","pause":"一時停止","end_now":"終了","logged":"{m} を記録しました。お疲れさま。","nothing_logged":"1サイクル完了前に終了したため、記録されません。","length":"セッションの長さ","min_n":"{n}分","plan_line":"{c} 回 · {m}","begin":"はじめる","streak":"連続日数","today":"今日","s_tone":"やさしい音","s_tone_sub":"フェーズが変わるたびにやさしい音","s_voice":"音声ガイド","s_voice_sub":"「吸って」「止めて」「吐いて」と読み上げ（端末の音声）","wellness_note":"リラックス目的のみ。リラックスの助けになるかもしれませんが、医療上の助言や治療ではありません。","new_pat":"新しいパターン","edit_pat":"パターンを編集","edit":"編集","selected":"選択中","presets":"内蔵パターン","custom":"マイパターン","custom_empty_t":"自分だけのリズムを作ろう","custom_empty_b":"吸う・止める・吐く・休むの長さを設定（Pro）。","prog_empty_t":"最初のセッションはここから","prog_empty_b":"セッションを完了すると、連続日数・時間・カレンダーがここに表示されます。","best_streak":"最長記録","total_time":"合計時間","sessions":"セッション数","last14":"直近14日","calendar":"カレンダー","prev_month":"前の月","next_month":"次の月","months12":"月別の時間","by_pat":"パターン別","history":"最近のセッション","history_h":"完全な履歴","f_name":"名前","max_custom":"カスタムパターンは12個までです。","pat_deleted":"パターンを削除しました","v_in":"吸って","v_in2":"もう少し","v_hold":"止めて","v_out":"吐いて","v_rest":"休んで"},
+  pt: {"tab_breathe":"Respirar","tab_patterns":"Padrões","tab_progress":"Progresso","sub_breathe":"Desacelere por um minuto","ob1_t":"Um minuto de calma, a qualquer hora","ob1_b":"Acompanhe o círculo luminoso: ele cresce ao inspirar e diminui ao expirar. Pode ajudar você a relaxar.","ob2_t":"Escolha um ritmo","ob2_b":"Caixa 4-4-4-4, 4-7-8, coerente 5,5 e o suspiro fisiológico estão prontos. Tons suaves, voz e vibração são opcionais.","ob3_t":"Crie um hábito gentil","ob3_b":"Acompanhe sua sequência e seus minutos. Um lembrete diário suave é opcional. Tudo fica neste telefone.","pro_f1":"Padrões de respiração personalizados","pro_f2":"Sessões mais longas (10–30 min)","pro_f3":"Histórico completo e calendário","pro_f4":"Cores de destaque extras","pro_f5":"Sem anúncios, nunca","pro_custom_b":"Padrões personalizados fazem parte do Pro.","pro_len_b":"Sessões acima de 5 minutos fazem parte do Pro.","pro_hist_b":"Histórico completo, meses anteriores e totais por padrão fazem parte do Pro.","rem_daily_body":"Um minuto de calma espera por você.","acc_sea":"Mar","acc_sky":"Céu","acc_dusk":"Crepúsculo","acc_sand":"Areia","acc_lilac":"Lilás","pat_box":"Respiração em caixa 4-4-4-4","pat_p478":"Respiração 4-7-8","pat_coh":"Coerente 5,5","pat_sigh":"Suspiro fisiológico 2-1-6","pat_calm":"Calma 4-6","ph_in":"Inspire","ph_in2":"Mais um pouco","ph_hold":"Segure","ph_out":"Expire","ph_rest":"Descanse","paused":"Pausado","ready":"Pronto quando você quiser","sess_done":"Sessão concluída","stage_aria":"Círculo guia de respiração","change_pat":"Mudar padrão","cycle_s":"{n} s por respiração","resume":"Retomar","pause":"Pausar","end_now":"Encerrar sessão","logged":"{m} registrados. Muito bem.","nothing_logged":"Encerrou antes de um ciclo completo, nada foi registrado.","length":"Duração da sessão","min_n":"{n} min","plan_line":"{c} respirações completas · {m}","begin":"Começar","streak":"Dias seguidos","today":"Hoje","s_tone":"Tons suaves","s_tone_sub":"Uma nota suave a cada mudança de fase","s_voice":"Dicas por voz","s_voice_sub":"Fala “Inspire”, “Segure”, “Expire” (voz do telefone)","wellness_note":"Apenas para relaxar. Pode ajudar você a relaxar; não é aconselhamento médico nem tratamento.","new_pat":"Novo padrão","edit_pat":"Editar padrão","edit":"Editar","selected":"Selecionado","presets":"Padrões incluídos","custom":"Seus padrões","custom_empty_t":"Crie seu próprio ritmo","custom_empty_b":"Defina inspirar, segurar, expirar e descanso (Pro).","prog_empty_t":"Sua primeira sessão começa aqui","prog_empty_b":"Conclua uma sessão e sua sequência, minutos e calendário aparecem aqui.","best_streak":"Melhor sequência","total_time":"Tempo total","sessions":"Sessões","last14":"Últimos 14 dias","calendar":"Calendário","prev_month":"Mês anterior","next_month":"Próximo mês","months12":"Minutos por mês","by_pat":"Por padrão","history":"Sessões recentes","history_h":"Histórico completo","f_name":"Nome","max_custom":"Você chegou a 12 padrões personalizados.","pat_deleted":"Padrão excluído","v_in":"Inspire","v_in2":"Mais um pouco","v_hold":"Segure","v_out":"Expire","v_rest":"Descanse"},
+  tr: {"tab_breathe":"Nefes","tab_patterns":"Düzenler","tab_progress":"İlerleme","sub_breathe":"Bir dakika yavaşlayın","ob1_t":"İstediğin an sakin bir dakika","ob1_b":"Parlayan daireyi izle: nefes alırken büyür, verirken küçülür. Rahatlamana yardımcı olabilir.","ob2_t":"Bir ritim seç","ob2_b":"Kutu 4-4-4-4, 4-7-8, uyumlu 5,5 ve fizyolojik iç çekiş hazır. Yumuşak tonlar, ses ve titreşim isteğe bağlı.","ob3_t":"Nazik bir alışkanlık edin","ob3_b":"Seri ve dakikalarını takip et. Nazik günlük hatırlatıcı isteğe bağlı. Her şey bu telefonda kalır.","pro_f1":"Özel nefes düzenleri","pro_f2":"Daha uzun seanslar (10–30 dk)","pro_f3":"Tam istatistik geçmişi ve takvim","pro_f4":"Ek vurgu renkleri","pro_f5":"Hiç reklam yok","pro_custom_b":"Özel düzenler Pro'ya dahildir.","pro_len_b":"5 dakikadan uzun seanslar Pro'ya dahildir.","pro_hist_b":"Tam geçmiş, önceki aylar ve düzen başına toplamlar Pro'ya dahildir.","rem_daily_body":"Sakin bir dakika seni bekliyor.","acc_sea":"Deniz","acc_sky":"Gökyüzü","acc_dusk":"Alacakaranlık","acc_sand":"Kum","acc_lilac":"Eflatun","pat_box":"Kutu nefesi 4-4-4-4","pat_p478":"4-7-8 nefesi","pat_coh":"Uyumlu 5,5","pat_sigh":"Fizyolojik iç çekiş 2-1-6","pat_calm":"Sakin 4-6","ph_in":"Nefes al","ph_in2":"Biraz daha","ph_hold":"Tut","ph_out":"Nefes ver","ph_rest":"Dinlen","paused":"Duraklatıldı","ready":"Hazır olduğunda","sess_done":"Seans tamamlandı","stage_aria":"Nefes rehberi dairesi","change_pat":"Düzeni değiştir","cycle_s":"Nefes başına {n} sn","resume":"Devam","pause":"Duraklat","end_now":"Seansı bitir","logged":"{m} kaydedildi. Güzel iş.","nothing_logged":"Tam bir döngüden önce bitti, kayıt yapılmadı.","length":"Seans süresi","min_n":"{n} dk","plan_line":"{c} tam nefes · {m}","begin":"Başla","streak":"Gün serisi","today":"Bugün","s_tone":"Yumuşak tonlar","s_tone_sub":"Her aşama değişiminde hafif bir ses","s_voice":"Sesli yönlendirme","s_voice_sub":"“Nefes al”, “Tut”, “Nefes ver” der (telefon sesi)","wellness_note":"Yalnızca rahatlama içindir. Rahatlamana yardımcı olabilir; tıbbi tavsiye veya tedavi değildir.","new_pat":"Yeni düzen","edit_pat":"Düzeni düzenle","edit":"Düzenle","selected":"Seçili","presets":"Hazır düzenler","custom":"Düzenlerin","custom_empty_t":"Kendi ritmini tasarla","custom_empty_b":"Nefes alma, tutma, verme ve dinlenme sürelerini ayarla (Pro).","prog_empty_t":"İlk seansın burada başlıyor","prog_empty_b":"Bir seansı bitir; seri, dakika ve takvim burada görünür.","best_streak":"En iyi seri","total_time":"Toplam süre","sessions":"Seanslar","last14":"Son 14 gün","calendar":"Takvim","prev_month":"Önceki ay","next_month":"Sonraki ay","months12":"Aylık dakika","by_pat":"Düzene göre","history":"Son seanslar","history_h":"Tam geçmiş","f_name":"Ad","max_custom":"12 özel düzene ulaştın.","pat_deleted":"Düzen silindi","v_in":"Nefes al","v_in2":"Biraz daha","v_hold":"Tut","v_out":"Nefes ver","v_rest":"Dinlen"},
+  uk: {"tab_breathe":"Дихання","tab_patterns":"Ритми","tab_progress":"Прогрес","sub_breathe":"Сповільніться на хвилину","ob1_t":"Хвилина спокою будь-коли","ob1_b":"Стежте за колом: воно росте на вдиху й зменшується на видиху. Це може допомогти розслабитися.","ob2_t":"Оберіть ритм","ob2_b":"Коробкове 4-4-4-4, 4-7-8, когерентне 5,5 і фізіологічне зітхання вже є. М'які тони, голос і вібрація — за бажанням.","ob3_t":"Створіть м'яку звичку","ob3_b":"Відстежуйте серію та хвилини. М'яке щоденне нагадування — за бажанням. Усе лишається на цьому телефоні.","pro_f1":"Власні ритми дихання","pro_f2":"Довші сесії (10–30 хв)","pro_f3":"Повна історія та календар","pro_f4":"Додаткові акцентні кольори","pro_f5":"Жодної реклами","pro_custom_b":"Власні ритми входять до Pro.","pro_len_b":"Сесії понад 5 хвилин входять до Pro.","pro_hist_b":"Повна історія, минулі місяці та підсумки за ритмами входять до Pro.","rem_daily_body":"На вас чекає хвилина спокою.","acc_sea":"Море","acc_sky":"Небо","acc_dusk":"Присмерк","acc_sand":"Пісок","acc_lilac":"Бузок","pat_box":"Квадратне дихання 4-4-4-4","pat_p478":"Дихання 4-7-8","pat_coh":"Когерентне 5,5","pat_sigh":"Фізіологічне зітхання 2-1-6","pat_calm":"Спокій 4-6","ph_in":"Вдих","ph_in2":"Ще трохи","ph_hold":"Затримка","ph_out":"Видих","ph_rest":"Пауза","paused":"Пауза","ready":"Готово, коли ви готові","sess_done":"Сесію завершено","stage_aria":"Коло-підказка дихання","change_pat":"Змінити ритм","cycle_s":"{n} с на вдих-видих","resume":"Продовжити","pause":"Пауза","end_now":"Завершити","logged":"Записано {m}. Чудово.","nothing_logged":"Завершено до повного циклу, тож нічого не записано.","length":"Тривалість сесії","min_n":"{n} хв","plan_line":"{c} повних циклів · {m}","begin":"Почати","streak":"Днів поспіль","today":"Сьогодні","s_tone":"М'які тони","s_tone_sub":"М'яка нота на кожній зміні фази","s_voice":"Голосові підказки","s_voice_sub":"Промовляє «Вдих», «Затримка», «Видих» (голос телефона)","wellness_note":"Лише для розслаблення. Може допомогти розслабитися; це не медична порада й не лікування.","new_pat":"Новий ритм","edit_pat":"Редагувати ритм","edit":"Редагувати","selected":"Обрано","presets":"Вбудовані ритми","custom":"Ваші ритми","custom_empty_t":"Створіть власний ритм","custom_empty_b":"Задайте вдих, затримку, видих і паузу (Pro).","prog_empty_t":"Ваша перша сесія починається тут","prog_empty_b":"Завершіть сесію — тут з'являться серія, хвилини та календар.","best_streak":"Найкраща серія","total_time":"Загальний час","sessions":"Сесій","last14":"Останні 14 днів","calendar":"Календар","prev_month":"Попередній місяць","next_month":"Наступний місяць","months12":"Хвилин на місяць","by_pat":"За ритмом","history":"Останні сесії","history_h":"Повна історія","f_name":"Назва","max_custom":"Досягнуто 12 власних ритмів.","pat_deleted":"Ритм видалено","v_in":"Вдих","v_in2":"Ще трохи","v_hold":"Затримка","v_out":"Видих","v_rest":"Пауза"},
+  zh: {"tab_breathe":"呼吸","tab_patterns":"节奏","tab_progress":"进度","sub_breathe":"放慢一分钟","ob1_t":"随时一分钟的平静","ob1_b":"跟随发光的圆圈：吸气时变大，呼气时缩小。它或许有助于放松。","ob2_t":"选择节奏","ob2_b":"方块 4-4-4-4、4-7-8、共振 5.5 和生理叹息已备好。轻柔音调、语音和震动均可选。","ob3_t":"养成温和的习惯","ob3_b":"记录连续天数和分钟数。温和的每日提醒可选。所有数据都保存在本机。","pro_f1":"自定义呼吸节奏","pro_f2":"更长的练习（10–30 分钟）","pro_f3":"完整历史统计与日历","pro_f4":"更多强调色","pro_f5":"永久无广告","pro_custom_b":"自定义节奏属于 Pro。","pro_len_b":"超过 5 分钟的练习属于 Pro。","pro_hist_b":"完整历史、往月记录和按节奏统计属于 Pro。","rem_daily_body":"一分钟的平静在等你。","acc_sea":"海","acc_sky":"天空","acc_dusk":"暮色","acc_sand":"沙","acc_lilac":"丁香","pat_box":"方块呼吸 4-4-4-4","pat_p478":"4-7-8 呼吸","pat_coh":"共振 5.5","pat_sigh":"生理叹息 2-1-6","pat_calm":"平静 4-6","ph_in":"吸气","ph_in2":"再吸一点","ph_hold":"屏息","ph_out":"呼气","ph_rest":"停顿","paused":"已暂停","ready":"准备好就开始","sess_done":"练习完成","stage_aria":"呼吸引导圆圈","change_pat":"更换节奏","cycle_s":"每次 {n} 秒","resume":"继续","pause":"暂停","end_now":"结束练习","logged":"已记录 {m}，做得好。","nothing_logged":"未完成一个完整循环，因此没有记录。","length":"练习时长","min_n":"{n} 分钟","plan_line":"{c} 个完整循环 · {m}","begin":"开始","streak":"连续天数","today":"今天","s_tone":"轻柔音调","s_tone_sub":"每次阶段切换时轻柔提示","s_voice":"语音提示","s_voice_sub":"朗读“吸气”“屏息”“呼气”（使用手机语音）","wellness_note":"仅用于放松。它或许有助于放松，并非医疗建议或治疗。","new_pat":"新建节奏","edit_pat":"编辑节奏","edit":"编辑","selected":"已选","presets":"内置节奏","custom":"我的节奏","custom_empty_t":"设计你自己的节奏","custom_empty_b":"设置吸气、屏息、呼气和停顿的时长（Pro）。","prog_empty_t":"你的第一次练习从这里开始","prog_empty_b":"完成一次练习后，连续天数、分钟数和日历会显示在这里。","best_streak":"最长连续","total_time":"总时长","sessions":"练习次数","last14":"最近 14 天","calendar":"日历","prev_month":"上个月","next_month":"下个月","months12":"每月分钟数","by_pat":"按节奏","history":"最近的练习","history_h":"完整历史","f_name":"名称","max_custom":"已达到 12 个自定义节奏。","pat_deleted":"已删除节奏","v_in":"吸气","v_in2":"再吸一点","v_hold":"屏息","v_out":"呼气","v_rest":"停顿"},
 };
 //@@END TOOL_STRINGS
 window.LANG_NAMES = {
@@ -1140,589 +1068,334 @@ if (window.matchMedia) {
   try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (S.settings.theme === 'system') { applyTheme(); } }); } catch (e) {}
 }
 //@@REGION TOOL_ICONS
-// Habit icon set (24×24, stroke = currentColor) + illustrations (ART: emblem,
-// onboarding cards). Own drawings — no third-party icon font.
+// Breathing icon set (24×24, stroke = currentColor) + illustrations (ART). Own drawings.
 const HICON = {
-  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
-  drop: '<path d="M12 3c3.5 4.2 6 7.4 6 10.6A6 6 0 0 1 6 13.6C6 10.4 8.5 7.2 12 3z"/>',
-  book: '<path d="M3 5c3-1.5 6-1.5 9 0v15c-3-1.5-6-1.5-9 0zM21 5c-3-1.5-6-1.5-9 0v15c3-1.5 6-1.5 9 0z"/>',
-  walk: '<path d="M8 3c1.7 0 2.5 2 2.5 4.5S9.5 11 8 11 5.5 9.5 5.5 7 6.3 3 8 3zM6 14h4M16 10c1.7 0 2.5 2 2.5 4.5S17.5 18 16 18s-2.5-1.5-2.5-4 .8-4 2.5-4zM14 21h4"/>',
-  dumbbell: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/>',
-  bike: '<circle cx="6" cy="16" r="3.5"/><circle cx="18" cy="16" r="3.5"/><path d="M6 16l4-7h5l3 7M10 9l2.5 7H6M13 6h3"/>',
-  flower: '<circle cx="12" cy="12" r="2.5"/><path d="M12 9.5C10 6 10.5 3 12 3s2 3 0 6.5zM14.5 12c3.5-2 6.5-1.5 6.5 0s-3 2-6.5 0zM12 14.5c2 3.5 1.5 6.5 0 6.5s-2-3 0-6.5zM9.5 12c-3.5 2-6.5 1.5-6.5 0s3-2 6.5 0z"/>',
-  moon: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
-  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
-  heart: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',
-  apple: '<path d="M12 7c-2-1.5-6-1-6.5 3.5C5 15 8 20 10 20c1 0 1.3-.5 2-.5s1 .5 2 .5c2 0 5-5 4.5-9.5C18 6 14 5.5 12 7zM12 7c0-2 1-3.5 3-4"/>',
-  leaf: '<path d="M5 19C5 10 10 5 20 4c-.5 9-5 15-14 15zM5 19l7-7"/>',
-  bowl: '<path d="M3 11h18a9 9 0 0 1-18 0zM8 11c0-3 2-5 4-5M12 11c0-2.5 1.5-4.5 4-5"/>',
-  cup: '<path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 2.5v2.5M12 2.5v2.5"/>',
-  pill: '<rect x="3" y="8.5" width="18" height="7" rx="3.5" transform="rotate(-45 12 12)"/><path d="M9.5 9.5l5 5"/>',
-  tooth: '<path d="M7.5 3.5C5 3.5 4 5.5 4 7.5c0 3 1.5 4.5 2 7.5.4 2.6 1 5.5 2.5 5.5s1.6-3.5 2-5c.3-1 .7-1.5 1.5-1.5s1.2.5 1.5 1.5c.4 1.5.5 5 2 5s2.1-2.9 2.5-5.5c.5-3 2-4.5 2-7.5 0-2-1-4-3.5-4-2 0-3 1-4.5 1s-2.5-1-4.5-1z"/>',
-  bed: '<path d="M3 18V6M3 14h18v4M21 14v-2.5A2.5 2.5 0 0 0 18.5 9H11v5"/><circle cx="7" cy="11" r="1.6"/>',
-  pen: '<path d="M4 20l1-4L16 5l3 3L8 19zM14 7l3 3"/>',
-  bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
-  code: '<path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16"/>',
-  music: '<path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>',
-  palette: '<path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.8 1.8-1.7 0-1.3-1.3-1.6-1.3-2.8 0-1 .8-1.5 1.8-1.5H17a4 4 0 0 0 4-4c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="7.5" r="1"/><circle cx="15" cy="8" r="1"/>',
-  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/>',
-  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
-  clock: '<circle cx="12" cy="13" r="7.5"/><path d="M12 9.5V13l2.5 2M4 4.5L6.5 2.5M20 4.5l-2.5-2"/>',
-  wallet: '<path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18v3M3 7.5V17a2 2 0 0 0 2 2h15V8H5.5A2.5 2.5 0 0 1 3 7.5zM16 13.5h1.5"/>',
-  sparkle: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>',
-  sprout: '<path d="M12 21v-9M12 12c0-4-3-6.5-7-6.5 0 4 3 6.5 7 6.5zM12 14c0-4.5 3-7 7.5-7 0 4.5-3 7-7.5 7zM7 21h10"/>',
-  nophone: '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2M3 3l18 18"/>',
-  nosmoke: '<path d="M3 14.5h13v3H3zM19 14.5v3M21.5 14.5v3M18.5 4c0 2 1.5 2 1.5 4M4 3l17 17"/>',
-  people: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.5 3.2-5.5 6.5-5.5s5.9 2 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.7.8 2.8 2.6 3 5.2"/>',
-  smile: '<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/>',
-  star: '<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/>',
+  wind: '<path d="M3 9h11a3 3 0 1 0-3-3M3 15h15a3 3 0 1 1-3 3M3 12h7"/>',
+  sliders: '<path d="M4 7h9M17 7h3M4 17h3M11 17h9M13 4.5v5M7 14.5v5"/>',
+  pause: '<path d="M8 5v14M16 5v14"/>',
+  stop: '<rect x="6" y="6" width="12" height="12" rx="2.5"/>',
+  volume: '<path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5zM15.5 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/>',
+  voice: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
 };
-// Habit colours: white glyph >= 3:1 on each; readable on light + dark.
-const COLORS = ['#5B48D9', '#3F6FE0', '#0288D1', '#00897B', '#2F8F46', '#B7791F', '#E2620F', '#E5484D', '#D23F8F', '#8E44D9', '#8D6E63', '#5F7186'];
 const ART = {
-  emblem: '<svg viewBox="0 0 96 96" aria-hidden="true"><defs><linearGradient id="emg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--accent-2)"/><stop offset="1" stop-color="var(--accent)"/></linearGradient></defs><rect width="96" height="96" rx="26" fill="url(#emg)"/><circle cx="48" cy="48" r="27" fill="none" stroke="var(--on-accent)" stroke-opacity=".28" stroke-width="7"/><path d="M48 21a27 27 0 1 1-25.7 18.6" fill="none" stroke="var(--on-accent)" stroke-width="7" stroke-linecap="round"/><path d="M36 49l8 8 17-18" fill="none" stroke="var(--on-accent)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  ob1: '<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="108" fill="var(--accent-soft)"/>' +
-    [0, 1, 2, 3, 4, 5, 6].map(i => '<rect x="' + (30 + i * 27) + '" y="' + (176 - i * 18) + '" width="20" height="' + (20 + i * 18) + '" rx="7" fill="' + COLORS[(i + 1) % 12] + '"' + (i < 6 ? ' opacity="' + (0.45 + i * 0.09) + '"' : '') + '/>').join('') +
-    '<path d="M42 160 C 90 140, 130 110, 196 52" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 11"/><circle cx="196" cy="52" r="13" fill="var(--accent)"/><path d="M190 52l4.5 4.5 8-8" fill="none" stroke="var(--on-accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  ob2: '<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="108" fill="var(--accent-soft)"/><rect x="34" y="70" width="172" height="100" rx="26" fill="var(--surface)" stroke="var(--border)"/><rect x="52" y="96" width="46" height="46" rx="15" fill="#00897B"/><path d="M75 104c7 8 12 14 12 20a12 12 0 0 1-24 0c0-6 5-12 12-20z" fill="none" stroke="#fff" stroke-width="4"/><rect x="108" y="102" width="44" height="10" rx="5" fill="var(--text)" opacity=".85"/><rect x="108" y="122" width="28" height="8" rx="4" fill="var(--text-mute)" opacity=".6"/><circle cx="178" cy="120" r="21" fill="#00897B"/><path d="M168 121l7 7 13-14" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>' +
-    [0, 1, 2, 3, 4, 5, 6, 7].map(i => { const a = i * Math.PI / 4; return '<circle cx="' + (178 + Math.cos(a) * 34).toFixed(1) + '" cy="' + (120 + Math.sin(a) * 34).toFixed(1) + '" r="4" fill="' + COLORS[i] + '"/>'; }).join('') + '</svg>',
-  ob3: '<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="108" fill="var(--accent-soft)"/><rect x="40" y="52" width="160" height="140" rx="22" fill="var(--surface)" stroke="var(--border)"/>' +
-    Array.from({ length: 28 }, (_, i) => { const v = [3, 3, 2, 3, 1, 3, 3, 0, 3, 2, 3, 3, 3, 1, 3, 3, 2, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 3][i]; return '<rect x="' + (54 + (i % 7) * 19) + '" y="' + (78 + Math.floor(i / 7) * 26) + '" width="15" height="19" rx="5" fill="var(--accent)" opacity="' + [0.1, 0.4, 0.7, 1][v] + '"/>'; }).join('') +
-    '<rect x="54" y="62" width="60" height="8" rx="4" fill="var(--text)" opacity=".8"/></svg>',
+  emblem: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="var(--accent-soft)"/><circle cx="48" cy="48" r="30" fill="none" stroke="var(--accent)" stroke-opacity=".35" stroke-width="3"/><circle cx="48" cy="48" r="20" fill="var(--accent)"/><circle cx="42" cy="42" r="6" fill="var(--on-accent)" opacity=".35"/></svg>',
+  ob1: '<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="108" fill="var(--accent-soft)"/><circle cx="120" cy="120" r="82" fill="none" stroke="var(--accent)" stroke-opacity=".3" stroke-width="3"/><circle cx="120" cy="120" r="56" fill="var(--accent)" opacity=".85"/><circle cx="120" cy="120" r="34" fill="var(--accent-2)"/><circle cx="104" cy="104" r="12" fill="var(--on-accent)" opacity=".3"/></svg>',
+  ob2: '<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="108" fill="var(--accent-soft)"/><rect x="62" y="62" width="116" height="116" rx="28" fill="none" stroke="var(--accent)" stroke-width="5" stroke-dasharray="3 12" stroke-linecap="round"/><circle cx="62" cy="62" r="11" fill="var(--accent)"/><circle cx="178" cy="62" r="8" fill="var(--accent)" opacity=".5"/><circle cx="178" cy="178" r="8" fill="var(--accent)" opacity=".5"/><circle cx="62" cy="178" r="8" fill="var(--accent)" opacity=".5"/><text x="120" y="132" text-anchor="middle" font-size="38" font-weight="800" fill="var(--text)">4·4·4·4</text></svg>',
+  ob3: '<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="108" fill="var(--accent-soft)"/><rect x="40" y="56" width="160" height="128" rx="22" fill="var(--surface)" stroke="var(--border)"/>' +
+    Array.from({ length: 21 }, (_, i) => '<rect x="' + (54 + (i % 7) * 19) + '" y="' + (80 + Math.floor(i / 7) * 28) + '" width="15" height="21" rx="6" fill="var(--accent)" opacity="' + [0.12, 0.45, 0.8, 1][[3, 3, 2, 0, 3, 1, 3, 3, 2, 3, 3, 3, 1, 3, 3, 3, 2, 3, 3, 3, 3][i]] + '"/>').join('') + '</svg>',
 };
 //@@END TOOL_ICONS
 //@@REGION TOOL_CORE
-// ── Habit Tracker core. Contract (docs/UTILITY_SHELL.md): define TOOL with
-// defaults / migrate / validateImport / screens{id:{title,subtitle,actions,render,onLeave}}
-// and optional csv / settingsHtml / syncReminders / onNewDay / onGrant / afterOnboarding. ──
-const FREE_LIMIT = 5;
-const RING_C = 2 * Math.PI * 21;
-const SUGGEST = [
-  { k: 'sg_water', icon: 'drop', color: '#0288D1', target: 8, unit: 'u_glasses' },
-  { k: 'sg_read', icon: 'book', color: '#5B48D9' },
-  { k: 'sg_walk', icon: 'walk', color: '#2F8F46' },
-  { k: 'sg_meditate', icon: 'flower', color: '#8E44D9' },
-  { k: 'sg_stretch', icon: 'dumbbell', color: '#E2620F' },
-  { k: 'sg_journal', icon: 'pen', color: '#8D6E63' },
-  { k: 'sg_sleep', icon: 'moon', color: '#3F6FE0' },
-  { k: 'sg_nosugar', icon: 'apple', color: '#E5484D' },
-  { k: 'sg_floss', icon: 'tooth', color: '#00897B' },
-  { k: 'sg_call', icon: 'people', color: '#D23F8F', days: 65 },
+// ── Breathing Exercise core. Pure maths block below is run under node by
+// scripts/check_breathingexercise_patterns.py — keep it dependency-free. ──
+// @@BXMATH BEGIN
+// Phases: [type, deciseconds]. in = inhale, in2 = short top-up inhale, hold = full lungs,
+// out = exhale, rest = empty lungs. `cycle` is the STATED cycle length (ds) the gate re-sums.
+const BX_PRESETS = [
+  { id: 'box',  name: 'Box 4-4-4-4', cycle: 160, phases: [['in', 40], ['hold', 40], ['out', 40], ['rest', 40]] },
+  { id: 'p478', name: '4-7-8', cycle: 190, phases: [['in', 40], ['hold', 70], ['out', 80]] },
+  { id: 'coh',  name: 'Coherent 5.5', cycle: 110, phases: [['in', 55], ['out', 55]] },
+  { id: 'sigh', name: 'Physiological sigh 2-1-6', cycle: 90, phases: [['in', 20], ['in2', 10], ['out', 60]] },
+  { id: 'calm', name: 'Calm 4-6', cycle: 100, phases: [['in', 40], ['out', 60]] },
 ];
-const MEMO = new Map();
-function memo(key, fn) { if (!MEMO.has(key)) MEMO.set(key, fn()); return MEMO.get(key); }
+const BX_LEN_FREE = [1, 2, 3, 5];
+const BX_LEN_PRO = [10, 15, 20, 30];
+function bxCycle(phases) { return phases.reduce((a, p) => a + p[1], 0); }
+// A session of `minutes` runs whole cycles only (never stops mid-breath): floor(length / cycle), at least one.
+function bxPlan(cycle, minutes) { const cycles = Math.max(1, Math.floor(minutes * 600 / cycle)); return { cycles: cycles, total: cycles * cycle }; }
+// Phase at `t` deciseconds into a cycle (0 <= t < cycle).
+function bxPhaseAt(phases, t) {
+  let s = 0;
+  for (let i = 0; i < phases.length; i++) { const d = phases[i][1]; if (t < s + d) return { idx: i, into: t - s, dur: d }; s += d; }
+  const l = phases.length - 1; return { idx: l, into: phases[l][1], dur: phases[l][1] };
+}
+// Custom pattern [inhale, hold, exhale, rest] in whole seconds -> phases (zero holds are dropped).
+function bxFromCustom(ph) {
+  const out = [['in', ph[0] * 10]];
+  if (ph[1] > 0) out.push(['hold', ph[1] * 10]);
+  out.push(['out', ph[2] * 10]);
+  if (ph[3] > 0) out.push(['rest', ph[3] * 10]);
+  return out;
+}
+// Orb scale at the start/end of every phase (0.3 empty .. 1 full).
+function bxLevels(phases) {
+  let cur = 0.3; return phases.map((p, i) => {
+    const from = cur, nx = phases[i + 1];
+    if (p[0] === 'in') cur = nx && nx[0] === 'in2' ? 0.75 : 1; else if (p[0] === 'in2') cur = 1; else if (p[0] === 'out') cur = 0.3;
+    return [from, cur];
+  });
+}
+function bxDayNum(k) { const p = k.split('-').map(Number); return Math.round(Date.UTC(p[0], p[1] - 1, p[2]) / 86400000); }
+// Streak over day keys that have a logged session: cur ends today or yesterday.
+function bxStreak(keys, todayK) {
+  const n = Array.from(new Set(keys.map(bxDayNum))).sort((a, b) => a - b), t = bxDayNum(todayK);
+  let best = 0, run = 0, prev = null;
+  n.forEach(d => { run = prev !== null && d === prev + 1 ? run + 1 : 1; if (run > best) best = run; prev = d; });
+  let cur = 0, d = n.indexOf(t) >= 0 ? t : t - 1;
+  while (n.indexOf(d) >= 0) { cur++; d--; }
+  return { cur: cur, best: best };
+}
+// @@BXMATH END
 
-const HB = {
-  active: () => S.tool.habits.filter(h => !h.archived),
-  archived: () => S.tool.habits.filter(h => h.archived),
-  get: id => S.tool.habits.find(h => h.id === id),
-  cnt(h, k) { const L = S.tool.log[h.id]; return (L && L[k]) || 0; },
-  set(h, k, n) { let L = S.tool.log[h.id]; if (!L) L = S.tool.log[h.id] = {}; n = clamp(n | 0, 0, 999); if (n <= 0) delete L[k]; else L[k] = n; MEMO.clear(); },
-  done(h, k) { return HB.cnt(h, k) >= (h.target || 1); },
-  sched(h, d) { return !!(h.days & (1 << d.getDay())); },
-  start(h) { return memo('st' + h.id, () => { let s = h.created || todayKey(); const L = S.tool.log[h.id]; if (L) for (const k in L) if (k < s) s = k; return pkey(s); }); },
-  note(h, k) { const N = S.tool.notes[h.id]; return (N && N[k]) || ''; },
-  setNote(h, k, txt) { txt = String(txt || '').trim().slice(0, 500); let N = S.tool.notes[h.id]; if (!N) N = S.tool.notes[h.id] = {}; if (txt) N[k] = txt; else delete N[k]; },
-  // Current streak: consecutive done days back from today; unscheduled days and a
-  // not-yet-done today never break it.
-  streak(h) {
-    return memo('cs' + h.id, () => {
-      const tk = todayKey(), st = HB.start(h); let d = today(), n = 0;
-      for (let i = 0; i < 4000 && d >= st; i++) {
-        const k = dkey(d);
-        if (HB.done(h, k)) n++; else if (HB.sched(h, d) && k !== tk) break;
-        d = addDays(d, -1);
-      }
-      return n;
-    });
+const FREE_CUSTOM_NOTE = 0;
+const MAXCUSTOM = 12;
+const RIM_C = 2 * Math.PI * 94;
+function customs() { return S.tool.custom || []; }
+function allPats() {
+  return BX_PRESETS.map(p => ({ id: p.id, name: t('pat_' + p.id), phases: p.phases, cycle: p.cycle, custom: false }))
+    .concat(customs().map(c => { const ph = bxFromCustom(c.ph); return { id: c.id, name: c.name, phases: ph, cycle: bxCycle(ph), custom: true, ph: c.ph }; }));
+}
+function curPat() { const a = allPats(); return a.find(p => p.id === S.tool.pat) || a[0]; }
+function timing(p) { return p.phases.map(x => fmtNum(x[1] / 10, { maximumFractionDigits: 1 })).join('-'); }
+function allowedLen(m) { return BX_LEN_FREE.indexOf(m) >= 0 || isPro(); }
+function minLabel(ds) { return t('min_n', { n: fmtNum(Math.round(ds / 60) / 10, { maximumFractionDigits: 1 }) }); }
+function dayKeys() { return Object.keys(S.tool.log).filter(k => S.tool.log[k] && S.tool.log[k].d > 0); }
+function stats() {
+  const keys = dayKeys(), st = bxStreak(keys, todayKey());
+  let d = 0, n = 0; keys.forEach(k => { d += S.tool.log[k].d; n += S.tool.log[k].n; });
+  return { cur: st.cur, best: st.best, ds: d, n: n, today: (S.tool.log[todayKey()] || { d: 0 }).d };
+}
+
+// ── Session runner ───────────────────────────────────────────────────
+const RUN = { on: false, paused: false, done: false, pat: null, plan: null, el: 0, last: 0, idx: -1, raf: 0, ctx: null, res: null, lock: null };
+function phaseKey(type) { return 'ph_' + type; }
+function tone(type) {
+  if (!S.tool.tone || !RUN.ctx || RUN.ctx.state === 'closed') return;
+  try {
+    const f = { in: 392, in2: 466, hold: 330, out: 294, rest: 262 }[type] || 330, c = RUN.ctx, now = c.currentTime;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(0.07, now + 0.25); g.gain.exponentialRampToValueAtTime(0.0001, now + 1.5);
+    o.connect(g); g.connect(c.destination); o.start(now); o.stop(now + 1.6);
+  } catch (e) {}
+}
+function speak(type) {
+  if (!S.tool.voice || !window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
+  try { const u = new SpeechSynthesisUtterance(t('v_' + type)); u.lang = LOCALES[LANG] || 'en-US'; u.rate = 0.85; u.volume = 0.8; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {}
+}
+function cue(type) { tone(type); speak(type); haptic('tap'); }
+function wake(on) {
+  try { const A = window.Android; if (A && typeof A.setKeepScreenOn === 'function') A.setKeepScreenOn(!!on); } catch (e) {}
+  try {
+    if (on && navigator.wakeLock && !RUN.lock) navigator.wakeLock.request('screen').then(l => { RUN.lock = l; l.addEventListener('release', () => { RUN.lock = null; }); }).catch(() => {});
+    else if (!on && RUN.lock) { RUN.lock.release(); RUN.lock = null; }
+  } catch (e) {}
+}
+function ease(x) { return x * x * (3 - 2 * x); }
+function startRun() {
+  const p = curPat(); if (!allowedLen(S.tool.mins)) S.tool.mins = 5;
+  RUN.pat = p; RUN.plan = bxPlan(p.cycle, S.tool.mins); RUN.on = true; RUN.paused = false; RUN.done = false; RUN.res = null; RUN.el = 0; RUN.idx = -1;
+  try { if (S.tool.tone && !RUN.ctx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) RUN.ctx = new AC(); } if (RUN.ctx && RUN.ctx.resume) RUN.ctx.resume(); } catch (e) {}
+  wake(true); RUN.last = performance.now(); loop(); UI.refresh();
+}
+function pauseRun(manual) {
+  if (!RUN.on || RUN.paused) return;
+  RUN.paused = true; cancelAnimationFrame(RUN.raf); wake(false); try { window.speechSynthesis && speechSynthesis.cancel(); } catch (e) {}
+  if (manual) UI.refresh();
+}
+function resumeRun() { if (!RUN.on || !RUN.paused) return; RUN.paused = false; RUN.last = performance.now(); wake(true); loop(); UI.refresh(); }
+function logSession(p, ds) {
+  if (ds <= 0) return;
+  const k = todayKey(), L = S.tool.log[k] || (S.tool.log[k] = { d: 0, n: 0 });
+  L.d += ds; L.n += 1;
+  S.tool.hist.unshift({ t: NOW(), p: p.id, name: p.custom ? p.name : '', d: ds });
+  if (S.tool.hist.length > 300) S.tool.hist.length = 300;
+  persist();
+}
+function endRun(finished) {
+  cancelAnimationFrame(RUN.raf); wake(false);
+  const p = RUN.pat, cyc = finished ? RUN.plan.cycles : Math.floor(RUN.el / p.cycle), ds = cyc * p.cycle;
+  RUN.on = false; RUN.paused = false; RUN.done = true; RUN.res = { ds: ds, finished: finished };
+  try { window.speechSynthesis && speechSynthesis.cancel(); } catch (e) {}
+  try { if (RUN.ctx) { RUN.ctx.close(); RUN.ctx = null; } } catch (e) {}
+  logSession(p, ds);
+  if (finished) { haptic('success'); announce(t('sess_done')); }
+  UI.refresh();
+  if (finished) Ads.naturalBreak('session_done');
+}
+function loop() {
+  RUN.raf = requestAnimationFrame(now => {
+    if (!RUN.on || RUN.paused) return;
+    RUN.el += Math.min(now - RUN.last, 250) / 100; RUN.last = now;
+    if (RUN.el >= RUN.plan.total) { endRun(true); return; }
+    paintRun(); loop();
+  });
+}
+function paintRun() {
+  const orb = $('#bx-orb'); if (!orb || !RUN.on) return;
+  const p = RUN.pat, a = bxPhaseAt(p.phases, RUN.el % p.cycle), ph = p.phases[a.idx], lv = bxLevels(p.phases)[a.idx];
+  const f = clamp(a.into / a.dur, 0, 1), rm = reducedMotion();
+  orb.style.transform = 'scale(' + (rm ? 0.8 : (lv[0] + (lv[1] - lv[0]) * ease(f))).toFixed(3) + ')';
+  const pr = $('#bx-pr'); if (pr) pr.style.strokeDashoffset = rm ? RIM_C : ((1 - (RUN.el / RUN.plan.total)) * RIM_C).toFixed(1);
+  const sp = $('#bx-sp'); if (sp) sp.style.width = (RUN.el / RUN.plan.total * 100).toFixed(1) + '%';
+  const phE = $('#bx-ph'), ctE = $('#bx-ct'), left = Math.max(1, Math.ceil((a.dur - a.into) / 10));
+  if (RUN.idx !== a.idx + 1000 * Math.floor(RUN.el / p.cycle)) {
+    RUN.idx = a.idx + 1000 * Math.floor(RUN.el / p.cycle); if (phE) phE.textContent = t(phaseKey(ph[0])); cue(ph[0]);
+  }
+  if (ctE && ctE.dataset.v !== String(left)) { ctE.dataset.v = String(left); ctE.textContent = fmtNum(left); }
+}
+
+// ── Screens ──────────────────────────────────────────────────────────
+function stageHtml() {
+  const idle = !RUN.on, txt = RUN.on ? (RUN.paused ? t('paused') : '') : (RUN.done ? t('sess_done') : t('ready'));
+  return '<div class="bx-stage" role="img" aria-label="' + esc(t('stage_aria')) + '"><svg class="bx-rim" viewBox="0 0 200 200" aria-hidden="true"><circle class="tr" cx="100" cy="100" r="94"/><circle class="pr" id="bx-pr" cx="100" cy="100" r="94" stroke-dasharray="' + RIM_C.toFixed(1) + '" stroke-dashoffset="' + RIM_C.toFixed(1) + '"/></svg>' +
+    '<div class="bx-orb" id="bx-orb"' + (idle ? '' : ' style="transform:scale(' + (RUN.paused ? 0.7 : 0.5) + ')"') + '></div><div class="bx-txt"><div class="ct" id="bx-ct" aria-hidden="true"></div></div></div>' +
+    '<div class="bx-phase" id="bx-ph" role="status">' + esc(txt) + '</div>';
+}
+function timelineHtml(p) {
+  return '<div class="bx-timeline" aria-hidden="true">' + p.phases.map(x => '<i class="' + (x[0] === 'hold' || x[0] === 'rest' ? 'h' : x[0] === 'out' ? 'o' : '') + '" style="flex:' + x[1] + '"></i>').join('') + '</div>';
+}
+const TOOL = {
+  defaults: () => ({ pat: 'box', mins: 3, tone: true, voice: false, custom: [], log: {}, hist: [] }),
+  migrate(tool) {
+    const o = Object.assign(TOOL.defaults(), tool && typeof tool === 'object' ? tool : {});
+    o.custom = (Array.isArray(o.custom) ? o.custom : []).filter(c => c && c.id && typeof c.name === 'string' && Array.isArray(c.ph) && c.ph.length === 4).slice(0, MAXCUSTOM).map(c => ({
+      id: String(c.id), name: String(c.name).slice(0, 30) || '—', ph: [clamp(c.ph[0] | 0, 1, 15), clamp(c.ph[1] | 0, 0, 15), clamp(c.ph[2] | 0, 1, 15), clamp(c.ph[3] | 0, 0, 15)] }));
+    const lg = {}; if (o.log && typeof o.log === 'object') Object.keys(o.log).forEach(k => { const v = o.log[k]; if (/^\d{4}-\d\d-\d\d$/.test(k) && v && v.d > 0) lg[k] = { d: Math.round(v.d), n: Math.max(1, v.n | 0) }; });
+    o.log = lg;
+    o.hist = (Array.isArray(o.hist) ? o.hist : []).filter(h => h && h.t && h.d > 0).slice(0, 300).map(h => ({ t: +h.t, p: String(h.p || ''), name: String(h.name || '').slice(0, 30), d: Math.round(h.d) }));
+    o.mins = [1, 2, 3, 5, 10, 15, 20, 30].indexOf(o.mins | 0) >= 0 ? o.mins | 0 : 3;
+    o.tone = !!o.tone; o.voice = !!o.voice;
+    if (!BX_PRESETS.some(p => p.id === o.pat) && !o.custom.some(c => c.id === o.pat)) o.pat = 'box';
+    return o;
   },
-  best(h) {
-    return memo('bs' + h.id, () => {
-      const tk = todayKey(), end = today(); let d = HB.start(h), run = 0, best = 0;
-      for (let i = 0; i < 4000 && d <= end; i++) {
-        const k = dkey(d);
-        if (HB.done(h, k)) { run++; if (run > best) best = run; } else if (HB.sched(h, d) && k !== tk) run = 0;
-        d = addDays(d, 1);
-      }
-      return best;
-    });
+  validateImport: tool => !!(tool && typeof tool === 'object' && tool.log && typeof tool.log === 'object' && !Array.isArray(tool.log)),
+  onGrant() { UI.refresh(); },
+  afterOnboarding() { UI.refresh(); },
+  settingsHtml() {
+    return '<div class="sec-h">' + esc(t('tab_breathe')) + '</div><div class="group">' +
+      sRow({ icon: 'volume', label: t('s_tone'), sub: t('s_tone_sub'), right: sSwitch(S.tool.tone, 'tog-tone', t('s_tone')), noChev: true }) +
+      sRow({ icon: 'voice', label: t('s_voice'), sub: t('s_voice_sub'), right: sSwitch(S.tool.voice, 'tog-voice', t('s_voice')), noChev: true }) + '</div>' +
+      '<p class="fine" style="text-align:start">' + esc(t('wellness_note')) + '</p>';
   },
-  // Completion rate over [from, to] on scheduled days (today counts only once done).
-  rate(h, from, to) {
-    const tk = todayKey(), st = HB.start(h); let num = 0, den = 0;
-    for (let d = from < st ? st : from; d <= to; d = addDays(d, 1)) {
-      const k = dkey(d);
-      if (!HB.sched(h, d)) continue;
-      const dn = HB.done(h, k);
-      if (k === tk && !dn) continue;
-      if (k > tk) break;
-      den++; if (dn) num++;
-    }
-    return den ? num / den : null;
+  csv() {
+    let r = 'date,minutes,sessions\n';
+    Object.keys(S.tool.log).sort().forEach(k => { r += k + ',' + (S.tool.log[k].d / 600).toFixed(2) + ',' + S.tool.log[k].n + '\n'; });
+    return r;
   },
-  total(h) { const L = S.tool.log[h.id] || {}, tg = h.target || 1; let n = 0; for (const k in L) if (L[k] >= tg) n++; return n; },
+  screens: {
+    breathe: {
+      title: () => t('tab_breathe'),
+      subtitle: () => t('sub_breathe'),
+      onLeave: () => pauseRun(false),
+      render(el) {
+        const p = curPat(), s = stats();
+        let h = '<button class="bx-chip" data-act="to-patterns" aria-label="' + esc(t('change_pat')) + '"><span class="bt"><b>' + esc(p.name) + '</b><small>' + esc(timing(p)) + ' · ' + esc(t('cycle_s', { n: fmtNum(p.cycle / 10, { maximumFractionDigits: 1 }) })) + '</small></span>' + icon('chev', 20, 'chev flip') + '</button>' + timelineHtml(p);
+        h += stageHtml();
+        if (RUN.on) {
+          h += '<div class="bx-prog"><i id="bx-sp"></i></div><div class="bx-go"><button class="btn btn-primary" data-act="' + (RUN.paused ? 'run-resume' : 'run-pause') + '">' + icon(RUN.paused ? 'play' : 'pause', 20) + esc(RUN.paused ? t('resume') : t('pause')) + '</button><button class="btn btn-neutral" data-act="run-end">' + icon('stop', 20) + esc(t('end_now')) + '</button></div>';
+        } else {
+          if (RUN.done && RUN.res) h += '<div class="bx-done">' + esc(RUN.res.ds > 0 ? t('logged', { m: minLabel(RUN.res.ds) }) : t('nothing_logged')) + '</div>';
+          const pl = bxPlan(p.cycle, S.tool.mins);
+          h += '<div class="bx-lens" role="group" aria-label="' + esc(t('length')) + '">' + BX_LEN_FREE.concat(BX_LEN_PRO).map(m => '<button class="bx-len" data-act="set-len" data-arg="' + m + '" aria-pressed="' + (S.tool.mins === m) + '">' + esc(t('min_n', { n: fmtNum(m) })) + (allowedLen(m) ? '' : icon('lock', 13)) + '</button>').join('') + '</div>' +
+            '<div class="bx-go"><button class="btn btn-primary" data-act="run-start">' + icon('play', 20) + esc(t('begin')) + '</button></div>' +
+            '<p class="bx-meta">' + esc(t('plan_line', { c: fmtNum(pl.cycles), m: minLabel(pl.total) })) + '</p>';
+        }
+        h += '<div class="tiles"><div class="tile"><div class="tv">' + fmtNum(s.cur) + '</div><div class="tl">' + esc(t('streak')) + '</div></div><div class="tile"><div class="tv">' + esc(minLabel(s.today)) + '</div><div class="tl">' + esc(t('today')) + '</div></div></div>';
+        h += '<p class="fine">' + esc(t('wellness_note')) + '</p>';
+        el.innerHTML = h;
+        if (RUN.on) { RUN.idx = -1; paintRun(); }
+      },
+    },
+    patterns: {
+      title: () => t('tab_patterns'),
+      actions: () => [{ icon: 'plus', label: t('new_pat'), act: 'new-pat', tint: true }],
+      render(el) {
+        const all = allPats(), cur = curPat().id;
+        const row = p => '<div class="pat"><button class="pm" data-act="pick-pat" data-arg="' + esc(p.id) + '"><b>' + esc(p.name) + '</b><small>' + esc(timing(p) + ' · ' + t('cycle_s', { n: fmtNum(p.cycle / 10, { maximumFractionDigits: 1 }) })) + '</small>' + timelineHtml(p) + '</button>' +
+          (p.id === cur ? '<span class="on" aria-label="' + esc(t('selected')) + '">' + icon('check', 22) + '</span>' : '') +
+          (p.custom ? '<button class="icon-btn" data-act="edit-pat" data-arg="' + esc(p.id) + '" aria-label="' + esc(t('edit')) + '">' + icon('edit') + '</button><button class="icon-btn" style="color:var(--danger)" data-act="del-pat" data-arg="' + esc(p.id) + '" aria-label="' + esc(t('delete')) + '">' + icon('trash') + '</button>' : '') + '</div>';
+        let h = '<div class="sec-h">' + esc(t('presets')) + '</div><div class="group">' + all.filter(p => !p.custom).map(row).join('') + '</div>';
+        h += '<div class="sec-h"><span>' + esc(t('custom')) + '</span>' + (isPro() ? '' : '<span class="badge">Pro</span>') + '</div>';
+        const cu = all.filter(p => p.custom);
+        h += cu.length ? '<div class="group">' + cu.map(row).join('') + '</div>' : UI.empty({ icon: 'sliders', title: t('custom_empty_t'), body: t('custom_empty_b'), cta: t('new_pat'), act: 'new-pat' });
+        el.innerHTML = h + '<p class="fine">' + esc(t('wellness_note')) + '</p>';
+      },
+    },
+    progress: {
+      title: () => t('tab_progress'),
+      render(el) {
+        const s = stats(), n = today();
+        if (!s.n) { el.innerHTML = UI.empty({ art: ART.ob1, title: t('prog_empty_t'), body: t('prog_empty_b'), cta: t('begin'), act: 'to-breathe' }); return; }
+        let h = '<div class="tiles"><div class="tile"><div class="tv">' + fmtNum(s.cur) + '</div><div class="tl">' + esc(t('streak')) + '</div></div><div class="tile"><div class="tv">' + fmtNum(s.best) + '</div><div class="tl">' + esc(t('best_streak')) + '</div></div>' +
+          '<div class="tile"><div class="tv">' + esc(minLabel(s.ds)) + '</div><div class="tl">' + esc(t('total_time')) + '</div></div><div class="tile"><div class="tv">' + fmtNum(s.n) + '</div><div class="tl">' + esc(t('sessions')) + '</div></div></div>';
+        const days = []; let mx = 1; for (let i = 13; i >= 0; i--) { const d = addDays(n, -i), v = (S.tool.log[dkey(d)] || { d: 0 }).d; mx = Math.max(mx, v); days.push({ d: d, v: v, cur: i === 0 }); }
+        h += '<div class="sec-h">' + esc(t('last14')) + '</div><div class="card card-pad"><div class="bars">' + days.map(b => '<div class="bar' + (b.cur ? ' cur' : '') + '" role="img" aria-label="' + esc(fmtDate(b.d, { day: 'numeric', month: 'long' }) + ' — ' + minLabel(b.v)) + '"><div class="bt"><div class="bf" style="height:' + Math.round(b.v / mx * 100) + '%"></div></div><div class="bl">' + esc(fmtDate(b.d, { day: 'numeric' })) + '</div></div>').join('') + '</div></div>';
+        h += '<div class="sec-h">' + esc(t('calendar')) + '</div><div class="card card-pad">' + calHtml() + '</div>';
+        // Pro history
+        const mon = []; for (let i = 11; i >= 0; i--) { const a = new Date(n.getFullYear(), n.getMonth() - i, 1, 12), pre = a.getFullYear() + '-' + String(a.getMonth() + 1).padStart(2, '0'); let v = 0; Object.keys(S.tool.log).forEach(k => { if (k.slice(0, 7) === pre) v += S.tool.log[k].d; }); mon.push({ a: a, v: v, cur: i === 0 }); }
+        const mm = Math.max(1, ...mon.map(m => m.v)), byp = {}; S.tool.hist.forEach(x => { const nm = patName(x); byp[nm] = (byp[nm] || 0) + x.d; });
+        const adv = '<div class="sec-h" style="margin-top:0">' + esc(t('months12')) + '</div><div class="bars">' + mon.map((m, i) => '<div class="bar' + (m.cur ? ' cur' : '') + '" role="img" aria-label="' + esc(fmtDate(m.a, { month: 'long' }) + ' — ' + minLabel(m.v)) + '"><div class="bt"><div class="bf" style="height:' + Math.round(m.v / mm * 100) + '%"></div></div><div class="bl">' + (i % 3 === 0 ? esc(fmtDate(m.a, { month: 'short' }).replace(/\.$/, '')) : '') + '</div></div>').join('') + '</div>' +
+          '<div class="sec-h">' + esc(t('by_pat')) + '</div>' + Object.keys(byp).sort((a, b) => byp[b] - byp[a]).slice(0, 6).map(k => '<div class="rank"><span class="rn">' + esc(k) + '</span><span class="pct">' + esc(minLabel(byp[k])) + '</span></div>').join('') +
+          '<div class="sec-h">' + esc(t('history')) + '</div><ul class="hist">' + S.tool.hist.slice(0, 15).map(x => '<li><b>' + esc(fmtDate(new Date(x.t), { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })) + '</b><span>' + esc(patName(x) + ' · ' + minLabel(x.d)) + '</span></li>').join('') + '</ul>';
+        h += '<div class="sec-h"><span>' + esc(t('history_h')) + '</span>' + (isPro() ? '' : '<span class="badge">Pro</span>') + '</div>' + (isPro() ? '<div class="card card-pad">' + adv + '</div>' : '<div class="card card-pad lockcard"><div class="blur" aria-hidden="true">' + adv + '</div><div class="lk"><span class="badge">' + icon('gem', 14) + 'Pro</span><p>' + esc(t('pro_hist_b')) + '</p><button class="btn btn-primary" data-act="go-pro" data-arg="pro_hist_b">' + esc(t('go_pro')) + '</button></div></div>');
+        el.innerHTML = h;
+      },
+    },
+  },
 };
-// All active habits on one day: {due, done}
-function dayStat(d) {
-  const k = dkey(d); let due = 0, done = 0;
-  HB.active().forEach(h => { if (HB.sched(h, d) && HB.start(h) <= d) { due++; if (HB.done(h, k)) done++; } });
-  return { due: due, done: done };
-}
-function rateOver(from, to) {
-  const tk = todayKey(); let num = 0, den = 0;
-  for (let d = from; d <= to; d = addDays(d, 1)) { const s = dayStat(d); if (dkey(d) === tk) { num += s.done; den += s.done; continue; } num += s.done; den += s.due; }
-  return den ? num / den : null;
-}
-function wkStart() {
-  const w = S.tool.weekStart;
-  if (w === 0 || w === 1 || w === 6) return w;
-  return ({ en: 0, ja: 0, pt: 0, hi: 0, es: 0, ar: 6 })[LANG] !== undefined ? ({ en: 0, ja: 0, pt: 0, hi: 0, es: 0, ar: 6 })[LANG] : 1;
-}
-function weekOf(d) { return addDays(d, -((d.getDay() - wkStart() + 7) % 7)); }
-function dowOrder() { const s = wkStart(); return [0, 1, 2, 3, 4, 5, 6].map(i => (s + i) % 7); }
-function schedText(h) {
-  const m = h.days & 127;
-  let s = m === 127 ? t('every_day') : m === 62 ? t('weekdays') : m === 65 ? t('weekends') : dowOrder().filter(i => m & (1 << i)).map(i => weekdayName(i, 'short')).join(', ');
-  if ((h.target || 1) > 1) s += ' · ' + t('goal_line', { n: h.target, unit: h.unit || t('unit_ph') });
-  return s;
-}
-function hic(h, size) { return '<span class="hic" style="--hc:' + h.color + '">' + icon(h.icon, size || 24) + '</span>'; }
-function lvl(h, k) { const c = HB.cnt(h, k), tg = h.target || 1; return c <= 0 ? 0 : c >= tg ? 3 : c / tg >= 0.5 ? 2 : 1; }
-
-const TD = { sel: '', later: false, arc: false, welcome: false };
-
-// ── Today ────────────────────────────────────────────────────────────
-function weekStripHtml() {
-  const tdy = today(); let h = '<div class="week" id="wk" role="group" aria-label="' + esc(t('pick_day')) + '">';
-  for (let i = 6; i >= 0; i--) {
-    const d = addDays(tdy, -i), k = dkey(d), s = dayStat(d), f = s.due ? s.done / s.due : 0, C = 2 * Math.PI * 15;
-    h += '<button class="wd' + (s.due && s.done === s.due ? ' full' : '') + '" data-act="sel-day" data-arg="' + k + '" aria-pressed="' + (k === TD.sel) + '" aria-label="' + esc(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })) + '">' +
-      '<span class="wn">' + esc(weekdayName(d.getDay(), 'short').replace(/\.$/, '')) + '</span><span class="wr"><svg viewBox="0 0 36 36"><circle class="tr" cx="18" cy="18" r="15" fill="none" stroke-width="3"/>' +
-      (f > 0 ? '<circle class="pr" cx="18" cy="18" r="15" fill="none" stroke-width="3" stroke-linecap="round" stroke-dasharray="' + C.toFixed(2) + '" stroke-dashoffset="' + (C * (1 - f)).toFixed(2) + '"/>' : '') + '</svg>' + fmtNum(d.getDate()) + '</span></button>';
-  }
-  return h + '</div>';
-}
-function summaryHtml() {
-  const d = pkey(TD.sel), k = TD.sel, due = HB.active().filter(h => HB.sched(h, d));
-  const n = due.length, dn = due.filter(h => HB.done(h, k)).length, all = n > 0 && dn === n, f = n ? dn / n : 0;
-  const top = Math.max(0, ...HB.active().map(h => HB.streak(h)));
-  const title = n === 0 ? t('nothing_today') : all ? t('all_done') : t('today_sum', { done: dn, total: n });
-  let sub = n === 0 ? t('nothing_today_sub') : all ? t('all_done_sub') : t('left_n', { n: n - dn });
-  if (TD.welcome && k === todayKey() && !all) sub = t('welcome_back');
-  else if (top > 1 && !all && n) sub += ' · 🔥 ' + fmtNum(top);
-  return '<div class="sum' + (all ? ' alldone' : '') + '" id="sum"><div class="ring"><svg viewBox="0 0 48 48"><circle class="tr" cx="24" cy="24" r="21" fill="none" stroke-width="5"/><circle class="pr" cx="24" cy="24" r="21" fill="none" stroke-width="5" stroke-linecap="round" stroke-dasharray="' + RING_C.toFixed(2) + '" stroke-dashoffset="' + (RING_C * (1 - f)).toFixed(2) + '" style="opacity:' + (f ? 1 : 0) + '"/></svg><b>' + fmtNum(dn) + '/' + fmtNum(n) + '</b></div>' +
-    '<div style="min-width:0"><h2>' + esc(title) + '</h2><p>' + esc(sub) + '</p></div></div>';
-}
-function metaHtml(h, k) {
-  const m = [], st = HB.streak(h), tg = h.target || 1;
-  if (st > 0) m.push('<span class="fl">' + icon('flame', 14) + fmtNum(st) + '</span>');
-  if (tg > 1) m.push(esc(t('goal_prog', { c: HB.cnt(h, k), t: tg, unit: h.unit || t('unit_ph') })));
-  else if (!st) m.push(esc(schedText(h)));
-  if (HB.note(h, k)) m.push('<span class="fl" aria-label="' + esc(t('note')) + '">' + icon('note', 14) + '</span>');
-  return m.join('<span aria-hidden="true">·</span>');
-}
-function rowHtml(h, k) {
-  const c = HB.cnt(h, k), tg = h.target || 1, on = c >= tg;
-  return '<div class="hrow' + (on ? ' isdone' : '') + '" data-hid="' + h.id + '" style="--hc:' + h.color + '">' +
-    '<button class="hmain" data-act="open-habit" data-arg="' + h.id + '">' + hic(h) + '<span class="htx"><span class="hnm">' + esc(h.name) + '</span><span class="hmt">' + metaHtml(h, k) + '</span></span></button>' +
-    '<button class="chk' + (on ? ' on' : '') + '" data-act="check" data-arg="' + h.id + '" aria-pressed="' + on + '" aria-label="' + esc(t('check_aria', { name: h.name })) + '">' +
-    '<svg class="rg" viewBox="0 0 48 48" aria-hidden="true"><circle class="tr" cx="24" cy="24" r="21" fill="none" stroke-width="4"/><circle class="pr" cx="24" cy="24" r="21" fill="none" stroke-width="4" stroke-linecap="round" stroke-dasharray="' + RING_C.toFixed(2) + '" style="stroke-dashoffset:' + (RING_C * (1 - Math.min(1, c / tg))).toFixed(2) + ';opacity:' + (c ? 1 : 0) + '"/></svg>' +
-    '<span class="fill"></span><svg class="tk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>' +
-    (tg > 1 ? '<span class="ct">' + fmtNum(c) + '</span>' : '') + '</button></div>';
-}
-function paintRow(h, k) {
-  const row = $('.hrow[data-hid="' + h.id + '"]'); if (!row) return null;
-  const c = HB.cnt(h, k), tg = h.target || 1, on = c >= tg, b = row.querySelector('.chk'), pr = b.querySelector('.pr'), ct = b.querySelector('.ct');
-  row.classList.toggle('isdone', on); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on));
-  pr.style.strokeDashoffset = (RING_C * (1 - Math.min(1, c / tg))).toFixed(2); pr.style.opacity = c ? 1 : 0;
-  if (ct) ct.textContent = fmtNum(c);
-  row.querySelector('.hmt').innerHTML = metaHtml(h, k);
-  return row;
-}
-function paintTodayChrome() {
-  const w = $('#wk'), s = $('#sum');
-  if (w) w.outerHTML = weekStripHtml();
-  if (s) s.outerHTML = summaryHtml();
-}
-function allDone(k) { const d = pkey(k), due = HB.active().filter(h => HB.sched(h, d)); return due.length > 0 && due.every(h => HB.done(h, k)); }
-function burst(b) {
-  if (reducedMotion()) return;
-  const s = document.createElement('span'); s.className = 'burst';
-  s.innerHTML = Array.from({ length: 8 }, (_, i) => { const a = i * Math.PI / 4; return '<i style="--dx:' + (Math.cos(a) * 34).toFixed(0) + 'px;--dy:' + (Math.sin(a) * 34).toFixed(0) + 'px"></i>'; }).join('');
-  b.appendChild(s); setTimeout(() => s.remove(), 700);
-}
-function confetti() {
-  if (reducedMotion()) return;
-  const c = document.createElement('div'); c.className = 'confetti';
-  c.innerHTML = Array.from({ length: 44 }, (_, i) => '<i style="left:' + (Math.random() * 100).toFixed(1) + '%;background:' + COLORS[i % 12] + ';--dx:' + ((Math.random() - 0.5) * 160).toFixed(0) + 'px;--r:' + (Math.random() * 720 - 360).toFixed(0) + 'deg;animation-delay:' + (Math.random() * 0.35).toFixed(2) + 's"></i>').join('');
-  document.body.appendChild(c); setTimeout(() => c.remove(), 2300);
-}
-function doCheck(h, k) {
-  if (k > todayKey()) { UI.toast(t('future_day')); return; }
-  const before = HB.cnt(h, k), tg = h.target || 1, wasAll = allDone(k);
-  if (before >= tg) {
-    HB.set(h, k, 0); persist(); haptic('reject'); paintRow(h, k); paintTodayChrome();
-    UI.toast(t('unchecked', { name: h.name }), { action: t('undo'), onAction: () => { HB.set(h, k, before); persist(); paintRow(h, k); paintTodayChrome(); } });
-    return;
-  }
-  HB.set(h, k, before + 1); persist();
-  const row = paintRow(h, k), b = row && row.querySelector('.chk');
-  if (before + 1 >= tg) {
-    haptic('success'); announce(t('done_aria', { name: h.name }));
-    if (b) { b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); burst(b); }
-  } else {
-    haptic('tap');
-    if (b) { b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
-  }
-  paintTodayChrome();
-  if (!wasAll && allDone(k)) { confetti(); announce(t('all_done')); }
-}
-ACT.check = el => { if (el._lp) { el._lp = false; return; } const h = HB.get(el.dataset.arg); if (h) doCheck(h, TD.sel || todayKey()); };
-ACT['sel-day'] = el => { TD.sel = el.dataset.arg; haptic('tap'); UI.refresh(); };
-ACT['to-today'] = () => { TD.sel = todayKey(); UI.refresh(); };
-ACT['toggle-later'] = () => { TD.later = !TD.later; UI.refresh(); };
-// Long-press a check button → that day's sheet (exact count + note).
-let lpT = 0, lpX = 0, lpY = 0;
-document.addEventListener('pointerdown', e => {
-  const b = e.target.closest('.chk[data-act="check"]'); if (!b) return;
-  lpX = e.clientX; lpY = e.clientY; clearTimeout(lpT);
-  lpT = setTimeout(() => { b._lp = true; haptic('tap'); openDay(b.dataset.arg, TD.sel || todayKey()); }, 480);
-});
-document.addEventListener('pointermove', e => { if (lpT && Math.hypot(e.clientX - lpX, e.clientY - lpY) > 12) { clearTimeout(lpT); lpT = 0; } });
-['pointerup', 'pointercancel'].forEach(ev => document.addEventListener(ev, () => { clearTimeout(lpT); lpT = 0; }));
-document.addEventListener('contextmenu', e => { if (e.target.closest('.chk')) e.preventDefault(); });
-
-function suggestionsHtml() {
-  return '<div class="sec-h" style="justify-content:center">' + esc(t('suggest')) + '</div><div class="chips">' +
-    SUGGEST.map((s, i) => '<button class="sug" data-act="suggest" data-arg="' + i + '"><span class="hic" style="--hc:' + s.color + '">' + icon(s.icon, 18) + '</span>' + esc(t(s.k)) + '</button>').join('') + '</div>';
-}
-ACT.suggest = el => { const s = SUGGEST[+el.dataset.arg]; if (!s) return; openEditor(null, { name: t(s.k), icon: s.icon, color: s.color, target: s.target || 1, unit: s.unit ? t(s.unit) : '', days: s.days || 127 }); };
-
-// ── Day sheet (exact count + note for one habit on one day) ─────────
-const DS = { hid: '', key: '', c: 0 };
-function openDay(hid, k) {
-  const h = HB.get(hid); if (!h) return;
-  if (k > todayKey()) { UI.toast(t('future_day')); return; }
-  DS.hid = hid; DS.key = k; DS.c = HB.cnt(h, k);
-  UI.sheet({ title: h.name, cls: 'dsheet', body: '<div id="ds-body" style="--hc:' + h.color + '"></div>',
-    foot: '<button class="btn btn-primary" data-act="ds-save">' + esc(t('save')) + '</button>' });
-  paintDay(true);
-}
-function paintDay(first) {
-  const h = HB.get(DS.hid), el = $('#ds-body'); if (!h || !el) return;
-  const tg = h.target || 1, on = DS.c >= tg, note = first ? HB.note(h, DS.key) : ($('#ds-note') || {}).value || '';
-  el.innerHTML = '<p style="margin:0 0 12px;color:var(--text-mute);font-weight:700;text-align:center">' + esc(fmtDate(pkey(DS.key), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })) + '</p><div class="big">' +
-    (tg === 1 ? '<button class="chk' + (on ? ' on' : '') + '" data-act="ds-toggle" aria-pressed="' + on + '" aria-label="' + esc(t('check_aria', { name: h.name })) + '"><svg class="rg" viewBox="0 0 48 48"><circle class="tr" cx="24" cy="24" r="21" fill="none" stroke-width="4"/></svg><span class="fill"></span><svg class="tk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><b>' + esc(on ? t('done_state') : t('not_done_state')) + '</b>'
-      : '<div class="stepper"><button data-act="ds-minus" aria-label="−">' + icon('minus') + '</button><output aria-live="polite">' + fmtNum(DS.c) + '</output><button data-act="ds-plus" aria-label="+">' + icon('plus') + '</button></div><b>' + esc(t('goal_prog', { c: DS.c, t: tg, unit: h.unit || t('unit_ph') })) + '</b>') +
-    '</div><label class="field"><span class="fl">' + esc(t('note')) + '</span><textarea class="inp" id="ds-note" maxlength="500" placeholder="' + esc(t('note_ph')) + '">' + esc(note) + '</textarea></label>';
-}
-ACT['ds-toggle'] = () => { const h = HB.get(DS.hid); DS.c = DS.c >= (h.target || 1) ? 0 : (h.target || 1); haptic(DS.c ? 'success' : 'tap'); paintDay(); };
-ACT['ds-plus'] = () => { DS.c = Math.min(999, DS.c + 1); haptic('tap'); paintDay(); };
-ACT['ds-minus'] = () => { DS.c = Math.max(0, DS.c - 1); haptic('tap'); paintDay(); };
-ACT['ds-save'] = () => {
-  const h = HB.get(DS.hid); if (!h) return;
-  HB.set(h, DS.key, DS.c); HB.setNote(h, DS.key, ($('#ds-note') || {}).value || ''); persist();
-  UI.closeLayer(true); UI.refresh();
-};
-
-// ── Habit editor ─────────────────────────────────────────────────────
-let ED = null;
-function openEditor(id, preset) {
-  if (!id && HB.active().length >= FREE_LIMIT && !isPro()) { Pro.open('limit_t'); return; }
-  const h = id ? HB.get(id) : null;
-  ED = h ? clone(h) : Object.assign({ id: null, name: '', icon: 'check', color: COLORS[S.tool.habits.length % COLORS.length], days: 127, target: 1, unit: '', rem: { on: false, h: 9, m: 0 } }, preset || {});
-  if (!ED.rem) ED.rem = { on: false, h: 9, m: 0 };
-  UI.sheet({ title: t(h ? 'edit_habit' : 'new_habit'), full: true, body: '<div id="ed-body"></div>', foot: '<button class="btn btn-primary" data-act="ed-save">' + esc(t('save')) + '</button>' });
-  paintEditor(!h && !(preset && preset.name));
-}
-function paintEditor(focusName) {
-  const el = $('#ed-body'); if (!el || !ED) return;
-  const m = ED.days & 127;
-  el.innerHTML = '<div class="edit-prev">' + hic(ED, 28) + '<b>' + esc(ED.name || t('f_name_ph')) + '</b></div>' +
-    '<label class="field"><span class="fl">' + esc(t('f_name')) + '</span><input class="inp" id="ed-name" maxlength="40" data-input="ed-name" value="' + esc(ED.name) + '" placeholder="' + esc(t('f_name_ph')) + '" enterkeyhint="done" autocomplete="off"></label>' +
-    '<div class="field"><span class="fl">' + esc(t('f_icon')) + '</span><div class="icons" style="--hc:' + ED.color + '">' + Object.keys(HICON).map(n => '<button class="ip" data-act="ed-icon" data-arg="' + n + '" aria-pressed="' + (ED.icon === n) + '" aria-label="' + n + '">' + icon(n, 24) + '</button>').join('') + '</div></div>' +
-    '<div class="field"><span class="fl">' + esc(t('f_color')) + '</span><div class="cols">' + COLORS.map(c => '<button class="sw" data-act="ed-color" data-arg="' + c + '" aria-pressed="' + (ED.color === c) + '" aria-label="' + c + '"><i style="background:' + c + '"></i></button>').join('') + '</div></div>' +
-    '<div class="field"><span class="fl">' + esc(t('f_repeat')) + '</span><div class="days" style="--hc:' + ED.color + '">' + dowOrder().map(i => '<button class="dy" data-act="ed-day" data-arg="' + i + '" aria-pressed="' + !!(m & (1 << i)) + '" aria-label="' + esc(weekdayName(i, 'long')) + '">' + esc(weekdayName(i, 'narrow')) + '</button>').join('') + '</div>' +
-    '<div class="presets">' + [[127, 'every_day'], [62, 'weekdays'], [65, 'weekends']].map(p => '<button class="pre" data-act="ed-preset" data-arg="' + p[0] + '" aria-pressed="' + (m === p[0]) + '">' + esc(t(p[1])) + '</button>').join('') + '</div></div>' +
-    '<div class="field"><span class="fl">' + esc(t('f_target')) + '</span><div class="goal"><div class="stepper"><button data-act="ed-tminus" aria-label="−">' + icon('minus') + '</button><output>' + fmtNum(ED.target) + '</output><button data-act="ed-tplus" aria-label="+">' + icon('plus') + '</button></div>' +
-    ((ED.target || 1) > 1 ? '<input class="inp" maxlength="16" data-input="ed-unit" value="' + esc(ED.unit) + '" placeholder="' + esc(t('unit_ph')) + '" aria-label="' + esc(t('f_unit')) + '">' : '') + '</div></div>' +
-    '<div class="field"><div class="remrow"><span class="rl">' + esc(t('f_reminder')) + '<span class="rs">' + esc(t('f_reminder_sub')) + '</span></span>' + sSwitch(ED.rem.on, 'ed-rem', t('f_reminder')) + '</div>' +
-    (ED.rem.on ? '<input class="inp" type="time" data-change="ed-remtime" style="margin-top:8px" aria-label="' + esc(t('s_time')) + '" value="' + String(ED.rem.h).padStart(2, '0') + ':' + String(ED.rem.m).padStart(2, '0') + '">' : '') + '</div>' +
-    (ED.id ? '<div class="btn-row" style="margin-top:6px">' + (ED.archived ? '<button class="btn btn-neutral" data-act="ed-unarchive">' + icon('restore', 20) + esc(t('unarchive')) + '</button>' : '<button class="btn btn-neutral" data-act="ed-archive">' + icon('archive', 20) + esc(t('archive')) + '</button>') +
-      '<button class="btn btn-danger" data-act="ed-delete">' + icon('trash', 20) + esc(t('delete')) + '</button></div>' : '');
-  if (focusName) setTimeout(() => { const i = $('#ed-name'); if (i) try { i.focus(); } catch (e) {} }, 320);
-}
-INPUT['ed-name'] = el => { ED.name = el.value; const b = $('.edit-prev b'); if (b) b.textContent = ED.name || t('f_name_ph'); };
-INPUT['ed-unit'] = el => { ED.unit = el.value.slice(0, 16); };
-ACT['ed-icon'] = el => { ED.icon = el.dataset.arg; haptic('tap'); paintEditor(); };
-ACT['ed-color'] = el => { ED.color = el.dataset.arg; haptic('tap'); paintEditor(); };
-ACT['ed-day'] = el => { ED.days = (ED.days & 127) ^ (1 << +el.dataset.arg); haptic('tap'); paintEditor(); };
-ACT['ed-preset'] = el => { ED.days = +el.dataset.arg; haptic('tap'); paintEditor(); };
-ACT['ed-tplus'] = () => { ED.target = Math.min(99, (ED.target || 1) + 1); paintEditor(); };
-ACT['ed-tminus'] = () => { ED.target = Math.max(1, (ED.target || 1) - 1); paintEditor(); };
-ACT['ed-rem'] = async () => {
-  if (ED.rem.on) { ED.rem.on = false; paintEditor(); return; }
-  const ok = await Reminders.ensurePermission();          // asked in context, never at launch
-  if (!ok) { UI.toast(t('notif_off'), { action: t('open_settings'), onAction: () => callA('openNotificationSettings') }); return; }
-  ED.rem.on = true; paintEditor();
-};
-CHANGE['ed-remtime'] = el => { const p = String(el.value || '').split(':'); if (p.length < 2) return; ED.rem.h = clamp(+p[0] | 0, 0, 23); ED.rem.m = clamp(+p[1] | 0, 0, 59); };
-function freeSlot() { const used = new Set(S.tool.habits.map(h => h.slot)); for (let s = 1; s <= 63; s++) if (!used.has(s)) return s; return 0; }
-function syncHabitReminder(h) {
-  if (!h.slot) return;
-  if (h.rem && h.rem.on && !h.archived) Reminders.set(h.slot, h.rem.h, h.rem.m, h.days & 127, h.name, t('rem_habit_body', { name: h.name }));
-  else Reminders.cancel(h.slot);
-}
-ACT['ed-save'] = () => {
-  const name = String(ED.name || '').trim().slice(0, 40);
-  if (!name) { UI.toast(t('name_needed')); haptic('reject'); const i = $('#ed-name'); if (i) i.focus(); return; }
-  if (!(ED.days & 127)) { UI.toast(t('days_needed')); haptic('reject'); return; }
-  let h;
-  const fields = { name: name, icon: HICON[ED.icon] ? ED.icon : 'check', color: ED.color, days: ED.days & 127, target: clamp(ED.target | 0, 1, 99), unit: String(ED.unit || '').trim().slice(0, 16), rem: { on: !!ED.rem.on, h: ED.rem.h | 0, m: ED.rem.m | 0 } };
-  if (ED.id) { h = HB.get(ED.id); if (!h) return; Object.assign(h, fields); }
-  else {
-    if (HB.active().length >= FREE_LIMIT && !isPro()) { Pro.open('limit_t'); return; }
-    h = Object.assign({ id: uid('h'), created: todayKey(), archived: false, slot: freeSlot() }, fields);
-    S.tool.habits.push(h);
-  }
-  MEMO.clear(); persist(); syncHabitReminder(h);
-  const isNew = !ED.id; ED = null;
-  UI.closeLayer(true); UI.refresh(); haptic('success');
-  if (isNew) UI.toast(t('habit_added', { name: h.name }));
-  Ads.naturalBreak('habit_saved');
-};
-function archiveHabit(h, on) {
-  h.archived = on; MEMO.clear(); persist(); syncHabitReminder(h);
-  UI.toast(t(on ? 'habit_archived' : 'habit_restored'), { action: t('undo'), onAction: () => { h.archived = !on; MEMO.clear(); persist(); syncHabitReminder(h); UI.refresh(); } });
-}
-ACT['ed-archive'] = () => { const h = HB.get(ED.id); UI.closeLayer(true); if (UI.cur().id === 'habit') UI.back(); archiveHabit(h, true); UI.refresh(); };
-ACT['ed-unarchive'] = () => { if (HB.active().length >= FREE_LIMIT && !isPro()) { Pro.open('limit_t'); return; } const h = HB.get(ED.id); UI.closeLayer(true); archiveHabit(h, false); UI.refresh(); };
-ACT.unarchive = el => { if (HB.active().length >= FREE_LIMIT && !isPro()) { Pro.open('limit_t'); return; } archiveHabit(HB.get(el.dataset.arg), false); UI.refresh(); };
-async function deleteHabit(h) {
-  const ok = await UI.confirm({ title: t('del_t'), body: t('del_b'), ok: t('delete'), danger: true });
-  if (!ok) return false;
-  const idx = S.tool.habits.indexOf(h), log = S.tool.log[h.id], notes = S.tool.notes[h.id];
-  S.tool.habits.splice(idx, 1); delete S.tool.log[h.id]; delete S.tool.notes[h.id];
-  MEMO.clear(); persist(); if (h.slot) Reminders.cancel(h.slot); haptic('reject');
-  UI.closeAll(); if (UI.cur().id === 'habit') UI.back(); UI.refresh();
-  UI.toast(t('habit_deleted'), { action: t('undo'), onAction: () => {
-    S.tool.habits.splice(Math.min(idx, S.tool.habits.length), 0, h); if (log) S.tool.log[h.id] = log; if (notes) S.tool.notes[h.id] = notes;
-    MEMO.clear(); persist(); syncHabitReminder(h); UI.refresh();
-  } });
-  return true;
-}
-ACT['ed-delete'] = () => { const h = HB.get(ED.id); if (h) deleteHabit(h); };
-ACT['del-habit'] = el => { const h = HB.get(el.dataset.arg); if (h) deleteHabit(h); };
-ACT['new-habit'] = () => openEditor(null);
-ACT['edit-habit'] = el => openEditor(el.dataset.arg);
-ACT['open-habit'] = el => { CAL.id = ''; UI.go('habit', { id: el.dataset.arg }); };
-
-// ── Habit detail ─────────────────────────────────────────────────────
-const CAL = { id: '', y: 0, m: 0 };
-function calHtml(h) {
-  if (CAL.id !== h.id) { const n = today(); CAL.id = h.id; CAL.y = n.getFullYear(); CAL.m = n.getMonth(); }
-  const first = new Date(CAL.y, CAL.m, 1, 12), dim = new Date(CAL.y, CAL.m + 1, 0).getDate(), tk = todayKey(), n = today();
-  const atNow = CAL.y === n.getFullYear() && CAL.m === n.getMonth();
-  let g = '<div class="cal-h"><button class="icon-btn" data-act="cal-prev" aria-label="' + esc(t('prev_month')) + '">' + icon('back', 22, 'flip') + '</button><b>' + esc(fmtDate(first, { month: 'long', year: 'numeric' })) + '</b>' +
-    '<button class="icon-btn" data-act="cal-next" aria-label="' + esc(t('next_month')) + '"' + (atNow ? ' disabled style="opacity:.3"' : '') + '>' + icon('chev', 22, 'flip') + '</button></div><div class="cal" style="--hc:' + h.color + '">' +
-    dowOrder().map(i => '<span class="dn">' + esc(weekdayName(i, 'narrow')) + '</span>').join('');
-  const pad = (first.getDay() - wkStart() + 7) % 7;
-  for (let i = 0; i < pad; i++) g += '<span class="cd pad"></span>';
+function patName(x) { if (x.name) return x.name; const p = BX_PRESETS.find(q => q.id === x.p); return p ? t('pat_' + p.id) : t('custom'); }
+const CAL = { y: 0, m: 0, init: false };
+function calHtml() {
+  const n = today(); if (!CAL.init) { CAL.y = n.getFullYear(); CAL.m = n.getMonth(); CAL.init = true; }
+  const first = new Date(CAL.y, CAL.m, 1, 12), dim = new Date(CAL.y, CAL.m + 1, 0).getDate(), tk = todayKey();
+  const atNow = CAL.y === n.getFullYear() && CAL.m === n.getMonth(), ws = ({ ar: 6, en: 0, ja: 0, pt: 0, hi: 0, es: 0 })[LANG] !== undefined ? ({ ar: 6, en: 0, ja: 0, pt: 0, hi: 0, es: 0 })[LANG] : 1;
+  let g = '<div class="cal-h"><button class="icon-btn" data-act="cal-prev" aria-label="' + esc(t('prev_month')) + '">' + icon('back', 22, 'flip') + '</button><b>' + esc(fmtDate(first, { month: 'long', year: 'numeric' })) + '</b><button class="icon-btn" data-act="cal-next" aria-label="' + esc(t('next_month')) + '"' + (atNow ? ' disabled style="opacity:.3"' : '') + '>' + icon('chev', 22, 'flip') + '</button></div><div class="cal">';
+  for (let i = 0; i < 7; i++) g += '<span class="dn">' + esc(weekdayName((ws + i) % 7, 'narrow')) + '</span>';
+  for (let i = 0; i < (first.getDay() - ws + 7) % 7; i++) g += '<span class="cd pad"></span>';
   for (let day = 1; day <= dim; day++) {
-    const d = new Date(CAL.y, CAL.m, day, 12), k = dkey(d), L = lvl(h, k), fut = k > tk;
-    const cls = 'cd' + (fut ? ' fut' : '') + (L ? ' l' + L : (!HB.sched(h, d) ? ' off' : '')) + (k === tk ? ' today' : '');
-    g += '<button class="' + cls + '"' + (fut ? ' disabled' : ' data-act="cal-day" data-arg="' + k + '"') + ' aria-label="' + esc(fmtDate(d, { day: 'numeric', month: 'long' }) + ' — ' + (L === 3 ? t('done_state') : t('not_done_state'))) + '">' + fmtNum(day) + (HB.note(h, k) ? '<span class="nt"></span>' : '') + '</button>';
+    const k = dkey(new Date(CAL.y, CAL.m, day, 12)), L = S.tool.log[k], v = L ? L.d : 0, lv = v >= 6000 ? 3 : v >= 3000 ? 2 : v > 0 ? 1 : 0;
+    g += '<span class="cd' + (lv ? ' l' + lv : '') + (k > tk ? ' fut' : '') + (k === tk ? ' today' : '') + '" role="img" aria-label="' + esc(fmtDate(new Date(CAL.y, CAL.m, day, 12), { day: 'numeric', month: 'long' }) + ' — ' + minLabel(v)) + '">' + fmtNum(day) + '</span>';
   }
   return g + '</div>';
 }
-ACT['cal-prev'] = () => { CAL.m--; if (CAL.m < 0) { CAL.m = 11; CAL.y--; } UI.refresh(); };
+ACT['cal-prev'] = () => { if (!Pro.require('pro_hist_b')) return; CAL.m--; if (CAL.m < 0) { CAL.m = 11; CAL.y--; } UI.refresh(); };
 ACT['cal-next'] = () => { CAL.m++; if (CAL.m > 11) { CAL.m = 0; CAL.y++; } UI.refresh(); };
-ACT['cal-day'] = el => openDay(UI.cur().params.id, el.dataset.arg);
-function barsHtml(items, color) {
-  return '<div class="bars"' + (color ? ' style="--accent:' + color + '"' : '') + '>' + items.map(b => '<div class="bar' + (b.cur ? ' cur' : '') + '" role="img" aria-label="' + esc(b.aria || b.label) + ' ' + fmtPct(b.v) + '"><div class="bt"><div class="bf" style="height:' + Math.round((b.v || 0) * 100) + '%"></div></div><span class="bl">' + esc(b.label) + '</span></div>').join('') + '</div>';
-}
-function weeksTrend(h) {
-  const ws = weekOf(today()), out = [];
-  for (let w = 11; w >= 0; w--) { const a = addDays(ws, -7 * w); out.push({ v: HB.rate(h, a, addDays(a, 6)) || 0, label: w % 3 === 0 ? fmtDate(a, { day: 'numeric', month: 'numeric' }) : '', aria: fmtDate(a, { day: 'numeric', month: 'short' }), cur: w === 0 }); }
-  return out;
-}
-function weekdayPattern(list) {
-  const tally = [0, 0, 0, 0, 0, 0, 0].map(() => [0, 0]), tk = todayKey(), end = today();
-  list.forEach(h => { for (let d = HB.start(h); d <= end; d = addDays(d, 1)) { if (!HB.sched(h, d)) continue; const k = dkey(d), dn = HB.done(h, k); if (k === tk && !dn) continue; tally[d.getDay()][1]++; if (dn) tally[d.getDay()][0]++; } });
-  return dowOrder().map(i => ({ v: tally[i][1] ? tally[i][0] / tally[i][1] : 0, label: weekdayName(i, 'short').replace(/\.$/, ''), aria: weekdayName(i, 'long') }));
-}
-function yearHtml(h) {
-  const end = today(), start = addDays(weekOf(end), -52 * 7); let g = '<div class="year"><div class="yg" style="--hc:' + h.color + '" role="img" aria-label="' + esc(t('year_map')) + '">';
-  for (let d = start; d <= end; d = addDays(d, 1)) { const L = lvl(h, dkey(d)); g += '<i' + (L ? ' class="l' + L + '"' : '') + '></i>'; }
-  return g + '</div></div>';
-}
-function lockCard(inner, reason) {
-  return '<div class="card card-pad lockcard"><div class="blur" aria-hidden="true">' + inner + '</div><div class="lk"><span class="badge">' + icon('gem', 14) + 'Pro</span><p>' + esc(t('advanced_b')) + '</p><button class="btn btn-primary" data-act="go-pro" data-arg="' + reason + '">' + esc(t('go_pro')) + '</button></div></div>';
-}
-function tile(v, l) { return '<div class="tile"><div class="tv">' + v + '</div><div class="tl">' + esc(l) + '</div></div>'; }
+ACT['to-patterns'] = () => { pauseRun(false); UI.tab('patterns'); };
+ACT['to-breathe'] = () => UI.tab('breathe');
+ACT['run-start'] = () => { if (!allowedLen(S.tool.mins)) { Pro.open('pro_len_b'); return; } startRun(); };
+ACT['run-pause'] = () => pauseRun(true);
+ACT['run-resume'] = () => resumeRun();
+ACT['run-end'] = () => endRun(false);
+ACT['set-len'] = el => { const m = +el.dataset.arg; if (!allowedLen(m)) { Pro.open('pro_len_b'); return; } S.tool.mins = m; RUN.done = false; persist(); UI.refresh(); };
+ACT['pick-pat'] = el => { S.tool.pat = el.dataset.arg; RUN.done = false; persist(); UI.tab('breathe'); };
+ACT['tog-tone'] = () => { S.tool.tone = !S.tool.tone; persist(); UI.refresh(); };
+ACT['tog-voice'] = () => { S.tool.voice = !S.tool.voice; persist(); UI.refresh(); };
 
-// ── Stats ────────────────────────────────────────────────────────────
-function monthsTrend() {
-  const n = today(), out = [];
-  for (let i = 11; i >= 0; i--) { const a = new Date(n.getFullYear(), n.getMonth() - i, 1, 12), b = new Date(n.getFullYear(), n.getMonth() - i + 1, 0, 12); out.push({ v: rateOver(a, b > n ? n : b) || 0, label: i % 3 === 0 ? fmtDate(a, { month: 'short' }).replace(/\.$/, '') : '', aria: fmtDate(a, { month: 'long', year: 'numeric' }), cur: i === 0 }); }
-  return out;
+// ── Custom pattern editor (Pro) ──────────────────────────────────────
+let ED = null;
+const ED_MIN = [1, 0, 1, 0], ED_LAB = ['ph_in', 'ph_hold', 'ph_out', 'ph_rest'];
+function openEd(id) {
+  const c = id ? customs().find(x => x.id === id) : null;
+  ED = { id: c ? c.id : '', name: c ? c.name : '', ph: c ? c.ph.slice() : [4, 2, 6, 0] };
+  UI.sheet({ title: t(c ? 'edit_pat' : 'new_pat'), body: '<div id="ed-body"></div>', foot: '<button class="btn btn-primary" data-act="ed-save">' + esc(t('save')) + '</button>' });
+  paintEd();
 }
-
-const TOOL = {
-  defaults: () => ({ habits: [], log: {}, notes: {}, weekStart: -1, lastVisit: '' }),
-  migrate(tool, from) {
-    const d = TOOL.defaults(), o = Object.assign(d, tool && typeof tool === 'object' ? tool : {});
-    o.habits = (Array.isArray(o.habits) ? o.habits : []).filter(h => h && h.id && typeof h.name === 'string').map((h, i) => ({
-      id: String(h.id), name: String(h.name).slice(0, 40), icon: HICON[h.icon] ? h.icon : 'check',
-      color: /^#[0-9a-fA-F]{6}$/.test(h.color) ? h.color : COLORS[i % COLORS.length],
-      days: (h.days & 127) || 127, target: clamp(h.target | 0 || 1, 1, 99), unit: String(h.unit || '').slice(0, 16),
-      created: /^\d{4}-\d\d-\d\d$/.test(h.created) ? h.created : todayKey(), archived: !!h.archived,
-      rem: { on: !!(h.rem && h.rem.on), h: clamp((h.rem && h.rem.h) | 0, 0, 23), m: clamp((h.rem && h.rem.m) | 0, 0, 59) },
-      slot: clamp(h.slot | 0, 0, 63),
-    }));
-    if (!o.log || typeof o.log !== 'object') o.log = {};
-    if (!o.notes || typeof o.notes !== 'object') o.notes = {};
-    const used = new Set();
-    o.habits.forEach(h => { if (!h.slot || used.has(h.slot)) { h.slot = 0; for (let s = 1; s <= 63; s++) if (!used.has(s)) { h.slot = s; break; } } used.add(h.slot); });
-    return o;
-  },
-  validateImport: tool => !!(tool && Array.isArray(tool.habits) && tool.log && typeof tool.log === 'object' && tool.habits.every(h => h && h.id && typeof h.name === 'string')),
-  syncReminders() { S.tool.habits.forEach(syncHabitReminder); },
-  onBoot() { MEMO.clear(); const lv = S.tool.lastVisit; TD.welcome = !!lv && daysBetween(pkey(lv), today()) >= 3; S.tool.lastVisit = todayKey(); TD.sel = todayKey(); },
-  onNewDay() { TD.sel = todayKey(); MEMO.clear(); },
-  onGrant() { MEMO.clear(); },
-  afterOnboarding() { UI.refresh(); },
-  settingsHtml() {
-    const w = S.tool.weekStart;
-    return '<div class="sec-h">' + esc(t('tab_habits')) + '</div><div class="group"><label class="row"><span class="ri">' + icon('cal', 20) + '</span><span class="rt"><span class="rl">' + esc(t('week_starts')) + '</span></span>' +
-      '<select class="inp" data-change="week-start" aria-label="' + esc(t('week_starts')) + '">' +
-      [[-1, t('auto')], [1, weekdayName(1, 'long')], [0, weekdayName(0, 'long')], [6, weekdayName(6, 'long')]].map(o => '<option value="' + o[0] + '"' + (o[0] === (w === 0 || w === 1 || w === 6 ? w : -1) ? ' selected' : '') + '>' + esc(o[1]) + '</option>').join('') + '</select></label></div>';
-  },
-  csv() {
-    const q = v => { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
-    const rows = [['habit', 'date', 'count', 'goal', 'done', 'note']];
-    S.tool.habits.forEach(h => {
-      const L = S.tool.log[h.id] || {}, N = S.tool.notes[h.id] || {};
-      Object.keys(Object.assign({}, L, N)).sort().forEach(k => rows.push([h.name, k, L[k] || 0, h.target || 1, (L[k] || 0) >= (h.target || 1) ? 1 : 0, N[k] || '']));
-    });
-    return rows.map(r => r.map(q).join(',')).join('\n') + '\n';
-  },
-  screens: {
-    today: {
-      title: () => TD.sel === todayKey() ? t('tab_today') : fmtDate(pkey(TD.sel), { weekday: 'long' }),
-      subtitle: () => fmtDate(pkey(TD.sel), { weekday: TD.sel === todayKey() ? 'long' : undefined, day: 'numeric', month: 'long' }),
-      actions: () => [{ icon: 'plus', label: t('new_habit'), act: 'new-habit', tint: true }],
-      render(el) {
-        if (!TD.sel) TD.sel = todayKey();
-        const act = HB.active();
-        if (!act.length) { el.innerHTML = UI.empty({ art: ART.ob1, title: t('empty_t'), body: t('empty_b'), cta: t('new_habit'), act: 'new-habit' }) + suggestionsHtml(); return; }
-        const d = pkey(TD.sel), due = act.filter(h => HB.sched(h, d)), later = act.filter(h => !HB.sched(h, d));
-        el.innerHTML = weekStripHtml() + (TD.sel !== todayKey() ? '<div class="backtoday"><button class="btn btn-secondary" data-act="to-today">' + icon('back', 18, 'flip') + esc(t('back_today')) + '</button></div>' : '') +
-          summaryHtml() + '<div class="hlist">' + due.map(h => rowHtml(h, TD.sel)).join('') + '</div>' +
-          (later.length ? '<button class="collapse" data-act="toggle-later" aria-expanded="' + TD.later + '">' + icon('chev', 18) + esc(t('not_today')) + ' · ' + fmtNum(later.length) + '</button>' +
-            (TD.later ? '<div class="hlist later">' + later.map(h => rowHtml(h, TD.sel)).join('') + '</div>' : '') : '');
-      },
-    },
-    habits: {
-      title: () => t('tab_habits'),
-      actions: () => [{ icon: 'plus', label: t('new_habit'), act: 'new-habit', tint: true }],
-      render(el) {
-        const act = HB.active(), arc = HB.archived();
-        if (!act.length && !arc.length) { el.innerHTML = UI.empty({ icon: 'list', title: t('habits_empty_t'), body: t('habits_empty_b'), cta: t('new_habit'), act: 'new-habit' }); return; }
-        let h = isPro() ? '' : '<div class="planbar">' + icon('gem', 20) + '<span>' + esc(t('free_limit', { n: act.length, max: FREE_LIMIT })) + '</span><button class="btn btn-primary" data-act="go-pro" data-arg="limit_t">' + esc(t('go_pro')) + '</button></div>';
-        if (act.length) h += '<div class="sec-h"><span>' + esc(t('active_h')) + '</span><span style="text-transform:none;letter-spacing:0;font-weight:650">' + esc(t('reorder_hint')) + '</span></div><div class="group" id="mlist">' +
-          act.map(x => '<div class="mrow" data-hid="' + x.id + '"><button class="drag" data-drag="1" aria-label="' + esc(t('move', { name: x.name })) + '">' + icon('grip', 20) + '</button>' +
-            '<button class="hmain" data-act="open-habit" data-arg="' + x.id + '">' + hic(x) + '<span class="htx"><span class="hnm">' + esc(x.name) + '</span><span class="hmt"><span>' + esc(schedText(x)) + '</span>' + (x.rem && x.rem.on ? '<span class="fl">' + icon('bell', 13) + esc(fmtTime(x.rem.h, x.rem.m)) + '</span>' : '') + '</span></span>' + icon('chev', 20, 'chev flip') + '</button></div>').join('') + '</div>';
-        if (arc.length) {
-          h += '<button class="collapse" data-act="toggle-arc" aria-expanded="' + !!TD.arc + '">' + icon('chev', 18) + esc(t('archived')) + ' · ' + fmtNum(arc.length) + '</button>';
-          if (TD.arc) h += '<div class="group">' + arc.map(x => '<div class="mrow"><button class="hmain" data-act="open-habit" data-arg="' + x.id + '">' + hic(x) + '<span class="htx"><span class="hnm">' + esc(x.name) + '</span><span class="hmt">' + esc(t('checkins') + ': ' + fmtNum(HB.total(x))) + '</span></span></button>' +
-            '<button class="icon-btn" data-act="unarchive" data-arg="' + x.id + '" aria-label="' + esc(t('unarchive')) + '">' + icon('restore') + '</button><button class="icon-btn" style="color:var(--danger)" data-act="del-habit" data-arg="' + x.id + '" aria-label="' + esc(t('delete')) + '">' + icon('trash') + '</button></div>').join('') + '</div>';
-        }
-        el.innerHTML = h;
-        initDrag($('#mlist'));
-      },
-    },
-    stats: {
-      title: () => t('tab_stats'),
-      render(el) {
-        const act = HB.active();
-        if (!act.length) { el.innerHTML = UI.empty({ icon: 'chart', title: t('stats_empty_t'), body: t('stats_empty'), cta: t('new_habit'), act: 'new-habit' }); return; }
-        const n = today(), from = addDays(n, -29);
-        let perfect = 0; for (let d = from; d <= n; d = addDays(d, 1)) { const s = dayStat(d); if (s.due && s.done === s.due) perfect++; }
-        const best = act.reduce((a, h) => { const b = HB.best(h); return b > a.v ? { v: b, h: h } : a; }, { v: 0, h: null });
-        let h = '<div class="tiles">' + tile(fmtPct(rateOver(from, n)), t('rate30')) + tile(fmtNum(act.reduce((a, x) => a + HB.total(x), 0)), t('checkins')) +
-          tile(fmtNum(best.v), t('best_streak')) + tile(fmtNum(perfect), t('perfect30')) + '</div>';
-        const days = []; for (let i = 13; i >= 0; i--) { const d = addDays(n, -i), s = dayStat(d); days.push({ v: s.due ? s.done / s.due : 0, label: weekdayName(d.getDay(), 'narrow'), aria: fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' }), cur: i === 0 }); }
-        h += '<div class="sec-h">' + esc(t('last14')) + '</div><div class="card card-pad">' + barsHtml(days) + '</div>';
-        const adv = '<div class="sec-h" style="margin-top:0">' + esc(t('by_weekday')) + '</div>' + barsHtml(weekdayPattern(act)) +
-          '<div class="sec-h">' + esc(t('months12')) + '</div>' + barsHtml(monthsTrend()) +
-          '<div class="sec-h">' + esc(t('consistent')) + '</div>' + act.map(x => ({ h: x, r: HB.rate(x, from, n) || 0 })).sort((a, b) => b.r - a.r).slice(0, 5)
-            .map(o => '<div class="rank" style="--hc:' + o.h.color + '">' + hic(o.h, 18) + '<span class="rn">' + esc(o.h.name) + '</span><span class="pct">' + fmtPct(o.r) + '</span></div>').join('');
-        h += '<div class="sec-h"><span>' + esc(t('advanced')) + '</span>' + (isPro() ? '' : '<span class="badge">Pro</span>') + '</div>' + (isPro() ? '<div class="card card-pad">' + adv + '</div>' : lockCard(adv, 'advanced_b'));
-        h += '<div class="sec-h">' + esc(t('per_habit')) + '</div><div class="group">' + act.map(x => { const r = HB.rate(x, from, n); return '<button class="row" data-act="open-habit" data-arg="' + x.id + '" style="--hc:' + x.color + '">' + hic(x, 20) +
-          '<span class="rt"><span class="rl">' + esc(x.name) + '</span><span class="mini"><i style="width:' + Math.round((r || 0) * 100) + '%"></i></span><span class="rs">🔥 ' + fmtNum(HB.streak(x)) + ' · ' + esc(t('best')) + ' ' + fmtNum(HB.best(x)) + '</span></span><span class="pct">' + fmtPct(r) + '</span></button>'; }).join('') + '</div>';
-        el.innerHTML = h;
-      },
-    },
-    habit: {
-      title: p => { const h = HB.get(p.id); return h ? h.name : ''; },
-      actions: p => HB.get(p.id) ? [{ icon: 'edit', label: t('edit_habit'), act: 'edit-habit', arg: p.id }] : [],
-      onLeave: () => Ads.naturalBreak('habit_detail'),
-      render(el, p) {
-        const h = HB.get(p.id);
-        if (!h) { el.innerHTML = UI.empty({ icon: 'info', title: t('habits_empty_t') }); return; }
-        const n = today(), r30 = HB.rate(h, addDays(n, -29), n);
-        let x = '<div class="hero" style="--hc:' + h.color + '">' + hic(h, 32) + '<div style="min-width:0"><h2>' + esc(schedText(h)) + '</h2><p>' + esc(t('since', { date: fmtDate(HB.start(h), { day: 'numeric', month: 'long', year: 'numeric' }) })) + (h.archived ? ' · ' + esc(t('archived')) : '') + '</p></div></div>' +
-          '<div class="tiles">' + tile('🔥 ' + fmtNum(HB.streak(h)), t('cur_streak')) + tile(fmtNum(HB.best(h)), t('best_streak')) + tile(fmtPct(r30), t('rate30')) + tile(fmtNum(HB.total(h)), t('checkins')) + '</div>' +
-          '<div class="sec-h">' + esc(t('calendar')) + '</div><div class="card card-pad">' + calHtml(h) + '<p class="fine" style="text-align:start">' + esc(t('cal_hint')) + '</p></div>' +
-          '<div class="sec-h">' + esc(t('trend12')) + '</div><div class="card card-pad">' + barsHtml(weeksTrend(h), h.color) + '</div>';
-        const adv = '<div class="sec-h" style="margin-top:0">' + esc(t('year_map')) + '</div>' + yearHtml(h) + '<div class="sec-h">' + esc(t('by_weekday')) + '</div>' + barsHtml(weekdayPattern([h]), h.color);
-        x += '<div class="sec-h"><span>' + esc(t('advanced')) + '</span>' + (isPro() ? '' : '<span class="badge">Pro</span>') + '</div>' + (isPro() ? '<div class="card card-pad">' + adv + '</div>' : lockCard(adv, 'advanced_b'));
-        const N = S.tool.notes[h.id] || {}, keys = Object.keys(N).sort().reverse().slice(0, 30);
-        x += '<div class="sec-h">' + esc(t('notes')) + '</div><div class="card card-pad">' + (keys.length ? '<ul class="notes">' + keys.map(k => '<li><b>' + esc(fmtDate(pkey(k), { weekday: 'short', day: 'numeric', month: 'long' })) + '</b><span>' + esc(N[k]) + '</span></li>').join('') + '</ul>' : '<p style="margin:0;color:var(--text-mute)">' + esc(t('no_notes')) + '</p>') + '</div>' +
-          '<div class="sec-h">' + esc(t('f_reminder')) + '</div><div class="group">' + sRow({ icon: 'bell', label: h.rem && h.rem.on ? fmtTime(h.rem.h, h.rem.m) : t('off'), sub: h.rem && h.rem.on ? schedText(h) : t('f_reminder_sub'), act: 'edit-habit', arg: h.id }) + '</div>';
-        el.innerHTML = x;
-        // Year heatmap opens on the most recent weeks (RTL scrolls the other way).
-        $$('.year', el).forEach(y => { y.scrollLeft = document.documentElement.dir === 'rtl' ? -y.scrollWidth : y.scrollWidth; });
-      },
-    },
-  },
+function paintEd() {
+  const el = $('#ed-body'); if (!el) return;
+  const nm = ($('#ed-name') || {}).value; if (nm != null) ED.name = nm;
+  const ph = bxFromCustom(ED.ph), cyc = bxCycle(ph);
+  el.innerHTML = '<label class="field"><span class="fl">' + esc(t('f_name')) + '</span><input class="inp" id="ed-name" maxlength="30" value="' + esc(ED.name) + '" placeholder="' + esc(ED.ph.join('-')) + '"></label>' +
+    ED.ph.map((v, i) => '<div class="edrow"><span class="fl">' + esc(t(ED_LAB[i])) + '</span><div class="stepper"><button data-act="ed-step" data-arg="' + i + ':-1" aria-label="−">' + icon('minus') + '</button><output aria-live="polite">' + fmtNum(v) + ' s</output><button data-act="ed-step" data-arg="' + i + ':1" aria-label="+">' + icon('plus') + '</button></div></div>').join('') +
+    '<p class="edsum">' + esc(t('cycle_s', { n: fmtNum(cyc / 10) })) + '</p>';
+}
+ACT['ed-step'] = el => { const a = el.dataset.arg.split(':'), i = +a[0]; ED.ph[i] = clamp(ED.ph[i] + (+a[1]), ED_MIN[i], 15); haptic('tap'); paintEd(); };
+ACT['new-pat'] = () => { if (!Pro.require('pro_custom_b')) return; if (customs().length >= MAXCUSTOM) { UI.toast(t('max_custom')); return; } openEd(''); };
+ACT['edit-pat'] = el => { if (!Pro.require('pro_custom_b')) return; openEd(el.dataset.arg); };
+ACT['ed-save'] = () => {
+  if (!ED) return;
+  const nm = (($('#ed-name') || {}).value || '').trim().slice(0, 30) || ED.ph.join('-');
+  if (ED.id) { const c = customs().find(x => x.id === ED.id); if (c) { c.name = nm; c.ph = ED.ph.slice(); } }
+  else { const c = { id: uid('c'), name: nm, ph: ED.ph.slice() }; S.tool.custom.push(c); S.tool.pat = c.id; }
+  persist(); UI.closeLayer(true); UI.refresh();
 };
-ACT['toggle-arc'] = () => { TD.arc = !TD.arc; UI.refresh(); };
-CHANGE['week-start'] = el => { S.tool.weekStart = +el.value; persist(); MEMO.clear(); UI.refresh(); };
-
-// Drag-to-reorder (grip handle; ArrowUp/ArrowDown on a focused grip also moves).
-function moveHabit(id, to) {
-  const act = HB.active(), from = act.findIndex(h => h.id === id); if (from < 0 || to === from) return;
-  const [m] = act.splice(from, 1); act.splice(clamp(to, 0, act.length), 0, m);
-  S.tool.habits = act.concat(HB.archived()); persist(); haptic('tap');
-}
-function initDrag(list) {
-  if (!list) return;
-  list.addEventListener('keydown', e => {
-    const g = e.target.closest('.drag'); if (!g || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
-    e.preventDefault(); const id = g.closest('.mrow').dataset.hid, i = HB.active().findIndex(h => h.id === id);
-    moveHabit(id, i + (e.key === 'ArrowUp' ? -1 : 1)); UI.refresh(); const ng = $('.mrow[data-hid="' + id + '"] .drag'); if (ng) ng.focus();
-  });
-  list.addEventListener('pointerdown', e => {
-    const g = e.target.closest('.drag'); if (!g) return;
-    e.preventDefault();
-    const row = g.closest('.mrow'), rows = $$('.mrow', list), i0 = rows.indexOf(row), hgt = row.getBoundingClientRect().height, y0 = e.clientY;
-    let cur = i0;
-    row.classList.add('dragging'); try { g.setPointerCapture(e.pointerId); } catch (x) {}
-    const mv = ev => {
-      const dy = ev.clientY - y0; row.style.transform = 'translateY(' + dy + 'px)';
-      const tgt = clamp(i0 + Math.round(dy / hgt), 0, rows.length - 1);
-      if (tgt !== cur) { cur = tgt; haptic('tap'); rows.forEach((r, i) => { if (r === row) return; let s = 0; if (i0 < cur && i > i0 && i <= cur) s = -hgt; if (i0 > cur && i < i0 && i >= cur) s = hgt; r.style.transform = s ? 'translateY(' + s + 'px)' : ''; }); }
-    };
-    const up = () => {
-      g.removeEventListener('pointermove', mv); g.removeEventListener('pointerup', up); g.removeEventListener('pointercancel', up);
-      row.classList.remove('dragging'); rows.forEach(r => { r.style.transform = ''; });
-      if (cur !== i0) { moveHabit(row.dataset.hid, cur); UI.refresh(); }
-    };
-    g.addEventListener('pointermove', mv); g.addEventListener('pointerup', up); g.addEventListener('pointercancel', up);
-  });
-}
+ACT['del-pat'] = el => {
+  const id = el.dataset.arg, prev = clone(S.tool);
+  S.tool.custom = customs().filter(c => c.id !== id); if (S.tool.pat === id) S.tool.pat = 'box'; persist(); UI.refresh();
+  UI.toast(t('pat_deleted'), { action: t('undo'), onAction: () => { S.tool = prev; persist(); UI.refresh(); } });
+};
+const _bxPause = window.onAppPause;
+window.onAppPause = function () { pauseRun(false); if (_bxPause) _bxPause(); };
 //@@END TOOL_CORE
 // ── Boot ─────────────────────────────────────────────────────────────
 (function boot() {

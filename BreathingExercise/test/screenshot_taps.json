@@ -1,0 +1,88 @@
+{
+  "_comment": "BreathingExercise (utility shell) screenshot capture - real-use states, never Settings/paywall/onboarding. _setup_taps seeds ~60 days of sessions, Pro + ad-free (no banner/lock overlays) via window.shellLoadState and defines bxSet() (theme/accent/pattern/length/tab, optionally starts a session at a given decisecond so the circle is mid-breath). Phone 7 + tablet_7 2 + tablet_10 2 = 11 distinct states; headlines in metadata/screenshot_headlines*.json describe exactly these screens.",
+  "_readiness_expr": "typeof UI !== 'undefined' && typeof window.shellLoadState === 'function' && typeof TOOL !== 'undefined' && typeof BX_PRESETS !== 'undefined'",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){var now=new Date(),log={},hist=[];function r(i,k){return Math.abs(Math.sin(i*12.9898+k*78.233)*43758.5453%1);}\nfunction dk(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}\nfor(var i=0;i<75;i++){if(i>9&&r(i,1)<0.35)continue;var d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i,12);var ds=[1920,3040,5700,900,3300,1900,6000][Math.floor(r(i,2)*7)];log[dk(d)]={d:ds,n:1+Math.floor(r(i,3)*2)};hist.push({t:new Date(now.getFullYear(),now.getMonth(),now.getDate()-i,8+Math.floor(r(i,4)*12),Math.floor(r(i,5)*60)).getTime(),p:['box','p478','coh','sigh','calm'][Math.floor(r(i,6)*5)],name:'',d:ds});}\nhist=hist.filter(function(h){return h.t<Date.now();}).sort(function(a,b){return b.t-a.t;});\nvar s={saveVersion:1,created:Date.now()-80*864e5,sessions:12,lastSeen:Date.now()-3600e3,onboarded:true,removeAds:true,pro:true,proTrialUntil:0,settings:{theme:'light',accent:'sea',lang:'',textSize:1,haptics:false,reduceMotion:false,daily:{on:false,h:19,m:0}},ads:{last:0,breaks:0},tool:{pat:'box',mins:5,tone:false,voice:false,custom:[],log:log,hist:hist}};\nwindow.bxSet=function(o){UI.closeAll();if(RUN.on){cancelAnimationFrame(RUN.raf);RUN.on=false;}RUN.done=false;S.settings.theme=o.theme||'light';S.settings.accent=o.accent||'sea';S.settings.lang='';S.tool.pat=o.pat||'box';S.tool.mins=o.mins||5;persist();applyLang();applyTheme();UI.buildNav();UI.tab(o.tab||'breathe');if(o.run){startRun();RUN.el=o.run;}\nsetTimeout(function(){var v=document.getElementById('view');if(!v||!o.scroll)return;var e=document.querySelector(o.scroll);if(e)v.scrollTop+=e.getBoundingClientRect().top-v.getBoundingClientRect().top-70;},500);return 'ok';};\nreturn window.shellLoadState(s);})();",
+      1500
+    ]
+  ],
+  "01_box": [
+    [
+      "js",
+      "bxSet({\"theme\": \"light\", \"accent\": \"sea\", \"pat\": \"box\", \"run\": 20});'ok';",
+      1500
+    ]
+  ],
+  "02_478": [
+    [
+      "js",
+      "bxSet({\"theme\": \"dark\", \"accent\": \"sky\", \"pat\": \"p478\", \"run\": 95});'ok';",
+      1500
+    ]
+  ],
+  "03_coherent": [
+    [
+      "js",
+      "bxSet({\"theme\": \"light\", \"accent\": \"sand\", \"pat\": \"coh\", \"run\": 20});'ok';",
+      1500
+    ]
+  ],
+  "04_sigh": [
+    [
+      "js",
+      "bxSet({\"theme\": \"dark\", \"accent\": \"lilac\", \"pat\": \"sigh\", \"run\": 28});'ok';",
+      1500
+    ]
+  ],
+  "05_calm": [
+    [
+      "js",
+      "bxSet({\"theme\": \"light\", \"accent\": \"dusk\", \"pat\": \"calm\", \"run\": 70});'ok';",
+      1500
+    ]
+  ],
+  "06_progress": [
+    [
+      "js",
+      "bxSet({\"theme\": \"light\", \"accent\": \"sea\", \"tab\": \"progress\"});'ok';",
+      1500
+    ]
+  ],
+  "07_history": [
+    [
+      "js",
+      "bxSet({\"theme\": \"dark\", \"accent\": \"dusk\", \"tab\": \"progress\", \"scroll\": \".lockcard,.hist\"});'ok';",
+      1500
+    ]
+  ],
+  "tablet_7_01_box": [
+    [
+      "js",
+      "bxSet({\"theme\": \"light\", \"accent\": \"sky\", \"pat\": \"box\", \"run\": 60});'ok';",
+      1500
+    ]
+  ],
+  "tablet_7_02_progress": [
+    [
+      "js",
+      "bxSet({\"theme\": \"dark\", \"accent\": \"sea\", \"tab\": \"progress\"});'ok';",
+      1500
+    ]
+  ],
+  "tablet_10_01_patterns": [
+    [
+      "js",
+      "bxSet({\"theme\": \"light\", \"accent\": \"sea\", \"tab\": \"patterns\"});'ok';",
+      1500
+    ]
+  ],
+  "tablet_10_02_478": [
+    [
+      "js",
+      "bxSet({\"theme\": \"light\", \"accent\": \"lilac\", \"pat\": \"p478\", \"run\": 55});'ok';",
+      1500
+    ]
+  ]
+}

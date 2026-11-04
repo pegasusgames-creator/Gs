@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_breathingexercise_patterns.py",
+    "breathing pattern table (phases sum to the stated cycle, name matches timings, no zero phase), session cycle/total-time maths over every length, custom-pattern conversion, streak maths and phase strings in 13 languages (JS vs independent Python reference)"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      238,
+      245,
+      242
+    ],
+    "bg_top_right": [
+      220,
+      239,
+      234
+    ],
+    "bg_bottom": [
+      27,
+      110,
+      99
+    ],
+    "text_primary": [
+      20,
+      48,
+      43
+    ],
+    "text_accent": [
+      27,
+      110,
+      99
+    ],
+    "text_subtle": [
+      64,
+      96,
+      90
+    ],
+    "footer_tint": [
+      37,
+      133,
+      119
+    ],
+    "mood": "wellness-calm",
+    "layout_archetype": "I",
+    "mascot_pattern": "M4",
+    "voice": "V5",
+    "texture": "T2"
+  }
+}

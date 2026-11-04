@@ -1,42 +1,22 @@
 # BreathingExercise Identity
 
-- **Category**: wellness
-- **Layout archetype**: I (toolbox / direct tool)
-- **Mascot pattern**: M4 (spirit-of-the-app abstract motif (particles, flow))
-- **Voice**: V5 (calm / zen)
-- **Texture**: T2 (soft glassmorphism)
+Utility-track app on the utility shell (docs/UTILITY_SHELL.md), built from HabitTracker's shell.
+
+- **Category**: wellness / breathing timer - Google HEALTH_AND_FITNESS, Apple HEALTH_FITNESS
+- **Layout archetype**: I (toolbox / direct tool) - opens on the breathing circle, three tabs: Breathe · Patterns · Progress
+- **Mascot pattern**: M4 (abstract motif: the breathing orb with a guide ring)
+- **Voice**: V5 (calm / zen) - plain, quiet wording ("may help you relax"), no medical or anxiety-treatment claims
+- **Texture**: T2 (soft cards, seafoam light)
 - **Mood string**: wellness-calm
 
-The app should feel like: quiet and contemplative; the app helps the user slow down.
+Seafoam Daylight (`#EEF5F2`, accent deep teal `#1B6E63`) with a free dark theme; Sky is a free accent, Dusk / Sand / Lilac are Pro accents
+(24-hour rewarded trial). Distinct from HabitTracker's violet and BloodPressureLog's navy.
 
-## Anti-pattern audit (APP_ARCHETYPES.md §5)
-
-This file was auto-generated during the 2026-04-30 portfolio archetype
-assignment pass. The four archetypes above were chosen so the app does
-NOT default to the template signature (A/M0/V1/T1).
-
-When the app's `game.html` is next touched (or built fresh), audit the
-in-app design against the §5 anti-patterns:
-
-- [ ] Center-aligned everything → use offset weight
-- [ ] Same SVG icon set as other apps → vary icon family per app
-- [ ] All-caps headlines on every screen → mixed case for body
-- [ ] Generic templated currency icon → make it match the app theme
-- [ ] Identical button shapes / sizes / spacings → vary
-- [ ] Symmetric vertical column layout → break with side panels / FAB
-- [ ] Generic "Level Complete!" celebration → app-specific phrasing
-- [ ] Same loading / transition patterns → vary
-- [ ] Identical settings screen → reorder, rename, add app-specific options
-
-If 3+ of the above are hit, redesign before the next ship.
-
-## Phase 8 self-check
-
-Before declaring this app release-ready, all four of:
-
-1. Side-by-side test (vs other shipped apps, do they look like different products?)
-2. Voice-specificity test (does the menu copy reflect this app's voice archetype?)
-3. Identity-element test (a single recognizable visual element)
-4. Anonymous-screenshot test (could a user identify this app without title/name?)
-
-must pass. See APP_ARCHETYPES.md §8.
+## What the app does
+- A large inhale / hold / exhale circle (rAF-timed, honours reduced motion), optional soft synthesized tones (WebAudio), spoken cues
+  (speechSynthesis, in the app language) and haptic ticks. Screen kept awake while a session runs (best-effort Wake Lock).
+- Patterns: Box 4-4-4-4, 4-7-8, Coherent 5.5, Physiological sigh 2-1-6, Calm 4-6; Pro adds custom patterns (inhale / hold / exhale / rest).
+- Sessions of 1, 2, 3, 5 minutes (free) or 10, 15, 20, 30 (Pro) always finish on a full breath: cycles = floor(length / cycle), at least 1.
+- Streak, best streak, minutes logged, 14-day chart, calendar; Pro: past months, 12-month chart, per-pattern totals, session history.
+- Optional gentle daily reminder (shell slot 0, permission asked in context). Local-only data, backup/restore.
+- `scripts/check_breathingexercise_patterns.py` runs the pure `BX` block under node against a Python reference.

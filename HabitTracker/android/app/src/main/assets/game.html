@@ -908,6 +908,20 @@ const Reminders = {
 };
 window.onNotificationPermissionResult = function (g) { const r = Reminders._res; Reminders._res = null; if (r) r(!!g); };
 
+// ── Screen: keep the display awake during a timer / guided session ──
+// Native flag first (reliable in the WebView), browser wake lock as fallback.
+const Screen = {
+  _lock: null,
+  keepOn(on) {
+    const A = bridge();
+    if (A && typeof A.setKeepScreenOn === 'function') { callA('setKeepScreenOn', !!on); return; }
+    try {
+      if (on && navigator.wakeLock && !this._lock) navigator.wakeLock.request('screen').then(l => { this._lock = l; l.addEventListener('release', () => { this._lock = null; }); }).catch(() => {});
+      else if (!on && this._lock) { this._lock.release(); this._lock = null; }
+    } catch (e) {}
+  },
+};
+
 // ── Data: local-only; export = JSON text via the share sheet / clipboard ──
 const Data = {
   payload() {

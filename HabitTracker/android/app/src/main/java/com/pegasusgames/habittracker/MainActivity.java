@@ -850,6 +850,16 @@ public class MainActivity extends Activity {
             NotificationHelper.armReminder(MainActivity.this, slot);
         }
 
+        // Keep the display awake while a timer / guided session runs
+        // (FLAG_KEEP_SCREEN_ON needs no permission; JS turns it off after).
+        @JavascriptInterface
+        public void setKeepScreenOn(final boolean on) {
+            runOnUiThread(() -> {
+                if (on) getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                else getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            });
+        }
+
         @JavascriptInterface
         public void cancelReminder(int slot) {
             NotificationHelper.removeReminder(MainActivity.this, slot);
