@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_billsplit_math.py",
+    "itemised split maths exact: largest-remainder rounding, per-person totals sum to the bill to the cent, tax/tip rounding, amount/percent parsing (JS vs independent Python Decimal/Fraction reference)"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      240,
+      246,
+      241
+    ],
+    "bg_top_right": [
+      220,
+      240,
+      227
+    ],
+    "bg_bottom": [
+      23,
+      113,
+      74
+    ],
+    "text_primary": [
+      20,
+      38,
+      28
+    ],
+    "text_accent": [
+      23,
+      113,
+      74
+    ],
+    "text_subtle": [
+      64,
+      89,
+      74
+    ],
+    "footer_tint": [
+      27,
+      127,
+      83
+    ],
+    "mood": "tool-clean",
+    "layout_archetype": "I",
+    "mascot_pattern": "M0",
+    "voice": "V5",
+    "texture": "T2"
+  }
+}

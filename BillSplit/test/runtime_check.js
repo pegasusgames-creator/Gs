@@ -256,7 +256,8 @@ const ok = (cond, msg) => { console.log(`  ${cond ? '✓' : '✗'} ${msg}`); if 
   await ev(() => { S.settings.lang = 'ar'; persist(); applyLang(); UI.tab('split'); });
   ok(await ev(() => document.documentElement.dir) === 'rtl', 'Arabic switches the layout to RTL');
   ok(await ev(() => ['one', 'two', 'few', 'many', 'other'].every(k => 'people_n_' + k in window.GAME_I18N.ar)), 'Arabic has all plural forms for people');
-  ok(await ev(() => document.querySelector('[data-app-version]').textContent.trim()) === '1.0.0', 'data-app-version present');
+  { const vn = (require('fs').readFileSync(require('path').join(__dirname, '../android/app/build.gradle'), 'utf8').match(/versionName "([^"]+)"/) || [])[1];
+    ok(await ev(() => document.querySelector('[data-app-version]').textContent.trim()) === vn, 'data-app-version matches versionName'); }
 
   ok(errs.length === 0, 'no page errors' + (errs.length ? ': ' + errs.slice(0, 3).join(' | ') : ''));
   await browser.close();

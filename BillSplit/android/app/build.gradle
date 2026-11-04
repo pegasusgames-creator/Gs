@@ -8,7 +8,7 @@ android {
         minSdk 24
         targetSdk 36
         versionCode 13
-        versionName "1.0.0"
+        versionName "2.0.0"
     }
     signingConfigs { release { if (kp['storeFile']) { storeFile rootProject.file(kp['storeFile']); storePassword kp['storePassword']; keyAlias kp['keyAlias']; keyPassword kp['keyPassword'] } } }
     buildTypes {

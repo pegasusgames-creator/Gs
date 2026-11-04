@@ -1,0 +1,88 @@
+{
+  "_comment": "BillSplit (utility shell) screenshot capture - real-use splitting states, never Settings/paywall/onboarding. _setup_taps seeds three saved groups, three history bills and Pro + ad-free through window.shellLoadState (no reload) and defines bsSet(), which builds a scenario bill, sets theme/accent and navigates with UI.tab/UI.go. Phone 7 + tablet_7 2 + tablet_10 2 = 11 distinct states; headlines in metadata/screenshot_headlines*.json describe exactly these screens.",
+  "_readiness_expr": "typeof UI !== 'undefined' && typeof window.shellLoadState === 'function' && typeof TOOL !== 'undefined' && typeof SM !== 'undefined'",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){var s={saveVersion:1,created:Date.now()-30*864e5,sessions:9,lastSeen:Date.now()-3600e3,onboarded:true,removeAds:true,pro:true,proTrialUntil:0,settings:{theme:'light',accent:'mint',lang:'',textSize:1,haptics:true,reduceMotion:false,daily:{on:false,h:20,m:0}},ads:{last:0,breaks:0},tool:TOOL.defaults()};\nvar BILLS={dinner:{name:'Friday dinner',people:['Ana','Ben','Cleo','Dev'],items:[['Margherita',1450,{a:1}],['Pasta',1600,{b:1}],['Salad',950,{c:1}],['Burger',1525,{d:1}],['Wine',3600,{a:1,b:1,c:1,d:1}],['Fries',700,{a:2,b:1,d:1}]],tax:['pct','8.875','prop'],tip:['pct','18','prop','post']},trip:{name:'Ski weekend',people:['Mia','Noah','Ola'],items:[['Lift passes',24000,{a:1,b:1,c:1}],['Cabin',48000,{a:1,b:1,c:1}],['Groceries',8650,{a:1,b:1,c:1}],['Fondue night',9400,{a:2,b:2,c:1}]],tax:['amt','0','even'],tip:['pct','10','even','pre']},brunch:{name:'Sunday brunch',people:['Sam','Tia'],items:[['Shakshuka',1650,{a:1}],['Pancakes',1400,{b:1}],['Coffee pot',900,{a:1,b:1}],['Juice',600,{b:1}]],tax:['pct','7','prop'],tip:['pct','20','prop','pre']}};\nfunction mk(b,cc){var ids=['a','b','c','d','e'];return {id:'b'+b.name,name:b.name,savedId:'',people:b.people.map(function(n,i){return {id:ids[i],name:n}}),items:b.items.map(function(it,i){return {id:'i'+i,name:it[0],c:it[1],w:it[2]}}),tax:{mode:b.tax[0],txt:b.tax[1]==='0'?'':b.tax[1],dist:b.tax[2]},tip:{mode:b.tip[0],txt:b.tip[1],dist:b.tip[2],base:b.tip[3]||'pre'}};}\ns.tool.cc='USD';s.tool.cur=mk(BILLS.dinner);\ns.tool.groups=[{id:'g1',name:'Flatmates',members:['Ana','Ben','Cleo']},{id:'g2',name:'Climbing club',members:['Dev','Eli','Fay','Gus']},{id:'g3',name:'Family',members:['Mum','Dad','Jo','Kit']}];\ns.tool.history=[['dinner','USD',1],['trip','EUR',4],['brunch','USD',9]].map(function(x,i){var b=mk(BILLS[x[0]]);return {id:'h'+i,at:Date.now()-x[2]*864e5,name:b.name,cc:x[1],total:0,bill:b};});\nwindow.bsSet=function(o){UI.closeAll();S.settings.theme=o.theme||'light';S.settings.accent=o.accent||'mint';S.settings.lang='';S.tool.cc=o.cc||'USD';S.tool.cur=mk(BILLS[o.bill||'dinner']);TD.open=o.open||{};persist();applyLang();applyTheme();UI.buildNav();UI.tab(o.tab||'split');if(o.go==='bill')UI.go('bill',{id:o.id||'h0'});setTimeout(function(){var v=document.getElementById('view');if(!v||!o.scroll)return;var sel={items:'.irow',tt:'.tt',res:'#res .sec-h',cards:'.pcard'}[o.scroll];var e=document.querySelector(sel);if(e)v.scrollTop+=e.getBoundingClientRect().top-v.getBoundingClientRect().top-10;},500);return 'ok';};\nreturn window.shellLoadState(s);})();",
+      1500
+    ]
+  ],
+  "01_split_total": [
+    [
+      "js",
+      "bsSet({\"bill\": \"dinner\", \"theme\": \"light\", \"accent\": \"mint\"});'ok';",
+      1600
+    ]
+  ],
+  "02_items_assigned": [
+    [
+      "js",
+      "bsSet({\"bill\": \"dinner\", \"theme\": \"light\", \"accent\": \"ocean\", \"scroll\": \"items\"});'ok';",
+      1600
+    ]
+  ],
+  "03_custom_shares": [
+    [
+      "js",
+      "bsSet({\"bill\": \"trip\", \"cc\": \"EUR\", \"theme\": \"dark\", \"accent\": \"mint\", \"scroll\": \"cards\"});'ok';",
+      1600
+    ]
+  ],
+  "04_tax_tip": [
+    [
+      "js",
+      "bsSet({\"bill\": \"dinner\", \"theme\": \"light\", \"accent\": \"plum\", \"scroll\": \"tt\"});'ok';",
+      1600
+    ]
+  ],
+  "05_who_pays_what": [
+    [
+      "js",
+      "bsSet({\"bill\": \"brunch\", \"theme\": \"light\", \"accent\": \"amber\", \"scroll\": \"res\"});'ok';",
+      1600
+    ]
+  ],
+  "06_saved_groups": [
+    [
+      "js",
+      "bsSet({\"tab\": \"groups\", \"theme\": \"light\", \"accent\": \"rose\"});'ok';",
+      1600
+    ]
+  ],
+  "07_bill_history": [
+    [
+      "js",
+      "bsSet({\"tab\": \"history\", \"theme\": \"dark\", \"accent\": \"ocean\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_01_split": [
+    [
+      "js",
+      "bsSet({\"bill\": \"trip\", \"cc\": \"EUR\", \"theme\": \"light\", \"accent\": \"mint\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_02_totals": [
+    [
+      "js",
+      "bsSet({\"bill\": \"dinner\", \"theme\": \"dark\", \"accent\": \"plum\", \"scroll\": \"cards\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_01_tax_tip": [
+    [
+      "js",
+      "bsSet({\"bill\": \"brunch\", \"theme\": \"light\", \"accent\": \"rose\", \"scroll\": \"tt\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_02_history": [
+    [
+      "js",
+      "bsSet({\"tab\": \"history\", \"theme\": \"light\", \"accent\": \"amber\"});'ok';",
+      1600
+    ]
+  ]
+}
