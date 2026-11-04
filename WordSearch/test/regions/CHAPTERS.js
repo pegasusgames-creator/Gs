@@ -1,0 +1,1 @@
+  const _NAMES=['6×6 · First Words','7×7 · Diagonals','8×8 · Backwards','9×9 · All Eight Ways','10×10 · Explorer','11×11 · Wanderer','12×12 · Wordsmith','13×13 · Scholar','14×14 · Lexicon','15×15 · Grand Search'];

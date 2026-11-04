@@ -1,0 +1,31 @@
+:root{
+  /* Daylight = "Heather": dusk-lilac page, warm paper board, plum ink.
+     Own family — no sibling pairs a heather-lilac page with plum
+     (Sudoku is blue-lavender + indigo, BlockPuzzle rose-pink). */
+  --bg:#efe6f0; --app-bg:#efe6f0; --surface:#fdf9fd;
+  --text:#2a1f31; --text-mute:#5b4c64;
+  --border:rgba(42,31,49,0.14);
+  --g-play:linear-gradient(135deg,#9a4a94,#6a3b9c); --on-accent:#ffffff;
+  --btn-neutral-bg:#e6d9e8;
+  --menu-tile-bg:#f8f1f8; --menu-tile-border:#dccbe0; --menu-tile-fg:#6b2f6e;
+  --accent:#8b3f87; --accent-dim:#6b2f6e;
+  --ws-hint:#c2185b;
+  /* board roles (themes recolour these): selection, six highlighter inks,
+     paper, letter ink, grid hairline */
+  --sel:#b06ab8; --f1:#ffcf5a; --f2:#7fd1bb; --f3:#f59fb3;
+  --board:#fffcf8; --ink:#2a1f31; --grid:#efe2ee;
+  --f4:#8fbcf0; --f5:#f5b27f; --f6:#bfa0ea;
+}
+body.midnight{
+  --bg:#16111b; --app-bg:#16111b; --surface:#231b2a;
+  --text:#f0e8f4; --text-mute:#b6a6c0;
+  --border:rgba(240,232,244,0.13);
+  --on-accent:#ffffff;
+  --btn-neutral-bg:#30263a;
+  --menu-tile-bg:#231b2a; --menu-tile-border:#3a2f45; --menu-tile-fg:#e2b6e6;
+  --accent:#c27cc4; --accent-dim:#9a5aa0;
+  --ws-hint:#ff7eb0;
+  --sel:#c98bd3; --f1:#c9a227; --f2:#2fa58a; --f3:#d0577a;
+  --board:#201927; --ink:#f0e8f4; --grid:#2d2435;
+  --f4:#4a86d0; --f5:#d0773a; --f6:#8d62d4;
+}

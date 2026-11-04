@@ -1,0 +1,1 @@
+    colors:['#ff8800','#ffdd00','#cc2200','#2ea043','#fff4e0'], palette:{sel:'#cc5500',f1:'#ffdd00',f2:'#ff8800',f3:'#ff6b6b',board:'#fff4e0',ink:'#3a1a00',grid:'#f2dcc0',f4:'#2ea043',f5:'#ffb347',f6:'#e0a0ff'}
