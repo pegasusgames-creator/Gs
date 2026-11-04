@@ -2080,6 +2080,7 @@ def main():
         ('check_reward_types_native.py', 'rewarded types requested by JS are whitelisted in Java'),
         ('check_lang_picker.py', 'every translated listing locale is selectable in the language picker'),
         ('check_trademarks.py', 'no third-party game/franchise trademarks in listing text'),
+        ('check_bloodpressurelog_categories.py', '2017 ACC/AHA category grid (every systolic/diastolic pair incl. all boundaries and the 180/120 note), half-up averaging, morning/evening slots, validity and category/disclaimer strings in 13 languages (JS vs independent Python reference)'),
         ('check_basicmathkids_items.py', 'BasicMathKids early-math items (answers, ranges, distractors)'),
         ('check_mahjong_solvable.py', 'mahjong deals replay their stored clearing order to an empty board'),
         ('check_billsplit_math.py', 'itemised split maths exact: largest-remainder rounding, per-person totals sum to the bill to the cent, tax/tip rounding, amount/percent parsing (JS vs independent Python Decimal/Fraction reference)'),

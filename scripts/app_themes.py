@@ -366,18 +366,18 @@ THEMES = {
 
     # ===== HEALTH / TRACKERS =====
     "BloodPressureLog": {
-        "bg_top_left":  (220, 235, 245),  # clinical light
-        "bg_top_right": (235, 245, 250),
-        "bg_bottom":    (190, 210, 230),
-        "text_primary":  (40, 60, 90),
-        "text_accent":   (200, 60, 70),   # medical red
-        "text_subtle":   (90, 110, 130),
-        "footer_tint":   (170, 60, 70),
-        "mood": "clinical-soft",
-        "layout_archetype": "I",
-        "mascot_pattern":   "M4",
-        "voice":            "V2",
-        "texture":          "T3",
+        "bg_top_left": (241, 246, 250),
+        "bg_top_right": (224, 236, 248),
+        "bg_bottom": (31, 78, 140),
+        "text_primary": (20, 32, 46),
+        "text_accent": (31, 78, 140),
+        "text_subtle": (70, 88, 107),
+        "footer_tint": (47, 104, 174),
+        "mood": 'clinical-soft',
+        "layout_archetype": 'I',
+        "mascot_pattern": 'M0',
+        "voice": 'V5',
+        "texture": 'T2',
     },
 
     "MoodJournal": {
