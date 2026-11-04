@@ -1181,7 +1181,7 @@ function resultCard(e, title) {
 }
 function rowOf(e) {
   const c = BP.cat(e.s, e.d);
-  return sRow({ label: e.s + '/' + e.d, sub: entryMeta(e) + (e.note ? ' — “' + e.note + '”' : ''), value: e.p != null ? t('pulse_v', { p: e.p }) : '', cls: 'erow cat-' + c, act: 'bp-edit', arg: e.id, right: chipHtml(c) });
+  return sRow({ label: e.s + '/' + e.d, sub: (e.p != null ? t('pulse_v', { p: e.p }) + ' · ' : '') + entryMeta(e) + (e.note ? ' — “' + e.note + '”' : ''), cls: 'erow cat-' + c, act: 'bp-edit', arg: e.id, right: chipHtml(c) });
 }
 
 // ── Log form ─────────────────────────────────────────────────────────
@@ -1355,7 +1355,7 @@ const TOOL = {
         tags: (Array.isArray(e.tags) ? e.tags : []).filter(k => TAGS.indexOf(k) >= 0), note: String(e.note || '').slice(0, 200) };
     }).sort((a, b) => a.t - b.t);
     const r = o.rem && typeof o.rem === 'object' ? o.rem : {};
-    ['am', 'pm', 'med'].forEach(k => { const x = r[k] || {}, df = d.rem[k]; r[k] = { on: !!x.on, h: clamp(x.h == null ? df.h : x.h | 0, 0, 23), m: clamp(x.m == null ? df.m : x.m | 0, 0, 59) }; });
+    ['am', 'pm', 'med'].forEach(k => { const x = r[k] || {}, df = TOOL.defaults().rem[k]; r[k] = { on: !!x.on, h: clamp(x.h == null ? df.h : x.h | 0, 0, 23), m: clamp(x.m == null ? df.m : x.m | 0, 0, 59) }; });
     o.rem = r;
     const a = o.at && typeof o.at === 'object' ? o.at : {};
     o.at = { re: Number.isFinite(a.re) ? a.re : 0, visit: Number.isFinite(a.visit) ? a.visit : 0 };

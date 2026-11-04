@@ -1,0 +1,88 @@
+{
+  "_comment": "BloodPressureLog (utility shell) screenshot capture - real-use states, never Settings/paywall/onboarding. _setup_taps seeds ~100 readings over 60 days (morning higher than evening, slow downward drift, a few tags/notes), Pro + ad-free (no banner / lock overlays) through window.shellLoadState and defines bpSet(), which sets theme/accent/form values/range and navigates with UI.tab. Phone 7 + tablet_7 2 + tablet_10 2 = 11 distinct states; headlines in metadata/screenshot_headlines*.json describe exactly these screens.",
+  "_readiness_expr": "typeof UI !== 'undefined' && typeof window.shellLoadState === 'function' && typeof TOOL !== 'undefined' && typeof BP !== 'undefined'",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){var now=new Date(),ents=[],n=0;function r(i,k){return Math.sin(i*12.9898+k*78.233)*43758.5453%1;}\nfor(var i=59;i>=0;i--){var d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i,7,40);var tr=(i/59)*7;var rm=r(i,1),re=r(i,2);\nvar s=Math.round(131+tr+rm*6),dd=Math.round(82+tr*0.5+r(i,3)*3);\nents.push({id:'m'+i,t:d.getTime()+Math.floor(Math.abs(rm)*40)*60000,s:s,d:dd,p:Math.round(70+r(i,4)*5),arm:'l',pos:'sit',tags:i%9===0?['coffee']:(i%11===0?['stress']:[]),note:i===40?'New cuff, rested 5 min':(i===12?'After a long walk':'')});\nif(i%3!==2){var e=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i,20,30);ents.push({id:'e'+i,t:e.getTime()+Math.floor(Math.abs(re)*30)*60000,s:Math.round(121+tr*0.8+re*5),d:Math.round(77+tr*0.4+r(i,5)*3),p:Math.round(67+r(i,6)*4),arm:'l',pos:'sit',tags:i%10===0?['meds']:[],note:''});}}\nents=ents.filter(function(e){return e.t<Date.now();});ents.sort(function(a,b){return a.t-b.t;});\nvar s={saveVersion:1,created:Date.now()-70*864e5,sessions:9,lastSeen:Date.now()-3600e3,onboarded:true,removeAds:true,pro:true,proTrialUntil:0,settings:{theme:'light',accent:'navy',lang:'',textSize:1,haptics:true,reduceMotion:false,daily:{on:false,h:20,m:0}},ads:{last:0,breaks:0},tool:{entries:ents,rem:{am:{on:false,h:8,m:0},pm:{on:false,h:20,m:0},med:{on:false,h:9,m:0}},at:{re:0,visit:0},last:{arm:'l',pos:'sit'}}};\nwindow.bpSet=function(o){UI.closeAll();S.settings.theme=o.theme||'light';S.settings.accent=o.accent||'navy';S.settings.lang='';FM=newForm();if(o.f){FM.s=String(o.f[0]);FM.d=String(o.f[1]);FM.p=String(o.f[2]);}TD.range=o.range||30;TD.just='';persist();applyLang();applyTheme();UI.buildNav();UI.tab(o.tab||'log');setTimeout(function(){var v=document.getElementById('view');if(!v||!o.scroll)return;var q={cmp:'.cmp',dist:'.dist',res:'.card.cat-norm,.card.cat-elev,.card.cat-s1,.card.cat-s2',chart:'.chart'}[o.scroll];var e=q&&document.querySelector(q);if(e)v.scrollTop+=e.getBoundingClientRect().top-v.getBoundingClientRect().top-70;},500);return 'ok';};\nreturn window.shellLoadState(s);})();",
+      1500
+    ]
+  ],
+  "01_log_reading": [
+    [
+      "js",
+      "bpSet({\"theme\": \"light\", \"accent\": \"navy\", \"tab\": \"log\", \"f\": [128, 82, 68]});'ok';",
+      1600
+    ]
+  ],
+  "02_category_chip": [
+    [
+      "js",
+      "bpSet({\"theme\": \"dark\", \"accent\": \"plum\", \"tab\": \"log\", \"f\": [146, 94, 74]});'ok';",
+      1600
+    ]
+  ],
+  "03_trend_30": [
+    [
+      "js",
+      "bpSet({\"theme\": \"light\", \"accent\": \"forest\", \"tab\": \"trends\", \"range\": 30});'ok';",
+      1600
+    ]
+  ],
+  "04_trend_7": [
+    [
+      "js",
+      "bpSet({\"theme\": \"dark\", \"accent\": \"navy\", \"tab\": \"trends\", \"range\": 7});'ok';",
+      1600
+    ]
+  ],
+  "05_morning_evening": [
+    [
+      "js",
+      "bpSet({\"theme\": \"light\", \"accent\": \"ember\", \"tab\": \"trends\", \"range\": 90, \"scroll\": \"cmp\"});'ok';",
+      1600
+    ]
+  ],
+  "06_history": [
+    [
+      "js",
+      "bpSet({\"theme\": \"light\", \"accent\": \"rose\", \"tab\": \"history\"});'ok';",
+      1600
+    ]
+  ],
+  "07_categories_split": [
+    [
+      "js",
+      "bpSet({\"theme\": \"dark\", \"accent\": \"forest\", \"tab\": \"trends\", \"range\": 90, \"scroll\": \"dist\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_01_log": [
+    [
+      "js",
+      "bpSet({\"theme\": \"light\", \"accent\": \"navy\", \"tab\": \"log\", \"f\": [135, 86, 72]});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_02_trend": [
+    [
+      "js",
+      "bpSet({\"theme\": \"dark\", \"accent\": \"plum\", \"tab\": \"trends\", \"range\": 30});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_01_history": [
+    [
+      "js",
+      "bpSet({\"theme\": \"light\", \"accent\": \"forest\", \"tab\": \"history\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_02_am_pm": [
+    [
+      "js",
+      "bpSet({\"theme\": \"light\", \"accent\": \"rose\", \"tab\": \"trends\", \"range\": 90, \"scroll\": \"cmp\"});'ok';",
+      1600
+    ]
+  ]
+}

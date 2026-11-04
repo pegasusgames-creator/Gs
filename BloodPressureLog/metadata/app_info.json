@@ -4,10 +4,11 @@
   "category_apple_subcategory": "",
   "contains_ads": true,
   "contains_iap": true,
-  "target_audience_min_age": 13,
-  "support_url": "https://pegasusgames.example/support",
-  "marketing_url": "",
+  "target_audience_min_age": 18,
+  "support_url": "https://pegasusgames-creator.github.io/",
+  "marketing_url": "https://pegasusgames-creator.github.io/",
   "copyright": "© 2026 Pegasus Games",
   "package_name": "com.pegasusgames.bloodpressurelog",
-  "upload_key_sha1": "67:4F:19:69:FD:B6:FE:D5:77:FB:13:0D:3C:9C:F5:9D:37:AB:36:F5"
+  "upload_key_sha1": "67:4F:19:69:FD:B6:FE:D5:77:FB:13:0D:3C:9C:F5:9D:37:AB:36:F5",
+  "health_apps_declaration": "required (Play Console > App content > Health apps): personal blood-pressure diary; no medical device, no diagnosis or treatment advice, category wording cites the 2017 ACC/AHA guideline for information only, data stays on device"
 }
