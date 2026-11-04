@@ -101,8 +101,7 @@ OLD_PLACEHOLDER_URL_PATTERNS = [
 # These blocks lift only when the app's game.html is rewritten to be real.
 BLOCKED_APPS = {
     "DiceRoller", "EmotionFlash", "FindDifference", "FlashlightSOS",
-    "FruitMerge", "GuitarChords", "HiddenObject", "JigsawPuzzle",
-    "MahjongSolitaire", "MemoryCard", "Metronome", "MovieTrivia",
+    "FruitMerge", "GuitarChords", "HiddenObject", "JigsawPuzzle", "MemoryCard", "Metronome", "MovieTrivia",
     "MultiplicationGame", "MusicTheory", "NumberMemory", "PasswordGen",
     "PatternSequence", "PianoKeyboard", "PinPull", "QRCodeGen",
     "RandomName", "RandomNumber", "RandomRecipe", "ScienceQuiz",
@@ -2081,6 +2080,8 @@ def main():
         ('check_reward_types_native.py', 'rewarded types requested by JS are whitelisted in Java'),
         ('check_lang_picker.py', 'every translated listing locale is selectable in the language picker'),
         ('check_trademarks.py', 'no third-party game/franchise trademarks in listing text'),
+        ('check_basicmathkids_items.py', 'BasicMathKids early-math items (answers, ranges, distractors)'),
+        ('check_mahjong_solvable.py', 'mahjong deals replay their stored clearing order to an empty board'),
         ('check_billsplit_math.py', 'itemised split maths exact: largest-remainder rounding, per-person totals sum to the bill to the cent, tax/tip rounding, amount/percent parsing (JS vs independent Python Decimal/Fraction reference)'),
         ('check_animalsounds_facts.py', 'Animal Sounds facts (habitat, diet, names, honest sounds)'),
         ('check_bmicalculator_math.py', 'BMI, WHO band edges (18.5/25/30/35/40), healthy-weight range, kg/lb/cm/ft-in conversions, Deurenberg body-fat, gauge, goal progress (JS vs independent exact-rational Python reference)'),

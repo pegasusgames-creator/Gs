@@ -70,7 +70,7 @@
     {
       "app": "BasicMathKids",
       "track": "kids",
-      "status": "building",
+      "status": "done",
       "model": "sonnet"
     },
     {
@@ -100,13 +100,13 @@
     {
       "app": "CountingApp",
       "track": "kids",
-      "status": "todo",
+      "status": "building",
       "model": "sonnet"
     },
     {
       "app": "MahjongSolitaire",
       "track": "game",
-      "status": "building",
+      "status": "done",
       "model": "default"
     },
     {
@@ -118,7 +118,7 @@
     {
       "app": "WordSearch",
       "track": "game",
-      "status": "todo",
+      "status": "building",
       "model": "default"
     },
     {

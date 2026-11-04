@@ -47,6 +47,8 @@ PRE_RELEASE = {
     "com.pegasusgames.bmicalculator",
     "com.pegasusgames.animalsounds",
     "com.pegasusgames.billsplit",
+    "com.pegasusgames.mahjong",
+    "com.pegasusgames.basicmathkids",
 }
 
 # Java NativeBridge methods every shipping game.html must call into.

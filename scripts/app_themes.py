@@ -232,18 +232,18 @@ THEMES = {
     },
 
     "MahjongSolitaire": {
-        "bg_top_left":  (40, 70, 50),     # jade green
-        "bg_top_right": (70, 110, 80),    # tile green
-        "bg_bottom":    (20, 40, 25),
-        "text_primary":  (255, 250, 235),
-        "text_accent":   (240, 180, 80),  # gold
-        "text_subtle":   (200, 220, 200),
-        "footer_tint":   (220, 180, 100),
-        "mood": "jade-tile",
-        "layout_archetype": "B",
-        "mascot_pattern":   "M1",
-        "voice":            "V3",
-        "texture":          "T4",
+        "bg_top_left": (246, 232, 201),
+        "bg_top_right": (240, 223, 189),
+        "bg_bottom": (220, 181, 122),
+        "text_primary": (43, 33, 22),
+        "text_accent": (31, 122, 92),
+        "text_subtle": (95, 74, 46),
+        "footer_tint": (21, 90, 67),
+        "mood": 'honey-teak tea table',
+        "layout_archetype": 'A',
+        "mascot_pattern": 'M4',
+        "voice": 'V5',
+        "texture": 'T4',
     },
 
     "FindDifference": {
@@ -468,18 +468,18 @@ THEMES = {
     },
 
     "BasicMathKids": {
-        "bg_top_left":  (180, 230, 180),  # mint
-        "bg_top_right": (220, 245, 200),
-        "bg_bottom":    (140, 190, 140),
-        "text_primary":  (30, 60, 40),
-        "text_accent":   (220, 90, 60),
-        "text_subtle":   (80, 110, 80),
-        "footer_tint":   (200, 80, 50),
-        "mood": "kids-mint",
-        "layout_archetype": "E",
-        "mascot_pattern":   "M2",
-        "voice":            "V7",
-        "texture":          "T7",
+        "bg_top_left": (216, 241, 226),
+        "bg_top_right": (180, 229, 200),
+        "bg_bottom": (29, 118, 72),
+        "text_primary": (18, 53, 36),
+        "text_accent": (196, 65, 31),
+        "text_subtle": (59, 99, 80),
+        "footer_tint": (45, 107, 179),
+        "mood": 'kids-mint',
+        "layout_archetype": 'E',
+        "mascot_pattern": 'M3',
+        "voice": 'V7',
+        "texture": 'T7',
     },
     # ===== AUTO-ASSIGNED (additive pass) =====
     "AgeCalculator": {
