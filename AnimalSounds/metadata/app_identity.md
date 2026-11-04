@@ -1,42 +1,31 @@
-# AnimalSounds Identity
+# Animal Sounds Identity
 
-- **Category**: kids
-- **Layout archetype**: E (animated character speaks)
-- **Mascot pattern**: M2 (static mascot with 2-3 expressions)
-- **Voice**: V7 (educational warm)
-- **Texture**: T7 (storybook / illustrated)
-- **Mood string**: kids-bright
+- **Track**: kids (Google Play Families, ages 3-8), built on the kids shell
+  (`docs/KIDS_SHELL.md`)
+- **Layout archetype**: E (animated character speaks: Fenn the fox suggests the
+  next animal in a speech bubble; activities are big picture tiles below)
+- **Mascot pattern**: M2 (Fenn the fox cub: idle bob + blink, ears flap and
+  hop on success, head tilt on a wrong tap, mouth moves while the voice speaks)
+- **Voice**: V7 (educational warm) - "Yes! That is the cow!", "Where does the
+  frog live?"
+- **Texture**: T7 (storybook / illustrated: 44 original outlined SVG animal
+  portraits, 10 habitat icons and 10 star stickers, dotted paper background)
+- **Mood string**: kids-lilac
 
-The app should feel like: warm and inviting; reads as a children's app at a glance.
+Soft lilac paper (`#efe9ff`) with a deep teal accent (`#0e7a85`) and four bold
+tile colours (brick, blue, leaf, grape); Meadow (light green) and Bedtime
+(soft navy, the only dark theme, never the default) are the alternates.
+Identity element: Fenn the fox in a speech bubble above four picture tiles,
+and animals drawn as round portrait stickers.
 
-## Anti-pattern audit (APP_ARCHETYPES.md §5)
+## Honesty notes
+- Animal sounds are SYNTHESIZED in the app with WebAudio (no audio files, no
+  recordings). The listing and the parent area say so; never claim "real
+  recordings".
+- Habitat and diet facts are checked by `scripts/check_animalsounds_facts.py`.
 
-This file was auto-generated during the 2026-04-30 portfolio archetype
-assignment pass. The four archetypes above were chosen so the app does
-NOT default to the template signature (A/M0/V1/T1).
-
-When the app's `game.html` is next touched (or built fresh), audit the
-in-app design against the §5 anti-patterns:
-
-- [ ] Center-aligned everything → use offset weight
-- [ ] Same SVG icon set as other apps → vary icon family per app
-- [ ] All-caps headlines on every screen → mixed case for body
-- [ ] Generic templated currency icon → make it match the app theme
-- [ ] Identical button shapes / sizes / spacings → vary
-- [ ] Symmetric vertical column layout → break with side panels / FAB
-- [ ] Generic "Level Complete!" celebration → app-specific phrasing
-- [ ] Same loading / transition patterns → vary
-- [ ] Identical settings screen → reorder, rename, add app-specific options
-
-If 3+ of the above are hit, redesign before the next ship.
-
-## Phase 8 self-check
-
-Before declaring this app release-ready, all four of:
-
-1. Side-by-side test (vs other shipped apps, do they look like different products?)
-2. Voice-specificity test (does the menu copy reflect this app's voice archetype?)
-3. Identity-element test (a single recognizable visual element)
-4. Anonymous-screenshot test (could a user identify this app without title/name?)
-
-must pass. See APP_ARCHETYPES.md §8.
+## Anti-pattern audit (APP_ARCHETYPES.md section 5)
+Offset weight (mascot + bubble), mixed-case labels, app-specific icon family
+(animal portraits, habitat glyphs), app-specific celebration copy (five stars
+and an animal sticker per right answer). Passes the side-by-side, voice,
+identity-element and anonymous-screenshot tests.

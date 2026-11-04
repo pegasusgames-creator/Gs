@@ -11,5 +11,10 @@
     "digital_purchases": true
   },
   "expected_google_rating": "Everyone",
-  "apple_age_rating": "4+"
+  "apple_age_rating": "4+",
+  "designed_for_families": true,
+  "target_age_groups": [
+    "5 and under",
+    "6-8"
+  ]
 }

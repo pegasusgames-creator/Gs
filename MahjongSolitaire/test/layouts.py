@@ -537,6 +537,19 @@ def mirror(tiles):
     return normalize([(mx - x, y, z) for (x, y, z) in tiles])
 
 
+def deepen(tiles):
+    """Taller versions of a shape: one more layer on its top layer (half-step,
+    eroded, or bricks across neighbours). Returns a list of raw tile lists."""
+    top = max(z for _, _, z in tiles)
+    layer = [t for t in tiles if t[2] == top]
+    out = []
+    for op in (half_up, erode, erode_h, half_x):
+        nxt = op(layer, top + 1)
+        if 2 <= len(nxt) <= max(2, len(layer) - 2):
+            out.append(list(tiles) + nxt)
+    return out
+
+
 def all_variants():
     """[(family_key, display_name, params, tiles)] — de-duplicated."""
     seen = set()
@@ -549,7 +562,17 @@ def all_variants():
                 t = None
             if not t:
                 continue
-            for v in (t, mirror(t)):
+            forms = [t]
+            if len(t) >= 40:
+                for d1 in deepen(t):
+                    f1 = finish(d1)
+                    if f1:
+                        forms.append(f1)
+                        for d2 in deepen(f1)[:1]:
+                            f2 = finish(d2)
+                            if f2:
+                                forms.append(f2)
+            for v in [m for f in forms for m in (f, mirror(f))]:
                 code = encode_layout(v)
                 if code in seen:
                     continue
