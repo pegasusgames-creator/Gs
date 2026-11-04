@@ -1,0 +1,88 @@
+{
+  "_comment": "BloodSugarLog (utility shell) screenshot capture - real-use Log / Insights / History states, never Settings/paywall/onboarding. _setup_taps seeds 45 days of readings (four meal contexts, notes, tags), ranges marked as set, Pro + ad-free (no banner / lock overlays) through window.shellLoadState (no reload: the pagehide persist would overwrite a localStorage seed) and defines bsSet(), which sets theme/accent/unit/typed value/context and navigates with UI.tab (the utility shell's navigation; there is no showScreen). Phone 7 + tablet_7 2 + tablet_10 2 = 11 distinct states; headlines in metadata/screenshot_headlines*.json describe exactly these screens.",
+  "_readiness_expr": "typeof UI !== 'undefined' && typeof window.shellLoadState === 'function' && typeof TOOL !== 'undefined' && typeof GL !== 'undefined'",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){\nvar base=new Date(),ents=[],seed=11,rnd=function(){seed=(seed*9301+49297)%233280;return seed/233280;};\nvar plan=[['f',7,10,98],['b',12,40,112],['a',14,15,148],['n',22,20,121]];\nfor(var d=44;d>=0;d--){for(var k=0;k<plan.length;k++){if((d+k)%5===4)continue;var p=plan[k],dt=new Date(base.getFullYear(),base.getMonth(),base.getDate()-d,p[1],p[2]);if(dt.getTime()>Date.now())continue;\nvar mg=Math.round(p[3]+(rnd()-.5)*(p[0]==='a'?70:44)+(d%9===0?28:0));ents.push({id:'e'+d+k,ts:dt.getTime(),mg:mg,c:p[0],carbs:p[0]==='a'?(30+Math.round(rnd()*5)*10):null,note:(d===2&&k===2)?'Pasta night':(d===6&&k===0)?'Walked before':'',tags:(d===2&&k===2)?['bigmeal']:(d===6&&k===0)?['exercise']:[]});}}\nvar s={saveVersion:1,created:Date.now()-60*864e5,sessions:9,lastSeen:Date.now()-3600e3,onboarded:true,removeAds:true,pro:true,proTrialUntil:0,settings:{theme:'light',accent:'citrine',lang:'',textSize:1,haptics:true,reduceMotion:false,daily:{on:false,h:20,m:0}},ads:{last:0,breaks:0},tool:{unit:'mg',ranges:{lo:70,hi:180,vlo:54,vhi:250,ctx:{},set:true},entries:ents,rems:[],saves:40}};\nwindow.bsSet=function(o){UI.closeAll();S.settings.theme=o.theme||'light';S.settings.accent=o.accent||'citrine';S.settings.lang='';S.tool.unit=o.unit||'mg';TD.v=o.v||'';TD.c=o.c||'o';TD.per=o.per||30;TD.filt='all';TD.all=false;TD.more=false;TD.carbs='';TD.note='';TD.tags=[];TD.when='';persist();applyLang();applyTheme();UI.buildNav();UI.tab(o.tab||'log');\nsetTimeout(function(){var v=document.getElementById('view');if(!v)return;if(o.v){var i=document.getElementById('in-v');if(i)i.dispatchEvent(new Event('input',{bubbles:true}));}\nif(!o.scroll)return;var e=document.querySelectorAll(o.scroll.sel)[o.scroll.n||0];if(e)v.scrollTop+=e.getBoundingClientRect().top-v.getBoundingClientRect().top-10;},500);return 'ok';};\nreturn window.shellLoadState(s);})();",
+      1600
+    ]
+  ],
+  "01_log_reading": [
+    [
+      "js",
+      "bsSet({\"theme\": \"light\", \"accent\": \"citrine\", \"v\": \"112\", \"c\": \"a\", \"tab\": \"log\"});'ok';",
+      1600
+    ]
+  ],
+  "02_mmol_entry": [
+    [
+      "js",
+      "bsSet({\"theme\": \"light\", \"accent\": \"ocean\", \"unit\": \"mmol\", \"v\": \"6.4\", \"c\": \"f\", \"tab\": \"log\"});'ok';",
+      1600
+    ]
+  ],
+  "03_above_range": [
+    [
+      "js",
+      "bsSet({\"theme\": \"dark\", \"accent\": \"citrine\", \"v\": \"196\", \"c\": \"b\", \"tab\": \"log\"});'ok';",
+      1600
+    ]
+  ],
+  "04_time_in_range": [
+    [
+      "js",
+      "bsSet({\"theme\": \"light\", \"accent\": \"berry\", \"tab\": \"insights\", \"per\": 30});'ok';",
+      1600
+    ]
+  ],
+  "05_day_pattern": [
+    [
+      "js",
+      "bsSet({\"theme\": \"dark\", \"accent\": \"ember\", \"tab\": \"insights\", \"per\": 14, \"scroll\": {\"sel\": \".chart\", \"n\": 1}});'ok';",
+      1600
+    ]
+  ],
+  "06_averages": [
+    [
+      "js",
+      "bsSet({\"theme\": \"light\", \"accent\": \"slate\", \"tab\": \"insights\", \"per\": 30, \"scroll\": {\"sel\": \".hb\"}});'ok';",
+      1600
+    ]
+  ],
+  "07_history": [
+    [
+      "js",
+      "bsSet({\"theme\": \"light\", \"accent\": \"citrine\", \"tab\": \"history\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_01_insights": [
+    [
+      "js",
+      "bsSet({\"theme\": \"light\", \"accent\": \"ocean\", \"tab\": \"insights\", \"per\": 30});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_02_history": [
+    [
+      "js",
+      "bsSet({\"theme\": \"dark\", \"accent\": \"citrine\", \"tab\": \"history\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_01_log": [
+    [
+      "js",
+      "bsSet({\"theme\": \"light\", \"accent\": \"berry\", \"v\": \"104\", \"c\": \"n\", \"tab\": \"log\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_02_estimate": [
+    [
+      "js",
+      "bsSet({\"theme\": \"dark\", \"accent\": \"slate\", \"tab\": \"insights\", \"per\": 90, \"scroll\": {\"sel\": \".badge.est\"}});'ok';",
+      1600
+    ]
+  ]
+}

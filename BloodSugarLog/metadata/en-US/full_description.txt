@@ -1,16 +1,20 @@
-Simple blood sugar tracking for diabetics and health-conscious users. Log your glucose readings, add meal notes, and visualize your trends.
+Log a blood sugar reading in seconds, in mg/dL or mmol/L, and see it coloured against the target range YOU set. Charts, time in range and averages show your patterns. Everything stays on your phone: no account, and it works offline.
 
-🩸 FEATURES
-• Log glucose in mg/dL or mmol/L
-• Pre/post-meal tags for each reading
-• Color-coded ranges (Low, Normal, High)
-• 7-day and 30-day trend charts
-• Optional notes with each entry
-• A1C estimate based on recent averages
-• All data stored locally on device
-• Works fully offline
+WHAT YOU GET
+• Fast log: type the number, pick Fasting, Before meal, After meal, Bedtime or Other, add carbs, tags and a note
+• Exact unit conversion: 1 mmol/L = 18.0156 mg/dL, stored as whole mg/dL and shown to one decimal in mmol/L
+• Your ranges: a neutral default you replace with the ranges your clinician gave you, optionally per meal context
+• Insights: time in range (share of readings), readings over time, a day-pattern chart, averages by time of day and by meal
+• Estimated A1C, shown only with enough data (20 readings on 10 days in the last 90) and labelled as an estimate, with the ADAG formula: (average mg/dL + 46.7) ÷ 28.7
+• Doctor summary: a plain-text summary to read out or share
+• Testing reminders, weekly or on a set date, only if they fit your plan
+• Backup and restore, light and dark themes, 13 languages
 
-📊 REFERENCE RANGES SHOWN
-• Fasting normal: 70–99 mg/dL
-• Post-meal normal: < 140 mg/dL
-• Pre-diabetic range highlighted
+PLEASE NOTE
+This is a logbook, not a medical device. It does not diagnose and gives no dosing or insulin advice; there is no calculator for either. Colours follow the ranges you enter. The A1C figure is an estimate from spot checks, not a lab result. If you feel unwell or are unsure what to do, contact your care team or your local emergency number.
+
+PRIVACY
+Your readings stay on your device. No account, no sign-in.
+
+PRO (one-time purchase, no subscription)
+Unlimited history (free: 60 readings), CSV export, extra accent colours and no ads. A separate one-time purchase removes ads only.

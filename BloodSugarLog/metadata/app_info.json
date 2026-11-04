@@ -4,10 +4,11 @@
   "category_apple_subcategory": "",
   "contains_ads": true,
   "contains_iap": true,
-  "target_audience_min_age": 13,
-  "support_url": "https://pegasusgames.example/support",
-  "marketing_url": "",
+  "target_audience_min_age": 18,
+  "support_url": "https://pegasusgames-creator.github.io/",
+  "marketing_url": "https://pegasusgames-creator.github.io/",
   "copyright": "© 2026 Pegasus Games",
   "package_name": "com.pegasusgames.bloodsugarlog",
-  "upload_key_sha1": "14:D2:6B:7E:42:AA:A5:07:62:CE:6F:65:96:C4:16:56:5F:AF:60:D9"
+  "upload_key_sha1": "14:D2:6B:7E:42:AA:A5:07:62:CE:6F:65:96:C4:16:56:5F:AF:60:D9",
+  "health_apps_declaration": "required (Play Console > App content > Health apps): blood glucose logbook; user-set target ranges, no medical device, no diagnosis, no dosing or insulin advice, estimated A1C labelled as an estimate, data stays on device"
 }

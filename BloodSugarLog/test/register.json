@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_bloodsugarlog_math.py",
+    "mg/dL<->mmol/L (18.0156, whole-mg storage, 1-decimal display), range classification incl. per-context ranges, time in range, averages by time of day / meal, ADAG eA1C + minimum-data rule, number parsing (JS vs independent exact-rational Python reference)"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      255,
+      249,
+      225
+    ],
+    "bg_top_right": [
+      251,
+      234,
+      184
+    ],
+    "bg_bottom": [
+      122,
+      82,
+      0
+    ],
+    "text_primary": [
+      38,
+      31,
+      0
+    ],
+    "text_accent": [
+      122,
+      82,
+      0
+    ],
+    "text_subtle": [
+      88,
+      73,
+      11
+    ],
+    "footer_tint": [
+      151,
+      104,
+      10
+    ],
+    "mood": "tool-clean",
+    "layout_archetype": "I",
+    "mascot_pattern": "M0",
+    "voice": "V8",
+    "texture": "T2"
+  }
+}
