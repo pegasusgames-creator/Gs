@@ -1,0 +1,88 @@
+{
+  "_comment": "BMICalculator (utility shell) screenshot capture - real-use calculator states, never Settings/paywall/onboarding. _setup_taps seeds twelve weekly readings with notes, a goal, Pro + ad-free (no banner / lock overlays) through window.shellLoadState (no reload: the pagehide persist would overwrite a localStorage seed) and defines bmSet(), which sets theme/accent/units/values and navigates with UI.tab (the utility shell's navigation; there is no showScreen). Phone 7 + tablet_7 2 + tablet_10 2 = 11 distinct states; headlines in metadata/screenshot_headlines*.json describe exactly these screens.",
+  "_readiness_expr": "typeof UI !== 'undefined' && typeof window.shellLoadState === 'function' && typeof TOOL !== 'undefined' && typeof BM !== 'undefined'",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){var base=new Date(),ents=[],kgs=[84.2,83.6,83.1,82.7,82.0,81.6,80.9,80.4,79.8,79.5,78.9,78.2],notes={0:'Starting point',3:'New routine',6:'Holiday week',9:'Back on track',11:'Feeling good'};for(var i=0;i<kgs.length;i++){var d=new Date(base.getFullYear(),base.getMonth(),base.getDate()-(kgs.length-1-i)*7,12);ents.push({id:'e'+i,d:dkey(d),kg:kgs[i],cm:176,note:notes[i]||'',bf:null});}\nvar s={saveVersion:1,created:Date.now()-60*864e5,sessions:9,lastSeen:Date.now()-3600e3,onboarded:true,removeAds:true,pro:true,proTrialUntil:0,settings:{theme:'light',accent:'teal',lang:'',textSize:1,haptics:true,reduceMotion:false,daily:{on:false,h:20,m:0}},ads:{last:0,breaks:0},tool:{units:'metric',cur:{kg:78.2,cm:176,age:34,sex:'f'},entries:ents,goal:{kg:74,start:84.2,at:ents[0].d},saves:12,wk:{on:false,dow:1,h:9,m:0}}};\nwindow.bmSet=function(o){UI.closeAll();S.settings.theme=o.theme||'light';S.settings.accent=o.accent||'teal';S.settings.lang='';S.tool.units=o.units||'metric';S.tool.cur={kg:o.kg||78.2,cm:o.cm||176,age:34,sex:'f'};TD.bfOpen=!!o.bf;TD.chart=o.chart||'bmi';TD.all=false;TD.gedit=false;syncText();persist();applyLang();applyTheme();UI.buildNav();UI.tab(o.tab||'calc');setTimeout(function(){var v=document.getElementById('view');if(!v||!o.scroll)return;var e=o.scroll==='range'?document.querySelector('#bmi-res .card'):o.scroll==='list'?document.querySelector('.sec-h'):o.scroll==='gauge'?document.querySelector('.res .rl'):null;if(e)v.scrollTop+=e.getBoundingClientRect().top-v.getBoundingClientRect().top-10;},500);return 'ok';};\nreturn window.shellLoadState(s);})();",
+      1500
+    ]
+  ],
+  "01_live_bmi": [
+    [
+      "js",
+      "bmSet({\"theme\": \"light\", \"accent\": \"teal\", \"kg\": 70, \"cm\": 175, \"tab\": \"calc\"});'ok';",
+      1600
+    ]
+  ],
+  "02_who_categories": [
+    [
+      "js",
+      "bmSet({\"theme\": \"light\", \"accent\": \"ocean\", \"kg\": 82, \"cm\": 172, \"tab\": \"calc\"});'ok';",
+      1600
+    ]
+  ],
+  "03_healthy_range": [
+    [
+      "js",
+      "bmSet({\"theme\": \"dark\", \"accent\": \"teal\", \"kg\": 92, \"cm\": 178, \"tab\": \"calc\", \"scroll\": \"range\"});'ok';",
+      1600
+    ]
+  ],
+  "04_metric_or_imperial": [
+    [
+      "js",
+      "bmSet({\"theme\": \"light\", \"accent\": \"plum\", \"units\": \"imperial\", \"kg\": 68, \"cm\": 168, \"tab\": \"calc\"});'ok';",
+      1600
+    ]
+  ],
+  "05_history_chart": [
+    [
+      "js",
+      "bmSet({\"theme\": \"light\", \"accent\": \"indigo\", \"tab\": \"history\"});'ok';",
+      1600
+    ]
+  ],
+  "06_history_notes": [
+    [
+      "js",
+      "bmSet({\"theme\": \"dark\", \"accent\": \"sunset\", \"tab\": \"history\", \"chart\": \"w\", \"scroll\": \"list\"});'ok';",
+      1600
+    ]
+  ],
+  "07_goal_progress": [
+    [
+      "js",
+      "bmSet({\"theme\": \"light\", \"accent\": \"teal\", \"tab\": \"goal\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_01_units": [
+    [
+      "js",
+      "bmSet({\"theme\": \"light\", \"accent\": \"ocean\", \"units\": \"imperial\", \"kg\": 75, \"cm\": 180, \"tab\": \"calc\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_7_02_history": [
+    [
+      "js",
+      "bmSet({\"theme\": \"dark\", \"accent\": \"teal\", \"tab\": \"history\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_01_healthy_range": [
+    [
+      "js",
+      "bmSet({\"theme\": \"light\", \"accent\": \"sunset\", \"kg\": 64, \"cm\": 165, \"tab\": \"calc\", \"scroll\": \"range\"});'ok';",
+      1600
+    ]
+  ],
+  "tablet_10_02_goal": [
+    [
+      "js",
+      "bmSet({\"theme\": \"light\", \"accent\": \"indigo\", \"tab\": \"goal\"});'ok';",
+      1600
+    ]
+  ]
+}

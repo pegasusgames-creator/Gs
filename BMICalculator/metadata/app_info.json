@@ -4,10 +4,11 @@
   "category_apple_subcategory": "",
   "contains_ads": true,
   "contains_iap": true,
-  "target_audience_min_age": 13,
-  "support_url": "https://pegasusgames.example/support",
-  "marketing_url": "",
+  "target_audience_min_age": 18,
+  "support_url": "https://pegasusgames-creator.github.io/",
+  "marketing_url": "https://pegasusgames-creator.github.io/",
   "copyright": "© 2026 Pegasus Games",
   "package_name": "com.pegasusgames.bmicalculator",
-  "upload_key_sha1": "F9:12:F0:10:8E:31:72:C6:81:A4:44:05:A3:6F:C3:8C:6A:ED:43:21"
+  "upload_key_sha1": "F9:12:F0:10:8E:31:72:C6:81:A4:44:05:A3:6F:C3:8C:6A:ED:43:21",
+  "health_apps_declaration": "required (Play Console > App content > Health apps): BMI / body-composition calculator and log; no medical device, no diagnosis, data stays on device"
 }

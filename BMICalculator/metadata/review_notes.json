@@ -1,6 +1,6 @@
 {
-  "google_review_notes": "No login required. All features of BMICalculator accessible from the main menu.",
-  "apple_review_notes": "No login required. To test IAPs, use the shop button in BMICalculator.",
+  "google_review_notes": "No login required. BMI Calculator opens on the BMI tab after a 3-card intro (Skip). Type a height and weight (metric or imperial) to see the BMI, its WHO adult category, a band gauge and the healthy-weight range; Save reading adds it to History (chart + notes); Goal tracks a target weight; the optional body-fat estimate (Deurenberg formula) is labelled 'estimate'. Pro and Remove Ads are one-time in-app products (Settings > Purchases); Restore purchases is in the same section. All data stays on the device. HEALTH APPS DECLARATION: the app is a BMI / body-composition calculator and personal log. It is not a medical device, gives no medical advice, diagnosis, treatment or dosing, states in onboarding, on the BMI tab, in Settings and in the listing that BMI is not valid for children, pregnancy or athletes and that users should talk to a health professional, and cites the WHO adult BMI bands. No health data leaves the device (Data Safety: no health data collected).",
+  "apple_review_notes": "No login required. To test in-app purchases open Settings (gear, top right) > Purchases: Go Pro (pro_lifetime) or Remove ads (remove_ads); Restore purchases is in the same section. The app is a BMI calculator and log, not a medical device, and shows 'not a diagnosis / not medical advice' wording; all data stays on device. No demo account needed.",
   "demo_account_required": false,
   "demo_username": "",
   "demo_password": "",

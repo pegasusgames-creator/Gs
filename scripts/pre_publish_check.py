@@ -2081,6 +2081,7 @@ def main():
         ('check_reward_types_native.py', 'rewarded types requested by JS are whitelisted in Java'),
         ('check_lang_picker.py', 'every translated listing locale is selectable in the language picker'),
         ('check_trademarks.py', 'no third-party game/franchise trademarks in listing text'),
+        ('check_bmicalculator_math.py', 'BMI, WHO band edges (18.5/25/30/35/40), healthy-weight range, kg/lb/cm/ft-in conversions, Deurenberg body-fat, gauge, goal progress (JS vs independent exact-rational Python reference)'),
         ('check_aspectratio_math.py', 'ratio/resize maths exact: GCD reduction, half-up rounding, width/height/ratio locks, clamping, px/in/cm/mm at any DPI, crops, batch, parsing, preset table (JS vs independent Python reference)'),
         ('check_solitaire_winnable.py', 'solitaire deals replay to four full foundations'),
         ('check_minesweeper_noguess.py', 'no-guess boards (every field solvable by logic from its safe first click, all 4 transforms)'),

@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_bmicalculator_math.py",
+    "BMI, WHO band edges (18.5/25/30/35/40), healthy-weight range, kg/lb/cm/ft-in conversions, Deurenberg body-fat, gauge, goal progress (JS vs independent exact-rational Python reference)"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      239,
+      246,
+      244
+    ],
+    "bg_top_right": [
+      214,
+      239,
+      234
+    ],
+    "bg_bottom": [
+      11,
+      107,
+      99
+    ],
+    "text_primary": [
+      16,
+      35,
+      31
+    ],
+    "text_accent": [
+      11,
+      107,
+      99
+    ],
+    "text_subtle": [
+      61,
+      88,
+      82
+    ],
+    "footer_tint": [
+      18,
+      130,
+      118
+    ],
+    "mood": "tool-clean",
+    "layout_archetype": "I",
+    "mascot_pattern": "M0",
+    "voice": "V8",
+    "texture": "T8"
+  }
+}
