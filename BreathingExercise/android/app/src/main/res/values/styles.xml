@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Full screen, no title bar, matches game background color -->
-    <style name="Theme.PegasusGames" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">#1a1a2e</item>
-        <item name="android:statusBarColor">#1a1a2e</item>
-        <item name="android:navigationBarColor">#1a1a2e</item>
+    <!-- Utility shell: system bars stay visible. Launch colours = the Daylight
+         background so there is no dark flash before game.html paints;
+         MainActivity then follows the in-app theme (setSystemBarColors). -->
+    <style name="Theme.PegasusUtility" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">#F5F3FA</item>
+        <item name="android:statusBarColor">#F5F3FA</item>
+        <item name="android:navigationBarColor">#F5F3FA</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowFullscreen">false</item>
     </style>
 </resources>
