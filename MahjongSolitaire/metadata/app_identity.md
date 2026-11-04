@@ -1,42 +1,32 @@
-# MahjongSolitaire Identity
+# Mahjong Solitaire — identity
 
-- **Category**: puzzle
-- **Layout archetype**: H (workshop / inventory)
-- **Mascot pattern**: M4 (spirit-of-the-app abstract motif (particles, flow))
-- **Voice**: V5 (calm / zen)
-- **Texture**: T2 (soft glassmorphism)
-- **Mood string**: puzzle-deep
+- **Category**: board / tile-matching puzzle (Google GAME_BOARD)
+- **Layout archetype**: A (hero Play over a calm button stack; the emblem carries the identity)
+- **Mascot pattern**: M4 (spirit-of-the-app: a small tile stack with its matching free pair lit)
+- **Voice**: V5 (calm / zen: "Serene clear", "Never truly stuck")
+- **Texture**: T4 (wood / material: honey-teak table grain, ivory tiles with jade backs)
+- **Mood string**: honey-teak tea table
 
-The app should feel like: thoughtful and tactile; each app's mechanic is the star.
+## The game in one line
+Classic mahjong solitaire (match two free identical tiles) tuned for readability and calm:
+big original SVG tile faces, held tiles dimmed, free undo, solver-backed hints, a shuffle
+that re-deals what is left so it stays clearable.
+
+## What makes it distinct in the portfolio
+- Mechanic: free-tile pair matching on stacked 3D layouts (no sibling stacks tiles).
+- Palette: honey wood `#f0dfbd` + jade `#1f7a5c` (Solitaire is sea-glass teal felt, Sokoban clay,
+  Puzzle2048 sand cream — none pairs warm honey wood with jade).
+- Icon focal: three stacked ivory tiles on jade backs with a lit matching pair.
+- Content: 500 reverse-dealt campaign deals (gate `scripts/check_mahjong_solvable.py` replays each),
+  21 layout families (traditional Turtle + 20 originals), date-seeded daily, endless boards.
+
+## Accessibility
+High-contrast tiles (whiter faces, deeper inks, corner numbers), "Dim held tiles" toggle,
+vibration toggle, tiles sized to the screen (about 40 px wide on a 360 px phone for the largest
+boards, up to 96 px on tablets), `prefers-reduced-motion` respected.
 
 ## Anti-pattern audit (APP_ARCHETYPES.md §5)
-
-This file was auto-generated during the 2026-04-30 portfolio archetype
-assignment pass. The four archetypes above were chosen so the app does
-NOT default to the template signature (A/M0/V1/T1).
-
-When the app's `game.html` is next touched (or built fresh), audit the
-in-app design against the §5 anti-patterns:
-
-- [ ] Center-aligned everything → use offset weight
-- [ ] Same SVG icon set as other apps → vary icon family per app
-- [ ] All-caps headlines on every screen → mixed case for body
-- [ ] Generic templated currency icon → make it match the app theme
-- [ ] Identical button shapes / sizes / spacings → vary
-- [ ] Symmetric vertical column layout → break with side panels / FAB
-- [ ] Generic "Level Complete!" celebration → app-specific phrasing
-- [ ] Same loading / transition patterns → vary
-- [ ] Identical settings screen → reorder, rename, add app-specific options
-
-If 3+ of the above are hit, redesign before the next ship.
-
-## Phase 8 self-check
-
-Before declaring this app release-ready, all four of:
-
-1. Side-by-side test (vs other shipped apps, do they look like different products?)
-2. Voice-specificity test (does the menu copy reflect this app's voice archetype?)
-3. Identity-element test (a single recognizable visual element)
-4. Anonymous-screenshot test (could a user identify this app without title/name?)
-
-must pass. See APP_ARCHETYPES.md §8.
+- [x] App-specific celebration copy ("Serene clear! Cleared in 1:42 (par 2:05), no shuffle")
+- [x] Own tile art and suit colours; no Unicode mahjong glyphs (they tofu on many devices)
+- [x] App-specific settings (high-contrast tiles, dim held tiles, vibration)
+- [x] Footer tools with icon + label + booster badge, not generic pills

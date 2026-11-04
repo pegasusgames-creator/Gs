@@ -27,6 +27,7 @@ from mahjong_core import normalize, validate_layout, encode_layout, Geo
 MAX_COLS = 8
 MAX_ROWS = 10
 MAX_TILES = 144
+MAX_LAYERS = 4   # deeper stacks bury too many faces to read at phone size
 CX = 40  # working centre (half units); layouts are normalised afterwards
 
 
@@ -157,7 +158,7 @@ def f_pyramid(w, h):
 
 def f_ziggurat(w, h):
     layers = [rows(0, [w] * h)]
-    while len(layers) < 5:
+    while len(layers) < 3:   # deeper half-step stacks bury too many faces
         nxt = half_up(layers[-1], len(layers))
         if not nxt:
             break
@@ -523,7 +524,7 @@ def finish(raw):
     if not t:
         return None
     t = normalize(t)
-    if len(t) > MAX_TILES or validate_layout(t):
+    if len(t) > MAX_TILES or max(p[2] for p in t) + 1 > MAX_LAYERS or validate_layout(t):
         return None
     cols = (max(x for x, _, _ in t) + 2) / 2.0
     rws = (max(y for _, y, _ in t) + 2) / 2.0

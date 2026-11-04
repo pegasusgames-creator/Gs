@@ -123,7 +123,7 @@ public class MainActivity extends Activity {
     ));
 
     // Launch colour (before game.html paints): the Daylight background.
-    private static final int WEBVIEW_BG_COLOR = 0xFFF5F3FA;
+    private static final int WEBVIEW_BG_COLOR = 0xFFF0F6F1;
 
     // ── Notification scheduling (NOTIFICATIONS_IMPL.md §1) ────────────────────
     private static final int REQ_DAILY_REMINDER       = 1001;

@@ -1,1 +1,1 @@
-(()=>{ loadLevel(0); gMoves=L.par; winLevel(); })()
+(()=>{ localStorage.setItem('mj_tutorialDone','1'); document.querySelectorAll('.overlay.show').forEach(o=>o.classList.remove('show')); showScreen('game'); loadLevel(0); for(const [a,b] of L.order){ if(gWon) break; if(!mjTap(a)||!mjTap(b)) return 'illegal move'; } return gWon; })()
