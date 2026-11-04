@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_countingapp_items.py",
+    "CountingApp counting rounds (shown count, ranges, skip-count rows, distractors)"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      214,
+      241,
+      239
+    ],
+    "bg_top_right": [
+      169,
+      227,
+      222
+    ],
+    "bg_bottom": [
+      16,
+      100,
+      110
+    ],
+    "text_primary": [
+      16,
+      52,
+      58
+    ],
+    "text_accent": [
+      176,
+      36,
+      106
+    ],
+    "text_subtle": [
+      51,
+      96,
+      106
+    ],
+    "footer_tint": [
+      31,
+      106,
+      165
+    ],
+    "mood": "kids-lagoon",
+    "layout_archetype": "E",
+    "mascot_pattern": "M3",
+    "voice": "V7",
+    "texture": "T7"
+  }
+}

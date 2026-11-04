@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" data-theme="sunny">
+<html lang="en" dir="ltr" data-theme="lagoon">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -20,41 +20,41 @@
 <style>
 /*@@REGION PALETTE*/
 :root{
-  --bg:#fff2c4; --app-bg:#fff2c4; --bg-glow:#ffd977; --bg-dots:rgba(201,121,10,.11);
-  --surface:#fffaf0; --surface-2:#fff0c9; --border:rgba(59,35,22,.14);
-  --menu-tile-bg:#fffaf0; --menu-tile-border:rgba(59,35,22,.14); --menu-tile-fg:#3b2316;
-  --text:#3b2316; --text-mute:#6b4a30; --ink:#3b2316; --art-bg:#fffaf0;
-  --accent:#c8305f; --accent-d:#8f1d40; --accent-soft:#f9d3df; --on-accent:#ffffff;
-  --g-play:linear-gradient(180deg,#d94a73,#b8264f);
-  --btn-neutral-bg:#f3e4bd; --btn-shadow:#d8c08a; --on-tile:#ffffff;
-  --tile-1:#c63c26; --tile-1-d:#8e2614; --tile-2:#2f6fb5; --tile-2-d:#1f4f86;
-  --tile-3:#2a8250; --tile-3-d:#1b5c37; --tile-4:#8150c4; --tile-4-d:#5c3594;
-  --guide:#f1dfb2; --guide-line:#b98b3c; --good:#2a8250; --star:#f2a516; --star-d:#c47f00;
-  --shadow:rgba(59,35,22,.16); --scrim:rgba(0,0,0,.45);
-  --l1:#c63c26; --l2:#2f6fb5; --l3:#2a8250; --l4:#8150c4; --l5:#a8551c;
+  --bg:#d6f1ef; --app-bg:#d6f1ef; --bg-glow:#a9e3de; --bg-dots:rgba(16,100,110,.10);
+  --surface:#f4fcfb; --surface-2:#dff5f3; --border:rgba(16,52,58,.15);
+  --menu-tile-bg:#f4fcfb; --menu-tile-border:rgba(16,52,58,.15); --menu-tile-fg:#10343a;
+  --text:#10343a; --text-mute:#33606a; --ink:#10262c; --art-bg:#f4fcfb;
+  --accent:#b0246a; --accent-d:#7c1649; --accent-soft:#f7d4e5; --on-accent:#ffffff;
+  --g-play:linear-gradient(180deg,#c43a80,#a01e5c);
+  --btn-neutral-bg:#bfe5e2; --btn-shadow:#8fc8c3; --on-tile:#ffffff;
+  --tile-1:#c0344f; --tile-1-d:#85213a; --tile-2:#1f6aa5; --tile-2-d:#144a78;
+  --tile-3:#12795f; --tile-3-d:#0b5543; --tile-4:#a85f0a; --tile-4-d:#744006;
+  --guide:#c4ebe7; --guide-line:#4f9a94; --good:#12795f; --star:#f2a516; --star-d:#c47f00;
+  --shadow:rgba(16,52,58,.17); --scrim:rgba(0,0,0,.45);
+  --l1:#c0344f; --l2:#1f6aa5; --l3:#12795f; --l4:#7a45b5; --l5:#a85f0a;
 }
-html[data-theme="meadow"]{
-  --bg:#e2f3d2; --app-bg:#e2f3d2; --bg-glow:#bfe6a0; --bg-dots:rgba(42,130,80,.10);
-  --surface:#f8fdf2; --surface-2:#ebf7df; --border:rgba(30,51,24,.14);
-  --menu-tile-bg:#f8fdf2; --menu-tile-border:rgba(30,51,24,.14); --menu-tile-fg:#1e3318;
-  --text:#1e3318; --text-mute:#456039; --ink:#2b2a1c; --art-bg:#f8fdf2;
-  --accent:#b8325c; --accent-d:#84203f; --accent-soft:#f6d2dc;
-  --g-play:linear-gradient(180deg,#c9446c,#a52650);
-  --btn-neutral-bg:#d8eec4; --btn-shadow:#a9cf8c; --guide:#d3ebbd; --guide-line:#5f8f45;
-  --shadow:rgba(30,51,24,.16);
+html[data-theme="sand"]{
+  --bg:#f8ecd0; --app-bg:#f8ecd0; --bg-glow:#f2d79b; --bg-dots:rgba(11,110,122,.10);
+  --surface:#fffaf0; --surface-2:#f9efd8; --border:rgba(58,42,20,.15);
+  --menu-tile-bg:#fffaf0; --menu-tile-border:rgba(58,42,20,.15); --menu-tile-fg:#3a2a14;
+  --text:#3a2a14; --text-mute:#6a4f2c; --ink:#2b2014; --art-bg:#fffaf0;
+  --accent:#0b6e7a; --accent-d:#074850; --accent-soft:#cdeaee;
+  --g-play:linear-gradient(180deg,#118595,#0a626d);
+  --btn-neutral-bg:#f0dfb6; --btn-shadow:#d6bd84; --guide:#f1e0b3; --guide-line:#b08c45;
+  --shadow:rgba(58,42,20,.16);
 }
-html[data-theme="bedtime"]{
-  --bg:#1c2045; --app-bg:#1c2045; --bg-glow:#33397a; --bg-dots:rgba(255,236,170,.10);
-  --surface:#2a2f5e; --surface-2:#343a72; --border:rgba(255,255,255,.14);
-  --menu-tile-bg:#2a2f5e; --menu-tile-border:rgba(255,255,255,.14); --menu-tile-fg:#fbf1dc;
-  --text:#fbf1dc; --text-mute:#cfc6ea; --ink:#2a1d14; --art-bg:#efe2c3;
-  --accent:#ff8fb1; --accent-d:#c75b7e; --accent-soft:#4a3a72; --on-accent:#1c2045;
-  --g-play:linear-gradient(180deg,#ffa3c0,#f0789e);
-  --btn-neutral-bg:#3b4180; --btn-shadow:#14173a;
-  --tile-1:#b8452f; --tile-1-d:#7c2a1a; --tile-2:#3466a8; --tile-2-d:#1f4377;
-  --tile-3:#2d7a4f; --tile-3-d:#1a5233; --tile-4:#7a52b8; --tile-4-d:#523384;
-  --guide:#3e447e; --guide-line:#aab0e6; --good:#2a8250; --shadow:rgba(0,0,0,.35);
-  --l1:#ff9b85; --l2:#8fc1ff; --l3:#85dca6; --l4:#c9a8ff; --l5:#ffc46b;
+html[data-theme="night"]{
+  --bg:#0f2a44; --app-bg:#0f2a44; --bg-glow:#1b4468; --bg-dots:rgba(180,230,255,.10);
+  --surface:#1b3d5e; --surface-2:#24496e; --border:rgba(255,255,255,.16);
+  --menu-tile-bg:#1b3d5e; --menu-tile-border:rgba(255,255,255,.16); --menu-tile-fg:#eaf6ff;
+  --text:#eaf6ff; --text-mute:#bcd6ea; --ink:#10262c; --art-bg:#e6f3fb;
+  --accent:#ffb36b; --accent-d:#d98440; --accent-soft:#4d4a5c; --on-accent:#0f2a44;
+  --g-play:linear-gradient(180deg,#ffc088,#f59a4c);
+  --btn-neutral-bg:#2a5278; --btn-shadow:#0a1c30; --guide:#2f5a82; --guide-line:#8fc0e6;
+  --tile-1:#b83c55; --tile-1-d:#7d243a; --tile-2:#2a6aa8; --tile-2-d:#1a4672;
+  --tile-3:#1a7a62; --tile-3-d:#0f5242; --tile-4:#9a5a14; --tile-4-d:#683a0a;
+  --good:#2fb58a; --shadow:rgba(0,0,0,.38);
+  --l1:#ff93a8; --l2:#8fc4ff; --l3:#7fe0bc; --l4:#c9a8ff; --l5:#ffc46b;
 }
 /*@@END PALETTE*/
 
@@ -266,50 +266,81 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
 
 /* Content bottom action bars use class "game-footer" (see the adaptive block below). */
 /*@@REGION CONTENT_CSS*/
-/* ABC Learning — letters grid, letter card, tracing, mini games. Tokens only
-   (letter inks --l1..--l5 are per theme); art fills are decorative. */
+/* Counting Fun — number hub, tap-to-count, hundred chart, songs, tracing, games. Tokens only. */
 .art{width:100%;height:100%;overflow:visible}
 .art path,.art circle,.art ellipse,.art rect{stroke:var(--ink);stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round}
 .art .n{stroke:none}
 .art .f{fill:none}
-.lc1{--lc:var(--l1)} .lc2{--lc:var(--l2)} .lc3{--lc:var(--l3)} .lc4{--lc:var(--l4)} .lc5{--lc:var(--l5)}
+.nc1{--lc:var(--l1)} .nc2{--lc:var(--l2)} .nc3{--lc:var(--l3)} .nc4{--lc:var(--l4)} .nc5{--lc:var(--l5)}
+.scroll-col{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;min-height:0}
 
-/* Letters grid */
-.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(72px,20vw,128px),1fr));gap:clamp(10px,2.6vw,16px);
+/* Number hub + digit grid */
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(64px,17vw,120px),1fr));gap:clamp(8px,2.4vw,14px);
   overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 4px 18px;flex:1;min-height:0;align-content:start}
-.ltile{position:relative;min-height:72px;aspect-ratio:1/1.08;border-radius:24px;background:var(--menu-tile-bg);color:var(--lc);
+.ltile{position:relative;min-height:68px;aspect-ratio:1/1.05;border-radius:22px;background:var(--menu-tile-bg);color:var(--lc);
   box-shadow:0 5px 0 var(--btn-shadow),0 8px 16px var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;
   transition:transform .08s,box-shadow .08s;padding:4px}
 .ltile:active{transform:translateY(4px);box-shadow:0 1px 0 var(--btn-shadow)}
-.ltile .lt-pair{font-weight:700;font-size:clamp(28px,7.6vw,46px);line-height:1.05}
-.ltile .mini{width:44%;aspect-ratio:1;margin-top:2px}
+.ltile .lt-pair{font-weight:700;font-size:clamp(28px,7.4vw,46px);line-height:1.05}
+.ltile .mini{width:40%;aspect-ratio:1;margin-top:2px}
+.ltile.wide{grid-column:1/-1;aspect-ratio:auto;min-height:76px;flex-direction:row;gap:14px;background:var(--tile-4);color:var(--on-tile);box-shadow:0 6px 0 var(--tile-4-d),0 10px 18px var(--shadow)}
+.ltile.wide .lt-pair{font-size:clamp(24px,6vw,34px)}
 .ltile.locked .lt-pair{opacity:.55}
-.ltile.locked .mini{filter:grayscale(1);opacity:.35}
 .ltile .badge{top:-7px;right:-7px}
 .pips{display:flex;gap:6px;margin-top:6px}
 .pips i{width:12px;height:12px;border-radius:50%;background:var(--btn-neutral-bg);box-shadow:inset 0 0 0 2px var(--border)}
 .pips i.on{background:var(--good);box-shadow:none}
 
-/* Letter card */
-.card-col{gap:10px;padding-bottom:0}
-.lcard{flex:1;min-height:0;background:var(--surface);border-radius:38px;box-shadow:0 8px 0 var(--btn-shadow),0 14px 30px var(--shadow);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 14px 14px;gap:2px;position:relative;overflow:hidden}
-.lcard::before{content:"";position:absolute;inset:auto -10% -38% -10%;height:60%;border-radius:50%;background:var(--surface-2);z-index:0}
-.lcard>*{position:relative;z-index:1}
-.lcard.swap{animation:cardIn .35s cubic-bezier(.2,1.2,.4,1)}
-@keyframes cardIn{from{transform:scale(.88) rotate(-2deg);opacity:.2}to{transform:none;opacity:1}}
-.pair{font-weight:700;line-height:.95;font-size:clamp(76px,min(30vw,16vh),190px);display:flex;gap:.14em;align-items:baseline;color:var(--l1);min-height:64px}
-.pair .lo{color:var(--l2)}
-.pic{width:min(62vw,34vh,320px);aspect-ratio:1;border-radius:50%;background:var(--art-bg);box-shadow:inset 0 0 0 4px var(--border),0 6px 0 var(--btn-shadow);display:grid;place-items:center;min-width:96px}
-.pic .art{width:84%;height:84%}
-.word{font-size:clamp(32px,min(10vw,6vh),64px);font-weight:700;color:var(--text);letter-spacing:.03em;min-height:64px;padding:0 14px}
-.word b{color:var(--l1)}
+/* Tap-to-count scene */
+.bignum{min-width:84px;min-height:58px;padding:0 20px;border-radius:999px;background:var(--surface);box-shadow:0 4px 0 var(--btn-shadow);font-weight:700;font-size:38px;line-height:58px;text-align:center;color:var(--accent)}
+.cstage{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-width:760px;margin:4px auto 6px;
+  background:var(--surface);border-radius:34px;box-shadow:inset 0 0 0 3px var(--border),0 8px 22px var(--shadow);overflow:hidden;padding:10px}
+.cgrid{display:grid;grid-template-columns:repeat(var(--cols,3),var(--sz,80px));gap:var(--gp,8px);justify-content:center;align-content:center}
+.obj{position:relative;width:var(--sz,80px);height:var(--sz,80px);border-radius:24px;display:grid;place-items:center;transition:transform .12s;padding:4px}
+.obj .art-w{width:86%;height:86%;display:block;transition:transform .15s}
+.obj.counted .art-w{opacity:.55}
+.obj .cnum{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(0);min-width:44%;height:44%;border-radius:999px;background:var(--accent);color:var(--on-accent);
+  font-weight:700;font-size:calc(var(--sz,80px)*.3);display:grid;place-items:center;line-height:1;box-shadow:0 3px 0 var(--accent-d);padding:0 6px}
+.obj.counted .cnum{transform:translate(-50%,-50%) scale(1);animation:pop .35s cubic-bezier(.2,1.5,.4,1)}
+.obj:active{transform:scale(.92)}
+.obj.hint{animation:glow 1s ease-in-out infinite}
+@keyframes pop{from{transform:translate(-50%,-50%) scale(.2)}}
 .card-bar{display:flex;justify-content:center;align-items:center;gap:clamp(10px,3.4vw,22px);flex:0 0 auto}
 
+/* Hundred chart */
+.hwrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:560px;margin:0 auto}
+.hchart{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;width:min(100%,46vh);aspect-ratio:1;background:var(--surface);padding:6px;border-radius:20px;box-shadow:inset 0 0 0 3px var(--border),0 6px 16px var(--shadow)}
+.hc{display:grid;place-items:center;border-radius:6px;background:var(--surface-2);color:var(--text-mute);font-size:clamp(9px,2.7vw,15px);font-weight:700;line-height:1;transition:background .15s}
+.hc.t{background:var(--tile-2);color:var(--on-tile)}
+.hc.o{background:var(--tile-1);color:var(--on-tile)}
+.hread{text-align:center;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:2px}
+.hread b{font-size:clamp(44px,12vw,64px);line-height:1;color:var(--accent)}
+.hread span{font-size:clamp(15px,4vw,20px);color:var(--text-mute);font-weight:700}
+.hbar{display:flex;gap:8px;justify-content:center;align-items:center;flex:0 0 auto;padding-bottom:4px}
+.pill.big{min-width:68px;min-height:68px;font-size:24px;font-weight:700;border-radius:24px;padding:0 12px}
+
+/* Songs */
+.ggrid{display:grid;grid-template-columns:1fr;gap:var(--gap);align-content:center;flex:1;min-height:0;padding:6px 0}
+@media (min-width:600px){.ggrid{grid-template-columns:repeat(3,1fr)}}
+.gcard{--tc:var(--tile-1);--td:var(--tile-1-d);position:relative;min-height:clamp(96px,17vh,220px);border-radius:30px;background:var(--tc);color:var(--on-tile);
+  box-shadow:0 7px 0 var(--td),0 12px 22px var(--shadow);display:flex;align-items:center;gap:16px;padding:12px 22px;transition:transform .08s,box-shadow .08s}
+.gcard:active{transform:translateY(5px);box-shadow:0 2px 0 var(--td)}
+.gcard.c2{--tc:var(--tile-2);--td:var(--tile-2-d)} .gcard.c3{--tc:var(--tile-3);--td:var(--tile-3-d)}
+.gcard .g-ico{width:clamp(70px,20vw,120px);height:clamp(70px,20vw,120px);flex:0 0 auto}
+.gcard .g-lbl{font-weight:700;font-size:clamp(21px,5.6vw,30px);text-align:start;text-shadow:0 2px 0 rgba(0,0,0,.18)}
+@media (min-width:600px){.gcard{flex-direction:column;justify-content:center}.gcard .g-lbl{text-align:center}}
+.gcard .badge,.tile .badge{width:40px;height:40px;top:-8px;right:-8px}
+.gcard .badge svg,.tile .badge svg{width:24px;height:24px}
+.snums{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(8px,2.4vw,14px);width:100%;max-width:560px;margin:0 auto}
+.sn{aspect-ratio:1;min-height:56px;border-radius:50%;background:var(--surface);color:var(--lc);font-weight:700;font-size:clamp(20px,6vw,36px);display:grid;place-items:center;
+  box-shadow:0 5px 0 var(--btn-shadow),0 8px 14px var(--shadow);transition:transform .12s,background .12s}
+.sn.on{background:var(--lc);color:var(--on-tile);transform:translateY(-6px) scale(1.12)}
+.sn.done{opacity:1}
+.song-stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(14px,3vh,28px);width:100%}
+.song-btns{display:flex;gap:18px;align-items:center}
+.rbtn.xl{width:clamp(88px,24vw,120px);height:clamp(88px,24vw,120px)}
+
 /* Tracing */
-.seg2{display:flex;background:var(--surface);border-radius:999px;padding:5px;gap:4px;box-shadow:0 4px 0 var(--btn-shadow)}
-.seg2 button{min-width:66px;min-height:58px;border-radius:999px;font-weight:700;font-size:32px;color:var(--text);line-height:1}
-.seg2 button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
 .tr-stage{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-width:760px;margin:4px auto 10px;
   background:var(--surface);border-radius:34px;box-shadow:inset 0 0 0 3px var(--border),0 8px 22px var(--shadow);overflow:hidden}
 #trSvg{width:100%;height:100%;touch-action:none}
@@ -332,57 +363,53 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
 .tr-stage.done #trSvg{animation:bounceIn .5s ease}
 @keyframes bounceIn{40%{transform:scale(1.05)}}
 
-/* Games hub */
-.ggrid{display:grid;grid-template-columns:1fr;gap:var(--gap);align-content:center;flex:1;min-height:0;padding:6px 0}
-@media (min-width:600px){.ggrid{grid-template-columns:repeat(3,1fr)}}
-.gcard{--tc:var(--tile-1);--td:var(--tile-1-d);position:relative;min-height:clamp(104px,19vh,230px);border-radius:30px;background:var(--tc);color:var(--on-tile);
-  box-shadow:0 7px 0 var(--td),0 12px 22px var(--shadow);display:flex;align-items:center;gap:16px;padding:12px 22px;transition:transform .08s,box-shadow .08s}
-.gcard:active{transform:translateY(5px);box-shadow:0 2px 0 var(--td)}
-.gcard.c2{--tc:var(--tile-2);--td:var(--tile-2-d)} .gcard.c3{--tc:var(--tile-4);--td:var(--tile-4-d)}
-.gcard .g-ico{width:clamp(78px,22vw,130px);height:clamp(78px,22vw,130px);flex:0 0 auto}
-.gcard .g-lbl{font-weight:700;font-size:clamp(21px,5.6vw,30px);text-align:start;text-shadow:0 2px 0 rgba(0,0,0,.18)}
-@media (min-width:600px){.gcard{flex-direction:column;justify-content:center}.gcard .g-lbl{text-align:center}}
-.gcard .badge,.tile .badge{width:40px;height:40px;top:-8px;right:-8px}
-.gcard .badge svg,.tile .badge svg{width:24px;height:24px}
-
-/* Play */
+/* Games */
 .stars{display:flex;gap:4px;align-items:center}
 .stars svg{width:clamp(30px,8vw,44px);height:clamp(30px,8vw,44px);fill:var(--btn-neutral-bg);stroke:var(--star-d);stroke-width:1.6;stroke-linejoin:round;transition:transform .3s}
 .stars svg.on{fill:var(--star);transform:scale(1.12)}
-.play-stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(14px,3vh,28px);width:100%;max-width:760px;margin:0 auto}
-.balloons{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,3vw,26px);width:100%;max-width:min(560px,52vh)}
-.balloon{position:relative;aspect-ratio:.82;display:grid;place-items:center;animation:float 3.2s ease-in-out infinite;min-height:80px}
-.balloon svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.balloon svg path,.balloon svg ellipse{stroke:var(--ink);stroke-width:2.4;stroke-linejoin:round}
-.balloon svg .n{stroke:none}
-.balloon span{position:relative;font-weight:700;font-size:clamp(44px,min(13vw,8vh),92px);color:var(--on-tile);margin-top:-16%;text-shadow:0 3px 0 rgba(0,0,0,.22)}
-.balloon:nth-child(2){animation-delay:-.8s} .balloon:nth-child(3){animation-delay:-1.6s} .balloon:nth-child(4){animation-delay:-2.4s}
-.balloon.popped{animation:popOut .42s ease-out forwards}
-@keyframes float{50%{transform:translateY(-7px)}}
-@keyframes popOut{to{transform:scale(1.45);opacity:0}}
-.opt-row{display:flex;gap:clamp(12px,3.4vw,24px);justify-content:center;width:100%}
-.ocard{flex:1 1 0;max-width:190px;min-height:84px;aspect-ratio:1;border-radius:28px;background:var(--surface);color:var(--text);font-weight:700;font-size:clamp(50px,min(14vw,9vh),100px);
+.play-stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,2.2vh,22px);width:100%;max-width:760px;margin:0 auto}
+.opt-row{display:flex;gap:clamp(10px,3vw,22px);justify-content:center;width:100%}
+.ocard{flex:1 1 0;max-width:150px;min-height:72px;aspect-ratio:1;border-radius:26px;background:var(--surface);color:var(--text);font-weight:700;font-size:clamp(34px,min(10vw,7vh),68px);
   box-shadow:0 6px 0 var(--btn-shadow),0 10px 20px var(--shadow);display:grid;place-items:center;line-height:1;transition:transform .08s,box-shadow .08s}
 .ocard:active{transform:translateY(4px);box-shadow:0 1px 0 var(--btn-shadow)}
-.ocard.small{font-size:clamp(40px,min(11vw,7vh),78px)}
 .ocard.right{background:var(--good);color:var(--on-tile);transform:scale(1.08)}
 .hint{animation:glow 1s ease-in-out infinite !important}
 @keyframes glow{50%{transform:scale(1.07);filter:drop-shadow(0 0 12px var(--star))}}
-.big-l{font-weight:700;font-size:clamp(100px,min(30vw,22vh),210px);line-height:1;color:var(--l1);background:var(--surface);border-radius:38px;padding:4px 44px 10px;
-  box-shadow:0 8px 0 var(--btn-shadow),0 14px 28px var(--shadow)}
-.pic-top{width:min(56vw,34vh,280px);aspect-ratio:1;border-radius:50%;background:var(--art-bg);display:grid;place-items:center;box-shadow:inset 0 0 0 4px var(--border),0 8px 0 var(--btn-shadow)}
-.pic-top .art{width:84%;height:84%}
+.cluster{flex:1 1 auto;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;background:var(--surface);border-radius:28px;box-shadow:inset 0 0 0 3px var(--border);padding:8px}
+.cluster .cgrid{max-height:100%}
+.runtot{min-width:56px;height:40px;line-height:40px;border-radius:999px;background:var(--surface-2);color:var(--accent);font-weight:700;font-size:24px;text-align:center;padding:0 14px}
+.rod,.cube{display:block;border-radius:6px;background:var(--tile-2);box-shadow:inset 0 0 0 2px var(--tile-2-d)}
+.cube{background:var(--tile-1);box-shadow:inset 0 0 0 2px var(--tile-1-d)}
+.rod{background:repeating-linear-gradient(180deg,var(--tile-2) 0 9.6%,var(--tile-2-d) 9.6% 10%)}
+.tgt{font-weight:700;font-size:clamp(64px,min(20vw,13vh),130px);line-height:1;color:var(--accent);background:var(--surface);border-radius:32px;padding:2px 36px 8px;box-shadow:0 7px 0 var(--btn-shadow),0 12px 24px var(--shadow)}
+.basket{flex:1 1 auto;min-height:0;width:100%;border-radius:26px;background:var(--surface-2);box-shadow:inset 0 0 0 4px var(--guide-line);padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-content:center;justify-content:center;overflow:hidden}
+.basket .bi{width:var(--isz,44px);height:var(--isz,44px)}
+.basket .rod{width:calc(var(--isz,44px)*.42);height:var(--isz,44px)}
+.basket .cube{width:calc(var(--isz,44px)*.42);height:calc(var(--isz,44px)*.42)}
+.srcbar{display:flex;gap:clamp(10px,3vw,18px);justify-content:center;align-items:center}
+.src{min-width:84px;min-height:84px;border-radius:26px;background:var(--tile-3);color:var(--on-tile);box-shadow:0 6px 0 var(--tile-3-d);display:grid;place-items:center;padding:6px;position:relative}
+.src:active{transform:translateY(4px);box-shadow:0 1px 0 var(--tile-3-d)}
+.src .art{width:56px;height:56px} .src .plus{position:absolute;right:6px;top:2px;font-weight:700;font-size:22px}
+.src.rodb{background:var(--tile-2);box-shadow:0 6px 0 var(--tile-2-d)} .src.cubeb{background:var(--tile-1);box-shadow:0 6px 0 var(--tile-1-d)}
+.src .rod,.src .cube{background:#fff;box-shadow:none}
+.src .rod{width:20px;height:60px;background:repeating-linear-gradient(180deg,#fff 0 9.4%,rgba(0,0,0,.28) 9.4% 10%)} .src .cube{width:24px;height:24px}
+.seqrow{display:flex;gap:clamp(6px,2vw,12px);justify-content:center;width:100%}
+.slotn{flex:1 1 0;max-width:96px;aspect-ratio:1;min-height:52px;border-radius:20px;background:var(--surface);display:grid;place-items:center;font-weight:700;font-size:clamp(22px,6.4vw,40px);color:var(--text);box-shadow:0 4px 0 var(--btn-shadow)}
+.slotn.q{background:var(--accent-soft);color:var(--accent);box-shadow:inset 0 0 0 4px var(--accent);animation:glow 1.6s ease-in-out infinite}
+.slotn.filled{background:var(--good);color:var(--on-tile)}
 .end-panel{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
 .end-stars{display:flex;gap:6px}
-.end-stars svg{width:clamp(46px,12vw,72px);height:clamp(46px,12vw,72px);fill:var(--star);stroke:var(--star-d);stroke-width:1.5;stroke-linejoin:round;animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}
+.end-stars svg{width:clamp(46px,12vw,72px);height:clamp(46px,12vw,72px);fill:var(--star);stroke:var(--star-d);stroke-width:1.5;stroke-linejoin:round;animation:pop2 .5s cubic-bezier(.2,1.4,.4,1) both}
 .end-stars svg:nth-child(2){animation-delay:.1s}.end-stars svg:nth-child(3){animation-delay:.2s}.end-stars svg:nth-child(4){animation-delay:.3s}.end-stars svg:nth-child(5){animation-delay:.4s}
+@keyframes pop2{from{transform:scale(0)}}
 .end-row{display:flex;gap:16px}
 .end-panel .mascot{width:clamp(120px,32vw,200px);height:clamp(120px,32vw,200px)}
-@media (max-height:620px){.helper .mascot{width:68px;height:68px}.helper{min-height:70px}}
+@media (max-height:620px){.helper .mascot{width:68px;height:68px}.helper{min-height:70px}.tgt{font-size:56px}}
 .wordmark{display:flex;align-items:baseline;gap:8px;font-weight:700;white-space:nowrap}
-.wordmark .wm-abc{display:flex;gap:2px;font-size:clamp(30px,8vw,44px);line-height:1}
-.wordmark .wm-abc span{display:inline-block;transform:rotate(var(--r));text-shadow:0 3px 0 var(--btn-shadow)}
-.wordmark .wm-l{font-size:clamp(18px,4.8vw,26px);color:var(--text)}
+.wordmark .wm-nums{display:flex;gap:2px;font-size:clamp(30px,8vw,44px);line-height:1}
+.wordmark .wm-nums span{display:inline-block;transform:rotate(var(--r));text-shadow:0 3px 0 var(--btn-shadow)}
+.wordmark .wm-l{font-size:clamp(17px,4.6vw,26px);color:var(--text)}
+@media (min-width:600px){.bignum{font-size:46px;min-height:68px;line-height:68px}}
 /*@@END CONTENT_CSS*/
 
 /* ===== 2026-10-15 round-1: adaptive sizing via clamp() =====
@@ -399,7 +426,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
     <div style="width:var(--tap);min-width:64px"></div>
     <div class="mid">
 <!--@@REGION HOME_TITLE-->
-      <div class="wordmark latin" aria-label="ABC Learning"><span class="wm-abc"><span style="color:var(--l1);--r:-8deg">A</span><span style="color:var(--l2);--r:5deg">B</span><span style="color:var(--l3);--r:-4deg">C</span></span><span class="wm-l">Learning</span></div>
+      <div class="wordmark latin" aria-label="Counting Fun"><span class="wm-nums"><span style="color:var(--l1);--r:-8deg">1</span><span style="color:var(--l2);--r:5deg">2</span><span style="color:var(--l3);--r:-4deg">3</span></span><span class="wm-l">Counting Fun</span></div>
 <!--@@END HOME_TITLE-->
     </div>
     <button class="rbtn" data-act="grownups" id="btnGrownups" data-i18n-aria="grownups" aria-label="For grown-ups">
@@ -415,65 +442,115 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
   </div>
   <nav class="home-tiles" id="homeTiles">
 <!--@@REGION HOME_TILES-->
-    <button class="tile" data-go="letters" data-arg='{"mode":"learn"}' data-i18n-aria="tLetters" aria-label="Letters">
-      <svg class="t-ico" viewBox="0 0 64 64" aria-hidden="true"><g stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="5" y="31" width="25" height="25" rx="5" fill="currentColor" fill-opacity=".22"/><rect x="34" y="31" width="25" height="25" rx="5" fill="currentColor" fill-opacity=".22"/><rect x="19.5" y="5" width="25" height="25" rx="5" fill="currentColor" fill-opacity=".22"/></g><g fill="currentColor" font-family="Andika,sans-serif" font-weight="700" font-size="19" text-anchor="middle"><text x="32" y="24.5">A</text><text x="17.5" y="50.5">B</text><text x="46.5" y="50.5">C</text></g></svg>
-      <span class="t-lbl" data-i18n="tLetters">Letters</span>
+    <button class="tile" data-go="count" data-i18n-aria="tCount" aria-label="Count">
+      <svg class="t-ico" viewBox="0 0 64 64" aria-hidden="true"><g stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><circle cx="17" cy="46" r="11" fill="currentColor" fill-opacity=".9"/><circle cx="43" cy="46" r="11" fill="currentColor" fill-opacity=".6"/><circle cx="30" cy="20" r="11" fill="currentColor" fill-opacity=".35"/></g><g fill="#fff" font-family="Andika,sans-serif" font-weight="700" font-size="13" text-anchor="middle"><text x="17" y="51">1</text><text x="43" y="51">2</text></g><text x="30" y="25" font-family="Andika,sans-serif" font-weight="700" font-size="13" text-anchor="middle" fill="currentColor">3</text></svg>
+      <span class="t-lbl" data-i18n="tCount">Count</span>
     </button>
-    <button class="tile c2" data-go="letters" data-arg='{"mode":"trace"}' data-i18n-aria="tTrace" aria-label="Trace">
-      <svg class="t-ico" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 52L27 12h6l13 40M19 38h22" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="1 6.5"/><g transform="rotate(38 46 34)"><rect x="41" y="10" width="11" height="34" rx="2.5" fill="currentColor" fill-opacity=".9"/><path d="M41 44h11l-5.5 10z" fill="currentColor" fill-opacity=".55"/><rect x="41" y="10" width="11" height="6" rx="2" fill="currentColor" fill-opacity=".45"/></g></svg>
+    <button class="tile c2" data-go="songs" data-i18n-aria="tSing" aria-label="Sing">
+      <svg class="t-ico" viewBox="0 0 64 64" aria-hidden="true"><path d="M24 48V14l30-7v34" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="17" cy="48" rx="9" ry="7" fill="currentColor"/><ellipse cx="47" cy="41" rx="9" ry="7" fill="currentColor"/><path d="M24 24l30-7" stroke="currentColor" stroke-width="4"/><path d="M8 58h48" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 7"/></svg>
+      <span class="t-lbl" data-i18n="tSing">Sing</span>
+    </button>
+    <button class="tile c3" data-go="digits" data-i18n-aria="tTrace" aria-label="Trace">
+      <svg class="t-ico" viewBox="0 0 64 64" aria-hidden="true"><path d="M20 22C20 10 28 6 34 6C42 6 48 12 48 20C48 30 36 40 18 54H50" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 6.5"/><g transform="rotate(38 50 40)"><rect x="45" y="14" width="11" height="32" rx="2.5" fill="currentColor" fill-opacity=".9"/><path d="M45 46h11l-5.5 10z" fill="currentColor" fill-opacity=".55"/><rect x="45" y="14" width="11" height="6" rx="2" fill="currentColor" fill-opacity=".45"/></g></svg>
       <span class="t-lbl" data-i18n="tTrace">Trace</span>
     </button>
-    <button class="tile c3" data-go="games" data-i18n-aria="tGames" aria-label="Games">
-      <svg class="t-ico" viewBox="0 0 64 64" aria-hidden="true"><g stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><path d="M22 6c-9 0-15 7-15 15 0 10 8 17 15 18 7-1 15-8 15-18 0-8-6-15-15-15z" fill="currentColor" fill-opacity=".9"/><path d="M44 16c-8 0-13 6-13 13 0 9 7 15 13 16 6-1 13-7 13-16 0-7-5-13-13-13z" fill="currentColor" fill-opacity=".45"/><path d="M22 39c-2 6 3 9 0 15M44 45c2 5-3 7 0 13" fill="none" stroke-linecap="round"/></g></svg>
+    <button class="tile c4" data-go="games" data-i18n-aria="tGames" aria-label="Games">
+      <svg class="t-ico" viewBox="0 0 64 64" aria-hidden="true"><g stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><rect x="6" y="30" width="24" height="24" rx="6" fill="currentColor" fill-opacity=".9"/><rect x="34" y="30" width="24" height="24" rx="6" fill="currentColor" fill-opacity=".5"/><rect x="20" y="6" width="24" height="20" rx="6" fill="currentColor" fill-opacity=".3"/></g><text x="18" y="48" font-family="Andika,sans-serif" font-weight="700" font-size="17" text-anchor="middle" fill="#fff">?</text><g fill="currentColor"><circle cx="40" cy="42" r="3"/><circle cx="52" cy="42" r="3"/><circle cx="46" cy="49" r="3"/></g></svg>
       <span class="t-lbl" data-i18n="tGames">Games</span>
-    </button>
-    <button class="tile c4" data-go="stickers" data-i18n-aria="stickers" aria-label="Stickers">
-      <svg class="t-ico" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6l7.6 15.4 17 2.5-12.3 12 2.9 16.9L32 44.8 16.8 52.8l2.9-16.9-12.3-12 17-2.5z" fill="currentColor" fill-opacity=".9" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M44 52c4-1 8-5 9-9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
-      <span class="t-lbl" data-i18n="stickers">Stickers</span>
     </button>
 <!--@@END HOME_TILES-->
   </nav>
 </section>
 
 <!--@@REGION CONTENT_SCREENS-->
-<!-- ABC Learning content screens: letters grid, letter card, tracing, games hub, game round. -->
-<section class="screen" id="scr-letters" data-screen="letters">
+<!-- Counting Fun content screens: number hub, tap-to-count, hundred chart, songs, digit tracing, games hub, game round. -->
+<section class="screen" id="scr-count" data-screen="count">
   <header class="topbar">
     <button class="rbtn" data-act="back" data-i18n-aria="back" aria-label="Back"><svg class="ico flip" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-    <div class="mid"><span class="title-pill" id="lettersTitle"></span></div>
-    <button class="rbtn" data-act="say-again" data-i18n-aria="listen" aria-label="Listen"><svg class="ico" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+    <div class="mid"><span class="title-pill latin">1 2 3</span></div>
+    <button class="rbtn" data-go="stickers" data-i18n-aria="stickers" aria-label="Stickers"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></button>
   </header>
-  <div class="col"><div class="lgrid ltr" id="letterGrid"></div></div>
+  <div class="col"><div class="lgrid ltr" id="numGrid"></div></div>
 </section>
 
-<section class="screen" id="scr-card" data-screen="card">
+<section class="screen" id="scr-counter" data-screen="counter">
   <header class="topbar">
     <button class="rbtn" data-act="back" data-i18n-aria="back" aria-label="Back"><svg class="ico flip" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-    <div class="mid"></div>
-    <button class="rbtn good" data-act="card-trace" data-i18n-aria="tTrace" aria-label="Trace"><svg class="ico" viewBox="0 0 24 24"><path d="M4 20l1-4.5L15.5 5a2.1 2.1 0 0 1 3 3L8 18.5z"/><path d="M13.5 7l3 3"/></svg></button>
+    <div class="mid"><span class="bignum latin" id="ctNum">0</span></div>
+    <button class="rbtn" data-act="ct-again" data-i18n-aria="again" aria-label="Again"><svg class="ico" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/></svg></button>
   </header>
-  <div class="col card-col ltr">
-    <div class="lcard" id="lcard">
-      <button class="pair latin" data-act="card-name" id="cardPair" aria-label="Letter"></button>
-      <button class="pic" data-act="card-word" id="cardPic" aria-label="Word"></button>
-      <button class="word latin" data-act="card-word" id="cardWord"></button>
-    </div>
+  <div class="col ltr">
+    <div class="cstage" id="cStage"><div class="cgrid" id="cGrid"></div></div>
     <div class="card-bar game-footer">
-      <button class="rbtn" data-act="card-prev" aria-label="Previous"><svg class="ico" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <button class="rbtn sky" data-act="card-name" data-i18n-aria="sayName" aria-label="Letter name"><svg class="ico" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
-      <button class="rbtn accent" data-act="card-sound" data-i18n-aria="saySound" aria-label="Letter sound"><svg class="ico" viewBox="0 0 24 24"><path d="M4.5 12c2.5-4 12.5-4 15 0-2.5 4.5-12.5 4.5-15 0z"/><path d="M7.5 12h9"/></svg></button>
-      <button class="rbtn" data-act="card-next" aria-label="Next"><svg class="ico" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      <button class="rbtn" data-act="ct-prev" data-i18n-aria="prev" aria-label="Previous"><svg class="ico flip" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="rbtn sky" data-act="say-again" data-i18n-aria="listen" aria-label="Listen"><svg class="ico" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+      <button class="rbtn" data-act="ct-next" data-i18n-aria="next" aria-label="Next"><svg class="ico" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
   </div>
+  <div class="helper"><div class="mascot" aria-hidden="true"></div><div class="bubble"><span class="say-text"></span></div></div>
+</section>
+
+<section class="screen" id="scr-hundred" data-screen="hundred">
+  <header class="topbar">
+    <button class="rbtn" data-act="back" data-i18n-aria="back" aria-label="Back"><svg class="ico flip" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="mid"><span class="title-pill latin">100</span></div>
+    <button class="rbtn" data-act="h-reset" data-i18n-aria="again" aria-label="Again"><svg class="ico" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/></svg></button>
+  </header>
+  <div class="col ltr">
+    <div class="hwrap">
+      <div class="hchart" id="hChart"></div>
+      <div class="hread"><b class="latin" id="hNum">0</b><span id="hTens"></span></div>
+      <div class="hbar game-footer">
+        <button class="pill big" data-act="h-minus" data-i18n-aria="takeOne" aria-label="Take one away"><span class="latin">&minus;1</span></button>
+        <button class="pill big accent" data-act="h-one" data-i18n-aria="addOne" aria-label="Add one"><span class="latin">+1</span></button>
+        <button class="pill big accent" data-act="h-ten" data-i18n-aria="addTen" aria-label="Add ten"><span class="latin">+10</span></button>
+        <button class="rbtn good" data-act="h-auto" data-i18n-aria="play" aria-label="Play"><svg class="ico" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <div class="helper"><div class="mascot" aria-hidden="true"></div><div class="bubble"><span class="say-text"></span></div></div>
+</section>
+
+<section class="screen" id="scr-songs" data-screen="songs">
+  <header class="topbar">
+    <button class="rbtn" data-act="back" data-i18n-aria="back" aria-label="Back"><svg class="ico flip" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="mid"><span class="title-pill" data-i18n="tSing">Sing</span></div>
+    <button class="rbtn" data-go="stickers" data-i18n-aria="stickers" aria-label="Stickers"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></button>
+  </header>
+  <div class="col"><div class="ggrid" id="songGrid"></div></div>
+</section>
+
+<section class="screen" id="scr-song" data-screen="song">
+  <header class="topbar">
+    <button class="rbtn" data-act="back" data-i18n-aria="back" aria-label="Back"><svg class="ico flip" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="mid"><span class="title-pill" id="songTitle"></span></div>
+    <button class="rbtn sky" data-act="say-again" data-i18n-aria="listen" aria-label="Listen"><svg class="ico" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+  </header>
+  <div class="col ltr">
+    <div class="song-stage">
+      <div class="snums" id="songNums"></div>
+      <div class="song-btns game-footer">
+        <button class="rbtn xl accent" data-act="song-play" id="songPlay" data-i18n-aria="play" aria-label="Play"><svg class="ico" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg></button>
+        <button class="rbtn xl good" data-act="song-say" data-i18n-aria="sayNums" aria-label="Say the numbers"><svg class="ico" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <div class="helper"><div class="mascot" aria-hidden="true"></div><div class="bubble"><span class="say-text"></span></div></div>
+</section>
+
+<section class="screen" id="scr-digits" data-screen="digits">
+  <header class="topbar">
+    <button class="rbtn" data-act="back" data-i18n-aria="back" aria-label="Back"><svg class="ico flip" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="mid"><span class="title-pill" data-i18n="tTrace">Trace</span></div>
+    <button class="rbtn" data-go="stickers" data-i18n-aria="stickers" aria-label="Stickers"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></button>
+  </header>
+  <div class="col"><div class="lgrid ltr" id="digitGrid"></div></div>
 </section>
 
 <section class="screen" id="scr-trace" data-screen="trace">
   <header class="topbar">
     <button class="rbtn" data-act="back" data-i18n-aria="back" aria-label="Back"><svg class="ico flip" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-    <div class="mid"><div class="seg2 ltr" id="caseSeg">
-      <button class="latin" data-act="tr-case" data-v="upper" data-i18n-aria="bigL" aria-label="Big letter"></button>
-      <button class="latin" data-act="tr-case" data-v="lower" data-i18n-aria="smallL" aria-label="Little letter"></button>
-    </div></div>
+    <div class="mid"><span class="bignum latin" id="trNum">0</span></div>
     <button class="rbtn" data-act="tr-again" data-i18n-aria="again" aria-label="Again"><svg class="ico" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/></svg></button>
   </header>
   <div class="tr-stage ltr" id="trStage">
@@ -489,7 +566,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
   <header class="topbar">
     <button class="rbtn" data-act="back" data-i18n-aria="back" aria-label="Back"><svg class="ico flip" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
     <div class="mid"><span class="title-pill" data-i18n="tGames">Games</span></div>
-    <button class="rbtn" data-act="say-again" data-i18n-aria="listen" aria-label="Listen"><svg class="ico" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+    <button class="rbtn" data-go="stickers" data-i18n-aria="stickers" aria-label="Stickers"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></button>
   </header>
   <div class="col"><div class="ggrid" id="gameGrid"></div></div>
 </section>
@@ -597,7 +674,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !importan
 // Per-app identity. Products MUST equal metadata/iaps.json and Java
 // VALID_PRODUCTS exactly (both non-consumable; no subscriptions in kids apps).
 const APP = {
-  name: 'ABC Learning',
+  name: 'Counting Fun',
   saveKey: 'countingapp_save',
   ageBand: '3-8',
   privacyUrl: 'https://pegasusgames-creator.github.io/privacy-kids.html',
@@ -608,9 +685,9 @@ const APP = {
   // First theme = default (must be light). id = html[data-theme] block in PALETTE;
   // label = i18n key; sw = [paper, accent] colours for the parent-area swatch.
   themes: [
-    { id: 'sunny', label: 'thSunny', sw: ['#fff2c4', '#c8305f'] },
-    { id: 'meadow', label: 'thMeadow', sw: ['#e2f3d2', '#2a8250'] },
-    { id: 'bedtime', label: 'thBedtime', sw: ['#1c2045', '#ff8fb1'] }
+    { id: 'lagoon', label: 'thLagoon', sw: ['#d6f1ef', '#b0246a'] },
+    { id: 'sand', label: 'thSand', sw: ['#f8ecd0', '#0b6e7a'] },
+    { id: 'night', label: 'thNight', sw: ['#0f2a44', '#ffb36b'] }
   ]
 };
 //@@END APP_META
@@ -1317,412 +1394,467 @@ window.LANG_NAMES = {
 <script>
 'use strict';
 //@@REGION CONTENT_STRINGS
-// ABC Learning strings. {x}/{y} = an English letter name, {w} = an English
-// word: those parts are always spoken by an English voice (the alphabet,
-// sounds and words are English in every language — the listing says so).
+// Counting Fun strings. {n} = a number: it is spoken in the UI language when the device has
+// that voice, otherwise in English. Sticker names (sea animals) are always spoken in English.
 const CONTENT_I18N = {
-  en: { mascotName:'Pip the owl', tLetters:'Letters', tTrace:'Trace', tGames:'Games', listen:'Listen', sayName:'Letter name', saySound:'Letter sound', bigL:'Big letter', smallL:'Little letter', again:'Again',
-    hello:"Hi, I'm Pip! Let's play with letters!", homeNext:"Let's trace {x}!", homeAll:'You traced every letter! Pick any one you like.', lettersVoice:'Tap a letter!',
-    traceVoice:'Trace {x}! Start at the green dot.', trDone:'Great tracing! {x} is for {w}!', gamesVoice:'Pick a game!',
-    gFind:'Find the letter {x}!', gFindNo:"That's {y}. Can you find {x}?", gYes:'Yes! That is {x}!', gMatch:'Big {x}. Where is little {x}?',
-    gMatchNo:"That's little {y}. Where is little {x}?", gSound:'Which letter does {w} start with?', gSoundYes:'Yes! {w} starts with {x}!', gSoundNo:"That's {y}. Listen again: {w}.",
-    roundDone:'Five stars! You did it!', tabLetters:'Letter pictures', tabStars:'Star stickers', progressLine:'{a} of 26 letters traced · {b} stickers collected',
-    gameFind:'Find the letter', gameMatch:'Big and little', gameSound:'First sound',
-    p_full:'All letters & games', p_full_d:'Unlocks letters K-Z (cards and tracing), the Big and little and First sound games, and removes ads. One-time purchase.' },
-  ar: { mascotName:'البومة بيب', tLetters:'الحروف', tTrace:'التتبّع', tGames:'الألعاب', listen:'استمع', sayName:'اسم الحرف', saySound:'صوت الحرف', bigL:'حرف كبير', smallL:'حرف صغير', again:'مرة أخرى',
-    hello:'مرحبًا، أنا بيب! هيا نلعب بالحروف!', homeNext:'هيا نتتبّع {x}!', homeAll:'تتبّعت كل الحروف! اختر أي حرف تحبه.', lettersVoice:'المس حرفًا!',
-    traceVoice:'تتبّع {x}! ابدأ من النقطة الخضراء.', trDone:'تتبّع رائع! {x} مثل {w}!', gamesVoice:'اختر لعبة!',
-    gFind:'ابحث عن الحرف {x}!', gFindNo:'هذا {y}. هل تجد {x}؟', gYes:'نعم! هذا {x}!', gMatch:'{x} الكبير. أين {x} الصغير؟',
-    gMatchNo:'هذا {y} الصغير. أين {x} الصغير؟', gSound:'بأي حرف تبدأ {w}؟', gSoundYes:'نعم! {w} تبدأ بـ {x}!', gSoundNo:'هذا {y}. استمع مرة أخرى: {w}.',
-    roundDone:'خمس نجوم! أحسنت!', tabLetters:'صور الحروف', tabStars:'ملصقات النجوم', progressLine:'{a} من 26 حرفًا تم تتبّعها · {b} ملصقات',
-    gameFind:'ابحث عن الحرف', gameMatch:'كبير وصغير', gameSound:'الصوت الأول',
-    p_full:'كل الحروف والألعاب', p_full_d:'يفتح الحروف من K إلى Z (البطاقات والتتبّع) ولعبتَي «كبير وصغير» و«الصوت الأول»، ويزيل الإعلانات. شراء لمرة واحدة.' },
-  de: { mascotName:'Eule Pip', tLetters:'Buchstaben', tTrace:'Nachspuren', tGames:'Spiele', listen:'Anhören', sayName:'Buchstabenname', saySound:'Buchstabenlaut', bigL:'Großbuchstabe', smallL:'Kleinbuchstabe', again:'Nochmal',
-    hello:'Hallo, ich bin Pip! Lass uns mit Buchstaben spielen!', homeNext:'Lass uns {x} nachspuren!', homeAll:'Du hast alle Buchstaben gespurt! Such dir einen aus.', lettersVoice:'Tippe auf einen Buchstaben!',
-    traceVoice:'Spure {x} nach! Fang beim grünen Punkt an.', trDone:'Toll gespurt! {x} wie {w}!', gamesVoice:'Such dir ein Spiel aus!',
-    gFind:'Finde den Buchstaben {x}!', gFindNo:'Das ist {y}. Findest du {x}?', gYes:'Ja! Das ist {x}!', gMatch:'Großes {x}. Wo ist das kleine {x}?',
-    gMatchNo:'Das ist ein kleines {y}. Wo ist das kleine {x}?', gSound:'Mit welchem Buchstaben fängt {w} an?', gSoundYes:'Ja! {w} fängt mit {x} an!', gSoundNo:'Das ist {y}. Hör noch mal: {w}.',
-    roundDone:'Fünf Sterne! Geschafft!', tabLetters:'Buchstabenbilder', tabStars:'Sternsticker', progressLine:'{a} von 26 Buchstaben gespurt · {b} Sticker gesammelt',
-    gameFind:'Finde den Buchstaben', gameMatch:'Groß und klein', gameSound:'Erster Laut',
-    p_full:'Alle Buchstaben & Spiele', p_full_d:'Schaltet die Buchstaben K-Z (Karten und Nachspuren), die Spiele Groß und klein und Erster Laut frei und entfernt Werbung. Einmalkauf.' },
-  es: { mascotName:'el búho Pip', tLetters:'Letras', tTrace:'Trazar', tGames:'Juegos', listen:'Escuchar', sayName:'Nombre de la letra', saySound:'Sonido de la letra', bigL:'Mayúscula', smallL:'Minúscula', again:'Otra vez',
-    hello:'¡Hola, soy Pip! ¡Juguemos con las letras!', homeNext:'¡Vamos a trazar la {x}!', homeAll:'¡Trazaste todas las letras! Elige la que quieras.', lettersVoice:'¡Toca una letra!',
-    traceVoice:'¡Traza la {x}! Empieza en el punto verde.', trDone:'¡Muy bien trazado! {x} de {w}!', gamesVoice:'¡Elige un juego!',
-    gFind:'¡Busca la letra {x}!', gFindNo:'Esa es la {y}. ¿Encuentras la {x}?', gYes:'¡Sí! ¡Es la {x}!', gMatch:'{x} grande. ¿Dónde está la {x} pequeña?',
-    gMatchNo:'Esa es la {y} pequeña. ¿Dónde está la {x} pequeña?', gSound:'¿Con qué letra empieza {w}?', gSoundYes:'¡Sí! {w} empieza con {x}!', gSoundNo:'Esa es la {y}. Escucha otra vez: {w}.',
-    roundDone:'¡Cinco estrellas! ¡Lo lograste!', tabLetters:'Dibujos de letras', tabStars:'Pegatinas de estrellas', progressLine:'{a} de 26 letras trazadas · {b} pegatinas',
-    gameFind:'Busca la letra', gameMatch:'Grande y pequeña', gameSound:'Primer sonido',
-    p_full:'Todas las letras y juegos', p_full_d:'Desbloquea las letras K-Z (tarjetas y trazado), los juegos Grande y pequeña y Primer sonido, y quita los anuncios. Pago único.' },
-  fr: { mascotName:'Pip la chouette', tLetters:'Lettres', tTrace:'Tracer', tGames:'Jeux', listen:'Écouter', sayName:'Nom de la lettre', saySound:'Son de la lettre', bigL:'Majuscule', smallL:'Minuscule', again:'Encore',
-    hello:'Coucou, je suis Pip ! Jouons avec les lettres !', homeNext:'Traçons le {x} !', homeAll:'Tu as tracé toutes les lettres ! Choisis celle que tu veux.', lettersVoice:'Touche une lettre !',
-    traceVoice:'Trace le {x} ! Commence au point vert.', trDone:'Bravo ! {x} comme {w} !', gamesVoice:'Choisis un jeu !',
-    gFind:'Trouve la lettre {x} !', gFindNo:'Ça, c’est {y}. Trouves-tu {x} ?', gYes:'Oui ! C’est {x} !', gMatch:'{x} majuscule. Où est {x} minuscule ?',
-    gMatchNo:'Ça, c’est {y} minuscule. Où est {x} minuscule ?', gSound:'Par quelle lettre commence {w} ?', gSoundYes:'Oui ! {w} commence par {x} !', gSoundNo:'Ça, c’est {y}. Écoute encore : {w}.',
-    roundDone:'Cinq étoiles ! Bravo !', tabLetters:'Images des lettres', tabStars:'Autocollants étoiles', progressLine:'{a} lettres tracées sur 26 · {b} autocollants',
-    gameFind:'Trouve la lettre', gameMatch:'Majuscule et minuscule', gameSound:'Premier son',
-    p_full:'Toutes les lettres et jeux', p_full_d:'Débloque les lettres K-Z (cartes et tracé), les jeux Majuscule et minuscule et Premier son, et retire les pubs. Achat unique.' },
-  hi: { mascotName:'उल्लू पिप', tLetters:'अक्षर', tTrace:'लिखो', tGames:'खेल', listen:'सुनो', sayName:'अक्षर का नाम', saySound:'अक्षर की ध्वनि', bigL:'बड़ा अक्षर', smallL:'छोटा अक्षर', again:'फिर से',
-    hello:'नमस्ते, मैं पिप हूँ! चलो अक्षरों से खेलें!', homeNext:'चलो {x} लिखें!', homeAll:'तुमने सारे अक्षर लिख लिए! कोई भी अक्षर चुनो।', lettersVoice:'किसी अक्षर को छुओ!',
-    traceVoice:'{x} पर उँगली चलाओ! हरे बिंदु से शुरू करो।', trDone:'बहुत बढ़िया! {x} से {w}!', gamesVoice:'कोई खेल चुनो!',
-    gFind:'अक्षर {x} ढूँढो!', gFindNo:'यह {y} है। क्या तुम {x} ढूँढ सकते हो?', gYes:'हाँ! यह {x} है!', gMatch:'बड़ा {x}। छोटा {x} कहाँ है?',
-    gMatchNo:'यह छोटा {y} है। छोटा {x} कहाँ है?', gSound:'{w} किस अक्षर से शुरू होता है?', gSoundYes:'हाँ! {w} {x} से शुरू होता है!', gSoundNo:'यह {y} है। फिर से सुनो: {w}।',
-    roundDone:'पाँच सितारे! शाबाश!', tabLetters:'अक्षर चित्र', tabStars:'सितारा स्टिकर', progressLine:'26 में से {a} अक्षर लिखे · {b} स्टिकर',
-    gameFind:'अक्षर ढूँढो', gameMatch:'बड़ा और छोटा', gameSound:'पहली ध्वनि',
-    p_full:'सभी अक्षर और खेल', p_full_d:'K-Z अक्षर (कार्ड और लिखना), "बड़ा और छोटा" और "पहली ध्वनि" खेल खोलता है और विज्ञापन हटाता है। एक बार की खरीद।' },
-  id: { mascotName:'burung hantu Pip', tLetters:'Huruf', tTrace:'Menebalkan', tGames:'Permainan', listen:'Dengar', sayName:'Nama huruf', saySound:'Bunyi huruf', bigL:'Huruf besar', smallL:'Huruf kecil', again:'Lagi',
-    hello:'Halo, aku Pip! Ayo bermain dengan huruf!', homeNext:'Ayo tebalkan {x}!', homeAll:'Kamu sudah menebalkan semua huruf! Pilih huruf yang kamu suka.', lettersVoice:'Ketuk sebuah huruf!',
-    traceVoice:'Tebalkan {x}! Mulai dari titik hijau.', trDone:'Hebat! {x} untuk {w}!', gamesVoice:'Pilih permainan!',
-    gFind:'Cari huruf {x}!', gFindNo:'Itu {y}. Bisakah kamu menemukan {x}?', gYes:'Ya! Itu {x}!', gMatch:'{x} besar. Di mana {x} kecil?',
-    gMatchNo:'Itu {y} kecil. Di mana {x} kecil?', gSound:'{w} dimulai dengan huruf apa?', gSoundYes:'Ya! {w} dimulai dengan {x}!', gSoundNo:'Itu {y}. Dengar lagi: {w}.',
-    roundDone:'Lima bintang! Kamu berhasil!', tabLetters:'Gambar huruf', tabStars:'Stiker bintang', progressLine:'{a} dari 26 huruf ditebalkan · {b} stiker',
-    gameFind:'Cari hurufnya', gameMatch:'Besar dan kecil', gameSound:'Bunyi pertama',
-    p_full:'Semua huruf & permainan', p_full_d:'Membuka huruf K-Z (kartu dan menebalkan), permainan Besar dan kecil serta Bunyi pertama, dan menghapus iklan. Pembelian sekali.' },
-  it: { mascotName:'il gufo Pip', tLetters:'Lettere', tTrace:'Ricalca', tGames:'Giochi', listen:'Ascolta', sayName:'Nome della lettera', saySound:'Suono della lettera', bigL:'Maiuscola', smallL:'Minuscola', again:'Ancora',
-    hello:'Ciao, sono Pip! Giochiamo con le lettere!', homeNext:'Ricalchiamo la {x}!', homeAll:'Hai ricalcato tutte le lettere! Scegline una.', lettersVoice:'Tocca una lettera!',
-    traceVoice:'Ricalca la {x}! Parti dal punto verde.', trDone:'Bravissimo! {x} come {w}!', gamesVoice:'Scegli un gioco!',
-    gFind:'Trova la lettera {x}!', gFindNo:'Questa è la {y}. Trovi la {x}?', gYes:'Sì! È la {x}!', gMatch:'{x} grande. Dov’è la {x} piccola?',
-    gMatchNo:'Questa è la {y} piccola. Dov’è la {x} piccola?', gSound:'Con quale lettera inizia {w}?', gSoundYes:'Sì! {w} inizia con {x}!', gSoundNo:'Questa è la {y}. Ascolta ancora: {w}.',
-    roundDone:'Cinque stelle! Ce l’hai fatta!', tabLetters:'Figure delle lettere', tabStars:'Adesivi stella', progressLine:'{a} lettere su 26 ricalcate · {b} adesivi',
-    gameFind:'Trova la lettera', gameMatch:'Grande e piccola', gameSound:'Primo suono',
-    p_full:'Tutte le lettere e i giochi', p_full_d:'Sblocca le lettere K-Z (schede e ricalco), i giochi Grande e piccola e Primo suono, e rimuove gli annunci. Acquisto unico.' },
-  ja: { mascotName:'フクロウのピップ', tLetters:'もじ', tTrace:'なぞる', tGames:'ゲーム', listen:'きく', sayName:'もじのなまえ', saySound:'もじのおと', bigL:'おおもじ', smallL:'こもじ', again:'もういちど',
-    hello:'こんにちは、ピップだよ！もじであそぼう！', homeNext:'{x} をなぞろう！', homeAll:'ぜんぶのもじをなぞったね！すきなもじをえらんでね。', lettersVoice:'もじをタッチしてね！',
-    traceVoice:'{x} をなぞろう！みどりのてんからはじめてね。', trDone:'じょうずになぞれたね！{x} は {w} の {x}！', gamesVoice:'ゲームをえらんでね！',
-    gFind:'{x} をさがしてね！', gFindNo:'それは {y} だよ。{x} はどれかな？', gYes:'せいかい！{x} だね！', gMatch:'おおもじの {x}。こもじの {x} はどれ？',
-    gMatchNo:'それはこもじの {y} だよ。こもじの {x} はどれ？', gSound:'{w} はどのもじではじまるかな？', gSoundYes:'せいかい！{w} は {x} ではじまるよ！', gSoundNo:'それは {y} だよ。もういちどきいてね：{w}。',
-    roundDone:'ほしがいつつ！やったね！', tabLetters:'もじのえ', tabStars:'ほしのシール', progressLine:'26もじのうち {a} もじなぞりずみ · シール {b} まい',
-    gameFind:'もじをさがそう', gameMatch:'おおもじとこもじ', gameSound:'さいしょのおと',
-    p_full:'すべてのもじとゲーム', p_full_d:'K〜Z の文字（カードとなぞり）、「おおもじとこもじ」「さいしょのおと」ゲームが使えるようになり、広告も消えます。買い切りです。' },
-  pt: { mascotName:'a coruja Pip', tLetters:'Letras', tTrace:'Traçar', tGames:'Jogos', listen:'Ouvir', sayName:'Nome da letra', saySound:'Som da letra', bigL:'Letra maiúscula', smallL:'Letra minúscula', again:'De novo',
-    hello:'Oi, eu sou o Pip! Vamos brincar com as letras!', homeNext:'Vamos traçar o {x}!', homeAll:'Você traçou todas as letras! Escolha a que quiser.', lettersVoice:'Toque em uma letra!',
-    traceVoice:'Trace o {x}! Comece no ponto verde.', trDone:'Muito bem! {x} de {w}!', gamesVoice:'Escolha um jogo!',
-    gFind:'Encontre a letra {x}!', gFindNo:'Essa é o {y}. Você acha o {x}?', gYes:'Isso! É o {x}!', gMatch:'{x} maiúsculo. Cadê o {x} minúsculo?',
-    gMatchNo:'Esse é o {y} minúsculo. Cadê o {x} minúsculo?', gSound:'Com que letra começa {w}?', gSoundYes:'Isso! {w} começa com {x}!', gSoundNo:'Essa é o {y}. Ouça de novo: {w}.',
-    roundDone:'Cinco estrelas! Você conseguiu!', tabLetters:'Figuras das letras', tabStars:'Figurinhas de estrela', progressLine:'{a} de 26 letras traçadas · {b} figurinhas',
-    gameFind:'Encontre a letra', gameMatch:'Maiúscula e minúscula', gameSound:'Primeiro som',
-    p_full:'Todas as letras e jogos', p_full_d:'Libera as letras K-Z (cartões e traçado), os jogos Maiúscula e minúscula e Primeiro som, e remove os anúncios. Compra única.' },
-  tr: { mascotName:'baykuş Pip', tLetters:'Harfler', tTrace:'Çiz', tGames:'Oyunlar', listen:'Dinle', sayName:'Harfin adı', saySound:'Harfin sesi', bigL:'Büyük harf', smallL:'Küçük harf', again:'Tekrar',
-    hello:'Merhaba, ben Pip! Hadi harflerle oynayalım!', homeNext:'Hadi {x} çizelim!', homeAll:'Bütün harfleri çizdin! İstediğin harfi seç.', lettersVoice:'Bir harfe dokun!',
-    traceVoice:'{x} harfini çiz! Yeşil noktadan başla.', trDone:'Harika çizdin! {x}, {w} gibi!', gamesVoice:'Bir oyun seç!',
-    gFind:'{x} harfini bul!', gFindNo:'Bu {y}. {x} harfini bulabilir misin?', gYes:'Evet! Bu {x}!', gMatch:'Büyük {x}. Küçük {x} nerede?',
-    gMatchNo:'Bu küçük {y}. Küçük {x} nerede?', gSound:'{w} hangi harfle başlar?', gSoundYes:'Evet! {w}, {x} ile başlar!', gSoundNo:'Bu {y}. Tekrar dinle: {w}.',
-    roundDone:'Beş yıldız! Başardın!', tabLetters:'Harf resimleri', tabStars:'Yıldız çıkartmaları', progressLine:'26 harften {a} tanesi çizildi · {b} çıkartma',
-    gameFind:'Harfi bul', gameMatch:'Büyük ve küçük', gameSound:'İlk ses',
-    p_full:'Tüm harfler ve oyunlar', p_full_d:'K-Z harflerini (kartlar ve çizim), Büyük ve küçük ile İlk ses oyunlarını açar ve reklamları kaldırır. Tek seferlik satın alma.' },
-  uk: { mascotName:'сова Піп', tLetters:'Літери', tTrace:'Обводити', tGames:'Ігри', listen:'Слухати', sayName:'Назва літери', saySound:'Звук літери', bigL:'Велика літера', smallL:'Мала літера', again:'Ще раз',
-    hello:'Привіт, я Піп! Граймося з літерами!', homeNext:'Обведімо {x}!', homeAll:'Ти обвів усі літери! Обери будь-яку.', lettersVoice:'Торкнися літери!',
-    traceVoice:'Обведи {x}! Почни із зеленої крапки.', trDone:'Чудово! {x}, як у слові {w}!', gamesVoice:'Обери гру!',
-    gFind:'Знайди літеру {x}!', gFindNo:'Це {y}. Знайдеш {x}?', gYes:'Так! Це {x}!', gMatch:'Велика {x}. Де мала {x}?',
-    gMatchNo:'Це мала {y}. Де мала {x}?', gSound:'З якої літери починається {w}?', gSoundYes:'Так! {w} починається з {x}!', gSoundNo:'Це {y}. Послухай ще раз: {w}.',
-    roundDone:'П’ять зірок! Молодець!', tabLetters:'Малюнки літер', tabStars:'Зіркові наліпки', progressLine:'Обведено {a} з 26 літер · {b} наліпок',
-    gameFind:'Знайди літеру', gameMatch:'Велика й мала', gameSound:'Перший звук',
-    p_full:'Усі літери та ігри', p_full_d:'Відкриває літери K-Z (картки й обведення), ігри «Велика й мала» та «Перший звук» і прибирає рекламу. Разова покупка.' },
-  zh: { mascotName:'猫头鹰皮普', tLetters:'字母', tTrace:'描写', tGames:'游戏', listen:'听一听', sayName:'字母名称', saySound:'字母发音', bigL:'大写字母', smallL:'小写字母', again:'再来一次',
-    hello:'你好，我是皮普！一起玩字母吧！', homeNext:'一起描写 {x} 吧！', homeAll:'你描完了所有字母！随便选一个吧。', lettersVoice:'点一个字母吧！',
-    traceVoice:'描一描 {x}！从绿点开始。', trDone:'描得真棒！{x} 是 {w} 的 {x}！', gamesVoice:'选一个游戏吧！',
-    gFind:'找出字母 {x}！', gFindNo:'这是 {y}。你能找到 {x} 吗？', gYes:'对了！这是 {x}！', gMatch:'大写的 {x}。小写的 {x} 在哪里？',
-    gMatchNo:'这是小写的 {y}。小写的 {x} 在哪里？', gSound:'{w} 是哪个字母开头的？', gSoundYes:'对了！{w} 以 {x} 开头！', gSoundNo:'这是 {y}。再听一遍：{w}。',
-    roundDone:'五颗星！你真棒！', tabLetters:'字母图片', tabStars:'星星贴纸', progressLine:'已描写 {a}/26 个字母 · {b} 张贴纸',
-    gameFind:'找字母', gameMatch:'大写和小写', gameSound:'首字母发音',
-    p_full:'全部字母和游戏', p_full_d:'解锁字母 K-Z（卡片和描写）、“大写和小写”和“首字母发音”游戏，并移除广告。一次性购买。' },
+  en: {"mascotName": "Pebble the penguin", "tCount": "Count", "tSing": "Sing", "tTrace": "Trace", "tGames": "Games", "listen": "Listen", "again": "Again", "play": "Play", "sayNums": "Say the numbers", "prev": "Previous", "next": "Next", "takeOne": "Take one away", "addOne": "Add one", "addTen": "Add ten", "hello": "Hi, I'm Pebble! Let's count together!", "homeNext": "Let's count to {n}!", "homeAll": "You counted every number up to 20! Pick any one you like.", "countVoice": "Tap a number!", "cTap": "Tap each one to count it!", "cDone": "That makes {n}! Great counting!", "numOnly": "{n}", "hVoice": "Add tens and ones. Watch the number grow!", "hTens": "{t} tens + {o} ones", "hDone": "You counted all the way to 100!", "songsVoice": "Pick a song to sing!", "song2": "Count by 2s", "song5": "Count by 5s", "song10": "Count by 10s", "songIntro": "Let's count by {n}s and sing!", "sDone": "What a great song!", "digitsVoice": "Pick a number to trace!", "traceVoice": "Trace the number {n}. Start at the green dot.", "trDone": "Great tracing! That is {n}!", "gamesVoice": "Pick a game!", "gameHow": "How many?", "gameMake": "Make the number", "gameNext": "What comes next?", "gHow": "How many are there? Tap to count them!", "gHowYes": "Yes! There are {n}!", "gHowNo": "Not quite. Tap each one and count again.", "gMake": "Put {n} in the basket!", "gMakeOver": "Too many! Take one away.", "gMakeYes": "Yes! You made {n}!", "gNext": "Count with me: {s}. What comes next?", "gNextYes": "Yes! {n} comes next!", "gNextNo": "Look at the numbers again.", "roundDone": "Five stars! You did it!", "tabNumbers": "Number stickers", "tabSongs": "Song stickers", "tabSea": "Sea stickers", "progressLine": "{a} of 20 numbers counted · {b} stickers collected", "thLagoon": "Lagoon", "thSand": "Sand", "thNight": "Night", "p_full": "All counting fun", "p_full_d": "Unlocks counting to 100 with tens and ones, the 5s and 10s songs, and the Make the number and What comes next games, and removes ads. One-time purchase."},
+  ar: {"mascotName": "البطريق بيبل", "tCount": "عدّ", "tSing": "غنِّ", "tTrace": "تتبّع", "tGames": "ألعاب", "listen": "استمع", "again": "مرة أخرى", "play": "تشغيل", "sayNums": "قل الأعداد", "prev": "السابق", "next": "التالي", "takeOne": "أزل واحدًا", "addOne": "أضف واحدًا", "addTen": "أضف عشرة", "hello": "مرحبًا، أنا بيبل! هيا نعدّ معًا!", "homeNext": "هيا نعدّ حتى {n}!", "homeAll": "عددت كل الأعداد حتى 20! اختر ما تحب.", "countVoice": "المس عددًا!", "cTap": "المس كل واحد لتعدّه!", "cDone": "هذا يساوي {n}! عدّ رائع!", "numOnly": "{n}", "hVoice": "أضف عشرات وآحادًا وشاهد العدد يكبر!", "hTens": "{t} عشرات + {o} آحاد", "hDone": "عددت حتى 100!", "songsVoice": "اختر أغنية لتغنّيها!", "song2": "عدّ بالاثنين", "song5": "عدّ بالخمسات", "song10": "عدّ بالعشرات", "songIntro": "هيا نعدّ بمضاعفات {n} ونغنّي!", "sDone": "يا لها من أغنية رائعة!", "digitsVoice": "اختر عددًا لتتبّعه!", "traceVoice": "تتبّع العدد {n}. ابدأ من النقطة الخضراء.", "trDone": "تتبّع رائع! هذا هو {n}!", "gamesVoice": "اختر لعبة!", "gameHow": "كم العدد؟", "gameMake": "كوّن العدد", "gameNext": "ما العدد التالي؟", "gHow": "كم عددها؟ المسها لتعدّها!", "gHowYes": "نعم! عددها {n}!", "gHowNo": "ليس تمامًا. المس كل واحد وعدّ مرة أخرى.", "gMake": "ضع {n} في السلة!", "gMakeOver": "كثير جدًا! أزل واحدًا.", "gMakeYes": "نعم! كوّنت {n}!", "gNext": "عدّ معي: {s}. ما العدد التالي؟", "gNextYes": "نعم! التالي {n}!", "gNextNo": "انظر إلى الأعداد مرة أخرى.", "roundDone": "خمس نجوم! أحسنت!", "tabNumbers": "ملصقات العدّ", "tabSongs": "ملصقات الأغاني", "tabSea": "ملصقات البحر", "progressLine": "عددت {a} من 20 عددًا · {b} ملصقات", "thLagoon": "البحيرة", "thSand": "الرمل", "thNight": "الليل", "p_full": "كل متعة العدّ", "p_full_d": "يفتح العدّ حتى 100 بالعشرات والآحاد، وأغنيتَي الخمسات والعشرات، ولعبتَي «كوّن العدد» و«ما العدد التالي؟»، ويزيل الإعلانات. شراء لمرة واحدة."},
+  de: {"mascotName": "Pinguin Pebble", "tCount": "Zählen", "tSing": "Singen", "tTrace": "Nachspuren", "tGames": "Spiele", "listen": "Anhören", "again": "Nochmal", "play": "Abspielen", "sayNums": "Zahlen sagen", "prev": "Zurück", "next": "Weiter", "takeOne": "Eins wegnehmen", "addOne": "Eins dazu", "addTen": "Zehn dazu", "hello": "Hallo, ich bin Pebble! Lass uns zusammen zählen!", "homeNext": "Lass uns bis {n} zählen!", "homeAll": "Du hast alle Zahlen bis 20 gezählt! Such dir eine aus.", "countVoice": "Tippe auf eine Zahl!", "cTap": "Tippe jedes an, um es zu zählen!", "cDone": "Das macht {n}! Toll gezählt!", "numOnly": "{n}", "hVoice": "Füge Zehner und Einer dazu. Sieh die Zahl wachsen!", "hTens": "{t} Zehner + {o} Einer", "hDone": "Du hast bis 100 gezählt!", "songsVoice": "Such dir ein Lied aus!", "song2": "In 2er-Schritten", "song5": "In 5er-Schritten", "song10": "In 10er-Schritten", "songIntro": "Wir zählen in {n}er-Schritten und singen!", "sDone": "Was für ein tolles Lied!", "digitsVoice": "Such dir eine Zahl zum Nachspuren aus!", "traceVoice": "Spure die Zahl {n} nach. Fang beim grünen Punkt an.", "trDone": "Toll gespurt! Das ist die {n}!", "gamesVoice": "Such dir ein Spiel aus!", "gameHow": "Wie viele?", "gameMake": "Lege die Zahl", "gameNext": "Was kommt als Nächstes?", "gHow": "Wie viele sind es? Tippe sie an und zähle!", "gHowYes": "Ja! Es sind {n}!", "gHowNo": "Nicht ganz. Tippe jedes an und zähle noch mal.", "gMake": "Leg {n} in den Korb!", "gMakeOver": "Zu viele! Nimm eins weg.", "gMakeYes": "Ja! Du hast {n} gelegt!", "gNext": "Zähl mit: {s}. Was kommt als Nächstes?", "gNextYes": "Ja! Als Nächstes kommt {n}!", "gNextNo": "Schau dir die Zahlen noch mal an.", "roundDone": "Fünf Sterne! Geschafft!", "tabNumbers": "Zähl-Sticker", "tabSongs": "Lieder-Sticker", "tabSea": "Meeres-Sticker", "progressLine": "{a} von 20 Zahlen gezählt · {b} Sticker gesammelt", "thLagoon": "Lagune", "thSand": "Sand", "thNight": "Nacht", "p_full": "Alles zum Zählen", "p_full_d": "Schaltet das Zählen bis 100 mit Zehnern und Einern, die Lieder in 5er- und 10er-Schritten und die Spiele Lege die Zahl und Was kommt als Nächstes frei und entfernt Werbung. Einmalkauf."},
+  es: {"mascotName": "Pebble el pingüino", "tCount": "Contar", "tSing": "Cantar", "tTrace": "Trazar", "tGames": "Juegos", "listen": "Escuchar", "again": "Otra vez", "play": "Reproducir", "sayNums": "Decir los números", "prev": "Anterior", "next": "Siguiente", "takeOne": "Quitar uno", "addOne": "Añadir uno", "addTen": "Añadir diez", "hello": "¡Hola, soy Pebble! ¡Contemos juntos!", "homeNext": "¡Contemos hasta {n}!", "homeAll": "¡Contaste todos los números hasta el 20! Elige el que quieras.", "countVoice": "¡Toca un número!", "cTap": "¡Toca cada uno para contarlo!", "cDone": "¡Son {n}! ¡Qué bien contado!", "numOnly": "{n}", "hVoice": "Añade decenas y unidades. ¡Mira crecer el número!", "hTens": "{t} decenas + {o} unidades", "hDone": "¡Contaste hasta 100!", "songsVoice": "¡Elige una canción!", "song2": "Contar de 2 en 2", "song5": "Contar de 5 en 5", "song10": "Contar de 10 en 10", "songIntro": "¡Contemos de {n} en {n} y cantemos!", "sDone": "¡Qué canción tan bonita!", "digitsVoice": "¡Elige un número para trazar!", "traceVoice": "Traza el número {n}. Empieza en el punto verde.", "trDone": "¡Muy bien trazado! ¡Es el {n}!", "gamesVoice": "¡Elige un juego!", "gameHow": "¿Cuántos hay?", "gameMake": "Forma el número", "gameNext": "¿Qué número sigue?", "gHow": "¿Cuántos hay? ¡Toca para contarlos!", "gHowYes": "¡Sí! ¡Hay {n}!", "gHowNo": "Casi. Toca cada uno y cuenta otra vez.", "gMake": "¡Pon {n} en la cesta!", "gMakeOver": "¡Demasiados! Quita uno.", "gMakeYes": "¡Sí! ¡Formaste el {n}!", "gNext": "Cuenta conmigo: {s}. ¿Qué número sigue?", "gNextYes": "¡Sí! ¡Sigue el {n}!", "gNextNo": "Mira los números otra vez.", "roundDone": "¡Cinco estrellas! ¡Lo lograste!", "tabNumbers": "Pegatinas de contar", "tabSongs": "Pegatinas de canciones", "tabSea": "Pegatinas del mar", "progressLine": "{a} de 20 números contados · {b} pegatinas", "thLagoon": "Laguna", "thSand": "Arena", "thNight": "Noche", "p_full": "Todo para contar", "p_full_d": "Desbloquea contar hasta 100 con decenas y unidades, las canciones de 5 en 5 y de 10 en 10, y los juegos Forma el número y ¿Qué número sigue?, y quita los anuncios. Pago único."},
+  fr: {"mascotName": "Pebble le pingouin", "tCount": "Compter", "tSing": "Chanter", "tTrace": "Tracer", "tGames": "Jeux", "listen": "Écouter", "again": "Encore", "play": "Lire", "sayNums": "Dire les nombres", "prev": "Précédent", "next": "Suivant", "takeOne": "Enlever un", "addOne": "Ajouter un", "addTen": "Ajouter dix", "hello": "Coucou, je suis Pebble ! Comptons ensemble !", "homeNext": "Comptons jusqu’à {n} !", "homeAll": "Tu as compté tous les nombres jusqu’à 20 ! Choisis celui que tu veux.", "countVoice": "Touche un nombre !", "cTap": "Touche chacun pour le compter !", "cDone": "Ça fait {n} ! Bien compté !", "numOnly": "{n}", "hVoice": "Ajoute des dizaines et des unités. Regarde le nombre grandir !", "hTens": "{t} dizaines + {o} unités", "hDone": "Tu as compté jusqu’à 100 !", "songsVoice": "Choisis une chanson !", "song2": "Compter de 2 en 2", "song5": "Compter de 5 en 5", "song10": "Compter de 10 en 10", "songIntro": "Comptons de {n} en {n} et chantons !", "sDone": "Quelle belle chanson !", "digitsVoice": "Choisis un nombre à tracer !", "traceVoice": "Trace le nombre {n}. Commence au point vert.", "trDone": "Bravo ! C’est le {n} !", "gamesVoice": "Choisis un jeu !", "gameHow": "Combien y en a-t-il ?", "gameMake": "Fais le nombre", "gameNext": "Quel nombre vient ensuite ?", "gHow": "Combien y en a-t-il ? Touche-les pour les compter !", "gHowYes": "Oui ! Il y en a {n} !", "gHowNo": "Pas tout à fait. Touche chacun et recompte.", "gMake": "Mets {n} dans le panier !", "gMakeOver": "Trop ! Enlève-en un.", "gMakeYes": "Oui ! Tu as fait {n} !", "gNext": "Compte avec moi : {s}. Quel nombre vient ensuite ?", "gNextYes": "Oui ! Après, c’est {n} !", "gNextNo": "Regarde encore les nombres.", "roundDone": "Cinq étoiles ! Bravo !", "tabNumbers": "Autocollants de comptage", "tabSongs": "Autocollants de chansons", "tabSea": "Autocollants de la mer", "progressLine": "{a} nombres sur 20 comptés · {b} autocollants", "thLagoon": "Lagon", "thSand": "Sable", "thNight": "Nuit", "p_full": "Tout pour compter", "p_full_d": "Débloque le comptage jusqu’à 100 avec dizaines et unités, les chansons de 5 en 5 et de 10 en 10, et les jeux Fais le nombre et Quel nombre vient ensuite ?, et retire les pubs. Achat unique."},
+  hi: {"mascotName": "पेंगुइन पेबल", "tCount": "गिनो", "tSing": "गाओ", "tTrace": "लिखो", "tGames": "खेल", "listen": "सुनो", "again": "फिर से", "play": "चलाओ", "sayNums": "संख्याएँ बोलो", "prev": "पिछला", "next": "अगला", "takeOne": "एक हटाओ", "addOne": "एक जोड़ो", "addTen": "दस जोड़ो", "hello": "नमस्ते, मैं पेबल हूँ! चलो साथ गिनें!", "homeNext": "चलो {n} तक गिनें!", "homeAll": "तुमने 20 तक सारी संख्याएँ गिन लीं! कोई भी चुनो।", "countVoice": "कोई संख्या छुओ!", "cTap": "हर एक को छूकर गिनो!", "cDone": "यह {n} हुआ! बहुत बढ़िया गिनती!", "numOnly": "{n}", "hVoice": "दहाई और इकाई जोड़ो। संख्या को बढ़ते देखो!", "hTens": "{t} दहाई + {o} इकाई", "hDone": "तुमने 100 तक गिन लिया!", "songsVoice": "गाने के लिए गीत चुनो!", "song2": "2 की गिनती", "song5": "5 की गिनती", "song10": "10 की गिनती", "songIntro": "चलो {n} की गिनती गाएँ!", "sDone": "कितना सुंदर गाना!", "digitsVoice": "लिखने के लिए संख्या चुनो!", "traceVoice": "संख्या {n} पर उँगली चलाओ। हरे बिंदु से शुरू करो।", "trDone": "बहुत बढ़िया! यह {n} है!", "gamesVoice": "कोई खेल चुनो!", "gameHow": "कितने हैं?", "gameMake": "संख्या बनाओ", "gameNext": "आगे कौन-सी संख्या आएगी?", "gHow": "कितने हैं? छूकर गिनो!", "gHowYes": "हाँ! कुल {n} हैं!", "gHowNo": "अभी नहीं। हर एक को छूकर फिर गिनो।", "gMake": "टोकरी में {n} रखो!", "gMakeOver": "बहुत ज़्यादा! एक हटाओ।", "gMakeYes": "हाँ! तुमने {n} बनाया!", "gNext": "मेरे साथ गिनो: {s}। आगे क्या आएगा?", "gNextYes": "हाँ! आगे {n} आता है!", "gNextNo": "संख्याओं को फिर से देखो।", "roundDone": "पाँच सितारे! शाबाश!", "tabNumbers": "गिनती स्टिकर", "tabSongs": "गीत स्टिकर", "tabSea": "समुद्र स्टिकर", "progressLine": "20 में से {a} संख्याएँ गिनीं · {b} स्टिकर", "thLagoon": "लैगून", "thSand": "रेत", "thNight": "रात", "p_full": "पूरी गिनती का मज़ा", "p_full_d": "दहाई और इकाई के साथ 100 तक गिनती, 5 और 10 की गिनती के गाने, \"संख्या बनाओ\" और \"आगे क्या आएगा?\" खेल खोलता है और विज्ञापन हटाता है। एक बार की खरीदारी।"},
+  id: {"mascotName": "Pebble si penguin", "tCount": "Hitung", "tSing": "Bernyanyi", "tTrace": "Menebalkan", "tGames": "Permainan", "listen": "Dengar", "again": "Lagi", "play": "Putar", "sayNums": "Ucapkan angkanya", "prev": "Sebelumnya", "next": "Berikutnya", "takeOne": "Kurangi satu", "addOne": "Tambah satu", "addTen": "Tambah sepuluh", "hello": "Halo, aku Pebble! Ayo berhitung bersama!", "homeNext": "Ayo hitung sampai {n}!", "homeAll": "Kamu sudah menghitung semua angka sampai 20! Pilih yang kamu suka.", "countVoice": "Ketuk sebuah angka!", "cTap": "Ketuk satu per satu untuk menghitungnya!", "cDone": "Jadi {n}! Hebat menghitungnya!", "numOnly": "{n}", "hVoice": "Tambahkan puluhan dan satuan. Lihat angkanya bertambah!", "hTens": "{t} puluhan + {o} satuan", "hDone": "Kamu menghitung sampai 100!", "songsVoice": "Pilih lagu untuk dinyanyikan!", "song2": "Hitung loncat 2", "song5": "Hitung loncat 5", "song10": "Hitung loncat 10", "songIntro": "Ayo menghitung loncat {n} sambil bernyanyi!", "sDone": "Lagu yang bagus!", "digitsVoice": "Pilih angka untuk ditebalkan!", "traceVoice": "Tebalkan angka {n}. Mulai dari titik hijau.", "trDone": "Hebat! Itu angka {n}!", "gamesVoice": "Pilih permainan!", "gameHow": "Ada berapa?", "gameMake": "Buat angkanya", "gameNext": "Angka apa berikutnya?", "gHow": "Ada berapa? Ketuk untuk menghitung!", "gHowYes": "Ya! Ada {n}!", "gHowNo": "Belum tepat. Ketuk satu per satu dan hitung lagi.", "gMake": "Taruh {n} di keranjang!", "gMakeOver": "Terlalu banyak! Kurangi satu.", "gMakeYes": "Ya! Kamu membuat {n}!", "gNext": "Hitung bersamaku: {s}. Angka apa berikutnya?", "gNextYes": "Ya! Berikutnya {n}!", "gNextNo": "Lihat angkanya sekali lagi.", "roundDone": "Lima bintang! Kamu berhasil!", "tabNumbers": "Stiker berhitung", "tabSongs": "Stiker lagu", "tabSea": "Stiker laut", "progressLine": "{a} dari 20 angka dihitung · {b} stiker", "thLagoon": "Laguna", "thSand": "Pasir", "thNight": "Malam", "p_full": "Semua seru berhitung", "p_full_d": "Membuka hitung sampai 100 dengan puluhan dan satuan, lagu hitung loncat 5 dan 10, serta permainan Buat angkanya dan Angka apa berikutnya?, dan menghapus iklan. Pembelian sekali."},
+  it: {"mascotName": "Pebble il pinguino", "tCount": "Conta", "tSing": "Canta", "tTrace": "Ricalca", "tGames": "Giochi", "listen": "Ascolta", "again": "Ancora", "play": "Riproduci", "sayNums": "Dì i numeri", "prev": "Indietro", "next": "Avanti", "takeOne": "Togli uno", "addOne": "Aggiungi uno", "addTen": "Aggiungi dieci", "hello": "Ciao, sono Pebble! Contiamo insieme!", "homeNext": "Contiamo fino a {n}!", "homeAll": "Hai contato tutti i numeri fino a 20! Scegline uno.", "countVoice": "Tocca un numero!", "cTap": "Tocca ognuno per contarlo!", "cDone": "Fa {n}! Che bel conteggio!", "numOnly": "{n}", "hVoice": "Aggiungi decine e unità. Guarda il numero crescere!", "hTens": "{t} decine + {o} unità", "hDone": "Hai contato fino a 100!", "songsVoice": "Scegli una canzone!", "song2": "Conta di 2 in 2", "song5": "Conta di 5 in 5", "song10": "Conta di 10 in 10", "songIntro": "Contiamo di {n} in {n} e cantiamo!", "sDone": "Che bella canzone!", "digitsVoice": "Scegli un numero da ricalcare!", "traceVoice": "Ricalca il numero {n}. Parti dal punto verde.", "trDone": "Bravissimo! È il {n}!", "gamesVoice": "Scegli un gioco!", "gameHow": "Quanti sono?", "gameMake": "Forma il numero", "gameNext": "Quale numero viene dopo?", "gHow": "Quanti sono? Toccali per contarli!", "gHowYes": "Sì! Sono {n}!", "gHowNo": "Non proprio. Tocca ognuno e conta ancora.", "gMake": "Metti {n} nel cesto!", "gMakeOver": "Troppi! Togline uno.", "gMakeYes": "Sì! Hai formato {n}!", "gNext": "Conta con me: {s}. Quale numero viene dopo?", "gNextYes": "Sì! Dopo viene il {n}!", "gNextNo": "Guarda ancora i numeri.", "roundDone": "Cinque stelle! Ce l’hai fatta!", "tabNumbers": "Adesivi del contare", "tabSongs": "Adesivi delle canzoni", "tabSea": "Adesivi del mare", "progressLine": "{a} numeri su 20 contati · {b} adesivi", "thLagoon": "Laguna", "thSand": "Sabbia", "thNight": "Notte", "p_full": "Tutto il contare", "p_full_d": "Sblocca il conteggio fino a 100 con decine e unità, le canzoni di 5 in 5 e di 10 in 10, i giochi Forma il numero e Quale numero viene dopo?, e rimuove gli annunci. Acquisto unico."},
+  ja: {"mascotName": "ペンギンのペブル", "tCount": "かぞえる", "tSing": "うたう", "tTrace": "なぞる", "tGames": "ゲーム", "listen": "きく", "again": "もういちど", "play": "さいせい", "sayNums": "すうじをいう", "prev": "まえ", "next": "つぎ", "takeOne": "1つへらす", "addOne": "1つふやす", "addTen": "10ふやす", "hello": "こんにちは、ペブルだよ！いっしょにかぞえよう！", "homeNext": "{n} までかぞえよう！", "homeAll": "20までぜんぶかぞえたね！すきなすうじをえらんでね。", "countVoice": "すうじをタッチしてね！", "cTap": "1つずつタッチしてかぞえよう！", "cDone": "ぜんぶで {n}！じょうずにかぞえたね！", "numOnly": "{n}", "hVoice": "10と1をふやそう！", "hTens": "10が {t}こ + 1が {o}こ", "hDone": "100までかぞえられたね！", "songsVoice": "うたをえらんでね！", "song2": "2ずつかぞえよう", "song5": "5ずつかぞえよう", "song10": "10ずつかぞえよう", "songIntro": "{n}ずつかぞえて、うたおう！", "sDone": "すてきなうただね！", "digitsVoice": "なぞるすうじをえらんでね！", "traceVoice": "すうじの {n} をなぞろう。みどりのてんからはじめてね。", "trDone": "じょうずになぞれたね！{n} だよ！", "gamesVoice": "ゲームをえらんでね！", "gameHow": "いくつあるかな？", "gameMake": "すうじをつくろう", "gameNext": "つぎのすうじは？", "gHow": "いくつあるかな？タッチしてかぞえよう！", "gHowYes": "せいかい！{n}こだよ！", "gHowNo": "おしい！1つずつタッチして、もういちどかぞえよう。", "gMake": "かごに {n} こいれてね！", "gMakeOver": "おおすぎるよ！1つへらそう。", "gMakeYes": "せいかい！{n} をつくれたね！", "gNext": "いっしょにかぞえよう：{s}。つぎはなにかな？", "gNextYes": "せいかい！つぎは {n} だよ！", "gNextNo": "もういちどすうじをみてね。", "roundDone": "ほしがいつつ！やったね！", "tabNumbers": "かぞえるシール", "tabSongs": "うたのシール", "tabSea": "うみのシール", "progressLine": "20このうち {a} こかぞえた · シール {b} まい", "thLagoon": "ラグーン", "thSand": "すな", "thNight": "よる", "p_full": "かぞえるあそびぜんぶ", "p_full_d": "10のくらいと1のくらいで100までかぞえるあそび、5ずつと10ずつのうた、「すうじをつくろう」と「つぎのすうじは？」ゲームをひらき、こうこくをけします。1かいのおかいもの。"},
+  pt: {"mascotName": "Pebble o pinguim", "tCount": "Contar", "tSing": "Cantar", "tTrace": "Traçar", "tGames": "Jogos", "listen": "Ouvir", "again": "De novo", "play": "Tocar", "sayNums": "Dizer os números", "prev": "Anterior", "next": "Próximo", "takeOne": "Tirar um", "addOne": "Pôr um", "addTen": "Pôr dez", "hello": "Oi, eu sou o Pebble! Vamos contar juntos!", "homeNext": "Vamos contar até {n}!", "homeAll": "Você contou todos os números até 20! Escolha o que quiser.", "countVoice": "Toque em um número!", "cTap": "Toque em cada um para contar!", "cDone": "Dá {n}! Que contagem boa!", "numOnly": "{n}", "hVoice": "Some dezenas e unidades. Veja o número crescer!", "hTens": "{t} dezenas + {o} unidades", "hDone": "Você contou até 100!", "songsVoice": "Escolha uma música!", "song2": "Contar de 2 em 2", "song5": "Contar de 5 em 5", "song10": "Contar de 10 em 10", "songIntro": "Vamos contar de {n} em {n} e cantar!", "sDone": "Que música legal!", "digitsVoice": "Escolha um número para traçar!", "traceVoice": "Trace o número {n}. Comece no ponto verde.", "trDone": "Muito bem! É o {n}!", "gamesVoice": "Escolha um jogo!", "gameHow": "Quantos são?", "gameMake": "Forme o número", "gameNext": "Qual número vem depois?", "gHow": "Quantos são? Toque para contar!", "gHowYes": "Sim! São {n}!", "gHowNo": "Quase. Toque em cada um e conte de novo.", "gMake": "Ponha {n} na cesta!", "gMakeOver": "Demais! Tire um.", "gMakeYes": "Sim! Você formou o {n}!", "gNext": "Conte comigo: {s}. Qual número vem depois?", "gNextYes": "Sim! Depois vem o {n}!", "gNextNo": "Olhe os números de novo.", "roundDone": "Cinco estrelas! Você conseguiu!", "tabNumbers": "Figurinhas de contar", "tabSongs": "Figurinhas de músicas", "tabSea": "Figurinhas do mar", "progressLine": "{a} de 20 números contados · {b} figurinhas", "thLagoon": "Lagoa", "thSand": "Areia", "thNight": "Noite", "p_full": "Toda a diversão de contar", "p_full_d": "Libera contar até 100 com dezenas e unidades, as músicas de 5 em 5 e de 10 em 10, e os jogos Forme o número e Qual número vem depois?, e remove os anúncios. Compra única."},
+  tr: {"mascotName": "Penguen Pebble", "tCount": "Say", "tSing": "Şarkı söyle", "tTrace": "Çiz", "tGames": "Oyunlar", "listen": "Dinle", "again": "Tekrar", "play": "Çal", "sayNums": "Sayıları söyle", "prev": "Önceki", "next": "Sonraki", "takeOne": "Birini çıkar", "addOne": "Bir ekle", "addTen": "On ekle", "hello": "Merhaba, ben Pebble! Hadi birlikte sayalım!", "homeNext": "Hadi {n} sayısına kadar sayalım!", "homeAll": "20'ye kadar bütün sayıları saydın! İstediğini seç.", "countVoice": "Bir sayıya dokun!", "cTap": "Saymak için her birine dokun!", "cDone": "Bu {n} eder! Harika saydın!", "numOnly": "{n}", "hVoice": "Onluk ve birlik ekle. Sayının büyümesini izle!", "hTens": "{t} onluk + {o} birlik", "hDone": "100'e kadar saydın!", "songsVoice": "Söylemek için bir şarkı seç!", "song2": "İkişer say", "song5": "Beşer say", "song10": "Onar say", "songIntro": "Hadi {n}'er sayıp şarkı söyleyelim!", "sDone": "Ne güzel şarkı!", "digitsVoice": "Çizmek için bir sayı seç!", "traceVoice": "{n} sayısını çiz. Yeşil noktadan başla.", "trDone": "Harika çizdin! Bu {n}!", "gamesVoice": "Bir oyun seç!", "gameHow": "Kaç tane?", "gameMake": "Sayıyı oluştur", "gameNext": "Sırada hangi sayı var?", "gHow": "Kaç tane var? Saymak için dokun!", "gHowYes": "Evet! {n} tane var!", "gHowNo": "Tam değil. Her birine dokun ve tekrar say.", "gMake": "Sepete {n} koy!", "gMakeOver": "Çok fazla! Birini çıkar.", "gMakeYes": "Evet! {n} oluşturdun!", "gNext": "Benimle say: {s}. Sırada hangi sayı var?", "gNextYes": "Evet! Sırada {n} var!", "gNextNo": "Sayılara bir daha bak.", "roundDone": "Beş yıldız! Başardın!", "tabNumbers": "Sayma çıkartmaları", "tabSongs": "Şarkı çıkartmaları", "tabSea": "Deniz çıkartmaları", "progressLine": "20 sayıdan {a} tanesi sayıldı · {b} çıkartma", "thLagoon": "Lagün", "thSand": "Kum", "thNight": "Gece", "p_full": "Bütün sayma eğlencesi", "p_full_d": "Onluk ve birliklerle 100'e kadar saymayı, beşer ve onar sayma şarkılarını, Sayıyı oluştur ve Sırada hangi sayı var? oyunlarını açar ve reklamları kaldırır. Tek seferlik satın alma."},
+  uk: {"mascotName": "Пінгвін Пеббл", "tCount": "Рахуй", "tSing": "Співай", "tTrace": "Обведи", "tGames": "Ігри", "listen": "Слухати", "again": "Ще раз", "play": "Грати", "sayNums": "Назви числа", "prev": "Назад", "next": "Далі", "takeOne": "Прибрати один", "addOne": "Додати один", "addTen": "Додати десять", "hello": "Привіт, я Пеббл! Давай рахувати разом!", "homeNext": "Давай порахуємо до {n}!", "homeAll": "Ти порахував усі числа до 20! Обери будь-яке.", "countVoice": "Торкнись числа!", "cTap": "Торкайся кожного, щоб порахувати!", "cDone": "Виходить {n}! Чудовий рахунок!", "numOnly": "{n}", "hVoice": "Додавай десятки й одиниці. Дивись, як росте число!", "hTens": "{t} десятків + {o} одиниць", "hDone": "Ти порахував аж до 100!", "songsVoice": "Обери пісеньку!", "song2": "Рахуємо по 2", "song5": "Рахуємо по 5", "song10": "Рахуємо по 10", "songIntro": "Рахуємо по {n} і співаємо!", "sDone": "Яка чудова пісенька!", "digitsVoice": "Обери число, щоб обвести!", "traceVoice": "Обведи число {n}. Почни із зеленої крапки.", "trDone": "Чудово обведено! Це {n}!", "gamesVoice": "Обери гру!", "gameHow": "Скільки їх?", "gameMake": "Склади число", "gameNext": "Яке число далі?", "gHow": "Скільки їх? Торкайся, щоб порахувати!", "gHowYes": "Так! Їх {n}!", "gHowNo": "Майже. Торкнись кожного й порахуй ще раз.", "gMake": "Поклади {n} у кошик!", "gMakeOver": "Забагато! Прибери один.", "gMakeYes": "Так! Ти склав {n}!", "gNext": "Рахуй зі мною: {s}. Яке число далі?", "gNextYes": "Так! Далі {n}!", "gNextNo": "Подивись на числа ще раз.", "roundDone": "П’ять зірок! Молодець!", "tabNumbers": "Наліпки рахунку", "tabSongs": "Наліпки пісень", "tabSea": "Морські наліпки", "progressLine": "Пораховано {a} із 20 чисел · {b} наліпок", "thLagoon": "Лагуна", "thSand": "Пісок", "thNight": "Ніч", "p_full": "Уся радість лічби", "p_full_d": "Відкриває лічбу до 100 з десятками й одиницями, пісні про рахунок по 5 і по 10, ігри «Склади число» та «Яке число далі?» і вимикає рекламу. Одноразова покупка."},
+  zh: {"mascotName": "企鹅佩佩", "tCount": "数数", "tSing": "唱歌", "tTrace": "描数字", "tGames": "游戏", "listen": "听一听", "again": "再来一次", "play": "播放", "sayNums": "读出数字", "prev": "上一个", "next": "下一个", "takeOne": "拿走一个", "addOne": "加一个", "addTen": "加十个", "hello": "你好，我是佩佩！我们一起数数吧！", "homeNext": "我们一起数到 {n} 吧！", "homeAll": "你已经数完了 20 以内的所有数！选一个你喜欢的吧。", "countVoice": "点一个数字吧！", "cTap": "点一点每一个，把它数出来！", "cDone": "一共是 {n}！数得真棒！", "numOnly": "{n}", "hVoice": "加上十和一，看数字慢慢变大！", "hTens": "{t} 个十 + {o} 个一", "hDone": "你一直数到了 100！", "songsVoice": "选一首歌来唱吧！", "song2": "2 个 2 个地数", "song5": "5 个 5 个地数", "song10": "10 个 10 个地数", "songIntro": "我们 {n} 个 {n} 个地数，一起唱歌吧！", "sDone": "多好听的歌呀！", "digitsVoice": "选一个数字来描吧！", "traceVoice": "描数字 {n}。从绿色的点开始。", "trDone": "描得真好！这是 {n}！", "gamesVoice": "选一个游戏吧！", "gameHow": "有多少个？", "gameMake": "凑出这个数", "gameNext": "接下来是哪个数？", "gHow": "一共有多少个？点一点来数！", "gHowYes": "对啦！一共有 {n} 个！", "gHowNo": "差一点。点一点每一个，再数一遍。", "gMake": "把 {n} 个放进篮子里！", "gMakeOver": "太多啦！拿走一个。", "gMakeYes": "对啦！你凑出了 {n}！", "gNext": "跟我一起数：{s}。接下来是哪个数？", "gNextYes": "对啦！接下来是 {n}！", "gNextNo": "再看看这些数字。", "roundDone": "五颗星！你做到了！", "tabNumbers": "数数贴纸", "tabSongs": "歌曲贴纸", "tabSea": "海洋贴纸", "progressLine": "20 个数已数完 {a} 个 · {b} 张贴纸", "thLagoon": "潟湖", "thSand": "沙滩", "thNight": "夜晚", "p_full": "全部数数乐趣", "p_full_d": "解锁用十和一数到 100、按 5 和按 10 数数的歌曲，以及“凑出这个数”和“接下来是哪个数？”游戏，并移除广告。一次性购买。"}
 };
 //@@END CONTENT_STRINGS
 //@@REGION CONTENT_DATA
-// ── Alphabet: [spoken name, spoken phonics cue, word]. Words are concrete,
-// drawable and start with the letter's main sound (X: the sound at the END
-// of "box" — no common X-initial word uses the /ks/ sound).
-const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-const FREE_LETTERS = 'ABCDEFGHIJ';   // free set; K-Z = full_pack
-const L_INFO = {
-  A:['ay','ah','apple'], B:['bee','buh','ball'], C:['see','kuh','cat'], D:['dee','duh','dog'], E:['ee','eh','egg'],
-  F:['ef','fuh','fish'], G:['jee','guh','grapes'], H:['aitch','huh','hat'], I:['eye','ih','igloo'], J:['jay','juh','jellyfish'],
-  K:['kay','kuh','kite'], L:['el','luh','lion'], M:['em','mmm','moon'], N:['en','nnn','nest'], O:['oh','aw','octopus'],
-  P:['pee','puh','pig'], Q:['cue','kwuh','quilt'], R:['ar','ruh','rainbow'], S:['ess','sss','sun'], T:['tee','tuh','tree'],
-  U:['you','uh','umbrella'], V:['vee','vuh','volcano'], W:['double you','wuh','whale'], X:['ex','ks','box'], Y:['why','yuh','yo-yo'], Z:['zee','zzz','zebra']
-};
-// Visually confusable lowercase letters (used as Match distractors).
-const CONFUSE = { b:'dpq', d:'bpq', p:'qbd', q:'pdg', m:'nw', n:'mhu', u:'nv', w:'mv', i:'jl', j:'ig', l:'it', f:'tk', t:'fl', g:'qy', y:'gv', h:'nk', c:'oe', o:'ca', e:'ca', a:'od', s:'zc', z:'sx', v:'uy', r:'nf', k:'hx', x:'kz' };
+// Counting Fun content data: the round generator (pure, checked offline by
+// scripts/check_countingapp_items.py), original SVG art, stickers, mascot.
 
-// ── Art helpers (original SVG, 100×100) ─────────────────────────────────
-function ringBumps(cx, cy, R, n, r) {
-  let d = '';
-  for (let i = 0; i <= n; i++) {
-    const a = (i / n) * Math.PI * 2 - Math.PI / 2, x = (cx + R * Math.cos(a)).toFixed(1), y = (cy + R * Math.sin(a)).toFixed(1);
-    d += i ? ` A${r} ${r} 0 0 1 ${x} ${y}` : `M${x} ${y}`;
+// @@GEN_BEGIN
+// Pure functions only (no DOM, no globals): the gate evaluates this block under node.
+const CF = (function () {
+  // Answer ranges per level (inclusive). Level 4 = tens and ones (rods + cubes), 11-99.
+  const LEVELS = {
+    howmany: [[1, 5], [6, 10], [11, 20], [11, 99]],
+    make:    [[1, 5], [6, 10], [11, 20], [11, 99]],
+    next:    [[3, 20], [6, 20], [15, 100], [30, 100]]
+  };
+  const NEXT_STEP = [1, 2, 5, 10];       // level -> the skip-count step (1 = count on by ones)
+  const OBJECTS = 8;                      // object art kinds
+  const CAP = [8, 12, 22, 99];            // distractor ceiling per level
+  const int = (r, a, b) => a + Math.floor(r() * (b - a + 1));
+  const pick = (r, a) => a[Math.floor(r() * a.length)];
+  function shuffle(r, a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); const x = a[i]; a[i] = a[j]; a[j] = x; } return a; }
+  function uniq(a) { return a.filter((v, i) => a.indexOf(v) === i); }
+  // `count` unique options containing `answer`; distractors come from `near`
+  // (plausible mistakes) first, then any number close by; never equal to the
+  // answer and never in `ban`.
+  function options(r, answer, near, cap, count, ban) {
+    ban = ban || [];
+    const ok = v => v >= 1 && v <= cap && v !== answer && ban.indexOf(v) < 0;
+    let ds = shuffle(r, uniq(near.filter(ok)));
+    const out = ds.slice(0, count - 1);
+    let guard = 0;
+    while (out.length < count - 1 && guard++ < 400) {
+      const v = answer + int(r, -6, 6);
+      if (ok(v) && out.indexOf(v) < 0) out.push(v);
+    }
+    for (let v = 1; out.length < count - 1 && v <= cap; v++) if (ok(v) && out.indexOf(v) < 0) out.push(v);
+    return shuffle(r, out.concat([answer]));
   }
-  return d + 'Z';
-}
-function sunRays(cx, cy, r0, r1, n) {
-  let d = '';
-  for (let i = 0; i < n; i++) {
-    const a = (i / n) * Math.PI * 2, w = 0.2, p = (ang, rr) => `${(cx + rr * Math.cos(ang)).toFixed(1)} ${(cy + rr * Math.sin(ang)).toFixed(1)}`;
-    d += `M${p(a - w, r0)}L${p(a, r1)}L${p(a + w, r0)}Z`;
+  function swapDigits(n) { return n >= 10 ? (n % 10) * 10 + Math.floor(n / 10) : n; }
+  function fresh(r, lo, hi, exclude) {
+    const pool = [];
+    for (let v = lo; v <= hi; v++) if (!exclude || exclude.indexOf(v) < 0) pool.push(v);
+    return pool.length ? pick(r, pool) : int(r, lo, hi);
   }
-  return d;
-}
-const EYE = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r || 4.5}" fill="#2a1d14"/><circle class="n" cx="${x + 1.4}" cy="${y - 1.6}" r="1.5" fill="#fff"/>`;
-const CHEEK = (x, y) => `<circle class="n" cx="${x}" cy="${y}" r="4.5" fill="#f58aa8" opacity=".55"/>`;
+  function shownFor(level, n, kind) {
+    const out = [];
+    if (level === 4) {
+      for (let i = 0; i < Math.floor(n / 10); i++) out.push({ k: 'ten', v: 10 });
+      for (let i = 0; i < n % 10; i++) out.push({ k: 'one', v: 1 });
+    } else for (let i = 0; i < n; i++) out.push({ k: 'obj', v: 1, t: kind });
+    return out;
+  }
+  function howmany(r, level, exclude) {
+    const R = LEVELS.howmany[level - 1], n = fresh(r, R[0], R[1], exclude), kind = int(r, 0, OBJECTS - 1);
+    const near = [n - 1, n + 1, n - 2, n + 2];
+    if (level === 4) near.push(n - 10, n + 10, swapDigits(n), n + 9, n - 9);
+    return { game: 'howmany', level: level, answer: n, lo: R[0], hi: R[1], kind: kind, shown: shownFor(level, n, kind), options: options(r, n, near, CAP[level - 1], level === 1 ? 3 : 4) };
+  }
+  function make(r, level, exclude) {
+    const R = LEVELS.make[level - 1], n = fresh(r, R[0], R[1], exclude), kind = int(r, 0, OBJECTS - 1);
+    return { game: 'make', level: level, answer: n, lo: R[0], hi: R[1], kind: kind, shown: [], options: null };
+  }
+  function next(r, level, exclude) {
+    const step = NEXT_STEP[level - 1], R = LEVELS.next[level - 1], len = 5;
+    // start is a multiple of step (1 for ones) so the whole row lies on the skip-count line
+    const lastStart = Math.floor((R[1] - step * (len - 1)) / step);   // k such that start = k*step
+    let seq, blank, guard = 0;
+    do {
+      const k = step === 1 ? int(r, 1, R[1] - (len - 1)) : int(r, 1, Math.max(1, lastStart));
+      const start = step === 1 ? k : k * step;
+      seq = []; for (let i = 0; i < len; i++) seq.push(start + i * step);
+      blank = int(r, 2, len - 1);
+    } while ((seq[blank] < R[0] || seq[blank] > R[1] || (exclude && exclude.indexOf(seq[blank]) >= 0)) && guard++ < 300);
+    if (seq[blank] < R[0] || seq[blank] > R[1]) {      // deterministic fallback inside the range
+      const start = step === 1 ? R[0] - 2 : Math.ceil(R[0] / step) * step - 2 * step;
+      seq = []; for (let i = 0; i < len; i++) seq.push(Math.max(step, start) + i * step);
+      blank = 2; if (seq[2] < R[0]) { seq = seq.map(v => v + step * Math.ceil((R[0] - seq[2]) / step)); }
+    }
+    const ans = seq[blank], shown = seq.filter((v, i) => i !== blank);
+    const near = [ans - step, ans + step, ans + 2 * step, ans - 2 * step, ans + 1, ans - 1, ans + (step === 1 ? 2 : 1)];
+    return { game: 'next', level: level, answer: ans, lo: R[0], hi: R[1], step: step, seq: seq, blank: blank, shown: shown, options: options(r, ans, near, 100, level === 1 ? 3 : 4, seq) };
+  }
+  function round(game, level, r, exclude) {
+    level = Math.max(1, Math.min(4, level | 0 || 1));
+    return game === 'make' ? make(r, level, exclude) : game === 'next' ? next(r, level, exclude) : howmany(r, level, exclude);
+  }
+  // Skip-counting song rows: step, 2*step, ... 10*step.
+  function songSeq(step) { const a = []; for (let i = 1; i <= 10; i++) a.push(step * i); return a; }
+  function mulberry(seed) { let a = seed >>> 0; return function () { a = (a + 0x6D2B79F5) >>> 0; let x = a; x = Math.imul(x ^ (x >>> 15), x | 1); x ^= x + Math.imul(x ^ (x >>> 7), x | 61); return ((x ^ (x >>> 14)) >>> 0) / 4294967296; }; }
+  return { LEVELS: LEVELS, NEXT_STEP: NEXT_STEP, OBJECTS: OBJECTS, round: round, songSeq: songSeq, mulberry: mulberry, SONG_STEPS: [2, 5, 10] };
+})();
+// @@GEN_END
+
+const OBJS = ['apple', 'fish', 'duck', 'flower', 'balloon', 'butterfly', 'strawberry', 'star'];
+const EYE = (x, y, r) => `<circle class="n" cx="${x}" cy="${y}" r="${r || 4.5}" fill="#10262c"/><circle class="n" cx="${x + 1.4}" cy="${y - 1.6}" r="1.5" fill="#fff"/>`;
 const SHINE = (x, y, rx, ry, rot) => `<ellipse class="n" cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#fff" opacity=".45" transform="rotate(${rot || 0} ${x} ${y})"/>`;
 
 const ART = {
-  A: `<path class="f" d="M50 32C50 24 52 17 57 11"/><path d="M55 21C61 10 73 9 80 13C74 22 63 25 55 21Z" fill="#5cb85c"/><path d="M50 32C38 22 15 26 15 52C15 75 31 93 50 88C69 93 85 75 85 52C85 26 62 22 50 32Z" fill="#e8463b"/>${SHINE(32, 48, 6, 11)}`,
-  B: `<circle cx="50" cy="52" r="38" fill="#fff"/><path class="n" d="M50 52L50 14A38 38 0 0 0 17.1 71Z" fill="#e8463b"/><path class="n" d="M50 52L17.1 71A38 38 0 0 0 82.9 71Z" fill="#ffd23f"/><path class="n" d="M50 52L82.9 71A38 38 0 0 0 50 14Z" fill="#3a86d8"/><path class="f" d="M50 14C40 30 38 44 50 52C40 58 26 66 17.1 71M50 52C62 58 74 66 82.9 71"/><circle class="f" cx="50" cy="52" r="38"/><circle cx="50" cy="52" r="6" fill="#fff"/>${SHINE(33, 34, 8, 5, -35)}`,
-  C: `<path d="M22 42L17 11L43 27Z" fill="#f4a340"/><path d="M78 42L83 11L57 27Z" fill="#f4a340"/><path class="n" d="M23 33L21 18L33 26Z" fill="#f7c6c6"/><path class="n" d="M77 33L79 18L67 26Z" fill="#f7c6c6"/><ellipse cx="50" cy="57" rx="36" ry="31" fill="#f4a340"/><path class="f" d="M50 27V36M42 28L44 36M58 28L56 36"/>${EYE(37, 53, 5)}${EYE(63, 53, 5)}<path d="M45 64H55L50 69Z" fill="#e86a7a"/><path class="f" d="M50 69Q45 75 40 71M50 69Q55 75 60 71M28 64L10 60M28 69L10 72M72 64L90 60M72 69L90 72"/>${CHEEK(28, 66)}${CHEEK(72, 66)}`,
-  D: `<ellipse cx="50" cy="54" rx="31" ry="31" fill="#c98a4b"/><path class="n" d="M54 30C64 26 76 34 74 46C66 50 56 44 54 30Z" fill="#f2d7b3"/><path d="M25 30C10 32 7 60 17 70C26 63 29 46 31 35Z" fill="#8a5a33"/><path d="M75 30C90 32 93 60 83 70C74 63 71 46 69 35Z" fill="#8a5a33"/>${EYE(40, 48)}${EYE(62, 46)}<ellipse cx="50" cy="68" rx="15" ry="11" fill="#f2d7b3"/><path d="M45 76Q50 90 55 76Z" fill="#e86a7a"/><ellipse cx="50" cy="62" rx="6.5" ry="4.5" fill="#2a1d14"/><path class="f" d="M50 66V71M43 73Q50 78 57 73"/>`,
-  E: `<ellipse class="n" cx="50" cy="91" rx="26" ry="4" fill="#000" opacity=".12"/><path d="M50 9C29 9 18 48 18 62C18 79 32 90 50 90C68 90 82 79 82 62C82 48 71 9 50 9Z" fill="#fff5dc"/><circle class="n" cx="38" cy="54" r="4" fill="#f2b8c6"/><circle class="n" cx="60" cy="40" r="3" fill="#9fd3f0"/><circle class="n" cx="64" cy="66" r="5" fill="#b9e3a0"/><circle class="n" cx="44" cy="74" r="3" fill="#ffd23f"/><circle class="n" cx="52" cy="26" r="3.5" fill="#f2b8c6"/>${SHINE(33, 40, 5, 12, 18)}`,
-  F: `<path d="M44 29C49 15 62 16 67 30Z" fill="#e0731a"/><path d="M76 50L94 33L94 67Z" fill="#e0731a"/><ellipse cx="47" cy="50" rx="34" ry="24" fill="#f6a03b"/><path class="f" d="M57 33C63 43 63 57 57 67"/><path class="n" d="M62 46L72 50L62 54Z" fill="#ffd23f"/><circle cx="29" cy="45" r="6.5" fill="#fff"/><circle cx="30" cy="45" r="3.2" fill="#2a1d14"/><path class="f" d="M16 57Q21 61 26 57"/><circle cx="12" cy="27" r="4" fill="#bfe3ff"/><circle cx="20" cy="15" r="3" fill="#bfe3ff"/>${SHINE(40, 38, 9, 4, -12)}`,
-  G: `<path class="f" d="M50 9V22"/><path d="M52 15C62 5 77 7 81 13C73 22 60 22 52 15Z" fill="#5cb85c"/>` +
-     [[38, 31], [50, 29], [62, 31], [32, 46], [44, 45], [56, 45], [68, 46], [38, 60], [50, 60], [62, 60], [44, 74], [56, 74], [50, 87]].map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="9" fill="${i % 3 ? '#8e5bd6' : '#7442c2'}"/><circle class="n" cx="${p[0] - 3}" cy="${p[1] - 3}" r="2.2" fill="#fff" opacity=".55"/>`).join(''),
-  H: `<path d="M19 70C19 40 33 25 50 25C67 25 81 40 81 70Z" fill="#e8463b"/><path class="f" d="M30 44V68M40 33V68M50 30V68M60 33V68M70 44V68" opacity=".45"/><rect x="14" y="65" width="72" height="17" rx="7" fill="#ffd23f"/><path class="f" d="M24 69V78M34 69V78M44 69V78M54 69V78M64 69V78M74 69V78" opacity=".4"/><circle cx="50" cy="20" r="11" fill="#fff5dc"/>`,
-  I: `<rect class="n" x="0" y="80" width="100" height="16" rx="4" fill="#d6ecff"/><path d="M9 82C9 45 27 25 50 25C73 25 91 45 91 82Z" fill="#f4faff"/><path class="f" d="M13 66H87M19 48H81M31 35H69M30 66V82M70 66V82M42 48V66M58 48V66M38 35V48M62 35V48" opacity=".5"/><path d="M38 82V67C38 59 44 54 50 54C56 54 62 59 62 67V82Z" fill="#35577f"/>${SHINE(26, 46, 4, 9, 30)}`,
-  J: `<path class="f" d="M31 57Q24 67 31 76Q38 85 31 94M44 59Q37 69 44 78Q51 86 44 94M56 59Q63 69 56 78Q49 86 56 94M69 57Q76 67 69 76Q62 85 69 94" style="stroke:#d0609a"/><path d="M17 58C17 30 31 15 50 15C69 15 83 30 83 58C76 54 70 62 62 58C56 54 50 62 44 58C38 54 30 62 17 58Z" fill="#f59ac0"/>${EYE(40, 40)}${EYE(60, 40)}<path class="f" d="M44 48Q50 53 56 48"/>${CHEEK(32, 47)}${CHEEK(68, 47)}<circle class="n" cx="34" cy="26" r="3" fill="#fff" opacity=".5"/><circle class="n" cx="64" cy="24" r="2" fill="#fff" opacity=".5"/>`,
-  K: `<path class="f" d="M50 78C43 84 57 88 50 95"/><path class="n" d="M47 84L41 80L42 88Z M53 88L59 84L58 92Z" fill="#e8463b"/><path d="M50 8L80 40L50 78L20 40Z" fill="#3a86d8"/><path class="n" d="M50 8L80 40L50 40Z" fill="#ffd23f"/><path class="n" d="M50 40L50 78L20 40Z" fill="#e8463b"/><path class="f" d="M50 8L80 40L50 78L20 40ZM50 8V78M20 40H80"/>`,
-  L: `<path d="${ringBumps(50, 52, 34, 14, 9)}" fill="#d9772a"/><circle cx="30" cy="32" r="8" fill="#f6c157"/><circle cx="70" cy="32" r="8" fill="#f6c157"/><circle cx="50" cy="54" r="26" fill="#f6c157"/>${EYE(40, 49)}${EYE(60, 49)}<ellipse class="n" cx="50" cy="66" rx="12" ry="8" fill="#fde3a7"/><path d="M45 59H55L50 65Z" fill="#8a5a33"/><path class="f" d="M50 65V68M44 70Q50 74 56 70"/>${CHEEK(34, 61)}${CHEEK(66, 61)}`,
-  M: `<path d="M64 10C40 13 21 31 21 54C21 76 39 92 61 92C70 92 78 89 85 84C62 85 45 68 45 48C45 32 52 18 64 10Z" fill="#ffd23f"/><path class="f" d="M30 51Q35 55 40 51M31 66Q37 71 43 66"/>${CHEEK(29, 58)}<path d="M76 20L79 27L86 30L79 33L76 40L73 33L66 30L73 27Z" fill="#ffd23f"/><path d="M84 52L86 56L90 58L86 60L84 64L82 60L78 58L82 56Z" fill="#fff5dc"/><circle class="n" cx="64" cy="70" r="2" fill="#fff5dc"/>`,
-  N: `<ellipse cx="38" cy="45" rx="9" ry="12" fill="#8fd0ef"/><ellipse cx="62" cy="45" rx="9" ry="12" fill="#8fd0ef"/><ellipse cx="50" cy="40" rx="9" ry="12" fill="#a9dcf5"/><circle class="n" cx="47" cy="34" r="2" fill="#fff" opacity=".7"/><path d="M11 50C13 80 30 88 50 88C70 88 87 80 89 50C70 58 30 58 11 50Z" fill="#b07a45"/><path class="f" d="M17 60L42 66M58 66L83 60M23 72L47 77M53 77L77 72M33 82L67 82" opacity=".55"/>`,
-  O: `<path class="f" d="M30 54C20 60 11 68 15 79C18 87 27 85 25 78" style="stroke-width:12"/><path class="f" d="M30 54C20 60 11 68 15 79C18 87 27 85 25 78" style="stroke:#a275e0;stroke-width:7"/><path class="f" d="M40 60C35 72 31 82 37 90C41 94 47 90 43 85" style="stroke-width:12"/><path class="f" d="M40 60C35 72 31 82 37 90C41 94 47 90 43 85" style="stroke:#a275e0;stroke-width:7"/><path class="f" d="M60 60C65 72 69 82 63 90C59 94 53 90 57 85" style="stroke-width:12"/><path class="f" d="M60 60C65 72 69 82 63 90C59 94 53 90 57 85" style="stroke:#a275e0;stroke-width:7"/><path class="f" d="M70 54C80 60 89 68 85 79C82 87 73 85 75 78" style="stroke-width:12"/><path class="f" d="M70 54C80 60 89 68 85 79C82 87 73 85 75 78" style="stroke:#a275e0;stroke-width:7"/>` +
-     `<path d="M22 50C22 25 36 13 50 13C64 13 78 25 78 50C78 61 66 65 50 65C34 65 22 61 22 50Z" fill="#a275e0"/><circle class="n" cx="60" cy="26" r="4" fill="#c9a5f0"/><circle class="n" cx="68" cy="36" r="2.5" fill="#c9a5f0"/>${EYE(40, 42)}${EYE(60, 42)}<path class="f" d="M44 51Q50 56 56 51"/>${CHEEK(31, 50)}${CHEEK(69, 50)}`,
-  P: `<path d="M24 30L20 10L40 22Z" fill="#f48fb1"/><path d="M76 30L80 10L60 22Z" fill="#f48fb1"/><circle cx="50" cy="54" r="34" fill="#f7a8c0"/>${EYE(37, 44)}${EYE(63, 44)}<ellipse cx="50" cy="64" rx="15" ry="11" fill="#f48fb1"/><ellipse class="n" cx="45" cy="64" rx="2.6" ry="4" fill="#a84d6a"/><ellipse class="n" cx="55" cy="64" rx="2.6" ry="4" fill="#a84d6a"/>${CHEEK(27, 58)}${CHEEK(73, 58)}<path class="f" d="M44 80Q50 84 56 80"/>`,
-  Q: `<rect x="12" y="12" width="76" height="76" rx="7" fill="#fff5dc"/>` +
-     ['#e8463b', '#ffd23f', '#3a86d8', '#5cb85c', '#f59ac0', '#9b6bd8', '#f6a03b', '#8fd0ef', '#e8463b'].map((c, i) => `<rect class="n" x="${(16 + (i % 3) * 23.3).toFixed(1)}" y="${(16 + Math.floor(i / 3) * 23.3).toFixed(1)}" width="21.3" height="21.3" rx="3" fill="${c}"/>`).join('') +
-     `<rect class="f" x="12" y="12" width="76" height="76" rx="7"/><path class="f" d="M38.3 14V86M61.6 14V86M14 38.3H86M14 61.6H86" stroke-dasharray="3 3" style="stroke-width:1.6"/>`,
-  R: [[42, 35, '#e8463b'], [35, 28, '#f6a03b'], [28, 21, '#ffd23f'], [21, 14, '#5cb85c']].map(b => `<path d="M${50 - b[0]} 72A${b[0]} ${b[0]} 0 0 1 ${50 + b[0]} 72H${50 + b[1]}A${b[1]} ${b[1]} 0 0 0 ${50 - b[1]} 72Z" fill="${b[2]}"/>`).join('') +
-     `<path d="M2 80C2 72 10 68 16 72C18 64 30 64 31 73C38 72 40 82 34 84H6C3 84 2 82 2 80Z" fill="#fff"/><path d="M66 80C66 72 74 68 80 72C82 64 94 64 95 73C100 74 100 84 96 84H70C67 84 66 82 66 80Z" fill="#fff"/>`,
-  S: `<path d="${sunRays(50, 50, 30, 46, 10)}" fill="#f6a03b"/><circle cx="50" cy="50" r="26" fill="#ffd23f"/>${EYE(41, 45)}${EYE(59, 45)}<path class="f" d="M41 58Q50 66 59 58"/>${CHEEK(33, 55)}${CHEEK(67, 55)}`,
-  T: `<path d="M44 92V60H56V92Z" fill="#a0663a"/><path class="f" d="M50 72L44 66M50 78L56 72"/><path d="M30 66C14 66 11 46 25 41C23 23 41 13 53 21C65 11 86 21 80 39C93 47 87 68 70 66Z" fill="#5cb85c"/><circle class="n" cx="38" cy="40" r="5" fill="#86d47c"/><circle class="n" cx="62" cy="34" r="4" fill="#86d47c"/><circle class="n" cx="66" cy="54" r="5" fill="#86d47c"/><circle class="n" cx="42" cy="56" r="3.5" fill="#86d47c"/><path class="f" d="M10 92H90"/>`,
-  U: `<path class="f" d="M50 52V82C50 90 40 90 40 82" style="stroke-width:4.5"/><path d="M10 52C10 28 28 14 50 14C72 14 90 28 90 52C84 46 76 46 70 52C64 46 56 46 50 52C44 46 36 46 30 52C24 46 16 46 10 52Z" fill="#e8463b"/><path d="M50 14C42 24 38 38 30 52C36 46 44 46 50 52C56 46 64 46 70 52C62 38 58 24 50 14Z" fill="#ffd23f"/><circle cx="50" cy="11" r="3.5" fill="#ffd23f"/>`,
-  V: `<circle cx="58" cy="15" r="8" fill="#e3ddd4"/><circle cx="70" cy="9" r="6" fill="#e3ddd4"/><circle cx="46" cy="19" r="6" fill="#e3ddd4"/><path d="M8 88L36 34H64L92 88Z" fill="#a86b45"/><path d="M36 34H64L58 48C54 43 51 52 47 45C44 49 40 47 39 41Z" fill="#e8463b"/><ellipse cx="50" cy="34" rx="14" ry="4" fill="#ff8a3d"/><path class="f" d="M30 70L38 64M66 66L72 74M48 76L54 72" opacity=".5"/><path class="f" d="M4 88H96"/>`,
-  W: `<path class="f" d="M40 25C40 15 32 11 27 7M40 25C40 15 48 11 53 7M40 25V9" style="stroke:#3a86d8;stroke-width:3.4"/><path d="M9 57C9 35 31 25 53 27C73 29 83 41 83 54L94 41C96 53 94 61 86 65C82 77 66 85 46 85C24 85 9 75 9 57Z" fill="#4a90d9"/><path class="n" d="M14 66C24 80 54 82 76 70C70 80 58 84 46 84C30 84 18 78 14 66Z" fill="#bfe3ff"/>${EYE(31, 52, 4)}<path class="f" d="M21 63Q29 69 38 64"/>${CHEEK(26, 60)}`,
-  X: `<rect x="16" y="42" width="68" height="46" rx="4" fill="#9b6bd8"/><rect x="12" y="31" width="76" height="14" rx="4" fill="#b58be6"/><rect class="n" x="44" y="31" width="12" height="57" fill="#ffd23f"/><path class="f" d="M44 31V88M56 31V88"/><path d="M50 31C38 13 25 22 34 31Z" fill="#ffd23f"/><path d="M50 31C62 13 75 22 66 31Z" fill="#ffd23f"/>`,
-  Y: `<circle class="f" cx="50" cy="9" r="4.5"/><path class="f" d="M50 14C53 22 47 26 50 33"/><circle cx="50" cy="62" r="30" fill="#e8463b"/><circle cx="50" cy="62" r="20" fill="#ffd23f"/><circle cx="50" cy="62" r="6" fill="#e8463b"/><path class="f" d="M50 42V56M50 68V82M30 62H44M56 62H70" opacity=".4"/>${SHINE(36, 46, 6, 4, -40)}`,
-  Z: `<path d="M32 28L25 6L43 19Z" fill="#fff"/><path d="M68 28L75 6L57 19Z" fill="#fff"/><path d="M40 20C43 8 57 8 60 20L56 24H44Z" fill="#2a1d14"/><path d="M30 30C30 17 70 17 70 30L66 70C64 85 36 85 34 70Z" fill="#fff"/><path class="n" d="M31 36L45 40L31 43ZM69 36L55 40L69 43ZM32 52L44 54L33 57ZM68 52L56 54L67 57ZM42 24L50 31L58 24L54 22L50 26L46 22Z" fill="#2a1d14"/><ellipse cx="50" cy="76" rx="16" ry="11" fill="#7d7d7d"/><ellipse class="n" cx="44" cy="76" rx="2.5" ry="3.5" fill="#2a1d14"/><ellipse class="n" cx="56" cy="76" rx="2.5" ry="3.5" fill="#2a1d14"/>${EYE(40, 47, 4)}${EYE(60, 47, 4)}`
+  apple: `<path class="f" d="M50 30C50 22 52 16 57 10"/><path d="M55 20C61 9 73 8 80 12C74 21 63 24 55 20Z" fill="#4caf50"/><path d="M50 32C38 22 15 26 15 52C15 75 31 93 50 88C69 93 85 75 85 52C85 26 62 22 50 32Z" fill="#e0453a"/>${SHINE(32, 48, 6, 11)}`,
+  fish: `<path d="M74 50L96 30V70Z" fill="#f08c2e"/><ellipse cx="46" cy="50" rx="36" ry="25" fill="#ffa24a"/><path class="f" d="M56 29C65 41 65 59 56 71"/><path d="M40 26C46 16 56 16 60 26Z" fill="#f08c2e"/>${EYE(28, 44, 5)}<path class="f" d="M20 56Q25 60 30 57"/>`,
+  duck: `<path d="M12 56C12 78 30 90 52 90C74 90 90 76 88 54C70 56 58 46 56 36C46 38 24 36 12 56Z" fill="#ffd23f"/><circle cx="48" cy="28" r="19" fill="#ffd23f"/><path d="M62 28C74 26 82 30 84 34C76 40 66 38 62 34Z" fill="#f08c2e"/>${EYE(46, 24, 4.5)}<path class="f" d="M30 66C40 78 58 76 66 64"/>`,
+  flower: `<path class="f" d="M50 58V94M50 80C40 70 30 74 28 80C38 84 46 82 50 80" style="stroke:#2f8a45;stroke-width:3.5"/>` + [0, 72, 144, 216, 288].map(a => `<ellipse cx="50" cy="22" rx="13" ry="17" fill="#f06aa3" transform="rotate(${a} 50 42)"/>`).join('') + `<circle cx="50" cy="42" r="11" fill="#ffd23f"/>`,
+  balloon: `<path class="f" d="M50 72C46 82 56 86 50 96"/><path d="M50 6C28 6 16 24 16 42C16 62 34 74 50 76C66 74 84 62 84 42C84 24 72 6 50 6Z" fill="#8a5fd0"/><path d="M45 76H55L50 82Z" fill="#8a5fd0"/>${SHINE(34, 28, 7, 12, 25)}`,
+  butterfly: `<path d="M48 44C40 20 14 14 10 30C6 46 26 54 48 50Z" fill="#3a9ad8"/><path d="M52 44C60 20 86 14 90 30C94 46 74 54 52 50Z" fill="#3a9ad8"/><path d="M48 54C30 56 18 70 26 80C34 88 46 76 48 60Z" fill="#f06aa3"/><path d="M52 54C70 56 82 70 74 80C66 88 54 76 52 60Z" fill="#f06aa3"/><rect x="46" y="30" width="8" height="46" rx="4" fill="#3a2a2e"/><path class="f" d="M48 30C44 20 40 16 36 14M52 30C56 20 60 16 64 14"/><circle class="n" cx="26" cy="32" r="4" fill="#fff" opacity=".7"/><circle class="n" cx="74" cy="32" r="4" fill="#fff" opacity=".7"/>`,
+  strawberry: `<path d="M50 90C24 76 16 50 22 36C30 30 70 30 78 36C84 50 76 76 50 90Z" fill="#e23b55"/><path d="M50 36L38 22L46 28L50 14L54 28L62 22Z" fill="#3fa250"/><g class="n" fill="#ffe9a8"><ellipse cx="38" cy="48" rx="2.4" ry="3.6"/><ellipse cx="54" cy="46" rx="2.4" ry="3.6"/><ellipse cx="66" cy="54" rx="2.4" ry="3.6"/><ellipse cx="44" cy="62" rx="2.4" ry="3.6"/><ellipse cx="58" cy="68" rx="2.4" ry="3.6"/><ellipse cx="32" cy="64" rx="2.4" ry="3.6"/></g>`,
+  star: `<path d="M50 6L62 36L94 38L69 58L77 90L50 72L23 90L31 58L6 38L38 36Z" fill="#ffc42e"/>${EYE(42, 52, 4)}${EYE(58, 52, 4)}<path class="f" d="M44 62Q50 67 56 62"/>`
 };
 
-// Special sticker set (earned by finishing game rounds).
+// Sea stickers: round rewards (the "special" page).
 const SPECIALS = [
-  ['star', 'star', `<path d="M50 8L61 36L91 38L68 57L76 87L50 70L24 87L32 57L9 38L39 36Z" fill="#ffd23f"/>${EYE(42, 52, 4)}${EYE(58, 52, 4)}<path class="f" d="M44 62Q50 67 56 62"/>`],
-  ['heart', 'heart', `<path d="M50 88C20 66 8 50 8 34C8 20 19 10 31 10C40 10 46 16 50 22C54 16 60 10 69 10C81 10 92 20 92 34C92 50 80 66 50 88Z" fill="#e8463b"/>${SHINE(26, 30, 6, 10, 30)}`],
-  ['rocket', 'rocket', `<path d="M40 76L34 94L50 84L66 94L60 76Z" fill="#f6a03b"/><path d="M36 56L20 74L38 72ZM64 56L80 74L62 72Z" fill="#e8463b"/><path d="M50 6C66 20 68 46 62 76H38C32 46 34 20 50 6Z" fill="#eef6ff"/><path class="n" d="M50 6C58 13 62 22 64 30H36C38 22 42 13 50 6Z" fill="#e8463b"/><circle cx="50" cy="46" r="9" fill="#3a86d8"/>${SHINE(46, 43, 3, 2, -30)}`],
-  ['crown', 'crown', `<path d="M14 76L10 30L32 50L50 20L68 50L90 30L86 76Z" fill="#ffd23f"/><rect x="14" y="74" width="72" height="12" rx="4" fill="#f6a03b"/><circle cx="50" cy="56" r="6" fill="#e8463b"/><circle cx="30" cy="62" r="4.5" fill="#3a86d8"/><circle cx="70" cy="62" r="4.5" fill="#5cb85c"/>`],
-  ['flower', 'flower', `<path class="f" d="M50 60V94M50 80C40 70 30 74 28 80C38 84 46 82 50 80" style="stroke:#3b8a3e;stroke-width:3.5"/>` + [0, 72, 144, 216, 288].map(a => `<ellipse cx="50" cy="22" rx="13" ry="17" fill="#f59ac0" transform="rotate(${a} 50 42)"/>`).join('') + `<circle cx="50" cy="42" r="12" fill="#ffd23f"/>`],
-  ['butterfly', 'butterfly', `<path d="M48 44C40 20 14 14 10 30C6 46 26 54 48 50Z" fill="#9b6bd8"/><path d="M52 44C60 20 86 14 90 30C94 46 74 54 52 50Z" fill="#9b6bd8"/><path d="M48 54C30 56 18 70 26 80C34 88 46 76 48 60Z" fill="#f59ac0"/><path d="M52 54C70 56 82 70 74 80C66 88 54 76 52 60Z" fill="#f59ac0"/><ellipse cx="50" cy="54" rx="5" ry="22" fill="#5a3d8a"/><path class="f" d="M48 33Q42 22 38 20M52 33Q58 22 62 20"/><circle class="n" cx="26" cy="32" r="5" fill="#fff" opacity=".5"/><circle class="n" cx="74" cy="32" r="5" fill="#fff" opacity=".5"/>`],
-  ['ice cream', 'icecream', `<path d="M30 50L50 94L70 50Z" fill="#e6b36b"/><path class="f" d="M36 58L58 76M44 52L64 64M64 58L44 82M54 52L38 66" opacity=".5"/><circle cx="38" cy="44" r="14" fill="#a8e6cf"/><circle cx="62" cy="44" r="14" fill="#f59ac0"/><circle cx="50" cy="30" r="15" fill="#fff5dc"/><circle cx="52" cy="13" r="5" fill="#e8463b"/>`],
-  ['balloon', 'balloon', `<path class="f" d="M50 72C46 82 56 86 50 96"/><path d="M50 6C28 6 16 24 16 42C16 62 34 74 50 76C66 74 84 62 84 42C84 24 72 6 50 6Z" fill="#e8463b"/><path d="M45 76H55L50 82Z" fill="#e8463b"/>${SHINE(34, 28, 7, 12, 25)}`],
-  ['planet', 'planet', `<circle cx="50" cy="50" r="28" fill="#f6a03b"/><path class="n" d="M26 42C40 46 60 46 74 42" stroke="#e0731a" style="stroke:#e0731a;stroke-width:5;fill:none"/><ellipse class="f" cx="50" cy="52" rx="46" ry="12" transform="rotate(-14 50 52)" style="stroke:#9b6bd8;stroke-width:5"/><circle class="n" cx="16" cy="18" r="2.5" fill="#ffd23f"/><circle class="n" cx="86" cy="84" r="3" fill="#ffd23f"/>`],
-  ['cupcake', 'cupcake', `<path d="M24 54L32 90H68L76 54Z" fill="#8fd0ef"/><path class="f" d="M38 56L42 90M50 56V90M62 56L58 90" opacity=".5"/><path d="M18 56C14 44 26 36 32 38C32 26 46 22 50 30C56 22 70 26 68 38C76 36 86 44 82 56Z" fill="#f59ac0"/><circle cx="50" cy="20" r="6" fill="#e8463b"/><path class="n" d="M34 46h5v2.5h-5zM56 42h5v2.5h-5zM46 50h5v2.5h-5zM66 50h5v2.5h-5z" fill="#ffd23f"/>`],
-  ['medal', 'medal', `<path d="M32 6L44 44H56L68 6H54L50 22L46 6Z" fill="#3a86d8"/><circle cx="50" cy="64" r="26" fill="#ffd23f"/><circle cx="50" cy="64" r="18" fill="#f6c14b"/><path d="M50 50L54 60L64 61L56 67L59 77L50 71L41 77L44 67L36 61L46 60Z" fill="#fff5dc"/>`],
-  ['ladybug', 'ladybug', `<circle cx="50" cy="26" r="13" fill="#2a1d14"/><path class="f" d="M44 16L38 6M56 16L62 6"/><ellipse cx="50" cy="58" rx="34" ry="32" fill="#e8463b"/><path class="f" d="M50 28V90"/><circle class="n" cx="34" cy="48" r="6" fill="#2a1d14"/><circle class="n" cx="66" cy="48" r="6" fill="#2a1d14"/><circle class="n" cx="34" cy="72" r="5" fill="#2a1d14"/><circle class="n" cx="66" cy="72" r="5" fill="#2a1d14"/>${SHINE(32, 36, 5, 8, 30)}`]
+  ['crab', 'crab', `<path class="f" d="M28 66L14 78M36 72L26 90M72 66L86 78M64 72L74 90"/><path d="M26 44C12 40 8 22 20 18C28 22 30 34 34 42Z" fill="#e8553b"/><path d="M74 44C88 40 92 22 80 18C72 22 70 34 66 42Z" fill="#e8553b"/><ellipse cx="50" cy="58" rx="30" ry="22" fill="#e8553b"/><path class="f" d="M42 38V30M58 38V30"/>${EYE(42, 28, 5.5)}${EYE(58, 28, 5.5)}<path class="f" d="M43 62Q50 68 57 62"/>`],
+  ['whale', 'whale', `<path class="f" d="M44 22C44 12 36 8 30 10M44 22C44 12 52 8 58 10" style="stroke:#6fb8e6"/><path d="M8 52C8 32 26 24 46 24C70 24 90 36 92 56C80 54 74 62 70 74C60 82 40 84 26 78C14 72 8 64 8 52Z" fill="#3b7fc4"/><path d="M82 52C90 44 96 38 96 30C86 32 80 40 80 48Z" fill="#3b7fc4"/><path d="M20 66C34 78 58 78 70 70L68 76C56 84 34 84 22 74Z" fill="#cfe9fb"/>${EYE(28, 48, 4.5)}`],
+  ['octopus', 'octopus', `<path d="M24 56C24 28 36 14 50 14C64 14 76 28 76 56Z" fill="#9b5fd0"/><path d="M24 56C14 64 14 78 24 82C26 74 30 70 34 68C32 76 36 86 44 84C44 76 46 72 50 70C54 72 56 76 56 84C64 86 68 76 66 68C70 70 74 74 76 82C86 78 86 64 76 56Z" fill="#9b5fd0"/>${EYE(40, 42, 5)}${EYE(60, 42, 5)}<path class="f" d="M45 54Q50 58 55 54"/>`],
+  ['turtle', 'turtle', `<path d="M78 56C90 54 96 46 92 40C86 40 78 44 74 50Z" fill="#6cc070"/><circle cx="90" cy="44" r="2" class="n" fill="#10262c"/><path d="M22 72L16 86H30L34 74ZM66 74L70 86H84L78 72Z" fill="#6cc070"/><path d="M12 66C12 42 30 28 50 28C70 28 88 42 88 66Z" fill="#3f9a55"/><path class="f" d="M50 28V66M30 36L36 66M70 36L64 66M16 56H84" opacity=".6"/>`],
+  ['jellyfish', 'jellyfish', `<path class="f" d="M32 56C28 68 36 74 32 88M44 58C40 70 48 76 44 92M56 58C52 70 60 76 56 92M68 56C64 68 72 74 68 88" style="stroke:#e07cb0;stroke-width:3.6"/><path d="M16 56C16 28 32 12 50 12C68 12 84 28 84 56Z" fill="#f29acb"/>${SHINE(36, 30, 6, 10, 30)}${EYE(40, 42, 4.2)}${EYE(60, 42, 4.2)}`],
+  ['sailboat', 'sailboat', `<path d="M50 10V70L18 70Z" fill="#fff"/><path d="M54 24V70H84Z" fill="#f2b33a"/><path d="M10 74H90L80 90H22Z" fill="#c8553d"/><path class="f" d="M50 10V74"/><path class="n" d="M6 92Q16 86 26 92T46 92T66 92T86 92" fill="none" stroke="#3b7fc4" stroke-width="4"/>`],
+  ['lighthouse', 'lighthouse', `<path d="M34 90L40 30H60L66 90Z" fill="#fff"/><path class="n" d="M37 62H63L65 76H35ZM39 38H61L62 50H38Z" fill="#e8553b"/><rect x="36" y="22" width="28" height="10" rx="2" fill="#10262c"/><path d="M40 22C40 12 60 12 60 22Z" fill="#e8553b"/><circle cx="50" cy="27" r="4" class="n" fill="#ffd23f"/><path class="n" d="M62 27L92 16V38ZM38 27L8 16V38Z" fill="#ffd23f" opacity=".45"/>`],
+  ['starfish', 'starfish', `<path d="M50 8L61 36L92 34L68 54L78 84L50 68L22 84L32 54L8 34L39 36Z" fill="#f39a3a"/><g class="n" fill="#ffd9a0"><circle cx="50" cy="26" r="2.6"/><circle cx="50" cy="40" r="2.6"/><circle cx="30" cy="42" r="2.6"/><circle cx="70" cy="42" r="2.6"/><circle cx="38" cy="64" r="2.6"/><circle cx="62" cy="64" r="2.6"/></g>${EYE(43, 52, 3.4)}${EYE(57, 52, 3.4)}`],
+  ['shell', 'shell', `<path d="M50 88L12 58C6 40 20 14 50 14C80 14 94 40 88 58Z" fill="#f6a8b8"/><path class="f" d="M50 88L50 16M50 88L28 20M50 88L72 20M50 88L14 40M50 88L86 40" opacity=".55"/><rect x="38" y="84" width="24" height="8" rx="3" fill="#e08a9c"/>`],
+  ['treasure', 'treasure', `<path d="M12 46C12 30 28 20 50 20C72 20 88 30 88 46Z" fill="#a8672e"/><rect x="12" y="44" width="76" height="40" rx="5" fill="#8a5224"/><path class="f" d="M30 22V84M70 22V84" opacity=".6"/><rect x="42" y="42" width="16" height="18" rx="3" fill="#ffc42e"/><circle class="n" cx="50" cy="50" r="2.6" fill="#10262c"/>`]
 ];
 
+function numBadge(n, cls) {
+  const hue = ['#c43a62', '#1f6aa5', '#12795f', '#7a45b5', '#a85f0a'][n % 5], s = String(n);
+  return `<circle cx="50" cy="50" r="40" fill="${hue}"/><circle class="n" cx="50" cy="50" r="31" fill="#fff" opacity=".18"/><text class="n" x="50" y="${s.length > 2 ? 62 : 65}" text-anchor="middle" font-family="Andika,sans-serif" font-weight="700" font-size="${s.length > 2 ? 30 : s.length > 1 ? 40 : 48}" fill="#fff" stroke="none">${s}</text>${cls || ''}`;
+}
 function artSvg(id) {
-  const body = ART[id] || ((SPECIALS.find(s => s[1] === id) || [])[2]) || '';
+  let body = ART[id];
+  let m;
+  if (!body && (m = /^N(\d+)$/.exec(id))) body = numBadge(+m[1], `<g transform="translate(60 4) scale(.34)">${ART[OBJS[(+m[1] - 1) % 8]]}</g>`);
+  else if (!body && (m = /^D(\d)$/.exec(id))) body = `<rect x="14" y="10" width="72" height="80" rx="16" fill="#fff6dc"/><path class="f" d="M24 80H76" style="stroke:#c8a35a;stroke-dasharray:3 5"/><text class="n" x="50" y="68" text-anchor="middle" font-family="Andika,sans-serif" font-weight="700" font-size="58" fill="#1f6aa5" stroke="none">${m[1]}</text><path d="M72 14L90 32L76 36Z" fill="#ffc42e"/>`;
+  else if (!body && (m = /^SG(\d+)$/.exec(id))) body = `<circle cx="50" cy="50" r="40" fill="#12795f"/><path class="f" d="M40 66V30L66 24V60" style="stroke:#fff;stroke-width:5"/><ellipse class="n" cx="34" cy="68" rx="9" ry="7" fill="#fff"/><ellipse class="n" cx="60" cy="62" rx="9" ry="7" fill="#fff"/><text class="n" x="50" y="94" text-anchor="middle" font-family="Andika,sans-serif" font-weight="700" font-size="22" fill="#10343a" stroke="none">x${m[1]}</text>`;
+  else if (!body && id === 'H100') body = `<path d="M18 84L12 36L34 56L50 22L66 56L88 36L82 84Z" fill="#ffc42e"/><text class="n" x="50" y="76" text-anchor="middle" font-family="Andika,sans-serif" font-weight="700" font-size="24" fill="#10343a" stroke="none">100</text>`;
+  if (!body) body = (SPECIALS.find(s => s[1] === id) || [])[2] || '';
   return '<svg class="art" viewBox="0 0 100 100" aria-hidden="true">' + body + '</svg>';
 }
-// Sticker catalog read by the shell's sticker book.
+const NUMS20 = Array.from({ length: 20 }, (_, i) => i + 1);
 window.STICKER_PAGES = [
-  { id: 'letters', label: 'tabLetters', tab: '<span class="latin">Aa</span>', items: LETTERS.map(L => ({ id: 'L_' + L, ghost: L, label: L_INFO[L][2] })) },
-  { id: 'stars', special: true, label: 'tabStars', tab: '<svg class="ico" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" fill="currentColor"/></svg>', items: SPECIALS.map(s => ({ id: 'S_' + s[1], ghost: '?', label: s[0] })) }
+  { id: 'numbers', label: 'tabNumbers', tab: '<span class="latin">123</span>', items: NUMS20.map(n => ({ id: 'N_' + n, ghost: String(n), label: String(n) })).concat(Array.from({ length: 10 }, (_, d) => ({ id: 'D_' + d, ghost: String(d), label: String(d) }))) },
+  { id: 'songs', label: 'tabSongs', tab: '<svg class="ico" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.6"/><circle cx="16.5" cy="16" r="2.6"/></svg>', items: [2, 5, 10].map(s => ({ id: 'SG_' + s, ghost: 'x' + s, label: 'x' + s })).concat([{ id: 'H_100', ghost: '100', label: '100' }]) },
+  { id: 'sea', special: true, label: 'tabSea', tab: '<svg class="ico" viewBox="0 0 24 24"><path d="M3 15c3-4 6-4 9 0s6 4 9 0M3 9c3-4 6-4 9 0s6 4 9 0"/></svg>', items: SPECIALS.map(s => ({ id: 'S_' + s[1], ghost: '?', label: s[0] })) }
 ];
-window.stickerSvg = id => artSvg(String(id).replace(/^[LS]_/, ''));
-
-// ── Tracing strokes: SVG path data in a 100-unit letter box (cap / ascender
-// line y=0, x-height y=45, baseline y=100, descender y=135). Stroke order and
-// direction follow common school handwriting (top-down, left-to-right).
-const STROKES = {
-  A: ['M50 0L12 100', 'M50 0L88 100', 'M27 62H73'],
-  B: ['M20 0V100', 'M20 0H52C80 0 80 48 52 48H20', 'M20 48H56C86 48 86 100 56 100H20'],
-  C: ['M84 18C74 4 62 0 50 0C22 0 8 24 8 50C8 76 22 100 50 100C62 100 74 96 84 82'],
-  D: ['M20 0V100', 'M20 0H44C76 0 90 22 90 50C90 78 76 100 44 100H20'],
-  E: ['M22 0V100', 'M22 0H80', 'M22 50H70', 'M22 100H80'],
-  F: ['M22 0V100', 'M22 0H80', 'M22 50H70'],
-  G: ['M84 18C74 4 62 0 50 0C22 0 8 24 8 50C8 76 22 100 50 100C76 100 88 84 88 58H58'],
-  H: ['M18 0V100', 'M82 0V100', 'M18 50H82'],
-  I: ['M50 0V100', 'M28 0H72', 'M28 100H72'],
-  J: ['M70 0V70C70 90 58 100 42 100C28 100 18 92 14 78', 'M46 0H90'],
-  K: ['M20 0V100', 'M80 0L20 60', 'M40 42L82 100'],
-  L: ['M22 0V100H80'],
-  M: ['M14 100V0', 'M14 0L50 64L86 0V100'],
-  N: ['M18 100V0', 'M18 0L82 100V0'],
-  O: ['M50 0C22 0 8 24 8 50C8 76 22 100 50 100C78 100 92 76 92 50C92 24 78 0 50 0'],
-  P: ['M20 0V100', 'M20 0H54C84 0 84 52 54 52H20'],
-  Q: ['M50 0C22 0 8 24 8 50C8 76 22 100 50 100C78 100 92 76 92 50C92 24 78 0 50 0', 'M58 72L90 104'],
-  R: ['M20 0V100', 'M20 0H54C84 0 84 52 54 52H20', 'M50 52L84 100'],
-  S: ['M82 14C74 4 62 0 50 0C30 0 16 10 16 26C16 44 34 48 50 52C68 56 86 60 86 76C86 92 70 100 50 100C36 100 22 96 14 86'],
-  T: ['M10 0H90', 'M50 0V100'],
-  U: ['M16 0V62C16 86 30 100 50 100C70 100 84 86 84 62V0'],
-  V: ['M12 0L50 100L88 0'],
-  W: ['M6 0L28 100L50 30L72 100L94 0'],
-  X: ['M14 0L86 100', 'M86 0L14 100'],
-  Y: ['M12 0L50 50', 'M88 0L50 50V100'],
-  Z: ['M14 0H86L14 100H86'],
-  a: ['M78 58C72 49 62 45 52 45C32 45 20 58 20 73C20 89 32 100 50 100C64 100 74 92 78 82', 'M78 45V100'],
-  b: ['M22 0V100', 'M22 73C22 56 34 45 50 45C68 45 80 58 80 73C80 88 68 100 50 100C34 100 22 90 22 73'],
-  c: ['M78 56C72 48 62 45 52 45C32 45 20 58 20 73C20 89 32 100 52 100C62 100 72 96 78 88'],
-  d: ['M78 58C72 49 62 45 52 45C32 45 20 58 20 73C20 89 32 100 50 100C64 100 74 92 78 82', 'M78 0V100'],
-  e: ['M22 74H78C78 56 66 45 50 45C32 45 20 58 20 73C20 89 32 100 52 100C62 100 72 96 78 88'],
-  f: ['M68 6C62 1 56 0 50 0C38 0 32 8 32 20V100', 'M14 46H62'],
-  g: ['M78 58C72 49 62 45 52 45C32 45 20 58 20 72C20 87 32 98 50 98C64 98 74 90 78 80', 'M78 45V112C78 128 66 135 50 135C38 135 28 131 22 124'],
-  h: ['M22 0V100', 'M22 70C22 54 34 45 50 45C68 45 78 56 78 72V100'],
-  i: ['M50 45V100', 'M50 22V24'],
-  j: ['M56 45V116C56 130 46 135 36 135C28 135 22 132 18 128', 'M56 22V24'],
-  k: ['M24 0V100', 'M74 45L24 80', 'M44 66L78 100'],
-  l: ['M50 0V100'],
-  m: ['M14 45V100', 'M14 66C14 52 22 45 32 45C42 45 48 52 48 64V100', 'M48 66C48 52 56 45 66 45C76 45 84 52 84 64V100'],
-  n: ['M20 45V100', 'M20 66C20 53 32 45 48 45C66 45 78 54 78 70V100'],
-  o: ['M50 45C32 45 20 58 20 73C20 88 32 100 50 100C68 100 80 88 80 73C80 58 68 45 50 45'],
-  p: ['M22 45V135', 'M22 72C22 56 34 45 50 45C68 45 80 58 80 73C80 88 68 100 50 100C34 100 22 90 22 74'],
-  q: ['M78 58C72 49 62 45 52 45C32 45 20 58 20 73C20 89 32 100 50 100C64 100 74 92 78 82', 'M78 45V135'],
-  r: ['M28 45V100', 'M28 70C28 54 40 45 56 45C64 45 70 47 74 51'],
-  s: ['M74 52C68 47 60 45 50 45C36 45 26 51 26 60C26 70 38 72 50 74C64 76 76 79 76 88C76 96 64 100 50 100C38 100 28 97 22 92'],
-  t: ['M44 10V88C44 96 50 100 58 100C64 100 68 98 72 96', 'M24 46H68'],
-  u: ['M22 45V76C22 92 34 100 50 100C66 100 78 90 78 74', 'M78 45V100'],
-  v: ['M18 45L50 100L82 45'],
-  w: ['M8 45L28 100L50 56L72 100L92 45'],
-  x: ['M22 45L78 100', 'M78 45L22 100'],
-  y: ['M20 45L52 98', 'M82 45L40 135'],
-  z: ['M22 45H78L22 100H78']
+window.stickerSvg = id => {
+  id = String(id);
+  if (id[0] === 'N' && id[1] === '_') return artSvg('N' + id.slice(2));
+  if (id[0] === 'D' && id[1] === '_') return artSvg('D' + id.slice(2));
+  if (id.slice(0, 3) === 'SG_') return artSvg('SG' + id.slice(3));
+  if (id === 'H_100') return artSvg('H100');
+  return artSvg(id.replace(/^S_/, ''));
 };
 
-// ── Mascot: Pip the owl (original SVG; idle bob + blink, talk, hop) ──────
+// Number tracing: stroke paths in a 100 x 100 box (top y=0, baseline y=100); school-style order and direction.
+const STROKES = {
+  '0': ['M50 0C24 0 14 28 14 50C14 74 24 100 50 100C76 100 86 74 86 50C86 28 76 0 50 0'],
+  '1': ['M26 26L54 0V100'],
+  '2': ['M16 28C16 8 34 0 50 0C70 0 84 12 84 30C84 52 52 72 16 100H86'],
+  '3': ['M16 14C26 4 40 0 52 0C72 0 82 12 82 26C82 42 66 50 44 50C68 50 86 58 86 76C86 92 70 100 50 100C32 100 20 94 12 84'],
+  '4': ['M62 0L12 68H90', 'M62 22V100'],
+  '5': ['M80 0H24L18 46C28 38 40 35 50 35C72 35 84 50 84 68C84 88 68 100 48 100C32 100 20 94 12 84'],
+  '6': ['M76 8C64 2 54 0 46 0C26 0 14 26 14 56C14 82 28 100 48 100C70 100 84 86 84 68C84 50 70 38 50 38C34 38 20 48 14 62'],
+  '7': ['M14 0H86L40 100'],
+  '8': ['M50 46C30 46 18 36 18 24C18 10 32 0 50 0C68 0 82 10 82 24C82 36 70 46 50 46C28 46 12 58 12 74C12 90 28 100 50 100C72 100 88 90 88 74C88 58 72 46 50 46'],
+  '9': ['M84 44C78 52 64 60 50 60C30 60 16 48 16 30C16 12 30 0 50 0C72 0 84 14 84 40C84 70 72 100 40 100C32 100 22 98 14 92']
+};
+
+// Mascot: Pebble the penguin (original SVG; idle bob + blink, talk, flap, hop).
 window.MASCOT_SVG = '<svg class="pip" viewBox="0 0 120 124" aria-hidden="true">' +
-  '<ellipse cx="60" cy="119" rx="30" ry="4" fill="#000" opacity=".13"/><g class="p-all" stroke="#3b2316" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">' +
-  '<path d="M46 108l-4 8M50 109v9M54 108l4 8M66 108l-4 8M70 109v9M74 108l4 8" stroke="#f2a516" stroke-width="3.6" fill="none"/>' +
-  '<g class="p-wl"><path d="M23 58C10 70 10 92 25 101C29 87 31 72 27 58Z" fill="#6f4529"/></g>' +
-  '<g class="p-wr"><path d="M97 58C110 70 110 92 95 101C91 87 89 72 93 58Z" fill="#6f4529"/></g>' +
-  '<path d="M29 32L21 8L45 22Z" fill="#8a5a3c"/><path d="M91 32L99 8L75 22Z" fill="#8a5a3c"/>' +
-  '<path d="M60 15C32 15 18 38 18 64C18 92 36 112 60 112C84 112 102 92 102 64C102 38 88 15 60 15Z" fill="#8a5a3c"/>' +
-  '<ellipse cx="60" cy="84" rx="27" ry="24" fill="#f3d9b0" stroke="none"/>' +
-  '<path d="M48 78q4 4 8 0M64 78q4 4 8 0M56 90q4 4 8 0" fill="none" stroke="#c9a77a" stroke-width="2.4"/>' +
-  '<circle cx="44" cy="49" r="17" fill="#fff8ec"/><circle cx="76" cy="49" r="17" fill="#fff8ec"/>' +
-  '<g class="p-eyes" stroke="none"><circle cx="45" cy="50" r="8.5" fill="#2a1a10"/><circle cx="75" cy="50" r="8.5" fill="#2a1a10"/><circle cx="48" cy="47" r="3" fill="#fff"/><circle cx="78" cy="47" r="3" fill="#fff"/></g>' +
-  '<path class="p-beak" d="M53 62H67L60 73Z" fill="#f2a516"/>' +
-  '<circle cx="30" cy="66" r="5" fill="#f58aa8" stroke="none" opacity=".6"/><circle cx="90" cy="66" r="5" fill="#f58aa8" stroke="none" opacity=".6"/>' +
-  '<path d="M48 22l6 7 6-7 6 7 6-7" fill="none" stroke="#f3d9b0" stroke-width="2.6"/>' +
+  '<ellipse cx="60" cy="119" rx="30" ry="4" fill="#000" opacity=".13"/><g class="p-all" stroke="#10262c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">' +
+  '<path d="M42 110c-6 2-10 6-8 9h18c1-4-2-8-4-9zM78 110c6 2 10 6 8 9H68c-1-4 2-8 4-9z" fill="#f39a3a"/>' +
+  '<g class="p-wl"><path d="M24 58C10 70 10 92 24 100C30 88 32 72 28 58Z" fill="#1f4f78"/></g>' +
+  '<g class="p-wr"><path d="M96 58C110 70 110 92 96 100C90 88 88 72 92 58Z" fill="#1f4f78"/></g>' +
+  '<path d="M60 12C34 12 20 36 20 64C20 92 38 112 60 112C82 112 100 92 100 64C100 36 86 12 60 12Z" fill="#2a6aa0"/>' +
+  '<path d="M60 40C42 40 34 58 34 78C34 98 46 110 60 110C74 110 86 98 86 78C86 58 78 40 60 40Z" fill="#f4fbff" stroke="none"/>' +
+  '<path d="M60 22C46 22 40 32 44 42C50 38 70 38 76 42C80 32 74 22 60 22Z" fill="#f4fbff" stroke="none"/>' +
+  '<g class="p-eyes" stroke="none"><circle cx="47" cy="48" r="8" fill="#fff"/><circle cx="73" cy="48" r="8" fill="#fff"/><circle cx="48" cy="49" r="4.6" fill="#10262c"/><circle cx="72" cy="49" r="4.6" fill="#10262c"/><circle cx="49.6" cy="47.4" r="1.6" fill="#fff"/><circle cx="73.6" cy="47.4" r="1.6" fill="#fff"/></g>' +
+  '<path class="p-beak" d="M52 58H68L60 70Z" fill="#f39a3a"/>' +
+  '<circle cx="38" cy="62" r="5" fill="#f58aa8" stroke="none" opacity=".6"/><circle cx="82" cy="62" r="5" fill="#f58aa8" stroke="none" opacity=".6"/>' +
+  '<path d="M42 30c4-5 9-7 18-7s14 2 18 7" fill="none" stroke="#e8553b" stroke-width="6"/>' +
   '</g></svg>';
 //@@END CONTENT_DATA
 //@@REGION CONTENT_ENGINE
-// ABC Learning engine: home suggestion, letters grid, letter card, finger
-// tracing, three mini games. Talks to the shell only through window.KIDS.
+// Counting Fun engine: home suggestion, number hub, tap-to-count, hundred chart,
+// skip-counting songs, digit tracing, three games. Talks to the shell only
+// through window.KIDS. Round content comes from the pure generator CF (CONTENT_DATA).
 (function () {
   const K = window.KIDS, $ = s => document.querySelector(s), t = K.t;
-  const P = () => { const p = K.save.progress; if (!p.traced || typeof p.traced !== 'object') p.traced = {}; if (typeof p.rounds !== 'number') p.rounds = 0; return p; };
-  const isFree = L => FREE_LETTERS.indexOf(L.toUpperCase()) >= 0;
-  const unlocked = L => K.full() || isFree(L);
-  const name = L => ({ t: L_INFO[L.toUpperCase()][0], c: L });          // spoken English letter name
-  const word = L => L_INFO[L.toUpperCase()][2];
-  const wordV = L => ({ t: word(L), c: word(L) });
+  const P = () => {
+    const p = K.save.progress;
+    ['traced', 'songs'].forEach(k => { if (!p[k] || typeof p[k] !== 'object') p[k] = {}; });
+    if (!p.lv || typeof p.lv !== 'object') p.lv = {};
+    ['howmany', 'make', 'next'].forEach(k => { if (!(p.lv[k] >= 1)) p.lv[k] = 1; });
+    if (typeof p.rounds !== 'number') p.rounds = 0;
+    return p;
+  };
   const delay = ms => new Promise(r => setTimeout(r, ms));
   const STAR = '<svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></svg>';
   const LOCK = '<span class="badge"><svg class="ico" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg></span>';
   const OK = '<span class="badge ok"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>';
-  const traced = ch => !!P().traced[ch];
-  let lastSay = null;                      // replay the last prompt (speaker buttons)
+  const objArt = k => '<span class="art-w">' + artSvg(OBJS[k % OBJS.length]) + '</span>';
+  const kindFor = n => (n - 1) % OBJS.length;
+  const MAXC = 20;
+  let lastSay = null;
   const say = fn => { lastSay = fn; return fn(); };
+  const sayNum = n => K.sayT('numOnly', { n: String(n) });
+  const counted = n => K.hasSticker('N_' + n);
+  const maxLevel = () => (K.full() ? 4 : 3);
+  const popTone = (i, n) => K.sfx('tick', n > 1 ? (i - 1) / (n - 1) : 0.5);
 
-  /* ── Home: Pip suggests the next letter to trace ──────────────────────── */
-  function nextLetter() { return LETTERS.find(L => !traced(L)) || null; }
+  // Fit `n` square cells into the stage: returns {cols, sz, gap}
+  function fit(stage, n, aspect) {
+    const W = Math.max(120, stage.clientWidth - 24), H = Math.max(120, stage.clientHeight - 24);
+    let best = { cols: 1, sz: 40 };
+    for (let cols = 1; cols <= n; cols++) {
+      const rows = Math.ceil(n / cols), g = 8;
+      const sz = Math.floor(Math.min((W - g * (cols - 1)) / cols, (H - g * (rows - 1)) / rows, 150));
+      if (sz > best.sz) best = { cols: cols, sz: sz };
+    }
+    return best;
+  }
+  function applyFit(stage, grid, n) {
+    const f = fit(stage, n); grid.style.setProperty('--cols', f.cols); grid.style.setProperty('--sz', f.sz + 'px');
+    return f;
+  }
+
+  /* ── Home: Pebble suggests the next number to count ───────────────────── */
+  function nextNumber() { for (let n = 1; n <= MAXC; n++) if (!counted(n)) return n; return 0; }
   K.defineScreen('home', {
     enter() {
-      const L = nextLetter(), chip = $('#nextChip');
-      chip.innerHTML = L ? '<span class="latin">' + L + '</span>' + (unlocked(L) ? '<svg class="ico flip" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>' : '<svg class="ico" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>')
-                     : '<svg class="ico" viewBox="0 0 24 24" style="width:34px;height:34px"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" fill="currentColor"/></svg>';
-      chip.setAttribute('aria-label', L ? t('homeNext', { x: L }) : t('homeAll'));
+      const n = nextNumber(), chip = $('#nextChip');
+      chip.innerHTML = n ? '<span class="latin">' + n + '</span><svg class="ico flip" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>'
+                         : '<svg class="ico" viewBox="0 0 24 24" style="width:34px;height:34px"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" fill="currentColor"/></svg>';
+      chip.setAttribute('aria-label', n ? t('homeNext', { n: n }) : t('homeAll'));
       const first = !P().greeted;
-      const fn = () => (first ? K.sayT('hello').then(done => done && L && K.current() === 'home' && K.sayT('homeNext', { x: name(L) })) : (L ? K.sayT('homeNext', { x: name(L) }) : K.sayT('homeAll')));
+      const fn = () => (first ? K.sayT('hello').then(done => done && n && K.current() === 'home' && K.sayT('homeNext', { n: String(n) })) : (n ? K.sayT('homeNext', { n: String(n) }) : K.sayT('homeAll')));
       if (first) { P().greeted = true; K.persist(); }
       lastSay = fn; setTimeout(() => { if (K.current() === 'home') fn(); }, 350);
-      if (!first) $('#homeSay').textContent = L ? t('homeNext', { x: L }) : t('homeAll');
+      if (!first) $('#homeSay').textContent = n ? t('homeNext', { n: n }) : t('homeAll');
     }
   });
-  window.homeNext = () => { const L = nextLetter(); if (!L) K.go('letters', { mode: 'trace' }); else if (!unlocked(L)) K.askGrownUp(); else K.go('trace', { l: L }); };
+  window.homeNext = () => { const n = nextNumber(); if (!n) K.go('count'); else K.go('counter', { n: n }); };
   window.mascotTap = () => { if (lastSay && K.current() === 'home') K.sayT('hello'); else if (lastSay) lastSay(); };
-  window.progressText = () => t('progressLine', { a: LETTERS.filter(L => traced(L) || traced(L.toLowerCase())).length, b: Object.keys(K.save.stickers).length });
+  window.progressText = () => t('progressLine', { a: NUMS20.filter(counted).length, b: Object.keys(K.save.stickers).length });
   window.stickerTap = id => {
-    const k = String(id).slice(2);
-    if (id[0] === 'L') K.sayEn(L_INFO[k][0] + ' is for ' + L_INFO[k][2] + '.', k + ' · ' + L_INFO[k][2]);
-    else { const s = SPECIALS.find(x => x[1] === k); if (s) K.sayEn(s[0] + '!', s[0]); }
-  };
-
-  /* ── Letters grid (mode: learn → card, trace → tracing) ───────────────── */
-  let gridMode = 'learn';
-  K.defineScreen('letters', {
-    enter(p) {
-      if (p && p.mode) gridMode = p.mode;
-      $('#lettersTitle').innerHTML = gridMode === 'trace' ? K.esc(t('tTrace')) : '<span class="latin">ABC</span>';
-      $('#letterGrid').innerHTML = LETTERS.map((L, i) => {
-        const lock = !unlocked(L), cls = 'ltile lc' + (i % 5 + 1) + (lock ? ' locked' : '');
-        const extra = gridMode === 'trace'
-          ? '<span class="pips"><i class="' + (traced(L) ? 'on' : '') + '"></i><i class="' + (traced(L.toLowerCase()) ? 'on' : '') + '"></i></span>'
-          : '<span class="mini">' + artSvg(L) + '</span>';
-        const badge = lock ? LOCK : (gridMode === 'trace' && traced(L) && traced(L.toLowerCase()) ? OK : '');
-        return '<button class="' + cls + '" data-act="pick-letter" data-l="' + L + '" aria-label="' + L + ' ' + word(L) + '"><span class="lt-pair latin">' + L + L.toLowerCase() + '</span>' + extra + badge + '</button>';
-      }).join('');
-      say(() => K.sayT('lettersVoice'));
-    }
-  });
-  K.acts['pick-letter'] = b => {
-    const L = b.getAttribute('data-l');
-    if (!unlocked(L)) { K.askGrownUp(); return; }
-    K.sfx('tap'); K.go(gridMode === 'trace' ? 'trace' : 'card', { l: L });
+    const s = String(id);
+    if (/^[ND]_/.test(s)) sayNum(s.slice(2));
+    else if (s.slice(0, 3) === 'SG_') sayNum(s.slice(3));
+    else if (s === 'H_100') sayNum(100);
+    else { const sp = SPECIALS.find(x => 'S_' + x[1] === s); if (sp) K.sayEn(sp[0] + '!', sp[0]); }
   };
   K.acts['say-again'] = () => { K.sfx('tap'); if (lastSay) lastSay(); };
 
-  /* ── Letter card ──────────────────────────────────────────────────────── */
-  let cardL = 'A';
-  function renderCard(anim) {
-    const L = cardL, l = L.toLowerCase(), w = word(L), at = w.indexOf(l);
-    $('#cardPair').innerHTML = '<span class="up">' + L + '</span><span class="lo">' + l + '</span>';
-    $('#cardPair').setAttribute('aria-label', L + ' ' + l);
-    $('#cardPic').innerHTML = artSvg(L); $('#cardPic').setAttribute('aria-label', w);
-    $('#cardWord').innerHTML = K.esc(w.slice(0, at)) + '<b>' + K.esc(w[at]) + '</b>' + K.esc(w.slice(at + 1));
-    if (anim) { const c = $('#lcard'); c.classList.remove('swap'); void c.offsetWidth; c.classList.add('swap'); }
-  }
-  const sayName = () => K.sayEn(name(cardL).t + '. ' + name(cardL).t + ' is for ' + word(cardL) + '.', cardL + ' · ' + word(cardL));
-  const saySound = () => { const i = L_INFO[cardL]; return K.sayEn(i[1] + '... ' + i[1] + '... ' + i[2] + '.', cardL + ' · ' + i[2]); };
-  K.defineScreen('card', {
-    back: () => ['letters', { mode: 'learn' }],
-    enter(p, re) { if (p && p.l && !re) cardL = p.l.toUpperCase(); renderCard(!re); if (!re) setTimeout(() => { if (K.current() === 'card') say(sayName); }, 380); }
+  /* ── Number hub 1-20 (+ the hundred chart) ────────────────────────────── */
+  K.defineScreen('count', {
+    enter() {
+      $('#numGrid').innerHTML = NUMS20.map(n => {
+        const done = counted(n);
+        return '<button class="ltile nc' + (n % 5 + 1) + '" data-act="pick-num" data-n="' + n + '" aria-label="' + n + '"><span class="lt-pair latin">' + n + '</span><span class="mini">' + artSvg(OBJS[kindFor(n)]) + '</span>' + (done ? OK : '') + '</button>';
+      }).join('') + '<button class="ltile wide" data-act="pick-hundred" aria-label="100"><span class="lt-pair latin">1 &rarr; 100</span>' + (K.full() ? '' : LOCK) + '</button>';
+      say(() => K.sayT('countVoice'));
+    }
   });
-  function stepCard(d) {
-    const i = LETTERS.indexOf(cardL) + d;
-    if (i < 0 || i >= LETTERS.length) { K.sfx('soft'); return; }
-    if (!unlocked(LETTERS[i])) { K.askGrownUp(); return; }
-    K.sfx('whoosh'); cardL = LETTERS[i]; renderCard(true); say(sayName);
-  }
-  Object.assign(K.acts, {
-    'card-name'() { K.mascot('happy'); say(sayName); },
-    'card-sound'() { say(saySound); },
-    'card-word'() { K.sfx('pop'); say(() => K.sayEn(word(cardL) + '!', word(cardL))); },
-    'card-prev'() { stepCard(-1); },
-    'card-next'() { stepCard(1); },
-    'card-trace'() { K.sfx('tap'); K.go('trace', { l: cardL }); }
-  });
+  K.acts['pick-num'] = b => { K.sfx('tap'); K.go('counter', { n: +b.getAttribute('data-n') }); };
+  K.acts['pick-hundred'] = () => { if (!K.full()) { K.askGrownUp(); return; } K.sfx('tap'); K.go('hundred'); };
 
-  /* ── Tracing ──────────────────────────────────────────────────────────── */
-  const SVGNS = 'http://www.w3.org/2000/svg', TOL = 16, INK = ['#e0457b', '#f2a516', '#3a86d8', '#34a35f'];
+  /* ── Tap-to-count scene ───────────────────────────────────────────────── */
+  let C = null;
+  function renderCounter() {
+    const g = $('#cGrid'), n = C.n, kind = kindFor(n);
+    g.innerHTML = Array.from({ length: n }, (_, i) => '<button class="obj" data-act="obj-tap" data-i="' + i + '" aria-label="' + (i + 1) + '">' + objArt(kind) + '<span class="cnum latin"></span></button>').join('');
+    layoutCounter(); C.cnt = 0; C.done = false; $('#ctNum').textContent = '0';
+  }
+  function layoutCounter() { if (C) applyFit($('#cStage'), $('#cGrid'), C.n); }
+  window.addEventListener('resize', () => { if (K.current() === 'counter') layoutCounter(); if (K.current() === 'play') layoutPlay(); });
+  K.defineScreen('counter', {
+    banner: false, back: 'count',
+    enter(p, re) {
+      if (re && C) return;
+      C = { n: Math.max(1, Math.min(MAXC, (p && p.n) | 0 || 1)) };
+      renderCounter(); setTimeout(layoutCounter, 60);
+      setTimeout(() => { if (K.current() === 'counter') say(() => K.sayT('cTap')); }, 300);
+    },
+    leave() { K.stopVoice(); }
+  });
+  K.acts['obj-tap'] = b => {
+    if (!C) return;
+    if (b.classList.contains('counted')) { sayNum(b.getAttribute('data-c')); K.sfx('tap'); return; }
+    C.cnt++; b.classList.add('counted'); b.setAttribute('data-c', C.cnt);
+    b.querySelector('.cnum').textContent = C.cnt; $('#ctNum').textContent = C.cnt;
+    K.sfx('pop'); popTone(C.cnt, C.n);
+    if (C.cnt < C.n) { sayNum(C.cnt); return; }
+    C.done = true; K.celebrate(); const n = C.n;
+    K.sayT('cDone', { n: String(n) }).then(() => K.awardSticker('N_' + n));
+    setTimeout(() => { if (!K.hasSticker('N_' + n) && K.current() === 'counter') K.awardSticker('N_' + n); }, 4200);
+  };
+  Object.assign(K.acts, {
+    'ct-again'() { K.sfx('whoosh'); renderCounter(); say(() => K.sayT('cTap')); },
+    'ct-prev'() { if (C.n <= 1) { K.sfx('soft'); return; } K.sfx('whoosh'); C.n--; renderCounter(); say(() => K.sayT('cTap')); },
+    'ct-next'() { if (C.n >= MAXC) { K.sfx('soft'); return; } K.sfx('whoosh'); C.n++; renderCounter(); say(() => K.sayT('cTap')); }
+  });
+  window.CF_COUNTER = { state: () => C };
+
+  /* ── Hundred chart: tens and ones ─────────────────────────────────────── */
+  let H = { n: 0, tok: 0 };
+  function renderHundred() {
+    const n = H.n, tens = Math.floor(n / 10), ones = n % 10;
+    let h = ''; for (let i = 1; i <= 100; i++) h += '<span class="hc' + (i <= tens * 10 ? ' t' : i <= n ? ' o' : '') + '">' + i + '</span>';
+    $('#hChart').innerHTML = h; $('#hNum').textContent = n;
+    $('#hTens').textContent = t('hTens', { t: tens, o: ones });
+  }
+  function hSet(n, speak) {
+    H.n = Math.max(0, Math.min(100, n)); renderHundred();
+    if (H.n === 100) { K.celebrate(); K.sayT('hDone').then(() => K.awardSticker('H_100')); setTimeout(() => { if (!K.hasSticker('H_100') && K.current() === 'hundred') K.awardSticker('H_100'); }, 4200); }
+    else if (speak) sayNum(H.n);
+  }
+  K.defineScreen('hundred', {
+    banner: false, back: 'count',
+    enter(p, re) { if (!K.full()) { K.go('count'); return; } if (!re) { H.n = (p && p.n) | 0; } renderHundred(); if (!re) say(() => K.sayT('hVoice')); },
+    leave() { H.tok++; K.stopVoice(); }
+  });
+  Object.assign(K.acts, {
+    'h-one'() { H.tok++; if (H.n >= 100) { K.sfx('soft'); return; } K.sfx('pop'); hSet(H.n + 1, true); },
+    'h-ten'() { H.tok++; if (H.n > 90) { K.sfx('soft'); return; } K.sfx('pop'); K.sfx('sparkle'); hSet(H.n + 10, true); },
+    'h-minus'() { H.tok++; if (H.n <= 0) { K.sfx('soft'); return; } K.sfx('tap'); hSet(H.n - 1, true); },
+    'h-reset'() { H.tok++; K.sfx('whoosh'); hSet(0, false); },
+    async 'h-auto'() {
+      const tok = ++H.tok; K.sfx('tap'); H.n = 0; renderHundred();
+      for (let v = 10; v <= 100; v += 10) {
+        if (tok !== H.tok || K.current() !== 'hundred') return;
+        K.sfx('pop'); H.n = v; renderHundred();
+        if (v === 100) { hSet(100, false); return; }
+        await Promise.race([sayNum(v), delay(2200)]); await delay(150);
+      }
+    }
+  });
+  window.CF_HUNDRED = { state: () => H };
+
+  /* ── Skip-counting songs (synthesized melodies) ───────────────────────── */
+  // Notes = semitones above middle C on a pentatonic scale, one note per number.
+  const SONGS = {
+    2:  { free: true,  c: ' c1', notes: [0, 2, 4, 7, 4, 2, 4, 7, 9, 12], bass: [0, 0, 7, 7, 0] },
+    5:  { free: false, c: ' c2', notes: [4, 4, 7, 9, 7, 4, 2, 4, 7, 12], bass: [0, 7, 9, 7, 0] },
+    10: { free: false, c: ' c3', notes: [12, 9, 7, 9, 12, 16, 14, 12, 9, 12], bass: [0, 5, 7, 5, 0] }
+  };
+  let AC = null;
+  function ac() {
+    if (!AC) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; try { AC = new A(); } catch (e) { return null; } }
+    if (AC.state === 'suspended') { try { AC.resume(); } catch (e) { /* ignore */ } }
+    return AC;
+  }
+  function note(semi, dur, at, type, vol) {
+    if (!K.save.settings.sfx) return;
+    const c = ac(); if (!c) return;
+    try {
+      const f = 261.63 * Math.pow(2, semi / 12), t0 = c.currentTime + at, o = c.createOscillator(), g = c.createGain();
+      o.type = type || 'triangle'; o.frequency.setValueAtTime(f, t0);
+      g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol || 0.16, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g); g.connect(c.destination); o.start(t0); o.stop(t0 + dur + 0.04);
+    } catch (e) { /* audio is optional */ }
+  }
+  let S = null;
+  const BEAT = 0.5;
+  function songStop() { if (!S) return; S.tok++; (S.timers || []).forEach(clearTimeout); S.timers = []; S.playing = false; document.querySelectorAll('#songNums .sn').forEach(e => e.classList.remove('on')); const b = $('#songPlay'); if (b) b.classList.remove('on'); }
+  K.defineScreen('songs', {
+    enter() {
+      $('#songGrid').innerHTML = CF.SONG_STEPS.map(s => {
+        const sg = SONGS[s], open = sg.free || K.full();
+        return '<button class="gcard' + sg.c.replace(' c1', '') + '" data-act="pick-song" data-s="' + s + '" aria-label="' + K.esc(t('song' + s)) + '"><span class="g-ico"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="rgba(255,255,255,.22)"/><text x="32" y="43" text-anchor="middle" font-family="Andika,sans-serif" font-weight="700" font-size="' + (s > 9 ? 28 : 34) + '" fill="currentColor">+' + s + '</text></svg></span><span class="g-lbl">' + K.esc(t('song' + s)) + '</span>' + (open ? '' : LOCK) + '</button>';
+      }).join('');
+      say(() => K.sayT('songsVoice'));
+    }
+  });
+  K.acts['pick-song'] = b => { const s = +b.getAttribute('data-s'); if (!(SONGS[s].free || K.full())) { K.askGrownUp(); return; } K.sfx('tap'); K.go('song', { s: s }); };
+  K.defineScreen('song', {
+    banner: false, back: 'songs',
+    enter(p, re) {
+      if (re && S) return;
+      const s = (p && p.s) || 2; S = { s: s, seq: CF.songSeq(s), tok: 0, timers: [] };
+      $('#songTitle').textContent = t('song' + s);
+      $('#songNums').innerHTML = S.seq.map((v, i) => '<div class="sn latin nc' + (i % 5 + 1) + '" data-i="' + i + '" style="--lc:var(--l' + (i % 5 + 1) + ')">' + v + '</div>').join('');
+      say(() => K.sayT('songIntro', { n: String(s) }));
+    },
+    leave() { songStop(); K.stopVoice(); }
+  });
+  function lit(i) { document.querySelectorAll('#songNums .sn').forEach((e, k) => e.classList.toggle('on', k === i)); }
+  K.acts['song-play'] = () => {
+    if (!S) return;
+    if (S.playing) { songStop(); K.sfx('tap'); return; }
+    K.stopVoice(); songStop(); S.playing = true; const tok = ++S.tok, sg = SONGS[S.s], s = S.s;
+    const n = S.seq.length;
+    sg.notes.forEach((semi, i) => {
+      const last = i === n - 1;
+      note(semi, last ? 1.3 : BEAT * 0.9, 0.15 + i * BEAT, 'triangle', 0.17);
+      if (i % 2 === 0) note(-12 + sg.bass[Math.floor(i / 2)], BEAT * 1.8, 0.15 + i * BEAT, 'sine', 0.10);
+      S.timers.push(setTimeout(() => { if (tok === S.tok) lit(i); }, 150 + i * BEAT * 1000));
+    });
+    [0, 4, 7].forEach(x => note(12 + x, 1.4, 0.15 + n * BEAT, 'triangle', 0.09));
+    S.timers.push(setTimeout(() => {
+      if (tok !== S.tok) return;
+      songStop(); K.celebrate(); K.sayT('sDone').then(() => K.awardSticker('SG_' + s));
+      setTimeout(() => { if (!K.hasSticker('SG_' + s) && K.current() === 'song') K.awardSticker('SG_' + s); }, 4200);
+    }, 150 + n * BEAT * 1000 + 700));
+  };
+  K.acts['song-say'] = async () => {
+    if (!S) return; songStop(); const tok = ++S.tok; S.playing = false; K.sfx('tap');
+    for (let i = 0; i < S.seq.length; i++) {
+      if (tok !== S.tok || K.current() !== 'song') return;
+      lit(i); const ok = await Promise.race([sayNum(S.seq[i]), delay(2400)]); if (ok === false) return; await delay(120);
+    }
+    lit(-1);
+  };
+  window.CF_SONG = { state: () => S, SONGS: SONGS };
+
+  /* ── Number tracing (digits 0-9) ──────────────────────────────────────── */
+  const DIGITS = '0123456789'.split('');
+  const traced = d => !!P().traced[d];
+  K.defineScreen('digits', {
+    enter() {
+      $('#digitGrid').innerHTML = DIGITS.map((d, i) => '<button class="ltile nc' + (i % 5 + 1) + '" data-act="pick-digit" data-d="' + d + '" aria-label="' + d + '"><span class="lt-pair latin">' + d + '</span><span class="pips"><i class="' + (traced(d) ? 'on' : '') + '"></i></span>' + (traced(d) ? OK : '') + '</button>').join('');
+      say(() => K.sayT('digitsVoice'));
+    }
+  });
+  K.acts['pick-digit'] = b => { K.sfx('tap'); K.go('trace', { d: b.getAttribute('data-d') }); };
+
+  const SVGNS = 'http://www.w3.org/2000/svg', TOL = 16, INK = ['#c0344f', '#1f6aa5', '#12795f', '#a85f0a'];
   let TR = null, hintRaf = 0, hintTimer = 0;
   const svg = () => $('#trSvg');
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
-  function buildTrace(L, lower, prog) {
-    const ch = lower ? L.toLowerCase() : L.toUpperCase(), strokes = STROKES[ch], s = svg();
-    const vb = lower ? [-9, -12, 118, 160] : [-12, -14, 124, 128];
-    s.setAttribute('viewBox', vb.join(' '));
-    const lines = lower ? [[0, ''], [45, 'dash'], [100, 'base'], [135, '']] : [[0, ''], [50, 'dash'], [100, 'base']];
-    let h = lines.map(l => '<line class="tg ' + l[1] + '" x1="' + (vb[0] + 3) + '" x2="' + (vb[0] + vb[2] - 3) + '" y1="' + l[0] + '" y2="' + l[0] + '"/>').join('');
-    h += strokes.map(d => '<path class="rail" d="' + d + '"/>').join('');
-    h += strokes.map((d, i) => '<path class="cl" id="cl' + i + '" d="' + d + '"/>').join('');
-    h += strokes.map((d, i) => '<path class="ink" id="ink' + i + '" d="' + d + '" pathLength="100" stroke-dasharray="100 200" stroke-dashoffset="100" style="visibility:hidden;stroke:' + INK[i % INK.length] + '"/>').join('');
+  function buildTrace(d, prog) {
+    const strokes = STROKES[d], s = svg();
+    s.setAttribute('viewBox', '-16 -14 132 128');
+    let h = [[0, ''], [50, 'dash'], [100, 'base']].map(l => '<line class="tg ' + l[1] + '" x1="-13" x2="113" y1="' + l[0] + '" y2="' + l[0] + '"/>').join('');
+    h += strokes.map(p => '<path class="rail" d="' + p + '"/>').join('');
+    h += strokes.map((p, i) => '<path class="cl" id="cl' + i + '" d="' + p + '"/>').join('');
+    h += strokes.map((p, i) => '<path class="ink" id="ink' + i + '" d="' + p + '" pathLength="100" stroke-dasharray="100 200" stroke-dashoffset="100" style="visibility:hidden;stroke:' + INK[i % INK.length] + '"/>').join('');
     h += '<polyline class="trail" id="trTrail" points=""/><g id="trMark"></g><circle class="hdot" id="trHint" r="5" cx="-99" cy="-99"/>';
     s.innerHTML = h;
     const rails = s.querySelectorAll('.rail');
-    TR = { L: L.toUpperCase(), lower: lower, ch: ch, si: 0, done: false, active: false, trail: [], last: Date.now(), strokes: strokes.map((d, i) => {
+    TR = { d: d, si: 0, done: false, active: false, trail: [], last: Date.now(), strokes: strokes.map((p, i) => {
       const el = rails[i], len = el.getTotalLength(), n = Math.max(8, Math.ceil(len / 2.4)), pts = [];
       for (let k = 0; k < n; k++) { const q = el.getPointAtLength(len * k / (n - 1)); pts.push({ x: q.x, y: q.y }); }
-      return { d: d, len: len, n: n, pts: pts, idx: 0, dot: len < 4 };
+      return { len: len, n: n, pts: pts, idx: 0 };
     }) };
-    $('#trStage').classList.remove('done');
-    $$cs();
-    if (prog) {                                           // screenshot / resume helper
+    $('#trStage').classList.remove('done'); $('#trNum').textContent = d;
+    if (prog) {
       const done = Math.min(prog.s | 0, TR.strokes.length);
       for (let i = 0; i < done; i++) { TR.strokes[i].idx = TR.strokes[i].n - 1; setInk(i); }
       TR.si = done;
@@ -1730,24 +1862,15 @@ window.MASCOT_SVG = '<svg class="pip" viewBox="0 0 120 124" aria-hidden="true">'
     }
     mark();
   }
-  function $$cs() {
-    const b = document.querySelectorAll('#caseSeg button');
-    b[0].textContent = TR.L; b[1].textContent = TR.L.toLowerCase();
-    b[0].setAttribute('aria-pressed', !TR.lower); b[1].setAttribute('aria-pressed', TR.lower);
-  }
-  function setInk(i) { const st = TR.strokes[i], el = document.getElementById('ink' + i); if (!el) return; const f = st.dot ? (st.idx ? 1 : 0) : st.idx / (st.n - 1); el.setAttribute('stroke-dashoffset', (100 - 100 * f).toFixed(2)); el.style.visibility = f > 0 ? 'visible' : 'hidden'; }
+  function setInk(i) { const st = TR.strokes[i], el = document.getElementById('ink' + i); if (!el) return; const f = st.idx / (st.n - 1); el.setAttribute('stroke-dashoffset', (100 - 100 * f).toFixed(2)); el.style.visibility = f > 0 ? 'visible' : 'hidden'; }
   function mark() {
     const g = document.getElementById('trMark'); if (!g) return;
     document.querySelectorAll('#trSvg .cl').forEach((c, i) => c.classList.toggle('cur', i === TR.si));
     if (TR.si >= TR.strokes.length) { g.innerHTML = ''; return; }
     const st = TR.strokes[TR.si], p = st.pts[st.idx];
-    let arrow = '';
-    if (!st.dot) {
-      const a = st.pts[Math.min(st.n - 1, st.idx + 3)], b = st.pts[Math.min(st.n - 1, st.idx + 7)];
-      const ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
-      arrow = '<path class="sarrow" d="M-4 -5L5 0L-4 5Z" transform="translate(' + b.x.toFixed(1) + ' ' + b.y.toFixed(1) + ') rotate(' + ang.toFixed(0) + ')"/>';
-    }
-    g.innerHTML = '<circle class="sdot-ring" cx="' + p.x + '" cy="' + p.y + '" r="8"/>' + arrow + '<circle class="sdot" cx="' + p.x + '" cy="' + p.y + '" r="8"/><text class="snum" x="' + p.x + '" y="' + p.y + '">' + (TR.si + 1) + '</text>';
+    const a = st.pts[Math.min(st.n - 1, st.idx + 3)], b = st.pts[Math.min(st.n - 1, st.idx + 7)];
+    const ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+    g.innerHTML = '<circle class="sdot-ring" cx="' + p.x + '" cy="' + p.y + '" r="8"/><path class="sarrow" d="M-4 -5L5 0L-4 5Z" transform="translate(' + b.x.toFixed(1) + ' ' + b.y.toFixed(1) + ') rotate(' + ang.toFixed(0) + ')"/><circle class="sdot" cx="' + p.x + '" cy="' + p.y + '" r="8"/><text class="snum" x="' + p.x + '" y="' + p.y + '">' + (TR.si + 1) + '</text>';
   }
   function toSvg(e) { const s = svg(), pt = s.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const m = s.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: -999, y: -999 }; }
   let lastTick = 0;
@@ -1756,7 +1879,6 @@ window.MASCOT_SVG = '<svg class="pip" viewBox="0 0 120 124" aria-hidden="true">'
     TR.trail.push(p.x.toFixed(1) + ',' + p.y.toFixed(1)); if (TR.trail.length > 26) TR.trail.shift();
     const tr = document.getElementById('trTrail'); if (tr) tr.setAttribute('points', TR.trail.join(' '));
     const st = TR.strokes[TR.si]; if (!st) return;
-    if (st.dot) { if (dist(p, st.pts[0]) < TOL * 1.4) strokeDone(); return; }
     const look = Math.max(6, Math.round(st.n * 0.22)), hi = Math.min(st.n - 1, st.idx + look);
     let best = -1;
     for (let i = st.idx; i <= hi; i++) if (dist(p, st.pts[i]) < TOL) best = i;
@@ -1769,19 +1891,18 @@ window.MASCOT_SVG = '<svg class="pip" viewBox="0 0 120 124" aria-hidden="true">'
   function strokeDone() {
     const st = TR.strokes[TR.si]; st.idx = st.n - 1; setInk(TR.si); lastTick = 0;
     K.sfx('stroke'); TR.si++; TR.last = Date.now();
-    if (TR.si >= TR.strokes.length) letterDone(); else mark();
+    if (TR.si >= TR.strokes.length) digitDone(); else mark();
   }
-  function letterDone() {
+  function digitDone() {
     TR.done = true; TR.active = false; mark(); stopHint();
     const tr = document.getElementById('trTrail'); if (tr) tr.setAttribute('points', '');
-    P().traced[TR.ch] = Date.now(); K.persist();
+    const d = TR.d; P().traced[d] = Date.now(); K.persist();
     $('#trStage').classList.add('done');
-    const i = LETTERS.indexOf(TR.L), nx = LETTERS[i + 1];
-    $('#trNextL').textContent = nx ? (TR.lower ? nx.toLowerCase() : nx) : '★';
+    const nx = DIGITS[DIGITS.indexOf(d) + 1];
+    $('#trNextL').textContent = nx || '★';
     K.celebrate();
-    const L = TR.L;
-    say(() => K.sayT('trDone', { x: name(TR.lower ? L.toLowerCase() : L), w: wordV(L) })).then(() => K.awardSticker('L_' + L));
-    setTimeout(() => { if (!K.hasSticker('L_' + L) && K.current() === 'trace') K.awardSticker('L_' + L); }, 4200);
+    say(() => K.sayT('trDone', { n: d })).then(() => K.awardSticker('D_' + d));
+    setTimeout(() => { if (!K.hasSticker('D_' + d) && K.current() === 'trace') K.awardSticker('D_' + d); }, 4200);
   }
   function hintLoop() {
     clearTimeout(hintTimer);
@@ -1814,37 +1935,32 @@ window.MASCOT_SVG = '<svg class="pip" viewBox="0 0 120 124" aria-hidden="true">'
     const end = () => { if (!TR) return; TR.active = false; TR.trail = []; TR.last = Date.now(); const tr = document.getElementById('trTrail'); if (tr) tr.setAttribute('points', ''); };
     s.addEventListener('pointerup', end); s.addEventListener('pointercancel', end);
   })();
-  const sayTrace = () => K.sayT('traceVoice', { x: name(TR.ch) });
+  const sayTrace = () => K.sayT('traceVoice', { n: TR.d });
   K.defineScreen('trace', {
-    banner: false,
-    back: () => ['letters', { mode: 'trace' }],
+    banner: false, back: 'digits',
     enter(p, re) {
-      if (re && TR) { $$cs(); return; }
-      const L = (p && p.l) || 'A';
-      buildTrace(L, p && p.c === 'lower', p && p.prog);
-      hintLoop();
+      if (re && TR) return;
+      buildTrace((p && p.d) || '1', p && p.prog); hintLoop();
       if (!(p && p.prog)) setTimeout(() => { if (K.current() === 'trace') say(sayTrace); }, 300);
-      else { lastSay = sayTrace; const c = document.querySelector('#scr-trace .say-text'); if (c) c.textContent = t('traceVoice', { x: TR.ch }); }
+      else { lastSay = sayTrace; const c = document.querySelector('#scr-trace .say-text'); if (c) c.textContent = t('traceVoice', { n: TR.d }); }
     },
     leave() { stopHint(); clearTimeout(hintTimer); K.stopVoice(); }
   });
   Object.assign(K.acts, {
-    'tr-case'(b) { const lower = b.getAttribute('data-v') === 'lower'; if (TR && lower === TR.lower && !TR.done) return; K.sfx('tap'); buildTrace(TR ? TR.L : 'A', lower); hintLoop(); say(sayTrace); },
-    'tr-again'() { K.sfx('whoosh'); buildTrace(TR.L, TR.lower); hintLoop(); say(sayTrace); },
+    'tr-again'() { K.sfx('whoosh'); buildTrace(TR.d); hintLoop(); say(sayTrace); },
     'tr-next'() {
-      const i = LETTERS.indexOf(TR.L), nx = LETTERS[i + 1];
-      if (!nx) { K.go('letters', { mode: 'trace' }); return; }
-      if (!unlocked(nx)) { K.askGrownUp(); return; }
-      K.sfx('tap'); buildTrace(nx, TR.lower); hintLoop(); say(sayTrace);
+      const nx = DIGITS[DIGITS.indexOf(TR.d) + 1];
+      if (!nx) { K.go('digits'); return; }
+      K.sfx('tap'); buildTrace(nx); hintLoop(); say(sayTrace);
     }
   });
-  window.ABC_TRACE = { state: () => TR, points: i => TR && TR.strokes[i == null ? TR.si : i] ? TR.strokes[i == null ? TR.si : i].pts.map(q => ({ x: q.x, y: q.y })) : [] };
+  window.CF_TRACE = { state: () => TR, points: i => TR && TR.strokes[i == null ? TR.si : i] ? TR.strokes[i == null ? TR.si : i].pts.map(q => ({ x: q.x, y: q.y })) : [] };
 
-  /* ── Mini games ───────────────────────────────────────────────────────── */
+  /* ── Games: How many? · Make the number · What comes next? ────────────── */
   const GAMES = [
-    { id: 'find', free: true, label: 'gameFind', c: '', ico: '<svg viewBox="0 0 64 64"><g stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><path d="M24 4C14 4 8 12 8 20c0 11 9 18 16 19 7-1 16-8 16-19 0-8-6-16-16-16z" fill="currentColor" fill-opacity=".9"/><path d="M24 39c-2 7 3 10 0 18" fill="none"/></g><text x="24" y="28" text-anchor="middle" font-size="20" font-weight="700" font-family="Andika,sans-serif" fill="#c63c26">B</text><circle cx="45" cy="40" r="11" fill="none" stroke="currentColor" stroke-width="4"/><path d="M53 48l7 7" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>' },
-    { id: 'match', free: false, label: 'gameMatch', c: ' c2', ico: '<svg viewBox="0 0 64 64"><rect x="4" y="10" width="26" height="34" rx="6" fill="currentColor" fill-opacity=".9"/><rect x="34" y="20" width="26" height="34" rx="6" fill="currentColor" fill-opacity=".9"/><g font-family="Andika,sans-serif" font-weight="700" text-anchor="middle" fill="#2f6fb5"><text x="17" y="35" font-size="22">G</text><text x="47" y="45" font-size="22">g</text></g><path d="M26 52c6 6 14 6 20 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>' },
-    { id: 'sound', free: false, label: 'gameSound', c: ' c3', ico: '<svg viewBox="0 0 64 64"><circle cx="24" cy="30" r="18" fill="currentColor" fill-opacity=".9"/><path d="M24 18c-6 0-9 5-9 9 0 6 5 10 9 10s9-4 9-10c0-4-3-9-9-9z" fill="#e8463b"/><path d="M24 18c1-4 3-6 6-7" stroke="#3b2316" stroke-width="2" fill="none"/><path d="M46 22a10 10 0 0 1 0 16M51 16a18 18 0 0 1 0 28" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/><text x="24" y="60" text-anchor="middle" font-size="16" font-weight="700" font-family="Andika,sans-serif" fill="currentColor">A?</text></svg>' }
+    { id: 'howmany', free: true, label: 'gameHow', c: '', ico: '<svg viewBox="0 0 64 64"><g stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><circle cx="16" cy="38" r="10" fill="currentColor" fill-opacity=".9"/><circle cx="38" cy="38" r="10" fill="currentColor" fill-opacity=".9"/><circle cx="27" cy="16" r="10" fill="currentColor" fill-opacity=".9"/></g><text x="50" y="36" font-family="Andika,sans-serif" font-weight="700" font-size="26" fill="currentColor">?</text><text x="10" y="60" font-family="Andika,sans-serif" font-weight="700" font-size="14" fill="currentColor">1 2 3</text></svg>' },
+    { id: 'make', free: false, label: 'gameMake', c: ' c2', ico: '<svg viewBox="0 0 64 64"><path d="M8 30h48l-6 26H14Z" fill="currentColor" fill-opacity=".9" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M16 30c0-12 32-12 32 0" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/><text x="32" y="50" text-anchor="middle" font-family="Andika,sans-serif" font-weight="700" font-size="22" fill="#fff">7</text></svg>' },
+    { id: 'next', free: false, label: 'gameNext', c: ' c3', ico: '<svg viewBox="0 0 64 64"><g font-family="Andika,sans-serif" font-weight="700" font-size="17" fill="currentColor" text-anchor="middle"><text x="10" y="26">2</text><text x="28" y="26">4</text><text x="46" y="26">6</text></g><rect x="8" y="36" width="22" height="22" rx="6" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="4 4"/><path d="M36 47h20m-7-7 7 7-7 7" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' }
   ];
   const gameOpen = g => g.free || K.full();
   K.defineScreen('games', {
@@ -1855,63 +1971,90 @@ window.MASCOT_SVG = '<svg class="pip" viewBox="0 0 120 124" aria-hidden="true">'
   });
   K.acts['pick-game'] = b => { const g = GAMES.find(x => x.id === b.getAttribute('data-g')); if (!gameOpen(g)) { K.askGrownUp(); return; } K.sfx('tap'); K.go('play', { g: g.id }); };
 
-  function rng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let x = a; x = Math.imul(x ^ (x >>> 15), x | 1); x ^= x + Math.imul(x ^ (x >>> 7), x | 61); return ((x ^ (x >>> 14)) >>> 0) / 4294967296; }; }
   let G = null;
-  const BAL = ['#d23b5a', '#2f6fb5', '#2a8250', '#8150c4'];
-  function pool(id) { return LETTERS.filter(L => unlocked(L) && !(id === 'sound' && L === 'X')); }
-  function pick(arr) { return arr[Math.floor(G.r() * arr.length)]; }
-  function shuf(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(G.r() * (i + 1)); const x = a[i]; a[i] = a[j]; a[j] = x; } return a; }
-  function startGame(id, seed) {
-    G = { id: id, turn: 0, total: 5, stars: 0, used: [], miss: 0, busy: false, r: seed != null ? rng(seed) : Math.random, lower: id === 'find' && P().rounds % 2 === 1 };
+  function startGame(id, seed, level) {
+    const lv = Math.max(1, Math.min(maxLevel(), level || P().lv[id] || 1));
+    G = { id: id, turn: 0, total: 5, stars: 0, first: 0, used: [], miss: 0, busy: false, level: lv, seed: seed, r: CF.mulberry(seed != null ? seed : (Date.now() & 0x7fffffff)) };
     renderStars(); nextTurn();
   }
   function renderStars() { $('#playStars').innerHTML = Array.from({ length: G.total }, (_, i) => STAR.replace('<svg', '<svg class="' + (i < G.stars ? 'on' : '') + '"')).join(''); }
   function nextTurn() {
     if (G.turn >= G.total) { finishRound(); return; }
-    const pl = pool(G.id), fresh = pl.filter(L => G.used.indexOf(L) < 0);
-    const T = pick(fresh.length ? fresh : pl); G.used.push(T); G.target = T; G.miss = 0; G.busy = false;
-    const n = G.id === 'find' ? 4 : 3, opts = [T];
-    if (G.id === 'match') (CONFUSE[T.toLowerCase()] || '').toUpperCase().split('').forEach(c => { if (opts.length < n && pl.indexOf(c) >= 0 && opts.indexOf(c) < 0) opts.push(c); });
-    let guard = 0; while (opts.length < n && guard++ < 200) { const c = pick(pl); if (opts.indexOf(c) < 0) opts.push(c); }
-    G.opts = shuf(opts); renderTurn(); prompt();
+    G.rd = CF.round(G.id, G.level, G.r, G.used); G.used.push(G.rd.answer);
+    G.miss = 0; G.busy = false; G.run = 0; G.basket = [];
+    renderTurn(); prompt();
   }
+  const rodHtml = () => '<i class="rod"></i>', cubeHtml = () => '<i class="cube"></i>';
+  function layoutPlay() {
+    const c = document.querySelector('#playStage .cluster'), g = document.querySelector('#playStage .cgrid'); if (!c || !g || !G || !G.rd) return;
+    if (G.rd.level === 4) return;
+    applyFit(c, g, G.rd.shown.length);
+  }
+  function basketSize() {
+    const b = $('#basket'); if (!b) return;
+    const n = Math.max(1, G.basket.length), W = b.clientWidth - 16, H = b.clientHeight - 16;
+    let sz = 20;
+    for (let s = 72; s >= 20; s -= 4) { const per = Math.max(1, Math.floor(W / (s + 6))), rows = Math.ceil(n / per); if (rows * (s + 6) <= H) { sz = s; break; } }
+    b.style.setProperty('--isz', sz + 'px');
+  }
+  function renderBasket() {
+    const b = $('#basket'); if (!b) return;
+    b.innerHTML = G.basket.map(k => k === 'ten' ? rodHtml() : k === 'one' ? cubeHtml() : '<span class="bi">' + artSvg(OBJS[G.rd.kind]) + '</span>').join('');
+    basketSize();
+  }
+  const basketVal = () => G.basket.reduce((a, k) => a + (k === 'ten' ? 10 : 1), 0);
   function renderTurn() {
-    const st = $('#playStage'), T = G.target;
-    if (G.id === 'find') {
-      st.innerHTML = '<div class="balloons">' + G.opts.map((L, i) => '<button class="balloon" data-act="ans" data-v="' + L + '" aria-label="' + L + '"><svg viewBox="0 0 100 124" aria-hidden="true"><path d="M50 4C25 4 10 24 10 46C10 72 32 90 50 94C68 90 90 72 90 46C90 24 75 4 50 4Z" fill="' + BAL[i] + '"/><path d="M44 94H56L50 101Z" fill="' + BAL[i] + '"/><path d="M50 101C45 109 55 113 50 122" fill="none"/><ellipse class="n" cx="31" cy="30" rx="7" ry="13" fill="#fff" opacity=".3" transform="rotate(25 31 30)"/></svg><span class="latin">' + (G.lower ? L.toLowerCase() : L) + '</span></button>').join('') + '</div>';
-    } else if (G.id === 'match') {
-      st.innerHTML = '<div class="big-l latin" aria-label="' + T + '">' + T + '</div><div class="opt-row">' + G.opts.map(L => '<button class="ocard latin" data-act="ans" data-v="' + L + '">' + L.toLowerCase() + '</button>').join('') + '</div>';
+    const st = $('#playStage'), rd = G.rd;
+    if (G.id === 'howmany') {
+      let inner;
+      if (rd.level === 4) {
+        inner = '<div class="cgrid" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:flex-end">' + rd.shown.map((s, i) => '<button class="obj" data-act="g-tap" data-i="' + i + '" style="width:auto;height:auto;border-radius:10px;padding:6px">' + (s.k === 'ten' ? '<i class="rod" style="width:26px;height:92px"></i>' : '<i class="cube" style="width:26px;height:26px"></i>') + '<span class="cnum latin" style="font-size:22px;min-width:36px;height:36px"></span></button>').join('') + '</div>';
+      } else {
+        inner = '<div class="cgrid">' + rd.shown.map((s, i) => '<button class="obj" data-act="g-tap" data-i="' + i + '" aria-label="' + (i + 1) + '">' + objArt(rd.kind) + '<span class="cnum latin"></span></button>').join('') + '</div>';
+      }
+      st.innerHTML = '<div class="runtot latin" id="runTot">0</div><div class="cluster ltr">' + inner + '</div><div class="opt-row ltr">' + rd.options.map(v => '<button class="ocard latin" data-act="ans" data-v="' + v + '">' + v + '</button>').join('') + '</div>';
+      layoutPlay(); setTimeout(layoutPlay, 60);
+    } else if (G.id === 'make') {
+      const src = rd.level === 4
+        ? '<button class="src rodb" data-act="mk-add" data-k="ten" aria-label="' + K.esc(t('addTen')) + '"><i class="rod"></i><span class="plus latin">+10</span></button><button class="src cubeb" data-act="mk-add" data-k="one" aria-label="' + K.esc(t('addOne')) + '"><i class="cube"></i><span class="plus latin">+1</span></button>'
+        : '<button class="src" data-act="mk-add" data-k="obj" aria-label="' + K.esc(t('addOne')) + '">' + artSvg(OBJS[rd.kind]) + '<span class="plus latin">+1</span></button>';
+      st.innerHTML = '<div class="tgt latin" id="tgt">' + rd.answer + '</div><div class="basket ltr" id="basket"></div><div class="srcbar ltr">' + src +
+        '<button class="rbtn" id="mkUndo" data-act="mk-undo" data-i18n-aria="takeOne" aria-label="' + K.esc(t('takeOne')) + '"><svg class="ico" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button></div>';
+      renderBasket();
     } else {
-      st.innerHTML = '<button class="pic-top" data-act="say-again" aria-label="' + word(T) + '">' + artSvg(T) + '</button><div class="opt-row">' + G.opts.map(L => '<button class="ocard small latin" data-act="ans" data-v="' + L + '">' + L + L.toLowerCase() + '</button>').join('') + '</div>';
+      st.innerHTML = '<div class="seqrow ltr" id="seqRow">' + rd.seq.map((v, i) => i === rd.blank ? '<div class="slotn q latin" id="blankSlot">?</div>' : '<div class="slotn latin">' + v + '</div>').join('') + '</div><div class="opt-row ltr">' + rd.options.map(v => '<button class="ocard latin" data-act="ans" data-v="' + v + '">' + v + '</button>').join('') + '</div>';
     }
   }
   function prompt() {
-    const T = G.target;
-    if (G.id === 'find') say(() => K.sayT('gFind', { x: name(G.lower ? T.toLowerCase() : T) }));
-    else if (G.id === 'match') say(() => K.sayT('gMatch', { x: name(T) }));
-    else say(() => K.sayT('gSound', { w: wordV(T) }));
+    const rd = G.rd;
+    if (G.id === 'howmany') say(() => K.sayT('gHow'));
+    else if (G.id === 'make') say(() => K.sayT('gMake', { n: String(rd.answer) }));
+    else say(() => K.sayT('gNext', { s: rd.seq.slice(0, rd.blank).join(', ') }));
+  }
+  function won() {
+    const rd = G.rd; G.busy = true; G.stars++; if (G.miss === 0) G.first++; renderStars(); K.mascot('happy');
+    const g = G, key = G.id === 'howmany' ? 'gHowYes' : G.id === 'make' ? 'gMakeYes' : 'gNextYes';
+    const sp = K.sayT(key, { n: String(rd.answer) });
+    Promise.race([sp, delay(3200)]).then(() => delay(250)).then(() => { if (G === g && K.current() === 'play') { G.turn++; nextTurn(); } });
   }
   function answer(b) {
-    if (!G || G.busy) return;
-    const v = b.getAttribute('data-v'), T = G.target;
-    if (v === T) {
-      G.busy = true; G.stars++; renderStars(); K.mascot('happy');
-      if (G.id === 'find') { K.sfx('pop'); b.classList.add('popped'); } else { K.sfx('yes'); b.classList.add('right'); }
-      const show = G.lower ? T.toLowerCase() : T;
-      const sp = G.id === 'sound' ? K.sayT('gSoundYes', { w: wordV(T), x: name(T) }) : K.sayT('gYes', { x: name(G.id === 'match' ? T.toLowerCase() : show) });
-      const g = G;
-      Promise.race([sp, delay(3200)]).then(() => delay(250)).then(() => { if (G === g && K.current() === 'play') { G.turn++; nextTurn(); } });
+    if (!G || G.busy || G.id === 'make') return;
+    const v = +b.getAttribute('data-v'), rd = G.rd;
+    if (v === rd.answer) {
+      K.sfx('yes'); b.classList.add('right');
+      if (G.id === 'next') { const q = $('#blankSlot'); if (q) { q.textContent = v; q.classList.remove('q'); q.classList.add('filled'); } }
+      won();
     } else {
       K.sfx('soft'); K.mascot('think'); G.miss++;
       b.classList.remove('wiggle'); void b.offsetWidth; b.classList.add('wiggle');
-      if (G.id === 'find') say(() => K.sayT('gFindNo', { y: name(G.lower ? v.toLowerCase() : v), x: name(G.lower ? T.toLowerCase() : T) }));
-      else if (G.id === 'match') say(() => K.sayT('gMatchNo', { y: name(v.toLowerCase()), x: name(T.toLowerCase()) }));
-      else say(() => K.sayT('gSoundNo', { y: name(v), w: wordV(T) }));
-      if (G.miss >= 2) { const r = document.querySelector('#playStage [data-v="' + T + '"]'); if (r) r.classList.add('hint'); }
+      say(() => K.sayT(G.id === 'howmany' ? 'gHowNo' : 'gNextNo'));
+      if (G.miss >= 2) { const r = document.querySelector('#playStage [data-act="ans"][data-v="' + rd.answer + '"]'); if (r) r.classList.add('hint'); }
     }
   }
   function finishRound() {
-    P().rounds++; K.persist();
+    const p = P(); p.rounds++;
+    if (G.first >= 4 && G.level < maxLevel()) p.lv[G.id] = G.level + 1; else if (G.first <= 1 && G.level > 1) p.lv[G.id] = G.level - 1; else p.lv[G.id] = G.level;
+    K.persist();
     $('#playStage').innerHTML = '<div class="end-panel"><div class="mascot happy" aria-hidden="true">' + window.MASCOT_SVG + '</div><div class="end-stars">' + STAR.repeat(5) + '</div><div class="end-row">' +
       '<button class="rbtn accent" data-act="play-again" data-i18n-aria="again" aria-label="' + K.esc(t('again')) + '"><svg class="ico" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/></svg></button>' +
       '<button class="rbtn" data-act="back" aria-label="' + K.esc(t('tGames')) + '"><svg class="ico" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg></button></div></div>';
@@ -1920,11 +2063,34 @@ window.MASCOT_SVG = '<svg class="pip" viewBox="0 0 120 124" aria-hidden="true">'
   }
   K.defineScreen('play', {
     banner: false, back: 'games',
-    enter(p, re) { if (re && G) { renderStars(); if (G.turn < G.total) renderTurn(); return; } startGame((p && p.g) || 'find', p && p.seed); },
-    leave() { G = null; }
+    enter(p, re) { if (re && G) { renderStars(); if (G.turn < G.total) renderTurn(); return; } startGame((p && p.g) || 'howmany', p && p.seed, p && p.level); },
+    leave() { G = null; K.stopVoice(); }
   });
-  Object.assign(K.acts, { ans: answer, 'play-again'() { K.sfx('tap'); startGame(G ? G.id : 'find'); } });
-  window.ABC_GAME = { state: () => G };
+  Object.assign(K.acts, {
+    ans: answer,
+    'g-tap'(b) {
+      if (!G || G.busy || b.classList.contains('counted')) return;
+      const s = G.rd.shown[+b.getAttribute('data-i')]; G.run += s.v; b.classList.add('counted');
+      b.querySelector('.cnum').textContent = G.run; $('#runTot').textContent = G.run;
+      K.sfx('pop'); sayNum(G.run);
+    },
+    'mk-add'(b) {
+      if (!G || G.busy) return;
+      const rd = G.rd, k = b.getAttribute('data-k');
+      if (basketVal() > rd.answer) { K.sfx('soft'); const u = $('#mkUndo'); if (u) u.classList.add('hint'); return; }
+      G.basket.push(k); renderBasket(); K.sfx('pop'); const v = basketVal();
+      if (v === rd.answer) { won(); }
+      else if (v > rd.answer) { K.sfx('soft'); G.miss++; say(() => K.sayT('gMakeOver')); const u = $('#mkUndo'); if (u) u.classList.add('hint'); }
+      else sayNum(v);
+    },
+    'mk-undo'() {
+      if (!G || G.busy || !G.basket.length) { K.sfx('soft'); return; }
+      G.basket.pop(); renderBasket(); K.sfx('whoosh'); const u = $('#mkUndo'); if (u) u.classList.remove('hint');
+      if (G.basket.length) sayNum(basketVal());
+    },
+    'play-again'() { K.sfx('tap'); startGame(G ? G.id : 'howmany'); }
+  });
+  window.CF_GAME = { state: () => G };
 })();
 //@@END CONTENT_ENGINE
 </script>

@@ -100,7 +100,7 @@
     {
       "app": "CountingApp",
       "track": "kids",
-      "status": "building",
+      "status": "done",
       "model": "sonnet"
     },
     {
@@ -136,7 +136,7 @@
     {
       "app": "BubbleShooter",
       "track": "game",
-      "status": "todo",
+      "status": "building",
       "model": "default"
     },
     {

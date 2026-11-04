@@ -1,0 +1,88 @@
+{
+  "_comment": "CountingApp (kids shell) screenshot capture: 11 distinct activity states (tap-to-count scenes, How many?, the hundred chart, a skip-counting song, number tracing, Make the number, What comes next?), each a different number or round seed and a cycled theme (lagoon / sand / night). No home menu, sticker book, parent area, gate or reveal popup in any slot. _setup_taps unlocks full_pack (so counting to 100, all songs and games are reachable and no banner), mutes the voice for capture, and seeds a few stickers. Screens are opened with KIDS.go(screen, params); trace prog {s: finished strokes, f: fraction of the next} shows a stroke mid-trace; play seed fixes the round.",
+  "_readiness_expr": "typeof KIDS !== 'undefined' && KIDS.ready === true",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){var s=KIDS.save;s.fullPack=true;s.removeAds=true;s.settings.voice=false;s.progress={greeted:true,rounds:3,traced:{'1':1,'2':1,'3':1},songs:{},lv:{howmany:1,make:1,next:1}};s.stickers={N_1:1,N_2:1,N_3:1,N_4:1,D_1:1,D_2:1,S_crab:1,S_shell:1};KIDS.persist();KIDS.go('home');return 'seeded';})()",
+      500
+    ]
+  ],
+  "01_gameplay_open": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelectorAll(sel)[i];if(!b)return;KIDS.acts[b.getAttribute('data-act')](b);}};KIDS.setTheme('lagoon');KIDS.go('counter',{n:7});T('#cGrid .obj',4);return 'ok';})()",
+      1500
+    ]
+  ],
+  "02_gameplay_early": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelectorAll(sel)[i];if(!b)return;KIDS.acts[b.getAttribute('data-act')](b);}};KIDS.setTheme('sand');KIDS.go('play',{g:'howmany',seed:3,level:1});T('#playStage .obj',2);return 'ok';})()",
+      1500
+    ]
+  ],
+  "03_gameplay_build": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelectorAll(sel)[i];if(!b)return;KIDS.acts[b.getAttribute('data-act')](b);}};KIDS.setTheme('night');KIDS.go('hundred',{n:47});return 'ok';})()",
+      1500
+    ]
+  ],
+  "04_gameplay_mid": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelectorAll(sel)[i];if(!b)return;KIDS.acts[b.getAttribute('data-act')](b);}};KIDS.setTheme('lagoon');KIDS.go('song',{s:5});return 'ok';})()",
+      1500
+    ]
+  ],
+  "05_gameplay_busy": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelectorAll(sel)[i];if(!b)return;KIDS.acts[b.getAttribute('data-act')](b);}};KIDS.setTheme('sand');KIDS.go('trace',{d:'8',prog:{s:0,f:0.5}});return 'ok';})()",
+      1500
+    ]
+  ],
+  "06_gameplay_deep": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelectorAll(sel)[i];if(!b)return;KIDS.acts[b.getAttribute('data-act')](b);}};KIDS.setTheme('night');KIDS.go('play',{g:'make',seed:6,level:2});T('#playStage [data-act=mk-add]',0);for(var i=0;i<4;i++){KIDS.acts['mk-add'](document.querySelector('#playStage [data-act=mk-add]'));}return 'ok';})()",
+      1500
+    ]
+  ],
+  "07_gameplay_late": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelectorAll(sel)[i];if(!b)return;KIDS.acts[b.getAttribute('data-act')](b);}};KIDS.setTheme('lagoon');KIDS.go('play',{g:'next',seed:8,level:3});return 'ok';})()",
+      1500
+    ]
+  ],
+  "tablet_7_01_gameplay_open": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelectorAll(sel)[i];if(!b)return;KIDS.acts[b.getAttribute('data-act')](b);}};KIDS.setTheme('sand');KIDS.go('counter',{n:14});T('#cGrid .obj',9);return 'ok';})()",
+      1500
+    ]
+  ],
+  "tablet_7_02_gameplay_early": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelectorAll(sel)[i];if(!b)return;KIDS.acts[b.getAttribute('data-act')](b);}};KIDS.setTheme('night');KIDS.go('play',{g:'make',seed:7,level:4});for(var i=0;i<2;i++)KIDS.acts['mk-add'](document.querySelector('#playStage [data-k=ten]'));KIDS.acts['mk-add'](document.querySelector('#playStage [data-k=one]'));return 'ok';})()",
+      1500
+    ]
+  ],
+  "tablet_10_01_gameplay_open": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelectorAll(sel)[i];if(!b)return;KIDS.acts[b.getAttribute('data-act')](b);}};KIDS.setTheme('lagoon');KIDS.go('hundred',{n:73});return 'ok';})()",
+      1500
+    ]
+  ],
+  "tablet_10_02_gameplay_early": [
+    [
+      "js",
+      "(function(){var T=function(sel,n){for(var i=0;i<n;i++){var b=document.querySelectorAll(sel)[i];if(!b)return;KIDS.acts[b.getAttribute('data-act')](b);}};KIDS.setTheme('sand');KIDS.go('trace',{d:'4',prog:{s:1,f:0.4}});return 'ok';})()",
+      1500
+    ]
+  ]
+}
