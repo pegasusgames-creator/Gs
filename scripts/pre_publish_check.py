@@ -2094,6 +2094,7 @@ def main():
         ('check_families_compliance.py', 'Google Play Families compliance (kids track)'),
         ('check_sudoku_unique.py', 'sudoku uniqueness + technique band'),
         ('check_level_select_coverage.py', 'Level Select reaches every level'),
+        ('check_version_not_lower.py', 'version not lower than the previous build'),
     ]:
         # Kids / utility screenshots show real-use states, not game boards, and
         # their bottom bar is a nav (banner clearance checked by their own gates).

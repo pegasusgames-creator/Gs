@@ -71,6 +71,8 @@ Everything in docs/GAME_SHELL.md "Deliverables per game", plus
 
 (codes from docs/APP_ARCHETYPES.md — read only its tables; never A+M0+V1+T1).
 
+**Versions:** keep the scaffold's `--version-name 2.0.0` (never lower than the app's previous versionName — most folders were already listed at 1.x, so 1.0.0 reads as a downgrade) and its bumped versionCode; `data-app-version` must equal versionName. `check_version_not_lower.py` blocks a regression.
+
 **Gate contract:** `pre_publish_check.py` runs every registered gate with ALL the apps in the run as arguments, so your `scripts/check_<app>_*.py` must check only your app: with no args or with your app among the args, check it; with other app names only, print a skip line and exit 0 — never exit 1 for an app that isn't yours.
 
 ## Verify
