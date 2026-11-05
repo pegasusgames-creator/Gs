@@ -18,6 +18,8 @@ const ok = (c, m) => { if (!c) { fails.push(m); console.log('  ✗ ' + m); } els
 
 async function dismiss(p) {
   for (let k = 0; k < 6; k++) {
+    const close = await p.$('#xEventsSheet [data-ev-close]');
+    if (close && await close.isVisible()) { await close.click().catch(() => {}); await p.waitForTimeout(400); continue; }
     const card = await p.$('[data-growth-card] [data-card-ok]');
     if (card && await card.isVisible()) { await card.click().catch(() => {}); await p.waitForTimeout(400); continue; }
     const hit = await p.evaluate(() => {
@@ -175,16 +177,17 @@ const shot = (p, name) => p.screenshot({ path: path.join(out, name + '.png') });
   await shot(p, '14_endless');
   // ── Themes: unlock + apply each, board recolours ──
   await p.evaluate(() => { save.completedLevels = Array.from({ length: 300 }, (_, i) => i); save.coins = 5000; persist(); hideOverlay('overlay-complete'); loadLevel(150); });
+  await p.waitForTimeout(400); await dismiss(p);
+  { let c = 0; for (const w of await words(p)) { if (c++ >= 5) break; const [x, y] = await centers(p, [w.cells[0], w.cells[w.cells.length - 1]]); await drag(p, x, y); } }
   const boards = [];
-  const ids = await p.evaluate(() => THEMES.map(t => t.id));
+  const ids = await p.evaluate(() => window._THEMES_META.map(t => t.id));
   for (const id of ids) {
-    await p.evaluate(() => showScreen('themes')); await p.waitForTimeout(250);
+    await dismiss(p); await p.evaluate(() => showScreen('themes')); await p.waitForTimeout(250);
     const i = ids.indexOf(id);
     await p.click('#themesGrid .theme-card >> nth=' + i); await p.waitForTimeout(250);
     await p.evaluate(() => showScreen('game')); await p.waitForTimeout(300);
     const cs = await p.evaluate(() => { const s = getComputedStyle(document.getElementById('board')); return s.backgroundColor + '|' + getComputedStyle(document.querySelector('.ws-cell')).color; });
     boards.push(cs);
-    if (i === 0) await solveAll(p, 'mouse').catch(() => {});
     await shot(p, '15_theme_' + id);
   }
   ok(new Set(boards).size === ids.length, 'every theme recolours the board (' + new Set(boards).size + '/' + ids.length + ' distinct)');

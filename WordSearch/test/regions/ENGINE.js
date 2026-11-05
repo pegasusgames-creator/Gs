@@ -140,10 +140,16 @@ function wsBuild(){
 }
 function wsLayout(){
   if(!L)return;
-  const wrap=document.getElementById('ws-wrap');if(!wrap)return;
-  const w=wrap.clientWidth,h=wrap.clientHeight;
-  const size=Math.max(150,Math.min(w,h,760));
+  const zone=document.getElementById('ws-zone'),wrap=document.getElementById('ws-wrap');if(!zone||!wrap)return;
+  if(!zone.clientHeight)return; // screen hidden: re-measured when it opens
+  const cs=getComputedStyle(zone),gap=parseFloat(cs.rowGap)||8;
+  const kids=[...zone.children].filter(el=>el!==wrap&&el.style.display!=='none'&&getComputedStyle(el).display!=='none');
+  let used=0;kids.forEach(el=>{used+=el.offsetHeight;});
+  const availH=zone.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-used-gap*kids.length;
+  const availW=zone.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+  const size=Math.max(140,Math.min(availW,availH,760));
   gCs=Math.floor(size/L.n);
+  wrap.style.height=(gCs*L.n)+'px';
   boardEl.style.width=boardEl.style.height=(gCs*L.n)+'px';
   boardEl.style.setProperty('--cs',gCs+'px');
   wsDrawCaps();
@@ -226,6 +232,7 @@ function wsStart(D,o){
   gTime=0;gHints=0;gFoundN=0;gWon=false;gDone=false;gMsgShown=false;gAnchor=-1;gDrag=null;levelStarted=true;
   if(!o.fresh)wsRestore();else wsClearSlot();
   const mb=document.getElementById('ws-msgbar');if(mb){mb.style.display='none';mb.className='ws-msgbar';}
+  document.querySelectorAll('.ws-toast').forEach(t=>t.remove());
   wsBuild();wsRenderHud();
   wsMarkHints();
   // a board restored with every word found resumes at its ending

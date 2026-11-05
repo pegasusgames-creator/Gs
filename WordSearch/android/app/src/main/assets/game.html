@@ -282,11 +282,12 @@ body.midnight .shop-item,body.midnight .settings-item,body.midnight .mg-card,bod
 .toggle,body.midnight .toggle{background:var(--btn-neutral-bg);}
 .toggle.on,body.midnight .toggle.on{background:var(--accent);}
 .shop-coins-banner,body.midnight .shop-coins-banner{background:var(--btn-neutral-bg);color:var(--text);}
+#complete-stars{color:#d29922;}
 .modal p.ws-small{font-size:.82rem;margin-top:-8px;}
 .modal .ws-reveal-msg{font-weight:800;color:var(--accent);letter-spacing:.04em;margin:-6px 0 14px;font-size:.95rem;line-height:1.35;}
 
 /* ── the puzzle book page (T3: subtle paper) ─────────────────── */
-.ws-zone{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 12px 6px;box-sizing:border-box;}
+.ws-zone{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;overflow:hidden;padding:8px 12px 6px;box-sizing:border-box;}
 .ws-hud{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;width:100%;max-width:680px;flex:0 0 auto;}
 .chip{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:5px 10px;font-size:clamp(.72rem,3.1vw,.86rem);font-weight:700;color:var(--text-mute);white-space:nowrap;}
 .chip b{color:var(--text);}
@@ -295,7 +296,7 @@ body.midnight .shop-item,body.midnight .settings-item,body.midnight .mg-card,bod
 .chip.over b{color:var(--text-mute);}
 .ws-bonus{cursor:pointer;border-style:dashed;border-color:#d29922;}
 .ws-bonus.got{border-style:solid;background:var(--btn-neutral-bg);}
-.ws-wrap{flex:1 1 0;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;}
+.ws-wrap{flex:0 0 auto;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;position:relative;}
 #board{position:relative;flex:0 0 auto;background-color:var(--board);
   background-image:radial-gradient(rgba(0,0,0,0.035) 0.8px,transparent 1px),linear-gradient(rgba(255,255,255,0.12),rgba(0,0,0,0.02));
   background-size:5px 5px,100% 100%;
@@ -306,7 +307,8 @@ body.midnight .shop-item,body.midnight .settings-item,body.midnight .mg-card,bod
 .ws-cell{display:flex;align-items:center;justify-content:center;position:relative;font-family:'Poppins',sans-serif;font-weight:700;
   font-size:calc(var(--cs) * 0.56);line-height:1;color:var(--ink);letter-spacing:0;transition:transform .16s ease,color .2s;}
 .ws-cell::before{content:"";position:absolute;inset:12%;border-radius:50%;pointer-events:none;}
-.ws-grid-lines .ws-cell{box-shadow:inset -1px -1px 0 var(--grid);}
+#board.ws-grid-lines{background-image:linear-gradient(to right,var(--grid) 1px,transparent 1px),linear-gradient(to bottom,var(--grid) 1px,transparent 1px),radial-gradient(rgba(0,0,0,0.035) 0.8px,transparent 1px);
+  background-size:var(--cs) var(--cs),var(--cs) var(--cs),5px 5px;background-position:-1px -1px,-1px -1px,0 0;}
 .ws-cell.pop{animation:ws-pop .42s cubic-bezier(.3,1.6,.5,1);}
 @keyframes ws-pop{0%{transform:scale(1)}40%{transform:scale(1.28)}100%{transform:scale(1)}}
 .ws-cell.hint::before{box-shadow:0 0 0 2px var(--ws-hint);}
@@ -2160,10 +2162,16 @@ function wsBuild(){
 }
 function wsLayout(){
   if(!L)return;
-  const wrap=document.getElementById('ws-wrap');if(!wrap)return;
-  const w=wrap.clientWidth,h=wrap.clientHeight;
-  const size=Math.max(150,Math.min(w,h,760));
+  const zone=document.getElementById('ws-zone'),wrap=document.getElementById('ws-wrap');if(!zone||!wrap)return;
+  if(!zone.clientHeight)return; // screen hidden: re-measured when it opens
+  const cs=getComputedStyle(zone),gap=parseFloat(cs.rowGap)||8;
+  const kids=[...zone.children].filter(el=>el!==wrap&&el.style.display!=='none'&&getComputedStyle(el).display!=='none');
+  let used=0;kids.forEach(el=>{used+=el.offsetHeight;});
+  const availH=zone.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-used-gap*kids.length;
+  const availW=zone.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+  const size=Math.max(140,Math.min(availW,availH,760));
   gCs=Math.floor(size/L.n);
+  wrap.style.height=(gCs*L.n)+'px';
   boardEl.style.width=boardEl.style.height=(gCs*L.n)+'px';
   boardEl.style.setProperty('--cs',gCs+'px');
   wsDrawCaps();
@@ -2246,6 +2254,7 @@ function wsStart(D,o){
   gTime=0;gHints=0;gFoundN=0;gWon=false;gDone=false;gMsgShown=false;gAnchor=-1;gDrag=null;levelStarted=true;
   if(!o.fresh)wsRestore();else wsClearSlot();
   const mb=document.getElementById('ws-msgbar');if(mb){mb.style.display='none';mb.className='ws-msgbar';}
+  document.querySelectorAll('.ws-toast').forEach(t=>t.remove());
   wsBuild();wsRenderHud();
   wsMarkHints();
   // a board restored with every word found resumes at its ending
