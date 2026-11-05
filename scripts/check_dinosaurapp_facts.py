@@ -107,13 +107,19 @@ def sentences(text):
 
 
 def dino_claim(sentence):
-    """True if the sentence calls a non-dinosaur a dinosaur (negations are fine)."""
+    """True if the sentence calls a non-dinosaur a dinosaur (negations and plain lists are fine)."""
     s = sentence.lower()
-    if not any(w.lower() in s for w in NOT_DINO_WORDS) and not re.search(r"\b(flying|sea|swimming|marine) dinosaurs?\b", s):
-        return False
-    if not re.search(r"dinosaur", s):
-        return False
-    return not re.search(r"\b(not|no|isn't|wasn't|aren't|weren't|never|before)\b", s)
+    if re.search(r"\b(flying|sea|swimming|marine) dinosaurs?\b", s):
+        return True
+    for w in NOT_DINO_WORDS:
+        w = re.escape(w.lower())
+        if re.search(w + r"\W+(?:\w+\W+){0,6}?(?:is|was|are|were|as)\s+(?:an?\s+|the\s+)?(?:\w+\s+){0,2}?dinosaur", s) and not re.search(r"\b(not|no|isn't|wasn't|never)\b", s):
+            return True
+        if re.search(r"dinosaurs?\W+(?:such as|like|including|called|named)\W+(?:\w+\W+){0,3}?" + w, s):
+            return True
+        if re.search(w + r"\W+(?:the|a|an)\s+(?:\w+\s+){0,2}?dinosaur", s) and not re.search(r"\b(not|no|never)\b", s):
+            return True
+    return False
 
 
 def check() -> list:
