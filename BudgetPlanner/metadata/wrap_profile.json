@@ -1,0 +1,70 @@
+{
+  "_comment": "BudgetPlanner wrapper decorations (scripts/wrap_screenshots.py). RESTRAINED: envelope-and-coin motifs in the app's blue/teal palette in corners/edges; headline + subtitle area kept clear.",
+  "pieces": [
+    {
+      "shape": "dot",
+      "x": 0.07,
+      "y": 0.28,
+      "size": 0.3,
+      "color": "#7db6f0",
+      "rot": -12,
+      "alpha": 78,
+      "blur": 12,
+      "num": "$"
+    },
+    {
+      "shape": "tile",
+      "x": 0.93,
+      "y": 0.3,
+      "size": 0.28,
+      "color": "#3fbfb0",
+      "rot": 1,
+      "alpha": 72,
+      "blur": 14,
+      "num": "€"
+    },
+    {
+      "shape": "dot",
+      "x": 0.05,
+      "y": 0.55,
+      "size": 0.2,
+      "color": "#f0be62",
+      "rot": -10,
+      "alpha": 66,
+      "blur": 16,
+      "num": "%"
+    },
+    {
+      "shape": "dot",
+      "x": 0.95,
+      "y": 0.58,
+      "size": 0.18,
+      "color": "#7db6f0",
+      "rot": 3,
+      "alpha": 78,
+      "blur": 12
+    },
+    {
+      "shape": "tile",
+      "x": 0.1,
+      "y": 0.89,
+      "size": 0.26,
+      "color": "#3fbfb0",
+      "rot": -8,
+      "alpha": 72,
+      "blur": 14,
+      "num": "£"
+    },
+    {
+      "shape": "dot",
+      "x": 0.9,
+      "y": 0.91,
+      "size": 0.16,
+      "color": "#f0be62",
+      "rot": 5,
+      "alpha": 66,
+      "blur": 16,
+      "num": "¥"
+    }
+  ]
+}

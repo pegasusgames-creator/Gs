@@ -1,6 +1,6 @@
 {
-  "google_review_notes": "No login required. All features of Budget Planner accessible from the main menu.",
-  "apple_review_notes": "No login required. To test IAPs, use the shop button in Budget Planner.",
+  "google_review_notes": "No login required. Budget Planner opens on the Plan tab after a 3-card intro (Skip). Tap Add starter envelopes, Add income (for example 3000), then the pencil on each envelope to assign money until Left to assign reaches zero. Add spending (+ in the top bar) records spending against an envelope; Move money transfers between envelopes. Bills (with dated reminders), Goals (monthly amount needed) and Months (month-over-month comparison) are the other tabs. Free plan: 8 envelopes, 3 goals, 3 months of history. Pro and Remove Ads are one-time in-app products (Settings > Purchases); Restore purchases is in the same section. All data stays on the device; currency is formatting only, no exchange rates.",
+  "apple_review_notes": "No login required. To test in-app purchases open Settings (gear, top right) > Purchases: Go Pro (pro_lifetime) or Remove ads (remove_ads); Restore purchases is in the same section. No demo account needed.",
   "demo_account_required": false,
   "demo_username": "",
   "demo_password": "",

@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_budgetplanner_math.py",
+    "envelope budget maths exact: assigned + left = income (+ money freed from earlier months), money conserved through rollover (carry/reset) and move-money, goal monthly amount = ceil(remaining / months left) with a schedule that adds up to the cent, largest-remainder spread, due-day clamping, amount parsing (JS vs independent Python Decimal/Fraction reference)"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      238,
+      243,
+      248
+    ],
+    "bg_top_right": [
+      220,
+      234,
+      248
+    ],
+    "bg_bottom": [
+      26,
+      92,
+      158
+    ],
+    "text_primary": [
+      18,
+      35,
+      58
+    ],
+    "text_accent": [
+      26,
+      92,
+      158
+    ],
+    "text_subtle": [
+      64,
+      86,
+      114
+    ],
+    "footer_tint": [
+      33,
+      105,
+      177
+    ],
+    "mood": "tool-clean",
+    "layout_archetype": "I",
+    "mascot_pattern": "M0",
+    "voice": "V8",
+    "texture": "T2"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "_comment": "Word Search screenshot capture. 500-level CAMPAIGN (valid loadLevel indices 0-499, display level = idx+1; chapters of 50 = grid sizes 6x6..15x15). Every slot is a gameplay board at a distinct level and board theme: window._wsShot(idx,theme,k,{bonus,hint,anchor,drag}) applies Word Search's real theme palette (window._WS_THEMES: sel/f1-f6/board/ink/grid) + midnight chrome, loads the level and finds its first k listed words through the real selection handler wsCheck() (mid-solve, never the last word, so no win card), then optionally finds the hidden bonus word, flashes a hint, anchors a tap-tap start letter or shows a selection mid-drag. Phone ships 7, tablets 2 each.",
+  "_readiness_expr": "typeof save !== 'undefined' && typeof loadLevel === 'function' && typeof showScreen === 'function' && typeof PIPE_COLORS !== 'undefined' && typeof wsCheck === 'function' && Array.isArray(window._WS_THEMES)",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){try{localStorage.setItem('ws_tutorialDone','1');localStorage.setItem('tutorialDone','1');var s={currentLevel:470,completedLevels:Array.from({length:470},function(_,i){return i;}),levelStars:(function(){var x={};for(var i=0;i<470;i++)x[i]=(i%5===0?2:3);return x;})(),coins:1260,lives:5,maxLives:5,lastLifeTime:Date.now(),dailyChallengeStreak:6,hintCount:3,wsInit:1,wsSlots:{},wsHideFound:false,unlockedThemes:['midnight'],soundEnabled:true,musicEnabled:false};Object.assign(save,s);if(typeof persist==='function')persist();if(typeof updateAllUI==='function')updateAllUI();\nwindow._wsShot=function(idx,th,k,o){o=o||{};var T=window._WS_THEMES||[];var t=T.find(function(x){return x.id===th;})||T[0];Object.assign(PIPE_COLORS,t.palette);Object.keys(t.palette).forEach(function(kk){document.body.style.setProperty('--'+kk,t.palette[kk]);});if(th==='midnight'){document.body.classList.add('midnight');document.documentElement.dataset.theme='midnight';}else{document.body.classList.remove('midnight');document.documentElement.dataset.theme='';}save.activeTheme=th;save.wsSlots={};document.querySelectorAll('.overlay.show').forEach(function(x){x.classList.remove('show');});showScreen('game');loadLevel(idx);\nsetTimeout(function(){for(var i=0;i<k&&i<L.words.length-1;i++){wsCheck(L.words[i].cells.slice());}if(o.bonus&&L.bonus)wsCheck(L.bonus.cells.slice());gTime=o.sec||(25+k*9);var nx=L.words.find(function(w){return !w.found;});if(o.hint)giveHint();if(o.anchor&&nx)wsSetAnchor(nx.cells[0]);if(o.drag&&nx)wsShowCur(nx.cells.slice(0,Math.max(2,nx.cells.length-1)));setTimeout(function(){document.querySelectorAll('.ws-toast').forEach(function(x){x.remove();});wsRenderHud();},1300);},400);};}catch(e){console.error(e);}})();'ok';",
+      1500
+    ]
+  ],
+  "01_swipe_heather": [
+    [
+      "js",
+      "window._wsShot(62,'default',3,{'drag': true});'ok';",
+      3400
+    ]
+  ],
+  "02_big_letters_newsprint": [
+    [
+      "js",
+      "window._wsShot(140,'newsprint',4,{});'ok';",
+      3400
+    ]
+  ],
+  "03_exactly_once_seaglass": [
+    [
+      "js",
+      "window._wsShot(205,'seaglass',5,{});'ok';",
+      3400
+    ]
+  ],
+  "04_bonus_word_meadow": [
+    [
+      "js",
+      "window._wsShot(256,'meadow',5,{'bonus': true});'ok';",
+      3400
+    ]
+  ],
+  "05_themes_sunrise": [
+    [
+      "js",
+      "window._wsShot(301,'sunrise',6,{});'ok';",
+      3400
+    ]
+  ],
+  "06_big_grid_slate": [
+    [
+      "js",
+      "window._wsShot(463,'slate',7,{});'ok';",
+      3400
+    ]
+  ],
+  "07_midnight_board": [
+    [
+      "js",
+      "window._wsShot(388,'midnight',6,{});'ok';",
+      3400
+    ]
+  ],
+  "tablet_7_01_roomy_heather": [
+    [
+      "js",
+      "window._wsShot(333,'default',5,{});'ok';",
+      3400
+    ]
+  ],
+  "tablet_7_02_tap_tap_seaglass": [
+    [
+      "js",
+      "window._wsShot(177,'seaglass',3,{'anchor': true});'ok';",
+      3400
+    ]
+  ],
+  "tablet_10_01_relax_newsprint": [
+    [
+      "js",
+      "window._wsShot(420,'newsprint',8,{});'ok';",
+      3400
+    ]
+  ],
+  "tablet_10_02_hint_midnight": [
+    [
+      "js",
+      "window._wsShot(275,'midnight',4,{'hint': true});'ok';",
+      3400
+    ]
+  ]
+}

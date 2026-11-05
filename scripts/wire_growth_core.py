@@ -60,6 +60,7 @@ CFG = {
     "Minesweeper":     dict(pkg="com.pegasusgames.minesweeper", name="Minesweeper", saveKey="minesweeper_save", levelBase=0, kind="levels", totalLevels=500, live=False, booster=dict(field="hintCount", name="Hint", emoji="💡", coins=25)),
     "Solitaire":       dict(pkg="com.pegasusgames.solitaire", name="Solitaire", saveKey="solitaire_save", levelBase=0, kind="levels", totalLevels=500, live=False, booster=dict(field="hintCount", name="Hint", emoji="💡", coins=25)),
     "MahjongSolitaire": dict(pkg="com.pegasusgames.mahjong", name="Mahjong Solitaire", saveKey="mahjong_save", levelBase=0, kind="levels", totalLevels=500, live=False, booster=dict(field="hintCount", name="Hint", emoji="💡", coins=25), ownHaptics=True),
+    "WordSearch":      dict(pkg="com.pegasusgames.wordsearch", name="Word Search", saveKey="wordsearch_save", levelBase=0, kind="levels", totalLevels=500, live=False, booster=dict(field="hintCount", name="Hint", emoji="💡", coins=25)),
 }
 
 CFG_RE = re.compile(r'<script data-growth-config>[\s\S]*?</script>\n?')

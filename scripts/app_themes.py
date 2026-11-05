@@ -263,18 +263,18 @@ THEMES = {
 
     # ===== WORD =====
     "WordSearch": {
-        "bg_top_left":  (250, 245, 220),  # cream paper
-        "bg_top_right": (235, 225, 190),  # aged paper
-        "bg_bottom":    (200, 190, 160),
-        "text_primary":  (50, 40, 25),
-        "text_accent":   (160, 70, 30),   # ink red-brown
-        "text_subtle":   (110, 90, 70),
-        "footer_tint":   (180, 80, 30),
-        "mood": "library-paper",
-        "layout_archetype": "G",
-        "mascot_pattern":   "M0",
-        "voice":            "V3",
-        "texture":          "T3",
+        "bg_top_left": (239, 230, 240),
+        "bg_top_right": (233, 220, 236),
+        "bg_bottom": (214, 190, 222),
+        "text_primary": (42, 31, 49),
+        "text_accent": (139, 63, 135),
+        "text_subtle": (91, 76, 100),
+        "footer_tint": (107, 47, 110),
+        "mood": 'heather puzzle-book dusk',
+        "layout_archetype": 'A',
+        "mascot_pattern": 'M4',
+        "voice": 'V7',
+        "texture": 'T3',
     },
 
     "WordScramble": {
@@ -637,18 +637,18 @@ THEMES = {
         "texture": 'T2',
     },
     "BudgetPlanner": {
-        "bg_top_left":  (234, 226, 215),
-        "bg_top_right": (225, 223, 203),
-        "bg_bottom":    (205, 173, 152),
-        "text_primary": (71, 51, 21),
-        "text_accent":  (171, 187, 27),
-        "text_subtle":  (133, 108, 71),
-        "footer_tint":  (179, 195, 34),
-        "mood": "tracker-soft",
-        "layout_archetype": "I",
-        "mascot_pattern":   "M0",
-        "voice":            "V8",
-        "texture":          "T8",
+        "bg_top_left": (238, 243, 248),
+        "bg_top_right": (220, 234, 248),
+        "bg_bottom": (26, 92, 158),
+        "text_primary": (18, 35, 58),
+        "text_accent": (26, 92, 158),
+        "text_subtle": (64, 86, 114),
+        "footer_tint": (33, 105, 177),
+        "mood": 'tool-clean',
+        "layout_archetype": 'I',
+        "mascot_pattern": 'M0',
+        "voice": 'V8',
+        "texture": 'T2',
     },
     "CapitalCities": {
         "bg_top_left":  (178, 132, 52),

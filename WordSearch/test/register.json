@@ -1,0 +1,20 @@
+{
+  "gate": [
+    "scripts/check_wordsearch_valid.py",
+    "word-search grids: every listed word exactly once on a straight line, no blocklisted word in any direction, bands match"
+  ],
+  "app_theme": {
+    "bg_top_left": [239, 230, 240],
+    "bg_top_right": [233, 220, 236],
+    "bg_bottom": [214, 190, 222],
+    "text_primary": [42, 31, 49],
+    "text_accent": [139, 63, 135],
+    "text_subtle": [91, 76, 100],
+    "footer_tint": [107, 47, 110],
+    "mood": "heather puzzle-book dusk",
+    "layout_archetype": "A",
+    "mascot_pattern": "M4",
+    "voice": "V7",
+    "texture": "T3"
+  }
+}

@@ -107,7 +107,6 @@ BLOCKED_APPS = {
     "RandomName", "RandomNumber", "RandomRecipe", "ScienceQuiz",
     "ScrewPuzzle", "SlidingTiles", "SolarSystem", "SportsQuiz",
     "Sumplete", "TripleMatch", "UkuleleChords", "WordScramble",
-    "WordSearch",
     # 2026-10-03 audit: BlockPuzzle's game.html is the Dice Roller placeholder
     # with ONE byte changed (99.9% identical) and was never listed.
 }
@@ -2080,6 +2079,8 @@ def main():
         ('check_reward_types_native.py', 'rewarded types requested by JS are whitelisted in Java'),
         ('check_lang_picker.py', 'every translated listing locale is selectable in the language picker'),
         ('check_trademarks.py', 'no third-party game/franchise trademarks in listing text'),
+        ('check_budgetplanner_math.py', 'envelope budget maths exact: assigned + left = income (+ money freed from earlier months), money conserved through rollover (carry/reset) and move-money, goal monthly amount = ceil(remaining / months left) with a schedule that adds up to the cent, largest-remainder spread, due-day clamping, amount parsing (JS vs independent Python Decimal/Fraction reference)'),
+        ('check_wordsearch_valid.py', 'word-search grids: every listed word exactly once on a straight line, no blocklisted word in any direction, bands match'),
         ('check_countingapp_items.py', 'CountingApp counting rounds (shown count, ranges, skip-count rows, distractors)'),
         ('check_bloodsugarlog_math.py', 'mg/dL<->mmol/L (18.0156, whole-mg storage, 1-decimal display), range classification incl. per-context ranges, time in range, averages by time of day / meal, ADAG eA1C + minimum-data rule, number parsing (JS vs independent exact-rational Python reference)'),
         ('check_breathingexercise_patterns.py', 'breathing pattern table (phases sum to the stated cycle, name matches timings, no zero phase), session cycle/total-time maths over every length, custom-pattern conversion, streak maths and phase strings in 13 languages (JS vs independent Python reference)'),

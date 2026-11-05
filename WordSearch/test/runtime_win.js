@@ -1,0 +1,1 @@
+(()=>{ localStorage.setItem('ws_tutorialDone','1'); document.querySelectorAll('.overlay.show').forEach(o=>o.classList.remove('show')); showScreen('game'); loadLevel(0); for(const w of L.words){ if(gWon) break; wsCheck(w.cells.slice().reverse()); } return L.words.every(w=>w.found); })()
