@@ -139,31 +139,32 @@ body.midnight .modal p{color:#7d93b6;}
 /* §3.1 menu hierarchy: V8 minimal + T6 neon — hero Play, secondary pair, glowing tertiary icons. */
 /*@@REGION PALETTE*/
 :root{
-  /* Daylight = light blueprint paper (portfolio rule: no dark defaults).
-     The spec's dark-navy "blueprint-echo" mood ships as Midnight below. */
-  --bg:#dbe4f3; --app-bg:#dbe4f3; --surface:#ffffff;
-  --text:#13233f; --text-mute:#5b6c8a;
-  --border:rgba(19,35,63,0.14);
-  --g-play:linear-gradient(135deg,#0fb5c9,#2563b0); --on-accent:#ffffff;
-  --btn-neutral-bg:#d3ddef;
-  --menu-tile-bg:#eef2fa; --menu-tile-border:#c6d3ea; --menu-tile-fg:#2b4a86;
-  --board-bg:#f4f7fc; --board-line:#c6d3ea; --wall:#2a3c5e;
-  --you:#0fb5c9; --you-dim:#0c8a99; --echo:#e85d5d; --echo-dim:#b03c3c;
-  --plate:#d29922; --exit:#2ea043;
-  --accent:#0fb5c9; --accent-dim:#0c8a99;
+  /* Daylight = lime-soda: pale key-lime ground, cobalt accent, a clear
+     glassy board for six candy bubble colours (own family — no sibling
+     game uses lime / cobalt). Midnight below = night garden. */
+  --bg:#e9f4cc; --app-bg:#e9f4cc; --surface:#fbfdf3;
+  --text:#1c2710; --text-mute:#46562b;
+  --border:rgba(28,39,16,0.15);
+  --g-play:linear-gradient(135deg,#2f7be8,#1c4fb5); --on-accent:#ffffff;
+  --btn-neutral-bg:#dcebb4;
+  --menu-tile-bg:#f4f9e4; --menu-tile-border:#c6da94; --menu-tile-fg:#1b48a3;
+  --accent:#1f5bc4; --accent-dim:#1a4ea6; --bs-hot:#c94a12;
+  /* board roles (themes recolour these; the canvas reads them live) */
+  --b1:#e8434f; --b2:#f2bd12; --b3:#2fa858; --b4:#2d7fe6; --b5:#9a55e0; --b6:#f5832a;
+  --board-bg:#f7fbe9; --board-edge:#c3d98d; --aim:#1f5bc4;
+  --pip:#fff1d2; --pip-ink:#3b2a1c; --danger:#d9481a;
 }
 body.midnight{
-  /* the prototype's blueprint-echo navy, verbatim */
-  --bg:#0e1726; --app-bg:#0e1726; --surface:#1b2942;
-  --text:#dce8fb; --text-mute:#7d93b6;
-  --border:rgba(220,232,251,0.13);
-  --on-accent:#04222a;
-  --btn-neutral-bg:#24395e;
-  --menu-tile-bg:#1b2942; --menu-tile-border:#24395e; --menu-tile-fg:#8fb4e8;
-  --board-bg:#1b2942; --board-line:#24395e; --wall:#0a1120;
-  --you:#37e0e0; --you-dim:#1d8f8f; --echo:#ff6b6b; --echo-dim:#a83b3b;
-  --plate:#f2c14e; --exit:#9be37d;
-  --accent:#37e0e0;
+  --bg:#0f1a13; --app-bg:#0f1a13; --surface:#1a271e;
+  --text:#e6f2dc; --text-mute:#a8bd98;
+  --border:rgba(230,242,220,0.13);
+  --on-accent:#ffffff;
+  --btn-neutral-bg:#253529;
+  --menu-tile-bg:#1a271e; --menu-tile-border:#2c3d30; --menu-tile-fg:#a9c8ff;
+  --accent:#6fa8ff; --accent-dim:#3f7fe0; --bs-hot:#ff8a4d;
+  --b1:#ff5c66; --b2:#ffd23f; --b3:#41c96d; --b4:#4a95ff; --b5:#b276ff; --b6:#ff9a47;
+  --board-bg:#142019; --board-edge:#2f4434; --aim:#8fbaff;
+  --pip:#ffeacc; --pip-ink:#2a1d12; --danger:#ff7a45;
 }
 /*@@END PALETTE*/
 .menu-primary{width:240px;padding:18px 0;border:none;border-radius:32px;font-family:'Poppins',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:2px;cursor:pointer;background:linear-gradient(135deg,#448aff,#69f0ae);color:#0f1923;box-shadow:0 0 24px rgba(105,240,174,0.35),0 0 60px rgba(68,138,255,0.25);transition:transform 0.1s;}
@@ -253,40 +254,75 @@ body.midnight{
 .stars-display{font-size:2rem;margin-bottom:16px;letter-spacing:4px;}
 
 /*@@REGION BOARD_CSS*/
-/* ── Afterimage board ─────────────────────────────────────────── */
-.board-zone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:4px 14px;}
-.par-row{display:flex;gap:8px;}
-.chip{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:5px 11px;font-size:0.78rem;font-weight:700;color:var(--text-mute);}
-.chip b{color:var(--text);}
-#board{position:relative;background:
-    repeating-linear-gradient(0deg,transparent 0 calc(100%/6 - 1px),var(--board-line) calc(100%/6 - 1px) calc(100%/6)),
-    repeating-linear-gradient(90deg,transparent 0 calc(100%/6 - 1px),var(--board-line) calc(100%/6 - 1px) calc(100%/6)),
-    var(--board-bg);
-  border:2px solid var(--board-line);border-radius:16px;overflow:hidden;box-shadow:0 16px 36px -18px rgba(10,20,40,0.45);touch-action:none;}
-.ent{position:absolute;border-radius:9px;transition:transform .13s cubic-bezier(.3,1.4,.5,1);}
-.wallc{position:absolute;background:var(--wall);border-radius:7px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.12);}
-.exitc{position:absolute;border-radius:9px;border:2.5px dashed var(--exit);box-shadow:inset 0 0 14px -2px var(--exit);transition:box-shadow .2s;}
-.exitc.armed{box-shadow:inset 0 0 18px 0 var(--exit),0 0 12px -2px var(--exit);}
-.platec{position:absolute;border-radius:50%;border:3px solid var(--plate);opacity:.85;transition:box-shadow .2s,background .2s;}
-.platec.held{background:radial-gradient(circle,var(--plate) 0%,transparent 70%);box-shadow:0 0 18px -2px var(--plate);}
-.youc{background:linear-gradient(160deg,var(--you),var(--you-dim));box-shadow:0 4px 10px -2px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.55);z-index:3;}
-.echoc{background:linear-gradient(160deg,var(--echo),var(--echo-dim));box-shadow:0 4px 10px -2px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.4);z-index:2;opacity:.93;}
-.echoc::after{content:"";position:absolute;inset:0;border-radius:9px;border:1.5px dashed rgba(255,255,255,0.6);opacity:.55;}
-.trail{position:absolute;border-radius:9px;background:var(--echo);opacity:.18;pointer-events:none;transition:opacity .5s;}
-.shake{animation:aim-sh .32s;}
-@keyframes aim-sh{0%,100%{transform:translate(var(--tx),var(--ty))}25%{transform:translate(calc(var(--tx) - 5px),var(--ty))}75%{transform:translate(calc(var(--tx) + 5px),var(--ty))}}
-.queue{display:flex;gap:6px;align-items:center;justify-content:center;height:24px;color:var(--echo);font-size:.74rem;}
-.queue .lbl{color:var(--text-mute);}
-.q{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--echo-dim);display:grid;place-items:center;font-weight:800;}
-.q.empty{opacity:.32;border-style:dashed;}
-.dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(2,52px);gap:6px;margin-top:2px;}
-.dpad button{background:var(--surface);border:1px solid var(--border);border-radius:13px;color:var(--text);font-size:1.25rem;font-weight:800;cursor:pointer;transition:transform .08s,background .12s,box-shadow .12s;}
-.dpad button:active{transform:scale(.92);}
-.dpad button.hinted{box-shadow:0 0 0 2px var(--you),0 0 14px -2px var(--you);}
-.pad-u{grid-column:2;grid-row:1}.pad-l{grid-column:1;grid-row:2}.pad-d{grid-column:2;grid-row:2}.pad-r{grid-column:3;grid-row:2}
-@media (min-width:600px){.dpad{grid-template-columns:repeat(3,62px);grid-template-rows:repeat(2,62px);}}
-@media (prefers-reduced-motion:reduce){.ent,.trail{transition:none!important;}.shake{animation:none!important;}}
+/* ── Bubble Shooter: chrome re-tint (shell chrome → this app's tokens, both themes) ── */
+body{background:var(--bg);color:var(--text);}
+#screen-game,#screen-levelselect,#screen-shop,#screen-settings,#screen-moregames,
+body.midnight #screen-game,body.midnight #screen-levelselect,body.midnight #screen-shop,body.midnight #screen-settings,body.midnight #screen-moregames{background:var(--bg);}
+.game-header,.ls-header,.shop-header,body.midnight .game-header{background:var(--surface);border-bottom:1px solid var(--border);}
+.game-footer,body.midnight .game-footer{background:var(--surface);border-top:1px solid var(--border);}
+.hdr-level,body.midnight .hdr-level{color:var(--accent);font-weight:800;}
+.hdr-coins{color:var(--text);}
+.ls-title,body.midnight .ls-title{color:var(--text);}
+.ls-back{color:var(--accent);}
+.ls-section-title,body.midnight .ls-section-title{color:var(--text-mute);}
+.ls-bubble.available,body.midnight .ls-bubble.available{background:var(--surface);color:var(--accent);border:2px solid var(--menu-tile-border);}
+.ls-bubble.locked,body.midnight .ls-bubble.locked{background:var(--btn-neutral-bg);color:var(--text-mute);border:none;}
+.ls-bubble.completed{background:var(--g-play);color:var(--on-accent);}
+.ls-bubble.stars-2{background:var(--accent-dim);color:var(--on-accent);border:none;}
+.ls-bubble.stars-1{background:var(--surface);color:var(--accent);border:2px solid var(--accent);}
+.ls-bubble.current{background:var(--bs-hot);color:var(--on-accent);box-shadow:0 0 12px -2px var(--bs-hot);}
+.shop-item,.settings-item,.mg-card,.modal,
+body.midnight .shop-item,body.midnight .settings-item,body.midnight .mg-card,body.midnight .modal{background:var(--surface);border-color:var(--border);color:var(--text);}
+.shop-item-desc,.mg-card-desc,.modal p,body.midnight .modal p{color:var(--text-mute);}
+.modal-btn.primary{background:var(--g-play);color:var(--on-accent);}
+.modal-btn.secondary,body.midnight .modal-btn.secondary{background:var(--btn-neutral-bg);color:var(--menu-tile-fg);}
+.toggle,body.midnight .toggle{background:var(--btn-neutral-bg);}
+.toggle.on,body.midnight .toggle.on{background:var(--accent);}
+.shop-coins-banner,body.midnight .shop-coins-banner{background:var(--btn-neutral-bg);color:var(--text);}
+#screen-themes .theme-card,#screen-stats .stat-card,#screen-missions .mission-card{background:var(--surface);border-color:var(--border);}
+#screen-themes .theme-card.active{background:var(--menu-tile-bg);border-color:var(--accent);}
+#screen-themes .theme-info h3,#screen-stats .stat-info h3,#screen-missions .mission-info h3{color:var(--text);}
+#screen-themes .theme-info p,#screen-stats .stat-info p,#screen-missions .mission-info p{color:var(--text-mute);}
+#screen-themes .active-badge{background:var(--btn-neutral-bg);color:var(--accent);}
+#screen-themes .locked-badge{background:var(--btn-neutral-bg);color:var(--text-mute);}
+#screen-missions .mission-bar-bg{background:var(--btn-neutral-bg);}
+#screen-missions .mission-bar-fill,#screen-missions .mission-claim-btn{background:var(--g-play);color:var(--on-accent);}
+#themesGrid .theme-ball{box-shadow:inset 0 0 0 1.5px var(--border);}
 
+/* ── Bubble Shooter board ─────────────────────────────────────── */
+.board-zone.bs-zone{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:stretch;gap:clamp(3px,0.8vh,8px);padding:6px clamp(6px,2.4vw,16px) 6px;position:relative;
+  /* T8 fizz: a few soft rising bubbles behind the board */
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cg fill='none' stroke='%231c2710' stroke-opacity='0.06' stroke-width='1.4'%3E%3Ccircle cx='30' cy='40' r='9'/%3E%3Ccircle cx='52' cy='18' r='5'/%3E%3Ccircle cx='160' cy='70' r='12'/%3E%3Ccircle cx='190' cy='160' r='6'/%3E%3Ccircle cx='90' cy='170' r='10'/%3E%3C/g%3E%3C/svg%3E");}
+body.midnight .board-zone.bs-zone{background-image:none;}
+.bs-hud{display:flex;gap:6px;justify-content:center;align-items:center;flex-wrap:wrap;flex:0 0 auto;}
+.chip{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:5px 11px;font-size:clamp(.74rem,3.3vw,.92rem);font-weight:700;color:var(--text-mute);display:inline-flex;align-items:center;gap:5px;line-height:1.2;white-space:nowrap;}
+.chip b{color:var(--text);font-variant-numeric:tabular-nums;}
+.chip small{font-size:.8em;font-weight:700;color:var(--text-mute);}
+.chip.bs-goal{color:var(--accent);}
+.bs-meter-row{display:flex;align-items:center;gap:8px;justify-content:center;flex:0 0 auto;width:100%;max-width:440px;margin:0 auto;}
+.bs-meter{flex:1;height:8px;border-radius:5px;background:var(--btn-neutral-bg);overflow:hidden;}
+.bs-meter i{display:block;height:100%;width:100%;border-radius:5px;background:var(--g-play);transition:width .25s ease;}
+.bs-meter.low i{background:var(--danger);}
+.bs-mstars{font-size:clamp(.8rem,3.4vw,1rem);color:#d29922;letter-spacing:1px;min-width:3.6em;text-align:right;font-weight:800;}
+.stars-display{color:#d29922;}
+.bs-view{flex:1 1 auto;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+#board{display:block;touch-action:none;cursor:crosshair;border-radius:clamp(10px,3vw,18px);box-shadow:0 16px 34px -20px rgba(20,40,10,0.55);}
+body.midnight #board{box-shadow:0 16px 34px -18px rgba(0,0,0,0.8);}
+.bs-coach{position:absolute;left:50%;bottom:24%;transform:translateX(-50%);max-width:88%;width:max-content;font-size:clamp(.74rem,3.2vw,.92rem);font-weight:700;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:7px 13px;text-align:center;line-height:1.3;opacity:0;transition:opacity .25s;pointer-events:none;box-shadow:0 8px 20px -12px rgba(0,0,0,.45);}
+.bs-coach.on{opacity:.97;}
+/* footer tools */
+.game-footer .foot-btn.bs-tool{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;background:var(--btn-neutral-bg);color:var(--menu-tile-fg);border-radius:16px;line-height:1.1;padding-left:4px;padding-right:4px;}
+body.midnight .game-footer .foot-btn.bs-tool{background:var(--btn-neutral-bg);color:var(--menu-tile-fg);}
+.game-footer .foot-btn.bs-tool.on,body.midnight .game-footer .foot-btn.bs-tool.on{background:var(--g-play);color:var(--on-accent);box-shadow:0 0 0 2px var(--accent);}
+.bs-tool svg{width:clamp(19px,5vw,26px);height:clamp(19px,5vw,26px);flex:0 0 auto;}
+.bs-ico{font-size:clamp(17px,4.6vw,23px);line-height:1;}
+.bs-tool .bs-lb{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;font-size:clamp(.62rem,2.7vw,.8rem);}
+.bs-badge{position:absolute;top:2px;right:5%;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:var(--accent);color:var(--on-accent);font-size:10px;font-weight:800;line-height:18px;text-align:center;font-style:normal;}
+.bs-tool.on .bs-badge{background:var(--surface);color:var(--text);}
+.bs-art{font-size:2.6rem;line-height:1;margin-bottom:6px;}
+@media (min-width:600px){.chip{padding:6px 14px;} .bs-badge{min-width:22px;height:22px;line-height:22px;font-size:12px;border-radius:11px;} .bs-meter{height:10px;}}
+@media (min-width:900px){.chip{font-size:1.02rem;} .bs-coach{font-size:1rem;}}
+@media (prefers-reduced-motion:reduce){.bs-coach,.bs-meter i{transition:none!important;}}
 /*@@END BOARD_CSS*/
 /* ============ 2026-06-10 round-1: adaptive sizing via clamp() ============ */
 .game-footer {
@@ -498,23 +534,26 @@ body.midnight{
 }
 /* =================== END SHARED MENU SKIN v2 =================== */
 /*@@REGION IDENTITY_CSS*/
-/* PART6: faint board-grid motif fills the empty menu space (skin masks center, behind content, pointer-events:none) */
-:root{ --m-motif-size:240px 240px; --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg stroke='%230fb5c9' stroke-width='2' opacity='0.10'%3E%3Cpath d='M0 60H240M0 120H240M0 180H240M60 0V240M120 0V240M180 0V240'/%3E%3C/g%3E%3C/svg%3E"); }
-
-/* ---- Afterimage identity: blueprint echo (Part B) ---- */
+/* ---- Bubble Shooter identity: lime soda, cobalt straw, candy bubbles ---- */
 :root{
-  --m-bg-top:#dfe8f6; --m-vignette: rgba(20,40,85,0.26); --m-grain-opacity:.04;
-  --m-cta-grad: linear-gradient(135deg,#0fb5c9,#2563b0);
-  --m-cta-glow: rgba(37,99,176,.42); --m-glow: rgba(15,181,201,.30);
-  --m-cta-glyph:"▶ "; --m-tile-icon:#2b4a86;
-  /* motif: graph paper + a cube with its dashed afterimage */
-  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cpath d='M0 0H360M0 60H360M0 120H360M0 180H360M0 240H360M0 300H360M0 0V360M60 0V360M120 0V360M180 0V360M240 0V360M300 0V360' stroke='%232b4a86' stroke-width='1' opacity='0.22' fill='none'/%3E%3C/svg%3E");
-  --m-motif-size: 360px 360px;
+  --m-bg-top:#f1f8dc; --m-vignette: rgba(46,70,18,0.22); --m-grain-opacity:.04;
+  --m-cta-grad: linear-gradient(135deg,#2f7be8,#1c4fb5);
+  --m-cta-glow: rgba(28,79,181,.40); --m-glow: rgba(47,123,232,.26);
+  --m-cta-glyph:"▶ "; --m-tile-icon:#1b48a3;
+  /* motif: floating bubble rings and a dotted bank shot, ~14% ink */
+  --m-motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cg fill='none' stroke='%231c2710' stroke-opacity='0.14' stroke-width='2'%3E%3Ccircle cx='54' cy='60' r='26'/%3E%3Ccircle cx='96' cy='34' r='12'/%3E%3Ccircle cx='250' cy='230' r='30'/%3E%3Ccircle cx='206' cy='268' r='13'/%3E%3Ccircle cx='280' cy='60' r='9'/%3E%3C/g%3E%3Cg fill='%231f5bc4' fill-opacity='0.16'%3E%3Ccircle cx='40' cy='250' r='4'/%3E%3Ccircle cx='60' cy='232' r='4'/%3E%3Ccircle cx='80' cy='214' r='4'/%3E%3Ccircle cx='100' cy='196' r='4'/%3E%3Ccircle cx='86' cy='176' r='4'/%3E%3C/g%3E%3C/svg%3E");
+  --m-motif-size: 320px 320px;
 }
-body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
+body.midnight{ --m-bg-top:#152218; --m-vignette:rgba(0,0,0,.5);
   /* --m-* defaults resolve at html scope and cannot see body.midnight
      token overrides — restate the tile fill here explicitly. */
-  --m-tile-grad:#1b2942; --m-tile-icon:#8fb4e8; }
+  --m-tile-grad:#1a271e; --m-tile-icon:#a9c8ff; }
+/* wordmark: clean 2-stop cobalt ink (≥4.5:1 on both grounds) */
+#screen-menu .menu-logo{background:linear-gradient(90deg,#1a3f8f,#1f5bc4);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+body.midnight #screen-menu .menu-logo{background:linear-gradient(90deg,#e6f2dc,#8fbaff);-webkit-background-clip:text;background-clip:text;}
+#screen-menu .menu-sub{color:var(--text-mute);}
+#screen-menu .menu-primary{color:var(--on-accent) !important;letter-spacing:.6px !important;}
+@media (max-width:380px){html body #screen-menu .menu-primary{padding-left:14px !important;padding-right:14px !important;}}
 /*@@END IDENTITY_CSS*/
 </style>
 <script>try{if(window.Android)window.NativeBridge=window.Android;}catch(e){}</script>
@@ -526,8 +565,8 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
   <div class="menu-lives" id="menu-lives">❤️ 5</div>
   <div class="menu-coins" id="menu-coins">🪙 0</div>
 <!--@@REGION MENU_TITLE-->
-  <div class="menu-logo">AFTERIMAGE</div>
-  <div class="menu-sub">Your echo moves two behind. Use it.</div>
+  <div class="menu-logo">BUBBLE SHOOTER</div>
+  <div class="menu-sub">Aim, bank, pop — and free the Pips.</div>
 <!--@@END MENU_TITLE-->
   <button class="menu-primary" onclick="startGame()"><span>PLAY</span><span class="play-sub" id="aim-play-sub">Level 1</span></button>
   <button class="menu-pair" id="dailyChallengeBtn" onclick="startDailyChallenge()" style="width:240px;margin-top:14px">Daily puzzle</button>
@@ -559,35 +598,33 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
     <div class="hdr-coins" id="hdr-coins">🪙 0</div>
   </div>
 <!--@@REGION BOARD_HTML-->
-  <div class="board-zone">
-    <div class="par-row">
-      <div class="chip">Moves <b id="hud-moves">0</b></div>
-      <div class="chip">Par <b id="hud-par">–</b></div>
+  <div class="board-zone bs-zone">
+    <div class="bs-hud" id="bs-hud">
+      <span class="chip bs-goal" id="bs-goal">🫧 Clear <b>0</b></span>
+      <span class="chip" aria-label="Score">Score <b id="bs-score">0</b></span>
     </div>
-    <div id="board"></div>
-    <div class="queue"><span class="lbl">echo plays next →</span><div class="q empty" id="q0">·</div><div class="q empty" id="q1">·</div></div>
-    <div class="dpad">
-      <button class="pad-u" data-d="U" aria-label="Up">↑</button>
-      <button class="pad-l" data-d="L" aria-label="Left">←</button>
-      <button class="pad-d" data-d="D" aria-label="Down">↓</button>
-      <button class="pad-r" data-d="R" aria-label="Right">→</button>
+    <div class="bs-meter-row" aria-hidden="true"><div class="bs-meter"><i id="bs-meter"></i></div><span class="bs-mstars" id="bs-mstars">★★★</span></div>
+    <div class="bs-view" id="bs-view">
+      <canvas id="board" role="img" aria-label="Bubble board: drag to aim, release to shoot, tap the launcher to swap"></canvas>
+      <div class="bs-coach" id="bs-coach" aria-live="polite"></div>
     </div>
   </div>
 <!--@@END BOARD_HTML-->
 <!--@@REGION FOOTER-->
   <div class="game-footer">
-    <button class="foot-btn" onclick="goMenu()">← Menu</button>
-    <button class="foot-btn" onclick="undoMove()">↶ Undo</button>
-    <button class="foot-btn" onclick="useHint()">💡 Hint</button>
-    <button class="foot-btn warn" onclick="resetLevel()">↺ Reset</button>
+    <button class="foot-btn bs-tool" onclick="goMenu()" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg><span class="bs-lb">Menu</span></button>
+    <button class="foot-btn bs-tool" id="bs-btn-fire" onclick="useHint()" aria-label="Fireball"><span class="bs-ico">🔥</span><span class="bs-lb">Fireball</span><i class="bs-badge" id="bs-fire-badge">0</i></button>
+    <button class="foot-btn bs-tool" id="bs-btn-bomb" onclick="bsBomb()" aria-label="Bomb"><span class="bs-ico">💣</span><span class="bs-lb">Bomb</span><i class="bs-badge" id="bs-bomb-badge">0</i></button>
+    <button class="foot-btn bs-tool" id="bs-btn-rainbow" onclick="bsRainbow()" aria-label="Rainbow"><span class="bs-ico">🌈</span><span class="bs-lb">Rainbow</span><i class="bs-badge" id="bs-rain-badge">0</i></button>
+    <button class="foot-btn bs-tool" onclick="resetLevel()" aria-label="Restart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v6h6"/><path d="M5.5 15a7.5 7.5 0 1 0 1.8-7.8L4 10"/></svg><span class="bs-lb">Restart</span></button>
   </div>
 <!--@@END FOOTER-->
 <!--@@REGION TUTORIAL_HTML-->
-  <div id="tutorialOverlay" style="display:none;position:absolute;bottom:90px;left:0;right:0;justify-content:center;pointer-events:none;z-index:50">
-    <div style="background:var(--surface,#fff);border:1.5px solid var(--you,#0fb5c9);border-radius:18px;padding:16px 22px;max-width:290px;text-align:center;pointer-events:all;box-shadow:0 14px 40px rgba(10,20,40,0.25)">
-      <div id="tut-title" style="color:var(--you,#0fb5c9);font-size:15px;font-weight:800;margin-bottom:6px">🟦 Two behind</div>
-      <div id="tut-body" style="color:var(--text,#13233f);font-size:13px;line-height:1.45">Swipe (or use the pad) to move your cyan cube one cell.</div>
-      <div id="tut-foot" style="color:var(--text-mute,#5b6c8a);font-size:11px;margin-top:10px">Tap to continue · 1/3</div>
+  <div id="tutorialOverlay" style="display:none;position:absolute;top:38%;left:0;right:0;justify-content:center;pointer-events:none;z-index:var(--z-tutorial,500)">
+    <div style="background:var(--surface,#fbfdf3);border:1.5px solid var(--accent,#1f5bc4);border-radius:18px;padding:16px 22px;max-width:300px;text-align:center;pointer-events:all;box-shadow:0 14px 40px rgba(20,40,10,0.25)">
+      <div id="tut-title" style="color:var(--accent,#1f5bc4);font-size:15px;font-weight:800;margin-bottom:6px">🎯 Drag to aim</div>
+      <div id="tut-body" style="color:var(--text,#1c2710);font-size:13px;line-height:1.45">Hold above the launcher and drag. Let go to shoot.</div>
+      <div id="tut-foot" style="color:var(--text-mute,#46562b);font-size:11px;margin-top:10px">Tap to continue · 1/3</div>
     </div>
   </div>
 <!--@@END TUTORIAL_HTML-->
@@ -666,7 +703,7 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
       <button class="shop-item-btn" onclick="openPrivacyPolicy()">View</button>
     </div>
     <div class="settings-item" style="justify-content:center;">
-      <span style="color:var(--text-mute, #37474f);font-size:0.75rem;">Afterimage <span data-app-version>v1.0.0</span> · © 2026 Pegasus Games</span>
+      <span style="color:var(--text-mute, #37474f);font-size:0.75rem;">Bubble Shooter <span data-app-version>v2.0.0</span> · © 2026 Pegasus Games</span>
     </div>
   </div>
 </div>
@@ -767,10 +804,15 @@ body.midnight{ --m-bg-top:#13203a; --m-vignette:rgba(0,0,0,.5);
 // this (same contract as the rest of the portfolio's PIPE_COLORS).
 //@@REGION ROLES
 const PIPE_COLORS = {
-  you:   'var(--you)',
-  echo:  'var(--echo)',
-  plate: 'var(--plate)',
-  exit:  'var(--exit)'
+  'b1':         'var(--b1)',
+  'b2':         'var(--b2)',
+  'b3':         'var(--b3)',
+  'b4':         'var(--b4)',
+  'b5':         'var(--b5)',
+  'b6':         'var(--b6)',
+  'board-bg':   'var(--board-bg)',
+  'board-edge': 'var(--board-edge)',
+  'aim':        'var(--aim)'
 };
 //@@END ROLES
 
@@ -784,532 +826,530 @@ const VALID_REWARD_TYPES = new Set(['hint','skip','life','extra_life','free_coin
 
 // Canonical shop order (CLAUDE.md "Shop ordering"): Spend Your Coins →
 // Coin packs → Subscriptions (Season Pass injected after coins_mega) → IAPs.
+// Hints in Bubble Shooter = Fireballs; lives = continues (+5 bubbles when you run out).
 const SHOP_PRODUCTS = [
-  {id:'lives_5_coins',    icon:'🪙', name:'5 Lives (Coins)',       desc:'Spend 30 coins for 5 lives',            price:'30 🪙', coinCost:30},
-  {id:'coins_small',      icon:'🪙', name:'100 Coins',            desc:'Small coin pack',                        price:'$0.99'},
-  {id:'coins_medium',     icon:'💵', name:'400 Coins',            desc:'Medium coin pack',                       price:'$2.99'},
-  {id:'coins_large',      icon:'💰', name:'800 Coins',            desc:'Great value coin pack',                  price:'$4.99'},
-  {id:'coins_mega',       icon:'🏆', name:'2000 Coins',           desc:'Mega coin pack — best value',            price:'$9.99'},
-  {id:'starter_pack',     icon:'🎁', name:'Starter Pack',         desc:'100🪙 + 5 hints + 5 lives + Ads Off',   price:'$0.99'},
-  {id:'remove_ads',       icon:'🚫', name:'Remove Ads',           desc:'Enjoy ad-free gameplay forever',         price:'$2.99'},
-  {id:'hint_pack',        icon:'💡', name:'10 Hints',             desc:'Pack of 10 hint tokens',                 price:'$1.99'},
-  {id:'five_lives',       icon:'❤️', name:'5 Extra Lives',        desc:'Refill your lives instantly',            price:'$0.99'},
-  {id:'unlimited_lives_1h',icon:'⚡',name:'Unlimited Lives 1hr',  desc:'Play without limits for 1 hour',         price:'$1.99'},
-  {id:'unlimited_lives_forever',icon:'♾️',name:'Unlimited Lives Forever',desc:'Never run out of lives again',   price:'$4.99'}
+  {id:'lives_5_coins',    icon:'🪙', name:'5 Lives (Coins)',       desc:'30 coins · each life buys +5 bubbles when you run out', price:'30 🪙', coinCost:30},
+  {id:'coins_small',      icon:'🪙', name:'100 Coins',            desc:'Spend on Bombs, Rainbows, Fireballs and themes',       price:'$0.99'},
+  {id:'coins_medium',     icon:'💵', name:'400 Coins',            desc:'Spend on Bombs, Rainbows, Fireballs and themes',       price:'$2.99'},
+  {id:'coins_large',      icon:'💰', name:'800 Coins',            desc:'Great value coin pack',                                price:'$4.99'},
+  {id:'coins_mega',       icon:'🏆', name:'2000 Coins',           desc:'Largest pack — most coins per dollar',                 price:'$9.99'},
+  {id:'starter_pack',     icon:'🎁', name:'Starter Pack',         desc:'100🪙 + 5 Fireballs + 5 lives + Ads Off',              price:'$0.99'},
+  {id:'remove_ads',       icon:'🚫', name:'Remove Ads',           desc:'No banners or interstitials, forever',                 price:'$2.99'},
+  {id:'hint_pack',        icon:'🔥', name:'10 Fireballs',         desc:'Each burns straight through a line of bubbles',        price:'$1.99'},
+  {id:'five_lives',       icon:'❤️', name:'5 Extra Lives',        desc:'Refill lives: +5 bubbles each time you run out',       price:'$0.99'},
+  {id:'unlimited_lives_1h',icon:'⚡',name:'Unlimited Lives 1hr',  desc:'Unlimited continues for 1 hour',                       price:'$1.99'},
+  {id:'unlimited_lives_forever',icon:'♾️',name:'Unlimited Lives Forever',desc:'Continues never run out',                      price:'$4.99'}
 ];
 //@@END SHOP
 
 // ============================================================
 //@@REGION LEVELS
-// LEVELS (150 levels)
-// ============================================================
-// 500-level campaign: deterministic generator seeds, mined + verified by
-// test/verify_levels.js (par = true BFS optimum; plate forced off the
-// natural shortest path). Bands: 1-20 easy, 21-40 medium, 41-60 hard.
+// 500 goal levels mined by test/gen_levels.py; every one passes
+// scripts/check_bubbleshooter_levels.py (greedy bot within the shot limit).
+// "goal|limit|par|target|k|palette|rows" — see the gate for the format.
 const CAMPAIGN = [
-  {"seed":1000,"par":5,"band":"easy"},
-  {"seed":1024,"par":5,"band":"easy"},
-  {"seed":1052,"par":5,"band":"easy"},
-  {"seed":1116,"par":5,"band":"easy"},
-  {"seed":1148,"par":5,"band":"easy"},
-  {"seed":1198,"par":5,"band":"easy"},
-  {"seed":1212,"par":5,"band":"easy"},
-  {"seed":1249,"par":5,"band":"easy"},
-  {"seed":1279,"par":5,"band":"easy"},
-  {"seed":1309,"par":5,"band":"easy"},
-  {"seed":1326,"par":5,"band":"easy"},
-  {"seed":1358,"par":5,"band":"easy"},
-  {"seed":1405,"par":5,"band":"easy"},
-  {"seed":1422,"par":5,"band":"easy"},
-  {"seed":1468,"par":5,"band":"easy"},
-  {"seed":1493,"par":5,"band":"easy"},
-  {"seed":1528,"par":5,"band":"easy"},
-  {"seed":1547,"par":5,"band":"easy"},
-  {"seed":1563,"par":5,"band":"easy"},
-  {"seed":1586,"par":5,"band":"easy"},
-  {"seed":1625,"par":5,"band":"easy"},
-  {"seed":1657,"par":5,"band":"easy"},
-  {"seed":1684,"par":5,"band":"easy"},
-  {"seed":1717,"par":5,"band":"easy"},
-  {"seed":1742,"par":5,"band":"easy"},
-  {"seed":1751,"par":5,"band":"easy"},
-  {"seed":1771,"par":5,"band":"easy"},
-  {"seed":1001,"par":6,"band":"easy"},
-  {"seed":1027,"par":6,"band":"easy"},
-  {"seed":1047,"par":6,"band":"easy"},
-  {"seed":1065,"par":6,"band":"easy"},
-  {"seed":1077,"par":6,"band":"easy"},
-  {"seed":1101,"par":6,"band":"easy"},
-  {"seed":1127,"par":6,"band":"easy"},
-  {"seed":1146,"par":6,"band":"easy"},
-  {"seed":1162,"par":6,"band":"easy"},
-  {"seed":1174,"par":6,"band":"easy"},
-  {"seed":1201,"par":6,"band":"easy"},
-  {"seed":1222,"par":6,"band":"easy"},
-  {"seed":1236,"par":6,"band":"easy"},
-  {"seed":1259,"par":6,"band":"easy"},
-  {"seed":1277,"par":6,"band":"easy"},
-  {"seed":1303,"par":6,"band":"easy"},
-  {"seed":1316,"par":6,"band":"easy"},
-  {"seed":1347,"par":6,"band":"easy"},
-  {"seed":1368,"par":6,"band":"easy"},
-  {"seed":1383,"par":6,"band":"easy"},
-  {"seed":1404,"par":6,"band":"easy"},
-  {"seed":1430,"par":6,"band":"easy"},
-  {"seed":1448,"par":6,"band":"easy"},
-  {"seed":1457,"par":6,"band":"easy"},
-  {"seed":1473,"par":6,"band":"easy"},
-  {"seed":1503,"par":6,"band":"easy"},
-  {"seed":1535,"par":6,"band":"easy"},
-  {"seed":1546,"par":6,"band":"easy"},
-  {"seed":1561,"par":6,"band":"easy"},
-  {"seed":1590,"par":6,"band":"easy"},
-  {"seed":1608,"par":6,"band":"easy"},
-  {"seed":1624,"par":6,"band":"easy"},
-  {"seed":1649,"par":6,"band":"easy"},
-  {"seed":1679,"par":6,"band":"easy"},
-  {"seed":1707,"par":6,"band":"easy"},
-  {"seed":1726,"par":6,"band":"easy"},
-  {"seed":1767,"par":6,"band":"easy"},
-  {"seed":1777,"par":6,"band":"easy"},
-  {"seed":1006,"par":7,"band":"easy"},
-  {"seed":1016,"par":7,"band":"easy"},
-  {"seed":1032,"par":7,"band":"easy"},
-  {"seed":1051,"par":7,"band":"easy"},
-  {"seed":1066,"par":7,"band":"easy"},
-  {"seed":1080,"par":7,"band":"easy"},
-  {"seed":1106,"par":7,"band":"easy"},
-  {"seed":1134,"par":7,"band":"easy"},
-  {"seed":1143,"par":7,"band":"easy"},
-  {"seed":1160,"par":7,"band":"easy"},
-  {"seed":1172,"par":7,"band":"easy"},
-  {"seed":1184,"par":7,"band":"easy"},
-  {"seed":1192,"par":7,"band":"easy"},
-  {"seed":1207,"par":7,"band":"easy"},
-  {"seed":1225,"par":7,"band":"easy"},
-  {"seed":1243,"par":7,"band":"easy"},
-  {"seed":1265,"par":7,"band":"easy"},
-  {"seed":1283,"par":7,"band":"easy"},
-  {"seed":1295,"par":7,"band":"easy"},
-  {"seed":1304,"par":7,"band":"easy"},
-  {"seed":1332,"par":7,"band":"easy"},
-  {"seed":1341,"par":7,"band":"easy"},
-  {"seed":1353,"par":7,"band":"easy"},
-  {"seed":1365,"par":7,"band":"easy"},
-  {"seed":1378,"par":7,"band":"easy"},
-  {"seed":1389,"par":7,"band":"easy"},
-  {"seed":1402,"par":7,"band":"easy"},
-  {"seed":1428,"par":7,"band":"easy"},
-  {"seed":1445,"par":7,"band":"easy"},
-  {"seed":1463,"par":7,"band":"easy"},
-  {"seed":1477,"par":7,"band":"easy"},
-  {"seed":1491,"par":7,"band":"easy"},
-  {"seed":1506,"par":7,"band":"easy"},
-  {"seed":1519,"par":7,"band":"easy"},
-  {"seed":1555,"par":7,"band":"easy"},
-  {"seed":1572,"par":7,"band":"easy"},
-  {"seed":1602,"par":7,"band":"easy"},
-  {"seed":1621,"par":7,"band":"easy"},
-  {"seed":1635,"par":7,"band":"easy"},
-  {"seed":1652,"par":7,"band":"easy"},
-  {"seed":1656,"par":7,"band":"easy"},
-  {"seed":1670,"par":7,"band":"easy"},
-  {"seed":1680,"par":7,"band":"easy"},
-  {"seed":1697,"par":7,"band":"easy"},
-  {"seed":1712,"par":7,"band":"easy"},
-  {"seed":1733,"par":7,"band":"easy"},
-  {"seed":1755,"par":7,"band":"easy"},
-  {"seed":1784,"par":7,"band":"easy"},
-  {"seed":1796,"par":7,"band":"easy"},
-  {"seed":1017,"par":8,"band":"easy"},
-  {"seed":1029,"par":8,"band":"easy"},
-  {"seed":1043,"par":8,"band":"easy"},
-  {"seed":1056,"par":8,"band":"easy"},
-  {"seed":1075,"par":8,"band":"easy"},
-  {"seed":1084,"par":8,"band":"easy"},
-  {"seed":1089,"par":8,"band":"easy"},
-  {"seed":1097,"par":8,"band":"easy"},
-  {"seed":1114,"par":8,"band":"easy"},
-  {"seed":1122,"par":8,"band":"easy"},
-  {"seed":1138,"par":8,"band":"easy"},
-  {"seed":1154,"par":8,"band":"easy"},
-  {"seed":1183,"par":8,"band":"easy"},
-  {"seed":1206,"par":8,"band":"easy"},
-  {"seed":1219,"par":8,"band":"easy"},
-  {"seed":1233,"par":8,"band":"easy"},
-  {"seed":1248,"par":8,"band":"easy"},
-  {"seed":1263,"par":8,"band":"easy"},
-  {"seed":1270,"par":8,"band":"easy"},
-  {"seed":1292,"par":8,"band":"easy"},
-  {"seed":1315,"par":8,"band":"easy"},
-  {"seed":1330,"par":8,"band":"easy"},
-  {"seed":1356,"par":8,"band":"easy"},
-  {"seed":1369,"par":8,"band":"easy"},
-  {"seed":1385,"par":8,"band":"easy"},
-  {"seed":1401,"par":8,"band":"easy"},
-  {"seed":1412,"par":8,"band":"easy"},
-  {"seed":1431,"par":8,"band":"easy"},
-  {"seed":1440,"par":8,"band":"easy"},
-  {"seed":1459,"par":8,"band":"easy"},
-  {"seed":1480,"par":8,"band":"easy"},
-  {"seed":1492,"par":8,"band":"easy"},
-  {"seed":1513,"par":8,"band":"easy"},
-  {"seed":1522,"par":8,"band":"easy"},
-  {"seed":1533,"par":8,"band":"easy"},
-  {"seed":1556,"par":8,"band":"easy"},
-  {"seed":1571,"par":8,"band":"easy"},
-  {"seed":1581,"par":8,"band":"easy"},
-  {"seed":1592,"par":8,"band":"easy"},
-  {"seed":1598,"par":8,"band":"easy"},
-  {"seed":1612,"par":8,"band":"easy"},
-  {"seed":1631,"par":8,"band":"easy"},
-  {"seed":1647,"par":8,"band":"easy"},
-  {"seed":1667,"par":8,"band":"easy"},
-  {"seed":1686,"par":8,"band":"easy"},
-  {"seed":1698,"par":8,"band":"easy"},
-  {"seed":1714,"par":8,"band":"easy"},
-  {"seed":1725,"par":8,"band":"easy"},
-  {"seed":1734,"par":8,"band":"easy"},
-  {"seed":1749,"par":8,"band":"easy"},
-  {"seed":1760,"par":8,"band":"easy"},
-  {"seed":1778,"par":8,"band":"easy"},
-  {"seed":1797,"par":8,"band":"easy"},
-  {"seed":1007,"par":9,"band":"med"},
-  {"seed":1022,"par":9,"band":"med"},
-  {"seed":1049,"par":9,"band":"med"},
-  {"seed":1056,"par":9,"band":"med"},
-  {"seed":1088,"par":9,"band":"med"},
-  {"seed":1111,"par":9,"band":"med"},
-  {"seed":1135,"par":9,"band":"med"},
-  {"seed":1167,"par":9,"band":"med"},
-  {"seed":1185,"par":9,"band":"med"},
-  {"seed":1197,"par":9,"band":"med"},
-  {"seed":1220,"par":9,"band":"med"},
-  {"seed":1237,"par":9,"band":"med"},
-  {"seed":1246,"par":9,"band":"med"},
-  {"seed":1268,"par":9,"band":"med"},
-  {"seed":1283,"par":9,"band":"med"},
-  {"seed":1314,"par":9,"band":"med"},
-  {"seed":1330,"par":9,"band":"med"},
-  {"seed":1344,"par":9,"band":"med"},
-  {"seed":1359,"par":9,"band":"med"},
-  {"seed":1370,"par":9,"band":"med"},
-  {"seed":1390,"par":9,"band":"med"},
-  {"seed":1405,"par":9,"band":"med"},
-  {"seed":1415,"par":9,"band":"med"},
-  {"seed":1432,"par":9,"band":"med"},
-  {"seed":1449,"par":9,"band":"med"},
-  {"seed":1463,"par":9,"band":"med"},
-  {"seed":1504,"par":9,"band":"med"},
-  {"seed":1512,"par":9,"band":"med"},
-  {"seed":1537,"par":9,"band":"med"},
-  {"seed":1563,"par":9,"band":"med"},
-  {"seed":1576,"par":9,"band":"med"},
-  {"seed":1596,"par":9,"band":"med"},
-  {"seed":1601,"par":9,"band":"med"},
-  {"seed":1621,"par":9,"band":"med"},
-  {"seed":1643,"par":9,"band":"med"},
-  {"seed":1671,"par":9,"band":"med"},
-  {"seed":1716,"par":9,"band":"med"},
-  {"seed":1724,"par":9,"band":"med"},
-  {"seed":1741,"par":9,"band":"med"},
-  {"seed":1762,"par":9,"band":"med"},
-  {"seed":1791,"par":9,"band":"med"},
-  {"seed":1008,"par":10,"band":"med"},
-  {"seed":1035,"par":10,"band":"med"},
-  {"seed":1046,"par":10,"band":"med"},
-  {"seed":1073,"par":10,"band":"med"},
-  {"seed":1085,"par":10,"band":"med"},
-  {"seed":1092,"par":10,"band":"med"},
-  {"seed":1117,"par":10,"band":"med"},
-  {"seed":1141,"par":10,"band":"med"},
-  {"seed":1160,"par":10,"band":"med"},
-  {"seed":1187,"par":10,"band":"med"},
-  {"seed":1213,"par":10,"band":"med"},
-  {"seed":1233,"par":10,"band":"med"},
-  {"seed":1244,"par":10,"band":"med"},
-  {"seed":1279,"par":10,"band":"med"},
-  {"seed":1298,"par":10,"band":"med"},
-  {"seed":1319,"par":10,"band":"med"},
-  {"seed":1328,"par":10,"band":"med"},
-  {"seed":1352,"par":10,"band":"med"},
-  {"seed":1364,"par":10,"band":"med"},
-  {"seed":1400,"par":10,"band":"med"},
-  {"seed":1421,"par":10,"band":"med"},
-  {"seed":1435,"par":10,"band":"med"},
-  {"seed":1456,"par":10,"band":"med"},
-  {"seed":1471,"par":10,"band":"med"},
-  {"seed":1491,"par":10,"band":"med"},
-  {"seed":1502,"par":10,"band":"med"},
-  {"seed":1519,"par":10,"band":"med"},
-  {"seed":1536,"par":10,"band":"med"},
-  {"seed":1556,"par":10,"band":"med"},
-  {"seed":1573,"par":10,"band":"med"},
-  {"seed":1586,"par":10,"band":"med"},
-  {"seed":1614,"par":10,"band":"med"},
-  {"seed":1633,"par":10,"band":"med"},
-  {"seed":1649,"par":10,"band":"med"},
-  {"seed":1666,"par":10,"band":"med"},
-  {"seed":1682,"par":10,"band":"med"},
-  {"seed":1692,"par":10,"band":"med"},
-  {"seed":1710,"par":10,"band":"med"},
-  {"seed":1740,"par":10,"band":"med"},
-  {"seed":1759,"par":10,"band":"med"},
-  {"seed":1785,"par":10,"band":"med"},
-  {"seed":1797,"par":10,"band":"med"},
-  {"seed":1010,"par":11,"band":"med"},
-  {"seed":1029,"par":11,"band":"med"},
-  {"seed":1055,"par":11,"band":"med"},
-  {"seed":1097,"par":11,"band":"med"},
-  {"seed":1118,"par":11,"band":"med"},
-  {"seed":1158,"par":11,"band":"med"},
-  {"seed":1172,"par":11,"band":"med"},
-  {"seed":1194,"par":11,"band":"med"},
-  {"seed":1218,"par":11,"band":"med"},
-  {"seed":1234,"par":11,"band":"med"},
-  {"seed":1264,"par":11,"band":"med"},
-  {"seed":1277,"par":11,"band":"med"},
-  {"seed":1290,"par":11,"band":"med"},
-  {"seed":1320,"par":11,"band":"med"},
-  {"seed":1346,"par":11,"band":"med"},
-  {"seed":1377,"par":11,"band":"med"},
-  {"seed":1410,"par":11,"band":"med"},
-  {"seed":1428,"par":11,"band":"med"},
-  {"seed":1450,"par":11,"band":"med"},
-  {"seed":1473,"par":11,"band":"med"},
-  {"seed":1490,"par":11,"band":"med"},
-  {"seed":1523,"par":11,"band":"med"},
-  {"seed":1539,"par":11,"band":"med"},
-  {"seed":1555,"par":11,"band":"med"},
-  {"seed":1612,"par":11,"band":"med"},
-  {"seed":1644,"par":11,"band":"med"},
-  {"seed":1673,"par":11,"band":"med"},
-  {"seed":1697,"par":11,"band":"med"},
-  {"seed":1706,"par":11,"band":"med"},
-  {"seed":1725,"par":11,"band":"med"},
-  {"seed":1743,"par":11,"band":"med"},
-  {"seed":1765,"par":11,"band":"med"},
-  {"seed":1003,"par":12,"band":"med"},
-  {"seed":1031,"par":12,"band":"med"},
-  {"seed":1052,"par":12,"band":"med"},
-  {"seed":1075,"par":12,"band":"med"},
-  {"seed":1091,"par":12,"band":"med"},
-  {"seed":1114,"par":12,"band":"med"},
-  {"seed":1127,"par":12,"band":"med"},
-  {"seed":1133,"par":12,"band":"med"},
-  {"seed":1153,"par":12,"band":"med"},
-  {"seed":1177,"par":12,"band":"med"},
-  {"seed":1201,"par":12,"band":"med"},
-  {"seed":1231,"par":12,"band":"med"},
-  {"seed":1286,"par":12,"band":"med"},
-  {"seed":1309,"par":12,"band":"med"},
-  {"seed":1334,"par":12,"band":"med"},
-  {"seed":1382,"par":12,"band":"med"},
-  {"seed":1417,"par":12,"band":"med"},
-  {"seed":1472,"par":12,"band":"med"},
-  {"seed":1494,"par":12,"band":"med"},
-  {"seed":1514,"par":12,"band":"med"},
-  {"seed":1557,"par":12,"band":"med"},
-  {"seed":1580,"par":12,"band":"med"},
-  {"seed":1588,"par":12,"band":"med"},
-  {"seed":1609,"par":12,"band":"med"},
-  {"seed":1646,"par":12,"band":"med"},
-  {"seed":1661,"par":12,"band":"med"},
-  {"seed":1675,"par":12,"band":"med"},
-  {"seed":1707,"par":12,"band":"med"},
-  {"seed":1749,"par":12,"band":"med"},
-  {"seed":1779,"par":12,"band":"med"},
-  {"seed":1796,"par":12,"band":"med"},
-  {"seed":1045,"par":13,"band":"med"},
-  {"seed":1094,"par":13,"band":"med"},
-  {"seed":1142,"par":13,"band":"med"},
-  {"seed":1169,"par":13,"band":"med"},
-  {"seed":1204,"par":13,"band":"med"},
-  {"seed":1250,"par":13,"band":"med"},
-  {"seed":1260,"par":13,"band":"med"},
-  {"seed":1311,"par":13,"band":"med"},
-  {"seed":1347,"par":13,"band":"med"},
-  {"seed":1375,"par":13,"band":"med"},
-  {"seed":1418,"par":13,"band":"med"},
-  {"seed":1457,"par":13,"band":"med"},
-  {"seed":1470,"par":13,"band":"med"},
-  {"seed":1540,"par":13,"band":"med"},
-  {"seed":1572,"par":13,"band":"med"},
-  {"seed":1624,"par":13,"band":"med"},
-  {"seed":1660,"par":13,"band":"med"},
-  {"seed":1702,"par":13,"band":"med"},
-  {"seed":1720,"par":13,"band":"med"},
-  {"seed":1768,"par":13,"band":"med"},
-  {"seed":1792,"par":13,"band":"med"},
-  {"seed":1002,"par":14,"band":"hard"},
-  {"seed":1009,"par":14,"band":"hard"},
-  {"seed":1024,"par":14,"band":"hard"},
-  {"seed":1052,"par":14,"band":"hard"},
-  {"seed":1066,"par":14,"band":"hard"},
-  {"seed":1078,"par":14,"band":"hard"},
-  {"seed":1084,"par":14,"band":"hard"},
-  {"seed":1096,"par":14,"band":"hard"},
-  {"seed":1103,"par":14,"band":"hard"},
-  {"seed":1115,"par":14,"band":"hard"},
-  {"seed":1123,"par":14,"band":"hard"},
-  {"seed":1139,"par":14,"band":"hard"},
-  {"seed":1148,"par":14,"band":"hard"},
-  {"seed":1157,"par":14,"band":"hard"},
-  {"seed":1176,"par":14,"band":"hard"},
-  {"seed":1197,"par":14,"band":"hard"},
-  {"seed":1213,"par":14,"band":"hard"},
-  {"seed":1224,"par":14,"band":"hard"},
-  {"seed":1245,"par":14,"band":"hard"},
-  {"seed":1254,"par":14,"band":"hard"},
-  {"seed":1270,"par":14,"band":"hard"},
-  {"seed":1278,"par":14,"band":"hard"},
-  {"seed":1292,"par":14,"band":"hard"},
-  {"seed":1305,"par":14,"band":"hard"},
-  {"seed":1325,"par":14,"band":"hard"},
-  {"seed":1336,"par":14,"band":"hard"},
-  {"seed":1349,"par":14,"band":"hard"},
-  {"seed":1372,"par":14,"band":"hard"},
-  {"seed":1387,"par":14,"band":"hard"},
-  {"seed":1402,"par":14,"band":"hard"},
-  {"seed":1416,"par":14,"band":"hard"},
-  {"seed":1437,"par":14,"band":"hard"},
-  {"seed":1461,"par":14,"band":"hard"},
-  {"seed":1484,"par":14,"band":"hard"},
-  {"seed":1495,"par":14,"band":"hard"},
-  {"seed":1503,"par":14,"band":"hard"},
-  {"seed":1515,"par":14,"band":"hard"},
-  {"seed":1531,"par":14,"band":"hard"},
-  {"seed":1544,"par":14,"band":"hard"},
-  {"seed":1555,"par":14,"band":"hard"},
-  {"seed":1562,"par":14,"band":"hard"},
-  {"seed":1585,"par":14,"band":"hard"},
-  {"seed":1590,"par":14,"band":"hard"},
-  {"seed":1605,"par":14,"band":"hard"},
-  {"seed":1630,"par":14,"band":"hard"},
-  {"seed":1642,"par":14,"band":"hard"},
-  {"seed":1658,"par":14,"band":"hard"},
-  {"seed":1671,"par":14,"band":"hard"},
-  {"seed":1675,"par":14,"band":"hard"},
-  {"seed":1689,"par":14,"band":"hard"},
-  {"seed":1696,"par":14,"band":"hard"},
-  {"seed":1710,"par":14,"band":"hard"},
-  {"seed":1719,"par":14,"band":"hard"},
-  {"seed":1728,"par":14,"band":"hard"},
-  {"seed":1745,"par":14,"band":"hard"},
-  {"seed":1759,"par":14,"band":"hard"},
-  {"seed":1769,"par":14,"band":"hard"},
-  {"seed":1780,"par":14,"band":"hard"},
-  {"seed":1791,"par":14,"band":"hard"},
-  {"seed":1001,"par":15,"band":"hard"},
-  {"seed":1020,"par":15,"band":"hard"},
-  {"seed":1038,"par":15,"band":"hard"},
-  {"seed":1056,"par":15,"band":"hard"},
-  {"seed":1080,"par":15,"band":"hard"},
-  {"seed":1113,"par":15,"band":"hard"},
-  {"seed":1120,"par":15,"band":"hard"},
-  {"seed":1137,"par":15,"band":"hard"},
-  {"seed":1165,"par":15,"band":"hard"},
-  {"seed":1175,"par":15,"band":"hard"},
-  {"seed":1195,"par":15,"band":"hard"},
-  {"seed":1212,"par":15,"band":"hard"},
-  {"seed":1237,"par":15,"band":"hard"},
-  {"seed":1267,"par":15,"band":"hard"},
-  {"seed":1281,"par":15,"band":"hard"},
-  {"seed":1307,"par":15,"band":"hard"},
-  {"seed":1326,"par":15,"band":"hard"},
-  {"seed":1348,"par":15,"band":"hard"},
-  {"seed":1366,"par":15,"band":"hard"},
-  {"seed":1378,"par":15,"band":"hard"},
-  {"seed":1397,"par":15,"band":"hard"},
-  {"seed":1411,"par":15,"band":"hard"},
-  {"seed":1429,"par":15,"band":"hard"},
-  {"seed":1444,"par":15,"band":"hard"},
-  {"seed":1453,"par":15,"band":"hard"},
-  {"seed":1463,"par":15,"band":"hard"},
-  {"seed":1481,"par":15,"band":"hard"},
-  {"seed":1487,"par":15,"band":"hard"},
-  {"seed":1512,"par":15,"band":"hard"},
-  {"seed":1545,"par":15,"band":"hard"},
-  {"seed":1567,"par":15,"band":"hard"},
-  {"seed":1581,"par":15,"band":"hard"},
-  {"seed":1601,"par":15,"band":"hard"},
-  {"seed":1617,"par":15,"band":"hard"},
-  {"seed":1623,"par":15,"band":"hard"},
-  {"seed":1651,"par":15,"band":"hard"},
-  {"seed":1681,"par":15,"band":"hard"},
-  {"seed":1716,"par":15,"band":"hard"},
-  {"seed":1735,"par":15,"band":"hard"},
-  {"seed":1752,"par":15,"band":"hard"},
-  {"seed":1766,"par":15,"band":"hard"},
-  {"seed":1798,"par":15,"band":"hard"},
-  {"seed":1025,"par":16,"band":"hard"},
-  {"seed":1046,"par":16,"band":"hard"},
-  {"seed":1067,"par":16,"band":"hard"},
-  {"seed":1127,"par":16,"band":"hard"},
-  {"seed":1155,"par":16,"band":"hard"},
-  {"seed":1186,"par":16,"band":"hard"},
-  {"seed":1230,"par":16,"band":"hard"},
-  {"seed":1255,"par":16,"band":"hard"},
-  {"seed":1295,"par":16,"band":"hard"},
-  {"seed":1318,"par":16,"band":"hard"},
-  {"seed":1351,"par":16,"band":"hard"},
-  {"seed":1377,"par":16,"band":"hard"},
-  {"seed":1394,"par":16,"band":"hard"},
-  {"seed":1415,"par":16,"band":"hard"},
-  {"seed":1469,"par":16,"band":"hard"},
-  {"seed":1480,"par":16,"band":"hard"},
-  {"seed":1506,"par":16,"band":"hard"},
-  {"seed":1525,"par":16,"band":"hard"},
-  {"seed":1559,"par":16,"band":"hard"},
-  {"seed":1578,"par":16,"band":"hard"},
-  {"seed":1614,"par":16,"band":"hard"},
-  {"seed":1635,"par":16,"band":"hard"},
-  {"seed":1655,"par":16,"band":"hard"},
-  {"seed":1670,"par":16,"band":"hard"},
-  {"seed":1733,"par":16,"band":"hard"},
-  {"seed":1778,"par":16,"band":"hard"},
-  {"seed":1041,"par":17,"band":"hard"},
-  {"seed":1094,"par":17,"band":"hard"},
-  {"seed":1170,"par":17,"band":"hard"},
-  {"seed":1217,"par":17,"band":"hard"},
-  {"seed":1236,"par":17,"band":"hard"},
-  {"seed":1268,"par":17,"band":"hard"},
-  {"seed":1313,"par":17,"band":"hard"},
-  {"seed":1361,"par":17,"band":"hard"},
-  {"seed":1428,"par":17,"band":"hard"},
-  {"seed":1517,"par":17,"band":"hard"},
-  {"seed":1539,"par":17,"band":"hard"},
-  {"seed":1580,"par":17,"band":"hard"},
-  {"seed":1627,"par":17,"band":"hard"},
-  {"seed":1678,"par":17,"band":"hard"},
-  {"seed":1738,"par":17,"band":"hard"},
-  {"seed":1792,"par":17,"band":"hard"},
-  {"seed":1040,"par":18,"band":"hard"},
-  {"seed":1143,"par":18,"band":"hard"},
-  {"seed":1203,"par":18,"band":"hard"},
-  {"seed":1242,"par":18,"band":"hard"},
-  {"seed":1339,"par":18,"band":"hard"},
-  {"seed":1395,"par":18,"band":"hard"},
-  {"seed":1464,"par":18,"band":"hard"},
-  {"seed":1538,"par":18,"band":"hard"},
-  {"seed":1652,"par":18,"band":"hard"},
-  {"seed":1698,"par":18,"band":"hard"},
-  {"seed":1746,"par":18,"band":"hard"},
-  {"seed":1013,"par":19,"band":"hard"},
-  {"seed":1189,"par":19,"band":"hard"},
-  {"seed":1205,"par":19,"band":"hard"},
-  {"seed":1317,"par":19,"band":"hard"},
-  {"seed":1441,"par":19,"band":"hard"},
-  {"seed":1612,"par":19,"band":"hard"},
-  {"seed":1708,"par":19,"band":"hard"},
-  {"seed":1059,"par":20,"band":"hard"},
-  {"seed":1130,"par":20,"band":"hard"},
-  {"seed":1319,"par":20,"band":"hard"},
-  {"seed":1541,"par":20,"band":"hard"},
-  {"seed":1758,"par":20,"band":"hard"}
+"c|10|5|0|1|245|55524455552/5522555552/25225555522",
+"c|7|3|0|0|146|11144666666/1144116666/444.411.111/44..11..11",
+"c|7|3|0|1|256|55666665555/.56666655./.556666222./...6662...",
+"p|9|3|0|9|134|1443333344P/4443333444/33413331433/3311111133",
+"c|9|6|0|0|356|33556665633/3356655666/333.655.336/33..55..33",
+"c|8|3|0|2|345|44444344444/..443344../.554434455./3554334553/..5333335../...3333...",
+"s|10|4|650|6|145|11115551155/..115511../.511141111./5511441111/..5144511../...5551...",
+"c|18|8|0|3|1346|11141114111/1114114111/111.111.111/61..11..16/311.111.113/31..11..13",
+"p|9|4|0|8|1245|422555P5224/.25555552./12251115221/.22111122./....121....",
+"c|26|14|0|10|1256|62215225255/.22252212./22212662225/.22266662./....661....",
+"c|16|6|0|7|1256|26666662622/6655666622/55155166122/5151166562/55561166622",
+"p|11|4|0|11|1345|335P4551111/33.5..5.11/3P355555544/33.5535.54/.335555555./3535555555",
+"c|12|6|0|1|3456|55444455666/66......46/66446666565/6644634566",
+"s|11|5|350|14|1236|66221212266/.22311322./...11111.../....11....",
+"c|13|6|0|15|1345|33554444444/34.5444.44/3.45.1.55.5/3.44..31.5/.55.555.15.",
+"p|9|3|0|7|1235|22335P53322/.135..53P./.115525511./..552255../.....5.....",
+"c|22|11|0|6|2456|25644554546/264.45.444/22222552455/225.25.225/44552222266",
+"c|22|9|0|4|1234|33313431333/31.1111.13/3.11.2.11.3/3.41..14.3/.44.444.44./.44.44.44.",
+"p|12|4|0|2|1256|665P552P225/655.22.625/65556621121/552.66.111",
+"s|12|5|600|0|1234|23331422222/23.1142.23/2.33.4.33.2/2.32..33.2/.23.222.22.",
+"c|9|7|0|0|1236|11222112233/1222122333/332.122.332/63..62..22/632.622.332",
+"p|10|6|0|4|2456|26P624P4444/5.6.44.4.2/5.4..2..2.2/5.4.22.2.2/4.4..2..2.2/6.6.55.2.2",
+"c|10|8|0|0|2346|44226336642/4.2.63.6.2/4.2..3..6.2/4.6.33.6.2/4.4..3..6.2/4.4.33.6.3",
+"s|19|6|300|1|1236|22266322611/...6662.../....666..../...6..6...",
+"c|13|8|0|0|1256|11152111221/1152211111/65552211551/5552211551/11222211111/1222625111",
+"p|8|6|0|2|2346|432266P6466/22.2266.4P/3.22.6.33.6/3.32..33.3/.33.233.33./.33.23.22./22.22.34.22",
+"c|10|7|0|3|1236|11112221111/2111661112/266.222.662/66..22..66/366.666.663",
+"c|7|5|0|2|1356|13366336666/1556111666/.156611666./..661166../...66166.../...3666.../....666....",
+"p|7|5|0|0|1256|111222P2111/11......1P/21.......12/21......12/22.......22/2665225662/56652225665",
+"s|18|7|1050|3|2345|44222444444/442....444/5.2.....4.3/.333..222./4..35545..5/5..3344..5/55544445552",
+"c|10|8|0|1|1356|31555533331/3555553311/111.555.111/11..11..11/111.111.116/11..61..11/.11..1..11.",
+"p|8|6|0|1|1236|661331P1113/111.12.21P/11112322166/211.22.626/66633336662/222.11.162/22222211111",
+"c|15|10|0|1|1245|41112224422/5111125522/121.115.252/12..11..22/522.121.444/22..54..44",
+"s|12|6|800|1|1245|55221112255/5522112255/222.424.222/22..22..22/144.222.441",
+"c|13|10|0|0|2345|32225544444/2242554224/..4445532../..444332../...25433.../....53....",
+"p|10|6|0|1|1235|255155515P2/2.1.55.1.2/5.5..P..5.5/5.5.22.5.5/5.5..2..5.5/3.2.11.2.3",
+"c|11|8|0|2|2345|33553555422/5555554422/55555444555/5552444225/55552422245/5522244522",
+"c|13|8|0|2|2346|66422222466/3442222443/..4462644../...4334.../....333....",
+"p|7|5|0|0|1236|33331263333/P.3.3P.3.1/3.3..6..3.1/1.6.66.3.1/6.6..6..3.1/2.3.61.6.1",
+"s|13|8|1950|1|1345|44311433555/.33.44.55./43554444544/.55.33.41./4115.3.1155/4.4.13.1.5/44441444455",
+"c|7|5|0|0|1346|11333344666/1.3.33.3.6/1.6..3..1.6/4.3.66.1.3/4.3..6..3.3",
+"p|10|5|0|1|1356|33331133111/33.11P3.11/P.55.1.66.1/3.55..56.1/.35.115.61./.66.11.66./11.63.16.55",
+"c|9|6|0|0|1356|33633333633/..663366../..666.666../.666..666./.666...666./335....533/31.......13",
+"s|17|6|800|0|3456|46666666664/46......64/33.......33/36......63/46655655664/4666666664",
+"c|15|9|0|1|2356|33322522333/33......33/33.......33/6266666626/33266666233",
+"p|9|7|0|0|1456|6661P111666/...1..1.../55.1P111.55/5.141141.5/1111.1.1111/1116666111",
+"c|7|5|0|1|1234|.111333111./....22..../....222..../...2222.../..3442443../4344444434",
+"c|10|7|0|4|1236|66222662226/6266661126/16666661162/2666666111/22633366313/2666333333/26622233332",
+"p|10|6|0|0|23456|6622222226P/..322P23../.3344P4433./4443333444/..5555555../...3333...",
+"s|20|5|650|0|2456|22656265622/..522225../..555.555../.666..666./.466...664.",
+"c|9|6|0|4|1356|11133333111/1.133331.1/513..3..315/1335335331/63353335336",
+"p|8|6|0|2|1235|22555553P33/111.55.P33/21115555533/211.53.113/11135533133/111.53.311",
+"c|8|6|0|3|1256|15525661111/1122661115/..2266611../...5655.../....555....",
+"s|15|6|950|0|1235|11555111333/..555113../.325333322./2555233222/.225113225./..211122../....115....",
+"c|9|6|0|1|1234|14444444444/.444..334./.4444.4444./4441424111/.441421311./...1443.../.....4.....",
+"p|9|6|0|0|1235|P55P5231P35/25......13/22.......25/2225555322/22225255552",
+"c|11|8|0|0|3456|66653335666/6663333666/656.333.656/66..33..66/446.333.644/44..33..44",
+"c|21|13|0|2|13456|16663444533/6361346533/66111364663/6661566666/64665566616",
+"p|10|8|0|0|12345|1P533144111/25311444P1/411152P4445/1111422445/41144245533/4114413553",
+"s|19|9|1500|3|2346|33222222233/336.44.633/23346664332/336.33.633/22463636422/243.66.342/62333633326",
+"c|16|12|0|2|1245|44214441244/4.1.44.1.4/2.1..1..1.2/2.1.11.1.2/2.5..1..5.2/1.5.11.5.1/1.1..2..1.1",
+"p|8|6|0|2|1235|155P122P55P/55......55/35.......11/33......11/33.......11/5152255551/51132555151",
+"c|10|7|0|2|12346|33333433334/3333333334/..433.363../...3226.../..4222221../.44622221./24333262622",
+"s|16|8|1250|1|2456|22556265522/2.5.22.5.2/2.5..2..5.2/6.4.66.4.6/6.4..6..4.6/6.4.22.4.6/6.4..6..4.6",
+"c|9|6|0|1|1345|55533433555/5543443455/.551313155./..111111../...14441.../...4444.../....444....",
+"p|7|5|0|1|2346|.2P266P333./....66..../....662..../...2233.../..6423233../4444223333",
+"c|13|10|0|2|1256|55152225155/6552222556/666.555.666/66..22..66/162.111.261/26..11..62/.22..1..22./22..11..22",
+"c|15|13|0|0|2345|22233323323/22.3332.32/5.32.3.45.4/4.22..55.5/.44.255.32./.43.55.53./33.35.55.44/32.5555.34",
+"p|7|5|0|1|1345|3511P511153/.411..11P./.143333341./1113333111/...53335...",
+"s|15|11|950|1|1356|33111611133/31......13/61.......16/33......33/33.......33/5551111555/61555155516",
+"c|13|9|0|0|1346|33334461411/..444441../.644444614./6611446641/..1114411../...1141...",
+"p|8|6|0|2|1246|11112221111/111.22.P11/.1P1666111./.114..411./...44644.../6614444166",
+"c|10|8|0|1|12346|44114661666/..214162../..221.322../.431..222./.661...622./666....223/34.......23/3........3",
+"s|17|5|1000|0|1246|26222666211/6622666421/266.246.221/66..44..11/226.244.111/22..21..11",
+"c|23|20|0|0|1356|11155161111/11.3651.16/6.15.1.51.5/6.53..51.5/.33.113.15./.33.11.55.",
+"p|8|5|0|2|12346|331166661P2/3311626P11/..3613661../..313611../...31164.../....11....",
+"c|9|6|0|1|1345|44444441533/4544141133/.544115311./..114553../...54155.../...4411.../....411....",
+"c|14|9|0|0|12356|66553322255/6555122255/.255122635./..512216../...56215.../...6616.../....511....",
+"p|12|6|0|3|12346|26661P33413/26.1113.P3/3.66.4.26.2/3.62..26.2/.32.222.42./.61.22.44.",
+"s|16|9|850|0|12456|55551111124/.555..112./.1555.1115./4465111511/.211455551./..144555../....445....",
+"c|13|11|0|0|13456|33335566655/663.16.144/66331111644/665.11.451/66541555533/355.35.453/33353355454",
+"p|8|5|0|1|1256|66P66666266/..566665../.12266622P./1525225251/.111565111./..155551../....515....",
+"c|17|13|0|3|12346|11622366666/.112..666./.1114.1144./1111114666/.161114666./..111466../....144....",
+"s|19|6|1300|0|12345|22533533522/2531331352/224.232.422/22..22..22/222.111.222/12..11..21/.11..4..11./11..44..11",
+"c|13|9|0|0|12345|35545554553/5555555555/.555555555./..111111../...13231.../...5555.../....525....",
+"p|11|9|0|0|3456|336P653355P/.633..344./.4644.33P3./5533333333/.553346533./..334666../....345....",
+"c|12|9|0|1|13456|11133333111/13......31/44.......44/43......34/33.......33/6334444336/65344444356",
+"c|16|13|0|4|12356|.252533556./....56..../....555..../...3555.../..3335222../5613352251/55533312233",
+"p|7|5|0|0|12346|22222P2222P/..232232../6..23232..6/6.12..21.6/62.11111.26/6441..1446/.444434444./4414334144",
+"s|17|7|1250|4|12345|22222515533/4252551533/.513441413./.11112114./..4115211../..152211../...22222.../....22....",
+"c|8|6|0|1|12345|55523332222/..223332../..223.322../.223..224./.444...244./114....242/11.......22",
+"p|8|5|0|2|12456|55555555555/25P6666552/P5556665552/5226666225/11264646211/1264444621",
+"c|9|6|0|0|12356|.555366111./....63..../....633..../...2363.../..2251635../2222253511/52225555111",
+"s|20|7|1500|0|1456|51155511664/51.5551.56/5.11.6.44.6/6.11..44.4/.61.145.61./.54.16.66./44.44.66.14/44.4111.14",
+"c|10|7|0|0|1235|.332221115./....21..../....511..../...5521.../..2211222../2222221521/25221213515",
+"p|8|5|0|4|12356|331222225P2/.11P..215./.1.......P./1........3/.1.6.2.1.3./1126222155",
+"c|15|13|0|2|13456|11443355654/1466334444/466.164.444/41..66..34/311.566.464/44..56..66/.44..5..63.",
+"c|14|12|0|2|12456|66244661426/..246644../..622.444../.662..461./.662...111./562....222/55.......22/5........2",
+"p|12|5|0|0|23456|2232P522322/223.66.322/P23336333P5/533.44.335/23333333332/523.66.325/22366266322/226.66.622",
+"s|17|12|1150|1|12456|66644154556/6562212651/651.221.511/46..62..44/466.641.554/44..44..15",
+"c|16|10|0|1|12356|36666366663/3365555633/33663336633/2363333632/23316361332/2311111132/12311111321",
+"p|12|9|0|3|23456|224P5555422/4P4.55.444/455444P4554/456.44.654/35334443353/355.55.553/33366666333/346.66.643",
+"c|21|18|0|2|13456|14456565441/..345543../.333444333./3345445433/.115565511./..556655../....565....",
+"s|15|10|1100|3|12456|55666166655/.225..522./.5511.1155./1161111611/.116212611./..644446../....444....",
+"c|26|18|0|3|12345|34215551243/42......24/44.......44/34......43/35.......53/5331111335/11111111111",
+"p|13|8|0|1|12456|4222262222P/.2..66..2./454.66P.454/5444664445/5..41114..5/.64....46./.544656445./1444664441",
+"c|16|13|0|0|12345|51222222215/..222222../..2232322../4133333314/.113212311./.12222221./...14441.../...2442...",
+"c|21|18|0|0|12356|16111311211/321.33.612/32211226111/225.12.213/22211135663/222.13.263",
+"p|9|7|0|3|12356|6666P115566/2262215522/23226P55P23/2336665526/11116666666/3122666666",
+"s|25|15|1450|2|12346|26611111662/4411221144/446.222.644/63..44..36/111.444.111/11..11..11/.23..6..32./23..44..32",
+"c|21|16|0|3|23456|45544335222/35.4343.22/3.33.3.44.2/3.35..44.3/.33.344.45./.33.33.54./66.33.32.45/22.3332.44",
+"p|13|10|0|1|23456|33366466333/3363443633/P336424P333/4335555334/44355255344/4445445444/44444344444",
+"c|17|13|0|2|12456|12216611544/1255..1154/..2.511.5../..24..55../11.24556.41/1.2....6.4/4.666.666.6/1166666666",
+"s|26|7|1600|0|13456|55544444664/555....564/445.166.444/4..6166..1/46.61161.51/6.31..11.6/513..5..466/3333555111",
+"c|23|19|0|4|12456|.461555164./....55..../....666..../...5665.../..6662666../6666666666/66666666666",
+"p|9|7|0|0|12356|333P22P3333/33......33/3P.......31/56......32/66665555553/6552555556",
+"c|14|10|0|2|23456|22255555222/2255335522/63355455336/3333443333/43334443334/2366446632",
+"c|12|9|0|3|13456|66661316666/6544114456/654.161.456/66..11..66/366.616.663/43..66..34/.55..5..55.",
+"p|11|8|0|4|13456|36611555566/665....566/441P34P5556/.63.34.55./.6.33556.5./6633336655/66.33333.66/6663333366",
+"s|21|9|1350|0|12356|66111511166/6661221666/663.121.366/11..55..11/355.252.553/55..22..55/.51..2..15./55..22..55",
+"c|25|19|0|0|13456|55416661455/.334..433./.3344.4433./5346446435/.666646666./...1111.../.....1.....",
+"p|16|11|0|4|13456|3316611134P/3515115P34/1P1.511.1P4/11..13..11/114.333.614/11..33..54/.11..3..55.",
+"c|24|20|0|4|23456|45224542254/4324224234/446.222.644/44..44..44/444.444.444/46..44..64/.46..4..64.",
+"s|26|15|1500|0|12346|33363666433/3323663343/33131616666/3331333616/44611433666/4441333111/44441331411/4444111411",
+"c|17|13|0|4|13456|36443366333/65.3336.33/6.55.3.15.4/6.55..55.1/.15.451.51./.55.44.55./55.51.11.33",
+"p|15|9|0|0|13456|P41115P1366/..135333../..4P3.311../.441..453./.551...553./111....531/31.......11",
+"c|12|9|0|2|12456|24446464442/..444444../.224141422./5211111125/.221252122./..211112../....111....",
+"c|11|9|0|1|13456|66666166666/..616616../..1344431../1144444411/.116656611./.16455461./...65556.../...5555...",
+"p|10|7|0|3|23456|24P4433622P/.445..262./.24P4.6666./2244366663/.444663535./...6333.../.....3.....",
+"s|17|10|950|3|12345|12244111455/..223234../..423.424../.443..544./.444...544./444....225/44.......22/4........2",
+"c|14|11|0|0|12456|61111146661/6111114644/661.444.464/66..62..66/566.552.666/56..15..46/.24..5..24.",
+"p|12|10|0|2|12345|55P55555555/.P.4..4.5./355P424P553/.33433433./1.3442443.1/1141111411/11411111411",
+"c|15|11|0|1|12356|55322222355/533.22.335/55111211155/511.66.115/26165556162/261.55.162/66111511166",
+"s|21|10|700|2|12356|22233333222/..235532../..555.555../.155..551./.153...351./625....526/22.......22",
+"c|15|12|0|0|12456|24266666242/2266666622/22466666422/5566556655/55554445555/5514444155",
+"p|13|9|0|3|12345|P422P31111P/.224..111./.4P45.4215./5445542115/.223544122./..212441../....124....",
+"c|14|12|0|0|12356|.223525322./....55..../....555..../...1111.../..1116111../1222222221/12222122221",
+"c|13|10|0|1|12346|33441116444/3342111614/.244111144./..111316../...11116.../...4446.../....616....",
+"p|11|9|0|0|12345|33442424433/3411P211P3/244.P21.4P2/24..11..42/424.222.424/54..22..45/.22..2..22.",
+"s|23|15|1050|3|12356|22555555522/.12....21./..2216122../.2.3..3.2./.333222333./.33111133./2.1166611.2/5111111115",
+"c|11|7|0|2|23456|43332223334/4.3.22.3.4/6.3..2..3.6/6.5.22.5.6/6.5..5..5.6/6.4.55.4.6",
+"p|15|9|0|4|12456|66166666166/111.P6.11P/616426246P6/664.22.466/51122522115/111.22.111",
+"c|25|16|0|4|12346|11364446311/1124444211/112.434.211/32..33..23/144.666.441/62..66..26/.62..2..26./46..44..64",
+"s|23|12|1150|0|12356|11221325511/..612255../.556331666./5533365636/..1355266../...5526...",
+"c|22|19|0|2|13456|61161344614/11.6664.14/4.13.3.31.4/5.36..35.3/.51.611.55./.11.13.55./33.11.33.54",
+"p|9|7|0|0|12345|P1112421111/..1211P1../..114.P11../.453..354./.444...444./544....445/54.......45",
+"c|17|14|0|3|23456|.662562443./....32..../....322..../....32..../...32342.../..322522../.222222255./6224422552",
+"c|16|10|0|1|13456|66644644666/66.4444.66/6.65.6.56.6/6.55..55.6/.55.535.55./.11.11.11./55.44.44.55",
+"p|12|10|0|0|12356|22P12P21122/.1123P211./5..63336..5/5666..6665/55666666655/555.33.555/55355655355",
+"s|15|12|700|3|12356|63555111223/33......66/53.......61/63......61/15355536665/5555556666",
+"c|14|7|0|3|12356|25555555552/22.5665.22/1.266.662.1/11.6666.11/.111.2.111./.1..33..1./11.33.33.11/1133333311",
+"p|25|21|0|2|12456|P5114441P51/P2......26/P5.......56/41......14/11.......11/1655555561/11115551111",
+"c|22|13|0|1|12346|.333444232./....14..../....162..../....13..../...14311.../..221611../.222114611./2222124313/22222221222",
+"s|26|9|800|4|12345|44254445244/4455445544/.445545544./..551155../...52125.../...3333.../....333....",
+"c|14|11|0|4|12346|44446443444/4.4.24.4.4/1.4..2..4.3/1.4.66.4.1/3.4..6..1.1/3.4.62.1.1/3.6..2..3.3/1.2.44.2.4/1.1..3..2.4",
+"p|17|12|0|1|12356|22533P3352P/3133333P13/P3323532333/3323333233/55621112655/5521111255/25221112252/5555115555/55552325555",
+"c|26|20|0|1|12346|32166266123/6166226616/.226222622./.22222222./..3444443../..246642../...33333.../...3333.../....242....",
+"c|14|8|0|2|12345|22553522144/..333321../..313.211../.331..111./.331...111./423....214/24.......44",
+"p|12|9|0|2|23456|2222P5322P2/5.P.55.2.5/3.2..P..2.3/3.4.55.4.3/2.4..4..4.2/5.6.22.6.5/5.5..2..5.5",
+"s|23|8|1000|4|12346|24161222233/24......16/24.......66/22......61/22.......11/2313222111/13116222444",
+"c|11|9|0|2|13456|.444333444./....33..../....444..../....44..../...34343.../..113311../.551131155./3533443353/46333433364",
+"p|12|10|0|1|12345|4433P1433P4/.P33..33P./.5545.5455./1144554411/.111424111./...4224.../.....5.....",
+"c|23|20|0|1|12456|55116161155/5142..2415/444.242.444/..566665../2512.6.2152/...1111.../22555155522",
+"s|17|8|750|4|12456|.222414222./....11..../....111..../....11..../...45554.../..444444../.414444414./6444114446",
+"c|22|17|0|0|12346|44666443322/.661..144./.3221.1413./3324113443/.422412433./.33314333./...61163.../...2133.../.....2.....",
+"p|15|7|0|0|12456|.1P54P6421./....41..../....P55..../....55..../...25555.../..225245../.112554444./1512222544",
+"c|13|11|0|1|13456|33311114466/..411114../..411.114../.333..135./.334...355./333....315/63.......55/6........3/6.........3",
+"c|15|12|0|0|12456|66111554162/..155544../..152.444../.111..422./.661...222./111....422/15.......22/5........6",
+"p|24|19|0|2|12346|P2662326622/6121331P16/6P241314266/6431331346/63414641436/3341111433/44111111144/4331111334/43433633434",
+"s|19|9|1100|2|12456|12111662644/1254664655/.255554265./..125511../...25541.../...1611.../....611....",
+"c|22|17|0|1|13456|11146333333/13.6131.33/6.34.5.15.3/6.35..45.3/.35.555.51./.31.33.36./33.16.36.55/51.3333.55/5.16.3.65.5",
+"p|12|9|0|4|12456|4552222P266/11.P..2.66/.P.2252P.6./4.2.55.1.2/55..665..25/.6..66..2./54666661222",
+"c|13|11|0|1|12345|.333555322./....11..../....121..../....51..../...41111.../..113512../.111351322./4114542244/44335312241",
+"s|23|11|2050|0|12356|11552225336/..522526../..2522262../6215236622/61125332311/5162232211/..6556611../..656663../....566....",
+"c|22|16|0|3|12345|15552244111/1..2241..2/15.22221.22/1.222231.2/11121111515/22.2211.53/32232211553/3.3.21.1.5/34222111135",
+"p|23|17|0|2|13456|314P444P41P/35......53/11.......11/16......61/44.......44/44......44/44531113544/5531111355",
+"c|14|10|0|0|12356|16666666661/..153351../..6551556../3566556653/.365555563./.35522553./...22122.../...2112...",
+"c|17|15|0|3|23456|.456663236./....26..../....246..../....26..../...24533.../..444533../.222463364./3222333664/63322336555",
+"p|16|11|0|2|13456|11133P331P1/.133..331./.5336.63P5./4446666444/.664616466./.66455466./...13331.../...3443.../.....4.....",
+"s|18|13|1450|1|12346|23222622232/2124664212/211.414.112/61..11..16/633.111.336/44..11..44/.11..1..11./11..11..11",
+"c|13|11|0|1|12345|44444551115/44.4315.12/4..11353..5/....55..../1..15524..4/1111..2224/11..125..33/3152255443",
+"p|12|8|0|2|12346|P2244P44222/22.4444.22/2.4P.3.4P.2/2.62..26.2/.33.616.33./.44.11.44./64.44.44.46",
+"c|22|13|0|2|23456|66425552466/..665566../..636.636../.666..666./.666...666./244....442/62.......26/6........6",
+"s|17|10|1800|3|12456|44411114564/..425661../164.655.122/66..65..22/.6646.5212./4.2....1.4/4444.2.1411/4462222144",
+"c|28|18|0|0|12456|55515551555/5525555255/641.545.146/64..44..46/664.424.466/62..44..26/.22..4..22./42..44..24",
+"p|16|10|0|2|12356|36111P52P22/.11555P16./...13311.../.1.3355.5./31163555652/2166555662/2116.6.3321/.1.6..5.2./33115355221",
+"c|16|11|0|4|12345|33353224422/3333345444/511.124.433/11..14..23/112.144.223/53..14..44/.34..5..42./34..55..41/.4...3...4.",
+"c|16|13|0|3|12345|54432223445/..442244../.555545555./3333443333/.333333333./..355553../....111....",
+"p|11|7|0|0|12345|P22P43P1133/..545351../..4P5.155../.555..555./.555...522./555....222/55.......33/4........3",
+"s|20|7|1350|0|12346|11166333133/14......13/66.......44/63......44/44.......43/42......44/44444363344/4434433334",
+"c|14|9|0|2|12456|66664441146/.461..164./.4414.5111./2444441111/.242421111./..552211../....241....",
+"p|10|7|0|4|12345|33333433333/P.1.P4.1.3/P.5..2..5.4/4.4.44.4.4/4.5..5..5.4/4.4.22.4.4/1.4..2..4.1/1.4.55.4.1/3.4..1..4.3",
+"c|22|18|0|0|23456|56222335522/625.35.566/32555523566/352.64.344/35566334244/545.66.654/66222226254",
+"s|16|9|1100|3|12456|45446164454/4464114644/.444111444./.44555544./..6552556../..511115../...61116.../...1111.../....151....",
+"c|16|14|0|0|12456|21444441144/.412..112./.2112.4442./2212256441/.465545666./..555266../....664....",
+"p|25|21|0|3|12356|2336115523P/222.15.256/P2221P36333/155.15.125/15553566666/135.33.666/51553335666/665.53.666",
+"c|15|10|0|1|12456|44442666642/2266626666/55556662666/5556611144/14651111114/1426511112/26455514111",
+"c|25|14|0|0|12345|11132214334/3133211334/.333231333./.32421433./..3322142../..345334../...11341.../...3234.../....333....",
+"p|14|10|0|4|12345|1152444P442/..24P52P../..222553P../5442255333/.544422223./.44412322./...25542.../...2444...",
+"s|22|8|1450|3|12346|62214461111/61.1441.14/1.61.4.21.1/1.13..34.1/.11.363.66./.41.46.66./11.34.11.66",
+"c|18|14|0|2|12345|.311111542./....11..../....413..../....13..../...35331.../..332112../.533121122./5521353324/55551255444",
+"p|15|13|0|3|12456|12644444621/1P6611P62P/.1.41114.P./.14....41./65..444..56/6144..4416/65446664456",
+"c|15|13|0|2|12356|22562616112/..622211../..112.611../.311..636./.551...636./555....333/56.......11/6........1",
+"s|16|7|1000|4|23456|.444432662./....22..../....632..../....62..../...46646.../..222664../.662266644./6663266666/65636266666",
+"c|12|10|0|1|12345|22233133222/22.3333.22/5.55.3.55.5/5.55..55.5/.43.444.34./.44.44.44./53.44.44.35",
+"p|19|14|0|0|12345|1233333332P/4P......P4/P5.......52/44......44/44.......44/4411111144/44431113444",
+"c|14|10|0|0|12356|22311226355/..312333../.336336333./2366311256/.666633125./..663333../....533....",
+"c|13|11|0|3|12456|11554245511/11......11/11.......11/14......41/14.......41/44......44/44.......44/4652662564/46666666664",
+"p|10|8|0|0|12346|33362326333/23P6226332/24P.323.P42/44..22..44/111.111.111/11..11..11/.11..1..11.",
+"s|18|11|750|0|13456|64443434446/..445544../..444.444../.143..341./.661...166./544....445/45.......54/4........4",
+"c|26|21|0|2|12356|25336633255/5525552265/55516553651/3655556531/35655623231/1115222221/15115322211",
+"p|11|8|0|1|12346|P3233P16211/3.2.1P.2.6/3.4..3..3.P/1.4.66.3.4/1.3..4..3.4/1.3.11.2.4/1.3..1..6.4",
+"c|19|17|0|0|12346|21466644266/1422626116/144.312.142/14..31..11/122.366.312/22..63..22/.22..1..22./22..42..22/.3...6...2.",
+"s|19|16|1000|3|12356|51522222515/51.2222.15/5.32.2.23.5/5.66..66.5/.56.363.65./.32.66.23./55.26.62.55",
+"c|20|13|0|0|12346|66611444436/66.1334.33/6.44.3.63.2/1.46..66.2/.33.442.62./.33.42.46./44.26.21.66",
+"p|11|8|0|2|13456|11P15533P63/..44P453../..4443441../1511334311/.113634411./.15543134./...11133.../...4511...",
+"c|26|24|0|2|13456|41451111161/3443361164/364.361.666/61..54..51/111.566.553/11..16..15/.33..4..33./33..44..35/.3...4...5.",
+"c|13|9|0|4|12456|45511111554/..251152../..221.122../.661..166./.111...111./226....622/22.......22/2........2",
+"p|23|15|0|2|12345|3P3115P13P3/..P15513../..3111113../2251551522/25532223552/4313553134/..5555555../..545545../....444....",
+"s|23|18|1300|3|13456|55541664413/551.56.411/55431636666/545.66.544/44566444444/444.44.444/43664444646/631.14.464",
+"c|17|14|0|4|12346|11133663221/1161661322/21611116322/4261166626/43333116662/4333113666/12133333314/4411133224",
+"p|26|23|0|0|12456|P41522P514P/4265225624/P2612621622/2221441222/14465556441/1466666641/46666666664",
+"c|20|17|0|4|12346|61136663116/6.1.66.1.6/6.1..3..1.6/6.2.44.2.6/3.2..4..2.3/2.6.11.6.2/4.4..4..4.4/4.4.44.4.4",
+"s|19|14|1350|0|13456|55365665564/53.6616.56/5.36.4.15.3/5.66..11.3/.36.554.53./.66.54.55./44.55.53.56/43.4455.66/4.33.5.46.6",
+"c|10|7|0|3|12456|22441111111/22......11/55.......14/65......11/44.......11/46......11/66.......51/6616222442/26111122225",
+"p|10|7|0|2|12345|P2444444P22/2142442412/22P22122422/5154444515/55511211555/5532112355/15333333351/4225555224/44225552244",
+"c|24|22|0|1|12346|31313441411/..134446../..246.222../.244..162./.341...112./211....113/11.......11",
+"c|27|21|0|2|13456|41111411114/111.44.111/16111311161/611.33.116/11543434511/645.44.546/44446464444/446.11.644/64111111146",
+"p|15|10|0|1|12345|5553P343P55/25......52/55.......5P/53......35/53.......35/2333553332/14445554441",
+"s|26|18|1600|2|12345|12512221521/5441221445/11142224111/2215555122/22225552222/5522552255/15522522551/1223333221",
+"c|20|16|0|0|12345|33533333533/2543333452/12334443321/1214444121/55555555555/5555555555/52555555525/5455555545",
+"p|19|15|0|4|123456|.6P211126P./....2P..../....3P3..../...3113.../..2211122../4461111644/46666566664",
+"c|17|15|0|3|12345|33444445442/45......41/14.......21/44......21/14.......11/22......11/14545522113/5555355411",
+"s|18|8|900|3|12456|.125616521./....66..../....646..../....22..../...62226.../..566665../.225464522./2266446622",
+"c|21|19|0|1|12346|11116633326/622.24.233/22234444336/464.42.131/26444461313/364.41.141/66663263411/333.64.466",
+"p|13|8|0|3|12345|P1123341P22/111.3P.152/113133333P5/134.31.115/11112111144/133.11.334/11442113244/314.23.224",
+"c|19|13|0|0|12346|46611211664/..162261../.111444111./4333443334/.333444333./..444444../....434....",
+"c|19|8|0|0|13456|66665556666/15.5555.51/3.54.5.45.3/5.14..41.5/.31.454.13./.11.55.11./61.55.55.16",
+"p|9|8|0|1|13456|44661P43313/55144P5311/.P54665411./.34666566./..3665553../..445555../...44455.../...1131.../....561....",
+"s|17|11|1050|1|23456|33544433463/36.4443.63/3.64.4.56.3/2.55..44.3/.55.554.65./.53.45.55./55.32.55.42/55.2225.44/3.62.2.22.4",
+"c|22|19|0|0|123456|33335253333/3323443233/.325323523./.15222251./..3321233../..366663../...34643.../...3333.../....333....",
+"p|11|8|0|0|12346|3P44622P266/.4P6..216./.4466.3166./1111666262/.113333326./...3133.../.....1.....",
+"c|22|17|0|0|123456|11116111211/..115115../..3115366../3335566662/.365543316./.33233366./...23333.../...5444...",
+"s|25|14|1600|1|12356|66122122166/1112..2111/55.66666.55/5..6666..5/2556...6552/2...55...2/.333555333./1.111111.1/12211211221",
+"c|24|21|0|1|123456|11112556653/4362555666/43125555265/5434522265/15411622265/5116632264/13162232644/6164444444/61564442364",
+"p|25|22|0|1|12356|P561P33P655/55.333P.55/2.22.5.22.2/2.22..22.2/.26.131.62./.23.33.32./51.16.61.15/16.1111.61/3.66.1.66.3",
+"c|25|19|0|4|12356|26611111662/33.1111.33/1.11.1.11.1/6.32..23.6/.63.222.36./.21.22.12./56.22.22.65/22.2222.22/1.55.2.55.1",
+"c|23|19|0|1|123456|25444221222/2114445222/323.441.266/66..44..33/666.444.324/66..22..42/.55..6..22./33..66..23/.3...1...1.",
+"p|13|12|0|1|123456|553P33P3366/33.1155.66/3.31.1.3P.6/3.11..44.1/.23.222.11./.36.22.56./44.66.24.63/14.6451.66/6.44.5.63.6",
+"s|20|7|1100|0|12456|24526661155/11......11/11.......11/44......45/44.......45/44......54/44445245555/1145222554",
+"c|17|14|0|2|12456|66551215566/6652222566/.652222256./.44655644./..5461645../..521125../...55555.../....55....",
+"p|24|17|0|1|23456|5546P3664P5/..56P26P../..653.356../.333..333./.633...336./633....336/63.......36",
+"c|18|16|0|1|12456|26426662462/2442222442/2.5122215.2/.451..154./166.262.661/.66666666./16666666661",
+"s|26|13|900|4|123456|21255334633/2263235113/.616444411./..624241../...64364.../...4331.../....411....",
+"c|26|18|0|4|123456|.311143361./....11..../....111..../....31..../...52166.../..555515../.266151156./2265311441/66665514315",
+"p|13|11|0|4|12346|46614P41664/.464..4P4./.4P43.3434./6262442626/.666222666./.23333332./...33433.../...1331.../.....3.....",
+"c|19|16|0|4|12356|36661623232/..151662../..1551663../6125226633/66163223336/6611166333/..5156633../..656533../....565....",
+"c|21|15|0|0|123456|55552513266/6.5.66.2.6/6.5..5..1.3/3.1.56.1.3/6.2..6..5.5/6.2.66.1.5/6.2..3..5.5/1.4.66.2.5",
+"p|14|10|0|2|12356|3P33555P333/..355P53../..561516P../3555115553/33566166533/3223113223/..5625265../..665566../....656....",
+"s|19|10|950|4|12346|63366311134/3366611213/111.461.131/11..26..11/313.166.133/31..66..33/.33..4..33.",
+"c|18|15|0|0|23456|53633433635/4333443334/423.454.324/26..44..62/666.454.666/63..55..36/.32..5..23.",
+"p|17|13|0|0|123456|.4P26P66P1./....P6..../....533..../....43..../...21144.../..331444../.114433242./1144434463",
+"c|21|16|0|1|13456|53556533411/.455..334./.5514.5434./1555556415/.151156645./...1116.../.....5.....",
+"s|23|13|1400|2|23456|33362422666/3.622265.6/2.5223654.6/6.5.44.2.6/.64.4.4.24./4543444466/54644443366",
+"c|14|13|0|1|23456|44566366544/5554334555/66644244666/5524224255/66222222266/2244224422/22242224222",
+"p|10|9|0|2|12456|.P56P52255./....5P..../....P44..../....44..../...21646.../..255626../.224555511./4466254111/66224244152",
+"c|12|11|0|1|12346|14444466443/44......33/34.......33/33......33/33.......22/21......22/21.......11/3334211626/33334266261",
+"c|20|17|0|1|12356|36255255263/1.2.22.2.1/1.2..1..2.1/1.2.33.2.1/1.5..3..5.1/2.5.11.5.2/2.5..1..5.2",
+"p|23|19|0|4|123456|13P355P3231/3.3.55.P.3/2.3..5..3.2/2.5.55.5.2/6.5..5..5.6/6.6.22.6.6/6.6..2..6.6/2.6.33.6.2/4.6..4..6.4",
+"s|17|14|1250|4|12346|11122311134/.161..613./.6232.1612./6233243622/.434246626./.44233666./...33334.../...3133.../.....4.....",
+"c|17|13|0|3|123456|65222226433/62......33/66.......13/26......13/33.......22/3334511124/23322412243",
+"p|17|14|0|2|123456|4P566166544/..346643../..13P34P1../4553333554/.346363643./.44433444./...42124.../...2222...",
+"c|15|13|0|0|13456|66336163366/1655555561/.565555565./.45111154./..5513155../..566665../...66666.../....66....",
+"s|23|12|1700|1|12356|53333333335/1523333251/12513531521/1233333321/13635153631/1655555561/56555555565/5555335555/55563236555",
+"c|36|25|0|4|13456|65534443556/6544444456/63164446136/5564334655/11643134611/3664334663/11164646111/1333663331/11331113311",
+"p|17|14|0|2|123456|2415P656P21/44.6P33.2P/4.66.4.34.6/5.66..44.3/.55.565.41./.16.54.41./31.65.44.32/22.5113.63/2.55.1.36.1",
+"c|13|11|0|0|12356|22552222511/..122222../.321236552./3223366622/.326363562./..613655../....566....",
+"c|35|30|0|3|123456|44125352144/3356556533/115.464.511/12..55..21/144.545.441/46..44..64/.66..5..66.",
+"p|15|12|0|0|123456|P5662226655/33......33/P3.......P3/33......33/13.......31/13......31/25435153452/2444114442",
+"s|22|13|1800|2|23456|22255255222/2655225562/552.454.255/36..44..63/333.343.333/33..55..33/.66..4..66./55..66..55/.5...6...5.",
+"c|20|17|0|0|13456|64366111111/44.6616.11/6.46.6.33.1/5.13..63.1/.11.366.11./.14.11.31./55.41.13.14",
+"p|27|24|0|4|123456|33P4222443P/31P5225613/3366666663P/5666446665/32166566123/3223553223/32211511223/6413333146",
+"c|13|12|0|0|12346|12444444421/1244444421/226.222.622/31..22..13/311.666.113/36..66..63/.21..6..12.",
+"s|24|9|1250|4|12345|45422115554/.512..353./.5253.2434./5524344355/.551213355./..511222../....125....",
+"c|32|27|0|3|123456|22221131264/1.2.12.2.6/1.4..5..2.6/1.4.55.5.5/1.4..5..2.2/3.5.15.2.2/1.4..3..2.1/1.4.55.3.4",
+"p|14|11|0|0|13456|1P341514331/13116P1131/.366P61663./336.33.633/.3..1.1..3./634....436/.4444.4444./4444..4444/14111111141",
+"c|23|16|0|1|23456|22223532222/..226622../..5226225../2554664552/.264363462./.44322344./...55655.../...5335...",
+"c|19|12|0|1|13456|11144455555/.154..551./4.1.415.1.4/55..45..13/.553555661./4..5554..6/316..1..666/3.663166.5/36661566111",
+"p|10|9|0|3|23456|6P6664433P6/.56P..333./.5533.P365./5255356663/.242356666./.44444666./...43666.../...4366.../.....6.....",
+"s|23|12|850|3|12346|22243634222/..434434../.623434326./6664444666/.666444666./..666666../....212....",
+"c|33|25|0|2|123456|11161641115/1166115111/14162112133/1163316333/11663263633/6545222343/63542333511/6334663555",
+"p|12|9|0|3|12356|2P253332P66/P5......22/5P.......25/21......22/22.......35/22......55/11251651355/1131112355",
+"c|17|14|0|0|12356|.355333265./....33..../....526..../....66..../...66631.../..326611../.533366112./1133366131/11125511515",
+"s|20|9|1350|1|13456|11114441111/1513443151/44135653144/4353553534/33333133333/3363333633/66333333366",
+"c|26|21|0|1|123456|54322445555/1122644555/.233264555./..661111../...16115.../...1115.../....314....",
+"p|33|20|0|3|12345|42551P155P4/255.11.552/3552P522553/332.55.233/55225352255/355.33.553/33323332333/312.11.213/34532223543",
+"c|31|26|0|1|123456|24255555242/.22155122./.225.6.522./5.335533.5/5.55.5.55.5/55.5..5.55/53.51315.35/3311111133/63514141536",
+"c|20|16|0|2|123456|11265522264/..651213../.536555426./1255544415/.223324544./..533445../....334....",
+"p|17|14|0|3|23456|33662426633/33542P4533/.P55323P52./.24622642./..3444443../..644446../...45454.../...6446.../....343....",
+"s|17|10|1750|1|13456|44444333331/44.1156.31/4.66.5.13.3/4.34..41.3/.43.334.35./.55.11.66./15.15.11.55/15.1114.35",
+"c|24|22|0|0|12356|25511111552/25.5115.52/3.35.1.53.3/3.66..66.3/.33.616.33./.33.11.33./35.66.66.53/65.2332.56/6.66.5.66.6/3.66..66.3",
+"p|21|15|0|2|12456|55445521P52/5P42526162/5P44P551P12/6452656112/22262615555/2261661555/44116655554/4441155146/44464466455",
+"c|21|15|0|3|123456|34545554543/3536666353/33334143333/6656116566/31466666413/1141661411/11111111111/1113113111/11355555311/1125555211",
+"s|20|13|850|1|123456|16166662266/112.46.264/64134445644/266.14.444/26366444644/253.11.665/25661344665/556.66.455",
+"c|34|23|0|3|123456|23126116624/3312316644/33222126456/5223143336/55522225566/5555555255/33524545655/2656611665/22636666662/2236616662",
+"p|13|9|0|2|12345|2P1411P4142/.154..P51./.1P44.4451./3355445533/.555454555./...3333.../.....3.....",
+"c|22|17|0|2|12345|44111311144/4242222424/.445444544./.41422414./..2441442../..443344../...55255.../...5555.../....454....",
+"c|18|15|0|0|13456|44155155144/41.5115.14/4.11.1.11.4/6.36..63.6/.66.111.66./.66.11.66./66.61.16.66",
+"p|17|15|0|0|12346|P331333133P/....P1..../3P.61P16.33/.32.22.23./66114241166/..143341../6.2233322.6/6642332466",
+"s|20|11|900|1|13456|.613565316./....66..../....313..../....66..../...61316.../..641146../.665111566./4661111664",
+"c|15|13|0|0|23456|36223332262/.363..566./.6533.6666./2245444666/.554643666./..544336../....633....",
+"p|15|13|0|0|123456|23P643451P6/..P6324P../.166622P23./1111116613/.166216661./..512166../....256....",
+"c|33|28|0|3|123456|63116521262/6211551163/66111136133/6144113311/66552616451/6655523642/35555532444/6412523555/44511623365",
+"s|16|13|900|0|23456|63554345536/26.3663.62/3.63.6.36.3/3.66..66.3/.62.333.26./.54.33.45./35.66.66.53/43.5555.34/4.55.5.55.4/4.55..55.4",
+"c|14|10|0|3|23456|53444443355/5.4.44.3.5/4.2..4..4.6/4.2.66.4.6/3.2..2..4.6/2.6.36.6.6/5.5..6..6.2/4.6.63.6.2",
+"p|12|9|0|4|12356|55113P31155/5.1.11.1.5/P.1..P..P.6/2.2.66.2.2/2.2..6..2.2/6.2.11.2.6/3.3..1..3.3/3.3.11.3.3",
+"c|19|15|0|2|23456|44524642544/..525525../..432.234../.366..663./.433...334./564....465/25.......52/3........3",
+"c|31|24|0|0|123456|53566426634/2556644644/66426666334/6446164335/54133354236/5133343111/55533443211",
+"p|14|11|0|3|123456|2255P115P55/.2P4..555./.4224.5P54./3226662555/.412566626./5622556535/..3522264../..151114../....116....",
+"s|22|13|1450|2|123456|11154645111/.55.44.55./32553435523/5.52..25.5/56121.12165/2322112232/2.22...22.2/224.66.422/22244644222",
+"c|22|18|0|2|12456|66266566266/6.245542.6/64.25552.46/2555225552/2..44444..2/6611..1166/622.444.226/222....222/.2.1.6.1.2./2225665222",
+"p|21|14|0|2|13456|6341444P41P/.131..P54./.134P.1653./5551166116/.551355613./..111336../....133....",
+"c|23|20|0|2|123456|22111115333/221.55.323/22345553342/314.56.266/11431566266/353.32.666/33353115426/315.11.516/14551333165/455.66.365",
+"s|23|12|850|0|12456|14422222441/..422224../..2225222../6666666666/.665565566./.65544556./...15151.../...5555...",
+"c|20|17|0|1|12346|26624222144/2664413444/444..3..226/4666..4126/46666226663/66.6626.46/66446324111",
+"p|12|11|0|1|12346|4P36P6163P4/4636P66364/62326362326/6446666446/22444244422/6643443466/32162226123/2141221412/22141614122",
+"c|23|18|0|0|12356|65261233666/6226622666/23666621666/3626665233/66116635333/1611633115/16133331212/3555531313/55563326162/5221123222",
+"c|18|14|0|1|12346|12333633321/.234..432./.6243.3426./3631661363/.333111333./...1111.../.....1.....",
+"p|18|14|0|1|12346|P433P42P233/44.3226.31/4.16.P.63.3/6.11..22.3/.26.264.21./.44.66.21./33.44.33.44/32.1363.24/3.11.4.32.4",
+"s|21|13|1200|2|123456|22221224246/25......26/24.......24/41......22/22.......22/2133333211/44164352331",
+"c|26|22|0|0|13456|55455155455/1115555111/111.555.111/61..55..16/341.555.143/35..55..53/.35..5..53./55..55..55",
+"p|17|14|0|4|123456|P3536P63532/.513..315./.1155.551P./6631661366/.661343166./..533335../....333....",
+"c|21|15|0|3|13456|66545554566/6344114436/36111111163/1111111111/66441614466/6554444556/65344444356/6661441666",
+"s|23|21|1500|1|12345|51223532215/51.5555.15/1.12.5.21.1/2.42..24.2/.21.222.12./.15.22.51./12.12.21.21/22.5225.22",
+"c|18|16|0|2|12456|14154442111/11......55/11.......11/66......11/11.......15/44......61/46462552511/1442255551",
+"p|14|9|0|2|12356|P1565656P11/15P1661551/P55.161.5P2/25..66..52/125.313.521/33..33..33/.26..1..62./26..55..62",
+"c|27|23|0|1|123456|33343354466/33.1212.66/3.52.2.22.3/2.22..52.2/.22.211.52./.23.34.52./44.63.15.22/41.3331.26",
+"c|25|16|0|4|12346|32444446661/36.4612.63/6.64.2.33.2/3.66..33.6/.33.444.41./.11.22.21./43.11.32.11/33.1133.13/3.23.3.34.1",
+"p|21|17|0|1|12456|64524P15226/P5.P445.22/5.22.5.62.4/5.22..64.4/.11.544.45./.12.44.24./51.11.12.62/11.1112.66/5.11.2.55.6",
+"s|23|17|1700|1|123456|65523646111/52.5664.11/1.15.6.61.6/1.12..53.6/.54.333.56./.52.32.25./46.56.36.31/63.5446.35/5.66.4.33.2/5.54..23.6",
+"c|26|18|0|3|12356|63225152236/6221111226/.661262166./..612216../...63336.../...6116.../....616....",
+"p|26|23|0|1|123456|2522334P322/34441P5152/4P365662125/4366661265/24355621625/2311122211/22111411611/2116541122/55666511124",
+"c|22|16|0|1|23456|45222222254/4.2.66.2.4/4.6..2..6.4/4.3.22.3.4/6.3..4..3.6/6.3.44.3.6/6.6..5..6.6/5.6.55.6.5/5.6..5..6.5",
+"s|25|11|1250|1|123456|41133112222/45......22/12.......62/64......66/66.......41/5612344244/33326142555",
+"c|23|19|0|3|12356|65122665155/66.6265.22/6.65.6.66.2/6.51..66.2/.63.366.56./.63.66.26./66.35.55.33/12.5555.66",
+"p|12|10|0|0|12356|36P6661P633/636.22.635/162P5555253/665.55.222/55511332222/521.61.225/56235112226/665.11.336/65511311262",
+"c|20|15|0|3|123456|11411111411/1111551111/165.555.561/46..66..64/665.212.566/55..55..55/.62..5..26./43..55..34/.3...1...3./33..11..33",
+"c|24|22|0|0|12456|61552244442/661.42.622/11465211612/166.66.111/21644515111/161.54.564/44515245621/442.15.151/42455541455/444.54.555",
+"p|11|10|0|0|23456|6P3666P6326/.2P4..442./.P446.6445./2536666352/.255565552./...6226.../.....6.....",
+"s|15|11|1200|2|123456|44556665562/4344625543/454.312.333/66..64..53/662.445.562/22..44..43/.22..2..24./12..42..14/.2...4...3./11..44..33",
+"c|19|16|0|4|123456|65553144444/6.5.44.3.3/6.4..4..6.3/2.4.11.1.3/3.3..1..1.2/2.6.12.1.2/1.6..3..1.4/1.1.33.1.1/1.1..3..1.1/1.4.44.3.1",
+"p|20|11|0|3|12345|P2442512P24/P.21311P.2/33.51511.12/3..1551..2/..222.441../512.44.111/.532444211./1322..2251/11522122544",
+"c|19|14|0|0|12356|55566161135/6526611653/.311661665./.11133536./..1136256../..116663../...65511.../...5251.../....235..../....65....",
+"s|23|14|1400|4|123456|11544444511/.562..265./.6112.2116./6352442536/.366444663./..565565../....555....",
+"c|14|13|0|1|12345|32331332222/25......23/22.......11/52......31/55.......11/45......11/21433322111/2345322245",
+"p|20|14|0|2|123456|5P1555P514P/61......16/44.......44/45......54/34.......43/64......46/66.......66/44......44/21115551112/1125555211",
+"c|21|15|0|1|12456|16664446661/5564444655/25664446652/2146666412/22124542122/1114444111/61151515116",
+"c|32|20|0|4|123456|64461166633/4436116533/544.411.631/33..42..63/531.666.442/21..42..64/.11..1..33.",
+"p|18|14|0|0|123456|33P15565511/.55P..343./.5P66.4455./4612142555/.644224335./.13322535./...52442.../...2242.../.....4.....",
+"s|24|12|2100|3|12346|11132223111/1.23..32.1/1.6633366.1/2663333662/46344.44364/4234444324/412.444.214/4111221114",
+"c|26|22|0|2|12456|55516661555/65.6556.56/5.26.5.62.5/5.16..61.5/.25.222.52./.54.22.45./22.66.66.22/22.1111.22/4.51.4.15.4/2.55..55.2",
+"p|19|14|0|2|123456|.P145P541P./....5P..../....53P..../....55..../....111..../...1551.../..1315131../6132442316/66144444166/6634224366",
+"c|25|17|0|1|123456|24546346335/..546465../..545.665../.561..254./.331...342./313....645/16.......44/4........4/4.........4",
+"s|22|15|1200|1|12456|11611611611/14.2662.41/5.66.1.66.5/6.26..62.6/.42.666.24./.42.66.24./44.11.11.44",
+"c|20|18|0|1|12346|41326633333/1366631133/11322214433/3332414444/41333164444/6433111324/22313462224/2232432232",
+"p|20|17|0|0|123456|4224143P43P/225.43.24P/632P14444P2/452.33.145/64536551166/421.65.366/44116644466",
+"c|22|17|0|3|13456|44453166434/..453154../..154.136../.666..335./.556...413./611....666/61.......63/4........5",
+"c|21|17|0|4|13456|66661436151/...4441.../..3434441../.45114444./11511355611/1333355666/.435346366./..545636../...55666.../...1164...",
+"p|18|12|0|1|123456|P3661222P31/3464P225P2/.166334443./.46134433./..4113366../..611321../...33221.../...5422.../....345....",
+"s|21|13|1300|1|123456|44421312444/44.2332.44/2.41.3.14.2/2.12..21.2/.22.444.22./.22.55.22./22.44.44.22/62.4554.26",
+"c|13|12|0|2|123456|11161152235/..115143../..531.445../.211..255./.425...555./342....455/13.......54/5........3/3.........1",
+"p|13|10|0|0|23456|3335P64P366/3526246332/6P5.23P.336/65..33..66/656.232.266/33..44..46/.65..4..44./55..55..55/.5...5...5./54..55..22",
+"c|22|19|0|3|12345|45545554554/15......51/13.......31/23......32/12.......21/2544114452/54445554445",
+"s|23|9|1400|1|12456|66245464416/.111..541./.6111.5266./5252666556/.111166455./.15226465./...26444.../...6615.../.....6.....",
+"c|31|21|0|0|123456|46626662664/3354444533/42364446324/4444..4444/444.252.444/1.6.66.6.1/11622622611",
+"p|14|10|0|1|12356|P315333513P/3.1.55.P.3/1.6..1..6.P/1.6.22.6.1/6.2..1..2.6/6.2.11.2.6/2.2..6..2.2/3.2.11.2.3",
+"c|33|27|0|0|123456|11122222111/31.1221.13/1.15.1.51.1/6.53..35.6/.65.111.56./.14.11.41./52.44.44.25/34.4224.43/3.53.6.35.3",
+"c|21|17|0|0|12456|11666666611/44.5115.44/4.55.1.55.4/4.55..55.4/.42.424.24./.44.55.44./46.15.51.64/22.6556.22/1.66.5.66.1/1.66..66.1",
+"p|18|14|0|4|123456|2P22441352P/..2P61P1../..344.32P../.614..555./.663...551./663....444/14.......46/4........6",
+"s|16|9|1000|4|123456|63255255236/62......26/55.......55/55......55/55.......55/51......15/51.......15/5645445465/55116461155",
+"c|20|15|0|4|12456|65655441266/5555146165/556.444.554/44..64..65/564.444.545/24..42..25/.12..5..46./16..55..66/.6...4...1./66..41..11",
+"p|21|19|0|2|123456|P1556365511/136611663P/55P15P51355/5636116365/14331113341/2322112232/12243134221/1263113621/11133133111",
+"c|21|18|0|2|12346|63466666436/.246..642./.4416.6144./4442222444/.442242244./..322223../....333....",
+"s|17|11|1600|1|12356|11153366551/1.5.63.5.1/6.6..2..5.1/2.1.21.6.1/2.1..5..6.5/5.1.65.5.2/5.1..3..3.1/1.6.33.5.1/1.1..3..5.2",
+"c|21|19|0|0|12356|51665553566/..665511../..255.561../.225..615./.222...266./222....126/32.......36",
+"p|14|10|0|1|123456|511P656P115/...5555.../..4P5553P../.44611644./45633533654/3433553343/.333656333./..655556../...45254.../...5225...",
+"c|13|12|0|1|12345|55444344455/3455225543/.445242544./..551155../...15551.../...4114.../....535....",
+"c|22|18|0|1|23456|45533333554/33......33/34.......43/55......55/33.......33/53......35/55.......55/2225555222/62355555326",
+"p|15|11|0|3|123456|551P6665155/2P3355P312/22P224222P2/6423443246/11124242111/1444224441/14562226541/6655225566/26223532262",
+"s|25|10|1200|1|123456|53354411556/52.4444.45/5.25.3.41.3/4.65..43.3/.55.114.33./.63.16.53./41.33.66.54",
+"c|14|10|0|3|123456|66244444266/6.244442.6/5222.4.2225/.222..222./4..6...6..4/3354..4533/333.414.333/3344444433",
+"p|10|9|0|1|12456|5555P25P666/..454111../..165P216../4155556612/22522242226/5541645522/..4416616../..456141../....615....",
+"c|27|23|0|2|12356|55236263255/12.2222.21/1.11.2.11.1/6.15..51.6/.63.252.36./.35.22.53./21.62.26.12/55.6666.55/6.32.6.23.6/6.22..22.6",
+"s|16|13|850|0|23456|45666346323/..652233../..555.333../.355..363./.362...334./252....333/65.......33/5........5/5.........5",
+"c|17|14|0|4|12346|36666261663/3246621661/.243121266./.44144322./..4422326../..662231../...22633.../....46....",
+"p|14|11|0|1|123456|5P4563P5445/6316666136/P611P211P62/2111111112/42124442124/4114114114/44441614444/4555665554",
+"c|18|15|0|4|123456|11223313121/2223333326/.555433346./.11155354./..3155544../..555514../...11514.../...4225.../....355..../....33....",
+"c|17|11|0|0|123456|11121412111/4122222214/.126222621./.13522531./..3234323../..334433../...13431.../...3443.../....444..../....22....",
+"p|34|29|0|0|123456|2361453114P/P4.55P1.6P/.2611611P6./6661262266/.611.5.666./4226565552/44356665562",
+"s|22|10|1900|3|12345|15333444144/22......11/32.......24/24......52/34.......35/25......22/24.......54/44......33/21122422355/1111422454",
+"c|25|21|0|0|123456|16622333466/..213333../..2222533../1133242442/41123524246/5124432255/..3245522../..354152../....625....",
+"p|33|22|0|0|123456|122P2255241/6.P.25.3.5/P.1..5..2.P/4.5.55.6.3/5.5..5..6.4/5.4.55.6.1/2.5..3..3.3/2.4.33.2.3/2.4..3..2.3/6.2.22.2.3",
+"c|13|10|0|0|123456|.333636333./....22..../....242..../....11..../...55555.../..555555../.445343544./3415445143/35152425153",
+"s|18|11|1650|4|12456|15112255661/4122615261/.446251111./.54512262./..5625552../..662555../...66644.../...6555.../....515....",
+"c|17|12|0|1|12346|33332121112/..324441../..324.441../.331..121./.344...442./344....462/43.......42/4........3/4.........2",
+"p|13|12|0|1|123456|36P3363P363/3341661433/.P5166P15P./.52444425./..1664661../..336633../...56665.../....55....",
+"c|31|25|0|1|123456|45141113542/3336414412/111.222.666/23..22..61/266.612.662/26..63..12/.24..2..33./54..44..43",
+"c|21|14|0|2|12346|13222222231/1.1.22.1.1/1.4..6..4.1/2.3.66.3.2/1.6..6..6.1/1.4.66.4.1/1.4..6..4.1/1.4.66.4.1",
+"p|11|9|0|1|12345|3P422122P23/..123321../..2P2.21P../.543..345./.223...322./112....211/11.......11/1........1",
+"s|16|13|1200|2|123456|26521412562/25.3443.52/2.63.5.36.2/2.64..46.2/.33.414.33./.36.11.63./33.15.51.33/33.3443.33/2.23.2.32.2",
+"c|15|14|0|0|23456|44442446354/..424443../..4243543../5542224423/56445622233/6343662223/..6466624../..666362../....555....",
+"p|19|11|0|1|12346|11116661111/P.1.6P.1.P/3.6..6..6.3/2.2.66.2.2/6.2..4..2.6/6.2.33.2.6/2.2..6..2.2/2.1.66.1.2/6.4..2..4.6",
+"c|25|23|0|0|123456|66211111266/...1111.../..5566655../.32166123./34541614543/2224114222/.212262212./..336633../...35653.../...5115...",
+"s|24|12|1850|0|123456|22262222244/.522..622./.2565.6611./1226365533/.113434334./4116623262/..2155355../..645555../....153....",
+"c|17|14|0|2|123456|66636154555/..331622../..113.426../.555..666./.445...366./443....426/55.......65/1........6/4.........3",
+"p|12|11|0|2|123456|.4P55616P2./....2P..../....223..../...5633.../..6555115../5433551366/22412516656",
+"c|20|16|0|3|123456|.566535665./....11..../....131..../....22..../....656..../...2112.../..2222222../1536226351/13436263431/4442222444",
+"c|20|16|0|1|23456|22222622232/53.2335.33/3.34.3.54.5/3.34..64.2/.65.565.42./.55.55.43./66.33.33.33",
+"p|17|15|0|0|123456|333355P3333/4P.111P.14/4.15.4.51.4/3.55..55.3/.25.444.52./.16.66.61./11.65.56.11/11.5555.11/1.11.5.11.1",
+"s|22|11|1750|1|12356|55623322251/...1522.../..1152236../.23135265./53133326351/2225532235/.523653513./..261353../...33152.../...3311...",
+"c|13|11|0|3|123456|11111411111/23......32/23.......32/12......21/12.......21/22......22/43.......34/55......55/21336363312/2131111312",
+"p|13|9|0|1|12356|66615P13666/655512166P/P25.533.333/22..53..33/122.335.353/26..66..33/.65..6..33./61..26..12/.6...2...3./55..31..33",
+"c|30|24|0|4|123456|55162426155/56......65/55.......55/32......23/65.......56/45......54/11616361611/1366666631",
+"s|16|9|900|2|123456|53166341222/3266524442/533.644.444/22..44..64/322.444.444/42..55..64/.52..2..24.",
+"c|22|17|0|1|123456|13522222531/..553355../..553.355../.312..213./.546...645./554....455/55.......55",
+"p|15|14|0|0|13456|443335634P4/..33463P../.63334P111./3333116141/.553413446./..543344../....411....",
+"c|19|14|0|3|13456|35345554353/3334554333/.336515633./.66655666./..3365633../..334433../...11411.../....33....",
+"c|22|18|0|1|123456|46655222223/1...52...3/1531.5.6236/..1.65.6../53..663..64/5166665153/2.33.3.51.6/2333366114",
+"p|17|13|0|0|12456|144666P64P1/44P1111P44/224.111.42P/41..44..14/445.454.544/45..55..54/.21..4..12./45..44..54/.4...2...4./65..44..56",
+"s|25|21|1300|0|123456|54665256645/.6.5665.6./.326525623./6..4444..6/...54145.../.44....44./44.5...5.44/...5555.../41.21112.14/4116556114",
+"c|25|23|0|0|123456|11132623111/1211111121/666.515.666/66..11..66/231.434.132/21..66..12/.26..3..62./22..44..22/.1...2...1./12..44..21",
+"p|22|19|0|0|123456|P6116P423P2/36......P1/P6.......65/51......56/45.......66/56......13/66333426662/6663363661",
+"c|10|9|0|0|23456|34663336643/4443443444/454.646.454/24..33..42/224.333.422/22..44..22/.26..6..62./44..66..44/.4...6...4.",
+"s|21|12|1500|4|12345|15544444551/322.44.223/34444444443/442.33.244/31113331113/412.44.214/14443334441/141.33.141",
+"c|25|21|0|0|123456|31456465413/5446446445/534.444.435/44..44..44/154.444.451/25..44..52/.65..6..56.",
+"p|27|16|0|3|12456|P442P1624P4/...211P.../..P444445../.42244224./51452425415/1415445141/.225444522./..561165../...61116.../...4114...",
+"c|30|26|0|4|123456|55522322555/55.1551.55/5.11.5.11.5/5.25..52.5/.21.222.12./.51.44.15./65.13.31.56/55.3333.55/5.33.3.33.5",
+"c|34|22|0|1|12345|51223232215/.2.2442.2./...2.1.2.../4.231132.4/53423332435/4523..3254/...24442.../211.33.112/.312232213./3223333223",
+"p|21|14|0|1|123456|P653P443566/25.3443.P2/2.66.P.66.2/1.66..66.1/.14.222.41./.11.55.11./22.55.55.22",
+"s|18|11|1250|2|123456|11333333311/5513333155/.116656611./.12666621./..1634361../..143341../...16661.../....33....",
+"c|27|24|0|0|123456|44142642333/21.2163.63/2.66.6.32.3/4.65..52.6/.41.566.26./.46.55.22./14.15.55.32/45.6655.24/3.66.1.33.4",
+"p|17|12|0|2|123456|11433P33411/P.4.4P.4.1/5.P..3..6.P/1.1.11.1.1/6.5..1..5.6/6.5.22.5.6/6.1..1..1.6/1.5.11.5.1/2.1..4..1.2",
+"c|20|14|0|1|123456|15111511151/11......11/41.......14/44......44/44.......44/24......42/36.......63/15......51/55443234455/3142222413",
+"s|19|14|1750|0|23456|22555555522/2.4.33.4.2/3.4..6..4.3/3.5.66.5.3/2.6..3..6.2/2.5.33.5.2/4.5..4..5.4/4.4.44.4.4/4.4..4..4.4/6.4.66.4.6",
+"c|15|12|0|2|123456|22644411151/12......11/12.......11/14......53/33.......26/33......66/36554322366/3133225352",
+"p|30|18|0|4|12456|1256111P255/25.55P1.24/2.66.1.21.P/2.54..46.5/.22.444.41./.22.26.41./52.61.64.25/22.6164.22/1.26.4.56.6",
+"c|33|23|0|4|12356|23153335132/1555335551/22533533522/3255555523/22263136222/1663333661/15566366551/3521551253/32561516523",
+"c|26|24|0|1|13456|54333633345/45.4664.54/1.64.5.46.1/3.61..16.3/.45.141.54./.45.11.54./14.53.35.41",
+"p|22|16|0|4|123456|61512221P16/61P455411P/.62P32332P./.23133132./..5116115../..664466../...12121.../....66....",
+"s|21|10|1000|3|123456|23322122332/5335555335/.336111633./.33111133./..3441443../..365563../...12121.../....22....",
+"c|17|15|0|2|123456|22511411522/6111441116/11116661111/4341331434/55111611155/4211221124/22132223122",
+"p|12|9|0|4|12345|13P113222P4/...52P3.../..P1353P4../.41121355./44112222454/4422221444/.222222444./..222144../...23522.../...2352...",
+"c|26|23|0|0|12346|41411211414/1641661461/.662444266./.36366363./..4331334../..434434../...61116.../...1221.../....141..../....33....",
+"s|16|9|1050|1|123456|66241614266/64......46/33.......33/54......45/42.......24/42......24/44.......44/4134554314/51333533315",
+"c|35|24|0|0|123456|45622422654/..636636../..4433344../2544444452/.112414211./.11266211./...36663.../...2222...",
+"p|26|24|0|1|123456|4P16655453P/.P56644P3./.653.5.623./6455..6666/6.4.2.5.6.1/2666333325/.25.6.3.53./.2.6612.4./.166252214./5154113444",
+"c|26|23|0|3|123456|54444423554/14.5543.52/6.22.5.51.1/6.21..53.2/.66.225.33./.45.61.33./66.54.33.44/36.4464.41",
+"c|22|18|0|3|123456|66426662466/26......62/62.......26/33......33/62.......26/14......41/21566666512/4156666514",
+"p|11|9|0|4|123456|P4443133622/..P6663P../..6P5.356../.315..354./.516...544./226....124/55.......44",
+"s|19|10|1200|4|23456|42333655336/4345553333/23665553332/3265554235/34355363222/3332643222/34526642255/5345556626/63452566666",
+"c|19|14|0|2|12356|66665335226/.615..222./.3255.3266./3212265266/.255216336./...5112.../.....1.....",
+"p|12|10|0|3|123456|6624666426P/364P662463/246.64P.6P2/22..11..22/452.414.254/22..22..22/.66..2..66.",
+"c|20|15|0|3|123456|13342224331/..542245../..152.251../.644..446./.314...413./514....415/51.......15/2........2/3.........3",
+"s|25|11|1150|3|123456|14236662224/4226643533/446.363.633/46..66..33/443.666.433/24..66..13/.24..6..11.",
+"c|25|22|0|3|12456|11265556211/24......42/61.......16/12......21/66.......66/11......11/11.......11/45......54/54516161545/2261551622",
+"p|41|30|0|4|123456|2P111511P32/263.66.36P/6662P55266P/364.66.463/33255655233/126.66.621/33354245333/246.22.642/24442224442",
+"c|27|19|0|3|12346|64611611646/31......13/31.......13/14......41/11.......11/63......36/26333333362/6433333346",
+"c|19|15|0|1|23456|55522265222/4335564565/243.555.653/35..42..53/432.542.336/64..54..33/.66..4..33./65..55..33",
+"p|20|13|0|1|12345|1144P54P555/.11P..25P./.P111.3514./2331434225/.511122455./5554524444/..2551423../..245333../....551....",
+"s|23|13|1350|4|12456|12466166421/4255555524/422.555.224/46..66..64/446.666.644/51..66..15/.41..1..14./22..44..22",
+"c|25|22|0|0|123456|42114441124/22.4444.22/2.26.4.62.2/2.62..26.2/.66.333.66./.12.55.21./44.25.52.44/45.4114.54/4.55.1.55.4",
+"p|17|10|0|3|123456|.P2422P311./....P2..../....1P2..../....66..../....163..../...6466.../..4666111../4656435616/44663333116/4666553536",
+"c|19|15|0|1|123456|25566121444/22.6612.44/2.11.6.22.1/4.35..32.1/.12.533.21./.12.33.21./22.22.12.44",
+"s|23|16|1450|3|123456|32624453355/3.2.16.3.5/5.6..3..4.6/2.5.11.6.1/2.5..1..4.2/6.4.21.5.5/3.2..6..6.5/3.6.13.6.4/3.6..1..6.2",
+"c|26|21|0|3|123456|21332123312/12......21/32.......23/33......33/16.......61/2253223522/45223532254",
+"p|10|9|0|2|13456|61143P64445/4P633334P6/54P.333.441/63..54..44/333.336.564/56..56..55/.54..5..51./41..54..14",
+"c|29|25|0|1|123456|21362224135/1114226565/.161511655./.11151315./..2551125../..665434../...66641.../...5654.../....666..../....61....",
+"c|22|17|0|3|123456|66233335113/.633..654./.5553.3365./6633313335/.135126333./..332233../....443....",
+"p|14|10|0|3|12456|51544P65546/1161615552/.11222P25P./.12122565./..4446666../..624461../...66661.../...2646.../....124..../....24....",
+"s|23|12|1350|3|123456|55532323555/..566665../..6325236../6663223666/.335424533./.55544555./...51415.../...5555...",
+"c|29|25|0|4|123456|54435553445/4.45..54.4/.556...655./6556..6556/456.131.654/.65522556./24442224442",
+"p|15|14|0|0|12356|115P6566P11/31.6116.13/1.55.2.5P.1/1.51..15.1/.11.515.11./.11.55.11./15.13.31.51/55.2222.55/5.56.2.65.5",
+"c|17|15|0|0|123456|44122222144/..522225../..126.621../.323..323./.536...635./334....433/33.......33/3........3",
+"s|24|11|1000|0|123456|41111111114/3.2.33.2.3/3.2..5..2.3/5.2.22.2.5/2.2..1..2.2/6.3.55.3.6/3.4..5..4.3/4.4.55.4.4",
+"c|17|14|0|4|12345|11122522111/31......13/25.......52/15......51/51.......15/53......35/53.......35/4111221114/44153235144",
+"p|21|12|0|3|13456|6P3366P3431/466.3P.334/4P445P13644/414.41.463/56644544543/363.44.155/44566454355/446.65.416/44133643116/416.15.653",
+"c|15|12|0|0|123456|22445342233/..151324../..315.322../.213..521./.522...566./524....665/55.......35/3........6/4.........1",
+"c|20|18|0|0|123456|13324462542/..346322../..346.326../.343..522./.334...255./255....222/11.......22/1........6/6.........5",
+"p|17|10|0|1|123456|42P25552524/.2P4..452./.31P5.5513./3152222513/.154444451./1555335551/..6666666../..255552../....656....",
+"s|22|13|1250|4|123456|61444444416/.454..454./.6311.1136./2411551142/.265111562./.63166136./...56665.../...6226.../.....2.....",
+"c|25|21|0|0|123456|52242225413/6624452412/.314243322./.15566362./..1461661../..525344../...15554.../...1346.../....554..../....55....",
+"p|25|22|0|3|123456|6P645163P13/66.6P11.31/2.22.3.46.5/5.42..44.5/.64.233.35./.42.55.36./54.46.53.33/32.5553.24/5.32.5.56.3",
+"c|13|11|0|2|12345|44113155441/..143154../..134.424../.332..442./.332...442./225....325/13.......44/5........1/5.........1",
+"s|21|15|1250|3|12345|14442335555/..425441../.543233323./2532223433/.432452113./..224213../....551....",
+"c|13|11|0|2|23456|46663336664/..545545../..255.552../.225..522./.222...222./222....222/22.......22/5........5",
+"p|17|15|0|2|123456|4P4521P5444/P.4.5P.4.1/3.5..5..5.3/3.3.11.3.3/3.3..1..3.3/1.3.66.3.1/6.6..4..6.6/4.2.11.2.4/4.2..2..2.4/6.1.55.1.6",
+"c|31|25|0|2|123456|34433533443/.133..331./.1262.2621./1111441111/.562232265./..323323../....222....",
+"c|21|19|0|0|13456|14556465541/15......51/31.......13/66......66/56.......65/65......56/55115551155/1115115111",
+"p|15|14|0|1|123456|15P242424P1/13422224P1/635.222.536/63..11..36/412.545.214/41..44..14/.44..6..44.",
+"s|17|12|1550|3|123456|11146664111/6..4444..6/36434243463/6153..3516/31.53635.13/.1.6666.1./2..6.6.6..2/2263113622"
 ];
-const LEVELS = CAMPAIGN; // length contract for level-select/addendum
-const BANDS={easy:{par:[5,8],walls:[4,6]},med:{par:[9,13],walls:[6,9]},hard:{par:[14,20],walls:[8,12]}};
+const LEVELS = CAMPAIGN;
 //@@END LEVELS
 
 // ============================================================
@@ -1586,7 +1626,7 @@ function buildLevelSelect(){
   // Chapters of 50 covering EVERY level (the old fixed list stopped at 60 of 500).
   const _N=(typeof LEVELS!=='undefined'?LEVELS:CAMPAIGN).length,_CH=50;
 //@@REGION CHAPTERS
-  const _NAMES=['Chapter 1','Chapter 2','Chapter 3','Chapter 4','Chapter 5','Chapter 6','Chapter 7','Chapter 8','Chapter 9','Chapter 10'];
+  const _NAMES=['First Fizz','Lemon Grove','Pip Meadow','Bubble Brook','Candy Cliffs','Orchard Rise','Lagoon Lights','Cloud Garden','Starfruit Sky','Grand Fizz'];
 //@@END CHAPTERS
   const sections=[];
   for(let s=0;s<_N;s+=_CH){const e=Math.min(_N,s+_CH);sections.push({label:(_NAMES[s/_CH]||('Chapter '+(s/_CH+1)))+' — '+(s+1)+'–'+e,range:[s,e]});}
@@ -1951,169 +1991,614 @@ window.onBackPressed=function(){
 
 // ============================================================
 //@@REGION ENGINE
-// GAME ENGINE
+// GAME ENGINE — Bubble Shooter
 // ============================================================
-// ━━ AFTERIMAGE CORE — ported verbatim from docs/prototypes/ditto.html ━━
-// step()/solve()/gen() are the tested prototype logic. Production layers:
-// banded difficulty, plate-detour filter, hint = first optimal move,
-// campaign seeds (CAMPAIGN), daily weekday ramp.
+// Hex-grid bubble shooter on a DPR canvas. The physics (bsRaycast), the
+// rules (bsResolve), the colour queue (bsDrawCol) and the greedy bot
+// (bsBotPick) are a line-for-line port of scripts/check_bubbleshooter_levels.py
+// — the content gate proves every shipped level clearable by that bot within
+// its shot limit, with the queue the first attempt (and the Daily) deals.
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-const GN=6,DIRS={U:[0,-1],D:[0,1],L:[-1,0],R:[1,0]},DK=['U','D','L','R'],ARROW={U:'↑',D:'↓',L:'←',R:'→'};
-function step(walls,bp,cp,q,dir){
-  const mv=(p,d)=>{if(d==null)return p;const[dx,dy]=DIRS[d];let nx=p[0]+dx,ny=p[1]+dy;if(nx<0||ny<0||nx>=GN||ny>=GN||walls.has(ny*GN+nx))return p;return[nx,ny];};
-  const nb=mv(bp,dir),nc=mv(cp,q[0]);
-  const collide=(nb[0]===nc[0]&&nb[1]===nc[1])||(nb[0]===cp[0]&&nb[1]===cp[1]&&nc[0]===bp[0]&&nc[1]===bp[1]);
-  return{nb,nc,nq:[q[1],dir],collide};
-}
-function solvePath(walls,bs,cs,exit,plate,q0){
-  // BFS over (you, echo, queue) recording the first move of the optimal line.
-  const enc=(b,c,q)=>b+'|'+c+'|'+(q[0]??'n')+'|'+(q[1]??'n');
-  const start=[bs,cs,q0||[null,null]];
-  let frontier=[[start[0],start[1],start[2],null]];
-  const seen=new Set([enc(start[0],start[1],start[2])]);let depth=0;
-  while(frontier.length){depth++;const next=[];
-    for(const[b,c,q,first]of frontier)for(const d of DK){
-      const{nb,nc,nq,collide}=step(walls,b,c,q,d);if(collide)continue;
-      const k=enc(nb,nc,nq);if(seen.has(k))continue;seen.add(k);
-      const f=first||d;
-      if(nb[0]===exit[0]&&nb[1]===exit[1]&&nc[0]===plate[0]&&nc[1]===plate[1])return{depth,first:f};
-      next.push([nb,nc,nq,f]);
-    }
-    frontier=next;if(depth>40)break;
-  }return null;
-}
-function solve(walls,bs,cs,exit,plate){const r=solvePath(walls,bs,cs,exit,plate,null);return r?r.depth:-1;}
-function shortestPath(walls,from,to){
-  const key=p=>p[1]*GN+p[0];const prev=new Map([[key(from),null]]);let frontier=[from];
-  while(frontier.length){const next=[];
-    for(const p of frontier){
-      if(p[0]===to[0]&&p[1]===to[1]){const path=[];let cur=p;while(cur){path.push(cur);cur=prev.get(key(cur));}return path;}
-      for(const d of DK){const[dx,dy]=DIRS[d];const nx=p[0]+dx,ny=p[1]+dy;
-        if(nx<0||ny<0||nx>=GN||ny>=GN||walls.has(ny*GN+nx))continue;
-        if(prev.has(ny*GN+nx))continue;prev.set(ny*GN+nx,p);next.push([nx,ny]);}
-    }frontier=next;}
-  return null;
-}
-function gen(seed,band){
-  const rnd=mulberry32(seed);
-  for(let t=0;t<5000;t++){
-    const walls=new Set();const nW=band.walls[0]+Math.floor(rnd()*(band.walls[1]-band.walls[0]+1));
-    while(walls.size<nW)walls.add(Math.floor(rnd()*GN*GN));
-    const cells=[];for(let i=0;i<GN*GN;i++)if(!walls.has(i))cells.push([i%GN,Math.floor(i/GN)]);
-    const pick=()=>cells[Math.floor(rnd()*cells.length)];
-    const bs=pick(),cs=pick(),exit=pick(),plate=pick();
-    const key=p=>p[0]+','+p[1];
-    if(new Set([bs,cs,exit,plate].map(key)).size<4)continue;
-    const par=solve(walls,bs,cs,exit,plate);
-    if(par<band.par[0]||par>band.par[1])continue;
-    const sp=shortestPath(walls,bs,exit);
-    if(sp&&sp.some(p=>p[0]===plate[0]&&p[1]===plate[1]))continue;
-    return{walls,bs,cs,exit,plate,par};
-  }
-  return null;
-}
 function dayNum(){return Math.floor((Date.now()-Date.UTC(2026,0,1))/864e5);}
-function dailyBand(day){const wd=new Date(Date.UTC(2026,0,1)+day*864e5).getUTCDay();return wd===1||wd===2?BANDS.easy:(wd===0||wd===6?BANDS.hard:BANDS.med);}
-function genDaily(day){
-  const seed=(day*2654435761%2147483647)+1;
-  return gen(seed,dailyBand(day))||gen(seed,{par:[7,22],walls:[4,10]})||gen(seed,{par:[5,40],walls:[4,10]});
+
+// ── geometry (bubble diameter = 1 unit) ──
+const BS_COLS=11,BS_NROWS=13,BS_DEAD=12,BS_RH=Math.sqrt(3)/2,BS_HIT=0.86,BS_HIT2=BS_HIT*BS_HIT;
+const BS_XMIN=0.5,BS_XMAX=10.5,BS_YTOP=0.5,BS_SX=5.5,BS_SY=0.5+12*BS_RH+1.3,BS_MINDY=-0.12,BS_MAXSEG=24,BS_POD=7;
+const BS_N=BS_NROWS*BS_COLS,BS_HU=BS_SY+1.05,BS_NX=BS_SX-2.2,BS_NY=BS_SY+0.22;
+function bsTables(p){
+  const rl=r=>((r+p)&1)?10:11,V=[],X=[],Y=[],NB=[],ROW0=[];
+  for(let i=0;i<BS_N;i++){const r=(i/11)|0,c=i%11;V[i]=c<rl(r);X[i]=(((r+p)&1)?1.0:0.5)+c;Y[i]=0.5+r*BS_RH;}
+  for(let i=0;i<BS_N;i++){
+    NB[i]=[];if(!V[i])continue;const r=(i/11)|0,c=i%11,odd=(r+p)&1;
+    const cand=!odd?[[r,c-1],[r,c+1],[r-1,c-1],[r-1,c],[r+1,c-1],[r+1,c]]:[[r,c-1],[r,c+1],[r-1,c],[r-1,c+1],[r+1,c],[r+1,c+1]];
+    for(const[rr,cc]of cand)if(rr>=0&&rr<BS_NROWS&&cc>=0&&cc<rl(rr))NB[i].push(rr*11+cc);
+  }
+  for(let c=0;c<11;c++)if(V[c])ROW0.push(c);
+  return{p,V,X,Y,NB,ROW0,rl};
+}
+const BS_T=[bsTables(0),bsTables(1)];
+
+// ── level codec: "goal|limit|par|target|k|palette|rows" ──
+function bsDecode(code){
+  const f=code.split('|'),B=new Int8Array(BS_N),rows=f[6].split('/');
+  rows.forEach((line,r)=>{for(let c=0;c<line.length;c++){const ch=line[c];if(ch==='P')B[r*11+c]=BS_POD;else if(ch!=='.')B[r*11+c]=+ch;}});
+  return{g:f[0],limit:+f[1],par:+f[2],target:+f[3],k:+f[4],pal:f[5].split('').map(Number),board:B,rows:rows.length};
+}
+function bsLevelSeed(idx){return((idx+1)*2654435761)%4294967296;}
+function bsRunSeed(idx,k){return(bsLevelSeed(idx)+k*0x9E3779B1)%4294967296;}
+
+// ── physics (port of raycast / aims / landings) ──
+function bsExposed(B,T){
+  const out=[];
+  for(let i=0;i<BS_N;i++){if(!B[i])continue;let e=((i/11)|0)===BS_NROWS-1;if(!e)for(const n of T.NB[i])if(B[n]===0){e=true;break;}if(e)out.push(i);}
+  return out;
+}
+function bsRaycast(B,T,ex,dx,dy){
+  let px=BS_SX,py=BS_SY;const path=[[px,py]];
+  for(let s=0;s<BS_MAXSEG;s++){
+    let tw;if(dx>1e-12)tw=(BS_XMAX-px)/dx;else if(dx<-1e-12)tw=(BS_XMIN-px)/dx;else tw=Infinity;
+    const tc=(BS_YTOP-py)/dy;let tb=Infinity,hb=-1;
+    for(const i of ex){const ox=px-T.X[i],oy=py-T.Y[i],b=dx*ox+dy*oy;if(b>=0)continue;const c=ox*ox+oy*oy-BS_HIT2,disc=b*b-c;if(disc<0)continue;const t=-b-Math.sqrt(disc);if(t<tb){tb=t;hb=i;}}
+    if(tb<=tw&&tb<=tc){
+      const qx=px+dx*tb,qy=py+dy*tb;path.push([qx,qy]);let best=-1,bd=Infinity;
+      for(const n of T.NB[hb])if(B[n]===0){const ex2=T.X[n]-qx,ey=T.Y[n]-qy,d2=ex2*ex2+ey*ey;if(d2<bd){bd=d2;best=n;}}
+      if(best<0||((best/11)|0)>=BS_DEAD)return{cell:-1,path,hit:hb};
+      return{cell:best,path,hit:hb};
+    }
+    if(tc<=tw){
+      const qx=px+dx*tc;path.push([qx,BS_YTOP]);let best=-1,bd=Infinity;
+      for(const n of T.ROW0)if(B[n]===0){const e=T.X[n]-qx,d2=e*e;if(d2<bd){bd=d2;best=n;}}
+      return{cell:best,path,hit:-1};
+    }
+    px=dx>0?BS_XMAX:BS_XMIN;py=py+dy*tw;dx=-dx;path.push([px,py]);
+  }
+  return{cell:-1,path,hit:-1};
+}
+function bsAims(B,T){
+  const out=[];
+  for(let i=0;i<BS_DEAD*11;i++){
+    if(!T.V[i]||B[i])continue;
+    if(i>=11){let any=false;for(const n of T.NB[i])if(B[n]){any=true;break;}if(!any)continue;}
+    const tx=T.X[i],ty=T.Y[i];
+    for(const ax of[tx,2*BS_XMIN-tx,2*BS_XMAX-tx]){const vx=ax-BS_SX,vy=ty-BS_SY,ln=Math.sqrt(vx*vx+vy*vy),ux=vx/ln,uy=vy/ln;if(uy<=BS_MINDY)out.push([ux,uy]);}
+  }
+  return out;
+}
+function bsLandings(B,T){
+  const ex=bsExposed(B,T),res=new Map();
+  for(const[ux,uy]of bsAims(B,T)){const r=bsRaycast(B,T,ex,ux,uy);if(r.cell>=0&&!res.has(r.cell))res.set(r.cell,[ux,uy]);}
+  return res;
 }
 
-// ── state / rendering ──
-let levelIndex=0,L=null,gState=null,gHist=[],gMoves=0,cellPx=0,gapPx=0,gWon=false;
-let firstAttempt=true,levelStarted=false,interstitialCounter=0,isDailyChallenge=false,dailyDay=0;
-const boardEl=document.getElementById('board');
-let youEl,echoEl,plateEl,exitEl;
-function layoutBoard(){
-  const zone=boardEl.parentElement;
-  const maxW=Math.min(window.innerWidth-28,460,Math.floor(window.innerHeight*0.46));
-  cellPx=Math.floor(maxW/GN);gapPx=Math.round(cellPx*0.12);
-  boardEl.style.width=boardEl.style.height=(cellPx*GN)+'px';
+// ── rules (port of cluster / drop_floaters / remove_and_free / resolve) ──
+function bsCluster(B,T,i,col){const seen=new Set([i]),st=[i];while(st.length){const j=st.pop();for(const n of T.NB[j])if(!seen.has(n)&&B[n]===col){seen.add(n);st.push(n);}}return seen;}
+function bsDropFloaters(B,T){
+  const seen=new Set(),st=[];for(const i of T.ROW0)if(B[i]){seen.add(i);st.push(i);}
+  while(st.length){const j=st.pop();for(const n of T.NB[j])if(B[n]&&!seen.has(n)){seen.add(n);st.push(n);}}
+  let nb=0,npod=0;const cells=[];
+  for(let i=0;i<BS_N;i++)if(B[i]&&!seen.has(i)){if(B[i]===BS_POD)npod++;else nb++;cells.push([i,B[i]]);B[i]=0;}
+  return{nb,npod,cells};
 }
-function bpx(c){return c*cellPx+gapPx/2;}
-function buildBoard(){
-  boardEl.innerHTML='';
-  L.walls.forEach(i=>{const x=i%GN,y=Math.floor(i/GN);const w=document.createElement('div');w.className='wallc';
-    w.style.width=w.style.height=(cellPx-gapPx)+'px';w.style.left=bpx(x)+'px';w.style.top=bpx(y)+'px';boardEl.appendChild(w);});
-  exitEl=document.createElement('div');exitEl.className='exitc';
-  exitEl.style.width=exitEl.style.height=(cellPx-gapPx+2)+'px';
-  exitEl.style.left=(bpx(L.exit[0])-1)+'px';exitEl.style.top=(bpx(L.exit[1])-1)+'px';boardEl.appendChild(exitEl);
-  plateEl=document.createElement('div');plateEl.className='platec';
-  plateEl.style.width=plateEl.style.height=(cellPx-gapPx-6)+'px';
-  plateEl.style.left=(bpx(L.plate[0])+3)+'px';plateEl.style.top=(bpx(L.plate[1])+3)+'px';boardEl.appendChild(plateEl);
-  echoEl=mkEnt('echoc');youEl=mkEnt('youc');
+function bsRemoveFree(B,T,removed){
+  let freed=0,nb=0;const gone=[],pips=[];
+  for(const j of removed){if(B[j]===BS_POD){freed++;pips.push(j);}else if(B[j]){nb++;gone.push([j,B[j]]);}B[j]=0;}
+  for(const j of removed)for(const n of T.NB[j])if(B[n]===BS_POD){B[n]=0;freed++;pips.push(n);}
+  return{nb,freed,gone,pips};
 }
-function mkEnt(cls){const d=document.createElement('div');d.className='ent '+cls;
-  d.style.width=d.style.height=(cellPx-gapPx)+'px';boardEl.appendChild(d);return d;}
-function setPos(el,c){const tx=bpx(c[0])+'px',ty=bpx(c[1])+'px';
-  el.style.setProperty('--tx',tx);el.style.setProperty('--ty',ty);el.style.transform='translate('+tx+','+ty+')';}
-function dropTrail(c){
-  const t=document.createElement('div');t.className='trail';
-  t.style.width=t.style.height=(cellPx-gapPx)+'px';
-  t.style.left=bpx(c[0])+'px';t.style.top=bpx(c[1])+'px';
-  boardEl.appendChild(t);
-  setTimeout(()=>{t.style.opacity='0';},60);setTimeout(()=>{t.remove();},620);
+function bsResolve(B,T,i,col){
+  B[i]=col;const cl=bsCluster(B,T,i,col);
+  if(cl.size<3)return{popped:0,dropped:0,pips:0,gone:[],pipCells:[],drops:[]};
+  const rf=bsRemoveFree(B,T,cl),dr=bsDropFloaters(B,T);
+  return{popped:rf.nb,dropped:dr.nb,pips:rf.freed+dr.npod,gone:rf.gone,pipCells:rf.pips.concat(dr.cells.filter(c=>c[1]===BS_POD).map(c=>c[0])),drops:dr.cells};
 }
-function renderGame(){
-  setPos(youEl,gState.b);setPos(echoEl,gState.c);
-  const held=gState.c[0]===L.plate[0]&&gState.c[1]===L.plate[1];
-  plateEl.classList.toggle('held',held);
-  exitEl.classList.toggle('armed',held);
-  document.getElementById('hud-moves').textContent=gMoves;
-  document.getElementById('hud-par').textContent=L.par;
-  const q0=document.getElementById('q0'),q1=document.getElementById('q1');
-  q0.textContent=gState.q[0]?ARROW[gState.q[0]]:'·';q0.className='q'+(gState.q[0]?'':' empty');
-  q1.textContent=gState.q[1]?ARROW[gState.q[1]]:'·';q1.className='q'+(gState.q[1]?'':' empty');
-  clearHintGlow();
+function bsPoints(popped,dropped,pips,combo){const base=10*popped+20*dropped+100*pips;return Math.floor(base*(Math.min(combo,5)+1)/2);}
+function bsColoursOn(B){const s=new Set();for(let i=0;i<BS_N;i++){const v=B[i];if(v>0&&v<BS_POD)s.add(v);}return[...s].sort((a,b)=>a-b);}
+function bsDrawCol(rnd,B){const p=bsColoursOn(B);if(!p.length)return 1;return p[Math.floor(rnd()*p.length)];}
+function bsPodsOn(B){let n=0;for(let i=0;i<BS_N;i++)if(B[i]===BS_POD)n++;return n;}
+function bsCount(B){let n=0;for(let i=0;i<BS_N;i++)if(B[i])n++;return n;}
+function bsGoalMet(g,B,score,target){if(!bsCount(B))return true;if(g==='p')return bsPodsOn(B)===0;if(g==='s')return score>=target;return false;}
+
+// ── greedy bot (port of evaluate / bot_pick) — runtime_win + screenshots ──
+function bsEval(B,T,cell,col,g){
+  const cl=bsCluster(B,T,cell,col),row=(cell/11)|0;
+  if(cl.size<3){let v=-1.0-0.06*row;if(cl.size===2)v+=0.45;return v;}
+  const b=B.slice(),r=bsResolve(b,T,cell,col);
+  let v=r.popped+1.6*r.dropped+(g==='p'?9.0:1.0)*r.pips;
+  if(!bsCount(b))v+=50;
+  if(g==='p'&&r.pips===0){let k=0;for(let j=0;j<BS_N;j++)if(b[j]===BS_POD&&T.NB[j].some(n=>b[n]===0))k++;v+=0.6*k;}
+  return v;
 }
-function loadLevel(idx){
-  levelIndex=idx;isDailyChallenge=false;isEndless=false;
-  const row=CAMPAIGN[idx];
-  L=gen(row.seed,BANDS[row.band]);
-  if(!L){_showMsg('Level failed to generate');return;}
-  gState={b:L.bs.slice(),c:L.cs.slice(),q:[null,null]};gHist=[];gMoves=0;gWon=false;
-  firstAttempt=true;levelStarted=true;
-  document.getElementById('hdr-level').textContent='Level '+(idx+1);
-  layoutBoard();buildBoard();renderGame();updateAllUI();
-  save.lastLevelProgress={level:idx+1};persist(); // display-numbered for the shim's Continue label
-  maybeShowTutorial();
+function bsBotPick(B,T,cur,nxt,g){
+  const lands=bsLandings(B,T),opts=[[cur,false]];if(nxt!==cur)opts.push([nxt,true]);let best=null;
+  for(const[cell,dir]of lands)for(const[col,sw]of opts){const v=bsEval(B,T,cell,col,g);if(best===null||v>best.v)best={cell,swap:sw,v,dir};}
+  return best;
 }
-window.addEventListener('resize',()=>{if(L){layoutBoard();buildBoard();renderGame();}});
-function moveDir(d){
-  if(!L||gWon||document.querySelector('.overlay.show'))return;
-  const r=step(L.walls,gState.b,gState.c,gState.q,d);
-  if(r.collide){
-    youEl.classList.add('shake');echoEl.classList.add('shake');
-    setTimeout(()=>{youEl.classList.remove('shake');echoEl.classList.remove('shake');},320);
-    playError();_showMsg("You and the echo can't overlap.");return;
+// Fireball: flies straight (bouncing off walls) to the ceiling and burns
+// every bubble it passes within contact distance.
+function bsFirePath(B,T,dx,dy){
+  let px=BS_SX,py=BS_SY;const path=[[px,py]],burn=[],seen=new Set();let travelled=0;
+  for(let s=0;s<BS_MAXSEG;s++){
+    let tw;if(dx>1e-12)tw=(BS_XMAX-px)/dx;else if(dx<-1e-12)tw=(BS_XMIN-px)/dx;else tw=Infinity;
+    const tc=(BS_YTOP-py)/dy,t1=Math.min(tw,tc);
+    for(let i=0;i<BS_N;i++){if(!B[i]||seen.has(i))continue;const ox=T.X[i]-px,oy=T.Y[i]-py;let t=ox*dx+oy*dy;if(t<0||t>t1+0.4)continue;const qx=px+dx*t-T.X[i],qy=py+dy*t-T.Y[i];if(qx*qx+qy*qy<=BS_HIT2){seen.add(i);burn.push([i,travelled+t]);}}
+    if(tc<=tw){path.push([px+dx*tc,BS_YTOP]);break;}
+    travelled+=tw;px=dx>0?BS_XMAX:BS_XMIN;py=py+dy*tw;dx=-dx;path.push([px,py]);
   }
-  gHist.push({b:gState.b.slice(),c:gState.c.slice(),q:gState.q.slice()});
-  if(r.nc[0]!==gState.c[0]||r.nc[1]!==gState.c[1])dropTrail(gState.c);
-  gState.b=r.nb;gState.c=r.nc;gState.q=r.nq;gMoves++;
-  playMove();renderGame();
-  if(r.nb[0]===L.exit[0]&&r.nb[1]===L.exit[1]&&r.nc[0]===L.plate[0]&&r.nc[1]===L.plate[1])winLevel();
+  burn.sort((a,b)=>a[1]-b[1]);
+  return{path,burn};
 }
-function undoMove(){
-  if(!gHist.length)return;
-  const p=gHist.pop();gState.b=p.b;gState.c=p.c;gState.q=p.q;gMoves=Math.max(0,gMoves-1);renderGame();
+function bsFireValue(B,T,dx,dy,g){
+  const fp=bsFirePath(B,T,dx,dy),b=B.slice(),rf=bsRemoveFree(b,T,fp.burn.map(x=>x[0])),dr=bsDropFloaters(b,T);
+  return rf.nb+1.6*dr.nb+(g==='p'?9:1)*(rf.freed+dr.npod)+(bsCount(b)?0:50);
 }
-function resetLevel(){
+function bsBestFire(){
+  const T=bsT();let best=null;
+  for(const d of bsAims(gB,T)){const v=bsFireValue(gB,T,d[0],d[1],L.g);if(!best||v>best.v)best={v,d};}
+  return best;
+}
+
+// ── state ──
+let levelIndex=0,L=null,gWon=false,levelStarted=false,interstitialCounter=0,isDailyChallenge=false,isEndless=false,dailyDay=0;
+let gB=new Int8Array(BS_N),gPar0=0,gRng=null,gCur=1,gNxt=2,gShots=0,gLimit=0,gScore=0,gCombo=0,gPodsTotal=0,gCont=0,gLost=false;
+let gBusy=false,gBoost=null,gBoostPaid=false,gAim=null,gAimOn=false,gSwapPend=null,gBall=null,gFx=[],gWob=new Map(),gShake=0,gBanner=null;
+let gMiss=0,gWave=1,gEndPal=[1,2,3,4],gEndCont=0,gMaxCombo=0,bsInstant=false,gHintLine=null;
+const BS_ENDLESS_MISS=5;
+function bsT(){return BS_T[gPar0];}
+const boardEl=document.getElementById('board');
+const bsView=document.getElementById('bs-view');
+const bsCtx=boardEl.getContext('2d');
+let bsD=30,bsDpr=1,bsSpr={},bsSprKey='',bsCol={};
+const BS_REDUCED=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+(function initSave(){
+  if(save.bsInit!==1){save.bsInit=1;save.hintCount=(save.hintCount|0)+2;save.bsBombs=(save.bsBombs|0)+1;save.bsRainbows=(save.bsRainbows|0)+1;}
+  if(save.hapticsEnabled===undefined)save.hapticsEnabled=true;
+  if(!save.bsTries||typeof save.bsTries!=='object')save.bsTries={};
+  ['bsBombs','bsRainbows','bsEndlessBest','bsPips','bsPopped','bsBestCombo','bsThree'].forEach(k=>{if(typeof save[k]!=='number')save[k]=0;});
+  try{persist();}catch(e){}
+})();
+
+// ── level start ──
+function bsStart(o){
+  gB=Int8Array.from(o.board);gPar0=o.par0||0;gRng=mulberry32(o.seed);
+  gCur=bsDrawCol(gRng,gB);gNxt=bsDrawCol(gRng,gB);
+  gShots=0;gLimit=o.limit||0;gScore=0;gCombo=0;gCont=0;gLost=false;gWon=false;gBusy=false;gBall=null;gFx=[];gWob.clear();
+  gAim=null;gAimOn=false;gSwapPend=null;gMiss=0;gMaxCombo=0;gHintLine=null;
+  if(gBoost){bsRefundBoost();}
+  gPodsTotal=bsPodsOn(gB);levelStarted=true;
+  ['overlay-bs-lost','overlay-bs-over','overlay-bs-restart','overlay-bs-boost'].forEach(id=>{const e=document.getElementById(id);if(e)e.classList.remove('show');});
+  bsLayout();bsHud();bsShowBanner();bsKick();
+}
+function bsBannerText(){
+  if(!L)return'';
+  if(isEndless)return'Endless · a new row every '+BS_ENDLESS_MISS+' misses';
+  const s=' · '+gLimit+' bubbles';
+  if(L.g==='p')return'Free '+gPodsTotal+' Pip'+(gPodsTotal>1?'s':'')+s;
+  if(L.g==='s')return'Score '+L.target.toLocaleString()+s;
+  return'Clear the board'+s;
+}
+function bsShowBanner(){gBanner={t0:performance.now(),text:bsBannerText()};}
+function loadLevel(idx){
+  idx=Math.max(0,Math.min(CAMPAIGN.length-1,idx|0));
+  levelIndex=idx;isDailyChallenge=false;isEndless=false;
+  L=bsDecode(CAMPAIGN[idx]);L.mode='camp';L.mirror=false;L.perm=[1,2,3,4,5,6];
+  const tries=save.bsTries[idx]|0;save.bsTries[idx]=tries+1;
+  L.seed=bsRunSeed(idx,L.k+tries);
+  document.getElementById('hdr-level').textContent='Level '+(idx+1);
+  bsStart({board:L.board,seed:L.seed,limit:L.limit});
+  updateAllUI();
+  save.lastLevelProgress={level:idx+1};persist();
+  maybeShowTutorial();
+  if(idx===3||idx===6)bsCoach(idx===3?'New goal: pop the bubbles around a Pip to set it free!':'New goal: reach the target score before you run out of bubbles.',3600);
+}
+function isLevelComplete(){return gWon||!levelStarted;}
+
+// ── layout + colours ──
+function bsLayout(){
+  if(!bsView)return;
+  const w=bsView.clientWidth,h=bsView.clientHeight;if(w<20||h<20)return;
+  const D=Math.max(14,Math.min(w/11,h/BS_HU));bsD=D;bsDpr=Math.min(3,window.devicePixelRatio||1);
+  boardEl.style.width=Math.round(11*D)+'px';boardEl.style.height=Math.round(BS_HU*D)+'px';
+  boardEl.width=Math.round(11*D*bsDpr);boardEl.height=Math.round(BS_HU*D*bsDpr);
+  bsSprKey='';bsKick();
+}
+window.addEventListener('resize',()=>{if(L)bsLayout();});
+function bsHex(v,fb){v=(v||'').trim();if(/^#[0-9a-f]{6}$/i.test(v))return v;if(/^#[0-9a-f]{3}$/i.test(v))return'#'+v[1]+v[1]+v[2]+v[2]+v[3]+v[3];return fb;}
+function bsMix(h,m,t){const a=parseInt(h.slice(1),16),b=parseInt(m.slice(1),16);const r=Math.round(((a>>16)&255)*(1-t)+((b>>16)&255)*t),g=Math.round(((a>>8)&255)*(1-t)+((b>>8)&255)*t),bl=Math.round((a&255)*(1-t)+(b&255)*t);return'#'+((1<<24)|(r<<16)|(g<<8)|bl).toString(16).slice(1);}
+function bsLum(h){const a=parseInt(h.slice(1),16),f=v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);};return 0.2126*f((a>>16)&255)+0.7152*f((a>>8)&255)+0.0722*f(a&255);}
+function bsReadColors(){
+  const cs=getComputedStyle(document.body),g=k=>cs.getPropertyValue('--'+k);
+  const fb=['#e8434f','#f2bd12','#2fa858','#2d7fe6','#9a55e0','#f5832a'];
+  const c={};for(let i=1;i<=6;i++)c[i]=bsHex(g('b'+i),fb[i-1]);
+  c.board=bsHex(g('board-bg'),'#f7fbe9');c.edge=bsHex(g('board-edge'),'#c3d98d');c.aim=bsHex(g('aim'),'#2160cc');
+  c.ink=bsLum(c.board)<0.36?'#f4f1ea':'#1c2710';c.pip=bsHex(g('pip'),'#fff1d2');c.pipInk=bsHex(g('pip-ink'),'#3b2a1c');c.danger=bsHex(g('danger'),'#e2571f');c.text=bsHex(g('text'),'#1c2710');
+  return c;
+}
+const BS_SYM=['','●','▲','■','◆','★','♥'];
+function bsPaintBubble(x,cx,cy,r,hex,sym){
+  const g=x.createRadialGradient(cx-r*0.34,cy-r*0.4,r*0.08,cx,cy,r);
+  g.addColorStop(0,bsMix(hex,'#ffffff',0.58));g.addColorStop(0.42,hex);g.addColorStop(1,bsMix(hex,'#000000',0.3));
+  x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.fillStyle=g;x.fill();
+  x.lineWidth=r*0.07;x.strokeStyle=bsMix(hex,'#000000',0.42);x.globalAlpha=0.55;x.stroke();x.globalAlpha=1;
+  x.beginPath();x.ellipse(cx-r*0.3,cy-r*0.4,r*0.27,r*0.15,-0.62,0,Math.PI*2);x.fillStyle='rgba(255,255,255,0.72)';x.fill();
+  x.beginPath();x.arc(cx+r*0.38,cy+r*0.3,r*0.09,0,Math.PI*2);x.fillStyle='rgba(255,255,255,0.32)';x.fill();
+  if(sym){x.fillStyle=bsMix(hex,'#000000',0.5);x.globalAlpha=0.55;x.font='800 '+(r*0.9)+'px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(sym,cx,cy+r*0.06);x.globalAlpha=1;}
+}
+function bsPaintPip(x,cx,cy,r,c,blink){
+  // glass pod
+  const g=x.createRadialGradient(cx-r*0.3,cy-r*0.35,r*0.1,cx,cy,r);
+  g.addColorStop(0,'rgba(255,255,255,0.85)');g.addColorStop(0.7,bsMix(c.edge,'#ffffff',0.55));g.addColorStop(1,c.edge);
+  x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.fillStyle=g;x.fill();
+  x.lineWidth=r*0.07;x.strokeStyle=bsMix(c.edge,'#000000',0.35);x.stroke();
+  // the Pip: round fluffy body, two ears, eyes, cheeks
+  const br=r*0.5,by=cy+r*0.1;
+  x.fillStyle=c.pip;x.strokeStyle=c.pipInk;x.lineWidth=r*0.06;
+  [[-0.32,-0.36],[0.32,-0.36]].forEach(e=>{x.beginPath();x.arc(cx+e[0]*r,by+e[1]*r,r*0.16,0,Math.PI*2);x.fill();x.stroke();});
+  x.beginPath();x.arc(cx,by,br,0,Math.PI*2);x.fill();x.stroke();
+  x.fillStyle=c.pipInk;
+  if(blink){x.fillRect(cx-r*0.27,by-r*0.06,r*0.16,r*0.04);x.fillRect(cx+r*0.11,by-r*0.06,r*0.16,r*0.04);}
+  else{x.beginPath();x.arc(cx-r*0.19,by-r*0.04,r*0.075,0,Math.PI*2);x.arc(cx+r*0.19,by-r*0.04,r*0.075,0,Math.PI*2);x.fill();}
+  x.fillStyle='#f28d9a';x.globalAlpha=0.7;x.beginPath();x.arc(cx-r*0.32,by+r*0.13,r*0.08,0,Math.PI*2);x.arc(cx+r*0.32,by+r*0.13,r*0.08,0,Math.PI*2);x.fill();x.globalAlpha=1;
+  x.beginPath();x.ellipse(cx-r*0.32,cy-r*0.5,r*0.22,r*0.11,-0.6,0,Math.PI*2);x.fillStyle='rgba(255,255,255,0.75)';x.fill();
+}
+function bsSprites(){
+  const c=bsReadColors(),key=bsD+'|'+bsDpr+'|'+JSON.stringify(c)+'|'+(save.bsSymbols?1:0);
+  if(key===bsSprKey)return;bsSprKey=key;bsCol=c;bsSpr={};
+  const px=Math.ceil(bsD*bsDpr)+2;
+  const mk=fn=>{const cv=document.createElement('canvas');cv.width=cv.height=px;const x=cv.getContext('2d');fn(x,px/2,px/2,px/2-1);return cv;};
+  for(let i=1;i<=6;i++)bsSpr[i]=mk((x,cx,cy,r)=>bsPaintBubble(x,cx,cy,r*0.985,c[i],save.bsSymbols?BS_SYM[i]:''));
+  bsSpr.pod=mk((x,cx,cy,r)=>bsPaintPip(x,cx,cy,r*0.985,c,false));
+  bsSpr.podBlink=mk((x,cx,cy,r)=>bsPaintPip(x,cx,cy,r*0.985,c,true));
+}
+function drawBoard(){bsSprKey='';bsKick();}
+function bsRole(v){return(v>0&&v<BS_POD&&L&&L.perm)?L.perm[v-1]:v;}
+
+// ── rendering ──
+let bsRAF=0,bsLastDraw=0;
+function bsKick(){if(!bsRAF)bsRAF=requestAnimationFrame(bsFrame);}
+function bsGameVisible(){const s=document.getElementById('screen-game');return s&&s.classList.contains('active')&&!document.hidden;}
+function bsFrame(now){
+  bsRAF=0;
+  if(!L||!bsGameVisible())return;
+  const busy=gBall||gFx.length||gAimOn||gWob.size||gShake>now||(gBanner&&now-gBanner.t0<2600)||gHintLine;
+  if(busy||now-bsLastDraw>66){bsLastDraw=now;bsRender(now);}
+  bsRAF=requestAnimationFrame(bsFrame);
+}
+function bsBoardT(x,k){if(L&&L.mirror)x.setTransform(-k,0,0,k,11*k,0);else x.setTransform(k,0,0,k,0,0);}
+function bsSX(v){return(L&&L.mirror)?11-v:v;}
+function bsRender(now){
+  if(!boardEl.width)bsLayout();
+  bsSprites();
+  const x=bsCtx,k=bsD*bsDpr,c=bsCol,T=bsT(),W=boardEl.width,H=boardEl.height;
+  x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,W,H);
+  let sh=0;if(gShake>now&&!BS_REDUCED)sh=Math.sin(now/22)*0.07*((gShake-now)/260);
+  bsBoardT(x,k);x.translate(sh,0);
+  // board panel
+  const bg=x.createLinearGradient(0,0,0,BS_HU);bg.addColorStop(0,bsMix(c.board,'#ffffff',0.35));bg.addColorStop(1,c.board);
+  x.fillStyle=bg;x.beginPath();x.roundRect?x.roundRect(0,0,11,BS_HU,0.42):x.rect(0,0,11,BS_HU);x.fill();
+  x.lineWidth=0.06;x.strokeStyle=c.edge;x.stroke();
+  // ceiling rail
+  x.fillStyle=c.edge;x.fillRect(0,0,11,0.12);
+  // danger line (brighter when bubbles near)
+  let low=0;for(let i=0;i<BS_N;i++)if(gB[i])low=Math.max(low,(i/11)|0);
+  const ly=0.5+11.5*BS_RH;x.save();x.setLineDash([0.22,0.18]);x.lineWidth=0.05;x.strokeStyle=c.danger;x.globalAlpha=low>=10?0.85:(low>=8?0.45:0.22);
+  x.beginPath();x.moveTo(0.15,ly);x.lineTo(10.85,ly);x.stroke();x.restore();
+  // bubbles
+  const blink=Math.floor(now/170)%23===0;
+  for(let i=0;i<BS_N;i++){
+    const v=gB[i];if(!v)continue;let px=T.X[i],py=T.Y[i];
+    const w=gWob.get(i);if(w){const t=(now-w.t0)/1000;if(t>0.45)gWob.delete(i);else{const a=Math.exp(-t*9)*Math.sin(t*38)*0.07;px+=w.dx*a;py+=w.dy*a;}}
+    if(v===BS_POD){const bob=BS_REDUCED?0:Math.sin(now/420+i)*0.025;x.drawImage(blink?bsSpr.podBlink:bsSpr.pod,px-0.5,py-0.5+bob,1,1);}
+    else x.drawImage(bsSpr[bsRole(v)],px-0.5,py-0.5,1,1);
+  }
+  // aim line + ghost
+  if(gAimOn&&gAim&&!gBall)bsDrawAim(x,now);
+  else if(gHintLine&&!gBall)bsDrawAim(x,now,gHintLine);
+  // ball in flight
+  if(gBall)bsDrawBall(x,now);
+  // effects
+  bsDrawFx(x,now);
+  // launcher
+  bsDrawLauncher(x,now);
+  // banner (unmirrored text)
+  if(gBanner){const t=now-gBanner.t0;if(t>2600)gBanner=null;else{
+    const a=t<250?t/250:(t>2100?(2600-t)/500:1);x.setTransform(k,0,0,k,0,0);x.globalAlpha=a*0.94;
+    x.fillStyle=c.ink;const yy=BS_SY-3.2;x.beginPath();x.roundRect?x.roundRect(1.2,yy-0.55,8.6,1.1,0.55):x.rect(1.2,yy-0.55,8.6,1.1);x.fill();
+    x.fillStyle=c.board;x.font='700 0.46px Poppins, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(gBanner.text,5.5,yy+0.02);x.globalAlpha=1;}}
+}
+function bsAimPath(dir){
+  const T=bsT(),ex=bsExposed(gB,T);
+  if(gBoost==='fire'){const fp=bsFirePath(gB,T,dir[0],dir[1]);return{path:fp.path,cell:-2,burn:fp.burn};}
+  return bsRaycast(gB,T,ex,dir[0],dir[1]);
+}
+function bsDrawAim(x,now,dirOverride){
+  const dir=dirOverride||gAim,r=bsAimPath(dir),T=bsT(),c=bsCol;
+  // show the path through ONE wall bounce
+  const pts=r.path.slice(0,3);const full=r.path.length<=3;
+  let segs=[];for(let i=0;i+1<pts.length;i++)segs.push([pts[i],pts[i+1]]);
+  const col=gBoost==='fire'?'#ff7a1a':(gBoost==='bomb'?c.ink:(gBoost==='rainbow'?c.aim:c[bsRole(gCur)]));
+  let off=BS_REDUCED?0:((now/1000)*1.1)%0.42,acc=0;x.fillStyle=col;
+  segs.forEach((s,si)=>{const dx=s[1][0]-s[0][0],dy=s[1][1]-s[0][1],len=Math.hypot(dx,dy);
+    for(let d=(0.42-((acc-off)%0.42+0.42)%0.42);d<len;d+=0.42){const tt=(acc+d);if(tt<0.65)continue;const fade=full||si===0?1:Math.max(0.15,1-d/len);
+      x.globalAlpha=0.85*fade;x.beginPath();x.arc(s[0][0]+dx*d/len,s[0][1]+dy*d/len,0.085,0,Math.PI*2);x.fill();}
+    acc+=len;});
+  x.globalAlpha=1;
+  if(gBoost==='fire'&&r.burn){x.strokeStyle='#ff7a1a';x.lineWidth=0.07;r.burn.forEach(b=>{x.beginPath();x.arc(T.X[b[0]],T.Y[b[0]],0.47,0,Math.PI*2);x.stroke();});return;}
+  if(!full)return;
+  if(r.cell>=0){
+    const gx=T.X[r.cell],gy=T.Y[r.cell];x.globalAlpha=0.45;
+    if(gBoost==='bomb'){x.strokeStyle=c.danger;x.lineWidth=0.06;x.setLineDash([0.15,0.12]);x.beginPath();x.arc(gx,gy,2.05,0,Math.PI*2);x.stroke();x.setLineDash([]);}
+    x.beginPath();x.arc(gx,gy,0.46,0,Math.PI*2);x.strokeStyle=col;x.lineWidth=0.08;x.stroke();x.globalAlpha=1;
+  }else if(r.cell===-1){const e=r.path[r.path.length-1];x.strokeStyle=c.danger;x.lineWidth=0.09;x.beginPath();x.moveTo(e[0]-0.25,e[1]-0.25);x.lineTo(e[0]+0.25,e[1]+0.25);x.moveTo(e[0]+0.25,e[1]-0.25);x.lineTo(e[0]-0.25,e[1]+0.25);x.stroke();}
+}
+function bsBoostSprite(x,kind,cx,cy,r,now){
+  if(kind==='fire'){const g=x.createRadialGradient(cx,cy,r*0.1,cx,cy,r);g.addColorStop(0,'#fff3b0');g.addColorStop(0.45,'#ffab2e');g.addColorStop(1,'#e2401c');x.fillStyle=g;x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.fill();
+    x.fillStyle='rgba(255,230,140,0.8)';for(let i=0;i<5;i++){const a=now/180+i*1.256;x.beginPath();x.arc(cx+Math.cos(a)*r*0.55,cy+Math.sin(a)*r*0.55,r*0.12,0,Math.PI*2);x.fill();}return;}
+  if(kind==='bomb'){x.fillStyle='#2b2f36';x.beginPath();x.arc(cx,cy+r*0.08,r*0.86,0,Math.PI*2);x.fill();x.fillStyle='rgba(255,255,255,0.35)';x.beginPath();x.arc(cx-r*0.3,cy-r*0.22,r*0.22,0,Math.PI*2);x.fill();
+    x.strokeStyle='#c9a227';x.lineWidth=r*0.14;x.beginPath();x.moveTo(cx+r*0.3,cy-r*0.55);x.quadraticCurveTo(cx+r*0.55,cy-r*0.95,cx+r*0.85,cy-r*0.8);x.stroke();
+    x.fillStyle=(Math.floor(now/120)%2)?'#ffd23f':'#ff7a1a';x.beginPath();x.arc(cx+r*0.88,cy-r*0.8,r*0.16,0,Math.PI*2);x.fill();return;}
+  if(kind==='rainbow'){const cols=[1,6,2,3,4,5].map(i=>bsCol[i]);for(let i=0;i<6;i++){x.beginPath();x.moveTo(cx,cy);x.arc(cx,cy,r,i*Math.PI/3+now/900,(i+1)*Math.PI/3+now/900);x.closePath();x.fillStyle=cols[i];x.fill();}
+    x.beginPath();x.arc(cx,cy,r*0.42,0,Math.PI*2);x.fillStyle='#ffffff';x.globalAlpha=0.85;x.fill();x.globalAlpha=1;x.fillStyle='rgba(255,255,255,0.6)';x.beginPath();x.ellipse(cx-r*0.3,cy-r*0.4,r*0.25,r*0.14,-0.6,0,Math.PI*2);x.fill();}
+}
+function bsDrawLauncher(x,now){
+  const c=bsCol;
+  // base cradle
+  x.fillStyle=bsMix(c.edge,'#ffffff',0.25);x.beginPath();x.ellipse(BS_SX,BS_SY+0.48,1.05,0.32,0,0,Math.PI*2);x.fill();
+  x.strokeStyle=c.edge;x.lineWidth=0.06;x.beginPath();x.arc(BS_SX,BS_SY,0.66,0.15*Math.PI,0.85*Math.PI);x.stroke();
+  if(!gBall&&!gLost&&!(gWon&&!isEndless)){
+    const pulse=BS_REDUCED?0:Math.sin(now/300)*0.015;
+    if(gBoost)bsBoostSprite(x,gBoost,BS_SX,BS_SY,0.5+pulse,now);
+    else x.drawImage(bsSpr[bsRole(gCur)],BS_SX-0.5-pulse,BS_SY-0.5-pulse,1+2*pulse,1+2*pulse);
+  }
+  // next bubble + swap hint
+  if(!(gWon&&!isEndless)){
+    x.globalAlpha=0.95;x.drawImage(bsSpr[bsRole(gNxt)],BS_NX-0.36,BS_NY-0.36,0.72,0.72);x.globalAlpha=1;
+    x.strokeStyle=c.ink;x.globalAlpha=0.5;x.lineWidth=0.05;x.beginPath();x.arc(BS_NX+0.95,BS_NY-0.18,0.32,Math.PI*1.05,Math.PI*1.85);x.stroke();
+    x.beginPath();x.moveTo(BS_NX+1.25,BS_NY-0.42);x.lineTo(BS_NX+1.24,BS_NY-0.22);x.lineTo(BS_NX+1.05,BS_NY-0.3);x.stroke();x.globalAlpha=1;
+  }
+  // bubbles-left badge (unmirrored text)
+  const k=bsD*bsDpr,bx=bsSX(BS_SX+2.25),by=BS_SY+0.18;
+  x.save();x.setTransform(k,0,0,k,0,0);
+  const left=isEndless?(BS_ENDLESS_MISS-gMiss):Math.max(0,gLimit-gShots);
+  x.fillStyle=(isEndless||left>3)?c.ink:c.danger;x.beginPath();x.arc(bx,by,0.43,0,Math.PI*2);x.fill();
+  x.fillStyle=c.board;x.font='800 '+(left>99?0.34:0.44)+'px Poppins, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(String(left),bx,by+0.02);
+  x.font='700 0.25px Poppins, sans-serif';x.fillStyle=c.ink;x.globalAlpha=0.7;x.fillText(isEndless?'to next row':'bubbles',bx,by+0.68);x.globalAlpha=1;
+  x.restore();
+}
+function bsDrawBall(x,now){
+  const b=gBall,t=Math.min(b.total,(now-b.t0)/1000*b.speed);let acc=0,px=b.path[0][0],py=b.path[0][1];
+  for(let i=0;i+1<b.path.length;i++){const a=b.path[i],e=b.path[i+1],len=Math.hypot(e[0]-a[0],e[1]-a[1]);
+    if(acc+len>=t){const f=len?(t-acc)/len:1;px=a[0]+(e[0]-a[0])*f;py=a[1]+(e[1]-a[1])*f;
+      if(i>b.lastSeg){b.lastSeg=i;if(i>0)bsSfx('bounce');}break;}acc+=len;px=e[0];py=e[1];}
+  if(b.kind==='ball')x.drawImage(bsSpr[bsRole(b.col)],px-0.5,py-0.5,1,1);else bsBoostSprite(x,b.kind,px,py,0.5,now);
+  if(b.kind==='fire'){while(b.burnI<b.burn.length&&b.burn[b.burnI][1]<=t){const i=b.burn[b.burnI][0];bsBurnCell(i,now);b.burnI++;}}
+  if(t>=b.total){gBall=null;b.done();}
+}
+function bsDrawFx(x,now){
+  const T=bsT(),keep=[];
+  for(const f of gFx){
+    const t=(now-f.t0)/1000;if(t<0){keep.push(f);continue;}
+    if(f.type==='pop'){if(t>0.24)continue;keep.push(f);const s=1+t*1.6,a=1-t/0.24;x.globalAlpha=Math.max(0,a);x.drawImage(f.spr,f.x-0.5*s,f.y-0.5*s,s,s);
+      x.strokeStyle=f.hex;x.lineWidth=0.05;x.beginPath();x.arc(f.x,f.y,0.5+t*2.4,0,Math.PI*2);x.stroke();x.globalAlpha=1;
+      if(!f.sounded){f.sounded=true;bsSfx('pop',f.n);}}
+    else if(f.type==='drop'){const y=f.y+f.vy*t+14*t*t,xx=f.x+f.vx*t;if(y>BS_HU+1)continue;keep.push(f);x.globalAlpha=y>BS_SY?Math.max(0,1-(y-BS_SY)/1.2):1;x.drawImage(f.spr,xx-0.5,y-0.5,1,1);x.globalAlpha=1;
+      if(!f.sounded&&y>BS_SY-0.6){f.sounded=true;if(f.n<10)bsSfx('plink',f.n);}}
+    else if(f.type==='spark'){if(t>f.life)continue;keep.push(f);x.globalAlpha=1-t/f.life;x.fillStyle=f.hex;x.beginPath();x.arc(f.x+f.vx*t,f.y+f.vy*t+3*t*t,f.r*(1-t/f.life*0.5),0,Math.PI*2);x.fill();x.globalAlpha=1;}
+    else if(f.type==='pip'){if(t>1.3)continue;keep.push(f);const y=f.y-t*t*7,xx=f.x+Math.sin(t*9)*0.18;x.globalAlpha=Math.max(0,1-t/1.3);x.drawImage(bsSpr.pod,xx-0.5,y-0.5,1,1);
+      x.fillStyle='#f0507a';x.font='0.5px sans-serif';x.textAlign='center';x.fillText('♥',xx+0.5,y-0.4);x.globalAlpha=1;}
+    else if(f.type==='boom'){if(t>0.45)continue;keep.push(f);x.globalAlpha=1-t/0.45;const g=x.createRadialGradient(f.x,f.y,0,f.x,f.y,2.3*(0.4+t*1.6));g.addColorStop(0,'rgba(255,240,170,0.95)');g.addColorStop(0.5,'rgba(255,140,40,0.6)');g.addColorStop(1,'rgba(255,90,30,0)');x.fillStyle=g;x.beginPath();x.arc(f.x,f.y,2.3*(0.4+t*1.6),0,Math.PI*2);x.fill();x.globalAlpha=1;}
+    else if(f.type==='text'){if(t>1.0)continue;keep.push(f);const k=bsD*bsDpr;x.save();x.setTransform(k,0,0,k,0,0);x.globalAlpha=t<0.7?1:(1-(t-0.7)/0.3);
+      x.font='800 '+f.size+'px Poppins, sans-serif';x.textAlign='center';x.textBaseline='middle';x.lineWidth=0.09;x.strokeStyle=bsCol.board;x.strokeText(f.str,bsSX(f.x),f.y-t*0.9);x.fillStyle=f.hex;x.fillText(f.str,bsSX(f.x),f.y-t*0.9);x.restore();}
+  }
+  gFx=keep;
+}
+function bsSparks(xx,yy,hex,n){if(BS_REDUCED)n=Math.min(n,2);for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=1.2+Math.random()*2.4;gFx.push({type:'spark',x:xx,y:yy,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:0.06+Math.random()*0.06,life:0.35+Math.random()*0.25,hex,t0:performance.now()});}}
+function bsText(xx,yy,str,hex,size,delay){gFx.push({type:'text',x:xx,y:yy,str,hex:hex||bsCol.ink,size:size||0.5,t0:performance.now()+(delay||0)});}
+
+// ── input: drag to aim, release to shoot, tap the launcher to swap ──
+function bsLocal(e){const r=boardEl.getBoundingClientRect();let ux=(e.clientX-r.left)/bsD,uy=(e.clientY-r.top)/bsD;if(L&&L.mirror)ux=11-ux;return[ux,uy];}
+function bsBlocked(){return!L||gBall||gBusy||gLost||(gWon&&!isEndless)||!!document.querySelector('.overlay.show');}
+function bsSetAim(p){
+  const vx=p[0]-BS_SX,vy=p[1]-BS_SY;
+  if(vy>-0.55){gAim=null;return;}
+  let ln=Math.hypot(vx,vy),ux=vx/ln,uy=vy/ln;
+  if(uy>BS_MINDY){uy=BS_MINDY;ux=(ux<0?-1:1)*Math.sqrt(1-uy*uy);}
+  gAim=[ux,uy];
+}
+boardEl.addEventListener('pointerdown',e=>{
+  if(bsBlocked())return;e.preventDefault();try{boardEl.setPointerCapture(e.pointerId);}catch(_){}
+  const p=bsLocal(e);gHintLine=null;
+  if(Math.hypot(p[0]-BS_SX,p[1]-BS_SY)<0.8||Math.hypot(p[0]-BS_NX,p[1]-BS_NY)<0.75||Math.hypot(p[0]-(BS_NX+1.1),p[1]-(BS_NY-0.3))<0.45){gSwapPend={p,moved:false};return;}
+  gAimOn=true;bsSetAim(p);bsKick();
+});
+boardEl.addEventListener('pointermove',e=>{
+  if(!gAimOn&&!gSwapPend)return;const p=bsLocal(e);
+  if(gSwapPend){if(Math.hypot(p[0]-gSwapPend.p[0],p[1]-gSwapPend.p[1])>0.7){gSwapPend=null;gAimOn=true;}else return;}
+  bsSetAim(p);bsKick();
+});
+boardEl.addEventListener('pointerup',e=>{
+  if(gSwapPend){gSwapPend=null;bsSwap();return;}
+  if(!gAimOn)return;gAimOn=false;const p=bsLocal(e);bsSetAim(p);
+  if(gAim&&!bsBlocked())bsFire(gAim[0],gAim[1]);else bsKick();
+  gAim=null;
+});
+boardEl.addEventListener('pointercancel',()=>{gAimOn=false;gAim=null;gSwapPend=null;});
+boardEl.addEventListener('contextmenu',e=>e.preventDefault());
+addEventListener('keydown',e=>{
+  if(!document.getElementById('screen-game').classList.contains('active')||bsBlocked())return;
+  if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();const a=gKeyAng+(e.key==='ArrowLeft'?-0.035:0.035);gKeyAng=Math.max(-1.45,Math.min(1.45,a));gAimOn=true;gAim=[Math.sin(gKeyAng),-Math.cos(gKeyAng)];if(gAim[1]>BS_MINDY)gAim=[(gAim[0]<0?-1:1)*Math.sqrt(1-BS_MINDY*BS_MINDY),BS_MINDY];bsKick();}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();const d=gAim||[Math.sin(gKeyAng),-Math.cos(gKeyAng)];gAimOn=false;gAim=null;bsFire(d[0],d[1]);}
+  else if(e.key==='s'||e.key==='S'||e.key==='Tab'){e.preventDefault();bsSwap();}
+});
+let gKeyAng=0;
+function bsSwap(){
+  if(bsBlocked())return;
+  if(gBoost){bsCoach('Swap works on the coloured bubbles — tap the booster again to put it back',2000);return;}
+  if(gCur===gNxt){bsCoach('Both bubbles are the same colour',1400);return;}
+  const t=gCur;gCur=gNxt;gNxt=t;bsSfx('swap');bsBuzz(8);bsKick();
+}
+
+// ── shooting ──
+function bsFire(dx,dy){
+  if(bsBlocked())return;
+  const T=bsT();gHintLine=null;
+  if(gBoost==='fire'){
+    const fp=bsFirePath(gB,T,dx,dy);gBoost=null;gBoostPaid=false;bsSfx('fire');bsBuzz(25);
+    bsLaunch({kind:'fire',path:fp.path,burn:fp.burn,done:()=>bsAfterBoost('fire',null)});return;
+  }
+  const r=bsRaycast(gB,T,bsExposed(gB,T),dx,dy);
+  if(gBoost==='bomb'||gBoost==='rainbow'){
+    const kind=gBoost;gBoost=null;
+    if(kind==='bomb')save.bsBombs=Math.max(0,(save.bsBombs|0)-1);else save.bsRainbows=Math.max(0,(save.bsRainbows|0)-1);persist();
+    bsSfx('shoot');bsLaunch({kind,path:r.path,done:()=>bsAfterBoost(kind,r.cell)});return;
+  }
+  const col=gCur;bsSfx('shoot');bsBuzz(6);
+  bsLaunch({kind:'ball',col,path:r.path,done:()=>bsLand(r.cell,col,r)});
+}
+function bsLaunch(b){
+  let total=0;for(let i=0;i+1<b.path.length;i++)total+=Math.hypot(b.path[i+1][0]-b.path[i][0],b.path[i+1][1]-b.path[i][1]);
+  b.total=total;b.speed=b.kind==='fire'?22:28;b.t0=performance.now();b.lastSeg=0;b.burnI=0;b.burn=b.burn||[];
+  if(bsInstant){gBall=null;if(b.kind==='fire')b.burn.forEach(x=>bsBurnCell(x[0],performance.now()));b.done();return;}
+  gBall=b;gBusy=true;bsKick();
+}
+function bsPopFx(cells,cx,cy,now,stagger){
+  const T=bsT();cells.forEach((c,n)=>{const i=c[0],v=c[1];const d=Math.hypot(T.X[i]-cx,T.Y[i]-cy);const role=bsRole(v);
+    gFx.push({type:'pop',x:T.X[i],y:T.Y[i],spr:bsSpr[role]||bsSpr[1],hex:bsCol[role]||bsCol.aim,n,t0:now+(stagger?d*45:0)});bsSparks(T.X[i],T.Y[i],bsCol[role]||bsCol.aim,3);});
+}
+function bsDropFx(cells,now){
+  const T=bsT();cells.forEach((c,n)=>{const i=c[0],v=c[1];
+    if(v===BS_POD){gFx.push({type:'pip',x:T.X[i],y:T.Y[i],t0:now+n*20});return;}
+    gFx.push({type:'drop',x:T.X[i],y:T.Y[i],vx:(Math.random()-0.5)*1.6,vy:-1-Math.random()*1.5,spr:bsSpr[bsRole(v)],n,t0:now+80+n*14});});
+}
+function bsLand(cell,col,ray){
+  const T=bsT(),now=performance.now();
+  if(cell<0){
+    // crossed the danger line
+    if(isEndless){gShots++;bsEndlessOver('A bubble crossed the line');return;}
+    gCombo=0;bsCoach('Too low — that bubble crossed the line and burst',1800);bsSfx('fizzle');
+    const e=ray.path[ray.path.length-1];bsSparks(e[0],e[1],bsCol[bsRole(col)],8);bsAfterShot({popped:0,dropped:0,pips:0});return;
+  }
+  const r=bsResolve(gB,T,cell,col);
+  if(!r.popped){bsSfx('stick');for(const n of T.NB[cell])if(gB[n]){const dx=T.X[n]-T.X[cell],dy=T.Y[n]-T.Y[cell];gWob.set(n,{t0:now,dx,dy});}}
+  else{
+    bsPopFx(r.gone.concat([]),T.X[cell],T.Y[cell],now,true);
+    r.pipCells.forEach((i,n)=>{if(!r.drops.some(d=>d[0]===i))gFx.push({type:'pip',x:T.X[i],y:T.Y[i],t0:now+120+n*60});});
+    bsDropFx(r.drops,now);
+  }
+  bsAfterShot(r,cell);
+}
+function bsBurnCell(i,now){
+  const T=bsT();const v=gB[i];if(!v)return;
+  if(v===BS_POD){gFx.push({type:'pip',x:T.X[i],y:T.Y[i],t0:now});}
+  else{gFx.push({type:'pop',x:T.X[i],y:T.Y[i],spr:bsSpr[bsRole(v)],hex:'#ff7a1a',n:3,t0:now});bsSparks(T.X[i],T.Y[i],'#ff9a2e',4);}
+  gB[i]=0;(gFireGone||(gFireGone=[])).push([i,v]);
+}
+let gFireGone=null;
+function bsAfterBoost(kind,cell){
+  const T=bsT(),now=performance.now();let rf={nb:0,freed:0,pips:[]},dr={nb:0,npod:0,cells:[]},cx=5.5,cy=4;
+  if(kind==='fire'){
+    // cells burned during the flight are already gone; free Pips beside them, then drop
+    const gone=gFireGone||[];gFireGone=null;rf={nb:0,freed:0,pips:[]};
+    gone.forEach(g=>{if(g[1]===BS_POD)rf.freed++;else rf.nb++;});
+    for(const g of gone)for(const n of T.NB[g[0]])if(gB[n]===BS_POD){gB[n]=0;rf.freed++;rf.pips.push(n);}
+    dr=bsDropFloaters(gB,T);
+    rf.pips.forEach(i=>gFx.push({type:'pip',x:T.X[i],y:T.Y[i],t0:now}));
+  }else if(cell<0||cell===undefined){
+    if(kind==='bomb')save.bsBombs++;else save.bsRainbows++;persist();
+    bsCoach('Missed the board — your '+(kind==='bomb'?'Bomb':'Rainbow')+' came back',1800);bsBusyOff();bsHud();return;
+  }else if(kind==='bomb'){
+    cx=T.X[cell];cy=T.Y[cell];const area=[];
+    for(let i=0;i<BS_N;i++)if(gB[i]&&Math.hypot(T.X[i]-cx,T.Y[i]-cy)<=2.05)area.push(i);
+    const cols=area.map(i=>[i,gB[i]]);rf=bsRemoveFree(gB,T,area);dr=bsDropFloaters(gB,T);
+    gFx.push({type:'boom',x:cx,y:cy,t0:now});bsShake(320);bsSfx('bomb');bsBuzz([40,30,60]);
+    bsPopFx(cols.filter(c=>c[1]!==BS_POD),cx,cy,now,true);rf.pips.forEach(i=>gFx.push({type:'pip',x:T.X[i],y:T.Y[i],t0:now+100}));
+  }else{
+    cx=T.X[cell];cy=T.Y[cell];const all=new Set();
+    for(const n of T.NB[cell]){const v=gB[n];if(v>0&&v<BS_POD)for(const j of bsCluster(gB,T,n,v))all.add(j);}
+    if(!all.size){save.bsRainbows++;persist();bsCoach('Nothing to match there — your Rainbow came back',1800);bsBusyOff();bsHud();return;}
+    const cols=[...all].map(i=>[i,gB[i]]);rf=bsRemoveFree(gB,T,all);dr=bsDropFloaters(gB,T);
+    bsSfx('rainbow');bsBuzz([15,20,15]);bsPopFx(cols,cx,cy,now,true);rf.pips.forEach(i=>gFx.push({type:'pip',x:T.X[i],y:T.Y[i],t0:now+100}));
+  }
+  bsDropFx(dr.cells,now);
+  const res={popped:Math.max(1,rf.nb),dropped:dr.nb,pips:rf.freed+dr.npod,boost:true};
+  if(!rf.nb&&!dr.nb&&!res.pips)res.popped=0;
+  bsAfterShot(res,cell);
+}
+function bsShake(ms){if(!BS_REDUCED)gShake=performance.now()+ms;}
+function bsBusyOff(){gBusy=false;bsKick();}
+function bsAfterShot(r,cell){
+  const T=bsT();
+  if(!r.boost)gShots++;
+  if(r.popped){
+    gCombo++;gMaxCombo=Math.max(gMaxCombo,gCombo);
+    const pts=bsPoints(r.popped,r.dropped,r.pips,gCombo);gScore+=pts;
+    save.bsPopped=(save.bsPopped|0)+r.popped+r.dropped;save.bsPips=(save.bsPips|0)+r.pips;save.bsBestCombo=Math.max(save.bsBestCombo|0,gCombo);
+    const cx=cell>=0?T.X[cell]:5.5,cy=cell>=0?T.Y[cell]:3;
+    bsText(cx,cy,'+'+pts,bsCol.ink,0.5,120);
+    if(gCombo>=2){bsText(5.5,BS_SY-4.4,'Combo ×'+Math.min(gCombo,5)+'!',bsCol.aim,0.62,200);bsSfx('combo',gCombo);}
+    if(r.dropped>=6){bsShake(260);bsBuzz([20,30,35]);bsText(cx,cy+0.7,r.dropped>=12?'Avalanche!':'Nice drop!',bsCol.danger,0.55,260);}
+    else bsBuzz(r.pips?[15,25,15]:12);
+    if(r.pips)bsSfx('pip');
+  }else if(!r.boost)gCombo=0;
+  if(isEndless){bsEndlessAfter(r);return;}
+  const done=bsGoalMet(L.g,gB,gScore,L.target);
+  if(done){bsCelebrate();return;}
+  if(!r.boost){gCur=gNxt;gNxt=bsDrawCol(gRng,gB);if(!bsColoursOn(gB).includes(gCur))gCur=bsDrawCol(gRng,gB);}
+  else{const pres=bsColoursOn(gB);if(!pres.includes(gCur))gCur=bsDrawCol(gRng,gB);if(!pres.includes(gNxt))gNxt=bsDrawCol(gRng,gB);}
+  bsHud();
+  if(gShots>=gLimit){gLost=true;bsBusyOff();if(bsInstant)bsShowLost();else setTimeout(bsShowLost,700);return;}
+  if(bsInstant){gBusy=false;return;}
+  setTimeout(bsBusyOff,r.popped?170:60);
+}
+let gCleared=false;
+function bsCelebrate(){
+  gBusy=true;gCleared=bsCount(gB)===0;bsHud();
+  const T=bsT(),now=performance.now(),rest=[];
+  for(let i=0;i<BS_N;i++)if(gB[i]){rest.push([i,gB[i]]);gB[i]=0;}
+  if(rest.length){bsDropFx(rest,now+200);}
+  if(bsInstant){winLevel();return;}
+  setTimeout(winLevel,rest.length?650:350);
+}
+
+// ── HUD ──
+function bsStarsFor(used){
+  if(gCont)return 1;const p=L.par,lim=L.limit;
+  if(used<=p)return 3;if(used<=p+Math.ceil((lim-p)/2))return 2;return 1;
+}
+function bsHud(){
   if(!L)return;
-  gState={b:L.bs.slice(),c:L.cs.slice(),q:[null,null]};gHist=[];gMoves=0;gWon=false;renderGame();
+  const goal=document.getElementById('bs-goal'),sh=document.getElementById('bs-shots'),sc=document.getElementById('bs-score'),mt=document.getElementById('bs-meter'),st=document.getElementById('bs-mstars');
+  if(goal){
+    if(isEndless)goal.innerHTML='∞ Wave <b>'+gWave+'</b>';
+    else if(L.g==='p')goal.innerHTML='🐾 Pips <b>'+(gPodsTotal-bsPodsOn(gB))+'/'+gPodsTotal+'</b>';
+    else if(L.g==='s')goal.innerHTML='🎯 <b>'+Math.min(gScore,L.target).toLocaleString()+'</b><small>/'+L.target.toLocaleString()+'</small>';
+    else goal.innerHTML='🫧 Clear <b>'+bsCount(gB)+'</b><small> left</small>';
+  }
+  if(sh)sh.textContent=isEndless?String(gShots):String(Math.max(0,gLimit-gShots));
+  const shl=document.getElementById('bs-shots-lbl');if(shl)shl.textContent=isEndless?'Shots':'Left';
+  if(sc)sc.textContent=gScore.toLocaleString();
+  if(mt&&st){
+    if(isEndless){mt.style.width=Math.round(100*(BS_ENDLESS_MISS-gMiss)/BS_ENDLESS_MISS)+'%';st.textContent='▼ new row';}
+    else{const left=Math.max(0,L.limit-gShots);mt.style.width=Math.round(100*Math.min(1,(gLimit-gShots)/Math.max(1,L.limit)))+'%';const s=bsStarsFor(gShots+0);st.textContent='★'.repeat(s)+'☆'.repeat(3-s);mt.parentElement.classList.toggle('low',left<=3);}
+  }
+  const fb=document.getElementById('bs-fire-badge');if(fb)fb.textContent=hasUnlimitedHints()?'∞':String(save.hintCount|0);
+  const bb=document.getElementById('bs-bomb-badge');if(bb)bb.textContent=(save.bsBombs|0)>0?String(save.bsBombs|0):'+';
+  const rb=document.getElementById('bs-rain-badge');if(rb)rb.textContent=(save.bsRainbows|0)>0?String(save.bsRainbows|0):'+';
+  ['fire','bomb','rainbow'].forEach(k=>{const b=document.getElementById('bs-btn-'+k);if(b)b.classList.toggle('on',gBoost===k);});
 }
+let _bsCoachT=null;
+function bsCoach(msg,ms){const el=document.getElementById('bs-coach');if(!el)return;el.textContent=msg;el.classList.add('on');clearTimeout(_bsCoachT);_bsCoachT=setTimeout(()=>el.classList.remove('on'),ms||1800);}
+
+// ── win / lose ──
 function winLevel(){
   if(gWon)return;
-  gWon=true;
-  playComplete();
-  // brief sync flourish: both cubes pulse together
-  youEl.style.transition='transform .13s, box-shadow .3s';
-  youEl.style.boxShadow='0 0 22px 2px var(--you)';echoEl.style.boxShadow='0 0 22px 2px var(--echo)';
-  const delta=gMoves-L.par;
-  const stars=delta<=0?3:(delta<=3?2:1);
+  gWon=true;levelStarted=false;
+  playComplete();bsSfx('win');bsBuzz([20,40,20,40,70]);
+  const used=gShots,stars=isEndless?3:bsStarsFor(used),left=Math.max(0,L.limit-used);
+  const bonus=gCont?0:left*50;gScore+=bonus;
+  let _wasNew=false;
   if(isDailyChallenge){
     const today=new Date().toISOString().split('T')[0];
     if(save.dailyChallengeDate!==today){
-      // A missed day restarts the streak (it used to only ever grow).
       var yesterday=new Date(Date.now()-86400000).toISOString().split('T')[0];
       save.dailyChallengeStreak=(save.dailyChallengeDate===yesterday)?(save.dailyChallengeStreak||0)+1:1;
       save.dailyChallengeDate=today;
@@ -2121,38 +2606,82 @@ function winLevel(){
       persist();
       if(window.gOnDailyDone){try{window.gOnDailyDone();}catch(e){}}
     }
-  }else if(!isEndless){
+  }else{
     _wasNew=!save.completedLevels.includes(levelIndex);
-    if(!save.completedLevels.includes(levelIndex))save.completedLevels.push(levelIndex);
+    if(_wasNew)save.completedLevels.push(levelIndex);
     const prev=save.levelStars[levelIndex]||0;
     if(stars>prev)save.levelStars[levelIndex]=stars;
+    if(stars===3&&prev<3)save.bsThree=(save.bsThree|0)+1;
     if(save.currentLevel<=levelIndex)save.currentLevel=Math.min(levelIndex+1,CAMPAIGN.length-1);
   }
   save.coins+=stars*5;
   save.lastLevelProgress=null;
   persist();
-  var _wasNew=_wasNew||false;
-  try{if(window.gGame)window.gGame.clear(isDailyChallenge?{daily:true,stars:stars,isNew:true,coins:stars*5}:{level:levelIndex+1,stars:stars,isNew:!!_wasNew,perfect:stars===3,endless:!!isEndless,coins:stars*5});}catch(e){}
+  try{if(window.gGame)window.gGame.clear(isDailyChallenge?{daily:true,stars:stars,isNew:true,coins:stars*5}:{level:levelIndex+1,stars:stars,isNew:!!_wasNew,perfect:stars===3,endless:false,coins:stars*5});}catch(e){}
   interstitialCounter++;
   if(interstitialCounter%3===0&&interstitialCounter>3)safeShowInterstitial();
-  const starsStr='★'.repeat(stars)+'☆'.repeat(3-stars);
-  document.getElementById('complete-stars').textContent=starsStr;
-  document.getElementById('complete-msg').textContent=
-    (delta<=0?'Perfect sync — matched par! ':'Synced in '+gMoves+' moves (par '+L.par+'). ')+'+'+(stars*5)+' coins';
+  document.getElementById('complete-stars').textContent='★'.repeat(stars)+'☆'.repeat(3-stars);
+  const goalTxt=gCleared?'Board cleared!':(L.g==='p'?('All '+gPodsTotal+' Pip'+(gPodsTotal>1?'s are':' is')+' free!'):('Target '+L.target.toLocaleString()+' reached!'));
+  document.getElementById('complete-msg').textContent=goalTxt+' '+used+' bubble'+(used===1?'':'s')+' used'+(bonus?' · +'+bonus+' bonus':'')+' · '+gScore.toLocaleString()+' pts · +'+(stars*5)+' coins';
+  const nb=document.querySelector('#overlay-complete .modal-btns .primary');if(nb)nb.textContent=isDailyChallenge?'Done ✓':'Next level →';
+  const h=document.querySelector('#overlay-complete h2');if(h)h.textContent=isDailyChallenge?'Daily cleared! 🫧':(stars===3?'Bubbly brilliant! 🫧':'Level clear! 🫧');
   const ov=document.getElementById('overlay-complete');
   ov.dataset.share=shareString(stars);
   setTimeout(()=>showOverlay('overlay-complete'),300);
-  updateAllUI();
+  bsHud();updateAllUI();
 }
 function shareString(stars){
-  if(isDailyChallenge)return 'Afterimage #'+dailyDay+' — '+gMoves+' moves'+(gMoves<=L.par?' ⭐':'');
-  return 'Afterimage level '+(levelIndex+1)+' — '+gMoves+' moves'+(gMoves<=L.par?' ⭐ par':'');
+  const used=gShots,s='⭐'.repeat(stars||1);
+  if(isDailyChallenge)return'Bubble Shooter Daily #'+dailyDay+' — '+used+' bubbles '+s+(gCont?'':' 🫧');
+  return'Bubble Shooter level '+(levelIndex+1)+' — '+used+' bubbles '+s;
 }
 function shareResult(){
   const ov=document.getElementById('overlay-complete');
   const txt=(ov&&ov.dataset.share)||shareString(1);
   if(window.Android&&window.Android.shareText){try{window.Android.shareText(txt);return;}catch(e){}}
   try{navigator.clipboard.writeText(txt);_showMsg('Copied!');}catch(e){}
+}
+function bsShowLost(){
+  if(!gLost||gWon)return;
+  bsSfx('lose');bsBuzz([60,40,90]);
+  const p=document.getElementById('bs-lost-msg');
+  if(p){let prog='';if(L.g==='p')prog=(gPodsTotal-bsPodsOn(gB))+' of '+gPodsTotal+' Pips free.';else if(L.g==='s')prog=gScore.toLocaleString()+' of '+L.target.toLocaleString()+' points.';else prog=bsCount(gB)+' bubble'+(bsCount(gB)===1?'':'s')+' still hanging.';
+    p.textContent=prog+' Keep this board and get 5 more bubbles?';}
+  const lv=document.getElementById('bs-lost-life');
+  if(lv)lv.textContent=hasUnlimitedLives()?'♾️ +5 bubbles · unlimited lives':'❤️ +5 bubbles · use a life ('+(save.lives|0)+' left)';
+  showOverlay('overlay-bs-lost');
+}
+let _bsAdCont=false,_bsAdBoost=null;
+function bsContinue(){
+  hideOverlay('overlay-bs-lost');
+  if(!L||!gLost||gWon)return;
+  gLost=false;gCont++;gLimit+=5;bsBusyOff();bsHud();bsCoach('+5 bubbles — no 3-star finish this time, but the win still counts',2600);
+}
+function bsContinueAd(){_bsAdCont=true;requestRewardedAd('extra_life');}
+function bsContinueLife(){
+  hideOverlay('overlay-bs-lost');
+  if(spendLife()){bsContinue();return;}
+  // out of lives: the no-lives sheet is open; bring the choice back when it closes
+  const t=setInterval(()=>{const n=document.getElementById('overlay-nolives');if(!n||!n.classList.contains('show')){clearInterval(t);if(gLost&&!gWon&&L&&!isEndless)bsShowLost();}},300);
+}
+function bsRetry(){hideOverlay('overlay-bs-lost');hideOverlay('overlay-bs-restart');if(isDailyChallenge){launchDailyLevel();return;}if(isEndless){launchEndless();return;}loadLevel(levelIndex);}
+(function(){
+  const base=window.onAdReward;
+  window.onAdReward=function(t){
+    if(t==='extra_life'&&_bsAdCont){_bsAdCont=false;if(isEndless)bsEndlessRescue();else bsContinue();return;}
+    if(t==='hint'&&_bsAdBoost){const k=_bsAdBoost;_bsAdBoost=null;bsGrantBoost(k);return;}
+    return base&&base.apply(this,arguments);
+  };
+  const nr=window.onAdNotReady;
+  window.onAdNotReady=function(){if(_bsAdCont||_bsAdBoost){_bsAdCont=false;_bsAdBoost=null;bsCoach('Ad not ready yet — try again in a moment',2200);}return nr&&nr.apply(this,arguments);};
+  const back=window.onBackPressed;
+  window.onBackPressed=function(){for(const id of['overlay-bs-boost','overlay-bs-restart','overlay-bs-lost','overlay-bs-over']){const el=document.getElementById(id);if(el&&el.classList.contains('show')){hideOverlay(id);if(id==='overlay-bs-over'||id==='overlay-bs-lost')goMenu();return;}}if(gBoost){bsToggleBoost(gBoost);return;}return back&&back.apply(this,arguments);};
+})();
+function undoMove(){bsCoach('No take-backs in bubbles — but swapping is free: tap the launcher',2000);}
+function resetLevel(){
+  if(!L)return;
+  if(isEndless||gWon||gShots===0||gLost){bsRetry();return;}
+  showOverlay('overlay-bs-restart');
 }
 function nextLevel(){
   hideOverlay('overlay-complete');
@@ -2164,90 +2693,193 @@ function nextLevel(){
 }
 function replayLevel(){hideOverlay('overlay-complete');if(isDailyChallenge)launchDailyLevel();else loadLevel(levelIndex);}
 function skipLevel(){
-  if(isDailyChallenge)return;
+  if(isDailyChallenge||isEndless)return;
   const next=levelIndex+1;
   if(next<CAMPAIGN.length){loadLevel(next);showScreen('game');}
 }
-// ── hint: first move of the optimal line from the CURRENT state ──
-let _hintTimer=null;
-function clearHintGlow(){document.querySelectorAll('.dpad button.hinted').forEach(b=>b.classList.remove('hinted'));}
+
+// ── boosters: Fireball (hint tokens), Bomb + Rainbow (inventory / coins / ad) ──
+function hasUnlimitedHints(){return(save.seasonPassUntil&&Date.now()<save.seasonPassUntil)||(save.weeklyPassUntil&&Date.now()<save.weeklyPassUntil);}
+function bsRefundBoost(){if(gBoost==='fire'&&gBoostPaid&&!hasUnlimitedHints()){save.hintCount=(save.hintCount|0)+1;persist();}gBoost=null;gBoostPaid=false;gHintLine=null;}
+function useHint(){
+  if(!L||bsBlocked())return;
+  if(gBoost==='fire'){bsRefundBoost();bsHud();bsKick();bsCoach('Fireball put back',1200);return;}
+  if(gBoost)bsRefundBoost();
+  if(save.hintCount>0&&!hasUnlimitedHints()){save.hintCount--;persist();updateAllUI();gBoostPaid=true;giveHint();return;}
+  if(hasUnlimitedHints()){gBoostPaid=false;giveHint();return;}
+  showOverlay('overlay-hint');
+}
+// giveHint arms the Fireball and lines it up on the solver's best burn
+// (most bubbles burned + dropped, Pips first on Pip levels).
 function giveHint(){
   if(!L)return;
   try{if(window.gGame)window.gGame.emit('hint');}catch(e){}
-  const r=solvePath(L.walls,gState.b,gState.c,L.exit,L.plate,gState.q);
-  if(!r){_showMsg('No route from here — undo or reset.');return;}
-  clearHintGlow();
-  const btn=document.querySelector('.dpad button[data-d="'+r.first+'"]');
-  if(btn){btn.classList.add('hinted');clearTimeout(_hintTimer);_hintTimer=setTimeout(clearHintGlow,2600);}
-  _showMsg('Optimal: '+ARROW[r.first]+' ('+r.depth+' to sync)');
+  gBoost='fire';
+  const best=bsBestFire();gHintLine=best?best.d:null;
+  bsSfx('arm');bsHud();bsKick();
+  bsCoach(best&&best.v>0?'🔥 Fireball ready — the glowing line is the best burn. Drag to aim anywhere':'🔥 Fireball ready — drag to aim, it burns straight through',2600);
 }
-function useHint(){
-  if(save.hintCount>0&&!hasUnlimitedHints()){save.hintCount--;persist();updateAllUI();giveHint();return;}
-  if(hasUnlimitedHints()){giveHint();return;}
-  showOverlay('overlay-hint');
-}
-function hasUnlimitedHints(){return (save.seasonPassUntil&&Date.now()<save.seasonPassUntil)||(save.weeklyPassUntil&&Date.now()<save.weeklyPassUntil);}
-function watchAdForHint(){hideOverlay('overlay-hint');requestRewardedAd('hint');}
+function watchAdForHint(){hideOverlay('overlay-hint');gBoostPaid=true;requestRewardedAd('hint');}
 function spendCoinsHint(){
   if(save.coins<25){_showMsg('Not enough coins!');return;}
-  save.coins-=25;persist();updateAllUI();hideOverlay('overlay-hint');giveHint();
+  save.coins-=25;persist();updateAllUI();hideOverlay('overlay-hint');gBoostPaid=true;giveHint();
+}
+const BS_BOOST={bomb:{name:'Bomb',icon:'💣',coins:50,desc:'Explodes where it lands, clearing every bubble within two rings.',key:'bsBombs'},rainbow:{name:'Rainbow',icon:'🌈',coins:40,desc:'Matches any colour: pops every colour group it touches.',key:'bsRainbows'}};
+function bsToggleBoost(kind){
+  if(!L||bsBlocked())return;
+  if(gBoost===kind){gBoost=null;gHintLine=null;bsHud();bsKick();return;}
+  if(gBoost==='fire')bsRefundBoost();
+  const b=BS_BOOST[kind];
+  if((save[b.key]|0)<=0){bsOpenBoostSheet(kind);return;}
+  gBoost=kind;gHintLine=null;bsSfx('arm');bsHud();bsKick();
+  bsCoach(b.icon+' '+b.name+' loaded — drag to aim. Tap it again to put it back',2200);
+}
+function bsBomb(){bsToggleBoost('bomb');}
+function bsRainbow(){bsToggleBoost('rainbow');}
+function bsOpenBoostSheet(kind){
+  const b=BS_BOOST[kind],ov=document.getElementById('overlay-bs-boost');if(!ov)return;
+  ov.dataset.kind=kind;
+  ov.querySelector('.bs-boost-art').textContent=b.icon;ov.querySelector('h2').textContent=b.name;ov.querySelector('p').textContent=b.desc;
+  ov.querySelector('[data-coins]').textContent='🪙 '+b.coins+' Coins';
+  showOverlay('overlay-bs-boost');
+}
+function bsBoostCoins(){
+  const ov=document.getElementById('overlay-bs-boost'),kind=ov.dataset.kind,b=BS_BOOST[kind];
+  if((save.coins|0)<b.coins){_showMsg('Not enough coins!');return;}
+  save.coins-=b.coins;persist();updateAllUI();hideOverlay('overlay-bs-boost');bsGrantBoost(kind);
+}
+function bsBoostAd(){const ov=document.getElementById('overlay-bs-boost');_bsAdBoost=ov.dataset.kind;hideOverlay('overlay-bs-boost');requestRewardedAd('hint');}
+function bsGrantBoost(kind){
+  const b=BS_BOOST[kind];if(!b)return;save[b.key]=(save[b.key]|0)+1;persist();bsHud();
+  if(L&&!bsBlocked()&&document.getElementById('screen-game').classList.contains('active')){gBoost=kind;bsSfx('arm');bsHud();bsKick();bsCoach(b.icon+' '+b.name+' loaded — drag to aim',1800);}
 }
 
-// ── ENDLESS: unlimited random boards, hard band ──
-let isEndless=false;
-function launchEndless(){
-  let L2=null,tries=0;
-  while(!L2&&tries<50){L2=gen(Math.floor(Math.random()*1e9)+1,BANDS.hard);tries++;}
-  if(!L2){_showMsg('Generation failed — try again');return;}
-  L=L2;isEndless=true;isDailyChallenge=false;levelStarted=true;
-  gState={b:L.bs.slice(),c:L.cs.slice(),q:[null,null]};gHist=[];gMoves=0;gWon=false;
-  document.getElementById('hdr-level').textContent='Endless';
-  layoutBoard();buildBoard();renderGame();updateAllUI();
-  showScreen('game');
+// ── ENDLESS: survival — a new row slides in every few misses ──
+function bsEndlessPalette(){return gWave>=6?[1,2,3,4,5,6]:(gWave>=3?[1,2,3,4,5]:[1,2,3,4]);}
+function bsEndlessRow(B,T,r,rnd,pal){
+  for(let c=0;c<T.rl(r);c++){const i=r*11+c;const nbc=T.NB[i].map(n=>B[n]).filter(v=>v>0&&v<BS_POD);
+    B[i]=(nbc.length&&rnd()<0.5)?nbc[Math.floor(rnd()*nbc.length)]:pal[Math.floor(rnd()*pal.length)];}
 }
-// ── daily ──
+function bsEndlessFill(rows){
+  const T=bsT(),pal=bsEndlessPalette();gB=new Int8Array(BS_N);
+  for(let r=0;r<rows;r++)bsEndlessRow(gB,T,r,gEndRnd,pal);
+}
+let gEndRnd=Math.random;
+function launchEndless(){
+  levelIndex=save.currentLevel||0;isEndless=true;isDailyChallenge=false;gWave=1;gEndCont=0;
+  const seed=(Math.random()*4294967295)>>>0;gEndRnd=mulberry32(seed^0x5bd1e995);
+  L={g:'e',limit:0,par:0,target:0,k:0,pal:[1,2,3,4],board:null,rows:6,mode:'endless',mirror:false,perm:[1,2,3,4,5,6],seed};
+  gPar0=0;bsEndlessFill(6);L.board=gB.slice();
+  document.getElementById('hdr-level').textContent='Endless';
+  showScreen('game');
+  bsStart({board:L.board,seed,limit:0});
+  updateAllUI();
+}
+function bsEndlessPush(){
+  const nb=new Int8Array(BS_N);let over=false;
+  for(let i=0;i<BS_N-11;i++)nb[i+11]=gB[i];
+  for(let i=(BS_NROWS-1)*11;i<BS_N;i++)if(gB[i])over=true;
+  gPar0^=1;const T=bsT();bsEndlessRow(nb,T,0,gEndRnd,bsEndlessPalette());gB=nb;
+  for(let i=BS_DEAD*11;i<BS_N;i++)if(gB[i])over=true;
+  bsSfx('push');bsShake(180);
+  return over;
+}
+function bsEndlessAfter(r){
+  if(!r.boost){if(r.popped)gMiss=Math.max(0,gMiss-1);else gMiss++;}
+  let over=false;
+  if(!bsCount(gB)){gScore+=1000;gWave++;save.coins+=10;persist();bsText(5.5,5,'Wave clear! +1000',bsCol.aim,0.7,100);
+    try{if(window.gGame)window.gGame.clear({endless:true,stars:3,isNew:false,coins:10});}catch(e){}
+    gPar0=0;bsEndlessFill(Math.min(8,5+Math.floor(gWave/2)));gMiss=0;}
+  else if(gMiss>=BS_ENDLESS_MISS){gMiss=0;over=bsEndlessPush();}
+  for(let i=BS_DEAD*11;i<BS_N;i++)if(gB[i])over=true;
+  if(!r.boost){gCur=gNxt;gNxt=bsDrawCol(gRng,gB);if(!bsColoursOn(gB).includes(gCur))gCur=bsDrawCol(gRng,gB);}
+  else{const pres=bsColoursOn(gB);if(!pres.includes(gCur))gCur=bsDrawCol(gRng,gB);if(!pres.includes(gNxt))gNxt=bsDrawCol(gRng,gB);}
+  bsHud();
+  if(over){bsEndlessOver('The bubbles reached the line');return;}
+  if(bsInstant){gBusy=false;return;}
+  setTimeout(bsBusyOff,r.popped?170:60);
+}
+function bsEndlessOver(why){
+  gLost=true;bsBusyOff();bsHud();
+  const best=save.bsEndlessBest|0,isBest=gScore>best;if(isBest)save.bsEndlessBest=gScore;
+  const coins=Math.min(40,Math.floor(gScore/400));save.coins+=coins;persist();updateAllUI();
+  bsSfx('lose');bsBuzz([60,40,90]);
+  const ov=document.getElementById('overlay-bs-over');if(!ov)return;
+  ov.querySelector('h2').textContent=isBest?'New best! 🏆':'Game over';
+  ov.querySelector('p').textContent=why+'. '+gScore.toLocaleString()+' points · wave '+gWave+' · best '+Math.max(best,gScore).toLocaleString()+(coins?' · +'+coins+' coins':'');
+  const rb=document.getElementById('bs-over-rescue');if(rb)rb.style.display=gEndCont?'none':'';
+  setTimeout(()=>showOverlay('overlay-bs-over'),bsInstant?0:600);
+}
+function bsEndlessRescueAd(){_bsAdCont=true;requestRewardedAd('extra_life');}
+function bsEndlessRescue(){
+  hideOverlay('overlay-bs-over');if(!isEndless||!gLost)return;
+  // clear the three lowest occupied rows and carry on
+  let low=0;for(let i=0;i<BS_N;i++)if(gB[i])low=Math.max(low,(i/11)|0);
+  const T=bsT(),cells=[];for(let i=0;i<BS_N;i++)if(gB[i]&&((i/11)|0)>=low-2)cells.push([i,gB[i]]);
+  cells.forEach(c=>gB[c[0]]=0);const dr=bsDropFloaters(gB,T);bsPopFx(cells,5.5,low*BS_RH,performance.now(),true);bsDropFx(dr.cells,performance.now());
+  if(!bsCount(gB))bsEndlessFill(5);
+  gLost=false;gEndCont++;gMiss=0;bsHud();bsCoach('Rows cleared — keep going!',1800);
+}
+
+// ── DAILY: a campaign board picked by date (Mon gentle → Sun tough),
+// mirrored and recoloured, dealt the bot-verified colour queue ──
+const BS_DAILY_BANDS=[[30,90],[80,150],[140,220],[200,290],[260,360],[330,430],[400,500]];
+function bsDailyPick(day){
+  const wd=new Date(Date.UTC(2026,0,1)+day*864e5).getUTCDay(),w=(wd+6)%7,band=BS_DAILY_BANDS[w];
+  const h=Math.imul(day+7,2654435761)>>>0;const idx=Math.min(CAMPAIGN.length-1,band[0]+h%(band[1]-band[0]));
+  const rnd=mulberry32(h^0xA5A5A5A5),perm=[1,2,3,4,5,6];for(let i=5;i>0;i--){const j=Math.floor(rnd()*(i+1));const t=perm[i];perm[i]=perm[j];perm[j]=t;}
+  return{idx,mirror:!!((h>>>9)&1),perm};
+}
 function startDailyChallenge(){
   const today=new Date().toISOString().split('T')[0];
-  if(save.dailyChallengeDate===today){_showMsg('You already synced today’s daily! Streak: '+save.dailyChallengeStreak);return;}
+  if(save.dailyChallengeDate===today){_showMsg('Today’s daily is done! Streak: '+save.dailyChallengeStreak+' — new board tomorrow');return;}
   launchDailyLevel();
 }
 function launchDailyLevel(){
-  dailyDay=dayNum();
-  L=genDaily(dailyDay);
-  if(!L){_showMsg('Daily failed to generate');return;}
-  isDailyChallenge=true;isEndless=false;levelStarted=true;
-  gState={b:L.bs.slice(),c:L.cs.slice(),q:[null,null]};gHist=[];gMoves=0;gWon=false;
+  dailyDay=dayNum();const pk=bsDailyPick(dailyDay);
+  L=bsDecode(CAMPAIGN[pk.idx]);L.mode='daily';L.mirror=pk.mirror;L.perm=pk.perm;L.seed=bsRunSeed(pk.idx,L.k);L.src=pk.idx;
+  isDailyChallenge=true;isEndless=false;
   document.getElementById('hdr-level').textContent='Daily #'+dailyDay;
-  layoutBoard();buildBoard();renderGame();updateAllUI();
   showScreen('game');
+  bsStart({board:L.board,seed:L.seed,limit:L.limit});
+  updateAllUI();
 }
-// ── input ──
-document.querySelectorAll('.dpad button').forEach(b=>b.addEventListener('click',()=>moveDir(b.dataset.d)));
-addEventListener('keydown',e=>{
-  if(!document.getElementById('screen-game').classList.contains('active'))return;
-  const m={ArrowUp:'U',ArrowDown:'D',ArrowLeft:'L',ArrowRight:'R',w:'U',s:'D',a:'L',d:'R',W:'U',S:'D',A:'L',D:'R'};
-  if(m[e.key]){e.preventDefault();moveDir(m[e.key]);}
-  if(e.key==='z'||e.key==='Z')undoMove();
-});
-let _sx=null,_sy=null;
-boardEl.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
-boardEl.addEventListener('touchend',e=>{
-  if(_sx==null)return;const t=e.changedTouches[0];
-  const dx=t.clientX-_sx,dy=t.clientY-_sy;
-  if(Math.abs(dx)<18&&Math.abs(dy)<18){_sx=null;return;}
-  if(Math.abs(dx)>Math.abs(dy))moveDir(dx>0?'R':'L');else moveDir(dy>0?'D':'U');
-  _sx=null;
-});
-function playMove(){if(!save.soundEnabled)return;try{const a=getAudio();const o=a.createOscillator(),g=a.createGain();o.frequency.value=420;g.gain.setValueAtTime(0.05,a.currentTime);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+0.08);o.connect(g).connect(a.destination);o.start();o.stop(a.currentTime+0.09);}catch(e){}}
+
+// ── audio (synthesized) + haptics ──
+function bsTone(f,d,v,type,when,f2){if(!save.soundEnabled)return;try{const a=getAudio(),t=a.currentTime+(when||0),o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(v,t+0.008);g.gain.exponentialRampToValueAtTime(0.0001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+0.02);}catch(e){}}
+function bsNoise(d,v,fq,when){if(!save.soundEnabled)return;try{const a=getAudio(),t=a.currentTime+(when||0),n=Math.floor(a.sampleRate*d),buf=a.createBuffer(1,n,a.sampleRate),ch=buf.getChannelData(0);for(let i=0;i<n;i++)ch[i]=(Math.random()*2-1)*(1-i/n);const s=a.createBufferSource();s.buffer=buf;const fl=a.createBiquadFilter();fl.type='bandpass';fl.frequency.value=fq||1200;const g=a.createGain();g.gain.value=v;s.connect(fl).connect(g).connect(a.destination);s.start(t);}catch(e){}}
+let _bsPopN=0,_bsPopT=0;
+function bsSfx(k,n){
+  switch(k){
+    case'shoot':bsTone(620,0.09,0.06,'triangle',0,260);bsNoise(0.05,0.05,2400);break;
+    case'bounce':bsTone(980,0.03,0.025,'square');break;
+    case'stick':bsTone(230,0.06,0.07,'sine',0,170);break;
+    case'pop':{const now=performance.now();if(now-_bsPopT>320)_bsPopN=0;_bsPopT=now;_bsPopN++;if(_bsPopN>14)return;bsTone(520*Math.pow(1.055,Math.min(_bsPopN,18)),0.07,0.06,'sine',0,300);bsNoise(0.03,0.025,3200);break;}
+    case'plink':bsTone(760+((n||0)%6)*70,0.06,0.035,'triangle');break;
+    case'combo':[0,1,2].forEach(i=>bsTone(660*Math.pow(1.26,i+Math.min(n||2,5)-2),0.09,0.05,'triangle',i*0.06));break;
+    case'pip':bsTone(880,0.16,0.06,'sine',0,1480);bsTone(1320,0.12,0.04,'sine',0.1,1760);break;
+    case'fire':bsNoise(0.35,0.08,700);bsTone(180,0.3,0.05,'sawtooth',0,520);break;
+    case'bomb':bsNoise(0.45,0.16,260);bsTone(90,0.35,0.12,'sine',0,40);break;
+    case'rainbow':[0,1,2,3].forEach(i=>bsTone(784*Math.pow(1.19,i),0.12,0.045,'sine',i*0.05));break;
+    case'arm':bsTone(520,0.08,0.05,'triangle',0,780);break;
+    case'swap':bsTone(600,0.05,0.04,'sine',0,820);break;
+    case'fizzle':bsTone(300,0.22,0.05,'sawtooth',0,90);break;
+    case'push':bsTone(140,0.18,0.07,'triangle',0,90);break;
+    case'win':[0,1,2,3,4].forEach(i=>bsTone(523*Math.pow(1.122,i*2),0.14,0.05,'triangle',0.35+i*0.07));break;
+    case'lose':[0,1,2].forEach(i=>bsTone(392/Math.pow(1.12,i),0.22,0.05,'triangle',i*0.16));break;
+  }
+}
+function bsBuzz(p){if(save.hapticsEnabled===false)return;try{if(navigator.vibrate)navigator.vibrate(p);}catch(e){}}
+
 // ── tutorial: 3 sequential steps, once ──
 const TUT_STEPS=[
-  {t:'🟦 You',b:'Swipe, use arrows, or the pad — your cyan cube moves one cell per turn.'},
-  {t:'🟥 Your echo',b:'The red echo replays YOUR moves, two turns late. Watch the "echo plays next" pips.'},
-  {t:'🎯 The goal',b:'Park the echo on the gold plate and stand on the green exit — on the same turn.'}
+  {t:'🎯 Drag to aim',b:'Hold anywhere above the launcher and drag. The dotted line shows the path — even off the walls. Let go to shoot.'},
+  {t:'🫧 Match three',b:'Land next to two or more of the same colour to pop them. Anything left hanging falls with them!'},
+  {t:'🔄 Free swap',b:'Tap the launcher to swap with the next bubble. Watch your bubbles left — the fewer you use, the more stars.'}
 ];
 function maybeShowTutorial(){
-  if(localStorage.getItem('aim_tutorialDone')||levelIndex!==0||isDailyChallenge)return;
-  let stepI=0;const ov=document.getElementById('tutorialOverlay');const card=(ov&&ov.querySelector('div'))||ov;/*PART3: bind taps to the pointer-events:all inner popup*/
+  if(localStorage.getItem('bs_tutorialDone')||levelIndex!==0||isDailyChallenge||isEndless)return;
+  let stepI=0;const ov=document.getElementById('tutorialOverlay');if(!ov)return;const card=(ov&&ov.querySelector('div'))||ov;
   function show(){
     document.getElementById('tut-title').textContent=TUT_STEPS[stepI].t;
     document.getElementById('tut-body').textContent=TUT_STEPS[stepI].b;
@@ -2256,13 +2888,78 @@ function maybeShowTutorial(){
   }
   function advance(){
     stepI++;
-    if(stepI>=TUT_STEPS.length){ov.style.display='none';localStorage.setItem('aim_tutorialDone','1');card.removeEventListener('click',advance);return;}
+    if(stepI>=TUT_STEPS.length){ov.style.display='none';localStorage.setItem('bs_tutorialDone','1');card.removeEventListener('click',advance);return;}
     show();
   }
   card.addEventListener('click',advance);
   show();
 }
-window.replayTutorial=function(){localStorage.removeItem('aim_tutorialDone');showScreen('game');loadLevel(0);};
+window.replayTutorial=function(){localStorage.removeItem('bs_tutorialDone');showScreen('game');loadLevel(0);};
+
+// ── overlays, settings rows, level-select tile (built once) ──
+(function(){
+  function ov(id,html){const d=document.createElement('div');d.className='overlay';d.id=id;d.innerHTML='<div class="modal">'+html+'</div>';document.body.appendChild(d);return d;}
+  ov('overlay-bs-lost','<div class="bs-art">🫧</div><h2>Out of bubbles!</h2><p id="bs-lost-msg">Keep this board and get 5 more bubbles?</p><div class="modal-btns">'+
+    '<button class="modal-btn primary" onclick="bsContinueAd()">📺 +5 bubbles · watch an ad</button>'+
+    '<button class="modal-btn secondary" id="bs-lost-life" onclick="bsContinueLife()">❤️ +5 bubbles · use a life</button>'+
+    '<button class="modal-btn secondary" onclick="bsRetry()">↺ Try again</button>'+
+    '<button class="modal-btn secondary" onclick="hideOverlay(\'overlay-bs-lost\');goMenu()">Menu</button></div>');
+  ov('overlay-bs-restart','<h2>Start over?</h2><p>A fresh board with a new set of bubbles. Your shots so far are lost.</p><div class="modal-btns">'+
+    '<button class="modal-btn primary" onclick="bsRetry()">↺ Restart</button>'+
+    '<button class="modal-btn secondary" onclick="hideOverlay(\'overlay-bs-restart\')">Keep playing</button></div>');
+  ov('overlay-bs-boost','<div class="bs-art bs-boost-art">💣</div><h2>Bomb</h2><p>…</p><div class="modal-btns">'+
+    '<button class="modal-btn primary" onclick="bsBoostAd()">📺 Watch an ad · get 1</button>'+
+    '<button class="modal-btn secondary" data-coins onclick="bsBoostCoins()">🪙 50 Coins</button>'+
+    '<button class="modal-btn secondary" onclick="hideOverlay(\'overlay-bs-boost\')">Cancel</button></div>');
+  ov('overlay-bs-over','<div class="bs-art">🏁</div><h2>Game over</h2><p></p><div class="modal-btns">'+
+    '<button class="modal-btn primary" id="bs-over-rescue" onclick="bsEndlessRescueAd()">📺 Clear 3 rows · watch an ad</button>'+
+    '<button class="modal-btn secondary" onclick="hideOverlay(\'overlay-bs-over\');launchEndless()">↺ Play again</button>'+
+    '<button class="modal-btn secondary" onclick="hideOverlay(\'overlay-bs-over\');goMenu()">Menu</button></div>');
+  // hint sheet copy matches this game (the Fireball is the hint booster)
+  const hh=document.querySelector('#overlay-hint h2');if(hh)hh.textContent='Fireball 🔥';
+  const hs=document.querySelector('#overlay-hint p');if(hs)hs.textContent='Burns straight through every bubble in its path, bouncing off the walls. Pips it touches are freed.';
+  document.querySelectorAll('#overlay-hint .modal-btn').forEach(b=>{if(/Coins/.test(b.textContent))b.textContent='🪙 25 Coins';if(/Watch Ad/.test(b.textContent))b.textContent='📺 Watch an ad · get 1';});
+  const cs=document.querySelector('#overlay-complete .modal-btns .primary');if(cs)cs.textContent='Next level →';
+  // Settings rows: Vibration + Colour symbols (after Music)
+  const mus=document.getElementById('toggle-music');
+  if(mus&&!document.getElementById('toggle-haptics')){
+    const item=mus.closest('.settings-item');
+    const r1=document.createElement('div');r1.className='settings-item';
+    r1.innerHTML='<span class="settings-label">📳 Vibration</span><div class="toggle'+(save.hapticsEnabled===false?'':' on')+'" id="toggle-haptics" onclick="toggleSetting(\'hapticsEnabled\',\'toggle-haptics\');if(save.hapticsEnabled)bsBuzz(20)"></div>';
+    const r2=document.createElement('div');r2.className='settings-item';
+    r2.innerHTML='<span class="settings-label">🔷 Colour symbols</span><div class="toggle'+(save.bsSymbols?' on':'')+'" id="toggle-symbols" onclick="toggleSetting(\'bsSymbols\',\'toggle-symbols\');drawBoard()"></div>';
+    if(item&&item.parentNode){item.parentNode.insertBefore(r1,item.nextSibling);item.parentNode.insertBefore(r2,r1.nextSibling);}
+  }
+  // Level Select's endless tile names this game's mode
+  if(typeof buildLevelSelect==='function'){
+    const base=buildLevelSelect;
+    buildLevelSelect=function(){base.apply(this,arguments);const bs=document.querySelectorAll('#ls-scroll button.ls-bubble');const eb=bs[bs.length-1];if(eb)eb.textContent='∞ Endless · best '+((save.bsEndlessBest|0).toLocaleString());};
+  }
+  if(bsView&&window.ResizeObserver){try{new ResizeObserver(()=>{if(L)bsLayout();}).observe(bsView);}catch(e){}}
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)bsKick();});
+  // keep drawing when the game screen opens
+  const _ss=window.showScreen;
+  if(typeof _ss==='function'){window.showScreen=function(n){const r=_ss.apply(this,arguments);if(n==='game'){setTimeout(()=>{bsLayout();bsKick();},0);}else{gAimOn=false;if(gBoost==='fire'&&n==='menu'&&!gBall){bsRefundBoost();}}return r;};}
+})();
+
+// ── menu emblem: a launcher, a dotted bank shot and a three-match pop ──
+window.MENU_EMBLEM='<svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">'+
+  '<defs><radialGradient id="bsE1" cx="35%" cy="32%" r="70%"><stop offset="0" stop-color="#ffd3d6"/><stop offset=".45" stop-color="#e8434f"/><stop offset="1" stop-color="#a5222c"/></radialGradient>'+
+  '<radialGradient id="bsE2" cx="35%" cy="32%" r="70%"><stop offset="0" stop-color="#cfe2ff"/><stop offset=".45" stop-color="#2d7fe6"/><stop offset="1" stop-color="#1a4c96"/></radialGradient>'+
+  '<radialGradient id="bsE3" cx="35%" cy="32%" r="70%"><stop offset="0" stop-color="#fff2b8"/><stop offset=".45" stop-color="#f2bd12"/><stop offset="1" stop-color="#a87f00"/></radialGradient>'+
+  '<radialGradient id="bsE4" cx="35%" cy="32%" r="70%"><stop offset="0" stop-color="#c9f0d4"/><stop offset=".45" stop-color="#2fa858"/><stop offset="1" stop-color="#1b6b37"/></radialGradient></defs>'+
+  '<rect x="6" y="4" width="108" height="112" rx="22" fill="#f7fbe9" stroke="#c3d98d" stroke-width="3"/>'+
+  '<g stroke="#1c2710" stroke-opacity=".25" stroke-width="1.2">'+
+  '<circle cx="30" cy="24" r="10" fill="url(#bsE2)"/><circle cx="50" cy="24" r="10" fill="url(#bsE3)"/><circle cx="70" cy="24" r="10" fill="url(#bsE1)"/><circle cx="90" cy="24" r="10" fill="url(#bsE1)"/>'+
+  '<circle cx="40" cy="41" r="10" fill="url(#bsE4)"/><circle cx="60" cy="41" r="10" fill="url(#bsE2)"/><circle cx="80" cy="41" r="10" fill="url(#bsE1)"/></g>'+
+  '<g fill="#2160cc"><circle cx="60" cy="98" r="2"/><circle cx="50" cy="90" r="2"/><circle cx="40" cy="82" r="2"/><circle cx="30" cy="74" r="2"/><circle cx="20" cy="66" r="2"/><circle cx="30" cy="61" r="2"/><circle cx="41" cy="57" r="2"/></g>'+
+  '<circle cx="60" cy="98" r="11" fill="url(#bsE1)" stroke="#1c2710" stroke-opacity=".25" stroke-width="1.2"/>'+
+  '<g fill="#fff" fill-opacity=".8"><ellipse cx="56" cy="94" rx="4" ry="2.4" transform="rotate(-35 56 94)"/></g>'+
+  '<g stroke="#e8434f" stroke-width="2.4" stroke-linecap="round"><path d="M95 41l6-4M97 47h7M95 53l6 4"/></g></svg>';
+window.MENU_MOTIF='<g fill="none" stroke="currentColor" stroke-opacity="0.13" stroke-width="3">'+
+  '<circle cx="60" cy="90" r="34"/><circle cx="118" cy="132" r="22"/><circle cx="370" cy="120" r="40"/><circle cx="318" cy="70" r="18"/>'+
+  '<circle cx="56" cy="760" r="30"/><circle cx="380" cy="800" r="36"/><circle cx="330" cy="742" r="16"/><circle cx="110" cy="820" r="14"/>'+
+  '<path d="M40 600 L120 520 L60 470" stroke-dasharray="2 12" stroke-linecap="round"/></g>';
 //@@END ENGINE
 
 
@@ -3055,11 +3752,15 @@ window.renderPipeStats=function(){
   var perfect=Object.values(save.levelStars||{}).filter(function(s){return s>=3;}).length;
 //@@REGION STATS
   var stats=[
-    {icon:'🎯',label:'Levels Synced',sub:'echo + exit together',value:completed},
-    {icon:'⭐',label:'Perfect Levels',sub:'no resets',value:perfect},
+    {icon:'🫧',label:'Levels Cleared',sub:'campaign levels',value:completed},
+    {icon:'⭐',label:'Three-Star Levels',sub:'cleared at or under par',value:perfect},
+    {icon:'🐾',label:'Pips Freed',sub:'critters rescued',value:save.bsPips||0},
+    {icon:'💥',label:'Bubbles Popped',sub:'popped + dropped',value:(save.bsPopped||0).toLocaleString()},
+    {icon:'🔗',label:'Best Combo',sub:'popping shots in a row',value:'×'+Math.min(5,save.bsBestCombo||0)},
+    {icon:'∞',label:'Endless Best',sub:'survival score',value:(save.bsEndlessBest||0).toLocaleString()},
     {icon:'🔥',label:'Daily Streak',sub:'days in a row',value:Math.max(save.dailyChallengeStreak||0,1)},
     {icon:'🪙',label:'Coins',sub:'current balance',value:save.coins||0},
-    {icon:'📋',label:'Current Level',sub:'keep flowing!',value:(save.currentLevel||0)+1},
+    {icon:'📋',label:'Current Level',sub:'next board',value:(save.currentLevel||0)+1},
   ];
 //@@END STATS
   list.innerHTML=stats.map(function(s){return '<div class="stat-card"><div class="stat-icon">'+s.icon+'</div><div class="stat-info"><h3>'+s.label+'</h3><p>'+s.sub+'</p></div><div class="stat-value">'+s.value+'</div></div>';}).join('');
@@ -3074,14 +3775,15 @@ window.renderPipeStats=function(){
   // No theme is sold via paid IAP — Midnight is a coin sink. (2026-05-25 user policy.)
 //@@REGION THEMES
   var THEMES=[
-    {id:'default',name:'Blueprint',emoji:'📘',unlockLevel:0,palette:{you:'#0fb5c9',echo:'#e85d5d',plate:'#d29922',exit:'#2ea043'}},
-    {id:'mint',name:'Mint',emoji:'🌿',unlockLevel:10,palette:{you:'#2ea871',echo:'#d96941',plate:'#c9a227',exit:'#3a86ff'}},
-    {id:'sunset',name:'Sunset',emoji:'🌇',unlockLevel:20,palette:{you:'#f2784b',echo:'#7a5cd6',plate:'#e0b228',exit:'#2ea043'}},
-    {id:'midnight',name:'Midnight',emoji:'🌙',coinCost:800,palette:{you:'#37e0e0',echo:'#ff6b6b',plate:'#f2c14e',exit:'#9be37d'}},
-    {id:'violet',name:'Violet',emoji:'🔮',unlockLevel:35,palette:{you:'#8b5cf6',echo:'#ef6292',plate:'#d29922',exit:'#22b8a0'}},
-    {id:'ember',name:'Ember',emoji:'🔥',unlockLevel:45,palette:{you:'#ff8c1a',echo:'#c0392b',plate:'#ffd166',exit:'#7fc97f'}},
-    {id:'mono',name:'Ink',emoji:'🖋️',unlockLevel:60,palette:{you:'#3a4a63',echo:'#8a93a6',plate:'#b08d2f',exit:'#4f7d52'}},
+    {id:'default',name:'Lime Soda',emoji:'🍋',unlockLevel:0,palette:{'b1':'#e8434f','b2':'#f2bd12','b3':'#2fa858','b4':'#2d7fe6','b5':'#9a55e0','b6':'#f5832a','board-bg':'#f7fbe9','board-edge':'#c3d98d','aim':'#1f5bc4'}},
+    {id:'lagoon',name:'Lagoon',emoji:'🐚',unlockLevel:20,palette:{'b1':'#ff6b6b','b2':'#f4c95d','b3':'#3bb273','b4':'#1fa7c2','b5':'#7f63d6','b6':'#f28c48','board-bg':'#e6f6f5','board-edge':'#9fd3cf','aim':'#137f93'}},
+    {id:'orchard',name:'Orchard',emoji:'🍎',unlockLevel:50,palette:{'b1':'#cf3131','b2':'#e0b31d','b3':'#6aa82d','b4':'#3a6fc4','b5':'#8e3f9e','b6':'#e8761e','board-bg':'#fbf4e4','board-edge':'#dcc596','aim':'#8a4f12'}},
+    {id:'midnight',name:'Midnight',emoji:'🌙',coinCost:800,palette:{'b1':'#ff5c66','b2':'#ffd23f','b3':'#41c96d','b4':'#4a95ff','b5':'#b276ff','b6':'#ff9a47','board-bg':'#142019','board-edge':'#2f4434','aim':'#8fbaff'}},
+    {id:'candy',name:'Candy',emoji:'🍬',unlockLevel:100,palette:{'b1':'#ff4f93','b2':'#ffcf3a','b3':'#3fcf7f','b4':'#4aa8ff','b5':'#a979ff','b6':'#ff8f4a','board-bg':'#fff3f8','board-edge':'#f2bfd5','aim':'#c2316f'}},
+    {id:'dusk',name:'Dusk',emoji:'🌆',unlockLevel:180,palette:{'b1':'#e5484d','b2':'#f5b83d','b3':'#36a389','b4':'#4b6fe0','b5':'#a355c9','b6':'#ef7d3c','board-bg':'#efeaf7','board-edge':'#c5b6e0','aim':'#5b3fa8'}},
+    {id:'ember',name:'Ember',emoji:'🔥',unlockLevel:300,palette:{'b1':'#d6452e','b2':'#f2b01e','b3':'#7da832','b4':'#3478c8','b5':'#9b4fb0','b6':'#ec7a1c','board-bg':'#2a1c16','board-edge':'#5a3a2a','aim':'#ffb070'}},
   ];
+  window._BS_THEMES=THEMES; // screenshot capture applies the real palettes
 //@@END THEMES
   window._THEMES_META=THEMES.map(function(t){return{id:t.id,name:t.name,emoji:t.emoji,unlockLevel:t.unlockLevel,coinCost:t.coinCost};});
 
@@ -3156,15 +3858,15 @@ window.renderPipeStats=function(){
 
 /* Missions */
 (function(){
-  var MISSION_KEY='aim_missions_v1';
+  var MISSION_KEY='bs_missions_v1';
   var MISSION_POOL=[
-    {id:'complete3',desc:'Sync 3 levels',goal:3,reward:30,icon:'🎯',track:'levels'},
-    {id:'complete5',desc:'Sync 5 levels',goal:5,reward:50,icon:'🏆',track:'levels'},
-    {id:'hint1',desc:'Use a hint',goal:1,reward:15,icon:'💡',track:'hint'},
-    {id:'daily',desc:'Finish daily challenge',goal:1,reward:25,icon:'📅',track:'daily'},
-    {id:'perfect',desc:'Match par on a level',goal:1,reward:20,icon:'⭐',track:'perfect'},
+    {id:'complete3',desc:'Clear 3 levels',goal:3,reward:30,icon:'🎯',track:'levels'},
+    {id:'complete5',desc:'Clear 5 levels',goal:5,reward:50,icon:'🏆',track:'levels'},
+    {id:'hint1',desc:'Fire a Fireball',goal:1,reward:15,icon:'💡',track:'hint'},
+    {id:'daily',desc:'Clear the daily board',goal:1,reward:25,icon:'📅',track:'daily'},
+    {id:'perfect',desc:'Clear a level with 3 stars',goal:1,reward:20,icon:'⭐',track:'perfect'},
     {id:'complete1',desc:'Clear any level',goal:1,reward:10,icon:'✅',track:'levels'},
-    {id:'complete2',desc:'Sync 2 levels',goal:2,reward:20,icon:'🌟',track:'levels'},
+    {id:'complete2',desc:'Clear 2 levels',goal:2,reward:20,icon:'🌟',track:'levels'},
     {id:'fill',desc:'Earn 2+ stars on 3 levels',goal:3,reward:25,icon:'✨',track:'fill'},
   ];
   function getToday(){return new Date().toLocaleDateString('en-CA');}
@@ -3527,7 +4229,7 @@ function injectDragonTheme(){
   window._THEMES_META.push({
     id:'dragon', name:'Dragon 🐉', unlock:0, coinCost:300,
 //@@REGION EVENT_THEME
-    colors:['#ff4444','#ff8800','#ffdd00','#2ea043','#cc2200'], palette:{you:'#ff8800',echo:'#cc2200',plate:'#ffdd00',exit:'#2ea043'}
+    colors:['#ff7a1a','#7b3fb5','#ffd23f','#2fa858','#2b2f36'], palette:{'b1':'#ff7a1a','b2':'#ffd23f','b3':'#2fa858','b4':'#3a6fc4','b5':'#7b3fb5','b6':'#e8434f','board-bg':'#f6efe2','board-edge':'#d9c39a','aim':'#7b3fb5'}
 //@@END EVENT_THEME
   });
 
@@ -3946,7 +4648,7 @@ window.addEventListener('load',function(){
 </script>
 
 
-<script data-growth-config>window.GROWTH_CFG={"app":"BubbleShooter","pkg":"com.pegasusgames.bubbleshooter","name":"Bubble Shooter","saveKey":"bubbleshooter_save","levelBase":0,"kind":"levels","totalLevels":500,"live":false,"booster":{"field":"hintCount","name":"Hint","emoji":"💡","coins":25}};</script>
+<script data-growth-config>window.GROWTH_CFG={"app":"BubbleShooter","pkg":"com.pegasusgames.bubbleshooter","name":"Bubble Shooter","saveKey":"bubbleshooter_save","levelBase":0,"kind":"levels","totalLevels":500,"live":false,"booster":{"field":"hintCount","name":"Fireball","emoji":"🔥","coins":25}};</script>
 <!-- Growth shim — CORE (shared game adapter + clear-event bus). Idempotent: data-growth-shim="CORE".
      Injected FIRST (before Part A). Every other growth shim reads/writes the
      game through window.gGame instead of probing localStorage keys.

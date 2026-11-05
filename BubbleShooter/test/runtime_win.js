@@ -1,0 +1,1 @@
+(()=>{ localStorage.setItem('bs_tutorialDone','1'); save.bsTries[0]=0; loadLevel(0); bsInstant=true; try{ for(let n=0;n<60&&!gWon&&!gLost;n++){ const p=bsBotPick(gB,bsT(),gCur,gNxt,L.g); if(!p)break; if(p.swap)bsSwap(); bsFire(p.dir[0],p.dir[1]); } } finally { bsInstant=false; } return gWon; })()

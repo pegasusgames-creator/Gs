@@ -1,0 +1,20 @@
+{
+  "gate": [
+    "scripts/check_bubbleshooter_levels.py",
+    "every level clearable (greedy bot meets the goal within the shot limit in a majority of seeded queues; levels 1-20 in >=95%)"
+  ],
+  "app_theme": {
+    "bg_top_left": [241, 248, 220],
+    "bg_top_right": [233, 244, 204],
+    "bg_bottom": [203, 225, 150],
+    "text_primary": [28, 39, 16],
+    "text_accent": [31, 91, 196],
+    "text_subtle": [70, 86, 43],
+    "footer_tint": [28, 79, 181],
+    "mood": "lime-soda fizz",
+    "layout_archetype": "F",
+    "mascot_pattern": "M1",
+    "voice": "V6",
+    "texture": "T2"
+  }
+}
