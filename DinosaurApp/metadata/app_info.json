@@ -1,13 +1,22 @@
 {
-  "category_google": "GAME_TRIVIA",
-  "category_apple_primary": "GAMES",
-  "category_apple_subcategory": "TRIVIA",
+  "category_google": "EDUCATION",
+  "category_apple_primary": "EDUCATION",
+  "category_apple_subcategory": "",
   "contains_ads": true,
   "contains_iap": true,
-  "target_audience_min_age": 13,
-  "support_url": "https://pegasusgames.example/support",
-  "marketing_url": "",
+  "target_audience_min_age": 3,
+  "support_url": "https://pegasusgames-creator.github.io/",
+  "marketing_url": "https://pegasusgames-creator.github.io/",
   "copyright": "© 2026 Pegasus Games",
   "package_name": "com.pegasusgames.dinosaurapp",
-  "upload_key_sha1": "26:0A:99:72:E7:70:28:FE:8D:D5:4B:BD:98:7C:37:12:26:EF:92:62"
+  "upload_key_sha1": "26:0A:99:72:E7:70:28:FE:8D:D5:4B:BD:98:7C:37:12:26:EF:92:62",
+  "kids_program": true,
+  "target_age_band": "3-8",
+  "target_audience_max_age": 8,
+  "play_target_age_groups": [
+    "ages_5_and_under",
+    "ages_6_to_8"
+  ],
+  "apple_kids_category_band": "6-8",
+  "first_upload_at": null
 }

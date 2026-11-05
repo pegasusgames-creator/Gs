@@ -1,42 +1,19 @@
 # DinosaurApp Identity
 
-- **Category**: kids
-- **Layout archetype**: E (animated character speaks)
-- **Mascot pattern**: M3 (animated companion with idle + reactions)
-- **Voice**: V7 (educational warm)
-- **Texture**: T5 (hand-drawn / sketch)
+- **Track**: kids (Google Play Families, ages 3-8), built on the kids shell (`docs/KIDS_SHELL.md`)
+- **Layout archetype**: E (animated character speaks: Tiko the baby dino suggests the next dinosaur in a speech bubble; four big picture tiles below)
+- **Mascot pattern**: M3 (Tiko hatching from an eggshell cap: idle bob + blink, arms flap and hop on success, head tilt on a wrong tap, mouth moves while the voice speaks)
+- **Voice**: V7 (educational warm) - "Let's meet Eoraptor!", "You found a Stegosaurus fossil!"
+- **Texture**: T5 (hand-drawn / sketch: 39 original thick-outlined SVG creatures built by a tube-outline generator, 8 fossil-themed stickers, dotted sand paper background)
 - **Mood string**: kids-bright
 
-The app should feel like: warm and inviting; reads as a children's app at a glance.
+Warm sand paper (`#f7ecd0`) with a terracotta accent (`#b5481a`) and four bold tile colours (terracotta, blue, leaf, plum); Fern (light green) and Volcano (charcoal-red, the only dark theme, never the default) are the alternates.
+Identity element: Tiko the hatchling in a speech bubble above four picture tiles (footprint, ruler, bone, star), and creatures drawn as thick-outlined round portrait stickers.
 
-## Anti-pattern audit (APP_ARCHETYPES.md §5)
+## Honesty notes
+- Nobody knows how dinosaurs sounded: every roar is SYNTHESIZED by the app (WebAudio, no audio files, no recordings) and labelled "made-up roar, made by the app".
+- Facts (length, weight, diet, period, fossil continent, size-compare ratios) are checked by `scripts/check_dinosaurapp_facts.py` against a palaeontology reference table.
+- Pteranodon / Quetzalcoatlus (flying reptiles), Elasmosaurus / Mosasaurus (sea reptiles) and Dimetrodon (older than the dinosaurs) are labelled "not a dinosaur".
 
-This file was auto-generated during the 2026-04-30 portfolio archetype
-assignment pass. The four archetypes above were chosen so the app does
-NOT default to the template signature (A/M0/V1/T1).
-
-When the app's `game.html` is next touched (or built fresh), audit the
-in-app design against the §5 anti-patterns:
-
-- [ ] Center-aligned everything → use offset weight
-- [ ] Same SVG icon set as other apps → vary icon family per app
-- [ ] All-caps headlines on every screen → mixed case for body
-- [ ] Generic templated currency icon → make it match the app theme
-- [ ] Identical button shapes / sizes / spacings → vary
-- [ ] Symmetric vertical column layout → break with side panels / FAB
-- [ ] Generic "Level Complete!" celebration → app-specific phrasing
-- [ ] Same loading / transition patterns → vary
-- [ ] Identical settings screen → reorder, rename, add app-specific options
-
-If 3+ of the above are hit, redesign before the next ship.
-
-## Phase 8 self-check
-
-Before declaring this app release-ready, all four of:
-
-1. Side-by-side test (vs other shipped apps, do they look like different products?)
-2. Voice-specificity test (does the menu copy reflect this app's voice archetype?)
-3. Identity-element test (a single recognizable visual element)
-4. Anonymous-screenshot test (could a user identify this app without title/name?)
-
-must pass. See APP_ARCHETYPES.md §8.
+## Distinct from AnimalSounds
+Different palette family (sand/terracotta vs lilac/teal), different mascot (hatchling vs fox), different screens (period-grouped book, size slider, fossil dig, shadow match vs sound board, habitats, quiz), different art generator and icon focal element (dinosaur silhouette on an egg-shaped badge).
