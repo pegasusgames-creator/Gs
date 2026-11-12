@@ -1,0 +1,88 @@
+{
+  "_comment": "DinosaurApp (kids shell) screenshot capture: 11 distinct real-use activity states (How big? slider with different dinosaurs and references, partly-brushed fossil digs, Shadow match boards, dinosaur cards), each a different dinosaur / seed and a cycled theme (sand / fern / volcano). No home menu, sticker book, parent area, gate or reveal popup in any slot. _setup_taps unlocks full_pack (every dinosaur reachable, no banner), mutes the voice for capture and seeds some met dinosaurs. Screens are opened with KIDS.go(screen, params); dig/match seeds fix the round.",
+  "_readiness_expr": "typeof KIDS !== 'undefined' && KIDS.ready === true",
+  "_setup_taps": [
+    [
+      "js",
+      "(function(){var s=KIDS.save;s.fullPack=true;s.removeAds=true;s.settings.voice=false;s.progress={greeted:true,rounds:1,heard:{tyrannosaurus:1,triceratops:1,stegosaurus:1,velociraptor:1,diplodocus:1,brachiosaurus:1,pteranodon:1,allosaurus:1}};s.stickers={D_tyrannosaurus:1,D_triceratops:1,D_stegosaurus:1,S_egg:1,S_bone:1};KIDS.persist();KIDS.go('home');return 'seeded';})()",
+      500
+    ]
+  ],
+  "01_gameplay_open": [
+    [
+      "js",
+      "KIDS.setTheme('sand');KIDS.go('size',{d:'tyrannosaurus'});'ok';",
+      1700
+    ]
+  ],
+  "02_gameplay_early": [
+    [
+      "js",
+      "KIDS.setTheme('sand');KIDS.go('card',{a:'triceratops'});'ok';",
+      1700
+    ]
+  ],
+  "03_gameplay_build": [
+    [
+      "js",
+      "KIDS.setTheme('fern');KIDS.go('dig',{seed:3});setTimeout(function(){var cv=document.getElementById('digCanvas'),c=cv.getContext('2d'),w=cv.width;c.globalCompositeOperation='destination-out';c.fillStyle='#000';[[.5,.62],[.38,.5],[.64,.5]].forEach(function(p){c.beginPath();c.arc(p[0]*w,p[1]*w,w*.13,0,7);c.fill()});document.getElementById('digHint').classList.add('off');},400);'ok';",
+      1700
+    ]
+  ],
+  "04_gameplay_mid": [
+    [
+      "js",
+      "KIDS.setTheme('fern');KIDS.go('match',{seed:5});'ok';",
+      1700
+    ]
+  ],
+  "05_gameplay_busy": [
+    [
+      "js",
+      "KIDS.setTheme('volcano');KIDS.go('size',{d:'diplodocus'});setTimeout(function(){document.querySelector('[data-r=\"house\"]').click();},300);'ok';",
+      1700
+    ]
+  ],
+  "06_gameplay_deep": [
+    [
+      "js",
+      "KIDS.setTheme('volcano');KIDS.go('dig',{seed:9});setTimeout(function(){var cv=document.getElementById('digCanvas'),c=cv.getContext('2d'),w=cv.width;c.globalCompositeOperation='destination-out';c.fillStyle='#000';[[.45,.55],[.58,.62],[.5,.42],[.35,.62]].forEach(function(p){c.beginPath();c.arc(p[0]*w,p[1]*w,w*.13,0,7);c.fill()});document.getElementById('digHint').classList.add('off');},400);'ok';",
+      1700
+    ]
+  ],
+  "07_gameplay_late": [
+    [
+      "js",
+      "KIDS.setTheme('sand');KIDS.go('match',{seed:11});'ok';",
+      1700
+    ]
+  ],
+  "tablet_7_01_gameplay_open": [
+    [
+      "js",
+      "KIDS.setTheme('sand');KIDS.go('size',{d:'stegosaurus'});'ok';",
+      1700
+    ]
+  ],
+  "tablet_7_02_gameplay_early": [
+    [
+      "js",
+      "KIDS.setTheme('fern');KIDS.go('card',{a:'spinosaurus'});'ok';",
+      1700
+    ]
+  ],
+  "tablet_10_01_gameplay_open": [
+    [
+      "js",
+      "KIDS.setTheme('volcano');KIDS.go('dig',{seed:21});setTimeout(function(){var cv=document.getElementById('digCanvas'),c=cv.getContext('2d'),w=cv.width;c.globalCompositeOperation='destination-out';c.fillStyle='#000';[[.5,.6],[.4,.5],[.62,.5],[.5,.72]].forEach(function(p){c.beginPath();c.arc(p[0]*w,p[1]*w,w*.13,0,7);c.fill()});document.getElementById('digHint').classList.add('off');},400);'ok';",
+      1700
+    ]
+  ],
+  "tablet_10_02_gameplay_early": [
+    [
+      "js",
+      "KIDS.setTheme('sand');KIDS.go('size',{d:'brachiosaurus'});setTimeout(function(){document.querySelector('[data-r=\"child\"]').click();},300);'ok';",
+      1700
+    ]
+  ]
+}

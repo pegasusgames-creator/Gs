@@ -1,0 +1,48 @@
+{
+  "gate": [
+    "scripts/check_dinosaurapp_facts.py",
+    "Dinosaur World facts (periods, diet, sizes, not-a-dinosaur labels)"
+  ],
+  "app_theme": {
+    "bg_top_left": [
+      247,
+      236,
+      208
+    ],
+    "bg_top_right": [
+      240,
+      215,
+      154
+    ],
+    "bg_bottom": [
+      201,
+      162,
+      95
+    ],
+    "text_primary": [
+      58,
+      37,
+      18
+    ],
+    "text_accent": [
+      181,
+      72,
+      26
+    ],
+    "text_subtle": [
+      107,
+      74,
+      42
+    ],
+    "footer_tint": [
+      201,
+      98,
+      43
+    ],
+    "mood": "kids-sand",
+    "layout_archetype": "E",
+    "mascot_pattern": "M3",
+    "voice": "V7",
+    "texture": "T5"
+  }
+}
